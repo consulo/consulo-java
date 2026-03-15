@@ -29,20 +29,16 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class AmbiguousFieldAccessInspection extends BaseInspection {
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.ambiguousFieldAccessDisplayName();
   }
 
-  @Nonnull
   @Override
   @RequiredReadAction
   protected String buildErrorString(Object... infos) {
@@ -65,7 +61,6 @@ public class AmbiguousFieldAccessInspection extends BaseInspection {
   }
 
   private static class AmbiguousMethodCallFix extends InspectionGadgetsFix {
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.ambiguousFieldAccessQuickfix();
     }

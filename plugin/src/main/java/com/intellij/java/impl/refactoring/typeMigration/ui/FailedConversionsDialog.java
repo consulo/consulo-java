@@ -22,7 +22,6 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,7 +45,6 @@ public class FailedConversionsDialog extends DialogWrapper {
     }
 
     @Override
-    @Nonnull
     protected Action[] createActions() {
         return new Action[]{
             getOKAction(),

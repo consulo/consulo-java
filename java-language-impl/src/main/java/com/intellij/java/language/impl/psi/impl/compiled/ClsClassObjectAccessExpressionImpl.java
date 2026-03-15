@@ -22,7 +22,6 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -37,19 +36,18 @@ public class ClsClassObjectAccessExpressionImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     myTypeElement.appendMirrorText(0, buffer);
     buffer.append('.').append(PsiKeyword.CLASS);
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirror(getOperand(), SourceTreeToPsiMap.<PsiClassObjectAccessExpression>treeToPsiNotNull(element).getOperand());
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     return new PsiElement[]{myTypeElement};
   }
@@ -60,7 +58,7 @@ public class ClsClassObjectAccessExpressionImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitClassObjectAccessExpression(this);
     }
@@ -70,7 +68,6 @@ public class ClsClassObjectAccessExpressionImpl extends ClsElementImpl implement
   }
 
   @Override
-  @Nonnull
   public PsiTypeElement getOperand() {
     return myTypeElement;
   }

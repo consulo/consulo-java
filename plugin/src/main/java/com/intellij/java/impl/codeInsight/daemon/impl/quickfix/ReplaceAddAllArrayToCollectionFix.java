@@ -39,8 +39,6 @@ import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionAction {
   private final PsiMethodCallExpression myMethodCall;
@@ -50,13 +48,12 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Replace " + myMethodCall.getText() + " with " + getCollectionsMethodCall());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (myMethodCall == null || !myMethodCall.isValid()) return false;
 
     Module module = file.getModule();
@@ -91,14 +88,13 @@ public class ReplaceAddAllArrayToCollectionFix implements SyntheticIntentionActi
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
     PsiExpression toReplace = elementFactory.createExpressionFromText(getCollectionsMethodCall(), myMethodCall);
     JavaCodeStyleManager.getInstance(project).shortenClassReferences(myMethodCall.replace(toReplace));
   }
 
-  @NonNls
   private String getCollectionsMethodCall() {
     PsiExpression qualifierExpression = myMethodCall.getMethodExpression().getQualifierExpression();
     PsiExpression[] expressions = myMethodCall.getArgumentList().getExpressions();

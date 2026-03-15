@@ -17,7 +17,6 @@
 package com.intellij.java.impl.refactoring.rename;
 
 import consulo.util.lang.function.Condition;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Dmitry Avdeev
@@ -26,7 +25,7 @@ public class RegExpValidator implements Condition<String> {
 
   private final String myPattern;
 
-  public RegExpValidator(@NonNls String pattern) {
+  public RegExpValidator(String pattern) {
     myPattern = pattern;
   }
 

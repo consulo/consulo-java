@@ -19,7 +19,6 @@ import java.util.Collections;
 
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.ProblemDescriptor;
@@ -44,18 +43,16 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.intellij.java.analysis.impl.codeInspection.EquivalenceChecker;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.ifStatementWithIdenticalBranchesDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.ifStatementWithIdenticalBranchesProblemDescriptor().get();
     }
@@ -70,14 +67,13 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
         public CollapseIfFix() {
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.ifStatementWithIdenticalBranchesCollapseQuickfix();
         }
 
         @Override
-        public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
+        public void doFix(Project project, ProblemDescriptor descriptor)
             throws IncorrectOperationException {
             PsiElement identifier = descriptor.getPsiElement();
             PsiIfStatement statement = (PsiIfStatement) identifier.getParent();
@@ -157,7 +153,7 @@ public class IfStatementWithIdenticalBranchesInspection extends BaseInspection {
 
         @Override
         public void visitIfStatement(
-            @Nonnull PsiIfStatement ifStatement
+            PsiIfStatement ifStatement
         ) {
             super.visitIfStatement(ifStatement);
             PsiStatement elseBranch = ifStatement.getElseBranch();

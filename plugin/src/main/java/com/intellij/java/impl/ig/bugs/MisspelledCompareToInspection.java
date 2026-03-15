@@ -25,20 +25,16 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MisspelledCompareToInspection extends BaseInspection {
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.misspelledComparetoDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.misspelledComparetoProblemDescriptor().get();
     }
@@ -57,9 +53,9 @@ public class MisspelledCompareToInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //note: no call to super
-            @NonNls String methodName = method.getName();
+            String methodName = method.getName();
             if (!"compareto".equals(methodName)) {
                 return;
             }

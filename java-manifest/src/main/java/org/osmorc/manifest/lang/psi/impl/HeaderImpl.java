@@ -31,7 +31,6 @@ import consulo.language.psi.PsiFileFactory;
 import consulo.language.psi.stub.IStubElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestFileType;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.*;
@@ -41,11 +40,11 @@ import org.osmorc.manifest.lang.psi.stub.HeaderStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Header {
-  public HeaderImpl(HeaderStub stub, @Nonnull IStubElementType nodeType) {
+  public HeaderImpl(HeaderStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public HeaderImpl(@Nonnull ASTNode node) {
+  public HeaderImpl(ASTNode node) {
     super(node);
   }
 
@@ -63,7 +62,7 @@ public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Heade
     return result != null ? result : "";
   }
 
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     ManifestToken nameToken = getNameToken();
     if (nameToken != null) {
       nameToken.replaceToken(name);
@@ -80,7 +79,6 @@ public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Heade
   }
 
   @Override
-  @Nonnull
   public Clause[] getClauses() {
     return findChildrenByClass(Clause.class);
   }
@@ -98,7 +96,7 @@ public class HeaderImpl extends ManifestElementBase<HeaderStub> implements Heade
   }
 
   @Override
-  public void addClause(@Nonnull String text) {
+  public void addClause(String text) {
     final String dummyTemplate;
     final boolean b = getClauses().length == 0;
     if (b) {

@@ -26,15 +26,13 @@ import consulo.platform.Platform;
 import consulo.ui.ex.JBColor;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.event.DoubleClickListener;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class GetJPDADialog extends DialogWrapper {
-  private static final @NonNls String JPDA_URL = "http://java.sun.com/products/jpda";
+  private static final String JPDA_URL = "http://java.sun.com/products/jpda";
 
   public GetJPDADialog() {
     super(false);
@@ -43,7 +41,6 @@ public class GetJPDADialog extends DialogWrapper {
     init();
   }
 
-  @Nonnull
   protected Action[] createActions() {
     return new Action[]{getOKAction()};
   }

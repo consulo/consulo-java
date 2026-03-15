@@ -22,18 +22,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class UnconditionalWaitInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unconditionalWaitDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.unconditionalWaitProblemDescriptor().get();
   }
@@ -46,7 +42,7 @@ public class UnconditionalWaitInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       if (!method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         return;
@@ -59,7 +55,7 @@ public class UnconditionalWaitInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @Nonnull PsiSynchronizedStatement statement) {
+      PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       PsiCodeBlock body = statement.getBody();
       if (body != null) {
@@ -88,7 +84,7 @@ public class UnconditionalWaitInspection extends BaseInspection {
           (PsiMethodCallExpression)firstExpression;
         PsiReferenceExpression methodExpression =
           methodCallExpression.getMethodExpression();
-        @NonNls String methodName =
+        String methodName =
           methodExpression.getReferenceName();
         if (!HardcodedMethodConstants.WAIT.equals(methodName)) {
           continue;

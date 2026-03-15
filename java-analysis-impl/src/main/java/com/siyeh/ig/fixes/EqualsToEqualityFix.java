@@ -13,8 +13,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -35,7 +34,6 @@ public class EqualsToEqualityFix extends InspectionGadgetsFix {
         return new EqualsToEqualityFix(negated);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return myNegated

@@ -49,8 +49,7 @@ import consulo.util.lang.PatternUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import java.util.List;
@@ -70,7 +69,7 @@ public class WildcardMethodBreakpoint extends Breakpoint<JavaMethodBreakpointPro
         return MethodBreakpoint.CATEGORY;
     }
 
-    protected WildcardMethodBreakpoint(Project project, @Nonnull String classPattern, @Nonnull String methodName, XBreakpoint<JavaMethodBreakpointProperties> breakpoint) {
+    protected WildcardMethodBreakpoint(Project project, String classPattern, String methodName, XBreakpoint<JavaMethodBreakpointProperties> breakpoint) {
         super(project, breakpoint);
         setClassPattern(classPattern);
         setMethodName(methodName);

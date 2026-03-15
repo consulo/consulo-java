@@ -25,18 +25,15 @@ import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantAssertConditionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.constantAssertConditionDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.constantAssertConditionProblemDescriptor().get();
     }

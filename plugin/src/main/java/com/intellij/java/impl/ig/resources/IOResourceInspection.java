@@ -30,9 +30,7 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,7 +45,6 @@ public class IOResourceInspection extends ResourceInspection {
     "java.io.Reader", "java.io.Writer",
     "java.io.RandomAccessFile", "java.util.zip.ZipFile"};
 
-  @NonNls
   @SuppressWarnings({"PublicField"})
   public String ignoredTypesString = "java.io.ByteArrayOutputStream" +
                                      ',' + "java.io.ByteArrayInputStream" +
@@ -66,19 +63,16 @@ public class IOResourceInspection extends ResourceInspection {
   }
 
   @Override
-  @Nonnull
   public String getID() {
     return "IOResourceOpenedButNotSafelyClosed";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.iOResourceOpenedNotClosedDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiExpression expression = (PsiExpression)infos[0];
     PsiType type = expression.getType();
@@ -102,13 +96,13 @@ public class IOResourceInspection extends ResourceInspection {
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(ignoredTypesString, ignoredTypes);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(Element element) throws WriteExternalException {
     ignoredTypesString = formatString(ignoredTypes);
     super.writeSettings(element);
   }
@@ -124,7 +118,7 @@ public class IOResourceInspection extends ResourceInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       if (!isIOResourceFactoryMethodCall(expression)) {
         return;
       }
@@ -132,7 +126,7 @@ public class IOResourceInspection extends ResourceInspection {
     }
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!isIOResource(expression)) {
         return;
@@ -174,7 +168,7 @@ public class IOResourceInspection extends ResourceInspection {
 
   public static boolean isIOResourceFactoryMethodCall(PsiMethodCallExpression expression) {
     PsiReferenceExpression methodExpression = expression.getMethodExpression();
-    @NonNls String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"getResourceAsStream".equals(methodName)) {
       return false;
     }
@@ -213,7 +207,7 @@ public class IOResourceInspection extends ResourceInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression expression) {
+      PsiNewExpression expression) {
       if (usedAsArgToResourceCreation) {
         return;
       }

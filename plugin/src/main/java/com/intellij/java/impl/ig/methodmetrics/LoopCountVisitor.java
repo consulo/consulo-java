@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 
@@ -24,31 +23,31 @@ class LoopCountVisitor extends JavaRecursiveElementVisitor {
 
 
   @Override
-  public void visitForStatement(@Nonnull PsiForStatement psiForStatement) {
+  public void visitForStatement(PsiForStatement psiForStatement) {
     super.visitForStatement(psiForStatement);
     m_count++;
   }
 
   @Override
-  public void visitForeachStatement(@Nonnull PsiForeachStatement psiForStatement) {
+  public void visitForeachStatement(PsiForeachStatement psiForStatement) {
     super.visitForeachStatement(psiForStatement);
     m_count++;
   }
 
   @Override
-  public void visitWhileStatement(@Nonnull PsiWhileStatement psiWhileStatement) {
+  public void visitWhileStatement(PsiWhileStatement psiWhileStatement) {
     super.visitWhileStatement(psiWhileStatement);
     m_count++;
   }
 
   @Override
-  public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement psiDoWhileStatement) {
+  public void visitDoWhileStatement(PsiDoWhileStatement psiDoWhileStatement) {
     super.visitDoWhileStatement(psiDoWhileStatement);
     m_count++;
   }
 
   @Override
-  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(PsiAnonymousClass aClass) {
     // no call to super, to keep it from drilling into anonymous classes
   }
 

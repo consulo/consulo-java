@@ -35,8 +35,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -50,7 +49,6 @@ import java.util.List;
 public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> extends CopyPastePostProcessor<ReferenceTransferableData> {
     private static final Logger LOG = Logger.getInstance(CopyPasteReferenceProcessor.class);
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public List<ReferenceTransferableData> collectTransferableData(
@@ -87,7 +85,6 @@ public abstract class CopyPasteReferenceProcessor<TRef extends PsiElement> exten
 
     protected abstract void addReferenceData(PsiFile file, int startOffset, PsiElement element, ArrayList<JavaReferenceData> to);
 
-    @Nonnull
     @Override
     public List<ReferenceTransferableData> extractTransferableData(Transferable content) {
         ReferenceTransferableData referenceData = null;

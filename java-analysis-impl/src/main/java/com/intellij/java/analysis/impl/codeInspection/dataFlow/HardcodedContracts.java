@@ -14,8 +14,7 @@ import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SyntaxTraverser;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -149,7 +148,6 @@ public final class HardcodedContracts {
       .register(staticCall("java.lang.System", "arraycopy"), expression -> getArraycopyContract());
 
   private static
-  @Nonnull
   ContractProvider getArraycopyContract() {
     ContractValue src = ContractValue.argument(0);
     ContractValue srcPos = ContractValue.argument(1);
@@ -169,7 +167,7 @@ public final class HardcodedContracts {
     );
   }
 
-  public static List<MethodContract> getHardcodedContracts(@Nonnull PsiMethod method, @Nullable PsiMethodCallExpression call) {
+  public static List<MethodContract> getHardcodedContracts(PsiMethod method, @Nullable PsiMethodCallExpression call) {
     PsiClass owner = method.getContainingClass();
     if (owner == null) {
       return Collections.emptyList();
@@ -234,7 +232,6 @@ public final class HardcodedContracts {
   }
 
   private static
-  @Nonnull
   List<MethodContract> getSubstringContracts(boolean endLimited) {
     List<MethodContract> contracts = new ArrayList<>(3);
     contracts.add(specialFieldRangeContract(0, RelationType.LE, SpecialField.STRING_LENGTH));
@@ -422,8 +419,7 @@ public final class HardcodedContracts {
   }
 
   private static
-  @Nonnull
-  List<MethodContract> handleAssertThat(int paramCount, @Nonnull PsiMethodCallExpression call) {
+  List<MethodContract> handleAssertThat(int paramCount, PsiMethodCallExpression call) {
     PsiExpression[] args = call.getArgumentList().getExpressions();
     if (args.length == paramCount) {
       for (int i = 1; i < args.length; i++) {
@@ -498,7 +494,6 @@ public final class HardcodedContracts {
   }
 
   private static
-  @Nonnull
   List<MethodContract> failIfNull(int argIndex, int argCount, boolean returnArg) {
     ValueConstraint[] constraints = createConstraintArray(argCount);
     constraints[argIndex] = NULL_VALUE;

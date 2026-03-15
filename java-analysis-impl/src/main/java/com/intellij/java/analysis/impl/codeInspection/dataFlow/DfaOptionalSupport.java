@@ -15,15 +15,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anet, peter
  */
 public final class DfaOptionalSupport {
     @Nullable
-    public static LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(@Nonnull PsiExpression qualifier) {
+    public static LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(PsiExpression qualifier) {
         PsiMethodCallExpression call = findCallExpression(qualifier);
         PsiMethod method = call == null ? null : call.resolveMethod();
         PsiClass containingClass = method == null ? null : method.getContainingClass();
@@ -39,7 +38,7 @@ public final class DfaOptionalSupport {
         return null;
     }
 
-    private static PsiMethodCallExpression findCallExpression(@Nonnull PsiElement anchor) {
+    private static PsiMethodCallExpression findCallExpression(PsiElement anchor) {
         if (PsiUtil.skipParenthesizedExprUp(anchor).getParent() instanceof PsiExpressionList argList) {
             PsiElement parent = argList.getParent();
             if (parent instanceof PsiMethodCallExpression methodCall) {
@@ -50,7 +49,7 @@ public final class DfaOptionalSupport {
     }
 
     @Nullable
-    public static LocalQuickFix createReplaceOptionalOfNullableWithEmptyFix(@Nonnull PsiElement anchor) {
+    public static LocalQuickFix createReplaceOptionalOfNullableWithEmptyFix(PsiElement anchor) {
         PsiMethodCallExpression parent = findCallExpression(anchor);
         if (parent == null) {
             return null;
@@ -60,7 +59,7 @@ public final class DfaOptionalSupport {
     }
 
     @Nullable
-    public static LocalQuickFix createReplaceOptionalOfNullableWithOfFix(@Nonnull PsiElement anchor) {
+    public static LocalQuickFix createReplaceOptionalOfNullableWithOfFix(PsiElement anchor) {
         PsiMethodCallExpression parent = findCallExpression(anchor);
         if (parent == null) {
             return null;
@@ -74,7 +73,6 @@ public final class DfaOptionalSupport {
      * @param present whether the value should be present
      * @return a DfType representing an Optional
      */
-    @Nonnull
     public static DfType getOptionalValue(boolean present) {
         DfType valueType = present ? DfTypes.NOT_NULL_OBJECT : DfTypes.NULL;
         return SpecialField.OPTIONAL_VALUE.asDfType(valueType);
@@ -89,7 +87,6 @@ public final class DfaOptionalSupport {
             myClearArguments = clearArguments;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return CommonQuickFixLocalize.fixReplaceWithX("." + myTargetMethodName + "()");
@@ -97,7 +94,7 @@ public final class DfaOptionalSupport {
 
         @Override
         @RequiredReadAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiMethodCallExpression
                 methodCallExpression = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
             if (methodCallExpression != null) {

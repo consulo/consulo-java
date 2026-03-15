@@ -21,8 +21,7 @@ import com.intellij.java.impl.codeInsight.generation.surroundWith.*;
 import consulo.language.editor.surroundWith.Surrounder;
 import consulo.util.lang.StringUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Denis Zhdanov
@@ -126,13 +125,13 @@ public abstract class JavaSurroundWithTest extends LightCodeInsightTestCase {
     doTest(getTestName(false), new JavaWithNullCheckSurrounder());
   }
 
-  private void doTest(@Nonnull String fileName, Surrounder surrounder) {
+  private void doTest(String fileName, Surrounder surrounder) {
     configureByFile(BASE_PATH + fileName + ".java");
     SurroundWithHandler.invoke(getProject(), getEditor(), getFile(), surrounder);
     checkResultByFile(BASE_PATH + fileName + "_after.java");
   }
 
-  private void doTestWithTemplateFinish(@Nonnull String fileName, Surrounder surrounder, @Nullable String textToType)
+  private void doTestWithTemplateFinish(String fileName, Surrounder surrounder, @Nullable String textToType)
     throws Exception {
     TemplateManagerImpl.setTemplateTesting(getProject(), getTestRootDisposable());
     configureByFile(BASE_PATH + fileName + ".java");

@@ -35,7 +35,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 class WrapReturnValueHandler implements RefactoringActionHandler {
     public static final LocalizeValue REFACTORING_NAME = JavaRefactoringLocalize.wrapReturnValue();
@@ -43,7 +42,7 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
     @Override
     @RequiredUIAccess
     public void invoke(
-        @Nonnull Project project,
+        Project project,
         Editor editor,
         PsiFile file,
         DataContext dataContext
@@ -91,7 +90,7 @@ class WrapReturnValueHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length != 1) {
             return;
         }

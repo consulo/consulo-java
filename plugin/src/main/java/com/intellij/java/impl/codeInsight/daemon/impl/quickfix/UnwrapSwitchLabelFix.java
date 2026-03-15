@@ -14,20 +14,18 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Objects;
 
 public class UnwrapSwitchLabelFix implements LocalQuickFix {
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return LocalizeValue.localizeTODO("Remove unreachable branches");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiExpression label = ObjectUtil.tryCast(descriptor.getStartElement(), PsiExpression.class);
         if (label == null) {
             return;

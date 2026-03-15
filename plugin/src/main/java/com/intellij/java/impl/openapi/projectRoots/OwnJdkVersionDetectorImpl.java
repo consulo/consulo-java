@@ -11,8 +11,7 @@ import consulo.platform.Platform;
 import consulo.process.io.BaseOutputReader;
 import consulo.util.io.CharsetToolkit;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
 
 import java.io.File;
@@ -36,7 +35,7 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
 
     @Nullable
     @Override
-    public JdkVersionInfo detectJdkVersionInfo(@Nonnull String homePath) {
+    public JdkVersionInfo detectJdkVersionInfo(String homePath) {
         // Java 1.7+
         File releaseFile = new File(homePath, "release");
         if (releaseFile.isFile()) {
@@ -131,20 +130,19 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
 
         private final List<String> myLines;
 
-        VersionOutputReader(@Nonnull InputStream stream) {
+        VersionOutputReader(InputStream stream) {
             super(stream, CharsetToolkit.getDefaultSystemCharset(), OPTIONS);
             myLines = new CopyOnWriteArrayList<>();
             start("java -version");
         }
 
-        @Nonnull
         @Override
-        protected Future<?> executeOnPooledThread(@Nonnull Runnable runnable) {
+        protected Future<?> executeOnPooledThread(Runnable runnable) {
             return Application.get().executeOnPooledThread(runnable);
         }
 
         @Override
-        protected void onTextAvailable(@Nonnull String text) {
+        protected void onTextAvailable(String text) {
             myLines.add(text);
             LOG.trace("text: " + text);
         }

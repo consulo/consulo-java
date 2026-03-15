@@ -1,7 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import jakarta.annotation.Nonnull;
 
 import java.security.MessageDigest;
 
@@ -11,23 +10,22 @@ import java.security.MessageDigest;
 public final class EKey
 {
 	final
-	@Nonnull
 	MemberDescriptor member;
 	final int dirKey;
 	final boolean stable;
 	final boolean negated;
 
-	public EKey(@Nonnull MemberDescriptor member, Direction direction, boolean stable)
+	public EKey(MemberDescriptor member, Direction direction, boolean stable)
 	{
 		this(member, direction, stable, false);
 	}
 
-	EKey(@Nonnull MemberDescriptor member, Direction direction, boolean stable, boolean negated)
+	EKey(MemberDescriptor member, Direction direction, boolean stable, boolean negated)
 	{
 		this(member, direction.asInt(), stable, negated);
 	}
 
-	EKey(@Nonnull MemberDescriptor member, int dirKey, boolean stable, boolean negated)
+	EKey(MemberDescriptor member, int dirKey, boolean stable, boolean negated)
 	{
 		this.member = member;
 		this.dirKey = dirKey;

@@ -48,8 +48,7 @@ import consulo.virtualFileSystem.VirtualFileManager;
 import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 import consulo.virtualFileSystem.archive.ZipArchiveFileType;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -81,7 +80,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
 
     @Override
     @Nullable
-    public String getDefaultDocumentationUrl(@Nonnull Sdk sdk) {
+    public String getDefaultDocumentationUrl(Sdk sdk) {
         JavaSdkVersion version = JavaSdkTypeUtil.getVersion(sdk);
         if (version == JavaSdkVersion.JDK_1_5) {
             return "http://docs.oracle.com/javase/1.5.0/docs/api/";
@@ -124,7 +123,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
 
     @Override
-    public void setupCommandLine(@Nonnull GeneralCommandLine commandLine, @Nonnull Sdk sdk) {
+    public void setupCommandLine(GeneralCommandLine commandLine, Sdk sdk) {
         commandLine.setExePath(getBinPath(sdk) + File.separator + VM_EXE_NAME);
     }
 
@@ -141,7 +140,6 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     /**
      * @implNote do not check JAVA_HOME, {@link #getEnviromentVariables(Platform)}
      */
-    @Nonnull
     @Override
     public Collection<String> suggestHomePaths() {
         Set<String> list = new LinkedHashSet<>();
@@ -179,9 +177,8 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         return list;
     }
 
-    @Nonnull
     @Override
-    public Set<String> getEnviromentVariables(@Nonnull Platform platform) {
+    public Set<String> getEnviromentVariables(Platform platform) {
         return Set.of("JAVA_HOME");
     }
 
@@ -234,7 +231,6 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         return true;
     }
 
-    @Nonnull
     @Override
     public FileChooserDescriptor getHomeChooserDescriptor() {
         FileChooserDescriptor descriptor = super.getHomeChooserDescriptor();
@@ -288,8 +284,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         return suggestedName;
     }
 
-    @Nonnull
-    private static String getVersionNumber(@Nonnull String versionString) {
+    private static String getVersionNumber(String versionString) {
         if (versionString.startsWith(JAVA_VERSION_PREFIX) || versionString.startsWith(OPENJDK_VERSION_PREFIX)) {
             boolean openJdk = versionString.startsWith(OPENJDK_VERSION_PREFIX);
             versionString = versionString.substring(openJdk ? OPENJDK_VERSION_PREFIX.length() : JAVA_VERSION_PREFIX.length());
@@ -445,7 +440,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         return null;
     }
 
-    public static boolean attachJdkAnnotations(@Nonnull SdkModificator modificator) {
+    public static boolean attachJdkAnnotations(SdkModificator modificator) {
         File pluginPath = PluginManager.getPluginPath(DefaultJavaSdkTypeImpl.class);
 
         File file = new File(pluginPath, "jdk-annotations.jar");

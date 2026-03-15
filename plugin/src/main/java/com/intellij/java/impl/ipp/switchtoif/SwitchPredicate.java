@@ -20,7 +20,6 @@ import consulo.language.psi.*;
 import consulo.language.ast.IElementType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import jakarta.annotation.Nonnull;
 
 class SwitchPredicate implements PsiElementPredicate {
 
@@ -40,7 +39,7 @@ class SwitchPredicate implements PsiElementPredicate {
     return checkSwitchStatement((PsiSwitchStatement)parent);
   }
 
-  public static boolean checkSwitchStatement(@Nonnull PsiSwitchStatement switchStatement) {
+  public static boolean checkSwitchStatement(PsiSwitchStatement switchStatement) {
     PsiExpression expression = switchStatement.getExpression();
     if (expression == null) {
       return false;

@@ -16,8 +16,7 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmEnumField;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a constant in a Java enum type.
@@ -44,7 +43,6 @@ public interface PsiEnumConstant extends PsiField, PsiConstructorCall, JvmEnumFi
   @Nullable
   PsiEnumConstantInitializer getInitializingClass();
 
-  @Nonnull
   PsiEnumConstantInitializer getOrCreateInitializingClass();
 
 }

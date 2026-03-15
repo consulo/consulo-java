@@ -30,8 +30,7 @@ import consulo.language.psi.PsiErrorElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nullable;
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -88,7 +87,6 @@ public class JavaFormatterUtil {
     return expression1.getOperationTokenType() == expression2.getOperationTokenType();
   }
 
-  @Nonnull
   public static WrapType getWrapType(int wrap) {
     switch (wrap) {
       case CommonCodeStyleSettings.WRAP_ALWAYS:
@@ -110,7 +108,7 @@ public class JavaFormatterUtil {
    * @param node     The node to check.
    * @return True for call chunk start.
    */
-  static boolean isStartOfCallChunk(@Nonnull CommonCodeStyleSettings settings, @Nonnull ASTNode node) {
+  static boolean isStartOfCallChunk(CommonCodeStyleSettings settings, ASTNode node) {
     if (node.getElementType() == JavaTokenType.DOT) {
       if (settings.KEEP_LINE_BREAKS) {
         ASTNode next = node.getTreeNext();
@@ -143,7 +141,7 @@ public class JavaFormatterUtil {
    * @param nodes List in which the method add nodes
    * @param node  Node to traverse
    */
-  public static void collectCallExpressionNodes(@Nonnull List<? super ASTNode> nodes, @Nonnull ASTNode node) {
+  public static void collectCallExpressionNodes(List<? super ASTNode> nodes, ASTNode node) {
     ArrayDeque<ASTNode> stack = new ArrayDeque<>(CALL_EXPRESSION_DEPTH);
     stack.addLast(node.getFirstChildNode());
     while (!stack.isEmpty()) {
@@ -399,7 +397,7 @@ public class JavaFormatterUtil {
    * Example: {@code private @Foo @Bar void method() {} }
    * Here both Foo and Bar are after keyword
    */
-  private static boolean isAnnotationAfterKeyword(@Nonnull ASTNode annotation) {
+  private static boolean isAnnotationAfterKeyword(ASTNode annotation) {
     ASTNode current = annotation.getTreePrev();
     while (current != null) {
       if (current instanceof PsiKeyword) {
@@ -410,7 +408,7 @@ public class JavaFormatterUtil {
     return false;
   }
 
-  private static boolean isAfterNonBlockStatement(@Nonnull ASTNode node) {
+  private static boolean isAfterNonBlockStatement(ASTNode node) {
     ASTNode prev = node.getTreePrev();
     if (prev instanceof PsiWhiteSpace) prev = prev.getTreePrev();
     return prev != null && prev.getElementType() != JavaElementType.BLOCK_STATEMENT;
@@ -473,14 +471,14 @@ public class JavaFormatterUtil {
     return CommonCodeStyleSettings.DO_NOT_WRAP;
   }
 
-  private static void putPreferredWrapInParentBlock(@Nonnull AbstractJavaBlock block, @Nonnull Wrap preferredWrap) {
+  private static void putPreferredWrapInParentBlock(AbstractJavaBlock block, Wrap preferredWrap) {
     AbstractJavaBlock parentBlock = block.getParentBlock();
     if (parentBlock != null) {
       parentBlock.setReservedWrap(preferredWrap, JavaElementType.MODIFIER_LIST);
     }
   }
 
-  private static boolean isModifierListWithSingleAnnotation(@Nonnull ASTNode elem, IElementType parentElementType) {
+  private static boolean isModifierListWithSingleAnnotation(ASTNode elem, IElementType parentElementType) {
     ASTNode parent = elem.getTreeParent();
     if (parent != null && parent.getElementType() == parentElementType) {
       return isModifierListWithSingleAnnotation(elem);
@@ -488,7 +486,7 @@ public class JavaFormatterUtil {
     return false;
   }
 
-  private static boolean isModifierListWithSingleAnnotation(@Nonnull ASTNode elem) {
+  private static boolean isModifierListWithSingleAnnotation(ASTNode elem) {
     if (elem.getPsi() instanceof PsiModifierList) {
       if (((PsiModifierList)elem.getPsi()).getAnnotations().length == 1) {
         return true;
@@ -497,7 +495,7 @@ public class JavaFormatterUtil {
     return false;
   }
 
-  private static boolean isAnnoInsideModifierListWithAtLeastOneKeyword(@Nonnull ASTNode current, @Nonnull ASTNode parent) {
+  private static boolean isAnnoInsideModifierListWithAtLeastOneKeyword(ASTNode current, ASTNode parent) {
     if (current.getElementType() != JavaElementType.ANNOTATION || parent.getElementType() != JavaElementType.MODIFIER_LIST) return false;
     while (true) {
       current = FormatterUtil.getPreviousNonWhitespaceSibling(current);
@@ -579,7 +577,7 @@ public class JavaFormatterUtil {
     }
   }
 
-  static boolean isTopLevelTypeInCatchSection(@Nonnull IElementType nodeType, ASTNode node) {
+  static boolean isTopLevelTypeInCatchSection(IElementType nodeType, ASTNode node) {
     if (nodeType != JavaElementType.TYPE) return false;
     ASTNode parent = node.getTreeParent();
     if (parent == null || parent.getElementType() != JavaElementType.PARAMETER) return false;

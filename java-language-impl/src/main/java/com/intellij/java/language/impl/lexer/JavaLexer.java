@@ -11,8 +11,7 @@ import consulo.util.collection.CharSequenceHashingStrategy;
 import consulo.util.collection.Sets;
 import consulo.util.lang.CharArrayUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -33,13 +32,13 @@ public final class JavaLexer extends LexerBase {
     JAVA9_KEYWORDS.addAll(Set.of(OPEN, MODULE, REQUIRES, EXPORTS, OPENS, USES, PROVIDES, TRANSITIVE, TO, WITH));
   }
 
-  public static boolean isKeyword(String id, @Nonnull LanguageLevel level) {
+  public static boolean isKeyword(String id, LanguageLevel level) {
     return KEYWORDS.contains(id) ||
       level.isAtLeast(LanguageLevel.JDK_1_4) && ASSERT.equals(id) ||
       level.isAtLeast(LanguageLevel.JDK_1_5) && ENUM.equals(id);
   }
 
-  public static boolean isSoftKeyword(CharSequence id, @Nonnull LanguageLevel level) {
+  public static boolean isSoftKeyword(CharSequence id, LanguageLevel level) {
     return level.isAtLeast(LanguageLevel.JDK_1_9) && JAVA9_KEYWORDS.contains(id) ||
       level.isAtLeast(LanguageLevel.JDK_10) && VAR.contentEquals(id) ||
       level.isAtLeast(LanguageLevel.JDK_16) && RECORD.contentEquals(id) ||
@@ -57,12 +56,12 @@ public final class JavaLexer extends LexerBase {
   private int myTokenEndOffset;  // positioned after the last symbol of the current token
   private IElementType myTokenType;
 
-  public JavaLexer(@Nonnull LanguageLevel level) {
+  public JavaLexer(LanguageLevel level) {
     myFlexLexer = new _JavaLexer(level);
   }
 
   @Override
-  public void start(@Nonnull CharSequence buffer, int startOffset, int endOffset, int initialState) {
+  public void start(CharSequence buffer, int startOffset, int endOffset, int initialState) {
     myBuffer = buffer;
     myBufferArray = CharArrayUtil.fromSequenceWithoutCopying(buffer);
     myBufferIndex = startOffset;
@@ -322,7 +321,6 @@ public final class JavaLexer extends LexerBase {
     return myBufferArray != null ? myBufferArray[position] : myBuffer.charAt(position);
   }
 
-  @Nonnull
   @Override
   public CharSequence getBufferSequence() {
     return myBuffer;

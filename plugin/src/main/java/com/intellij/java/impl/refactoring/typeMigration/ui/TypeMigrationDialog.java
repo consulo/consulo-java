@@ -37,8 +37,7 @@ import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.Messages;
 import consulo.util.lang.function.Functions;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -58,7 +57,7 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
   private TypeMigrationRules myRules;
   private final ScopeChooserCombo myScopeChooserCombo;
 
-  public TypeMigrationDialog(@Nonnull Project project, @Nonnull PsiElement[] roots, @Nullable TypeMigrationRules rules) {
+  public TypeMigrationDialog(Project project, PsiElement[] roots, @Nullable TypeMigrationRules rules) {
     super(project, false);
     myRoots = roots;
     myRules = rules;
@@ -83,7 +82,6 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
     invokeRefactoring(new TypeMigrationProcessor(myProject, myRoots, getMigrationTypeFunction(), myRules, true));
   }
 
-  @Nonnull
   protected abstract Function<PsiElement, PsiType> getMigrationTypeFunction();
 
   protected void appendMigrationTypeEditor(JPanel panel, GridBagConstraints cs) {
@@ -114,13 +112,12 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
   public static class MultipleElements extends TypeMigrationDialog {
     private final Function<PsiElement, PsiType> myMigrationTypeFunction;
 
-    public MultipleElements(@Nonnull Project project, @Nonnull PsiElement[] roots, @Nonnull Function<PsiElement, PsiType> migrationTypeFunction, @Nonnull TypeMigrationRules rules) {
+    public MultipleElements(Project project, PsiElement[] roots, Function<PsiElement, PsiType> migrationTypeFunction, TypeMigrationRules rules) {
       super(project, roots, rules);
       myMigrationTypeFunction = migrationTypeFunction;
       init();
     }
 
-    @Nonnull
     @Override
     protected Function<PsiElement, PsiType> getMigrationTypeFunction() {
       return myMigrationTypeFunction;
@@ -131,7 +128,7 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
     private final PsiTypeCodeFragment myTypeCodeFragment;
     private final EditorComboBox myToTypeEditor;
 
-    public SingleElement(@Nonnull Project project, @Nonnull PsiElement[] roots) {
+    public SingleElement(Project project, PsiElement[] roots) {
       super(project, roots, null);
       LOG.assertTrue(roots.length > 0);
       PsiType rootType = getRootType();
@@ -235,7 +232,6 @@ public abstract class TypeMigrationDialog extends RefactoringDialog {
       super.doAction();
     }
 
-    @Nonnull
     @Override
     protected Function<PsiElement, PsiType> getMigrationTypeFunction() {
       return Functions.constant(getMigrationType());

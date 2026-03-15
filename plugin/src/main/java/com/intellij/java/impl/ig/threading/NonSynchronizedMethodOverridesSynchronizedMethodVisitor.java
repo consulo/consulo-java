@@ -25,12 +25,11 @@ package com.intellij.java.impl.ig.threading;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.ig.BaseInspectionVisitor;
-import jakarta.annotation.Nonnull;
 
 class NonSynchronizedMethodOverridesSynchronizedMethodVisitor extends BaseInspectionVisitor {
 
   @Override
-  public void visitMethod(@Nonnull PsiMethod method) {
+  public void visitMethod(PsiMethod method) {
     //no call to super, so we don't drill into anonymous classes
     if (method.isConstructor()) {
       return;

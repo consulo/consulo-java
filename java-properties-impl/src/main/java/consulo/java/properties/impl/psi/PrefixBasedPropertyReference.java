@@ -24,10 +24,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -39,14 +37,12 @@ public class PrefixBasedPropertyReference extends PropertyReference {
   private boolean myDynamicPrefix;
   @Nullable
   private String myKeyPrefix;
-  @NonNls
   private static final String PREFIX_ATTR_NAME = "prefix";
 
   public PrefixBasedPropertyReference(String key, final PsiElement element, @Nullable final String bundleName, final boolean soft) {
     super(key, element, bundleName, soft);
   }
 
-  @Nonnull
   protected String getKeyText() {
     String keyText = super.getKeyText();
     final String keyPrefix = getKeyPrefix();

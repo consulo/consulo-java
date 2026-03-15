@@ -34,7 +34,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.function.Predicate;
@@ -45,7 +44,7 @@ public class AnnotatedPackagesSearcher implements AnnotatedPackagesSearchExecuto
 
     @Override
     @RequiredReadAction
-    public boolean execute(@Nonnull AnnotatedPackagesSearch.Parameters p, @Nonnull Predicate<? super PsiJavaPackage> consumer) {
+    public boolean execute(AnnotatedPackagesSearch.Parameters p, Predicate<? super PsiJavaPackage> consumer) {
         PsiClass annClass = p.getAnnotationClass();
         assert annClass.isAnnotationType() : "Annotation type should be passed to annotated packages search";
 
@@ -134,7 +133,7 @@ public class AnnotatedPackagesSearcher implements AnnotatedPackagesSearchExecuto
 
     private static class PackageInfoFilesOnly extends GlobalSearchScope {
         @Override
-        public int compare(@Nonnull VirtualFile file1, @Nonnull VirtualFile file2) {
+        public int compare(VirtualFile file1, VirtualFile file2) {
             return 0;
         }
 
@@ -149,7 +148,7 @@ public class AnnotatedPackagesSearcher implements AnnotatedPackagesSearchExecuto
         }
 
         @Override
-        public boolean isSearchInModuleContent(@Nonnull Module aModule) {
+        public boolean isSearchInModuleContent(Module aModule) {
             return true;
         }
     }

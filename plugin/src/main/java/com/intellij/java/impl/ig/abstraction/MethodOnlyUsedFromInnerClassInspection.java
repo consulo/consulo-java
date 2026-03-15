@@ -33,8 +33,7 @@ import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -49,14 +48,12 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean onlyReportStaticMethods = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.methodOnlyUsedFromInnerClassDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         PsiNamedElement element = (PsiNamedElement) infos[0];
         String name = element.getName();
@@ -143,7 +140,7 @@ public class MethodOnlyUsedFromInnerClassInspection extends BaseInspection {
 
         private PsiClass cache = null;
 
-        MethodReferenceFinder(@Nonnull PsiMethod method) {
+        MethodReferenceFinder(PsiMethod method) {
             this.method = method;
             methodClass = method.getContainingClass();
         }

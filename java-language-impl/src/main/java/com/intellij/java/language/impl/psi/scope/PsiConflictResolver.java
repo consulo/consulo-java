@@ -17,9 +17,8 @@ package com.intellij.java.language.impl.psi.scope;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,5 +30,5 @@ import jakarta.annotation.Nullable;
 public interface PsiConflictResolver
 {
 	@Nullable
-	CandidateInfo resolveConflict(@Nonnull List<CandidateInfo> conflicts);
+	CandidateInfo resolveConflict(List<CandidateInfo> conflicts);
 }

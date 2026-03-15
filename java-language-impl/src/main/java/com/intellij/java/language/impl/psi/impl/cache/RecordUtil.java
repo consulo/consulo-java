@@ -34,7 +34,6 @@ import consulo.language.ast.LighterASTTokenNode;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.util.CharTable;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -46,7 +45,7 @@ public class RecordUtil {
   private RecordUtil() {
   }
 
-  public static boolean isDeprecatedByAnnotation(@Nonnull LighterAST tree, @Nonnull LighterASTNode modList) {
+  public static boolean isDeprecatedByAnnotation(LighterAST tree, LighterASTNode modList) {
     for (final LighterASTNode child : tree.getChildren(modList)) {
       if (child.getTokenType() == JavaElementType.ANNOTATION) {
         final LighterASTNode ref = LightTreeUtil.firstChildOfType(tree, child, JavaElementType.JAVA_CODE_REFERENCE);
@@ -65,7 +64,7 @@ public class RecordUtil {
     return false;
   }
 
-  public static boolean isDeprecatedByDocComment(@Nonnull LighterAST tree, @Nonnull LighterASTNode comment) {
+  public static boolean isDeprecatedByDocComment(LighterAST tree, LighterASTNode comment) {
     String text = LightTreeUtil.toFilteredString(tree, comment, null);
     if (text.contains(DEPRECATED_TAG)) {
       JavaDocLexer lexer = new JavaDocLexer(LanguageLevel.HIGHEST);
@@ -82,7 +81,7 @@ public class RecordUtil {
     return false;
   }
 
-  public static int packModifierList(@Nonnull LighterAST tree, @Nonnull LighterASTNode modList) {
+  public static int packModifierList(LighterAST tree, LighterASTNode modList) {
     int packed = 0;
     for (final LighterASTNode child : tree.getChildren(modList)) {
       packed |= ModifierFlags.KEYWORD_TO_MODIFIER_FLAG_MAP.getInt(child.getTokenType());
@@ -90,13 +89,12 @@ public class RecordUtil {
     return packed;
   }
 
-  @Nonnull
-  public static String intern(@Nonnull CharTable table, @Nonnull LighterASTNode node) {
+  public static String intern(CharTable table, LighterASTNode node) {
     assert node instanceof LighterASTTokenNode : node;
     return table.intern(((LighterASTTokenNode) node).getText()).toString();
   }
 
-  public static boolean isStaticNonPrivateMember(@Nonnull StubElement<?> stub) {
+  public static boolean isStaticNonPrivateMember(StubElement<?> stub) {
     StubElement<PsiModifierList> type = stub.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
     if (!(type instanceof PsiModifierListStub)) {
       return false;

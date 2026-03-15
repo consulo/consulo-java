@@ -13,8 +13,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
@@ -25,13 +24,13 @@ import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.
 public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExpression> implements InsertHandler<LookupElement> {
   private final PsiExpression myContext;
 
-  public JavaLangClassMemberReference(@Nonnull PsiLiteralExpression literal, @Nonnull PsiExpression context) {
+  public JavaLangClassMemberReference(PsiLiteralExpression literal, PsiExpression context) {
     super(literal);
     myContext = context;
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     return element;
   }
 
@@ -94,7 +93,6 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
   }
 
   @Override
-  @Nonnull
   public Object[] getVariants() {
     String type = getMemberType(myElement);
     if (type != null) {
@@ -171,7 +169,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
   }
 
   @Override
-  public void handleInsert(@Nonnull InsertionContext context, @Nonnull LookupElement item) {
+  public void handleInsert(InsertionContext context, LookupElement item) {
     Object object = item.getObject();
     if (object instanceof ReflectiveSignature) {
       ReflectiveSignature signature = (ReflectiveSignature) object;
@@ -182,7 +180,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
 
 
   @Nullable
-  public static PsiMethod matchMethod(@Nonnull PsiMethod[] methods, @Nonnull List<? extends ReflectiveType> argumentTypes) {
+  public static PsiMethod matchMethod(PsiMethod[] methods, List<? extends ReflectiveType> argumentTypes) {
     int mismatchCount = Integer.MAX_VALUE;
     PsiMethod bestGuess = null;
     for (PsiMethod method : methods) {
@@ -221,7 +219,7 @@ public class JavaLangClassMemberReference extends PsiReferenceBase<PsiLiteralExp
   }
 
   @Nullable
-  public static List<PsiExpression> getReflectionMethodArguments(@Nonnull PsiMethodCallExpression definitionCall, int argumentOffset) {
+  public static List<PsiExpression> getReflectionMethodArguments(PsiMethodCallExpression definitionCall, int argumentOffset) {
     PsiExpression[] arguments = definitionCall.getArgumentList().getExpressions();
 
     if (arguments.length == argumentOffset + 1) {

@@ -23,17 +23,16 @@ import consulo.language.editor.inspection.scheme.GlobalInspectionToolWrapper;
 import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
  */
 public class EntryPointsNode extends InspectionNode {
-  public EntryPointsNode(@Nonnull GlobalInspectionContextImpl context) {
+  public EntryPointsNode(GlobalInspectionContextImpl context) {
     super(createDummyWrapper(context));
   }
 
-  private static InspectionToolWrapper createDummyWrapper(@Nonnull GlobalInspectionContextImpl context) {
+  private static InspectionToolWrapper createDummyWrapper(GlobalInspectionContextImpl context) {
     InspectionToolWrapper toolWrapper = new GlobalInspectionToolWrapper(new DummyEntryPointsTool(), new HighlightDisplayKey("Dummy", "dummy"));
     toolWrapper.initialize(context);
     return toolWrapper;

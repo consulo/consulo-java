@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.portability.mediatype;
 
-import org.jetbrains.annotations.NonNls;
 
 public enum VideoMediaType {
   THREE_GPP("video/3gpp"),
@@ -66,7 +65,7 @@ public enum VideoMediaType {
 
   private final String contentType;
 
-  VideoMediaType(@NonNls String contentType) {
+  VideoMediaType(String contentType) {
     this.contentType = contentType;
   }
 

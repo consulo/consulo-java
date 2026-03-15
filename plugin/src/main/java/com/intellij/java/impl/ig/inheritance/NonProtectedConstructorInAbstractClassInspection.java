@@ -26,7 +26,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,20 +36,17 @@ public class NonProtectedConstructorInAbstractClassInspection extends BaseInspec
      */
     public boolean m_ignoreNonPublicClasses = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonProtectedConstructorInAbstractClassDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "ConstructorNotProtectedInAbstractClass";
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonProtectedConstructorInAbstractClassProblemDescriptor().get();
     }
@@ -75,7 +71,7 @@ public class NonProtectedConstructorInAbstractClassInspection extends BaseInspec
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //no call to super, so we don't drill into anonymous classes
             if (!method.isConstructor()) {
                 return;

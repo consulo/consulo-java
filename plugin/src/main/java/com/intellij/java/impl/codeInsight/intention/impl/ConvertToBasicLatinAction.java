@@ -44,8 +44,7 @@ import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.xml.javaee.ExternalResourceManager;
 import consulo.xml.psi.xml.XmlEntityDecl;
 import consulo.xml.psi.xml.XmlFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -60,7 +59,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(ConvertToBasicLatinAction.class);
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
     Pair<PsiElement, Handler> pair = findHandler(element);
     if (pair == null) return false;
@@ -73,14 +72,13 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
     return false;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionConvertToBasicLatin();
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     Pair<PsiElement, Handler> pair = findHandler(element);
     if (pair == null) return;
     PsiElement workElement = pair.first;

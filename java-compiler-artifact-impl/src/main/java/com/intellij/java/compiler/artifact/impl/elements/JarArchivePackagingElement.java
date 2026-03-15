@@ -19,7 +19,6 @@ import consulo.compiler.artifact.element.ArchivePackageWriter;
 import consulo.compiler.artifact.element.ArchivePackagingElement;
 import consulo.compiler.artifact.element.ZipArchivePackagingElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -30,7 +29,7 @@ public class JarArchivePackagingElement extends ArchivePackagingElement {
         super(JarArchiveElementType.getInstance());
     }
 
-    public JarArchivePackagingElement(@Nonnull String archiveFileName) {
+    public JarArchivePackagingElement(String archiveFileName) {
         super(JarArchiveElementType.getInstance(), archiveFileName);
     }
 

@@ -38,22 +38,19 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.popup.JBPopup;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 
 public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     private static final Logger LOG = Logger.getInstance(PullAsAbstractUpFix.class);
-    @Nonnull
     private final LocalizeValue myName;
 
-    public PullAsAbstractUpFix(PsiMethod psiMethod, @Nonnull LocalizeValue name) {
+    public PullAsAbstractUpFix(PsiMethod psiMethod, LocalizeValue name) {
         super(psiMethod);
         myName = name;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myName;
@@ -61,21 +58,21 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         return startElement instanceof PsiMethod && startElement.isValid() && ((PsiMethod) startElement).getContainingClass() != null;
     }
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         final PsiMethod method = (PsiMethod) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(method.getContainingFile())) {
@@ -112,7 +109,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
                     "Choose super class",
                     new PsiElementProcessor<PsiClass>() {
                         @Override
-                        public boolean execute(@Nonnull PsiClass aClass) {
+                        public boolean execute(PsiClass aClass) {
                             pullUp(method, containingClass, aClass);
                             return false;
                         }
@@ -153,7 +150,7 @@ public class PullAsAbstractUpFix extends LocalQuickFixAndIntentionActionOnPsiEle
         return false;
     }
 
-    public static void registerQuickFix(@Nonnull PsiMethod methodWithOverrides, @Nonnull QuickFixActionRegistrar registrar) {
+    public static void registerQuickFix(PsiMethod methodWithOverrides, QuickFixActionRegistrar registrar) {
         PsiClass containingClass = methodWithOverrides.getContainingClass();
         if (containingClass == null) {
             return;

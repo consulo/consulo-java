@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.descriptors.data;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.jdi.DecompiledLocalVariable;
 import com.intellij.java.debugger.impl.ui.impl.watch.ArgumentValueDescriptorImpl;
 import consulo.project.Project;
@@ -33,7 +32,7 @@ public class ArgValueData extends DescriptorData<ArgumentValueDescriptorImpl>
 	}
 
 	@Override
-	protected ArgumentValueDescriptorImpl createDescriptorImpl(@Nonnull Project project)
+	protected ArgumentValueDescriptorImpl createDescriptorImpl(Project project)
 	{
 		return new ArgumentValueDescriptorImpl(project, myVariable, myValue);
 	}

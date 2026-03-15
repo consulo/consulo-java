@@ -20,7 +20,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.ui.console.Filter;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,9 +29,8 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class VcsContentAnnotationExceptionFilterFactory implements ExceptionFilterFactory {
-  @Nonnull
   @Override
-  public Filter create(@Nonnull GlobalSearchScope searchScope) {
+  public Filter create(GlobalSearchScope searchScope) {
     return new VcsContentAnnotationExceptionFilter(searchScope);
   }
 }

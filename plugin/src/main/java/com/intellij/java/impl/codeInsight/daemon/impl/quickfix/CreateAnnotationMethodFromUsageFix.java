@@ -30,15 +30,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class CreateAnnotationMethodFromUsageFix extends CreateFromUsageBaseFix {
     private static final Logger LOG = Logger.getInstance(CreateAnnotationMethodFromUsageFix.class);
 
     private final SmartPsiElementPointer<PsiNameValuePair> myNameValuePair;
 
-    public CreateAnnotationMethodFromUsageFix(@Nonnull PsiNameValuePair valuePair) {
+    public CreateAnnotationMethodFromUsageFix(PsiNameValuePair valuePair) {
         myNameValuePair = SmartPointerManager.getInstance(valuePair.getProject()).createSmartPsiElementPointer(valuePair);
     }
 

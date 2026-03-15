@@ -21,12 +21,10 @@ import com.siyeh.ig.GroupDisplayNameUtil;
 import consulo.java.deadCodeNotWorking.OldStyleInspection;
 import consulo.language.Language;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class BaseGlobalInspection extends GlobalJavaInspectionTool implements OldStyleInspection {
     @Override
-    @Nonnull
     public final LocalizeValue getGroupDisplayName() {
         return GroupDisplayNameUtil.getGroupDisplayName(getClass());
     }

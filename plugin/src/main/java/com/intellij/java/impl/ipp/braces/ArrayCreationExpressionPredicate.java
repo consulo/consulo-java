@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ipp.braces;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiArrayInitializerExpression;
 import consulo.language.psi.PsiElement;
@@ -24,7 +23,7 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 
 class ArrayCreationExpressionPredicate implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@Nonnull PsiElement element) {
+  public boolean satisfiedBy(PsiElement element) {
     if (!(element instanceof PsiArrayInitializerExpression)) {
       return false;
     }

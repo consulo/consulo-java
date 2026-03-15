@@ -23,7 +23,6 @@ import consulo.language.Language;
 import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -31,12 +30,10 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class GenerationSettingsProvider extends CodeStyleSettingsProvider {
     @Override
-    @Nonnull
     public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
         return new CodeStyleGenerationConfigurable(settings);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getConfigurableDisplayName() {
         return ApplicationLocalize.titleCodeGeneration();

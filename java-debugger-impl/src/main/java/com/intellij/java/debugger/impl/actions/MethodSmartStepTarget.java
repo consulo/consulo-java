@@ -25,8 +25,7 @@ import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
 import consulo.util.lang.Range;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -36,7 +35,7 @@ public class MethodSmartStepTarget extends SmartStepTarget {
     private final PsiMethod myMethod;
 
     public MethodSmartStepTarget(
-        @Nonnull PsiMethod method,
+        PsiMethod method,
         @Nullable String label,
         @Nullable PsiElement highlightElement,
         boolean needBreakpointRequest,
@@ -53,7 +52,6 @@ public class MethodSmartStepTarget extends SmartStepTarget {
         return IconDescriptorUpdaters.getIcon(myMethod, 0);
     }
 
-    @Nonnull
     @Override
     public String getPresentation() {
         String label = getLabel();
@@ -67,7 +65,6 @@ public class MethodSmartStepTarget extends SmartStepTarget {
         return label != null ? label + formatted : formatted;
     }
 
-    @Nonnull
     public PsiMethod getMethod() {
         return myMethod;
     }

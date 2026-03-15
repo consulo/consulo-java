@@ -25,14 +25,13 @@ import consulo.execution.ui.RunContentDescriptor;
 import consulo.ui.ex.action.*;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class DefaultDebugUIEnvironment implements DebugUIEnvironment {
   private final ExecutionEnvironment myExecutionEnvironment;
   private final DebugEnvironment myModelEnvironment;
 
-  public DefaultDebugUIEnvironment(@Nonnull ExecutionEnvironment environment, RunProfileState state, RemoteConnection remoteConnection,
+  public DefaultDebugUIEnvironment(ExecutionEnvironment environment, RunProfileState state, RemoteConnection remoteConnection,
                                    boolean pollConnection) {
     myExecutionEnvironment = environment;
     myModelEnvironment = new DefaultDebugEnvironment(environment, state, remoteConnection, pollConnection);
@@ -64,7 +63,6 @@ public class DefaultDebugUIEnvironment implements DebugUIEnvironment {
   }
 
   @Override
-  @Nonnull
   public RunProfile getRunProfile() {
     return myExecutionEnvironment.getRunProfile();
   }

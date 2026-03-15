@@ -24,26 +24,21 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ConnectionResourceInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ConnectionOpenedButNotSafelyClosed";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.connectionOpenedNotSafelyClosedDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiType type = (PsiType) infos[0];
         String text = type.getPresentableText();
@@ -59,7 +54,7 @@ public class ConnectionResourceInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
             if (!isConnectionFactoryMethod(expression)) {
@@ -150,7 +145,7 @@ public class ConnectionResourceInspection extends BaseInspection {
         }
 
         private static boolean isConnectionFactoryMethod(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
@@ -167,7 +162,7 @@ public class ConnectionResourceInspection extends BaseInspection {
                 return false;
             }
             String className = containingClass.getQualifiedName();
-            @NonNls String microeditionConnector =
+            String microeditionConnector =
                 "javax.microedition.io.Connector";
             return microeditionConnector.equals(className);
         }
@@ -184,7 +179,7 @@ public class ConnectionResourceInspection extends BaseInspection {
         }
 
         @Override
-        public void visitElement(@Nonnull PsiElement element) {
+        public void visitElement(PsiElement element) {
             if (containsClose) {
                 return;
             }
@@ -193,7 +188,7 @@ public class ConnectionResourceInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression call
+            PsiMethodCallExpression call
         ) {
             if (containsClose) {
                 return;

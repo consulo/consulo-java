@@ -26,8 +26,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -37,12 +36,10 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
   public boolean ignoreReferences = true;
   public boolean ignoreComplexLiterals = false;
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallProblemDescriptor().get();
   }
@@ -89,7 +86,6 @@ public abstract class UnpredictableBigDecimalConstructorCallInspection
       this.argumentText = argumentText;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.unpredictableBigDecimalConstructorCallQuickfix(argumentText);
     }

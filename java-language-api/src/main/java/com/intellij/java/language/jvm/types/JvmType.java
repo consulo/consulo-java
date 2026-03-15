@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.jvm.JvmAnnotation;
 
 import java.lang.reflect.AnnotatedType;
@@ -34,6 +33,5 @@ public interface JvmType
 	 * @return type annotations
 	 * @see AnnotatedType#getAnnotations
 	 */
-	@Nonnull
 	JvmAnnotation[] getAnnotations();
 }

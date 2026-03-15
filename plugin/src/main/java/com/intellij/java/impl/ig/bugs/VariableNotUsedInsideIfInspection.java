@@ -25,18 +25,15 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class VariableNotUsedInsideIfInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.variableNotUsedInsideIfDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.variableNotUsedInsideIfProblemDescriptor().get();
     }

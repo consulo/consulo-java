@@ -51,8 +51,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,12 +71,12 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor processor,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
+        Object state
     ) {
         if (refEntity instanceof RefMethod refMethod) {
             if (refMethod.isSyntheticJSP()
@@ -123,9 +122,9 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 
     @Override
     protected boolean queryExternalUsagesRequests(
-        @Nonnull RefManager manager,
-        @Nonnull GlobalJavaInspectionContext globalContext,
-        @Nonnull final ProblemDescriptionsProcessor processor
+        RefManager manager,
+        GlobalJavaInspectionContext globalContext,
+        final ProblemDescriptionsProcessor processor
     ) {
         Project project = manager.getProject();
         for (RefElement entryPoint : globalContext.getEntryPointsManager(manager).getEntryPoints()) {
@@ -136,7 +135,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
         final AnalysisScope scope = manager.getScope();
         manager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull RefEntity refEntity) {
+            public void visitElement(RefEntity refEntity) {
                 if (refEntity instanceof RefMethod refMethod
                     && refMethod.getElement() instanceof PsiMethod psiMethod
                     //implicit constructors are invisible
@@ -184,7 +183,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
 
     @Nullable
     @Override
-    public String getHint(@Nonnull QuickFix fix) {
+    public String getHint(QuickFix fix) {
         return ((AcceptSuggested) fix).getHint();
     }
 
@@ -195,7 +194,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
     }
 
     @Override
-    public void compose(@Nonnull StringBuffer buf, @Nonnull RefEntity refEntity, @Nonnull HTMLComposer composer) {
+    public void compose(StringBuffer buf, RefEntity refEntity, HTMLComposer composer) {
         if (refEntity instanceof RefMethod refMethod) {
             HTMLJavaHTMLComposer javaComposer = composer.getExtension(HTMLJavaHTMLComposer.COMPOSER);
             javaComposer.appendDerivedMethods(buf, refMethod);
@@ -221,7 +220,7 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
         return res;
     }
 
-    private static void clearUsedParameters(@Nonnull RefMethod refMethod, RefParameter[] params, boolean checkDeep) {
+    private static void clearUsedParameters(RefMethod refMethod, RefParameter[] params, boolean checkDeep) {
         RefParameter[] methodParams = refMethod.getParameters();
 
         for (int i = 0; i < methodParams.length; i++) {
@@ -238,19 +237,16 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionUnusedParameterDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }
@@ -285,14 +281,13 @@ public class UnusedParametersInspection extends GlobalJavaBatchInspectionTool im
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionUnusedParameterDeleteQuickfix();
         }
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) {
                 return;
             }

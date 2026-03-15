@@ -32,8 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -42,7 +41,7 @@ import java.util.Map;
 @ExtensionImpl
 public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider<PsiJavaCodeReferenceElement> {
   @Override
-  public void registerFixes(@Nonnull PsiJavaCodeReferenceElement ref, @Nonnull QuickFixActionRegistrar registrar) {
+  public void registerFixes(PsiJavaCodeReferenceElement ref, QuickFixActionRegistrar registrar) {
     if (PsiUtil.isModuleFile(ref.getContainingFile())) {
       List<LocalQuickFix> fixes = OrderEntryFix.registerFixes(ref);
       if (fixes != null) {
@@ -97,9 +96,9 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
     }
   }
 
-  private static void registerPriorityActions(@Nonnull QuickFixActionRegistrar registrar,
-                                              @Nonnull TextRange fixRange,
-                                              @Nonnull PsiReferenceExpression refExpr) {
+  private static void registerPriorityActions(QuickFixActionRegistrar registrar,
+                                              TextRange fixRange,
+                                              PsiReferenceExpression refExpr) {
     JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(refExpr.getProject());
 
     Map<VariableKind, IntentionAction> map = new EnumMap<>(VariableKind.class);
@@ -121,7 +120,7 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
   }
 
   @Nullable
-  private static VariableKind getKind(@Nonnull JavaCodeStyleManager styleManager, @Nonnull PsiReferenceExpression refExpr) {
+  private static VariableKind getKind(JavaCodeStyleManager styleManager, PsiReferenceExpression refExpr) {
     String reference = refExpr.getText();
 
     boolean upperCase = true;
@@ -156,7 +155,6 @@ public class DefaultQuickFixProvider extends UnresolvedReferenceQuickFixProvider
   }
 
   @Override
-  @Nonnull
   public Class<PsiJavaCodeReferenceElement> getReferenceClass() {
     return PsiJavaCodeReferenceElement.class;
   }

@@ -27,9 +27,7 @@ import consulo.execution.debug.breakpoint.XBreakpointType;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for non-line java breakpoint
@@ -37,7 +35,7 @@ import org.jetbrains.annotations.Nls;
  * @author egor
  */
 public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties> extends XBreakpointType<XBreakpoint<T>, T> {
-    protected JavaBreakpointTypeBase(@Nonnull String id, @Nls @Nonnull String title) {
+    protected JavaBreakpointTypeBase(String id, String title) {
         super(id, title, true);
     }
 
@@ -48,19 +46,19 @@ public abstract class JavaBreakpointTypeBase<T extends JavaBreakpointProperties>
 
     @Nullable
     @Override
-    public final XBreakpointCustomPropertiesPanel<XBreakpoint<T>> createCustomRightPropertiesPanel(@Nonnull Project project) {
+    public final XBreakpointCustomPropertiesPanel<XBreakpoint<T>> createCustomRightPropertiesPanel(Project project) {
         return new JavaBreakpointFiltersPanel<T, XBreakpoint<T>>(project);
     }
 
     @Nullable
     @Override
-    public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XBreakpoint<T> breakpoint, @Nonnull Project project) {
+    public final XDebuggerEditorsProvider getEditorsProvider(XBreakpoint<T> breakpoint, Project project) {
         return new JavaDebuggerEditorsProvider();
     }
 
     @Nullable
     @Override
-    public XSourcePosition getSourcePosition(@Nonnull XBreakpoint<T> breakpoint) {
+    public XSourcePosition getSourcePosition(XBreakpoint<T> breakpoint) {
         Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
         if (javaBreakpoint != null) {
             PsiClass aClass = javaBreakpoint.getPsiClass();

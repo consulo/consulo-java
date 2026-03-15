@@ -31,13 +31,12 @@ import consulo.language.editor.template.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class JavaWithCastSurrounder extends JavaExpressionSurrounder {
-  @NonNls private static final String TYPE_TEMPLATE_VARIABLE = "type";
+  private static final String TYPE_TEMPLATE_VARIABLE = "type";
 
   @Override
   public boolean isApplicable(PsiExpression expr) {

@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.String;
 import java.util.Collection;

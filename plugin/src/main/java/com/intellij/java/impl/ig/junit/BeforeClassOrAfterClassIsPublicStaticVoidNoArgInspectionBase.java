@@ -9,7 +9,6 @@ import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import java.util.Arrays;
@@ -29,7 +28,6 @@ public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase extend
         return annotation.endsWith("Class");
     }
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
@@ -37,13 +35,11 @@ public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase extend
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.beforeClassOrAfterClassIsPublicStaticVoidNoArgDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.beforeClassOrAfterClassIsPublicStaticVoidNoArgProblemDescriptor(infos[1]).get();
     }
@@ -55,7 +51,7 @@ public class BeforeClassOrAfterClassIsPublicStaticVoidNoArgInspectionBase extend
 
     private static class BeforeClassOrAfterClassIsPublicStaticVoidNoArgVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //note: no call to super;
             String annotation = Arrays.stream(STATIC_CONFIGS)
                 .filter(anno -> AnnotationUtil.isAnnotated(method, anno, CHECK_HIERARCHY))

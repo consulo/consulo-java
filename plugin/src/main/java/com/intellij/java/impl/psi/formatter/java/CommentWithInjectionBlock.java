@@ -31,7 +31,6 @@ import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import consulo.language.codeStyle.inject.InjectedLanguageBlockBuilder;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
@@ -46,7 +45,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 									 Indent indent,
 									 CommonCodeStyleSettings settings,
 									 JavaCodeStyleSettings javaSettings,
-									 @Nonnull FormattingMode formattingMode)
+									 FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 		myInjectedBlockBuilder = new JavaCommentInjectedBlockBuilder();
@@ -66,7 +65,6 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 		return false;
 	}
 
-	@Nonnull
 	@Override
 	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
@@ -74,7 +72,7 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @Nonnull Block child2)
+	public Spacing getSpacing(Block child1, Block child2)
 	{
 		return null;
 	}
@@ -116,7 +114,6 @@ public class CommentWithInjectionBlock extends AbstractJavaBlock
 			myRange = range;
 		}
 
-		@Nonnull
 		@Override
 		public TextRange getTextRange()
 		{

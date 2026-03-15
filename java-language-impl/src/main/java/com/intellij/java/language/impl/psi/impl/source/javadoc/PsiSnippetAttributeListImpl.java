@@ -9,8 +9,7 @@ import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiSnippetAttributeListImpl extends CompositePsiElement implements PsiSnippetAttributeList {
   public PsiSnippetAttributeListImpl() {
@@ -18,7 +17,7 @@ public class PsiSnippetAttributeListImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     super.accept(visitor);
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitSnippetAttributeList(this);
@@ -29,7 +28,6 @@ public class PsiSnippetAttributeListImpl extends CompositePsiElement implements 
   }
 
   @Override
-  @Nonnull
   public PsiSnippetAttribute[] getAttributes() {
     PsiSnippetAttribute[] children = PsiTreeUtil.getChildrenOfType(this, PsiSnippetAttribute.class);
     if (children == null) return PsiSnippetAttribute.EMPTY_ARRAY;
@@ -39,7 +37,7 @@ public class PsiSnippetAttributeListImpl extends CompositePsiElement implements 
   @Override
   public
   @Nullable
-  PsiSnippetAttribute getAttribute(@Nonnull String name) {
+  PsiSnippetAttribute getAttribute(String name) {
     for (PsiElement child = getFirstChild(); child != null; child = child.getNextSibling()) {
       if (child instanceof PsiSnippetAttribute && ((PsiSnippetAttribute)child).getName().equals(name)) {
         return (PsiSnippetAttribute)child;

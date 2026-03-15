@@ -1,10 +1,9 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class TestNPEafterNew {
   @Nullable
   Object[] arr;
-  void test(@Nonnull Object[] notnull) {
+  void test(Object[] notnull) {
       arr = notnull;
       System.out.println(arr.length);
   }

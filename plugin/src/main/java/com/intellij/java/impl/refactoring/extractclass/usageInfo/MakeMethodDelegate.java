@@ -19,7 +19,6 @@ import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 
 public class MakeMethodDelegate extends FixableUsageInfo {
   private final PsiMethod method;
@@ -38,7 +37,7 @@ public class MakeMethodDelegate extends FixableUsageInfo {
     for (PsiStatement statement : statements) {
       statement.delete();
     }
-    @NonNls StringBuffer delegation = new StringBuffer();
+    StringBuffer delegation = new StringBuffer();
     PsiType returnType = method.getReturnType();
     if (!PsiType.VOID.equals(returnType)) {
       delegation.append("return ");

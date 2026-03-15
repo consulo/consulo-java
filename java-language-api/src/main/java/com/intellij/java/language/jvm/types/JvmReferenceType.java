@@ -15,10 +15,9 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.language.jvm.JvmTypeDeclaration;
-import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -40,7 +39,6 @@ public interface JvmReferenceType extends JvmType
 
 	JvmReferenceType[] EMPTY_ARRAY = new JvmReferenceType[0];
 
-	@Nonnull
 	String getName();
 
 	/**
@@ -63,6 +61,5 @@ public interface JvmReferenceType extends JvmType
 	 * @return type arguments or empty iterable if this type is not a parameterized type
 	 * @see ParameterizedType#getActualTypeArguments
 	 */
-	@Nonnull
 	Iterable<JvmType> typeArguments();
 }

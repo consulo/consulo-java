@@ -25,7 +25,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,19 +32,16 @@ import java.util.Set;
 @ExtensionImpl
 public class SerializableWithUnconstructableAncestorInspection extends BaseInspection {
     @Override
-    @Nonnull
     public String getID() {
         return "SerializableClassWithUnconstructableAncestor";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiClass ancestor = (PsiClass) infos[0];
         return InspectionGadgetsLocalize.serializableWithUnconstructableAncestorProblemDescriptor(ancestor.getName()).get();
@@ -59,7 +55,7 @@ public class SerializableWithUnconstructableAncestorInspection extends BaseInspe
     private static class SerializableWithUnconstructableAncestorVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (aClass.isInterface() || aClass.isAnnotationType()) {
                 return;
             }

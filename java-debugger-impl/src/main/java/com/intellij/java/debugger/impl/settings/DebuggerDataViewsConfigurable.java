@@ -30,8 +30,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -74,7 +73,6 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable {
         myProject = null;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.javaLanguageDisplayName();
@@ -290,13 +288,11 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable {
     }
 
     @Override
-    @Nonnull
     public String getHelpTopic() {
         return "reference.idesettings.debugger.dataviews";
     }
 
     @Override
-    @Nonnull
     public String getId() {
         return getHelpTopic();
     }

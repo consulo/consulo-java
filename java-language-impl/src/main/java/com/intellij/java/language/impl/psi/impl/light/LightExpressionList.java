@@ -11,7 +11,6 @@ import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
-import jakarta.annotation.Nonnull;
 
 /**
  * This class exists for compatibility only.
@@ -19,14 +18,13 @@ import jakarta.annotation.Nonnull;
  */
 public class LightExpressionList extends LightElement implements PsiExpressionList {
   private final PsiExpression[] myExpressions;
-  @Nonnull
   private final PsiElement myContext;
   private final TextRange myRange;
 
-  public LightExpressionList(@Nonnull PsiManager manager,
-                             @Nonnull Language language,
+  public LightExpressionList(PsiManager manager,
+                             Language language,
                              PsiExpression[] expressions,
-                             @Nonnull PsiElement context,
+                             PsiElement context,
                              TextRange range) {
     super(manager, language);
     myExpressions = expressions;
@@ -35,7 +33,7 @@ public class LightExpressionList extends LightElement implements PsiExpressionLi
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitExpressionList(this);
     }
@@ -45,13 +43,11 @@ public class LightExpressionList extends LightElement implements PsiExpressionLi
   }
 
   @Override
-  @Nonnull
   public PsiExpression[] getExpressions() {
     return myExpressions;
   }
 
   @Override
-  @Nonnull
   public PsiType[] getExpressionTypes() {
     PsiExpression[] expressions = getExpressions();
     PsiType[] types = PsiType.createArray(expressions.length);
@@ -70,7 +66,6 @@ public class LightExpressionList extends LightElement implements PsiExpressionLi
 
   @Override
   public
-  @Nonnull
   PsiElement getContext() {
     return myContext;
   }

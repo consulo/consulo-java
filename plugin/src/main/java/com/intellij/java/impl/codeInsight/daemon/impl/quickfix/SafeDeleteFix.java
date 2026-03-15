@@ -27,15 +27,13 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class SafeDeleteFix extends LocalQuickFixAndIntentionActionOnPsiElement {
-    public SafeDeleteFix(@Nonnull PsiElement element) {
+    public SafeDeleteFix(PsiElement element) {
         super(element);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public LocalizeValue getText() {
@@ -48,11 +46,11 @@ public class SafeDeleteFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;

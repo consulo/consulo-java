@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.*;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +40,6 @@ public class CreateConstructorFromSuperFix extends CreateConstructorFromThisOrSu
   }
 
   @Override
-  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     do {
       element = PsiTreeUtil.getParentOfType(element, PsiClass.class);

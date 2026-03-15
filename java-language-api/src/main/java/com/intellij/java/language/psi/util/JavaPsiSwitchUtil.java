@@ -10,9 +10,8 @@ import consulo.util.collection.MultiMap;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -35,7 +34,7 @@ public final class JavaPsiSwitchUtil {
      * @param selectorType type of switch selector expression
      * @return kind of selector
      */
-    public static @Nonnull SelectorKind getSwitchSelectorKind(@Nonnull PsiType selectorType) {
+    public static SelectorKind getSwitchSelectorKind(PsiType selectorType) {
         if (TypeConversionUtil.getTypeRank(selectorType) <= TypeConversionUtil.INT_RANK) {
             return SelectorKind.INT;
         }
@@ -77,7 +76,7 @@ public final class JavaPsiSwitchUtil {
      * @return true if the block contains at least one case label (including default)
      */
     @Contract(pure = true)
-    public static boolean hasAnyCaseLabels(@Nonnull PsiSwitchBlock block) {
+    public static boolean hasAnyCaseLabels(PsiSwitchBlock block) {
         PsiCodeBlock body = block.getBody();
         if (body == null) {
             return false;
@@ -105,7 +104,7 @@ public final class JavaPsiSwitchUtil {
         return null;
     }
 
-    private static @Nullable Object getBranchConstant(@Nonnull PsiCaseLabelElement labelElement, @Nonnull PsiType selectorType) {
+    private static @Nullable Object getBranchConstant(PsiCaseLabelElement labelElement, PsiType selectorType) {
         if (labelElement instanceof PsiExpression expr) {
             if (expr instanceof PsiReferenceExpression ref && ref.resolve() instanceof PsiEnumConstant constant) {
                 return constant;
@@ -140,7 +139,7 @@ public final class JavaPsiSwitchUtil {
      * It's useful to check for duplicate branches: if a single constant is mapped to more than one PSI element, then such a switch
      * is not well-formed.
      */
-    public static @Nonnull MultiMap<Object, PsiElement> getValuesAndLabels(@Nonnull PsiSwitchBlock block) {
+    public static MultiMap<Object, PsiElement> getValuesAndLabels(PsiSwitchBlock block) {
         MultiMap<Object, PsiElement> elementsToCheckDuplicates = new MultiMap<>();
         PsiCodeBlock body = block.getBody();
         if (body == null) {
@@ -184,9 +183,9 @@ public final class JavaPsiSwitchUtil {
      * @param selectorType The type used to select the case label element.
      * @return {@code true} if the 'overWhom' case label element dominates the 'who' case label element, {@code false} otherwise.
      */
-    public static boolean isDominated(@Nonnull PsiCaseLabelElement overWhom,
-                                      @Nonnull PsiElement who,
-                                      @Nonnull PsiType selectorType) {
+    public static boolean isDominated(PsiCaseLabelElement overWhom,
+                                      PsiElement who,
+                                      PsiType selectorType) {
         boolean isOverWhomUnconditionalForSelector = JavaPsiPatternUtil.isUnconditionalForType(overWhom, selectorType);
         if (!isOverWhomUnconditionalForSelector &&
             ((!(overWhom instanceof PsiExpression expression) || ExpressionUtil.isNullLiteral(expression)) &&
@@ -218,7 +217,7 @@ public final class JavaPsiSwitchUtil {
         return false;
     }
 
-    public static boolean isInCaseNullDefaultLabel(@Nonnull PsiElement element) {
+    public static boolean isInCaseNullDefaultLabel(PsiElement element) {
         PsiCaseLabelElementList list = ObjectUtil.tryCast(element.getParent(), PsiCaseLabelElementList.class);
         if (list == null || list.getElementCount() != 2) {
             return false;
@@ -228,7 +227,7 @@ public final class JavaPsiSwitchUtil {
             elements[1] instanceof PsiDefaultCaseLabelElement;
     }
 
-    private static boolean isConstantLabelElement(@Nonnull PsiCaseLabelElement labelElement) {
+    private static boolean isConstantLabelElement(PsiCaseLabelElement labelElement) {
         Object value = JavaPsiFacade.getInstance(labelElement.getProject()).getConstantEvaluationHelper()
             .computeConstantExpression(labelElement, false);
         return value != null || getEnumConstant(labelElement) != null;
@@ -240,7 +239,7 @@ public final class JavaPsiSwitchUtil {
      * which may dominate over any other label).
      * Only labels for which domination rules are violated will be returned.
      */
-    public static @Nonnull Map<PsiCaseLabelElement, PsiElement> findDominatedLabels(@Nonnull PsiSwitchBlock block) {
+    public static Map<PsiCaseLabelElement, PsiElement> findDominatedLabels(PsiSwitchBlock block) {
         PsiCodeBlock body = block.getBody();
         if (body == null) {
             return Collections.emptyMap();
@@ -293,7 +292,7 @@ public final class JavaPsiSwitchUtil {
         return result;
     }
 
-    private static boolean shouldConsiderForDominance(@Nonnull PsiCaseLabelElement labelElement) {
+    private static boolean shouldConsiderForDominance(PsiCaseLabelElement labelElement) {
         if (labelElement instanceof PsiPattern) {
             return true;
         }
@@ -318,7 +317,7 @@ public final class JavaPsiSwitchUtil {
      * @param block the switch block to analyze. Must not be null.
      * @return the first unconditional pattern label element if found; otherwise, returns null.
      */
-    public static PsiCaseLabelElement getUnconditionalPatternLabel(@Nonnull PsiSwitchBlock block) {
+    public static PsiCaseLabelElement getUnconditionalPatternLabel(PsiSwitchBlock block) {
         PsiCodeBlock body = block.getBody();
         if (body == null) {
             return null;
@@ -357,7 +356,7 @@ public final class JavaPsiSwitchUtil {
      * @return true if this switch block is a boolean switch that contains both true and false branches.
      * All unrelated branches or duplicate branches are ignored.
      */
-    public static boolean isBooleanSwitchWithTrueAndFalse(@Nonnull PsiSwitchBlock block) {
+    public static boolean isBooleanSwitchWithTrueAndFalse(PsiSwitchBlock block) {
         PsiCodeBlock body = block.getBody();
         if (body == null) {
             return false;
@@ -411,7 +410,7 @@ public final class JavaPsiSwitchUtil {
      * @return either default switch label statement {@link PsiSwitchLabelStatementBase}, or {@link PsiDefaultCaseLabelElement},
      * or null, if nothing was found.
      */
-    public static @Nullable PsiElement findDefaultElement(@Nonnull PsiSwitchBlock switchBlock) {
+    public static @Nullable PsiElement findDefaultElement(PsiSwitchBlock switchBlock) {
         PsiCodeBlock body = switchBlock.getBody();
         if (body == null) {
             return null;
@@ -434,7 +433,7 @@ public final class JavaPsiSwitchUtil {
      * @return either default switch label statement {@link PsiSwitchLabelStatementBase}, or {@link PsiDefaultCaseLabelElement},
      * or null, if nothing was found.
      */
-    public static @Nullable PsiElement findDefaultElement(@Nonnull PsiSwitchLabelStatementBase label) {
+    public static @Nullable PsiElement findDefaultElement(PsiSwitchLabelStatementBase label) {
         if (label.isDefaultCase()) {
             return label;
         }
@@ -451,7 +450,7 @@ public final class JavaPsiSwitchUtil {
      * @return a list of switch branches consisting of either {@link PsiSwitchLabelStatementBase} for default case,
      * or {@link PsiCaseLabelElement}
      */
-    public static @Nonnull List<PsiElement> getSwitchBranches(@Nonnull PsiSwitchBlock block) {
+    public static List<PsiElement> getSwitchBranches(PsiSwitchBlock block) {
         final PsiCodeBlock body = block.getBody();
         if (body == null) {
             return Collections.emptyList();
@@ -476,7 +475,7 @@ public final class JavaPsiSwitchUtil {
      * @param block the switch block
      * @return a list of all case labels within this switch block (default branches are naturally not returned).
      */
-    public static @Nonnull List<PsiCaseLabelElement> getCaseLabelElements(@Nonnull PsiSwitchBlock block) {
+    public static List<PsiCaseLabelElement> getCaseLabelElements(PsiSwitchBlock block) {
         PsiCodeBlock body = block.getBody();
         if (body == null) {
             return List.of();

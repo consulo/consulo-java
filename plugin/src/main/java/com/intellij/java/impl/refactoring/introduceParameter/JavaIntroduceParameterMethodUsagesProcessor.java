@@ -43,8 +43,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -161,7 +160,7 @@ public class JavaIntroduceParameterMethodUsagesProcessor implements IntroducePar
     }
 
     @RequiredWriteAction
-    private static void removeParametersFromCall(@Nonnull PsiExpressionList argList, IntList parametersToRemove) {
+    private static void removeParametersFromCall(PsiExpressionList argList, IntList parametersToRemove) {
         PsiExpression[] exprs = argList.getExpressions();
 
         IntList reverse = IntLists.newArrayList(parametersToRemove.toArray());

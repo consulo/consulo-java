@@ -22,18 +22,15 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SetReplaceableByEnumSetInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.setReplaceableByEnumSetDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.setReplaceableByEnumSetProblemDescriptor().get();
     }
@@ -45,7 +42,7 @@ public class SetReplaceableByEnumSetInspection extends BaseInspection {
 
     private static class SetReplaceableByEnumSetVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             PsiType type = expression.getType();
             if (!(type instanceof PsiClassType classType) || !classType.hasParameters()) {

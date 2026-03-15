@@ -6,8 +6,7 @@ import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.ast.*;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -231,7 +230,6 @@ class ParameterNullityInferenceKt {
         }
     }
 
-    @Nonnull
     private static List<String> getParameterNames(LighterAST tree, LighterASTNode method) {
         LighterASTNode parameterList = LightTreeUtil.firstChildOfType(tree, method, PARAMETER_LIST);
         if (parameterList == null) {

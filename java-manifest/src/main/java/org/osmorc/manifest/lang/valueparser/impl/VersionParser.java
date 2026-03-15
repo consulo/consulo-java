@@ -26,7 +26,7 @@ package org.osmorc.manifest.lang.valueparser.impl;
 
 import consulo.language.editor.annotation.AnnotationHolder;
 import consulo.document.util.TextRange;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.valueparser.impl.valueobject.Version;
 

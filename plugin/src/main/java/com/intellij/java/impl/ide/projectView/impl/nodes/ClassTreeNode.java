@@ -30,7 +30,7 @@ import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.project.ui.view.tree.ViewSettings;
 import consulo.ui.ex.tree.PresentationData;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 

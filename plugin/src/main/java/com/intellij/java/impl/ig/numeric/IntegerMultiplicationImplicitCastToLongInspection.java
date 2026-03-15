@@ -27,8 +27,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.localize.LocalizeValue;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -41,7 +39,6 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
   /**
    * @noinspection StaticCollection
    */
-  @NonNls
   private static final Set<String> s_typesToCheck = new HashSet<String>(4);
 
   static {
@@ -55,13 +52,11 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
   public boolean ignoreNonOverflowingCompileTimeConstants = true;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.integerMultiplicationImplicitCastToLongDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.integerMultiplicationImplicitCastToLongProblemDescriptor().get();
   }
@@ -80,7 +75,7 @@ public class IntegerMultiplicationImplicitCastToLongInspection extends
   private class IntegerMultiplicationImplicitlyCastToLongVisitor extends BaseInspectionVisitor {
     @Override
     public void visitBinaryExpression(
-      @Nonnull PsiBinaryExpression expression) {
+      PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.ASTERISK)

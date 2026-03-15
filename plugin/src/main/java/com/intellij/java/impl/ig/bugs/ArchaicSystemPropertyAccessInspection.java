@@ -28,23 +28,19 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
-    @Nonnull
     @Override
     public String getID() {
         return "UseOfArchaicSystemPropertyAccessors";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.archaicSystemPropertyAccessorsDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         PsiMethodCallExpression call = (PsiMethodCallExpression) infos[0];
@@ -60,14 +56,12 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         return new InspectionGadgetsFix[]{new ReplaceWithParseMethodFix(),
             new ReplaceWithStandardPropertyAccessFix()};
     }
 
     private static class ReplaceWithParseMethodFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.archaicSystemPropertyAccessorsReplaceParseQuickfix();
@@ -99,7 +93,6 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
     }
 
     private static class ReplaceWithStandardPropertyAccessFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.archaicSystemPropertyAccessorsReplaceStandardQuickfix();
@@ -141,7 +134,7 @@ public class ArchaicSystemPropertyAccessInspection extends BaseInspection {
     private static class ArchaicSystemPropertyAccessVisitor extends BaseInspectionVisitor {
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression) {
+            PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             if (isIntegerGetInteger(expression) ||
                 isLongGetLong(expression) ||

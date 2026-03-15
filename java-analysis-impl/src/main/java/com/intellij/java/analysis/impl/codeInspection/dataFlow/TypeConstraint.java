@@ -10,12 +10,10 @@ import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.EntryStream;
 import one.util.streamex.MoreCollectors;
 import one.util.streamex.StreamEx;
-import org.jetbrains.annotations.Nls;
 
 import java.util.*;
 
@@ -35,21 +33,19 @@ public interface TypeConstraint {
      * @param other other constraint to join with
      * @return joined constraint. If some type satisfies either this or other constraint, it also satisfies the resulting constraint.
      */
-    @Nonnull
-    TypeConstraint join(@Nonnull TypeConstraint other);
+    TypeConstraint join(TypeConstraint other);
 
     /**
      * @param other other constraint to meet with
      * @return intersection constraint. If some type satisfies the resulting constraint, it also satisfies both this and other constraints.
      */
-    @Nonnull
-    TypeConstraint meet(@Nonnull TypeConstraint other);
+    TypeConstraint meet(TypeConstraint other);
 
     /**
      * @param other other constraint to check
      * @return true if every type satisfied by other constraint is also satisfied by this constraint.
      */
-    boolean isSuperConstraintOf(@Nonnull TypeConstraint other);
+    boolean isSuperConstraintOf(TypeConstraint other);
 
     /**
      * @return negated constraint (a constraint that satisfied only by types not satisfied by this constraint).
@@ -74,7 +70,6 @@ public interface TypeConstraint {
      * @param type declared PsiType of the value
      * @return presentation text that tells about additional constraints; can be empty if no additional constraints are known
      */
-    @Nonnull
     default String getPresentationText(@Nullable PsiType type) {
         return toShortString();
     }
@@ -109,11 +104,10 @@ public interface TypeConstraint {
      */
     default
     @Nullable
-    @Nls
     String getAssignabilityExplanation(
-        @Nonnull TypeConstraint otherType,
+        TypeConstraint otherType,
         boolean expectedAssignable,
-        @Nls String elementTitle
+        String elementTitle
     ) {
         return null;
     }
@@ -151,7 +145,6 @@ public interface TypeConstraint {
      * @return an array component type for an array type; BOTTOM if this type is not always an array type or primitive array
      */
     default
-    @Nonnull
     TypeConstraint getArrayComponent() {
         return TypeConstraints.BOTTOM;
     }
@@ -161,7 +154,6 @@ public interface TypeConstraint {
      * @return an extracted type constraint
      */
     static
-    @Nonnull
     TypeConstraint fromDfType(DfType type) {
         return type instanceof DfReferenceType
             ? ((DfReferenceType)type).getConstraint()
@@ -177,8 +169,7 @@ public interface TypeConstraint {
     interface Exact extends TypeConstraint {
         @Override
         default
-        @Nonnull
-        TypeConstraint join(@Nonnull TypeConstraint other) {
+        TypeConstraint join(TypeConstraint other) {
             if (other == TypeConstraints.BOTTOM || this.equals(other)) {
                 return this;
             }
@@ -190,8 +181,7 @@ public interface TypeConstraint {
 
         @Override
         default
-        @Nonnull
-        TypeConstraint meet(@Nonnull TypeConstraint other) {
+        TypeConstraint meet(TypeConstraint other) {
             if (this.equals(other) || other.isSuperConstraintOf(this)) {
                 return this;
             }
@@ -224,13 +214,13 @@ public interface TypeConstraint {
          * @param other type to test assignability
          * @return true if this type is assignable from the other type
          */
-        boolean isAssignableFrom(@Nonnull Exact other);
+        boolean isAssignableFrom(Exact other);
 
         /**
          * @param other type to test convertibility
          * @return true if this type is convertible from the other type
          */
-        boolean isConvertibleFrom(@Nonnull Exact other);
+        boolean isConvertibleFrom(Exact other);
 
         @Override
         default StreamEx<Exact> instanceOfTypes() {
@@ -239,9 +229,9 @@ public interface TypeConstraint {
 
         @Override
         default String getAssignabilityExplanation(
-            @Nonnull TypeConstraint otherType,
+            TypeConstraint otherType,
             boolean expectedAssignable,
-            @Nls String elementTitle
+            String elementTitle
         ) {
             Exact exact = otherType.instanceOfTypes().collect(MoreCollectors.onlyOne()).orElse(null);
             if (exact == null) {
@@ -270,7 +260,7 @@ public interface TypeConstraint {
         }
 
         @Override
-        default boolean isSuperConstraintOf(@Nonnull TypeConstraint other) {
+        default boolean isSuperConstraintOf(TypeConstraint other) {
             return other == TypeConstraints.BOTTOM || this.equals(other);
         }
 
@@ -283,7 +273,6 @@ public interface TypeConstraint {
          * @return a constraint that represents objects not only of this type but also of any subtypes. May return self if the type is final.
          */
         default
-        @Nonnull
         TypeConstraint instanceOf() {
             if (isFinal()) {
                 return canBeInstantiated() ? this : TypeConstraints.BOTTOM;
@@ -295,7 +284,6 @@ public interface TypeConstraint {
          * @return a constraint that represents objects that are not instanceof this type
          */
         default
-        @Nonnull
         TypeConstraint notInstanceOf() {
             return new Constrained(Collections.emptySet(), Collections.singleton(this));
         }
@@ -307,7 +295,6 @@ public interface TypeConstraint {
 
         @Override
         default
-        @Nonnull
         String getPresentationText(@Nullable PsiType type) {
             return type != null && TypeConstraints.exact(type).equals(this) ? "" : "exactly " + toShortString();
         }
@@ -318,13 +305,11 @@ public interface TypeConstraint {
      */
     final class Constrained implements TypeConstraint {
         private final
-        @Nonnull
         Set<Exact> myInstanceOf;
         private final
-        @Nonnull
         Set<Exact> myNotInstanceOf;
 
-        Constrained(@Nonnull Set<Exact> instanceOf, @Nonnull Set<Exact> notInstanceOf) {
+        Constrained(Set<Exact> instanceOf, Set<Exact> notInstanceOf) {
             assert !instanceOf.isEmpty() || !notInstanceOf.isEmpty();
             myInstanceOf = instanceOf;
             myNotInstanceOf = notInstanceOf;
@@ -358,8 +343,7 @@ public interface TypeConstraint {
 
         @Override
         public
-        @Nonnull
-        TypeConstraint join(@Nonnull TypeConstraint other) {
+        TypeConstraint join(TypeConstraint other) {
             if (isSuperConstraintOf(other)) {
                 return this;
             }
@@ -376,8 +360,7 @@ public interface TypeConstraint {
         }
 
         private
-        @Nonnull
-        TypeConstraint joinWithConstrained(@Nonnull Constrained other) {
+        TypeConstraint joinWithConstrained(Constrained other) {
             Set<Exact> notTypes = new HashSet<>(this.myNotInstanceOf);
             notTypes.retainAll(other.myNotInstanceOf);
             Set<Exact> instanceOfTypes;
@@ -402,14 +385,13 @@ public interface TypeConstraint {
         }
 
         private static
-        @Nonnull
-        Set<Exact> withSuper(@Nonnull Set<Exact> instanceofValues) {
+        Set<Exact> withSuper(Set<Exact> instanceofValues) {
             return StreamEx.of(instanceofValues).flatMap(Exact::superTypes).append(instanceofValues).toSet();
         }
 
         private
         @Nullable
-        Constrained withInstanceofValue(@Nonnull Exact type) {
+        Constrained withInstanceofValue(Exact type) {
             if (myInstanceOf.contains(type)) {
                 return this;
             }
@@ -469,8 +451,7 @@ public interface TypeConstraint {
 
         @Override
         public
-        @Nonnull
-        TypeConstraint meet(@Nonnull TypeConstraint other) {
+        TypeConstraint meet(TypeConstraint other) {
             if (this.isSuperConstraintOf(other)) {
                 return other;
             }
@@ -499,7 +480,7 @@ public interface TypeConstraint {
         }
 
         @Override
-        public boolean isSuperConstraintOf(@Nonnull TypeConstraint other) {
+        public boolean isSuperConstraintOf(TypeConstraint other) {
             if (other == TypeConstraints.BOTTOM) {
                 return true;
             }
@@ -553,9 +534,9 @@ public interface TypeConstraint {
 
         @Override
         public String getAssignabilityExplanation(
-            @Nonnull TypeConstraint otherType,
+            TypeConstraint otherType,
             boolean expectedAssignable,
-            @Nls String elementTitle
+            String elementTitle
         ) {
             Exact exact = otherType.instanceOfTypes().collect(MoreCollectors.onlyOne()).orElse(null);
             if (exact == null) {
@@ -614,7 +595,6 @@ public interface TypeConstraint {
 
         @Override
         public
-        @Nonnull
         TypeConstraint getArrayComponent() {
             return instanceOfTypes().map(Exact::getArrayComponent)
                 .map(type -> type instanceof Exact exact ? exact.instanceOf() : TypeConstraints.BOTTOM)
@@ -640,7 +620,6 @@ public interface TypeConstraint {
         }
 
         @Override
-        @Nonnull
         public String toString() {
             return EntryStream.of(
                     "instanceof ", myInstanceOf,
@@ -652,7 +631,6 @@ public interface TypeConstraint {
         }
 
         @Override
-        @Nonnull
         public String getPresentationText(@Nullable PsiType type) {
             Set<Exact> instanceOfTypes = myInstanceOf;
             Exact exact = type == null ? null : ObjectUtil.tryCast(TypeConstraints.exact(type), Exact.class);

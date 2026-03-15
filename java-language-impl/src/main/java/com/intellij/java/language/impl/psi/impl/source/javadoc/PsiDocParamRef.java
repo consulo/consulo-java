@@ -17,8 +17,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.CharTable;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +52,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      public PsiElement handleElementRename(@Nonnull String newElementName) {
+      public PsiElement handleElementRename(String newElementName) {
         final CharTable charTableByTree = SharedImplUtil.findCharTableByTree(getNode());
         LeafElement newElement =
           Factory.createSingleLeafElement(JavaDocTokenType.DOC_TAG_VALUE_TOKEN, newElementName, charTableByTree, getManager());
@@ -62,7 +61,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+      public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
         if (isReferenceTo(element)) return PsiDocParamRef.this;
         if (!(element instanceof PsiParameter)) {
           throw new IncorrectOperationException("Unsupported operation");
@@ -71,7 +70,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
       }
 
       @Override
-      public boolean isReferenceTo(@Nonnull PsiElement element) {
+      public boolean isReferenceTo(PsiElement element) {
         if (!(element instanceof PsiNamedElement)) return false;
         PsiNamedElement namedElement = (PsiNamedElement)element;
         if (!getCanonicalText().equals(namedElement.getName())) return false;
@@ -80,9 +79,8 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
     };
   }
 
-  @Nonnull
   @RequiredReadAction
-  public static List<PsiNamedElement> getAllParameters(@Nonnull PsiDocComment comment) {
+  public static List<PsiNamedElement> getAllParameters(PsiDocComment comment) {
     List<PsiNamedElement> allParams = new ArrayList<>();
     PsiJavaDocumentedElement owner = comment.getOwner();
     if (owner instanceof PsiMethod) {
@@ -110,7 +108,7 @@ public class PsiDocParamRef extends CompositePsiElement implements PsiDocTagValu
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDocTagValue(this);
     }

@@ -23,9 +23,8 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.xml.psi.xml.XmlTag;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface CommonModelElement {
   boolean isValid();
@@ -44,7 +43,6 @@ public interface CommonModelElement {
   PsiFile getContainingFile();
 
   abstract class PsiBase implements CommonModelElement {
-    @Nonnull
     public abstract PsiElement getPsiElement();
 
     public boolean isValid() {
@@ -75,7 +73,6 @@ public interface CommonModelElement {
 
   abstract class ModuleBase implements CommonModelElement{
 
-    @Nonnull
     public abstract Module getModule();
 
     public boolean isValid() {

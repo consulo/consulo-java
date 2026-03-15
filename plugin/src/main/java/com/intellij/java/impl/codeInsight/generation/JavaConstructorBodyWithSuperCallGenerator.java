@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiParameter;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 
-import jakarta.annotation.Nonnull;
 
 /**
 * @author Max Medvedev
@@ -29,9 +28,9 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBodyGenerator {
   @Override
-  public void generateFieldInitialization(@Nonnull StringBuilder buffer,
-                                          @Nonnull PsiField[] fields,
-                                          @Nonnull PsiParameter[] parameters) {
+  public void generateFieldInitialization(StringBuilder buffer,
+                                          PsiField[] fields,
+                                          PsiParameter[] parameters) {
     for (int i = 0, length = fields.length; i < length; i++) {
       String fieldName = fields[i].getName();
       String paramName = parameters[i].getName();
@@ -46,7 +45,7 @@ public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBod
   }
 
   @Override
-  public void generateSuperCallIfNeeded(@Nonnull StringBuilder buffer, @Nonnull PsiParameter[] parameters) {
+  public void generateSuperCallIfNeeded(StringBuilder buffer, PsiParameter[] parameters) {
     if (parameters.length > 0) {
       buffer.append("super(");
       for (int j = 0; j < parameters.length; j++) {
@@ -59,7 +58,7 @@ public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBod
   }
 
   @Override
-  public StringBuilder start(StringBuilder buffer, @Nonnull String name, @Nonnull PsiParameter[] parameters) {
+  public StringBuilder start(StringBuilder buffer, String name, PsiParameter[] parameters) {
     buffer.append("public ").append(name).append("(");
     for (PsiParameter parameter : parameters) {
       buffer.append(parameter.getType().getPresentableText()).append(' ').append(parameter.getName()).append(',');
@@ -76,7 +75,6 @@ public class JavaConstructorBodyWithSuperCallGenerator implements ConstructorBod
     buffer.append('}');
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

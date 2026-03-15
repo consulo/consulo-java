@@ -29,25 +29,21 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class NonShortCircuitBooleanInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "NonShortCircuitBooleanExpression";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionProblemDescriptor().get();
     }
@@ -57,7 +53,6 @@ public class NonShortCircuitBooleanInspection extends BaseInspection {
     }
 
     private static class NonShortCircuitBooleanFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.nonShortCircuitBooleanExpressionReplaceQuickfix();

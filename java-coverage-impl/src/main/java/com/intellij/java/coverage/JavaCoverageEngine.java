@@ -42,8 +42,7 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +75,6 @@ public class JavaCoverageEngine extends CoverageEngine {
         return !(conf instanceof ApplicationConfiguration) && conf instanceof CommonJavaRunConfigurationParameters;
     }
 
-    @Nonnull
     @Override
     public CoverageEnabledConfiguration createCoverageEnabledConfiguration(@Nullable RunConfigurationBase conf) {
         return new JavaCoverageEnabledConfiguration(conf, this);
@@ -85,9 +83,9 @@ public class JavaCoverageEngine extends CoverageEngine {
     @Nullable
     @Override
     public CoverageSuite createCoverageSuite(
-        @Nonnull CoverageRunner covRunner,
-        @Nonnull String name,
-        @Nonnull CoverageFileProvider coverageDataFileProvider,
+        CoverageRunner covRunner,
+        String name,
+        CoverageFileProvider coverageDataFileProvider,
         String[] filters,
         long lastCoverageTimeStamp,
         String suiteToMerge,
@@ -110,10 +108,10 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Override
     public CoverageSuite createCoverageSuite(
-        @Nonnull CoverageRunner covRunner,
-        @Nonnull String name,
-        @Nonnull CoverageFileProvider coverageDataFileProvider,
-        @Nonnull CoverageEnabledConfiguration config
+        CoverageRunner covRunner,
+        String name,
+        CoverageFileProvider coverageDataFileProvider,
+        CoverageEnabledConfiguration config
     ) {
         if (config instanceof JavaCoverageEnabledConfiguration javaConfig) {
             return createSuite(
@@ -133,11 +131,10 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Nullable
     @Override
-    public CoverageSuite createEmptyCoverageSuite(@Nonnull CoverageRunner coverageRunner) {
+    public CoverageSuite createEmptyCoverageSuite(CoverageRunner coverageRunner) {
         return new JavaCoverageSuite(this);
     }
 
-    @Nonnull
     @Override
     public CoverageAnnotator getCoverageAnnotator(Project project) {
         return JavaCoverageAnnotator.getInstance(project);
@@ -147,7 +144,7 @@ public class JavaCoverageEngine extends CoverageEngine {
      * Determines if coverage information should be displayed for given file
      */
     @Override
-    public boolean coverageEditorHighlightingApplicableTo(@Nonnull PsiFile psiFile) {
+    public boolean coverageEditorHighlightingApplicableTo(PsiFile psiFile) {
         if (!(psiFile instanceof PsiClassOwner)) {
             return false;
         }
@@ -157,7 +154,7 @@ public class JavaCoverageEngine extends CoverageEngine {
     }
 
     @Override
-    public boolean acceptedByFilters(@Nonnull PsiFile psiFile, @Nonnull CoverageSuitesBundle suite) {
+    public boolean acceptedByFilters(PsiFile psiFile, CoverageSuitesBundle suite) {
         VirtualFile virtualFile = psiFile.getVirtualFile();
         if (virtualFile == null) {
             return false;
@@ -190,9 +187,9 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Override
     public boolean recompileProjectAndRerunAction(
-        @Nonnull Module module,
-        @Nonnull CoverageSuitesBundle suite,
-        @Nonnull Runnable chooseSuiteAction
+        Module module,
+        CoverageSuitesBundle suite,
+        Runnable chooseSuiteAction
     ) {
         VirtualFile outputpath =
             ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
@@ -259,7 +256,7 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Nullable
     @Override
-    public List<Integer> collectSrcLinesForUntouchedFile(@Nonnull File classFile, @Nonnull CoverageSuitesBundle suite) {
+    public List<Integer> collectSrcLinesForUntouchedFile(File classFile, CoverageSuitesBundle suite) {
         List<Integer> uncoveredLines = new ArrayList<>();
 
         byte[] content;
@@ -281,10 +278,10 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Override
     public boolean includeUntouchedFileInCoverage(
-        @Nonnull String qualifiedName,
-        @Nonnull File outputFile,
-        @Nonnull PsiFile sourceFile,
-        @Nonnull CoverageSuitesBundle suite
+        String qualifiedName,
+        File outputFile,
+        PsiFile sourceFile,
+        CoverageSuitesBundle suite
     ) {
         for (CoverageSuite coverageSuite : suite.getSuites()) {
             JavaCoverageSuite javaSuite = (JavaCoverageSuite) coverageSuite;
@@ -297,14 +294,13 @@ public class JavaCoverageEngine extends CoverageEngine {
 
 
     @Override
-    public String getQualifiedName(@Nonnull File outputFile, @Nonnull PsiFile sourceFile) {
+    public String getQualifiedName(File outputFile, PsiFile sourceFile) {
         String packageFQName = getPackageName(sourceFile);
         return StringUtil.getQualifiedName(packageFQName, FileUtil.getNameWithoutExtension(outputFile));
     }
 
-    @Nonnull
     @Override
-    public Set<String> getQualifiedNames(@Nonnull PsiFile sourceFile) {
+    public Set<String> getQualifiedNames(PsiFile sourceFile) {
         Application application = sourceFile.getApplication();
         PsiClass[] classes = application.runReadAction((Supplier<PsiClass[]>) ((PsiClassOwner) sourceFile)::getClasses);
         Set<String> qNames = new HashSet<>();
@@ -323,12 +319,11 @@ public class JavaCoverageEngine extends CoverageEngine {
         return qNames;
     }
 
-    @Nonnull
     @Override
     public Set<File> getCorrespondingOutputFiles(
-        @Nonnull PsiFile srcFile,
+        PsiFile srcFile,
         @Nullable Module module,
-        @Nonnull CoverageSuitesBundle suite
+        CoverageSuitesBundle suite
     ) {
         if (module == null) {
             return Collections.emptySet();
@@ -388,8 +383,8 @@ public class JavaCoverageEngine extends CoverageEngine {
     @Override
     @RequiredReadAction
     public String generateBriefReport(
-        @Nonnull Editor editor,
-        @Nonnull PsiFile psiFile,
+        Editor editor,
+        PsiFile psiFile,
         int lineNumber,
         int startOffset,
         int endOffset,
@@ -517,13 +512,12 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Nullable
     @Override
-    public String getTestMethodName(@Nonnull PsiElement element, @Nonnull AbstractTestProxy testProxy) {
+    public String getTestMethodName(PsiElement element, AbstractTestProxy testProxy) {
         return testProxy.toString();
     }
 
-    @Nonnull
     @Override
-    public List<PsiElement> findTestsByNames(@Nonnull String[] testNames, @Nonnull Project project) {
+    public List<PsiElement> findTestsByNames(String[] testNames, Project project) {
         List<PsiElement> elements = new ArrayList<>();
         JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
         GlobalSearchScope projectScope = GlobalSearchScope.projectScope(project);
@@ -605,7 +599,6 @@ public class JavaCoverageEngine extends CoverageEngine {
         );
     }
 
-    @Nonnull
     protected static String getPackageName(PsiFile sourceFile) {
         return sourceFile.getApplication().runReadAction((Supplier<String>) ((PsiClassOwner) sourceFile)::getPackageName);
     }

@@ -26,8 +26,7 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.util.IncorrectOperationException;
 import consulo.ide.ServiceManager;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Map;
 
 @ServiceAPI(ComponentScope.APPLICATION)
@@ -42,15 +41,14 @@ public abstract class JavaDirectoryService {
    * @return the package instance, or null if the directory does not correspond to any package.
    */
   @Nullable
-  public abstract PsiJavaPackage getPackage(@Nonnull PsiDirectory dir);
+  public abstract PsiJavaPackage getPackage(PsiDirectory dir);
 
   /**
    * Returns the list of Java classes contained in the directory.
    *
    * @return the array of classes.
    */
-  @Nonnull
-  public abstract PsiClass[] getClasses(@Nonnull PsiDirectory dir);
+  public abstract PsiClass[] getClasses(PsiDirectory dir);
 
   /**
    * Creates a class with the specified name in the directory.
@@ -59,8 +57,7 @@ public abstract class JavaDirectoryService {
    * @return the created class instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @Nonnull
-  public abstract PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
+  public abstract PsiClass createClass(PsiDirectory dir, String name) throws IncorrectOperationException;
 
   /**
    * Creates a class with the specified name in the directory.
@@ -71,24 +68,23 @@ public abstract class JavaDirectoryService {
    * @throws IncorrectOperationException if the operation failed for some reason.
    * @since 5.1
    */
-  @Nonnull
-  public abstract PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName) throws IncorrectOperationException;
+  public abstract PsiClass createClass(PsiDirectory dir, String name, String templateName) throws IncorrectOperationException;
 
   /**
    * @param askForUndefinedVariables
    *  true show dialog asking for undefined variables
    *  false leave them blank
    */
-  public abstract PsiClass createClass(@Nonnull PsiDirectory dir, @Nonnull String name, @Nonnull String templateName, boolean askForUndefinedVariables) throws IncorrectOperationException;
+  public abstract PsiClass createClass(PsiDirectory dir, String name, String templateName, boolean askForUndefinedVariables) throws IncorrectOperationException;
 
   /**
    * @param additionalProperties additional properties to be substituted in the template
    */
-  public abstract PsiClass createClass(@Nonnull PsiDirectory dir,
-                                       @Nonnull String name,
-                                       @Nonnull String templateName,
+  public abstract PsiClass createClass(PsiDirectory dir,
+                                       String name,
+                                       String templateName,
                                        boolean askForUndefinedVariables,
-                                       @Nonnull final Map<String, String> additionalProperties) throws IncorrectOperationException;
+                                       final Map<String, String> additionalProperties) throws IncorrectOperationException;
 
   /**
    * Checks if it's possible to create a class with the specified name in the directory,
@@ -98,7 +94,7 @@ public abstract class JavaDirectoryService {
    * @param name the name of the class to check creation possibility (not including the file extension).
    * @throws IncorrectOperationException if the creation is not possible.
    */
-  public abstract void checkCreateClass(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
+  public abstract void checkCreateClass(PsiDirectory dir, String name) throws IncorrectOperationException;
 
   /**
    * Creates an interface class with the specified name in the directory.
@@ -107,8 +103,7 @@ public abstract class JavaDirectoryService {
    * @return the created interface instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @Nonnull
-  public abstract PsiClass createInterface(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
+  public abstract PsiClass createInterface(PsiDirectory dir, String name) throws IncorrectOperationException;
 
   /**
    * Creates an enumeration class with the specified name in the directory.
@@ -117,8 +112,7 @@ public abstract class JavaDirectoryService {
    * @return the created class instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @Nonnull
-  public abstract PsiClass createEnum(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
+  public abstract PsiClass createEnum(PsiDirectory dir, String name) throws IncorrectOperationException;
 
   /**
    * Creates an annotation class with the specified name in the directory.
@@ -127,8 +121,7 @@ public abstract class JavaDirectoryService {
    * @return the created class instance.
    * @throws IncorrectOperationException if the operation failed for some reason.
    */
-  @Nonnull
-  public abstract PsiClass createAnnotationType(@Nonnull PsiDirectory dir, @Nonnull String name) throws IncorrectOperationException;
+  public abstract PsiClass createAnnotationType(PsiDirectory dir, String name) throws IncorrectOperationException;
 
 
   /**
@@ -136,7 +129,7 @@ public abstract class JavaDirectoryService {
    *
    * @return true if the directory is a source root, false otherwise
    */
-  public abstract boolean isSourceRoot(@Nonnull PsiDirectory dir);
+  public abstract boolean isSourceRoot(PsiDirectory dir);
 
-  public abstract LanguageLevel getLanguageLevel(@Nonnull PsiDirectory dir);
+  public abstract LanguageLevel getLanguageLevel(PsiDirectory dir);
 }

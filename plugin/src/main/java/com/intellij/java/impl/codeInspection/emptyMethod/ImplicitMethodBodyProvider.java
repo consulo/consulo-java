@@ -4,7 +4,6 @@ import com.intellij.java.analysis.codeInspection.reference.RefMethod;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -13,5 +12,5 @@ import jakarta.annotation.Nonnull;
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface ImplicitMethodBodyProvider {
   @RequiredReadAction
-  boolean hasImplicitMethodBody(@Nonnull RefMethod method);
+  boolean hasImplicitMethodBody(RefMethod method);
 }

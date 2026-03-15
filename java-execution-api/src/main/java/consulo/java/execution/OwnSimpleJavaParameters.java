@@ -32,8 +32,7 @@ import consulo.project.Project;
 import consulo.util.io.CharsetToolkit;
 import consulo.virtualFileSystem.util.PathsList;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.nio.charset.Charset;
 
 /**
@@ -222,13 +221,11 @@ public class OwnSimpleJavaParameters extends SimpleProgramParameters
 	 * @throws CantRunException when incorrect Java SDK is specified
 	 * @see OwnJdkUtil#setupJVMCommandLine(OwnSimpleJavaParameters)
 	 */
-	@Nonnull
 	public GeneralCommandLine toCommandLine() throws CantRunException
 	{
 		return OwnJdkUtil.setupJVMCommandLine(this);
 	}
 
-	@Nonnull
 	public ProcessHandler createOSProcessHandler() throws ExecutionException
 	{
 		ProcessHandler processHandler = ProcessHandlerFactory.getInstance().createProcessHandler(toCommandLine());

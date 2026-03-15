@@ -24,7 +24,6 @@
  */
 package org.osmorc.manifest.lang.headerparser;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.annotation.AnnotationHolder;
 import consulo.language.editor.annotation.Annotator;
@@ -36,7 +35,7 @@ import org.osmorc.manifest.lang.psi.HeaderValuePart;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class HeaderAnnotator implements Annotator {
-  public void annotate(@Nonnull PsiElement psiElement, @Nonnull AnnotationHolder holder) {
+  public void annotate(PsiElement psiElement, AnnotationHolder holder) {
     if (psiElement instanceof HeaderValuePart) {
       HeaderValuePart headerValue = (HeaderValuePart)psiElement;
       HeaderParser headerParser = HeaderUtil.getHeaderParser(headerValue);

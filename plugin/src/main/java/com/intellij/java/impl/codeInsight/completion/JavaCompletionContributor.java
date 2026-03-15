@@ -64,8 +64,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -95,7 +94,7 @@ public class JavaCompletionContributor extends CompletionContributor {
   private static final ElementPattern SWITCH_LABEL = psiElement().withSuperParent(2, psiElement(PsiSwitchLabelStatement.class).withSuperParent(2, psiElement(PsiSwitchStatement.class).with(new
                                                                                                                                                                                                 PatternCondition<PsiSwitchStatement>("enumExpressionType") {
                                                                                                                                                                                                   @Override
-                                                                                                                                                                                                  public boolean accepts(@Nonnull PsiSwitchStatement psiSwitchStatement, ProcessingContext context) {
+                                                                                                                                                                                                  public boolean accepts(PsiSwitchStatement psiSwitchStatement, ProcessingContext context) {
                                                                                                                                                                                                     PsiExpression expression = psiSwitchStatement.getExpression();
                                                                                                                                                                                                     if (expression == null) {
                                                                                                                                                                                                       return false;
@@ -202,7 +201,7 @@ public class JavaCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet _result) {
+  public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet _result) {
     if (parameters.getCompletionType() != CompletionType.BASIC) {
       return;
     }
@@ -276,7 +275,7 @@ public class JavaCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static void addIdentifierVariants(@Nonnull CompletionParameters parameters, PsiElement position, CompletionResultSet result, JavaCompletionSession session, PrefixMatcher matcher) {
+  private static void addIdentifierVariants(CompletionParameters parameters, PsiElement position, CompletionResultSet result, JavaCompletionSession session, PrefixMatcher matcher) {
     session.registerBatchItems(result, getFastIdentifierVariants(parameters, position, matcher, position.getParent(), session));
 
     if (JavaSmartCompletionContributor.AFTER_NEW.accepts(position)) {
@@ -298,11 +297,11 @@ public class JavaCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static List<LookupElement> getFastIdentifierVariants(@Nonnull CompletionParameters parameters,
+  private static List<LookupElement> getFastIdentifierVariants(CompletionParameters parameters,
                                                                PsiElement position,
                                                                PrefixMatcher matcher,
                                                                PsiElement parent,
-                                                               @Nonnull JavaCompletionSession session) {
+                                                               JavaCompletionSession session) {
     List<LookupElement> items = new ArrayList<>();
     if (TypeArgumentCompletionProvider.IN_TYPE_ARGS.accepts(position)) {
       new TypeArgumentCompletionProvider(false, session).addTypeArgumentVariants(parameters, items::add, matcher);
@@ -348,7 +347,7 @@ public class JavaCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static void addExpressionVariants(@Nonnull CompletionParameters parameters, PsiElement position, Consumer<LookupElement> result) {
+  private static void addExpressionVariants(CompletionParameters parameters, PsiElement position, Consumer<LookupElement> result) {
     if (JavaSmartCompletionContributor.INSIDE_EXPRESSION.accepts(position) && !JavaKeywordCompletion.AFTER_DOT.accepts(position) && !SmartCastProvider.shouldSuggestCast(parameters)) {
       addExpectedTypeMembers(parameters, result);
       if (SameSignatureCallParametersProvider.IN_CALL_ARGUMENT.accepts(position)) {
@@ -583,7 +582,7 @@ public class JavaCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public String advertise(@Nonnull CompletionParameters parameters) {
+  public String advertise(CompletionParameters parameters) {
     if (!(parameters.getOriginalFile() instanceof PsiJavaFile)) {
       return null;
     }
@@ -649,7 +648,7 @@ public class JavaCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public String handleEmptyLookup(@Nonnull CompletionParameters parameters, Editor editor) {
+  public String handleEmptyLookup(CompletionParameters parameters, Editor editor) {
     if (!(parameters.getOriginalFile() instanceof PsiJavaFile)) {
       return null;
     }
@@ -695,7 +694,7 @@ public class JavaCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public boolean invokeAutoPopup(@Nonnull PsiElement position, char typeChar) {
+  public boolean invokeAutoPopup(PsiElement position, char typeChar) {
     return typeChar == ':' && JavaTokenType.COLON == position.getNode().getElementType();
   }
 
@@ -727,7 +726,7 @@ public class JavaCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public void beforeCompletion(@Nonnull CompletionInitializationContext context) {
+  public void beforeCompletion(CompletionInitializationContext context) {
     PsiFile file = context.getFile();
 
     if (file instanceof PsiJavaFile) {
@@ -836,7 +835,7 @@ public class JavaCompletionContributor extends CompletionContributor {
     return nextLeaf;
   }
 
-  private static void autoImport(@Nonnull PsiFile file, int offset, @Nonnull Editor editor) {
+  private static void autoImport(PsiFile file, int offset, Editor editor) {
     CharSequence text = editor.getDocument().getCharsSequence();
     while (offset > 0 && Character.isJavaIdentifierPart(text.charAt(offset))) {
       offset--;
@@ -864,7 +863,7 @@ public class JavaCompletionContributor extends CompletionContributor {
     autoImportReference(file, editor, extractReference(PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiExpression.class, false)));
   }
 
-  private static void autoImportReference(@Nonnull PsiFile file, @Nonnull Editor editor, @Nullable PsiJavaCodeReferenceElement element) {
+  private static void autoImportReference(PsiFile file, Editor editor, @Nullable PsiJavaCodeReferenceElement element) {
     if (element == null) {
       return;
     }
@@ -902,7 +901,6 @@ public class JavaCompletionContributor extends CompletionContributor {
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

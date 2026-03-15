@@ -41,9 +41,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -56,13 +54,11 @@ public class ForCanBeForeachInspection extends BaseInspection {
   public boolean ignoreUntypedCollections = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "ForLoopReplaceableByForEach";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.forCanBeForeachDisplayName();
   }
@@ -73,7 +69,6 @@ public class ForCanBeForeachInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.forCanBeForeachProblemDescriptor().get();
   }
@@ -93,7 +88,6 @@ public class ForCanBeForeachInspection extends BaseInspection {
   }
 
   private class ForCanBeForeachFix extends InspectionGadgetsFix {
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.foreachReplaceQuickfix();
     }
@@ -127,7 +121,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Nullable
     private String createListIterationText(
-      @Nonnull PsiForStatement forStatement) {
+      PsiForStatement forStatement) {
       PsiBinaryExpression condition = (PsiBinaryExpression)ParenthesesUtils.stripParentheses(forStatement.getCondition());
       if (condition == null) {
         return null;
@@ -208,7 +202,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       PsiStatement firstStatement = getFirstStatement(body);
       boolean isDeclaration = isListElementDeclaration(firstStatement, listVariable, indexName, parameterType);
       String contentVariableName;
-      @NonNls String finalString;
+      String finalString;
       PsiStatement statementToSkip;
       if (isDeclaration) {
         PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)firstStatement;
@@ -240,14 +234,14 @@ public class ForCanBeForeachInspection extends BaseInspection {
         finalString = "";
         statementToSkip = null;
       }
-      @NonNls StringBuilder out = new StringBuilder();
+      StringBuilder out = new StringBuilder();
       out.append("for(");
       out.append(finalString);
       out.append(typeString);
       out.append(' ');
       out.append(contentVariableName);
       out.append(": ");
-      @NonNls String listName;
+      String listName;
       if (listReference == null) {
         listName = "this";
       }
@@ -346,7 +340,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Nullable
     private String createCollectionIterationText(
-      @Nonnull PsiForStatement forStatement)
+      PsiForStatement forStatement)
       throws IncorrectOperationException {
       PsiStatement body = forStatement.getBody();
       PsiStatement firstStatement = getFirstStatement(body);
@@ -399,7 +393,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
         isIteratorNextDeclaration(firstStatement, iteratorName,
                                   contentType);
       PsiStatement statementToSkip;
-      @NonNls String finalString;
+      String finalString;
       String contentVariableName;
       if (isDeclaration) {
         PsiDeclarationStatement declarationStatement =
@@ -446,7 +440,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
         statementToSkip = null;
       }
       String contentTypeString = contentType.getCanonicalText();
-      @NonNls StringBuilder out = new StringBuilder();
+      StringBuilder out = new StringBuilder();
       out.append("for(");
       out.append(finalString);
       out.append(contentTypeString);
@@ -454,7 +448,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       out.append(contentVariableName);
       out.append(": ");
       if (!contentType.equals(javaLangObject)) {
-        @NonNls String iterableTypeString =
+        String iterableTypeString =
           "java.lang.Iterable<" + contentTypeString + '>';
         if (iteratorContentType == null) {
           out.append('(');
@@ -475,7 +469,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
 
     @Nullable
-    private String createArrayIterationText(@Nonnull PsiForStatement forStatement) {
+    private String createArrayIterationText(PsiForStatement forStatement) {
       PsiExpression condition = forStatement.getCondition();
       PsiBinaryExpression strippedCondition = (PsiBinaryExpression)ParenthesesUtils.stripParentheses(condition);
       if (strippedCondition == null) {
@@ -538,7 +532,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       PsiStatement firstStatement = getFirstStatement(body);
       boolean isDeclaration = isArrayElementDeclaration(firstStatement, arrayVariable, indexName);
       String contentVariableName;
-      @NonNls String finalString;
+      String finalString;
       PsiStatement statementToSkip;
       if (isDeclaration) {
         PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)firstStatement;
@@ -586,7 +580,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
         }
         statementToSkip = null;
       }
-      @NonNls StringBuilder out = new StringBuilder();
+      StringBuilder out = new StringBuilder();
       out.append("for(");
       out.append(finalString);
       out.append(typeText);
@@ -914,12 +908,12 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
 
     private String createNewVariableName(
-      @Nonnull PsiForStatement scope, PsiType type,
+      PsiForStatement scope, PsiType type,
       @Nullable String containerName) {
       Project project = scope.getProject();
       JavaCodeStyleManager codeStyleManager =
         JavaCodeStyleManager.getInstance(project);
-      @NonNls String baseName;
+      String baseName;
       if (containerName != null) {
         baseName = StringUtils.createSingularFromName(containerName);
       }
@@ -967,7 +961,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @Nonnull PsiForStatement forStatement) {
+      PsiForStatement forStatement) {
       super.visitForStatement(forStatement);
       if (!PsiUtil.isLanguageLevel5OrHigher(forStatement)) {
         return;
@@ -1099,8 +1093,8 @@ public class ForCanBeForeachInspection extends BaseInspection {
   }
 
   private static boolean isIndexVariableOnlyUsedAsIndex(
-    @Nonnull PsiVariable arrayVariable,
-    @Nonnull PsiVariable indexVariable,
+    PsiVariable arrayVariable,
+    PsiVariable indexVariable,
     @Nullable PsiStatement body) {
     if (body == null) {
       return true;
@@ -1155,7 +1149,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
       (PsiMethodCallExpression)initialValue;
     PsiReferenceExpression initialMethodExpression =
       initialCall.getMethodExpression();
-    @NonNls String initialCallName =
+    String initialCallName =
       initialMethodExpression.getReferenceName();
     if (!HardcodedMethodConstants.ITERATOR.equals(initialCallName) &&
         !"listIterator".equals(initialCallName)) {
@@ -1493,7 +1487,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression callExpression) {
+      PsiMethodCallExpression callExpression) {
       super.visitMethodCallExpression(callExpression);
       PsiReferenceExpression methodExpression =
         callExpression.getMethodExpression();
@@ -1534,7 +1528,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
       if (!methodCalled) {
         super.visitElement(element);
       }
@@ -1542,7 +1536,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       if (methodCalled) {
         return;
       }
@@ -1585,7 +1579,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
       if (indexVariableUsedOnlyAsIndex) {
         super.visitElement(element);
       }
@@ -1593,7 +1587,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @Nonnull PsiReferenceExpression reference) {
+      PsiReferenceExpression reference) {
       if (!indexVariableUsedOnlyAsIndex) {
         return;
       }
@@ -1654,14 +1648,14 @@ public class ForCanBeForeachInspection extends BaseInspection {
     private final Holder collection;
 
     VariableOnlyUsedAsListIndexVisitor(
-      @Nonnull Holder collection,
-      @Nonnull PsiVariable indexVariable) {
+      Holder collection,
+      PsiVariable indexVariable) {
       this.collection = collection;
       this.indexVariable = indexVariable;
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
       if (indexVariableUsedOnlyAsIndex) {
         super.visitElement(element);
       }
@@ -1669,7 +1663,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @Nonnull PsiReferenceExpression reference) {
+      PsiReferenceExpression reference) {
       if (!indexVariableUsedOnlyAsIndex) {
         return;
       }
@@ -1794,7 +1788,7 @@ public class ForCanBeForeachInspection extends BaseInspection {
 
     private final PsiVariable variable;
 
-    public Holder(@Nonnull PsiVariable variable) {
+    public Holder(PsiVariable variable) {
       this.variable = variable;
     }
 

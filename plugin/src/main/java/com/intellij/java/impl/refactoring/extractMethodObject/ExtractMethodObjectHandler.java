@@ -43,23 +43,22 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
-import jakarta.annotation.Nonnull;
 
 public class ExtractMethodObjectHandler implements RefactoringActionHandler {
     private static final Logger LOG = Logger.getInstance(ExtractMethodObjectHandler.class);
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         ExtractMethodHandler.selectAndPass(project, editor, file, selectedValue -> invokeOnElements(project, editor, file, selectedValue));
     }
 
     @RequiredUIAccess
     private void invokeOnElements(
-        @Nonnull Project project,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement[] elements
+        Project project,
+        Editor editor,
+        PsiFile file,
+        PsiElement[] elements
     ) {
         if (elements.length == 0) {
             CommonRefactoringUtil.showErrorHint(
@@ -101,10 +100,10 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
 
     @RequiredUIAccess
     public static void run(
-        @Nonnull Project project,
-        @Nonnull Editor editor,
-        @Nonnull ExtractMethodObjectProcessor processor,
-        @Nonnull ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor
+        Project project,
+        Editor editor,
+        ExtractMethodObjectProcessor processor,
+        ExtractMethodObjectProcessor.MyExtractMethodProcessor extractProcessor
     ) {
         int offset = editor.getCaretModel().getOffset();
         RangeMarker marker = editor.getDocument().createRangeMarker(new TextRange(offset, offset));
@@ -146,7 +145,7 @@ public class ExtractMethodObjectHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         throw new UnsupportedOperationException();
     }
 }

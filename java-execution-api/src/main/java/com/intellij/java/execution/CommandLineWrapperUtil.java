@@ -17,7 +17,6 @@ package com.intellij.java.execution;
 
 import consulo.util.io.FileUtil;
 
-import jakarta.annotation.Nonnull;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,12 +28,10 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
 public class CommandLineWrapperUtil {
-  @Nonnull
   public static File createClasspathJarFile(Manifest manifest, List<String> pathList) throws IOException {
     return createClasspathJarFile(manifest, pathList, false);
   }
 
-  @Nonnull
   @SuppressWarnings({
       "deprecation",
       "IOResourceOpenedButNotSafelyClosed"

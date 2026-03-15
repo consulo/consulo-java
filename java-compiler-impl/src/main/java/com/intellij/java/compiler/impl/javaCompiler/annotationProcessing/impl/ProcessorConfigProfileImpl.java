@@ -17,8 +17,7 @@ package com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.impl;
 
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 /**
@@ -85,7 +84,6 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @Nonnull
   public String getProcessorPath() {
     return myProcessorPath;
   }
@@ -106,7 +104,6 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @Nonnull
   public String getGeneratedSourcesDirectoryName(boolean forTests) {
     return forTests? myGeneratedTestsDirectoryName : myGeneratedProductionDirectoryName;
   }
@@ -132,7 +129,6 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @Nonnull
   public Set<String> getModuleNames() {
     return myModuleNames;
   }
@@ -178,13 +174,11 @@ public final class ProcessorConfigProfileImpl implements ProcessorConfigProfile 
   }
 
   @Override
-  @Nonnull
   public Set<String> getProcessors() {
     return Collections.unmodifiableSet(myProcessors);
   }
 
   @Override
-  @Nonnull
   public Map<String, String> getProcessorOptions() {
     return Collections.unmodifiableMap(myProcessorOptions);
   }

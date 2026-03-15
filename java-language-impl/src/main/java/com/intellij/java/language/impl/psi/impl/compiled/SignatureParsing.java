@@ -11,8 +11,7 @@ import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.internal.org.objectweb.asm.TypeReference;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.text.CharacterIterator;
 import java.util.ArrayList;
@@ -32,8 +31,7 @@ public final class SignatureParsing {
    */
   @FunctionalInterface
   public interface TypeInfoProvider {
-    @Nonnull
-    TypeInfo.RefTypeInfo toTypeInfo(@Nonnull String jvmClassName);
+    TypeInfo.RefTypeInfo toTypeInfo(String jvmClassName);
 
     /**
      * @param fn function that returns Java-style FQN by JVM class name
@@ -140,7 +138,6 @@ public final class SignatureParsing {
     }
   }
 
-  @Nonnull
   static TypeParametersDeclaration parseTypeParametersDeclaration(CharIterator signature,
                                                                   TypeInfoProvider mapping) throws ClsFormatException {
     if (signature.current() != '<') {
@@ -208,7 +205,7 @@ public final class SignatureParsing {
     return id;
   }
 
-  private static @Nonnull TypeInfo parseParameterizedClassRefSignatureToTypeInfo(CharIterator signature, TypeInfoProvider mapping)
+  private static TypeInfo parseParameterizedClassRefSignatureToTypeInfo(CharIterator signature, TypeInfoProvider mapping)
     throws ClsFormatException {
     signature.next();
     int start = signature.pos();
@@ -263,8 +260,7 @@ public final class SignatureParsing {
     }
   }
 
-  @Nonnull
-  private static TypeInfo parseClassOrTypeVariableElementToTypeInfo(@Nonnull CharIterator signature, TypeInfoProvider mapping)
+  private static TypeInfo parseClassOrTypeVariableElementToTypeInfo(CharIterator signature, TypeInfoProvider mapping)
     throws ClsFormatException {
     char variance = parseVariance(signature);
     if (variance == '*') {
@@ -333,7 +329,6 @@ public final class SignatureParsing {
    */
   @SuppressWarnings("DeprecatedIsStillUsed")
   @Deprecated
-  @Nonnull
   public static String parseTypeString(CharacterIterator signature, Function<? super String, String> mapping) throws ClsFormatException {
     StringBuilder sb = new StringBuilder();
     int pos = signature.getIndex();
@@ -357,8 +352,8 @@ public final class SignatureParsing {
    * @return a parsed {@link TypeInfo} object
    * @throws ClsFormatException if signature cannot be parsed
    */
-  public static @Nonnull TypeInfo parseTypeStringToTypeInfo(@Nonnull CharIterator signature,
-                                                            @Nonnull TypeInfoProvider mapping) throws ClsFormatException {
+  public static TypeInfo parseTypeStringToTypeInfo(CharIterator signature,
+                                                            TypeInfoProvider mapping) throws ClsFormatException {
     int dimensions = parseDimensions(signature);
 
     TypeInfo type = parseTypeWithoutVarianceToTypeInfo(signature, mapping);

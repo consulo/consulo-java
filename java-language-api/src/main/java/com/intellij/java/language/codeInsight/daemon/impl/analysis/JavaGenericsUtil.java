@@ -11,8 +11,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -97,7 +96,7 @@ public class JavaGenericsUtil
 		return false;
 	}
 
-	public static boolean isUncheckedWarning(@Nonnull PsiJavaCodeReferenceElement expression, @Nonnull JavaResolveResult resolveResult, @Nonnull LanguageLevel languageLevel)
+	public static boolean isUncheckedWarning(PsiJavaCodeReferenceElement expression, JavaResolveResult resolveResult, LanguageLevel languageLevel)
 	{
 		final PsiElement resolve = resolveResult.getElement();
 		if(!(resolve instanceof PsiMethod))
@@ -362,13 +361,13 @@ public class JavaGenericsUtil
 	}
 
 	@Nullable
-	public static PsiType getCollectionItemType(@Nonnull PsiExpression expression)
+	public static PsiType getCollectionItemType(PsiExpression expression)
 	{
 		return getCollectionItemType(expression.getType(), expression.getResolveScope());
 	}
 
 	@Nullable
-	public static PsiType getCollectionItemType(@Nullable PsiType type, @Nonnull GlobalSearchScope scope)
+	public static PsiType getCollectionItemType(@Nullable PsiType type, GlobalSearchScope scope)
 	{
 		if(type instanceof PsiArrayType)
 		{

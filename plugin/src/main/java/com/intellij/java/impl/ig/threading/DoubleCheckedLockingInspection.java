@@ -31,8 +31,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -45,13 +44,11 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
   public boolean ignoreOnVolatileVariables = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.doubleCheckedLockingDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.doubleCheckedLockingProblemDescriptor().get();
   }
@@ -80,7 +77,6 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
       this.field = field;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.doubleCheckedLockingQuickfix(field.getName());
     }
@@ -106,7 +102,7 @@ public class DoubleCheckedLockingInspection extends BaseInspection {
 
     @Override
     public void visitIfStatement(
-      @Nonnull PsiIfStatement statement) {
+      PsiIfStatement statement) {
       super.visitIfStatement(statement);
       PsiExpression outerCondition = statement.getCondition();
       if (outerCondition == null) {

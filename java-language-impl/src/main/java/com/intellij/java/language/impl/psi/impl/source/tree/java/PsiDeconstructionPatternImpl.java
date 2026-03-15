@@ -8,8 +8,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.DECONSTRUCTION_PATTERN;
 
@@ -19,7 +18,7 @@ public class PsiDeconstructionPatternImpl extends CompositePsiElement implements
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDeconstructionPattern(this);
     }
@@ -29,7 +28,7 @@ public class PsiDeconstructionPatternImpl extends CompositePsiElement implements
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiDeconstructionList getDeconstructionList() {
     PsiDeconstructionList recordStructurePattern =
       (PsiDeconstructionList)findPsiChildByType(JavaElementType.DECONSTRUCTION_LIST);
@@ -38,7 +37,7 @@ public class PsiDeconstructionPatternImpl extends CompositePsiElement implements
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiTypeElement getTypeElement() {
     PsiTypeElement type = (PsiTypeElement)findPsiChildByType(JavaElementType.TYPE);
     assert type != null; // guaranteed by parser
@@ -65,10 +64,10 @@ public class PsiDeconstructionPatternImpl extends CompositePsiElement implements
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 
     boolean shouldContinue = getDeconstructionList().processDeclarations(processor, state, lastParent, place);

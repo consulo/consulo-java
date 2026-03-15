@@ -27,7 +27,6 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -37,21 +36,18 @@ public class UnnecessaryReturnInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreInThenBranch = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "UnnecessaryReturnStatement";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryReturnDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return (Boolean) infos[0]
             ? InspectionGadgetsLocalize.unnecessaryReturnConstructorProblemDescriptor().get()
@@ -81,7 +77,7 @@ public class UnnecessaryReturnInspection extends BaseInspection {
 
     private class UnnecessaryReturnVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+        public void visitReturnStatement(PsiReturnStatement statement) {
             super.visitReturnStatement(statement);
     /*  if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

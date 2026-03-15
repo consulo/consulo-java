@@ -26,7 +26,6 @@ import consulo.usage.UsageInfo2UsageAdapter;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.util.ChunkExtractor;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +37,7 @@ import java.util.List;
 public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCellRenderer {
   protected final List<SliceNode> myCachedChildren;
 
-  public SliceLeafValueRootNode(@Nonnull Project project,
+  public SliceLeafValueRootNode(Project project,
                                 PsiElement leafExpression,
                                 SliceNode root,
                                 List<SliceNode> children,
@@ -48,7 +47,6 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
   }
 
   @Override
-  @Nonnull
   public Collection<SliceNode> getChildren() {
     return myCachedChildren;
   }
@@ -71,8 +69,8 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
   }
 
   @Override
-  public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
-                                    @Nonnull JTree tree,
+  public void customizeCellRenderer(SliceUsageCellRenderer renderer,
+                                    JTree tree,
                                     Object value,
                                     boolean selected,
                                     boolean expanded,
@@ -94,9 +92,9 @@ public class SliceLeafValueRootNode extends SliceNode implements MyColoredTreeCe
     }
   }
 
-  private static void appendElementText(@Nonnull UsageInfo2UsageAdapter usage,
-                                        @Nonnull PsiElement element,
-                                        @Nonnull SliceUsageCellRenderer renderer) {
+  private static void appendElementText(UsageInfo2UsageAdapter usage,
+                                        PsiElement element,
+                                        SliceUsageCellRenderer renderer) {
     PsiFile file = element.getContainingFile();
     List<TextChunk> result = new ArrayList<TextChunk>();
     ChunkExtractor.getExtractor(element.getContainingFile()).createTextChunks(usage, file.getText(), element.getTextRange().getStartOffset(),

@@ -17,7 +17,6 @@ package com.intellij.psi.resolve;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.psi.*;
-import org.jetbrains.annotations.NonNls;
 
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
@@ -83,7 +82,7 @@ public abstract class ResolveVarargsMethodTest extends Resolve15TestCase {
     return method;
   }
 
-  private static void assertResolvesToMethodInClass(JavaResolveResult result, @NonNls String name) {
+  private static void assertResolvesToMethodInClass(JavaResolveResult result, String name) {
     PsiMethod method = (PsiMethod)result.getElement();
     assertNotNull(method);
     assertTrue(result.isValidResult());

@@ -31,19 +31,16 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class StringBufferReplaceableByStringInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringBufferReplaceableByStringDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiElement element = (PsiElement) infos[0];
         if (element instanceof PsiNewExpression) {
@@ -66,7 +63,6 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
             this.isStringBuilder = isStringBuilder;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return isStringBuilder
@@ -206,7 +202,7 @@ public class StringBufferReplaceableByStringInspection extends BaseInspection {
 
     private static class StringBufferReplaceableByStringVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+        public void visitLocalVariable(PsiLocalVariable variable) {
             super.visitLocalVariable(variable);
             PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
             if (codeBlock == null) {

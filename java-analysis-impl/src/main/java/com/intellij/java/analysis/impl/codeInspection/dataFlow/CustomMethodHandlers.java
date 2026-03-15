@@ -21,8 +21,7 @@ import consulo.application.util.CachedValueProvider;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.reflect.ReflectionUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.lang.reflect.InvocationTargetException;
@@ -70,7 +69,6 @@ final class CustomMethodHandlers {
 
   interface CustomMethodHandler {
 
-    @Nonnull
     DfType getMethodResult(DfaCallArguments callArguments,
                            DfaMemoryState memState,
                            DfaValueFactory factory,
@@ -155,7 +153,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType handleConstantCall(DfaCallArguments arguments, DfaMemoryState state, PsiMethod method) {
     PsiType returnType = method.getReturnType();
     if (returnType == null) {
@@ -199,7 +196,6 @@ final class CustomMethodHandlers {
     return LanguageCachedValueUtil.getCachedValue(method, new CachedValueProvider<>() {
       @Override
       public
-      @Nonnull
       Result<Method> compute() {
         Method reflection = getMethod();
         return Result.create(reflection, method);
@@ -266,7 +262,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType indexOf(DfaValue qualifier,
                  DfaMemoryState memState,
                  DfaValueFactory factory,
@@ -277,7 +272,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType collectionFactory(DfaCallArguments args,
                            DfaMemoryState memState, DfaValueFactory factory,
                            PsiMethod method) {
@@ -314,7 +308,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType substring(DfaCallArguments args, DfaMemoryState state, DfaValueFactory factory, PsiType stringType) {
     if (stringType == null || !stringType.equalsToText(JAVA_LANG_STRING)) {
       return TOP;
@@ -341,7 +334,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType mathAbs(DfaValue[] args, DfaMemoryState memState, boolean isLong) {
     DfaValue arg = ArrayUtil.getFirstElement(args);
     if (arg == null) {
@@ -353,7 +345,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType calendarGet(DfaValue[] arguments, DfaMemoryState state) {
     if (arguments.length != 1) {
       return TOP;
@@ -394,7 +385,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType skip(DfaValue[] arguments, DfaMemoryState state) {
     if (arguments.length != 1) {
       return TOP;
@@ -404,7 +394,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType numberAsString(DfaCallArguments args, DfaMemoryState state, int bitsPerChar, int maxBits) {
     DfaValue arg = args.myArguments[0];
     if (arg == null) {
@@ -417,7 +406,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType enumName(DfaValue qualifier, DfaMemoryState state, PsiType type) {
     DfType dfType = state.getDfType(qualifier);
     PsiEnumConstant value = DfConstantType.getConstantOfType(dfType, PsiEnumConstant.class);
@@ -437,7 +425,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType randomNextInt(DfaCallArguments arguments, DfaMemoryState state, DfaValueFactory factory, PsiMethod method) {
     DfaValue[] values = arguments.myArguments;
     if (values == null) {
@@ -459,7 +446,6 @@ final class CustomMethodHandlers {
   }
 
   private static
-  @Nonnull
   DfType className(DfaMemoryState memState,
                    DfaValue qualifier,
                    String name,

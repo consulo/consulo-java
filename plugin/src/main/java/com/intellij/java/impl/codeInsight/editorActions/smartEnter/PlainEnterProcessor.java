@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.codeEditor.action.EditorActionHandler;
 import consulo.codeEditor.action.EditorActionManager;
@@ -32,7 +32,6 @@ import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.CharArrayUtil;
-import jakarta.annotation.Nonnull;
 
 public class PlainEnterProcessor implements EnterProcessor
 {
@@ -172,7 +171,7 @@ public class PlainEnterProcessor implements EnterProcessor
 	 * is pointed to correct position there, i.e. no additional processing is required;
 	 * {@code false} otherwise
 	 */
-	private static boolean processExistingBlankLine(@Nonnull Editor editor, @Nullable PsiCodeBlock codeBlock, @Nullable PsiElement element)
+	private static boolean processExistingBlankLine(Editor editor, @Nullable PsiCodeBlock codeBlock, @Nullable PsiElement element)
 	{
 		PsiWhiteSpace whiteSpace = null;
 		if(codeBlock == null)

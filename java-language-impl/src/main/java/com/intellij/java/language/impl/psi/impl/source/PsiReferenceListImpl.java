@@ -26,32 +26,29 @@ import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaClassReferenceListElementType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassReferenceListStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
  */
 public class PsiReferenceListImpl extends JavaStubPsiElement<PsiClassReferenceListStub> implements PsiReferenceList
 {
-	public PsiReferenceListImpl(@Nonnull PsiClassReferenceListStub stub)
+	public PsiReferenceListImpl(PsiClassReferenceListStub stub)
 	{
 		super(stub, stub.getStubType());
 	}
 
-	public PsiReferenceListImpl(@Nonnull ASTNode node)
+	public PsiReferenceListImpl(ASTNode node)
 	{
 		super(node);
 	}
 
 	@Override
-	@Nonnull
 	public PsiJavaCodeReferenceElement[] getReferenceElements()
 	{
 		return calcTreeElement().getChildrenAsPsiElements(JavaElementType.JAVA_CODE_REFERENCE, PsiJavaCodeReferenceElement.ARRAY_FACTORY);
 	}
 
 	@Override
-	@Nonnull
 	public PsiClassType[] getReferencedTypes()
 	{
 		PsiClassReferenceListStub stub = getGreenStub();
@@ -78,7 +75,7 @@ public class PsiReferenceListImpl extends JavaStubPsiElement<PsiClassReferenceLi
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

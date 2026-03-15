@@ -16,16 +16,14 @@
 
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import jakarta.annotation.Nonnull;
 
 final class CoreHKey
 {
 	final
-	@Nonnull
 	MemberDescriptor myMethod;
 	final int dirKey;
 
-	CoreHKey(@Nonnull MemberDescriptor method, int dirKey)
+	CoreHKey(MemberDescriptor method, int dirKey)
 	{
 		this.myMethod = method;
 		this.dirKey = dirKey;

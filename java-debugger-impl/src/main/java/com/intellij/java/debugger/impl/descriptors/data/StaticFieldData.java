@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.descriptors.data;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.ui.impl.watch.FieldDescriptorImpl;
 import consulo.project.Project;
@@ -24,7 +23,7 @@ import consulo.internal.com.sun.jdi.Field;
 public final class StaticFieldData extends DescriptorData<FieldDescriptorImpl>{
   private final Field myField;
 
-  public StaticFieldData(@Nonnull Field field) {
+  public StaticFieldData(Field field) {
     myField = field;
   }
 

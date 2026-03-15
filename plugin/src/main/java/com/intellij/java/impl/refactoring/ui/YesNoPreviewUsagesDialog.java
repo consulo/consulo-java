@@ -28,7 +28,6 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -82,7 +81,6 @@ public class YesNoPreviewUsagesDialog extends DialogWrapper {
     return panel;
   }
 
-  @Nonnull
   protected Action[] createActions() {
     if (myHelpID != null) {
       return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};

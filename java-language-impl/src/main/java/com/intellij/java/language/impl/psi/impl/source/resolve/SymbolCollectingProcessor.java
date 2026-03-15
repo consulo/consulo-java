@@ -24,7 +24,6 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.util.collection.MostlySingularMultiMap;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -34,7 +33,7 @@ public class SymbolCollectingProcessor extends BaseScopeProcessor implements Ele
   private PsiElement myCurrentFileContext = null;
 
   @Override
-  public <T> T getHint(@Nonnull Key<T> hintKey) {
+  public <T> T getHint(Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       //noinspection unchecked
       return (T)this;
@@ -50,7 +49,7 @@ public class SymbolCollectingProcessor extends BaseScopeProcessor implements Ele
   }
 
   @Override
-  public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+  public boolean execute(PsiElement element, ResolveState state) {
     if (element instanceof PsiNamedElement) {
       PsiNamedElement named = (PsiNamedElement)element;
       String name = named.getName();
@@ -74,12 +73,11 @@ public class SymbolCollectingProcessor extends BaseScopeProcessor implements Ele
     private final PsiNamedElement myElement;
     private final PsiElement myFileContext;
 
-    public ResultWithContext(@Nonnull PsiNamedElement element, PsiElement fileContext) {
+    public ResultWithContext(PsiNamedElement element, PsiElement fileContext) {
       myElement = element;
       myFileContext = fileContext;
     }
 
-    @Nonnull
     public PsiNamedElement getElement() {
       return myElement;
     }

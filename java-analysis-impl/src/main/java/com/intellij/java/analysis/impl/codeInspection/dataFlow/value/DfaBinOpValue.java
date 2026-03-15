@@ -12,8 +12,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,17 +23,14 @@ import java.util.Map;
 public final class DfaBinOpValue extends DfaValue
 {
 	private final
-	@Nonnull
 	DfaVariableValue myLeft;
 	private final
-	@Nonnull
 	DfaValue myRight;
 	private final boolean myLong;
 	private final
-	@Nonnull
 	LongRangeBinOp myOp;
 
-	private DfaBinOpValue(@Nonnull DfaVariableValue left, @Nonnull DfaValue right, boolean isLong, @Nonnull LongRangeBinOp op)
+	private DfaBinOpValue(DfaVariableValue left, DfaValue right, boolean isLong, LongRangeBinOp op)
 	{
 		super(left.getFactory());
 		switch(op)
@@ -66,13 +62,11 @@ public final class DfaBinOpValue extends DfaValue
 		myOp = op;
 	}
 
-	@Nonnull
 	public DfaVariableValue getLeft()
 	{
 		return myLeft;
 	}
 
-	@Nonnull
 	public DfaValue getRight()
 	{
 		return myRight;
@@ -80,13 +74,11 @@ public final class DfaBinOpValue extends DfaValue
 
 	@Override
 	public
-	@Nonnull
 	PsiType getType()
 	{
 		return myLong ? PsiType.LONG : PsiType.INT;
 	}
 
-	@Nonnull
 	@Override
 	public DfIntegralType getDfType()
 	{
@@ -100,7 +92,6 @@ public final class DfaBinOpValue extends DfaValue
 	}
 
 	public
-	@Nonnull
 	LongRangeBinOp getOperation()
 	{
 		return myOp;
@@ -121,7 +112,6 @@ public final class DfaBinOpValue extends DfaValue
 		return myLeft + delimiter + myRight;
 	}
 
-	@Nonnull
 	public DfaValue tryReduceOnCast(DfaMemoryState state, PsiPrimitiveType type)
 	{
 		if(!TypeConversionUtil.isIntegralNumberType(type))
@@ -300,7 +290,6 @@ public final class DfaBinOpValue extends DfaValue
 			return null;
 		}
 
-		@Nonnull
 		private DfaBinOpValue doCreate(DfaVariableValue left, DfaValue right, boolean isLong, LongRangeBinOp op)
 		{
 			long hash = ((isLong ? 1L : 0L) << 63) | ((long) left.getID() << 32) | right.getID();

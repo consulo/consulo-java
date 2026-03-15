@@ -31,29 +31,27 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class DeleteMultiCatchFix implements SyntheticIntentionAction {
   private final PsiTypeElement myTypeElement;
 
-  public DeleteMultiCatchFix(@Nonnull PsiTypeElement typeElement) {
+  public DeleteMultiCatchFix(PsiTypeElement typeElement) {
     myTypeElement = typeElement;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.deleteCatchText(JavaHighlightUtil.formatType(myTypeElement.getType()));
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myTypeElement.isValid() && PsiManager.getInstance(project).isInProject(myTypeElement.getContainingFile());
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(myTypeElement.getContainingFile())) return;
 
     PsiElement parentType = myTypeElement.getParent();

@@ -21,14 +21,12 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.ui.ex.awt.JBUI;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
 @ExtensionImpl
 public class UncheckedWarningLocalInspection extends UncheckedWarningLocalInspectionBase {
-  @Nonnull
   @Override
   protected LocalQuickFix[] createFixes() {
     return new LocalQuickFix[]{new GenerifyFileFix()};

@@ -23,8 +23,7 @@ package com.intellij.java.analysis.codeInspection.reference;
 import consulo.language.editor.inspection.reference.RefElement;
 import com.intellij.java.language.psi.PsiModifier;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 
 public interface RefJavaElement extends RefElement
@@ -34,7 +33,6 @@ public interface RefJavaElement extends RefElement
 	 *
 	 * @return the collection of used types
 	 */
-	@Nonnull
 	Collection<RefClass> getOutTypeReferences();
 
 

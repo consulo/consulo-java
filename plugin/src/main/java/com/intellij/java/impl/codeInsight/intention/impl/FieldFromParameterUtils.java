@@ -34,10 +34,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.Ref;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -47,7 +45,7 @@ import java.util.Map;
  */
 public final class FieldFromParameterUtils {
   @Nullable
-  public static PsiParameter findParameterAtCursor(@Nonnull PsiFile file, @Nonnull Editor editor) {
+  public static PsiParameter findParameterAtCursor(PsiFile file, Editor editor) {
     int offset = editor.getCaretModel().getOffset();
     PsiParameterList parameterList = PsiTreeUtil.findElementOfClassAtOffset(file, offset, PsiParameterList.class, false);
     if (parameterList == null) {
@@ -151,7 +149,7 @@ public final class FieldFromParameterUtils {
 
         if (expression instanceof PsiMethodCallExpression) {
           PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
-          @NonNls String text = methodCallExpression.getMethodExpression().getText();
+          String text = methodCallExpression.getMethodExpression().getText();
 
           if (text.equals("super") || text.equals("this")) {
             continue;
@@ -200,11 +198,11 @@ public final class FieldFromParameterUtils {
     return i;
   }
 
-  public static void createFieldAndAddAssignment(@Nonnull Project project,
-                                                 @Nonnull PsiClass targetClass,
-                                                 @Nonnull PsiMethod method,
-                                                 @Nonnull PsiParameter parameter,
-                                                 @Nonnull PsiType fieldType, @Nonnull String fieldName,
+  public static void createFieldAndAddAssignment(Project project,
+                                                 PsiClass targetClass,
+                                                 PsiMethod method,
+                                                 PsiParameter parameter,
+                                                 PsiType fieldType, String fieldName,
                                                  boolean isStatic, boolean isFinal) throws IncorrectOperationException {
 
     PsiManager psiManager = PsiManager.getInstance(project);

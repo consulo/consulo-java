@@ -41,8 +41,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,11 +51,10 @@ import java.util.List;
 public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionAction {
   private final PsiField myField;
 
-  public InitializeFinalFieldInConstructorFix(@Nonnull PsiField field) {
+  public InitializeFinalFieldInConstructorFix(PsiField field) {
     myField = field;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.initializeFinalFieldInConstructorName();
@@ -64,7 +62,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!myField.isValid() || myField.hasModifierProperty(PsiModifier.STATIC) || myField.hasInitializer()) {
       return false;
     }
@@ -80,7 +78,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
 
   @Override
   @RequiredUIAccess
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     final PsiClass myClass = myField.getContainingClass();
@@ -110,7 +108,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
 
   @Nullable
   @RequiredReadAction
-  private static <T extends PsiElement> T getHighestElement(@Nonnull List<T> elements) {
+  private static <T extends PsiElement> T getHighestElement(List<T> elements) {
     T highest = null;
     int highestTextOffset = Integer.MAX_VALUE;
     for (T element : elements) {
@@ -124,11 +122,10 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
     return highest;
   }
 
-  @Nonnull
   private static List<PsiExpressionStatement> addFieldInitialization(
-    @Nonnull List<PsiMethod> constructors,
-    @Nonnull PsiField field,
-    @Nonnull Project project
+    List<PsiMethod> constructors,
+    PsiField field,
+    Project project
   ) {
     final List<PsiExpressionStatement> statements = new ArrayList<>();
     for (PsiMethod constructor : constructors) {
@@ -142,9 +139,9 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
 
   @Nullable
   private static PsiExpressionStatement addFieldInitialization(
-    @Nonnull PsiMethod constructor,
-    @Nonnull PsiField field,
-    @Nonnull Project project
+    PsiMethod constructor,
+    PsiField field,
+    Project project
   ) {
     PsiCodeBlock methodBody = constructor.getBody();
     if (methodBody == null) return null;
@@ -162,7 +159,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
     return (PsiExpressionStatement)methodBody.add(codeStyleManager.reformat(factory.createStatementFromText(stmtText, methodBody)));
   }
 
-  private static boolean methodContainsParameterWithName(@Nonnull PsiMethod constructor, @Nonnull String name) {
+  private static boolean methodContainsParameterWithName(PsiMethod constructor, String name) {
     for (PsiParameter parameter : constructor.getParameterList().getParameters()) {
       if (name.equals(parameter.getName())) {
         return true;
@@ -171,8 +168,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
     return false;
   }
 
-  @Nonnull
-  private static List<PsiMethod> choose(@Nonnull PsiMethod[] ctors, @Nonnull final Project project) {
+  private static List<PsiMethod> choose(PsiMethod[] ctors, final Project project) {
     if (project.getApplication().isUnitTestMode()) {
       return Arrays.asList(ctors);
     }
@@ -195,7 +191,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
     return Collections.emptyList();
   }
 
-  private static PsiMethodMember[] toPsiMethodMemberArray(@Nonnull PsiMethod[] methods) {
+  private static PsiMethodMember[] toPsiMethodMemberArray(PsiMethod[] methods) {
     final PsiMethodMember[] result = new PsiMethodMember[methods.length];
     for (int i = 0; i < methods.length; i++) {
       result[i] = new PsiMethodMember(methods[i]);
@@ -203,7 +199,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
     return result;
   }
 
-  private static PsiMethod[] toPsiMethodArray(@Nonnull List<PsiMethodMember> methodMembers) {
+  private static PsiMethod[] toPsiMethodArray(List<PsiMethodMember> methodMembers) {
     final PsiMethod[] result = new PsiMethod[methodMembers.size()];
     int i = 0;
     for (PsiMethodMember methodMember : methodMembers) {
@@ -213,13 +209,13 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
   }
 
   @RequiredUIAccess
-  private static void createDefaultConstructor(PsiClass psiClass, @Nonnull final Project project, final Editor editor, final PsiFile file) {
+  private static void createDefaultConstructor(PsiClass psiClass, final Project project, final Editor editor, final PsiFile file) {
     final AddDefaultConstructorFix defaultConstructorFix = new AddDefaultConstructorFix(psiClass);
     project.getApplication().runWriteAction(() -> defaultConstructorFix.invoke(project, editor, file));
   }
 
   @RequiredReadAction
-  private static PsiMethod[] filterIfFieldAlreadyAssigned(@Nonnull PsiField field, @Nonnull PsiMethod[] ctors) {
+  private static PsiMethod[] filterIfFieldAlreadyAssigned(PsiField field, PsiMethod[] ctors) {
     final List<PsiMethod> result = new ArrayList<>(Arrays.asList(ctors));
     for (PsiReference reference : ReferencesSearch.search(field, new LocalSearchScope(ctors))) {
       final PsiElement element = reference.getElement();
@@ -230,7 +226,7 @@ public class InitializeFinalFieldInConstructorFix implements SyntheticIntentionA
     return result.toArray(new PsiMethod[result.size()]);
   }
 
-  private static String suggestInitValue(@Nonnull PsiField field) {
+  private static String suggestInitValue(PsiField field) {
     PsiType type = field.getType();
     return PsiTypesUtil.getDefaultValueOfType(type);
   }

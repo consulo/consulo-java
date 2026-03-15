@@ -28,7 +28,6 @@ import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -39,13 +38,12 @@ public class JavaStaticMemberNameIndex extends StringStubIndexExtension<PsiMembe
     return ourInstance;
   }
 
-  @Nonnull
   @Override
   public StubIndexKey<String, PsiMember> getKey() {
     return JavaStubIndexKeys.JVM_STATIC_MEMBERS_NAMES;
   }
 
-  public Collection<PsiMember> getStaticMembers(final String name, final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiMember> getStaticMembers(final String name, final Project project, final ProjectAwareSearchScope scope) {
     return super.get(name, project, new JavaSourceFilterScope(scope));
   }
 }

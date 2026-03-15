@@ -51,7 +51,6 @@ import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -79,8 +78,8 @@ public class JavaFunctionalExpressionSearcher
     @Override
     @RequiredReadAction
     public void processQuery(
-        @Nonnull FunctionalExpressionSearch.SearchParameters queryParameters,
-        @Nonnull Predicate<? super PsiFunctionalExpression> consumer
+        FunctionalExpressionSearch.SearchParameters queryParameters,
+        Predicate<? super PsiFunctionalExpression> consumer
     ) {
         PsiClass aClass = queryParameters.getElementToSearch();
 
@@ -168,7 +167,6 @@ public class JavaFunctionalExpressionSearcher
         searchInFiles(aClass, consumer, filesToProcess, expectedFunExprParamsCount);
     }
 
-    @Nonnull
     @RequiredReadAction
     private static Set<Module> getJava8Modules(Project project) {
         Set<Module> highLevelModules = new HashSet<>();
@@ -245,7 +243,6 @@ public class JavaFunctionalExpressionSearcher
         });
     }
 
-    @Nonnull
     private static GlobalSearchScope combineResolveScopes(Project project, Set<VirtualFile> candidateFiles) {
         PsiManager psiManager = PsiManager.getInstance(project);
         LinkedHashSet<GlobalSearchScope> resolveScopes = new LinkedHashSet<>(candidateFiles.stream().map(file -> {
@@ -255,7 +252,6 @@ public class JavaFunctionalExpressionSearcher
         return GlobalSearchScope.union(resolveScopes.toArray(new GlobalSearchScope[resolveScopes.size()]));
     }
 
-    @Nonnull
     private static Set<VirtualFile> getFilesWithFunctionalExpressionsScope(Project project, GlobalSearchScope useScope) {
         Set<VirtualFile> files = new LinkedHashSet<>();
         PsiSearchHelper helper = PsiSearchHelper.getInstance(project);
@@ -265,7 +261,6 @@ public class JavaFunctionalExpressionSearcher
         return files;
     }
 
-    @Nonnull
     private static GlobalSearchScope convertToGlobalScope(Project project, SearchScope useScope) {
         GlobalSearchScope scope;
         if (useScope instanceof GlobalSearchScope globalSearchScope) {
@@ -365,7 +360,7 @@ public class JavaFunctionalExpressionSearcher
                 }
 
                 @Override
-                public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+                public void visitLambdaExpression(PsiLambdaExpression expression) {
                     super.visitLambdaExpression(expression);
                     if (expression.getParameterList().getParametersCount() == expectedParamCount) {
                         visitFunctionalExpression(expression);
@@ -373,7 +368,7 @@ public class JavaFunctionalExpressionSearcher
                 }
 
                 @Override
-                public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
+                public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
                     super.visitMethodReferenceExpression(expression);
                     visitFunctionalExpression(expression);
                 }
@@ -408,7 +403,7 @@ public class JavaFunctionalExpressionSearcher
         }
 
         @Override
-        public boolean process(@Nonnull VirtualFile file, Collection<JavaFunctionalExpressionIndex.IndexHolder> holders) {
+        public boolean process(VirtualFile file, Collection<JavaFunctionalExpressionIndex.IndexHolder> holders) {
             Set<JavaFunctionalExpressionIndex.IndexHolder> savedHolders = myHolders.get(file);
             for (JavaFunctionalExpressionIndex.IndexHolder holder : holders) {
                 int lambdaParamsNumber = holder.getLambdaParamsNumber();

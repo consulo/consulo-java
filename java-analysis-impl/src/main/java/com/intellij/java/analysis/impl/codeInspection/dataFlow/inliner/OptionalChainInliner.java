@@ -33,7 +33,6 @@ import consulo.util.lang.ObjectUtil;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.BiConsumer;
 
 import static com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil.*;
@@ -161,7 +160,7 @@ public class OptionalChainInliner implements CallInliner {
           .register(GUAVA_TO_JAVA, (builder, stub) -> {/* no op */});
 
   @Override
-  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(CFGBuilder builder, PsiMethodCallExpression call) {
     BiConsumer<CFGBuilder, PsiMethodCallExpression> terminalInliner = TERMINAL_MAPPER.mapFirst(call);
     if (terminalInliner != null) {
       PsiExpression qualifierExpression = call.getMethodExpression().getQualifierExpression();
@@ -310,7 +309,7 @@ public class OptionalChainInliner implements CallInliner {
   }
 
   @Override
-  public boolean mayInferPreciseType(@Nonnull PsiExpression expression) {
+  public boolean mayInferPreciseType(PsiExpression expression) {
     return InlinerUtil.isLambdaChainParameterReference(expression, TypeUtils::isOptional);
   }
 }

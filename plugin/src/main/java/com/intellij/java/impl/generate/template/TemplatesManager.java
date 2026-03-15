@@ -28,7 +28,6 @@ import consulo.util.dataholder.Key;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -120,14 +119,12 @@ public abstract class TemplatesManager implements PersistentStateComponent<Templ
     }
   }
 
-  @Nonnull
   public static PsiType createFieldListElementType(Project project) {
     PsiType classType = createElementType(project, FieldElement.class);
     PsiClass listClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_UTIL_LIST, GlobalSearchScope.allScope(project));
     return listClass != null ? JavaPsiFacade.getElementFactory(project).createType(listClass, classType) : PsiType.NULL;
   }
 
-  @Nonnull
   public static PsiType createElementType(Project project, Class<?> elementClass) {
     List<String> methodNames = ContainerUtil.mapNotNull(elementClass.getMethods(), new Function<Method, String>() {
       @Override

@@ -26,9 +26,8 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -168,9 +167,9 @@ public abstract class ParameterTablePanel extends JPanel {
     myTable.setPreferredScrollableViewportSize(new Dimension(250, myTable.getRowHeight() * 5));
     myTable.setShowGrid(false);
     myTable.setIntercellSpacing(new Dimension(0, 0));
-    @NonNls InputMap inputMap = myTable.getInputMap();
+    InputMap inputMap = myTable.getInputMap();
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "enable_disable");
-    @NonNls ActionMap actionMap = myTable.getActionMap();
+    ActionMap actionMap = myTable.getActionMap();
     actionMap.put("enable_disable", new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
         if (myTable.isEditing()) return;

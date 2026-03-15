@@ -28,24 +28,20 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SimplifyIfElseIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class SimplifyIfElseIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.simplifyIfElseIntentionName();
     }
 
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new SimplifyIfElsePredicate();
     }
 
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiIfStatement statement = (PsiIfStatement) element.getParent();
         if (SimplifyIfElsePredicate.isSimplifiableAssignment(statement)) {
@@ -92,7 +88,7 @@ public class SimplifyIfElseIntention extends Intention {
         PsiElement nextStatement =
             PsiTreeUtil.skipSiblingsForward(statement,
                 PsiWhiteSpace.class);
-        @NonNls String newStatement = "return " + conditionText + ';';
+        String newStatement = "return " + conditionText + ';';
         replaceStatement(newStatement, statement);
         assert nextStatement != null;
         nextStatement.delete();
@@ -105,7 +101,7 @@ public class SimplifyIfElseIntention extends Intention {
             return;
         }
         String conditionText = condition.getText();
-        @NonNls String newStatement = "return " + conditionText + ';';
+        String newStatement = "return " + conditionText + ';';
         replaceStatement(newStatement, statement);
     }
 
@@ -188,7 +184,7 @@ public class SimplifyIfElseIntention extends Intention {
         PsiElement nextStatement =
             PsiTreeUtil.skipSiblingsForward(statement,
                 PsiWhiteSpace.class);
-        @NonNls String newStatement = "return " + conditionText + ';';
+        String newStatement = "return " + conditionText + ';';
         replaceStatement(newStatement, statement);
         assert nextStatement != null;
         nextStatement.delete();
@@ -200,7 +196,7 @@ public class SimplifyIfElseIntention extends Intention {
         PsiExpression condition = statement.getCondition();
         String conditionText =
             BoolUtils.getNegatedExpressionText(condition);
-        @NonNls String newStatement = "return " + conditionText + ';';
+        String newStatement = "return " + conditionText + ';';
         replaceStatement(newStatement, statement);
     }
 

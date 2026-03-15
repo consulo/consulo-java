@@ -24,7 +24,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
-import jakarta.annotation.Nonnull;
 
 class InlineViewDescriptor implements UsageViewDescriptor{
 
@@ -34,7 +33,6 @@ class InlineViewDescriptor implements UsageViewDescriptor{
     myElement = element;
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myElement};
   }

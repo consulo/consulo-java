@@ -31,8 +31,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import javax.swing.*;
 import java.util.*;
@@ -42,13 +40,11 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean ignoreReferencesToLocalInnerClasses = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unqualifiedInnerClassAccessDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unqualifiedInnerClassAccessProblemDescriptor().get();
@@ -66,7 +62,6 @@ public class UnqualifiedInnerClassAccessInspection extends BaseInspection {
     }
 
     private static class UnqualifiedInnerClassAccessFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unqualifiedInnerClassAccessQuickfix();

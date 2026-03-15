@@ -16,9 +16,7 @@
 package consulo.deadCodeNotWorking.impl;
 
 import consulo.language.editor.inspection.InspectionTool;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -28,7 +26,7 @@ import java.lang.reflect.Field;
 @Deprecated
 public class SingleCheckboxOptionsPanel extends JPanel
 {
-	public SingleCheckboxOptionsPanel(@Nonnull String label, @Nonnull InspectionTool owner, @NonNls String property)
+	public SingleCheckboxOptionsPanel(String label, InspectionTool owner, String property)
 	{
 		super(new GridBagLayout());
 		boolean selected = getPropertyValue(owner, property);

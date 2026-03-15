@@ -15,9 +15,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.defUse.DefUseInspection;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
@@ -29,7 +27,7 @@ import com.intellij.testFramework.IdeaTestUtil;
  * For "lightweight" tests please use {@linkplain LightAdvHighlightingJdk7Test}.
  */
 public abstract class AdvHighlightingJdk7Test extends DaemonAnalyzerTestCase {
-  @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting7/";
+  private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting7/";
 
   @Override
   protected Sdk getTestProjectJdk() {
@@ -68,7 +66,7 @@ public abstract class AdvHighlightingJdk7Test extends DaemonAnalyzerTestCase {
   }
 
   //ambiguous method calls
-  private void doTestAmbiguous(@Nonnull JavaSdkVersion javaSdkVersion) throws Exception {
+  private void doTestAmbiguous(JavaSdkVersion javaSdkVersion) throws Exception {
     String name = getTestName(true);
     IdeaTestUtil.setTestVersion(javaSdkVersion, getModule(), myTestRootDisposable);
     doTest(BASE_PATH + name + "/pck/AmbiguousMethodCall.java", BASE_PATH + "/" + name, false, false);

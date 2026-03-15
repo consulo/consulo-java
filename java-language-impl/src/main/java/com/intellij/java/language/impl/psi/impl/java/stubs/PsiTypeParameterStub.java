@@ -21,11 +21,9 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.language.psi.stub.NamedStub;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
 public interface PsiTypeParameterStub extends NamedStub<PsiTypeParameter> {
-  @Nonnull
   List<PsiAnnotationStub> getAnnotations();
 }

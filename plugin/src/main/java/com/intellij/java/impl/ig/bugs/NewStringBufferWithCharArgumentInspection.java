@@ -27,19 +27,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.newStringBufferWithCharArgumentDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.newStringBufferWithCharArgumentProblemDescriptor().get();
     }
@@ -60,7 +57,6 @@ public class NewStringBufferWithCharArgumentInspection extends BaseInspection {
     }
 
     private static class NewStringBufferWithCharArgumentFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.newStringBufferWithCharArgumentQuickfix();
         }

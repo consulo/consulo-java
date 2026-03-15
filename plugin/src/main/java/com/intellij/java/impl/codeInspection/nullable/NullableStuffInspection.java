@@ -33,9 +33,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.*;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NullableStuffInspection extends NullableStuffInspectionBase {
@@ -50,11 +48,10 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
     }
 
     public static class NavigateToNullLiteralArguments extends LocalQuickFixOnPsiElement {
-        public NavigateToNullLiteralArguments(@Nonnull PsiParameter element) {
+        public NavigateToNullLiteralArguments(PsiParameter element) {
             super(element);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getText() {
             return JavaInspectionsLocalize.nullableStuffInspectionNavigateNullArgumentUsagesFixFamilyName();
@@ -63,10 +60,10 @@ public class NullableStuffInspection extends NullableStuffInspectionBase {
         @Override
         @RequiredReadAction
         public void invoke(
-            @Nonnull Project project,
-            @Nonnull PsiFile file,
-            @Nonnull PsiElement startElement,
-            @Nonnull PsiElement endElement
+            Project project,
+            PsiFile file,
+            PsiElement startElement,
+            PsiElement endElement
         ) {
             PsiParameter p = (PsiParameter)startElement;
             PsiMethod method = PsiTreeUtil.getParentOfType(p, PsiMethod.class);

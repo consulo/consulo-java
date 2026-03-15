@@ -26,7 +26,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -34,20 +33,18 @@ import java.util.List;
 @IntentionMetaData(ignoreId = "java.ConvertCatchToThrowsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ConvertCatchToThrowsIntention extends Intention {
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.convertCatchToThrowsIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new ConvertCatchToThrowsPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiCatchSection catchSection = (PsiCatchSection) element.getParent();
         PsiMethod method = PsiTreeUtil.getParentOfType(catchSection, PsiMethod.class);
         if (method == null) {

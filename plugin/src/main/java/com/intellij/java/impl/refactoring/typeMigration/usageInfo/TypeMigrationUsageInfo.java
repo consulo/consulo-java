@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring.typeMigration.usageInfo;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -27,7 +26,7 @@ public class TypeMigrationUsageInfo extends UsageInfo {
   private boolean myExcluded;
   private TypeMigrationUsageInfo myOwnerRoot;
 
-  public TypeMigrationUsageInfo(@Nonnull PsiElement element) {
+  public TypeMigrationUsageInfo(PsiElement element) {
     super(element);
   }
 

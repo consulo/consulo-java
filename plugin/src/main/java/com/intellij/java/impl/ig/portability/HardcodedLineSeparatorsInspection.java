@@ -23,7 +23,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,17 +32,14 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
 
   private static final Pattern newlines = Pattern.compile("\\\\n|\\\\r|\\\\0{0,1}12|\\\\0{0,1}15");
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.hardcodedLineSeparatorDisplayName();
   }
 
-  @Nonnull
   public String getID() {
     return "HardcodedLineSeparator";
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.hardcodedLineSeparatorProblemDescriptor().get();
   }
@@ -55,7 +51,7 @@ public class HardcodedLineSeparatorsInspection extends BaseInspection {
   private static class HardcodedLineSeparatorsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+    public void visitLiteralExpression(PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       PsiType type = expression.getType();
       if (type == null || !TypeUtils.isJavaLangString(type) && !type.equals(PsiType.CHAR)) {

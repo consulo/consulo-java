@@ -45,8 +45,7 @@ import consulo.project.Project;
 import consulo.util.collection.BidirectionalMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,12 +63,12 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor processor,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
+        Object state
     ) {
         if (refEntity instanceof RefMethod refMethod) {
             if (refMethod.isSyntheticJSP() || refMethod.hasSuperMethods() || refMethod.isEntry()) {
@@ -169,11 +168,11 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
     ) {
         manager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull RefEntity refEntity) {
+            public void visitElement(RefEntity refEntity) {
                 if (processor.getDescriptions(refEntity) != null) {
                     refEntity.accept(new RefJavaVisitor() {
                         @Override
-                        public void visitMethod(@Nonnull RefMethod refMethod) {
+                        public void visitMethod(RefMethod refMethod) {
                             globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
                                 processor.ignoreElement(refMethod);
                                 return true;
@@ -187,25 +186,21 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
         return false;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionRedundantThrowsDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return SHORT_NAME;
     }
 
-    @Nonnull
     private LocalQuickFix getFix(ProblemDescriptionsProcessor processor, String hint) {
         QuickFix fix = myQuickFixes.get(hint);
         if (fix == null) {
@@ -225,7 +220,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
 
     @Nullable
     @Override
-    public String getHint(@Nonnull QuickFix fix) {
+    public String getHint(QuickFix fix) {
         List<String> hints = myQuickFixes.getKeysByValue(fix);
         LOG.assertTrue(hints != null && hints.size() == 1);
         assert hints != null;
@@ -241,7 +236,6 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
             myHint = hint;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionRedundantThrowsRemoveQuickfix();
@@ -249,7 +243,7 @@ public class RedundantThrows extends GlobalJavaInspectionTool {
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             if (myProcessor != null) {
                 RefElement refElement = (RefElement) myProcessor.getElement(descriptor);
                 if (refElement instanceof RefMethod refMethod && refElement.isValid()) {

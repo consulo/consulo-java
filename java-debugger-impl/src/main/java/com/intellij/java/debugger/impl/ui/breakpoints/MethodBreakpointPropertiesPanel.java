@@ -29,7 +29,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaMethodBreakpointProperties;
 import com.intellij.java.debugger.DebuggerBundle;
 import consulo.execution.debug.breakpoint.XBreakpoint;
@@ -47,7 +46,6 @@ public class MethodBreakpointPropertiesPanel extends XBreakpointCustomProperties
 	//}
 
 
-	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{
@@ -106,14 +104,14 @@ public class MethodBreakpointPropertiesPanel extends XBreakpointCustomProperties
 	}
 
 	@Override
-	public void loadFrom(@Nonnull XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
+	public void loadFrom(XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
 	{
 		myWatchEntryCheckBox.setSelected(breakpoint.getProperties().WATCH_ENTRY);
 		myWatchExitCheckBox.setSelected(breakpoint.getProperties().WATCH_EXIT);
 	}
 
 	@Override
-	public void saveTo(@Nonnull XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
+	public void saveTo(XBreakpoint<JavaMethodBreakpointProperties> breakpoint)
 	{
 		breakpoint.getProperties().WATCH_ENTRY = myWatchEntryCheckBox.isSelected();
 		breakpoint.getProperties().WATCH_EXIT = myWatchExitCheckBox.isSelected();

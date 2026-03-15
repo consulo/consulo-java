@@ -27,7 +27,6 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.In
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceVariable;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -37,7 +36,7 @@ public class TypeCompatibilityConstraint implements ConstraintFormula
 	private PsiType myT;
 	private PsiType myS;
 
-	public TypeCompatibilityConstraint(@Nonnull PsiType t, @Nonnull PsiType s)
+	public TypeCompatibilityConstraint(PsiType t, PsiType s)
 	{
 		myT = t;
 		myS = s;

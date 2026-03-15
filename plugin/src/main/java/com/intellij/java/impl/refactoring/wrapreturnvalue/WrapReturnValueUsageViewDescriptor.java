@@ -20,18 +20,15 @@ import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import jakarta.annotation.Nonnull;
 
 class WrapReturnValueUsageViewDescriptor implements UsageViewDescriptor {
-    @Nonnull
     private final PsiMethod method;
 
-    WrapReturnValueUsageViewDescriptor(@Nonnull PsiMethod method, UsageInfo[] usages) {
+    WrapReturnValueUsageViewDescriptor(PsiMethod method, UsageInfo[] usages) {
         super();
         this.method = method;
     }
 
-    @Nonnull
     @Override
     public PsiElement[] getElements() {
         return new PsiElement[]{method};

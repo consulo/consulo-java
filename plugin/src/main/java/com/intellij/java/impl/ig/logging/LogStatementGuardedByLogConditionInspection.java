@@ -37,10 +37,8 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,7 +52,6 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   @SuppressWarnings({"PublicField"})
   public String loggerClassName = "java.util.logging.Logger";
   @SuppressWarnings({"PublicField"})
-  @NonNls
   public String loggerMethodAndconditionMethodNames =
     "fine,isLoggable(java.util.logging.Level.FINE)," +
     "finer,isLoggable(java.util.logging.Level.FINER)," +
@@ -70,13 +67,11 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.logStatementGuardedByLogConditionDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.logStatementGuardedByLogConditionProblemDescriptor().get();
   }
@@ -113,7 +108,6 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
 
   private class LogStatementGuardedByLogConditionFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.logStatementGuardedByLogConditionQuickfix();
     }
@@ -149,7 +143,7 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
       if (qualifier == null) {
         return;
       }
-      @NonNls StringBuilder ifStatementText = new StringBuilder("if (");
+      StringBuilder ifStatementText = new StringBuilder("if (");
       ifStatementText.append(qualifier.getText());
       ifStatementText.append('.');
       int index = logMethodNameList.indexOf(referenceName);
@@ -176,7 +170,7 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
       }
     }
 
-    private boolean isSameLogMethodCall(PsiStatement statement, @Nonnull String methodName) {
+    private boolean isSameLogMethodCall(PsiStatement statement, String methodName) {
       if (statement == null) {
         return false;
       }
@@ -291,13 +285,13 @@ public class LogStatementGuardedByLogConditionInspection extends BaseInspection 
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(loggerMethodAndconditionMethodNames, logMethodNameList, logConditionMethodNameList);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(Element element) throws WriteExternalException {
     loggerMethodAndconditionMethodNames = formatString(logMethodNameList, logConditionMethodNameList);
     super.writeSettings(element);
   }

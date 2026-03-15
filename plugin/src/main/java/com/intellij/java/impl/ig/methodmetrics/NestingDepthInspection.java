@@ -20,17 +20,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestingDepthInspection extends MethodMetricInspection {
 
-  @Nonnull
   public String getID() {
     return "OverlyNestedMethod";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.nestingDepthDisplayName();
   }
@@ -43,7 +40,6 @@ public class NestingDepthInspection extends MethodMetricInspection {
     return InspectionGadgetsLocalize.nestingDepthLimitOption().get();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     Integer nestingDepth = (Integer)infos[0];
     return InspectionGadgetsLocalize.nestingDepthProblemDescriptor(nestingDepth).get();
@@ -56,7 +52,7 @@ public class NestingDepthInspection extends MethodMetricInspection {
   private class NestingDepthMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

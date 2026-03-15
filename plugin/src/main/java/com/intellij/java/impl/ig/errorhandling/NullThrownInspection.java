@@ -27,17 +27,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NullThrownInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nullThrownDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nullThrownProblemDescriptor().get();
@@ -49,7 +46,6 @@ public class NullThrownInspection extends BaseInspection {
     }
 
     private static class ThrowNullFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.nullThrownQuickfix();

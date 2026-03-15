@@ -3,7 +3,6 @@ package com.intellij.java.impl.vfs.impl.jar;
 import consulo.virtualFileSystem.archive.ArchiveEntry;
 import consulo.virtualFileSystem.archive.ArchiveFile;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
@@ -18,11 +17,10 @@ import java.util.zip.ZipEntry;
 public class JarArchiveFile implements ArchiveFile {
   private final JarFile myZipFile;
 
-  public JarArchiveFile(@Nonnull String path) throws IOException {
+  public JarArchiveFile(String path) throws IOException {
     myZipFile = new JarFile(path);
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return myZipFile.getName();
@@ -36,11 +34,10 @@ public class JarArchiveFile implements ArchiveFile {
   }
 
   @Override
-  public InputStream getInputStream(@Nonnull ArchiveEntry entry) throws IOException {
+  public InputStream getInputStream(ArchiveEntry entry) throws IOException {
     return myZipFile.getInputStream(((JarArchiveEntry)entry).getEntry());
   }
 
-  @Nonnull
   @Override
   public Iterator<? extends ArchiveEntry> entries() {
     final Enumeration<? extends ZipEntry> entries = myZipFile.entries();

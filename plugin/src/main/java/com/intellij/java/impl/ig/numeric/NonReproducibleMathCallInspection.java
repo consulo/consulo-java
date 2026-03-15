@@ -25,7 +25,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,13 +56,11 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
     }
 
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonReproducibleMathCallDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonReproducibleMathCallProblemDescriptor().get();
     }
@@ -73,7 +70,6 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
     }
 
     private static class MakeStrictFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.nonReproducibleMathCallReplaceQuickfix();
@@ -94,7 +90,7 @@ public class NonReproducibleMathCallInspection extends BaseInspection {
 
     private static class BigDecimalEqualsVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

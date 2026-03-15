@@ -23,19 +23,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SuspiciousToArrayCallInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.suspiciousToArrayCallDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         PsiType type = (PsiType) infos[0];
         return InspectionGadgetsLocalize.suspiciousToArrayCallProblemDescriptor(type.getPresentableText()).get();
@@ -54,12 +50,12 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
     private static class SuspiciousToArrayCallVisitor extends BaseInspectionVisitor {
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            @NonNls String methodName =
+            String methodName =
                 methodExpression.getReferenceName();
             if (!"toArray".equals(methodName)) {
                 return;
@@ -89,9 +85,9 @@ public class SuspiciousToArrayCallInspection extends BaseInspection {
         }
 
         private void checkCollectionAndArrayTypes(
-            @Nonnull PsiClassType collectionType,
-            @Nonnull PsiExpression argument,
-            @Nonnull PsiMethodCallExpression expression
+            PsiClassType collectionType,
+            PsiExpression argument,
+            PsiMethodCallExpression expression
         ) {
             PsiType argumentType = argument.getType();
             if (!(argumentType instanceof PsiArrayType)) {

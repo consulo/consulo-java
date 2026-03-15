@@ -19,25 +19,21 @@ import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public abstract class MutablyNamedIntention extends Intention {
     private LocalizeValue myMText = LocalizeValue.empty();
 
-    @Nonnull
     protected abstract LocalizeValue getTextForElement(PsiElement element);
 
-    @Nonnull
     @Override
     public final LocalizeValue getText() {
         return myMText.orIfEmpty(getNeutralText());
     }
 
-    @Nonnull
     public abstract LocalizeValue getNeutralText();
 
     @Override
-    public final boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement node) {
+    public final boolean isAvailable(Project project, Editor editor, PsiElement node) {
         PsiElement element = findMatchingElement(node, editor);
         if (element == null) {
             return false;

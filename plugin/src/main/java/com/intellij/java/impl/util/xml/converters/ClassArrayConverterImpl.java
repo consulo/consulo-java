@@ -29,11 +29,9 @@ import consulo.module.Module;
 import consulo.project.Project;
 import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.GenericDomValue;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +49,6 @@ public class ClassArrayConverterImpl extends ClassArrayConverter {
     REFERENCE_PROVIDER.setAllowEmpty(true);
   }
 
-  @Nonnull
   public PsiReference[] createReferences(GenericDomValue genericDomValue, PsiElement element, ConvertContext context) {
     String s = genericDomValue.getStringValue();
     if (s != null) {
@@ -88,7 +85,7 @@ public class ClassArrayConverterImpl extends ClassArrayConverter {
     }
   }
 
-  public PsiClass fromString(@Nullable @NonNls String s, ConvertContext context) {
+  public PsiClass fromString(@Nullable String s, ConvertContext context) {
     if (s == null) return null;
     Module module = context.getModule();
     PsiFile psiFile = context.getFile();

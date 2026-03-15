@@ -42,7 +42,6 @@ import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Functions;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -120,7 +119,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
             new TypeMigrationProcessor(project, roots, migrationTypeFunction, rules, allowDependentRoots) {
                 @Override
                 @RequiredWriteAction
-                public void performRefactoring(@Nonnull UsageInfo[] usages) {
+                public void performRefactoring(UsageInfo[] usages) {
                     super.performRefactoring(usages);
                     if (editor != null) {
                         Application.get().invokeLater(() -> {
@@ -162,15 +161,14 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
         processor.run();
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new TypeMigrationViewDescriptor(myRoots[0]);
     }
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         if (hasFailedConversions()) {
             if (myProject.getApplication().isUnitTestMode()) {
                 if (ourSkipFailedConversionInTestMode) {
@@ -199,7 +197,7 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected void previewRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void previewRefactoring(UsageInfo[] usages) {
         MigrationPanel panel = new MigrationPanel(myRoots, myLabeler, myProject, isPreviewUsages());
         String name;
         if (myRoots.length == 1) {
@@ -247,7 +245,6 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    @Nonnull
     @Override
     @RequiredUIAccess
     public UsageInfo[] findUsages() {
@@ -264,13 +261,13 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    protected void refreshElements(@Nonnull PsiElement[] elements) {
+    protected void refreshElements(PsiElement[] elements) {
         myRoots = elements;
     }
 
     @Override
     @RequiredWriteAction
-    public void performRefactoring(@Nonnull UsageInfo[] usages) {
+    public void performRefactoring(UsageInfo[] usages) {
         change(usages, myLabeler, myProject);
     }
 
@@ -329,7 +326,6 @@ public class TypeMigrationProcessor extends BaseRefactoringProcessor {
         return myLabeler;
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return LocalizeValue.localizeTODO("TypeMigration");

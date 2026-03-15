@@ -13,8 +13,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -24,11 +23,11 @@ public class PackageLookupItem extends LookupElement {
   private final String myString;
   private final boolean myAddDot;
 
-  public PackageLookupItem(@Nonnull PsiPackage aPackage) {
+  public PackageLookupItem(PsiPackage aPackage) {
     this(aPackage, null);
   }
 
-  public PackageLookupItem(@Nonnull PsiPackage pkg, @Nullable PsiElement context) {
+  public PackageLookupItem(PsiPackage pkg, @Nullable PsiElement context) {
     myPackage = pkg;
     myString = StringUtil.notNullize(myPackage.getName());
 
@@ -36,13 +35,11 @@ public class PackageLookupItem extends LookupElement {
     myAddDot = !(file instanceof PsiJavaCodeReferenceCodeFragment) || ((PsiJavaCodeReferenceCodeFragment) file).isClassesAccepted();
   }
 
-  @Nonnull
   @Override
   public Object getObject() {
     return myPackage;
   }
 
-  @Nonnull
   @Override
   public String getLookupString() {
     return myString;
@@ -58,7 +55,7 @@ public class PackageLookupItem extends LookupElement {
   }
 
   @Override
-  public void handleInsert(@Nonnull InsertionContext context) {
+  public void handleInsert(InsertionContext context) {
     if (myAddDot) {
       context.setAddCompletionChar(false);
       TailType.DOT.processTail(context.getEditor(), context.getTailOffset());

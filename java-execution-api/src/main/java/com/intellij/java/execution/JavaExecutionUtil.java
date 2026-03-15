@@ -50,8 +50,7 @@ import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -63,11 +62,11 @@ public class JavaExecutionUtil {
   private JavaExecutionUtil() {
   }
 
-  public static boolean executeRun(@Nonnull final Project project, String contentName, Image icon, final DataContext dataContext) throws ExecutionException {
+  public static boolean executeRun(final Project project, String contentName, Image icon, final DataContext dataContext) throws ExecutionException {
     return executeRun(project, contentName, icon, dataContext, null);
   }
 
-  public static boolean executeRun(@Nonnull final Project project, String contentName, Image icon, DataContext dataContext, Filter[] filters) throws ExecutionException {
+  public static boolean executeRun(final Project project, String contentName, Image icon, DataContext dataContext, Filter[] filters) throws ExecutionException {
     final OwnJavaParameters cmdLine = dataContext.getData(OwnJavaParameters.JAVA_PARAMETERS);
     final DefaultRunProfile profile = new DefaultRunProfile(project, cmdLine, contentName, icon, filters);
     final ProgramRunner runner = RunnerRegistry.getInstance().getRunner(DefaultRunExecutor.EXECUTOR_ID, profile);
@@ -132,7 +131,7 @@ public class JavaExecutionUtil {
     }
 
     @Override
-    public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException {
+    public RunProfileState getState(final Executor executor, final ExecutionEnvironment env) throws ExecutionException {
       final JavaCommandLineState state = new JavaCommandLineState(env) {
         @Override
         protected OwnJavaParameters createJavaParameters() {
@@ -154,7 +153,7 @@ public class JavaExecutionUtil {
   }
 
   @Nullable
-  public static String getRuntimeQualifiedName(@Nonnull final PsiClass aClass) {
+  public static String getRuntimeQualifiedName(final PsiClass aClass) {
     return ClassUtil.getJVMClassName(aClass);
   }
 
@@ -179,7 +178,7 @@ public class JavaExecutionUtil {
   }
 
   @RequiredReadAction
-  public static Module findModule(@Nonnull final PsiClass psiClass) {
+  public static Module findModule(final PsiClass psiClass) {
     return ModuleUtilCore.findModuleForPsiElement(psiClass);
   }
 

@@ -39,8 +39,7 @@ import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -53,7 +52,7 @@ public abstract class RuntimeTypeEvaluator extends EditorEvaluationCommand<PsiTy
 	}
 
 	@Override
-	public void threadAction(@Nonnull SuspendContextImpl suspendContext)
+	public void threadAction(SuspendContextImpl suspendContext)
 	{
 		PsiType type = null;
 		try

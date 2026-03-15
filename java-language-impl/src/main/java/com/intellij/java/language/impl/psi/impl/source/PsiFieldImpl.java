@@ -50,8 +50,7 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.Reference;
 import java.util.*;
@@ -101,19 +100,16 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  @Nonnull
   public CompositeElement getNode() {
     return (CompositeElement) super.getNode();
   }
 
   @Override
-  @Nonnull
   public PsiIdentifier getNameIdentifier() {
     return (PsiIdentifier) getNode().findChildByRoleAsPsiElement(ChildRole.NAME);
   }
 
   @Override
-  @Nonnull
   public String getName() {
     final PsiFieldStub stub = getGreenStub();
     if (stub != null) {
@@ -123,13 +119,12 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }
 
   @Override
-  @Nonnull
   @SuppressWarnings("Duplicates")
   public PsiType getType() {
     PsiFieldStub stub = getStub();
@@ -159,7 +154,6 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  @Nonnull
   public PsiModifierList getModifierList() {
     final PsiModifierList selfModifierList = getSelfModifierList();
     if (selfModifierList != null) {
@@ -188,7 +182,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
@@ -268,7 +262,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
    * @return Light generated initializer literal expression if it was stored in stubs, the regular initializer otherwise
    */
   @Nullable
-  public static PsiExpression getDetachedInitializer(@Nonnull PsiVariable variable) {
+  public static PsiExpression getDetachedInitializer(PsiVariable variable) {
     return variable instanceof PsiFieldImpl ? ((PsiFieldImpl) variable).getDetachedInitializer() : variable.getInitializer();
   }
 
@@ -286,7 +280,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
     private static final OurConstValueComputer INSTANCE = new OurConstValueComputer();
 
     @Override
-    public Object execute(@Nonnull PsiVariable variable, Set<PsiVariable> visitedVars) {
+    public Object execute(PsiVariable variable, Set<PsiVariable> visitedVars) {
       return ((PsiFieldImpl) variable)._computeConstantValue(visitedVars);
     }
   }
@@ -384,7 +378,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitField(this);
     } else {
@@ -393,7 +387,7 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     return true;
   }
@@ -431,13 +425,12 @@ public class PsiFieldImpl extends JavaStubPsiElement<PsiFieldStub> implements Ps
   }
 
   @Override
-  @Nonnull
   public SearchScope getUseScope() {
     return PsiImplUtil.getMemberUseScope(this);
   }
 
   @Override
-  public void putInfo(@Nonnull Map<String, String> info) {
+  public void putInfo(Map<String, String> info) {
     info.put("fieldName", getName());
   }
 }

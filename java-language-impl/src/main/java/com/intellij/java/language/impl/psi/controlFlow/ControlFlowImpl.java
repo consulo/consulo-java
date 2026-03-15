@@ -4,7 +4,6 @@ package com.intellij.java.language.impl.psi.controlFlow;
 import consulo.logging.Logger;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.Stack;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -53,7 +52,6 @@ class ControlFlowImpl extends AbstractControlFlow
 	}
 
 	@Override
-	@Nonnull
 	public List<Instruction> getInstructions()
 	{
 		return myInstructions;
@@ -93,16 +91,14 @@ class ControlFlowImpl extends AbstractControlFlow
 	private static final class ImmutableControlFlow extends AbstractControlFlow
 	{
 		private final
-		@Nonnull
 		List<Instruction> myInstructions;
 		private final
-		@Nonnull
 		PsiElement[] myElementsForInstructions;
 		private final boolean myConstantConditionOccurred;
 
-		private ImmutableControlFlow(@Nonnull Instruction[] instructions,
-                                 @Nonnull HashMap<PsiElement, int[]> myElementToOffsetMap,
-                                 @Nonnull PsiElement [] elementsForInstructions, boolean occurred)
+		private ImmutableControlFlow(Instruction[] instructions,
+                                 HashMap<PsiElement, int[]> myElementToOffsetMap,
+                                 PsiElement [] elementsForInstructions, boolean occurred)
 		{
 			super(myElementToOffsetMap);
 			myInstructions = Arrays.asList(instructions);
@@ -111,7 +107,6 @@ class ControlFlowImpl extends AbstractControlFlow
 		}
 
 		@Override
-		@Nonnull
 		public List<Instruction> getInstructions()
 		{
 			return myInstructions;

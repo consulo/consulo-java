@@ -10,13 +10,12 @@ import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.execution.debug.stream.trace.XValueInterpreter;
 import consulo.internal.com.sun.jdi.*;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.concurrent.CompletableFuture;
 
 public class JavaValueInterpreter implements XValueInterpreter {
     @Override
-    public CompletableFuture<Result> extract(@Nonnull XDebugSession session, @Nonnull XValue result) {
+    public CompletableFuture<Result> extract(XDebugSession session, XValue result) {
         return CompletableFuture.supplyAsync(() -> {
             if (result instanceof JavaValue javaValue) {
                 Value reference = javaValue.getDescriptor().getValue();
@@ -52,7 +51,7 @@ public class JavaValueInterpreter implements XValueInterpreter {
         });
     }
 
-    private boolean hasInnerExceptions(@Nonnull ArrayReference resultArray) {
+    private boolean hasInnerExceptions(ArrayReference resultArray) {
         ArrayReference result = (ArrayReference) resultArray.getValue(1);
         ReferenceType type = result.referenceType();
         if (type instanceof ArrayType arrayType) {

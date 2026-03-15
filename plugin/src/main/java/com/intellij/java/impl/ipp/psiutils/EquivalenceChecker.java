@@ -19,8 +19,7 @@ import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean declarationStatementsAreEquivalent(
-        @Nonnull PsiDeclarationStatement statement1,
-        @Nonnull PsiDeclarationStatement statement2) {
+        PsiDeclarationStatement statement1,
+        PsiDeclarationStatement statement2) {
         PsiElement[] elements1 = statement1.getDeclaredElements();
         List<PsiLocalVariable> vars1 =
             new ArrayList<PsiLocalVariable>(elements1.length);
@@ -68,8 +67,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean localVariablesAreEquivalent(
-        @Nonnull PsiLocalVariable localVariable1,
-        @Nonnull PsiLocalVariable localVariable2) {
+        PsiLocalVariable localVariable1,
+        PsiLocalVariable localVariable2) {
         PsiType type1 = localVariable1.getType();
         PsiType type2 = localVariable2.getType();
         if (!typesAreEquivalent(type1, type2)) {
@@ -88,7 +87,7 @@ public class EquivalenceChecker {
         return expressionsAreEquivalent(initializer1, initializer2);
     }
 
-    private static boolean tryStatementsAreEquivalent(@Nonnull PsiTryStatement statement1, @Nonnull PsiTryStatement statement2) {
+    private static boolean tryStatementsAreEquivalent(PsiTryStatement statement1, PsiTryStatement statement2) {
         PsiCodeBlock tryBlock1 = statement1.getTryBlock();
         PsiCodeBlock tryBlock2 = statement2.getTryBlock();
         if (!codeBlocksAreEquivalent(tryBlock1, tryBlock2)) {
@@ -145,8 +144,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean parametersAreEquivalent(
-        @Nonnull PsiParameter parameter1,
-        @Nonnull PsiParameter parameter2) {
+        PsiParameter parameter1,
+        PsiParameter parameter2) {
         PsiType type1 = parameter1.getType();
         PsiType type2 = parameter2.getType();
         if (!typesAreEquivalent(type1, type2)) {
@@ -174,8 +173,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean whileStatementsAreEquivalent(
-        @Nonnull PsiWhileStatement statement1,
-        @Nonnull PsiWhileStatement statement2) {
+        PsiWhileStatement statement1,
+        PsiWhileStatement statement2) {
         PsiExpression condition1 = statement1.getCondition();
         PsiExpression condition2 = statement2.getCondition();
         PsiStatement body1 = statement1.getBody();
@@ -185,8 +184,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean forStatementsAreEquivalent(
-        @Nonnull PsiForStatement statement1,
-        @Nonnull PsiForStatement statement2) {
+        PsiForStatement statement1,
+        PsiForStatement statement2) {
         PsiExpression condition1 = statement1.getCondition();
         PsiExpression condition2 = statement2.getCondition();
         if (!expressionsAreEquivalent(condition1, condition2)) {
@@ -208,8 +207,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean forEachStatementsAreEquivalent(
-        @Nonnull PsiForeachStatement statement1,
-        @Nonnull PsiForeachStatement statement2) {
+        PsiForeachStatement statement1,
+        PsiForeachStatement statement2) {
         PsiExpression value1 = statement1.getIteratedValue();
         PsiExpression value2 = statement2.getIteratedValue();
         if (!expressionsAreEquivalent(value1, value2)) {
@@ -234,8 +233,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean switchStatementsAreEquivalent(
-        @Nonnull PsiSwitchStatement statement1,
-        @Nonnull PsiSwitchStatement statement2) {
+        PsiSwitchStatement statement1,
+        PsiSwitchStatement statement2) {
         PsiExpression switchExpression1 = statement1.getExpression();
         PsiExpression swithcExpression2 = statement2.getExpression();
         PsiCodeBlock body1 = statement1.getBody();
@@ -245,8 +244,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean doWhileStatementsAreEquivalent(
-        @Nonnull PsiDoWhileStatement statement1,
-        @Nonnull PsiDoWhileStatement statement2) {
+        PsiDoWhileStatement statement1,
+        PsiDoWhileStatement statement2) {
         PsiExpression condition1 = statement1.getCondition();
         PsiExpression condition2 = statement2.getCondition();
         PsiStatement body1 = statement1.getBody();
@@ -256,8 +255,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean assertStatementsAreEquivalent(
-        @Nonnull PsiAssertStatement statement1,
-        @Nonnull PsiAssertStatement statement2) {
+        PsiAssertStatement statement1,
+        PsiAssertStatement statement2) {
         PsiExpression condition1 = statement1.getAssertCondition();
         PsiExpression condition2 = statement2.getAssertCondition();
         PsiExpression description1 = statement1.getAssertDescription();
@@ -267,8 +266,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean synchronizedStatementsAreEquivalent(
-        @Nonnull PsiSynchronizedStatement statement1,
-        @Nonnull PsiSynchronizedStatement statement2) {
+        PsiSynchronizedStatement statement1,
+        PsiSynchronizedStatement statement2) {
         PsiExpression lock1 = statement1.getLockExpression();
         PsiExpression lock2 = statement2.getLockExpression();
         PsiCodeBlock body1 = statement1.getBody();
@@ -278,16 +277,16 @@ public class EquivalenceChecker {
     }
 
     private static boolean blockStatementsAreEquivalent(
-        @Nonnull PsiBlockStatement statement1,
-        @Nonnull PsiBlockStatement statement2) {
+        PsiBlockStatement statement1,
+        PsiBlockStatement statement2) {
         PsiCodeBlock block1 = statement1.getCodeBlock();
         PsiCodeBlock block2 = statement2.getCodeBlock();
         return codeBlocksAreEquivalent(block1, block2);
     }
 
     private static boolean breakStatementsAreEquivalent(
-        @Nonnull PsiBreakStatement statement1,
-        @Nonnull PsiBreakStatement statement2) {
+        PsiBreakStatement statement1,
+        PsiBreakStatement statement2) {
         PsiIdentifier identifier1 = statement1.getLabelIdentifier();
         PsiIdentifier identifier2 = statement2.getLabelIdentifier();
         if (identifier1 == null) {
@@ -302,8 +301,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean continueStatementsAreEquivalent(
-        @Nonnull PsiContinueStatement statement1,
-        @Nonnull PsiContinueStatement statement2) {
+        PsiContinueStatement statement1,
+        PsiContinueStatement statement2) {
         PsiIdentifier identifier1 = statement1.getLabelIdentifier();
         PsiIdentifier identifier2 = statement2.getLabelIdentifier();
         if (identifier1 == null) {
@@ -318,8 +317,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean switchLabelStatementsAreEquivalent(
-        @Nonnull PsiSwitchLabelStatement statement1,
-        @Nonnull PsiSwitchLabelStatement statement2) {
+        PsiSwitchLabelStatement statement1,
+        PsiSwitchLabelStatement statement2) {
         if (statement1.isDefaultCase()) {
             return statement2.isDefaultCase();
         }
@@ -332,8 +331,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean labeledStatementsAreEquivalent(
-        @Nonnull PsiLabeledStatement statement1,
-        @Nonnull PsiLabeledStatement statement2) {
+        PsiLabeledStatement statement1,
+        PsiLabeledStatement statement2) {
         PsiIdentifier identifier1 = statement1.getLabelIdentifier();
         PsiIdentifier identifier2 = statement2.getLabelIdentifier();
         String text1 = identifier1.getText();
@@ -363,8 +362,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean ifStatementsAreEquivalent(
-        @Nonnull PsiIfStatement statement1,
-        @Nonnull PsiIfStatement statement2) {
+        PsiIfStatement statement1,
+        PsiIfStatement statement2) {
         PsiExpression condition1 = statement1.getCondition();
         PsiExpression condition2 = statement2.getCondition();
         PsiStatement thenBranch1 = statement1.getThenBranch();
@@ -377,32 +376,32 @@ public class EquivalenceChecker {
     }
 
     private static boolean expressionStatementsAreEquivalent(
-        @Nonnull PsiExpressionStatement statement1,
-        @Nonnull PsiExpressionStatement statement2) {
+        PsiExpressionStatement statement1,
+        PsiExpressionStatement statement2) {
         PsiExpression expression1 = statement1.getExpression();
         PsiExpression expression2 = statement2.getExpression();
         return expressionsAreEquivalent(expression1, expression2);
     }
 
     private static boolean returnStatementsAreEquivalent(
-        @Nonnull PsiReturnStatement statement1,
-        @Nonnull PsiReturnStatement statement2) {
+        PsiReturnStatement statement1,
+        PsiReturnStatement statement2) {
         PsiExpression returnValue1 = statement1.getReturnValue();
         PsiExpression returnValue2 = statement2.getReturnValue();
         return expressionsAreEquivalent(returnValue1, returnValue2);
     }
 
     private static boolean throwStatementsAreEquivalent(
-        @Nonnull PsiThrowStatement statement1,
-        @Nonnull PsiThrowStatement statement2) {
+        PsiThrowStatement statement1,
+        PsiThrowStatement statement2) {
         PsiExpression exception1 = statement1.getException();
         PsiExpression exception2 = statement2.getException();
         return expressionsAreEquivalent(exception1, exception2);
     }
 
     private static boolean expressionListStatementsAreEquivalent(
-        @Nonnull PsiExpressionListStatement statement1,
-        @Nonnull PsiExpressionListStatement statement2) {
+        PsiExpressionListStatement statement1,
+        PsiExpressionListStatement statement2) {
         PsiExpressionList expressionList1 =
             statement1.getExpressionList();
         PsiExpression[] expressions1 = expressionList1.getExpressions();
@@ -573,8 +572,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean methodCallExpressionsAreEquivalent(
-        @Nonnull PsiMethodCallExpression methodCallExpression1,
-        @Nonnull PsiMethodCallExpression methodCallExpression2) {
+        PsiMethodCallExpression methodCallExpression1,
+        PsiMethodCallExpression methodCallExpression2) {
         PsiReferenceExpression methodExpression1 =
             methodCallExpression1.getMethodExpression();
         PsiReferenceExpression methodExpression2 =
@@ -592,8 +591,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean newExpressionsAreEquivalent(
-        @Nonnull PsiNewExpression newExpression1,
-        @Nonnull PsiNewExpression newExpression2) {
+        PsiNewExpression newExpression1,
+        PsiNewExpression newExpression2) {
         PsiJavaCodeReferenceElement classReference1 =
             newExpression1.getClassReference();
         PsiJavaCodeReferenceElement classReference2 =
@@ -644,8 +643,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean arrayInitializerExpressionsAreEquivalent(
-        @Nonnull PsiArrayInitializerExpression arrayInitializerExpression1,
-        @Nonnull PsiArrayInitializerExpression arrayInitializerExpression2) {
+        PsiArrayInitializerExpression arrayInitializerExpression1,
+        PsiArrayInitializerExpression arrayInitializerExpression2) {
         PsiExpression[] initializers1 =
             arrayInitializerExpression1.getInitializers();
         PsiExpression[] initializers2 =
@@ -654,8 +653,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean typeCastExpressionsAreEquivalent(
-        @Nonnull PsiTypeCastExpression typeCastExpression1,
-        @Nonnull PsiTypeCastExpression typeCastExpression2) {
+        PsiTypeCastExpression typeCastExpression1,
+        PsiTypeCastExpression typeCastExpression2) {
         PsiTypeElement typeElement1 = typeCastExpression1.getCastType();
         PsiTypeElement typeElement2 = typeCastExpression2.getCastType();
         if (!typeElementsAreEquivalent(typeElement1, typeElement2)) {
@@ -667,8 +666,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean arrayAccessExpressionsAreEquivalent(
-        @Nonnull PsiArrayAccessExpression arrayAccessExpression1,
-        @Nonnull PsiArrayAccessExpression arrayAccessExpression2) {
+        PsiArrayAccessExpression arrayAccessExpression1,
+        PsiArrayAccessExpression arrayAccessExpression2) {
         PsiExpression arrayExpression2 =
             arrayAccessExpression1.getArrayExpression();
         PsiExpression arrayExpression1 =
@@ -682,8 +681,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean prefixExpressionsAreEquivalent(
-        @Nonnull PsiPrefixExpression prefixExpression1,
-        @Nonnull PsiPrefixExpression prefixExpression2) {
+        PsiPrefixExpression prefixExpression1,
+        PsiPrefixExpression prefixExpression2) {
         IElementType tokenType1 = prefixExpression1.getOperationTokenType();
         if (!tokenType1.equals(prefixExpression2.getOperationTokenType())) {
             return false;
@@ -694,8 +693,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean postfixExpressionsAreEquivalent(
-        @Nonnull PsiPostfixExpression postfixExpression1,
-        @Nonnull PsiPostfixExpression postfixExpression2) {
+        PsiPostfixExpression postfixExpression1,
+        PsiPostfixExpression postfixExpression2) {
         IElementType tokenType1 = postfixExpression1.getOperationTokenType();
         if (!tokenType1.equals(postfixExpression2.getOperationTokenType())) {
             return false;
@@ -706,8 +705,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean polyadicExpressionsAreEquivalent(
-        @Nonnull PsiPolyadicExpression polyadicExpression1,
-        @Nonnull PsiPolyadicExpression polyadicExpression2) {
+        PsiPolyadicExpression polyadicExpression1,
+        PsiPolyadicExpression polyadicExpression2) {
         IElementType tokenType1 = polyadicExpression1.getOperationTokenType();
         IElementType tokenType2 = polyadicExpression2.getOperationTokenType();
         if (!tokenType1.equals(tokenType2)) {
@@ -727,8 +726,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean assignmentExpressionsAreEquivalent(
-        @Nonnull PsiAssignmentExpression assignmentExpression1,
-        @Nonnull PsiAssignmentExpression assignmentExpression2) {
+        PsiAssignmentExpression assignmentExpression1,
+        PsiAssignmentExpression assignmentExpression2) {
         IElementType tokenType1 = assignmentExpression1.getOperationTokenType();
         if (!tokenType1.equals(assignmentExpression2.getOperationTokenType())) {
             return false;
@@ -742,8 +741,8 @@ public class EquivalenceChecker {
     }
 
     private static boolean conditionalExpressionsAreEquivalent(
-        @Nonnull PsiConditionalExpression conditionalExpression1,
-        @Nonnull PsiConditionalExpression conditionalExpression2) {
+        PsiConditionalExpression conditionalExpression1,
+        PsiConditionalExpression conditionalExpression2) {
         PsiExpression condition1 = conditionalExpression1.getCondition();
         PsiExpression condition2 = conditionalExpression2.getCondition();
         PsiExpression thenExpression1 =

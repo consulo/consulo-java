@@ -25,7 +25,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 public class HighlightMessageUtil {
     private static final LocalizeValue QUESTION_MARK = LocalizeValue.of("?");
@@ -33,9 +32,8 @@ public class HighlightMessageUtil {
     private HighlightMessageUtil() {
     }
 
-    @Nonnull
     @RequiredReadAction
-    public static LocalizeValue getSymbolName(@Nonnull PsiElement symbol, PsiSubstitutor substitutor) {
+    public static LocalizeValue getSymbolName(PsiElement symbol, PsiSubstitutor substitutor) {
         return switch (symbol) {
             case PsiAnonymousClass ac -> LanguageLocalize.javaTermsAnonymousClass();
             case PsiClass c -> {

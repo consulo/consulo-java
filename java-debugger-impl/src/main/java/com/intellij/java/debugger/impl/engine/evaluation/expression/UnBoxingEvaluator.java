@@ -22,8 +22,7 @@ import com.intellij.java.language.psi.CommonClassNames;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
 import consulo.util.lang.Couple;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -57,7 +56,7 @@ public class UnBoxingEvaluator implements Evaluator
 		return TYPES_TO_CONVERSION_METHOD_MAP.containsKey(typeName);
 	}
 
-	public UnBoxingEvaluator(@Nonnull Evaluator operand)
+	public UnBoxingEvaluator(Evaluator operand)
 	{
 		myOperand = DisableGC.create(operand);
 	}

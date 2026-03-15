@@ -6,7 +6,6 @@ package com.intellij.refactoring;
 
 import static org.junit.Assert.assertTrue;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import consulo.application.ApplicationManager;
@@ -19,7 +18,6 @@ import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class ExtractMethodObjectTest extends LightRefactoringTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

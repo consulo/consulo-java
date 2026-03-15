@@ -28,8 +28,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -46,13 +45,13 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
 
   private final PsiExpression myContext;
 
-  public JavaLangInvokeHandleReference(@Nonnull PsiLiteralExpression literal, @Nonnull PsiExpression context) {
+  public JavaLangInvokeHandleReference(PsiLiteralExpression literal, PsiExpression context) {
     super(literal);
     myContext = context;
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     return element;
   }
 
@@ -93,17 +92,16 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
     return null;
   }
 
-  private static PsiElement resolveField(@Nonnull String name, @Nonnull PsiClass psiClass, Condition<? super PsiField> filter) {
+  private static PsiElement resolveField(String name, PsiClass psiClass, Condition<? super PsiField> filter) {
     PsiField field = psiClass.findFieldByName(name, true);
     return field != null && filter.value(field) ? field : null;
   }
 
-  private static PsiElement resolveMethod(@Nonnull String name, @Nonnull PsiClass psiClass, Condition<? super PsiMethod> filter) {
+  private static PsiElement resolveMethod(String name, PsiClass psiClass, Condition<? super PsiMethod> filter) {
     PsiMethod[] methods = psiClass.findMethodsByName(name, true);
     return ContainerUtil.find(methods, filter);
   }
 
-  @Nonnull
   @Override
   public Object[] getVariants() {
     Object value = myElement.getValue();
@@ -137,13 +135,13 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
     return ArrayUtil.EMPTY_OBJECT_ARRAY;
   }
 
-  private Object[] lookupMethods(@Nonnull PsiClass psiClass, Predicate<? super PsiMethod> filter) {
+  private Object[] lookupMethods(PsiClass psiClass, Predicate<? super PsiMethod> filter) {
     return psiClass.getVisibleSignatures().stream().map(MethodSignatureBackedByPsiMethod::getMethod).filter(filter).sorted(Comparator.comparingInt((PsiMethod method) -> getMethodSortOrder
         (method)).thenComparing(PsiMethod::getName)).map(method -> withPriority(JavaLookupElementBuilder.forMethod(method, PsiSubstitutor.EMPTY).withInsertHandler(this), -getMethodSortOrder
         (method))).toArray();
   }
 
-  private Object[] lookupFields(@Nonnull PsiClass psiClass, Predicate<? super PsiField> filter) {
+  private Object[] lookupFields(PsiClass psiClass, Predicate<? super PsiField> filter) {
     Set<String> uniqueNames = new HashSet<>();
     return Arrays.stream(psiClass.getAllFields()).filter(field -> field != null && (field.getContainingClass() == psiClass || !field.hasModifierProperty(PsiModifier.PRIVATE)) && field.getName()
         != null && uniqueNames.add(field.getName())).filter(filter).sorted(Comparator.comparing((PsiField field) -> isPublic(field) ? 0 : 1).thenComparing(PsiField::getName)).map(field ->
@@ -167,7 +165,7 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
   }
 
   @Override
-  public void handleInsert(@Nonnull InsertionContext context, @Nonnull LookupElement item) {
+  public void handleInsert(InsertionContext context, LookupElement item) {
     Object object = item.getObject();
 
     if (object instanceof PsiMethod) {
@@ -185,9 +183,8 @@ public class JavaLangInvokeHandleReference extends PsiReferenceBase<PsiLiteralEx
   }
 
   static class JavaLangInvokeHandleReferenceProvider extends PsiReferenceProvider {
-    @Nonnull
     @Override
-    public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+    public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
       if (element instanceof PsiLiteralExpression) {
         PsiLiteralExpression literal = (PsiLiteralExpression) element;
         if (literal.getValue() instanceof String) {

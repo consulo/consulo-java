@@ -23,22 +23,18 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DivideByZeroInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "divzero";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.divideByZeroDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.divideByZeroProblemDescriptor().get();
   }

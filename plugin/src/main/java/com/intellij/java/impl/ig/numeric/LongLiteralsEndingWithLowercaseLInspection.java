@@ -28,23 +28,19 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class LongLiteralsEndingWithLowercaseLInspection
   extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "LongLiteralEndingWithLowercaseL";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLProblemDescriptor().get();
   }
@@ -58,7 +54,6 @@ public class LongLiteralsEndingWithLowercaseLInspection
   }
 
   private static class LongLiteralFix extends InspectionGadgetsFix {
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.longLiteralsEndingWithLowercaseLReplaceQuickfix();
     }
@@ -76,7 +71,7 @@ public class LongLiteralsEndingWithLowercaseLInspection
     @Override
     @RequiredReadAction
     public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression expression) {
+      PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       PsiType type = expression.getType();
       if (type == null) {

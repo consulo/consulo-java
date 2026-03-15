@@ -30,9 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -41,14 +39,12 @@ public class IfMayBeConditionalInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean reportMethodCalls = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.ifMayBeConditionalDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.ifMayBeConditionalProblemDescriptor().get();
     }
@@ -65,7 +61,6 @@ public class IfMayBeConditionalInspection extends BaseInspection {
     }
 
     private static class IfMayBeConditionalFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.ifMayBeConditionalQuickfix();
@@ -80,7 +75,7 @@ public class IfMayBeConditionalInspection extends BaseInspection {
             PsiStatement elseBranch = ifStatement.getElseBranch();
             PsiStatement elseStatement = ControlFlowUtils.stripBraces(elseBranch);
             PsiExpression condition = ifStatement.getCondition();
-            @NonNls StringBuilder replacementText = new StringBuilder();
+            StringBuilder replacementText = new StringBuilder();
             if (thenStatement instanceof PsiReturnStatement) {
                 PsiReturnStatement elseReturn = (PsiReturnStatement) elseStatement;
                 PsiReturnStatement thenReturn = (PsiReturnStatement) thenStatement;

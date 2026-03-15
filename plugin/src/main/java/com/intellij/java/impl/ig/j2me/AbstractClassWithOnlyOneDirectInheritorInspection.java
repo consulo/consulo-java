@@ -24,17 +24,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AbstractClassWithOnlyOneDirectInheritorInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.abstractClassWithOnlyOneDirectInheritorDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.abstractClassWithOnlyOneDirectInheritorProblemDescriptor().get();
     }
@@ -46,7 +43,7 @@ public class AbstractClassWithOnlyOneDirectInheritorInspection extends BaseInspe
     private static class AbstractClassWithOnlyOneDirectInheritorVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
                 return;
             }

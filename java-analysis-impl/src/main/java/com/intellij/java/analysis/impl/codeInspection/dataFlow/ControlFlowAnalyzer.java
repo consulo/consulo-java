@@ -37,8 +37,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.FList;
 import consulo.util.collection.FactoryMap;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -76,7 +75,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    *                     If PsiClass then class initializers + field initializers will be analyzed
    * @param inlining     if true inlining is performed for known method calls
    */
-  ControlFlowAnalyzer(final DfaValueFactory valueFactory, @Nonnull PsiElement codeFragment, boolean inlining) {
+  ControlFlowAnalyzer(final DfaValueFactory valueFactory, PsiElement codeFragment, boolean inlining) {
     myInlining = inlining;
     myFactory = valueFactory;
     myCodeFragment = codeFragment;
@@ -141,7 +140,6 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   private
-  @Nonnull
   PsiClassType createClassType(GlobalSearchScope scope, String fqn) {
     PsiClass aClass = JavaPsiFacade.getInstance(myProject).findClass(fqn, scope);
     if (aClass != null) {
@@ -185,7 +183,6 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   private
-  @Nonnull
   List<DfaVariableValue> getSynthetics(PsiElement element) {
     int startOffset = getStartOffset(element).getInstructionOffset();
     List<DfaVariableValue> synthetics = new ArrayList<>();
@@ -204,7 +201,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   @Override
-  public void visitErrorElement(@Nonnull PsiErrorElement element) {
+  public void visitErrorElement(PsiErrorElement element) {
     throw new CannotAnalyzeException();
   }
 
@@ -401,7 +398,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
   }
 
   @Override
-  public void visitYieldStatement(@Nonnull PsiYieldStatement statement) {
+  public void visitYieldStatement(PsiYieldStatement statement) {
     startElement(statement);
     PsiSwitchExpression enclosing = statement.findEnclosingExpression();
     PsiExpression expression = statement.getExpression();
@@ -419,11 +416,11 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(statement);
   }
 
-  void addNullCheck(@Nonnull PsiExpression expression) {
+  void addNullCheck(PsiExpression expression) {
     addNullCheck(NullabilityProblemKind.fromContext(expression, myCustomNullabilityProblems));
   }
 
-  void addNullCheck(@Nullable NullabilityProblemKind.NullabilityProblem<?> problem) {
+  void addNullCheck(NullabilityProblemKind.@Nullable NullabilityProblem<?> problem) {
     if (problem != null) {
       DfaControlTransferValue transfer = shouldHandleException() && problem.thrownException() != null
           ? myFactory.controlTransfer(myExceptionCache.get(problem.thrownException()), myTrapStack) : null;
@@ -441,19 +438,17 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private void controlTransfer(@Nonnull TransferTarget target, FList<Trap> traps) {
+  private void controlTransfer(TransferTarget target, FList<Trap> traps) {
     addInstruction(new ControlTransferInstruction(myFactory.controlTransfer(target, traps)));
   }
 
   private
-  @Nonnull
   FList<Trap> getTrapsInsideElement(PsiElement element) {
     return FList.createFromReversed(ContainerUtil.reverse(
         ContainerUtil.findAll(myTrapStack, cd -> PsiTreeUtil.isAncestor(element, cd.getAnchor(), true))));
   }
 
   private
-  @Nonnull
   List<DfaVariableValue> getVariablesInside(PsiElement exitedStatement) {
     return ContainerUtil.map(PsiTreeUtil.findChildrenOfType(exitedStatement, PsiVariable.class),
         myFactory.getVarFactory()::createVariableValue);
@@ -922,7 +917,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  private void processSwitch(@Nonnull PsiSwitchBlock switchBlock) {
+  private void processSwitch(PsiSwitchBlock switchBlock) {
     PsiExpression selector = PsiUtil.skipParenthesizedExprDown(switchBlock.getExpression());
     DfaVariableValue expressionValue = null;
     boolean syntheticVar = true;
@@ -1464,11 +1459,11 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     }
   }
 
-  void generateBoxingUnboxingInstructionFor(@Nonnull PsiExpression expression, PsiType expectedType) {
+  void generateBoxingUnboxingInstructionFor(PsiExpression expression, PsiType expectedType) {
     generateBoxingUnboxingInstructionFor(expression, expression.getType(), expectedType, false);
   }
 
-  void generateBoxingUnboxingInstructionFor(@Nonnull PsiExpression context, PsiType actualType, PsiType expectedType, boolean explicit) {
+  void generateBoxingUnboxingInstructionFor(PsiExpression context, PsiType actualType, PsiType expectedType, boolean explicit) {
     if (PsiType.VOID.equals(expectedType)) {
       return;
     }
@@ -1702,7 +1697,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     finishElement(call);
   }
 
-  void addBareCall(@Nullable PsiMethodCallExpression expression, @Nonnull PsiReferenceExpression reference) {
+  void addBareCall(@Nullable PsiMethodCallExpression expression, PsiReferenceExpression reference) {
     addConditionalErrorThrow();
     PsiMethod method = ObjectUtil.tryCast(reference.resolve(), PsiMethod.class);
     List<? extends MethodContract> contracts =
@@ -2043,7 +2038,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
         myCurrentFlow.getEndOffset(element).getInstructionOffset() > -1;
   }
 
-  public void removeLambda(@Nonnull PsiLambdaExpression lambda) {
+  public void removeLambda(PsiLambdaExpression lambda) {
     int start = myCurrentFlow.getStartOffset(lambda).getInstructionOffset();
     int end = myCurrentFlow.getEndOffset(lambda).getInstructionOffset();
     for (int i = start; i < end; i++) {
@@ -2061,13 +2056,13 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    * @param resultNullability desired nullability returned by block return statement
    * @param target            a variable to store the block result (returned via {@code return} statement)
    */
-  void inlineBlock(@Nonnull PsiCodeBlock block, @Nonnull Nullability resultNullability, @Nonnull DfaVariableValue target) {
+  void inlineBlock(PsiCodeBlock block, Nullability resultNullability, DfaVariableValue target) {
     enterExpressionBlock(block, resultNullability, target);
     block.accept(this);
     exitExpressionBlock();
   }
 
-  private void enterExpressionBlock(@Nonnull PsiCodeBlock block, @Nonnull Nullability resultNullability, @Nonnull DfaVariableValue target) {
+  private void enterExpressionBlock(PsiCodeBlock block, Nullability resultNullability, DfaVariableValue target) {
     // Transfer value is pushed to avoid emptying stack beyond this point
     pushTrap(new Trap.InsideInlinedBlock(block));
     addInstruction(new PushInstruction(myFactory.controlTransfer(ReturnTransfer.INSTANCE, FList.emptyList()), null));
@@ -2092,7 +2087,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    * @param problem    a problem to check. Use {@link NullabilityProblemKind#noProblem} to suppress the problem which
    *                   would be detected by default.
    */
-  void addCustomNullabilityProblem(@Nonnull PsiExpression expression, @Nonnull NullabilityProblemKind<? super PsiExpression> problem) {
+  void addCustomNullabilityProblem(PsiExpression expression, NullabilityProblemKind<? super PsiExpression> problem) {
     myCustomNullabilityProblems.put(expression, problem);
   }
 
@@ -2102,7 +2097,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    *
    * @param expression an expression to deregister.
    */
-  void removeCustomNullabilityProblem(@Nonnull PsiExpression expression) {
+  void removeCustomNullabilityProblem(PsiExpression expression) {
     myCustomNullabilityProblems.remove(expression);
   }
 
@@ -2112,7 +2107,6 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    * @param type a type of variable to create
    * @return newly created variable
    */
-  @Nonnull
   DfaVariableValue createTempVariable(@Nullable PsiType type) {
     if (type == null) {
       type = PsiType.VOID;
@@ -2126,7 +2120,7 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
    * @param variable to check
    * @return true if supplied variable is a temp variable.
    */
-  public static boolean isTempVariable(@Nonnull DfaVariableValue variable) {
+  public static boolean isTempVariable(DfaVariableValue variable) {
     return variable.getDescriptor() instanceof Synthetic;
   }
 
@@ -2149,7 +2143,6 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
 
     @Override
     public
-    @Nonnull
     String toString() {
       return "tmp$" + myLocation;
     }
@@ -2172,17 +2165,15 @@ public class ControlFlowAnalyzer extends JavaElementVisitor {
     @Nullable
     ExpressionBlockContext myPreviousBlock;
     final
-    @Nonnull
     PsiCodeBlock myCodeBlock;
     final boolean myForceNonNullBlockResult;
     final
-    @Nonnull
     DfaVariableValue myTarget;
 
     ExpressionBlockContext(@Nullable ExpressionBlockContext previousBlock,
-                           @Nonnull PsiCodeBlock codeBlock,
+                           PsiCodeBlock codeBlock,
                            boolean forceNonNullBlockResult,
-                           @Nonnull DfaVariableValue target) {
+                           DfaVariableValue target) {
       myPreviousBlock = previousBlock;
       myCodeBlock = codeBlock;
       myForceNonNullBlockResult = forceNonNullBlockResult;

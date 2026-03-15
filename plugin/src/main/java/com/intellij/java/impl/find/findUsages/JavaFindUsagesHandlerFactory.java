@@ -32,7 +32,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -45,7 +44,7 @@ public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     private final JavaThrowFindUsagesOptions myFindThrowOptions;
     private final JavaVariableFindUsagesOptions myFindVariableOptions;
 
-    public static JavaFindUsagesHandlerFactory getInstance(@Nonnull Project project) {
+    public static JavaFindUsagesHandlerFactory getInstance(Project project) {
         return project.getExtensionPoint(FindUsagesHandlerFactory.class).findExtensionOrFail(JavaFindUsagesHandlerFactory.class);
     }
 
@@ -59,13 +58,13 @@ public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     }
 
     @Override
-    public boolean canFindUsages(@Nonnull PsiElement element) {
+    public boolean canFindUsages(PsiElement element) {
         return new JavaFindUsagesProvider().canFindUsagesFor(element);
     }
 
     @Override
     @RequiredUIAccess
-    public FindUsagesHandler createFindUsagesHandler(@Nonnull PsiElement element, boolean forHighlightUsages) {
+    public FindUsagesHandler createFindUsagesHandler(PsiElement element, boolean forHighlightUsages) {
         if (element instanceof PsiDirectory directory) {
             PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
             return psiPackage == null ? null : new JavaFindUsagesHandler(psiPackage, this);

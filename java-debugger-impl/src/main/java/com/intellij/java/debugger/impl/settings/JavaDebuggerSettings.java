@@ -22,8 +22,7 @@ import consulo.configurable.IdeaSimpleConfigurable;
 import consulo.execution.debug.setting.DebuggerSettingsCategory;
 import consulo.execution.debug.setting.XDebuggerSettings;
 import consulo.java.language.localize.JavaLanguageLocalize;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import org.jdom.Element;
 
@@ -49,9 +48,8 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
         super("java");
     }
 
-    @Nonnull
     @Override
-    public Collection<? extends Configurable> createConfigurables(@Nonnull DebuggerSettingsCategory category) {
+    public Collection<? extends Configurable> createConfigurables(DebuggerSettingsCategory category) {
         Supplier<DebuggerSettings> settingsSupplier = DebuggerSettings::getInstance;
 
         switch (category) {
@@ -74,7 +72,6 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
     }
 
     @SuppressWarnings("SpellCheckingInspection")
-    @Nonnull
     public static List<Configurable> createDataViewsConfigurable() {
         return Arrays.<Configurable>asList(new DebuggerDataViewsConfigurable(null),
             IdeaSimpleConfigurable.create("reference.idesettings.debugger.typerenderers",
@@ -85,7 +82,7 @@ public class JavaDebuggerSettings extends XDebuggerSettings<Element> {
     }
 
     @Override
-    public void generalApplied(@Nonnull DebuggerSettingsCategory category) {
+    public void generalApplied(DebuggerSettingsCategory category) {
         if (category == DebuggerSettingsCategory.DATA_VIEWS) {
             NodeRendererSettings.getInstance().fireRenderersChanged();
         }

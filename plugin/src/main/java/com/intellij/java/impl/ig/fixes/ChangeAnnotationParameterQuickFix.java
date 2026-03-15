@@ -14,8 +14,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author VISTALL
@@ -26,17 +25,17 @@ public class ChangeAnnotationParameterQuickFix extends LocalQuickFixAndIntention
   private final String myNewValue;
   private final LocalizeValue myMessage;
 
-  public ChangeAnnotationParameterQuickFix(@Nonnull PsiAnnotation annotation,
-                                           @Nonnull String name,
+  public ChangeAnnotationParameterQuickFix(PsiAnnotation annotation,
+                                           String name,
                                            @Nullable String newValue,
-                                           @Nonnull LocalizeValue message) {
+                                           LocalizeValue message) {
     super(annotation);
     myName = name;
     myNewValue = newValue;
     myMessage = message;
   }
 
-  public ChangeAnnotationParameterQuickFix(@Nonnull PsiAnnotation annotation, @Nonnull String name, @Nullable String newValue) {
+  public ChangeAnnotationParameterQuickFix(PsiAnnotation annotation, String name, @Nullable String newValue) {
     this(annotation, name, newValue,
          newValue == null
            ? InspectionGadgetsLocalize.removeAnnotationParameter0FixName(name)
@@ -44,11 +43,11 @@ public class ChangeAnnotationParameterQuickFix extends LocalQuickFixAndIntention
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile psiFile,
+  public void invoke(Project project,
+                     PsiFile psiFile,
                      @Nullable Editor editor,
-                     @Nonnull PsiElement psiElement,
-                     @Nonnull PsiElement psiElement1) {
+                     PsiElement psiElement,
+                     PsiElement psiElement1) {
     if (!(psiElement instanceof PsiAnnotation annotation)) {
       return;
     }
@@ -64,7 +63,6 @@ public class ChangeAnnotationParameterQuickFix extends LocalQuickFixAndIntention
     }
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return myMessage;

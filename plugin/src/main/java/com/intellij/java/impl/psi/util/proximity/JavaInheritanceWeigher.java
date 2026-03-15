@@ -25,9 +25,7 @@ import consulo.language.util.proximity.ProximityLocation;
 import consulo.language.util.proximity.ProximityWeigher;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.NotNullLazyKey;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +37,6 @@ import java.util.function.Predicate;
 @ExtensionImpl(id = "javaInheritance", order = "after explicitlyImported, before sameLogicalRoot")
 public class JavaInheritanceWeigher extends ProximityWeigher {
     private static final NotNullLazyKey<Set<String>, ProximityLocation> PLACE_SUPER_CLASSES = NotNullLazyKey.create("PLACE_SUPER_CLASSES", new NotNullFunction<ProximityLocation, Set<String>>() {
-        @Nonnull
         @Override
         public Set<String> apply(ProximityLocation location) {
             HashSet<String> result = new HashSet<>();
@@ -57,7 +54,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
     });
 
     @Override
-    public Comparable weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
+    public Comparable weigh(PsiElement element, ProximityLocation location) {
         if (location.getPosition() == null || !(element instanceof PsiClass)) {
             return null;
         }
@@ -109,7 +106,7 @@ public class JavaInheritanceWeigher extends ProximityWeigher {
             return true;
         }
 
-        @NonNls String qname = element.getQualifiedName();
+        String qname = element.getQualifiedName();
         return qname == null || qname.startsWith("java.lang.");
     }
 }

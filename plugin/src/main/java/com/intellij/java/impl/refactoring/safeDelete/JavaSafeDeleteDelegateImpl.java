@@ -26,9 +26,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
 import consulo.usage.UsageInfo;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -70,7 +68,7 @@ public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
     }
     else if (element instanceof PsiDocMethodOrFieldRef) {
       if (((PsiDocMethodOrFieldRef)element).getSignature() != null) {
-        @NonNls final StringBuffer newText = new StringBuffer();
+        final StringBuffer newText = new StringBuffer();
         newText.append("/** @see #").append(method.getName()).append('(');
         List<PsiParameter> parameters = new ArrayList<PsiParameter>(Arrays.asList(method.getParameterList().getParameters()));
         parameters.remove(parameter);
@@ -89,7 +87,6 @@ public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

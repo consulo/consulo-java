@@ -30,8 +30,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -151,7 +150,6 @@ public class JavaEditorTextProviderImpl implements EditorTextProvider {
     return def;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

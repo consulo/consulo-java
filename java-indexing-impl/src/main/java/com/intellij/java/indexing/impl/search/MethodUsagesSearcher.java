@@ -35,7 +35,6 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -48,8 +47,8 @@ public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, Method
     implements MethodReferencesSearchExecutor {
     @Override
     public void processQuery(
-        @Nonnull MethodReferencesSearch.SearchParameters p,
-        @Nonnull Predicate<? super PsiReference> consumer
+        MethodReferencesSearch.SearchParameters p,
+        Predicate<? super PsiReference> consumer
     ) {
         PsiMethod method = p.getMethod();
         boolean[] isConstructor = new boolean[1];
@@ -146,7 +145,7 @@ public class MethodUsagesSearcher extends QueryExecutorBase<PsiReference, Method
         );
     }
 
-    static <T> T resolveInReadAction(@Nonnull Project p, @Nonnull Supplier<T> computable) {
+    static <T> T resolveInReadAction(Project p, Supplier<T> computable) {
         return Application.get().isReadAccessAllowed()
             ? computable.get()
             : DumbService.getInstance(p).runReadActionInSmartMode(computable);

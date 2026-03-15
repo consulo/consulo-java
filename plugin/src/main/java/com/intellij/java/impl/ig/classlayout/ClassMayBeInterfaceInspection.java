@@ -30,18 +30,15 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ClassMayBeInterfaceInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classMayBeInterfaceDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.classMayBeInterfaceProblemDescriptor().get();
@@ -53,7 +50,6 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
     }
 
     private static class ClassMayBeInterfaceFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.classMayBeInterfaceConvertQuickfix();
@@ -124,9 +120,9 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
         }
 
         private static void moveReference(
-            @Nonnull PsiReferenceList source,
+            PsiReferenceList source,
             @Nullable PsiReferenceList target,
-            @Nonnull PsiJavaCodeReferenceElement reference
+            PsiJavaCodeReferenceElement reference
         ) throws IncorrectOperationException {
             PsiJavaCodeReferenceElement[] sourceReferences = source.getReferenceElements();
             String fqName = reference.getQualifiedName();
@@ -149,7 +145,7 @@ public class ClassMayBeInterfaceInspection extends BaseInspection {
 
     private static class ClassMayBeInterfaceVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so that it doesn't drill down to inner classes
             if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()
                 || aClass instanceof PsiTypeParameter || aClass instanceof PsiAnonymousClass

@@ -27,10 +27,8 @@ import consulo.language.psi.meta.PsiMetaData;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.navigation.Navigatable;
 import consulo.util.lang.lazy.LazyValue;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Supplier;
 
 /**
@@ -56,13 +54,13 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append('@').append(myReferenceElement.get().getCanonicalText());
     appendText(getParameterList(), indentLevel, buffer);
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     PsiAnnotation mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
     setMirror(getNameReferenceElement(), mirror.getNameReferenceElement());
@@ -70,7 +68,6 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     return new PsiElement[]{
         myReferenceElement.get(),
@@ -79,7 +76,7 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitAnnotation(this);
     } else {
@@ -88,7 +85,6 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
   }
 
   @Override
-  @Nonnull
   public PsiAnnotationParameterList getParameterList() {
     return myParameterList.get();
   }
@@ -111,12 +107,12 @@ public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub
 
   @Override
   @Nullable
-  public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName) {
+  public PsiAnnotationMemberValue findDeclaredAttributeValue(final String attributeName) {
     return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
   }
 
   @Override
-  public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, T value) {
+  public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(String attributeName, T value) {
     throw cannotModifyException(this);
   }
 

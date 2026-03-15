@@ -23,18 +23,15 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringBufferFieldInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringbufferFieldDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiType type = (PsiType) infos[0];
         String typeName = type.getPresentableText();
@@ -48,7 +45,7 @@ public class StringBufferFieldInspection extends BaseInspection {
 
     private static class StringBufferFieldVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             super.visitField(field);
             PsiType type = field.getType();
             if (!type.equalsToText(CommonClassNames.JAVA_LANG_STRING_BUFFER) &&

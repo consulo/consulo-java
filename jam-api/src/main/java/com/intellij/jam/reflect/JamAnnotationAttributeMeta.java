@@ -33,8 +33,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.function.PairConsumer;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -58,12 +57,12 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
     myJamKey = JamService.JAM_ELEMENT_KEY.subKey(attrName);
   }
 
-  public JamAnnotationAttributeMeta<T, JamType> addPomTargetProducer(@Nonnull PairConsumer<T, Consumer<PomTarget>> producer) {
+  public JamAnnotationAttributeMeta<T, JamType> addPomTargetProducer(PairConsumer<T, Consumer<PomTarget>> producer) {
     myPomTargetProducers.add(producer);
     return this;
   }
 
-  public List<PomTarget> getAssociatedTargets(@Nonnull T element) {
+  public List<PomTarget> getAssociatedTargets(T element) {
     final ArrayList<PomTarget> list = ContainerUtil.newArrayList();
     final Consumer<PomTarget> targetConsumer = target -> list.add(target);
     for (final PairConsumer<T, Consumer<PomTarget>> function : myPomTargetProducers) {
@@ -107,7 +106,6 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
       super(attrName, annoMeta, instantiator);
     }
 
-    @Nonnull
     public T getJam(PsiElementRef<PsiAnnotation> anno) {
       final PsiAnnotation psiElement = anno.getPsiElement();
       assert psiElement != null;
@@ -126,11 +124,10 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
 
   }
   public static final class Collection<T extends JamElement> extends JamAnnotationAttributeMeta<T, List<T>> {
-    public Collection(String attrName, @Nonnull JamAnnotationMeta annoMeta, JamInstantiator<PsiAnnotation, T> instantiator) {
+    public Collection(String attrName, JamAnnotationMeta annoMeta, JamInstantiator<PsiAnnotation, T> instantiator) {
       super(attrName, annoMeta, instantiator);
     }
 
-    @Nonnull
     public List<T> getJam(final PsiElementRef<PsiAnnotation> anno) {
       return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, T>() {
         public T apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
@@ -147,13 +144,12 @@ public abstract class JamAnnotationAttributeMeta<T extends JamElement, JamType> 
       return null;
     }
 
-    @Nonnull
     public T addAttribute(PsiElementRef<PsiAnnotation> annoRef) {
       return ObjectUtil.assertNotNull(getJam(addAttribute(annoRef, "@" + myAnnoMeta.getAnnoName(), getAttributeLink())));
     }
 
     @Override
-    public JamAnnotationAttributeMeta.Collection<T> addPomTargetProducer(@Nonnull PairConsumer<T, Consumer<PomTarget>> producer) {
+    public JamAnnotationAttributeMeta.Collection<T> addPomTargetProducer(PairConsumer<T, Consumer<PomTarget>> producer) {
       super.addPomTargetProducer(producer);
       return this;
     }

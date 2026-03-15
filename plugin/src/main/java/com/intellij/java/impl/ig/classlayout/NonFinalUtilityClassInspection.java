@@ -25,21 +25,18 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class NonFinalUtilityClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonFinalUtilityClassDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonFinalUtilityClassProblemDescriptor().get();
@@ -59,7 +56,7 @@ public class NonFinalUtilityClassInspection extends BaseInspection {
     private static class NonFinalUtilityClassVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so that it doesn't drill down to inner classes
             if (!UtilityClassUtil.isUtilityClass(aClass)) {
                 return;

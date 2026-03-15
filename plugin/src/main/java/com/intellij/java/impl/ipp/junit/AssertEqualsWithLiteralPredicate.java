@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import org.jetbrains.annotations.NonNls;
 
 class AssertEqualsWithLiteralPredicate implements PsiElementPredicate {
 
@@ -37,7 +36,7 @@ class AssertEqualsWithLiteralPredicate implements PsiElementPredicate {
     }
     PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"assertEquals".equals(methodName)) {
       return false;
     }
@@ -69,7 +68,7 @@ class AssertEqualsWithLiteralPredicate implements PsiElementPredicate {
     if (expression == null) {
       return false;
     }
-    @NonNls String text = expression.getText();
+    String text = expression.getText();
     return "true".equals(text) ||
            "false".equals(text) || "null".equals(text);
   }

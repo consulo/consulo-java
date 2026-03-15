@@ -27,26 +27,21 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ConditionSignalInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "CallToSignalInsteadOfSignalAll";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.conditionSignalDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.conditionSignalProblemDescriptor().get();
   }
@@ -63,7 +58,6 @@ public class ConditionSignalInspection extends BaseInspection {
 
   private static class ConditionSignalFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.conditionSignalReplaceQuickfix();
     }
@@ -77,7 +71,7 @@ public class ConditionSignalInspection extends BaseInspection {
       assert methodExpression != null;
       PsiExpression qualifier = methodExpression
         .getQualifierExpression();
-      @NonNls String signalAll = "signalAll";
+      String signalAll = "signalAll";
       if (qualifier == null) {
         replaceExpression(methodExpression, signalAll);
       }
@@ -93,12 +87,12 @@ public class ConditionSignalInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       String methodName = methodExpression.getReferenceName();
-      @NonNls String signal = "signal";
+      String signal = "signal";
       if (!signal.equals(methodName)) {
         return;
       }

@@ -28,7 +28,6 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,19 +36,16 @@ public class UtilityClassInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.utilityClassDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.utilityClassProblemDescriptor().get();
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner) infos[0], ignorableAnnotations);
@@ -71,7 +67,7 @@ public class UtilityClassInspection extends BaseInspection {
     private class UtilityClassVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so that it doesn't drill down to inner classes
             if (!UtilityClassUtil.isUtilityClass(aClass)) {
                 return;

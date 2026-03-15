@@ -35,19 +35,17 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
 
 public abstract class AddAnnotationIntention extends BaseIntentionAction {
   public AddAnnotationIntention() {
     setText(CodeInsightLocalize.intentionAddAnnotationFamily());
   }
 
-  @Nonnull
-  public abstract Pair<String, String[]> getAnnotations(@Nonnull Project project);
+  public abstract Pair<String, String[]> getAnnotations(Project project);
 
   // include not in project files
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
     if (owner == null || owner.getManager().isInProject(owner) && !CodeStyleSettingsManager.getSettings(project).USE_EXTERNAL_ANNOTATIONS) {
       return false;
@@ -73,7 +71,7 @@ public abstract class AddAnnotationIntention extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiModifierListOwner owner = AddAnnotationPsiFix.getContainer(file, editor.getCaretModel().getOffset());
     if (owner == null || !owner.isValid()) {
       return;

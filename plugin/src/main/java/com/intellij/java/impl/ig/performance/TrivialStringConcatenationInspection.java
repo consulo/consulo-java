@@ -30,30 +30,24 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class TrivialStringConcatenationInspection extends BaseInspection {
     @Override
-    @Nonnull
     public String getID() {
         return "ConcatenationWithEmptyString";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.trivialStringConcatenationDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.trivialStringConcatenationProblemDescriptor().get();
     }
 
-    @NonNls
     static String calculateReplacementExpression(PsiLiteralExpression expression) {
         PsiElement parent = ParenthesesUtils.getParentSkipParentheses(expression);
         if (!(parent instanceof PsiPolyadicExpression)) {
@@ -117,7 +111,7 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
         return text.toString();
     }
 
-    static String buildReplacement(@Nonnull PsiExpression operandToReplace, boolean seenString) {
+    static String buildReplacement(PsiExpression operandToReplace, boolean seenString) {
         if (ExpressionUtils.isNullLiteral(operandToReplace)) {
             if (seenString) {
                 return "null";
@@ -144,7 +138,6 @@ public class TrivialStringConcatenationInspection extends BaseInspection {
             myName = InspectionGadgetsLocalize.stringReplaceQuickfix(calculateReplacementExpression(expression));
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return myName;

@@ -52,8 +52,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -73,12 +72,10 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
     static final Key<SmartPsiElementPointer<PsiClass>> MARKER = Key.create("STATIC_METHOD_USED_IN_ONE_CLASS");
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassDisplayName();
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
@@ -107,11 +104,11 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        Object state
     ) {
         if (!(refEntity instanceof RefMethod method)) {
             return null;
@@ -167,9 +164,8 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
         return new ProblemDescriptor[]{createProblemDescriptor(manager, psiMethod.getNameIdentifier(), psiClass)};
     }
 
-    @Nonnull
     @RequiredReadAction
-    static ProblemDescriptor createProblemDescriptor(@Nonnull InspectionManager manager, PsiElement problemElement, PsiClass usageClass) {
+    static ProblemDescriptor createProblemDescriptor(InspectionManager manager, PsiElement problemElement, PsiClass usageClass) {
         LocalizeValue message = usageClass instanceof PsiAnonymousClass anonymousClass
             ? InspectionGadgetsLocalize.staticMethodOnlyUsedInOneAnonymousClassProblemDescriptor(
                 anonymousClass.getBaseClassReference().getText()
@@ -182,15 +178,15 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 
     @Override
     public boolean queryExternalUsagesRequests(
-        @Nonnull final InspectionManager manager,
-        @Nonnull final GlobalInspectionContext globalContext,
-        @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        final InspectionManager manager,
+        final GlobalInspectionContext globalContext,
+        final ProblemDescriptionsProcessor problemDescriptionsProcessor,
         Object state
     ) {
         globalContext.getRefManager().iterate(new RefJavaVisitor() {
             @Override
             @RequiredReadAction
-            public void visitElement(@Nonnull RefEntity refEntity) {
+            public void visitElement(RefEntity refEntity) {
                 if (refEntity instanceof RefMethod refMethod) {
                     SmartPsiElementPointer<PsiClass> classPointer = refMethod.getUserData(MARKER);
                     if (classPointer != null) {
@@ -242,7 +238,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 
         @Override
         @RequiredReadAction
-        public void visitCallExpression(@Nonnull PsiCallExpression callExpression) {
+        public void visitCallExpression(PsiCallExpression callExpression) {
             if (!myAccessible) {
                 return;
             }
@@ -335,7 +331,6 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
             super(settingsDelegate);
         }
 
-        @Nonnull
         @Override
         @RequiredReadAction
         protected String buildErrorString(Object... infos) {
@@ -365,18 +360,15 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
             }
 
             @Override
-            @Nonnull
             public LocalizeValue getName() {
                 return InspectionGadgetsLocalize.staticMethodOnlyUsedInOneClassQuickfix();
             }
 
-            @Nonnull
             @Override
             public RefactoringActionHandler getHandler() {
                 return RefactoringActionHandlerFactory.getInstance().createMoveHandler();
             }
 
-            @Nonnull
             @Override
             @RequiredReadAction
             public DataContext enhanceDataContext(DataContext context) {
@@ -391,7 +383,7 @@ public class StaticMethodOnlyUsedInOneClassInspection extends BaseGlobalInspecti
 
         private class StaticMethodOnlyUsedInOneClassVisitor extends BaseInspectionVisitor {
             @Override
-            public void visitMethod(@Nonnull PsiMethod method) {
+            public void visitMethod(PsiMethod method) {
                 super.visitMethod(method);
                 if (!method.isStatic() || method.isPrivate() || method.getNameIdentifier() == null) {
                     return;

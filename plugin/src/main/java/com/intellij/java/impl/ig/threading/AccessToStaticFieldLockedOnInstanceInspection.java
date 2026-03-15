@@ -25,8 +25,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.LinkedHashSet;
@@ -38,13 +37,11 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
   @SuppressWarnings("PublicField") public Set<String> ignoredClasses = new LinkedHashSet<>();
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.accessToStaticFieldLockedOnInstanceDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.accessToStaticFieldLockedOnInstanceProblemDescriptor().get();
   }
@@ -63,7 +60,7 @@ public class AccessToStaticFieldLockedOnInstanceInspection extends BaseInspectio
   private class AccessToStaticFieldLockedOnInstanceVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       boolean isLockedOnInstance = false;
       boolean isLockedOnClass = false;

@@ -41,7 +41,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.concurrent.AsyncResult;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -60,13 +59,13 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
   }
 
   @Override
-  public AsyncResult<Void> addModuleDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope) {
+  public AsyncResult<Void> addModuleDependency(Module from, Module to, DependencyScope scope) {
     ModuleRootModificationUtil.addDependency(from, to, scope, false);
     return AsyncResult.done(null);
   }
 
   @Override
-  public AsyncResult<Void> addExternalLibraryDependency(@Nonnull Collection<Module> modules, @Nonnull ExternalLibraryDescriptor descriptor, @Nonnull DependencyScope scope) {
+  public AsyncResult<Void> addExternalLibraryDependency(Collection<Module> modules, ExternalLibraryDescriptor descriptor, DependencyScope scope) {
     List<String> defaultRoots = descriptor.getLibraryClassesRoots();
     Module firstModule = ContainerUtil.getFirstItem(modules);
     LOG.assertTrue(firstModule != null);
@@ -96,14 +95,14 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
   }
 
   @Override
-  public AsyncResult<Void> addLibraryDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope) {
+  public AsyncResult<Void> addLibraryDependency(Module from, Library library, DependencyScope scope) {
     OrderEntryUtil.addLibraryToRoots(from, library);
     return AsyncResult.done(null);
   }
 
   @Override
   @RequiredReadAction
-  public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel level) {
+  public AsyncResult<Void> changeLanguageLevel(Module module, LanguageLevel level) {
     if (JavaSdkUtil.isLanguageLevelAcceptable(myProject, module, level)) {
       ModifiableRootModel rootModel = ModuleRootManager.getInstance(module).getModifiableModel();
       rootModel.getExtension(JavaMutableModuleExtension.class).getInheritableLanguageLevel().set(null, level);

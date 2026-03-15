@@ -39,7 +39,6 @@ import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.project.ui.view.tree.ViewSettings;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -105,7 +104,6 @@ public class PsiFieldFavoriteNodeProvider implements BookmarkNodeProvider {
   }
 
   @Override
-  @Nonnull
   public String getFavoriteTypeId() {
     return "field";
   }

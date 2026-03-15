@@ -27,7 +27,7 @@ import consulo.ui.ex.awt.ToolbarDecorator;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicComboBoxEditor;

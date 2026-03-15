@@ -8,7 +8,6 @@ import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserContributor;
 import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserRegistrator;
 import org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser;
 
-import jakarta.annotation.Nonnull;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -24,7 +23,6 @@ public class ManifestHeaderParserRegistratorImpl implements ManifestHeaderParser
       return impl;
     });
 
-  @Nonnull
   public static ManifestHeaderParserRegistratorImpl get() {
     ExtensionPoint<ManifestHeaderParserContributor> point =
       Application.get().getExtensionPoint(ManifestHeaderParserContributor.class);
@@ -36,7 +34,7 @@ public class ManifestHeaderParserRegistratorImpl implements ManifestHeaderParser
   private GenericComplexHeaderParser myDefaultParser = new GenericComplexHeaderParser();
 
   @Override
-  public void register(@Nonnull String key, @Nonnull HeaderParser headerParser) {
+  public void register(String key, HeaderParser headerParser) {
     if (myParsers.containsKey(key)) {
       throw new IllegalArgumentException("Duplicate registration " + key);
     }

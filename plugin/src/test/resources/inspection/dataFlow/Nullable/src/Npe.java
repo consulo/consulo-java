@@ -1,8 +1,7 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class Npe {
-   Object foo(@Nonnull Object o) {
+   Object foo(Object o) {
      return o;
    }
 

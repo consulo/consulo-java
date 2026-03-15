@@ -15,15 +15,14 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.lazy.LazyValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
 public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRecordComponentStub> implements PsiRecordComponent {
   private final Supplier<PsiTypeElement> myType;
 
-  public ClsRecordComponentImpl(@Nonnull PsiRecordComponentStub stub) {
+  public ClsRecordComponentImpl(PsiRecordComponentStub stub) {
     super(stub);
     myType = LazyValue.atomicNotNull(() -> new ClsTypeElementImpl(this, getStub().getType()));
   }
@@ -33,31 +32,27 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
     return null;
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return getStub().getName();
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
   @Override
-  @Nonnull
   public PsiTypeElement getTypeElement() {
     return myType.get();
   }
 
   @Override
-  @Nonnull
   public PsiType getType() {
     return getTypeElement().getType();
   }
 
   @Override
-  @Nonnull
   public PsiModifierList getModifierList() {
     final StubElement<PsiModifierList> child = getStub().findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
     assert child != null;
@@ -65,7 +60,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
@@ -89,7 +84,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     PsiAnnotation[] annotations = getModifierList().getAnnotations();
     for (PsiAnnotation annotation : annotations) {
       appendText(annotation, indentLevel, buffer);
@@ -100,7 +95,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
 
     PsiParameter mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -109,7 +104,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitRecordComponent(this);
     } else {
@@ -123,12 +118,10 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   }
 
   @Override
-  @Nonnull
   public SearchScope getUseScope() {
     return new LocalSearchScope(getParent());
   }
 
-  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     PsiClass clsClass = getContainingClass();

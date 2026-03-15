@@ -29,7 +29,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JUnitTestClassNamingConventionInspection
@@ -39,7 +38,6 @@ public class JUnitTestClassNamingConventionInspection
   private static final int DEFAULT_MAX_LENGTH = 64;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.junitTestClassNamingConventionDisplayName();
   }
@@ -55,7 +53,6 @@ public class JUnitTestClassNamingConventionInspection
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     String className = (String)infos[0];
     if (className.length() < getMinLength()) {
@@ -122,7 +119,7 @@ public class JUnitTestClassNamingConventionInspection
       registerClassError(aClass, name);
     }
 
-    private boolean hasJUnit4TestMethods(@Nonnull PsiClass aClass) {
+    private boolean hasJUnit4TestMethods(PsiClass aClass) {
       //use this if this method turns out to have bad performance:
       //if (!TestUtils.isTest(aClass)) {
       //    return false;

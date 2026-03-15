@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.portability.mediatype;
 
-import org.jetbrains.annotations.NonNls;
 
 public enum MessageMediaType {
   CPIM("message/CPIM"),
@@ -34,7 +33,7 @@ public enum MessageMediaType {
 
   private final String contentType;
 
-  MessageMediaType(@NonNls String contentType) {
+  MessageMediaType(String contentType) {
     this.contentType = contentType;
   }
 

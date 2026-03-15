@@ -11,8 +11,7 @@ import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.collection.SmartHashSet;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -36,9 +35,9 @@ public final class JavaPatternExhaustivenessUtil {
      * Check record pattern exhaustiveness.
      * This method tries to rewrite the existing set of patterns to equivalent
      */
-    private static @Nonnull RecordExhaustivenessResult checkRecordPatternExhaustivenessForDescriptors(@Nonnull List<? extends PatternDescriptor> elements,
-                                                                                                      @Nonnull PsiType targetType,
-                                                                                                      @Nonnull PsiElement context) {
+    private static RecordExhaustivenessResult checkRecordPatternExhaustivenessForDescriptors(List<? extends PatternDescriptor> elements,
+                                                                                                      PsiType targetType,
+                                                                                                      PsiElement context) {
         List<PatternDeconstructionDescriptor> descriptions =
             StreamEx.of(elements).select(PatternDeconstructionDescriptor.class)
                 .filter(element -> TypeConversionUtil.areTypesConvertible(element.type(), targetType))
@@ -70,9 +69,9 @@ public final class JavaPatternExhaustivenessUtil {
         }).get(new ReduceResultCacheContext(targetType, new HashSet<>(descriptions)));
     }
 
-    public static @Nonnull RecordExhaustivenessResult checkRecordExhaustiveness(@Nonnull List<? extends PsiCaseLabelElement> elements,
-                                                                                @Nonnull PsiType selectorType,
-                                                                                @Nonnull PsiElement context) {
+    public static RecordExhaustivenessResult checkRecordExhaustiveness(List<? extends PsiCaseLabelElement> elements,
+                                                                                PsiType selectorType,
+                                                                                PsiElement context) {
         return checkRecordPatternExhaustivenessForDescriptors(preparePatternDescriptors(elements), selectorType, context);
     }
 
@@ -93,10 +92,10 @@ public final class JavaPatternExhaustivenessUtil {
      * @param cache        The cache of previously calculated reduce results.
      * @return The list of missed record patterns, or null if none are found.
      */
-    private static @Nullable List<? extends PatternDescriptor> findMissedRecordPatterns(@Nonnull PsiType selectorType,
-                                                                                                           @Nonnull Set<? extends PatternDescriptor> patterns,
-                                                                                                           @Nonnull PsiElement context,
-                                                                                                           @Nonnull ReduceCache cache) {
+    private static @Nullable List<? extends PatternDescriptor> findMissedRecordPatterns(PsiType selectorType,
+                                                                                                           Set<? extends PatternDescriptor> patterns,
+                                                                                                           PsiElement context,
+                                                                                                           ReduceCache cache) {
         PsiClass selectorClass = PsiUtil.resolveClassInClassTypeOnly(selectorType);
         if (selectorClass == null) {
             return null;
@@ -205,7 +204,7 @@ public final class JavaPatternExhaustivenessUtil {
         return coverSelectorType(context, reduceResult.patterns(), selectorType) ? new ArrayList<>(missingRecordPatterns) : null;
     }
 
-    private static @Nonnull List<PatternTypeTestDescriptor> getNestedTypeTestDescriptions(@Nonnull Collection<PatternDeconstructionDescriptor> setWithOneDifferentElement,
+    private static List<PatternTypeTestDescriptor> getNestedTypeTestDescriptions(Collection<PatternDeconstructionDescriptor> setWithOneDifferentElement,
                                                                                           int i) {
         return StreamEx.of(setWithOneDifferentElement)
             .map(t -> t.list().get(i))
@@ -213,8 +212,8 @@ public final class JavaPatternExhaustivenessUtil {
             .toList();
     }
 
-    private static @Nonnull MultiMap<List<PatternDescriptor>, PatternDeconstructionDescriptor> getGroupWithoutOneComponent(
-        @Nonnull Set<? extends PatternDescriptor> combinedPatterns, int i) {
+    private static MultiMap<List<PatternDescriptor>, PatternDeconstructionDescriptor> getGroupWithoutOneComponent(
+        Set<? extends PatternDescriptor> combinedPatterns, int i) {
         MultiMap<List<PatternDescriptor>, PatternDeconstructionDescriptor> groupWithoutOneComponent = new MultiMap<>();
         for (PatternDescriptor description : combinedPatterns) {
             if (!(description instanceof PatternDeconstructionDescriptor deconstructionDescription)) {
@@ -228,7 +227,7 @@ public final class JavaPatternExhaustivenessUtil {
         return groupWithoutOneComponent;
     }
 
-    private static List<PatternDescriptor> getWithoutComponent(@Nonnull PatternDeconstructionDescriptor description,
+    private static List<PatternDescriptor> getWithoutComponent(PatternDeconstructionDescriptor description,
                                                                int toRemove) {
         ArrayList<PatternDescriptor> shortKey = new ArrayList<>();
         for (int i = 0; i < description.list().size(); i++) {
@@ -252,8 +251,8 @@ public final class JavaPatternExhaustivenessUtil {
      *
      * @return a new ReduceResult with expanded sealed types
      */
-    private static @Nonnull ReduceResult unwrapSealedTypes(@Nonnull Set<? extends PatternDescriptor> existedPatterns,
-                                                           @Nonnull ReduceCache cache) {
+    private static ReduceResult unwrapSealedTypes(Set<? extends PatternDescriptor> existedPatterns,
+                                                           ReduceCache cache) {
         Set<PatternDescriptor> result = new HashSet<>(existedPatterns);
         if (existedPatterns.isEmpty()) return new ReduceResult(result, false);
         List<PatternDeconstructionDescriptor> deconstructionExistedPatterns =
@@ -307,8 +306,8 @@ public final class JavaPatternExhaustivenessUtil {
 
     private static boolean isDirectSealedPath(@Nullable PsiClass from,
                                               @Nullable PsiClass to,
-                                              @Nonnull ReduceCache cache,
-                                              @Nonnull Set<PsiClass> visited) {
+                                              ReduceCache cache,
+                                              Set<PsiClass> visited) {
         if (from == null || to == null) return false;
         Map<PsiClass, Boolean> toCache = cache.sealedPath().get(from);
         if (toCache != null) {
@@ -335,12 +334,12 @@ public final class JavaPatternExhaustivenessUtil {
 
     private static void addToSealedCache(@Nullable PsiClass from,
                                          @Nullable PsiClass to,
-                                         @Nonnull ReduceCache cache,
+                                         ReduceCache cache,
                                          boolean result) {
         cache.sealedPath().computeIfAbsent(from, k -> new HashMap<>()).put(to, result);
     }
 
-    private static @Nonnull Set<PatternDeconstructionDescriptor> getDeconstructionPatternOnlyWithTestPatterns(Set<PatternDeconstructionDescriptor> descriptions) {
+    private static Set<PatternDeconstructionDescriptor> getDeconstructionPatternOnlyWithTestPatterns(Set<PatternDeconstructionDescriptor> descriptions) {
         Set<PatternDeconstructionDescriptor> filtered = new HashSet<>();
         for (PatternDeconstructionDescriptor description : descriptions) {
             if (ContainerUtil.and(description.list(), t -> t instanceof PatternTypeTestDescriptor)) {
@@ -350,7 +349,7 @@ public final class JavaPatternExhaustivenessUtil {
         return filtered;
     }
 
-    private static @Nullable List<PsiType> getComponentTypes(@Nonnull PsiElement context, @Nonnull PsiType type) {
+    private static @Nullable List<PsiType> getComponentTypes(PsiElement context, PsiType type) {
         return LanguageCachedValueUtil.getCachedValue(context, () -> {
             Map<PsiType, List<PsiType>> result = ConcurrentFactoryMap.createMap(descriptionType -> {
                 PsiType capturedToplevel = PsiUtil.captureToplevelWildcards(descriptionType, context);
@@ -364,9 +363,9 @@ public final class JavaPatternExhaustivenessUtil {
         }).get(type);
     }
 
-    private static @Nonnull Collection<PatternDeconstructionDescriptor> createPatternsFrom(int differentElement,
-                                                                                           @Nonnull Set<? extends PatternDescriptor> nestedPatterns,
-                                                                                           @Nonnull PatternDeconstructionDescriptor sample) {
+    private static Collection<PatternDeconstructionDescriptor> createPatternsFrom(int differentElement,
+                                                                                           Set<? extends PatternDescriptor> nestedPatterns,
+                                                                                           PatternDeconstructionDescriptor sample) {
         HashSet<PatternDeconstructionDescriptor> descriptions = new HashSet<>();
         for (PatternDescriptor nestedPattern : nestedPatterns) {
             descriptions.add(sample.createFor(differentElement, nestedPattern));
@@ -374,9 +373,9 @@ public final class JavaPatternExhaustivenessUtil {
         return descriptions;
     }
 
-    private static boolean oneOfUnconditional(@Nonnull PsiElement context,
-                                              @Nonnull PatternDeconstructionDescriptor whoType,
-                                              @Nonnull PatternDeconstructionDescriptor overWhom) {
+    private static boolean oneOfUnconditional(PsiElement context,
+                                              PatternDeconstructionDescriptor whoType,
+                                              PatternDeconstructionDescriptor overWhom) {
         if (!whoType.type().equals(overWhom.type())) {
             return false;
         }
@@ -391,9 +390,9 @@ public final class JavaPatternExhaustivenessUtil {
         return true;
     }
 
-    private static boolean coverSelectorType(@Nonnull PsiElement context,
-                                             @Nonnull Set<? extends PatternDescriptor> patterns,
-                                             @Nonnull PsiType selectorType) {
+    private static boolean coverSelectorType(PsiElement context,
+                                             Set<? extends PatternDescriptor> patterns,
+                                             PsiType selectorType) {
         for (PatternDescriptor pattern : patterns) {
             if (pattern instanceof PatternTypeTestDescriptor &&
                 JavaPsiPatternUtil.covers(context, pattern.type(), selectorType)) {
@@ -406,10 +405,10 @@ public final class JavaPatternExhaustivenessUtil {
     /**
      * Tries all types of reductions
      */
-    private static @Nonnull ReduceResult reduce(@Nonnull PsiType selectorType,
-                                                @Nonnull PsiElement context,
-                                                @Nonnull Set<? extends PatternDescriptor> currentPatterns,
-                                                @Nonnull ReduceCache cache) {
+    private static ReduceResult reduce(PsiType selectorType,
+                                                PsiElement context,
+                                                Set<? extends PatternDescriptor> currentPatterns,
+                                                ReduceCache cache) {
         currentPatterns = new HashSet<>(currentPatterns);
         ReduceResultCacheContext cacheContext = new ReduceResultCacheContext(selectorType, currentPatterns);
         ReduceResult result = cache.loopReduceCache().get(cacheContext);
@@ -434,11 +433,11 @@ public final class JavaPatternExhaustivenessUtil {
      * @param tryToExpand  a flag indicating whether to try to expand sealed types
      * @return the result of the reduction loop
      */
-    private static @Nonnull LoopReduceResult reduceInLoop(@Nonnull PsiType selectorType,
-                                                          @Nonnull PsiElement context,
-                                                          @Nonnull Set<? extends PatternDescriptor> patterns,
-                                                          @Nonnull BiPredicate<Set<? extends PatternDescriptor>, PsiType> stopAt,
-                                                          @Nonnull ReduceCache cache, boolean tryToExpand) {
+    private static LoopReduceResult reduceInLoop(PsiType selectorType,
+                                                          PsiElement context,
+                                                          Set<? extends PatternDescriptor> patterns,
+                                                          BiPredicate<Set<? extends PatternDescriptor>, PsiType> stopAt,
+                                                          ReduceCache cache, boolean tryToExpand) {
         boolean changed = false;
         int currentIteration = 0;
         Set<? extends PatternDescriptor> currentPatterns = new HashSet<>(patterns);
@@ -468,11 +467,11 @@ public final class JavaPatternExhaustivenessUtil {
         return new LoopReduceResult(currentPatterns, changed, false);
     }
 
-    private static boolean addNewClasses(@Nonnull PsiElement context,
-                                         @Nonnull PsiType selectorType,
-                                         @Nonnull Set<PsiClass> visitedCovered,
-                                         @Nonnull Set<PsiType> existedTypes,
-                                         @Nonnull Collection<PatternTypeTestDescriptor> toAdd) {
+    private static boolean addNewClasses(PsiElement context,
+                                         PsiType selectorType,
+                                         Set<PsiClass> visitedCovered,
+                                         Set<PsiType> existedTypes,
+                                         Collection<PatternTypeTestDescriptor> toAdd) {
         boolean changed = false;
         for (PsiClass covered : visitedCovered) {
             PsiClassType classType = JavaPsiFacade.getElementFactory(covered.getProject()).createType(covered);
@@ -492,7 +491,7 @@ public final class JavaPatternExhaustivenessUtil {
         return changed;
     }
 
-    private static @Nonnull Set<PatternDescriptor> combineResult(@Nonnull Set<? extends PatternDescriptor> patterns,
+    private static Set<PatternDescriptor> combineResult(Set<? extends PatternDescriptor> patterns,
                                                                  Set<? extends PatternDescriptor> toRemove,
                                                                  Set<? extends PatternDescriptor> toAdd) {
         Set<PatternDescriptor> result = new HashSet<>();
@@ -505,7 +504,7 @@ public final class JavaPatternExhaustivenessUtil {
         return result;
     }
 
-    private static @Nonnull MultiMap<PsiClass, PsiType> findPermittedClasses(@Nonnull List<PatternTypeTestDescriptor> elements) {
+    private static MultiMap<PsiClass, PsiType> findPermittedClasses(List<PatternTypeTestDescriptor> elements) {
         MultiMap<PsiClass, PsiType> patternClasses = new MultiMap<>();
         for (PatternDescriptor element : elements) {
             PsiType patternType = element.type();
@@ -521,8 +520,8 @@ public final class JavaPatternExhaustivenessUtil {
         return patternClasses;
     }
 
-    private static @Nonnull List<PatternTypeTestDescriptor> reduceToTypeTest(@Nonnull List<? extends PatternDescriptor> elements,
-                                                                             @Nonnull PsiElement context) {
+    private static List<PatternTypeTestDescriptor> reduceToTypeTest(List<? extends PatternDescriptor> elements,
+                                                                             PsiElement context) {
         List<PatternTypeTestDescriptor> reducedToTypeTest = new ArrayList<>();
         List<PatternDeconstructionDescriptor> deconstructionDescriptions = new ArrayList<>();
         for (PatternDescriptor element : elements) {
@@ -543,7 +542,7 @@ public final class JavaPatternExhaustivenessUtil {
         return reducedToTypeTest;
     }
 
-    private static @Nonnull List<PatternTypeTestDescriptor> reduceEnumConstantsToTypeTest(@Nonnull List<PsiEnumConstant> constants) {
+    private static List<PatternTypeTestDescriptor> reduceEnumConstantsToTypeTest(List<PsiEnumConstant> constants) {
         List<PatternTypeTestDescriptor> reducedToTypeTest = new ArrayList<>();
         Map<PsiType, Set<PsiEnumConstant>> enumsByTypes = constants.stream().collect(
             Collectors.groupingBy(t -> t.getType(), Collectors.toUnmodifiableSet()));
@@ -574,15 +573,15 @@ public final class JavaPatternExhaustivenessUtil {
      * @param elements     case labels from the analyzed switch
      * @return the set of missed classes (may contain classes outside the selector type hierarchy)
      */
-    public static @Nonnull Set<PsiClass> findMissedClasses(@Nonnull PsiSwitchBlock block,
-                                                           @Nonnull PsiType selectorType,
-                                                           @Nonnull List<? extends PsiCaseLabelElement> elements) {
+    public static Set<PsiClass> findMissedClasses(PsiSwitchBlock block,
+                                                           PsiType selectorType,
+                                                           List<? extends PsiCaseLabelElement> elements) {
         List<PatternDescriptor> descriptions = preparePatternDescriptors(elements);
         List<PsiEnumConstant> enumConstants = getEnumConstants(elements);
         return findMissedClasses(selectorType, descriptions, enumConstants, block);
     }
 
-    private static @Nonnull List<PsiEnumConstant> getEnumConstants(@Nonnull List<? extends PsiCaseLabelElement> elements) {
+    private static List<PsiEnumConstant> getEnumConstants(List<? extends PsiCaseLabelElement> elements) {
         return StreamEx.of(elements).map(JavaPsiSwitchUtil::getEnumConstant).nonNull().toList();
     }
 
@@ -596,17 +595,17 @@ public final class JavaPatternExhaustivenessUtil {
      * @param context       the context element (parent of pattern descriptions)
      * @return the set of missed classes (may contain classes outside the selector type hierarchy)
      */
-    private static @Nonnull Set<PsiClass> findMissedClasses(@Nonnull PsiType selectorType,
-                                                            @Nonnull List<? extends PatternDescriptor> elements,
-                                                            @Nonnull List<PsiEnumConstant> enumConstants,
-                                                            @Nonnull PsiElement context) {
+    private static Set<PsiClass> findMissedClasses(PsiType selectorType,
+                                                            List<? extends PatternDescriptor> elements,
+                                                            List<PsiEnumConstant> enumConstants,
+                                                            PsiElement context) {
         return findMissedClassesData(selectorType, elements, enumConstants, context).missedClasses();
     }
 
-    private static @Nonnull SealedResult findMissedClassesData(@Nonnull PsiType selectorType,
-                                                               @Nonnull List<? extends PatternDescriptor> elements,
-                                                               @Nonnull List<PsiEnumConstant> enumConstants,
-                                                               @Nonnull PsiElement context) {
+    private static SealedResult findMissedClassesData(PsiType selectorType,
+                                                               List<? extends PatternDescriptor> elements,
+                                                               List<PsiEnumConstant> enumConstants,
+                                                               PsiElement context) {
         //Used to keep dependencies. The last dependency is one of the selector types.
         record ClassWithDependencies(PsiClass mainClass, List<PsiClass> dependencies) {
         }
@@ -702,13 +701,13 @@ public final class JavaPatternExhaustivenessUtil {
      * @param caseElements switch labels to create pattern descriptions for
      */
     @Contract(pure = true)
-    private static @Nonnull List<PatternDescriptor> preparePatternDescriptors(@Nonnull List<? extends PsiCaseLabelElement> caseElements) {
+    private static List<PatternDescriptor> preparePatternDescriptors(List<? extends PsiCaseLabelElement> caseElements) {
         List<PsiPrimaryPattern> unconditionalPatterns =
             ContainerUtil.mapNotNull(caseElements, element -> JavaPsiPatternUtil.findUnconditionalPattern(element));
         return StreamEx.of(unconditionalPatterns).map(JavaPatternExhaustivenessUtil::createDescription).nonNull().toList();
     }
 
-    private static @Nullable PatternDescriptor createDescription(@Nonnull PsiPattern pattern) {
+    private static @Nullable PatternDescriptor createDescription(PsiPattern pattern) {
         PsiType type = JavaPsiPatternUtil.getPatternType(pattern);
         if (type == null) {
             return null;
@@ -741,7 +740,7 @@ public final class JavaPatternExhaustivenessUtil {
      * @param block switch block to analyze
      * @return true if this block is not exhaustive while it should be
      */
-    public static boolean hasExhaustivenessError(@Nonnull PsiSwitchBlock block) {
+    public static boolean hasExhaustivenessError(PsiSwitchBlock block) {
         return hasExhaustivenessError(block, JavaPsiSwitchUtil.getCaseLabelElements(block));
     }
 
@@ -750,7 +749,7 @@ public final class JavaPatternExhaustivenessUtil {
      * @param elements list of labels to analyze (can be a subset of all labels of the block)
      * @return true if this block is not exhaustive while it should be
      */
-    public static boolean hasExhaustivenessError(@Nonnull PsiSwitchBlock block, @Nonnull List<PsiCaseLabelElement> elements) {
+    public static boolean hasExhaustivenessError(PsiSwitchBlock block, List<PsiCaseLabelElement> elements) {
         PsiExpression selector = block.getExpression();
         if (selector == null) return false;
         PsiType selectorType = selector.getType();
@@ -791,7 +790,6 @@ public final class JavaPatternExhaustivenessUtil {
      * Pattern descriptor
      */
     sealed private interface PatternDescriptor permits PatternDeconstructionDescriptor, PatternTypeTestDescriptor {
-        @Nonnull
         PsiType type();
     }
 
@@ -801,8 +799,8 @@ public final class JavaPatternExhaustivenessUtil {
      * @param type     target type
      * @param psiClass class (the result of the type resolve)
      */
-    private record PatternTypeTestDescriptor(@Nonnull PsiType type, @Nullable PsiClass psiClass) implements PatternDescriptor {
-        PatternTypeTestDescriptor(@Nonnull PsiType type) {
+    private record PatternTypeTestDescriptor(PsiType type, @Nullable PsiClass psiClass) implements PatternDescriptor {
+        PatternTypeTestDescriptor(PsiType type) {
             //almost all operations with patterns take into account classes.
             //it is supposed to be safe to use it to compare ReduceResultCacheContext if there are no parameters
             this(type, PsiUtil.resolveClassInClassTypeOnly(type));
@@ -836,7 +834,7 @@ public final class JavaPatternExhaustivenessUtil {
      * @param type main deconstruction type
      * @param list descriptors for deconstruction list elements
      */
-    private record PatternDeconstructionDescriptor(@Nonnull PsiType type, @Nonnull List<? extends PatternDescriptor> list)
+    private record PatternDeconstructionDescriptor(PsiType type, List<? extends PatternDescriptor> list)
         implements PatternDescriptor {
         PatternDeconstructionDescriptor createFor(int element, PatternDescriptor pattern) {
             ArrayList<PatternDescriptor> descriptions = new ArrayList<>(list);
@@ -845,21 +843,21 @@ public final class JavaPatternExhaustivenessUtil {
         }
     }
 
-    private record ReduceCache(@Nonnull Map<ReduceResultCacheContext, ReduceResult> loopReduceCache,
-                               @Nonnull Map<ReduceUnwrapContext, ReduceResult> unwrapCache,
-                               @Nonnull Map<PsiClass, Map<PsiClass, Boolean>> sealedPath) {
+    private record ReduceCache(Map<ReduceResultCacheContext, ReduceResult> loopReduceCache,
+                               Map<ReduceUnwrapContext, ReduceResult> unwrapCache,
+                               Map<PsiClass, Map<PsiClass, Boolean>> sealedPath) {
         static ReduceCache init() {
             return new ReduceCache(new HashMap<>(), new HashMap<>(), new HashMap<>());
         }
     }
 
-    private record ReduceUnwrapContext(@Nonnull Set<PatternDeconstructionDescriptor> currentPatterns) {
+    private record ReduceUnwrapContext(Set<PatternDeconstructionDescriptor> currentPatterns) {
     }
 
-    private record LoopReduceResult(@Nonnull Set<? extends PatternDescriptor> patterns, boolean changed, boolean stopped) {
+    private record LoopReduceResult(Set<? extends PatternDescriptor> patterns, boolean changed, boolean stopped) {
     }
 
-    private record ReduceResult(@Nonnull Set<? extends PatternDescriptor> patterns, boolean changed) {
+    private record ReduceResult(Set<? extends PatternDescriptor> patterns, boolean changed) {
 
         /**
          * Reduce i-component for a set of deconstruction patterns.
@@ -883,7 +881,7 @@ public final class JavaPatternExhaustivenessUtil {
          * see {@link  #unwrapSealedTypes(Set, ReduceCache)}
          * Also, see <a href="https://bugs.openjdk.org/browse/JDK-8311815">bug in OpenJDK</a>
          */
-        private @Nonnull ReduceResult reduceRecordPatterns(@Nonnull PsiElement context, @Nonnull ReduceCache cache) {
+        private ReduceResult reduceRecordPatterns(PsiElement context, ReduceCache cache) {
             boolean changed = false;
             Map<PsiType, Set<PatternDeconstructionDescriptor>> byType = StreamEx.of(patterns)
                 .select(PatternDeconstructionDescriptor.class)
@@ -934,9 +932,9 @@ public final class JavaPatternExhaustivenessUtil {
             return new ReduceResult(combineResult(patterns, toRemove, toAdd), true);
         }
 
-        private static @Nonnull Collection<PatternDeconstructionDescriptor> createPatternsFrom(int differentElement,
-                                                                                               @Nonnull Set<? extends PatternDescriptor> nestedPatterns,
-                                                                                               @Nonnull PatternDeconstructionDescriptor sample) {
+        private static Collection<PatternDeconstructionDescriptor> createPatternsFrom(int differentElement,
+                                                                                               Set<? extends PatternDescriptor> nestedPatterns,
+                                                                                               PatternDeconstructionDescriptor sample) {
             HashSet<PatternDeconstructionDescriptor> descriptions = new HashSet<>();
             for (PatternDescriptor nestedPattern : nestedPatterns) {
                 descriptions.add(sample.createFor(differentElement, nestedPattern));
@@ -948,7 +946,7 @@ public final class JavaPatternExhaustivenessUtil {
          * Reduce deconstruction pattern to TypePattern equivalent.
          * R(q0..qn) -> R r
          */
-        private @Nonnull ReduceResult reduceDeconstructionRecordToTypePattern(@Nonnull PsiElement context) {
+        private ReduceResult reduceDeconstructionRecordToTypePattern(PsiElement context) {
             boolean changed = false;
             Map<PsiType, List<PsiType>> componentCache = new HashMap<>();
             Set<PatternDescriptor> toAdd = new HashSet<>();
@@ -1006,7 +1004,7 @@ public final class JavaPatternExhaustivenessUtil {
          * This method uses {@link #findMissedClassesData(PsiType, List, List, PsiElement) findMissedClasses}
          * To prevent recursive calls, only TypeTest descriptions are passed to this method.
          */
-        private @Nonnull ReduceResult reduceClasses(@Nonnull PsiType selectorType, @Nonnull PsiElement context) {
+        private ReduceResult reduceClasses(PsiType selectorType, PsiElement context) {
             Set<PatternTypeTestDescriptor> consideredDescription =
                 StreamEx.of(patterns).select(PatternTypeTestDescriptor.class).collect(Collectors.toSet());
             if (consideredDescription.isEmpty()) {
@@ -1022,12 +1020,12 @@ public final class JavaPatternExhaustivenessUtil {
     }
 
     private static final class ReduceResultCacheContext {
-        private final @Nonnull PsiType mySelectorType;
+        private final PsiType mySelectorType;
         private final @Nullable PsiClass myPsiClass;
-        private final @Nonnull Set<? extends PatternDescriptor> currentPatterns;
+        private final Set<? extends PatternDescriptor> currentPatterns;
 
-        ReduceResultCacheContext(@Nonnull PsiType selectorType,
-                                 @Nonnull Set<? extends PatternDescriptor> currentPatterns) {
+        ReduceResultCacheContext(PsiType selectorType,
+                                 Set<? extends PatternDescriptor> currentPatterns) {
             this.mySelectorType = selectorType;
             this.currentPatterns = currentPatterns;
             //almost all operations with patterns take into account classes.
@@ -1035,7 +1033,7 @@ public final class JavaPatternExhaustivenessUtil {
             this.myPsiClass = PsiUtil.resolveClassInClassTypeOnly(selectorType);
         }
 
-        private @Nonnull ReduceResult reduceClassesInner(@Nonnull PsiElement context) {
+        private ReduceResult reduceClassesInner(PsiElement context) {
             Set<PatternTypeTestDescriptor> typeTestDescriptions =
                 StreamEx.of(currentPatterns).select(PatternTypeTestDescriptor.class).toSet();
             Set<PatternTypeTestDescriptor> toAdd = new HashSet<>();
@@ -1133,15 +1131,15 @@ public final class JavaPatternExhaustivenessUtil {
             }
         }
 
-        private static @Nonnull RecordExhaustivenessResult createExhaustiveResult() {
+        private static RecordExhaustivenessResult createExhaustiveResult() {
             return new RecordExhaustivenessResult(true, true);
         }
 
-        private static @Nonnull RecordExhaustivenessResult createNotExhaustiveResult() {
+        private static RecordExhaustivenessResult createNotExhaustiveResult() {
             return new RecordExhaustivenessResult(false, true);
         }
 
-        private static @Nonnull RecordExhaustivenessResult createNotBeAdded() {
+        private static RecordExhaustivenessResult createNotBeAdded() {
             return new RecordExhaustivenessResult(false, false);
         }
     }
@@ -1152,6 +1150,6 @@ public final class JavaPatternExhaustivenessUtil {
      * @param missedClasses  set of missed subclasses
      * @param coveredClasses set of covered subclasses
      */
-    private record SealedResult(@Nonnull Set<PsiClass> missedClasses, @Nonnull Set<PsiClass> coveredClasses) {
+    private record SealedResult(Set<PsiClass> missedClasses, Set<PsiClass> coveredClasses) {
     }
 }

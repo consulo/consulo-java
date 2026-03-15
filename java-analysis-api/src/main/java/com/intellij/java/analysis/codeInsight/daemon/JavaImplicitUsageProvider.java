@@ -2,13 +2,12 @@ package com.intellij.java.analysis.codeInsight.daemon;
 
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 public interface JavaImplicitUsageProvider extends ImplicitUsageProvider {
   /**
    * @return true if the given element is implicitly initialized to a non-null value
    */
-  default boolean isImplicitlyNotNullInitialized(@Nonnull PsiElement element) {
+  default boolean isImplicitlyNotNullInitialized(PsiElement element) {
     return false;
   }
 
@@ -17,12 +16,12 @@ public interface JavaImplicitUsageProvider extends ImplicitUsageProvider {
    * which instances may have implicit initialization steps not directly available in the source code
    * (e.g. Java class initializer is processed via annotation processor and custom steps added)
    */
-  default boolean isClassWithCustomizedInitialization(@Nonnull PsiElement element) {
+  default boolean isClassWithCustomizedInitialization(PsiElement element) {
     return false;
   }
 
   // is "unused import" warning can be shown in this file
-  default boolean isUnusedImportEnabled(@Nonnull PsiElement element) {
+  default boolean isUnusedImportEnabled(PsiElement element) {
     return false;
   }
 

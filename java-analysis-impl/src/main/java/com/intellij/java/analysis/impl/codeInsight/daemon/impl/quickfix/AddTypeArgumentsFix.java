@@ -25,7 +25,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class AddTypeArgumentsFix extends MethodArgumentFix {
   private static final Logger LOG = Logger.getInstance(AddTypeArgumentsFix.class);
@@ -35,7 +34,6 @@ public class AddTypeArgumentsFix extends MethodArgumentFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     if (myArgList.getExpressions().length == 1) {
       return JavaQuickFixLocalize.addTypeArgumentsSingleArgumentText();

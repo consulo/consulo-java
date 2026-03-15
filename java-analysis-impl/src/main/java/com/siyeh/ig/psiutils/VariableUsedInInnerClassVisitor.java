@@ -15,7 +15,6 @@
  */
 package com.siyeh.ig.psiutils;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
@@ -24,25 +23,24 @@ import com.intellij.java.language.psi.PsiVariable;
 
 class VariableUsedInInnerClassVisitor extends JavaRecursiveElementVisitor {
 
-  @Nonnull
   private final PsiVariable variable;
   private boolean usedInInnerClass = false;
   private boolean inInnerClass = false;
 
-  public VariableUsedInInnerClassVisitor(@Nonnull PsiVariable variable) {
+  public VariableUsedInInnerClassVisitor(PsiVariable variable) {
     super();
     this.variable = variable;
   }
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (!usedInInnerClass) {
       super.visitElement(element);
     }
   }
 
   @Override
-  public void visitClass(@Nonnull PsiClass psiClass) {
+  public void visitClass(PsiClass psiClass) {
     if (usedInInnerClass) {
       return;
     }
@@ -54,7 +52,7 @@ class VariableUsedInInnerClassVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @Nonnull PsiReferenceExpression referenceExpression) {
+    PsiReferenceExpression referenceExpression) {
     if (usedInInnerClass) {
       return;
     }

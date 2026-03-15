@@ -29,8 +29,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.List;
@@ -40,13 +39,11 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
     @SuppressWarnings({"PublicField"})
     public boolean ignoreIterators = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.loopConditionNotUpdatedInsideLoopDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.loopConditionNotUpdatedInsideLoopProblemDescriptor().get();
     }
@@ -109,7 +106,7 @@ public class LoopConditionNotUpdatedInsideLoopInspection extends BaseInspection 
 
         private boolean checkCondition(
             @Nullable PsiExpression condition,
-            @Nonnull PsiStatement context,
+            PsiStatement context,
             List<PsiExpression> notUpdated
         ) {
             if (condition == null) {

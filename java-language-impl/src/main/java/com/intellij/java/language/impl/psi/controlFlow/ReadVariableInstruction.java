@@ -17,13 +17,11 @@ package com.intellij.java.language.impl.psi.controlFlow;
 
 import com.intellij.java.language.psi.PsiVariable;
 
-import jakarta.annotation.Nonnull;
 
 public final class ReadVariableInstruction extends SimpleInstruction {
-  @Nonnull
   public final PsiVariable variable;
 
-  ReadVariableInstruction(@Nonnull PsiVariable variable) {
+  ReadVariableInstruction(PsiVariable variable) {
     this.variable = variable;
   }
 
@@ -32,7 +30,7 @@ public final class ReadVariableInstruction extends SimpleInstruction {
   }
 
   @Override
-  public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
+  public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
     visitor.visitReadVariableInstruction(this, offset, nextOffset);
   }
 

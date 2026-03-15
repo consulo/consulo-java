@@ -11,7 +11,6 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.search.ReferencesSearchQueryExecutor;
 import consulo.project.util.query.QueryExecutorBase;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -22,7 +21,7 @@ import java.util.function.Supplier;
 @ExtensionImpl
 public class ConstructorReferencesSearcher extends QueryExecutorBase<PsiReference, ReferencesSearch.SearchParameters> implements ReferencesSearchQueryExecutor {
     @Override
-    public void processQuery(@Nonnull ReferencesSearch.SearchParameters p, @Nonnull Predicate<? super PsiReference> consumer) {
+    public void processQuery(ReferencesSearch.SearchParameters p, Predicate<? super PsiReference> consumer) {
         PsiElement element = p.getElementToSearch();
         if (!(element instanceof PsiMethod method)) {
             return;

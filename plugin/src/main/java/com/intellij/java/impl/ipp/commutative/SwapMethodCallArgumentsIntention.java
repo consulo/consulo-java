@@ -25,20 +25,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SwapMethodCallArgumentsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new SwapMethodCallArgumentsPredicate();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.swapMethodCallArgumentsIntentionFamilyName();
@@ -54,7 +50,7 @@ public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiExpressionList argumentList = (PsiExpressionList) element;
         PsiExpression[] arguments = argumentList.getExpressions();
@@ -64,7 +60,7 @@ public class SwapMethodCallArgumentsIntention extends MutablyNamedIntention {
         String secondArgumentText = secondArgument.getText();
         PsiCallExpression callExpression =
             (PsiCallExpression) argumentList.getParent();
-        @NonNls String callText;
+        String callText;
         if (callExpression instanceof PsiMethodCallExpression) {
             PsiMethodCallExpression methodCallExpression =
                 (PsiMethodCallExpression) callExpression;

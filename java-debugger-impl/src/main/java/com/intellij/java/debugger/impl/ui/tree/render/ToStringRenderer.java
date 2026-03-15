@@ -33,7 +33,6 @@ import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 public class ToStringRenderer extends NodeRendererImpl implements OnDemandRenderer {
@@ -98,7 +97,6 @@ public class ToStringRenderer extends NodeRendererImpl implements OnDemandRender
         return XDebuggerUIConstants.COLLECTING_DATA_MESSAGE.get();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getLinkText() {
         return JavaDebuggerLocalize.messageNodeTostring();

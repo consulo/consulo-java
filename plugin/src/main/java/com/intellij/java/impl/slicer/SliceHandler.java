@@ -32,8 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author cdr
@@ -46,7 +45,7 @@ public class SliceHandler implements CodeInsightActionHandler {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     PsiDocumentManager.getInstance(project).commitAllDocuments(); // prevents problems with smart pointers creation
     PsiElement expression = getExpressionAtCaret(editor, file);
     if (expression == null) {

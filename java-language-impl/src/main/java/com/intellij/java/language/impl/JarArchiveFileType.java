@@ -18,7 +18,6 @@ package com.intellij.java.language.impl;
 import consulo.virtualFileSystem.VirtualFileManager;
 import consulo.virtualFileSystem.archive.ArchiveFileType;
 
-import jakarta.annotation.Nonnull;
 
 public class JarArchiveFileType extends ArchiveFileType {
   public static final String PROTOCOL = "jar";
@@ -28,13 +27,11 @@ public class JarArchiveFileType extends ArchiveFileType {
     super(VirtualFileManager.getInstance());
   }
 
-  @Nonnull
   @Override
   public String getId() {
     return "JAR_ARCHIVE";
   }
 
-  @Nonnull
   @Override
   public String getProtocol() {
     return PROTOCOL;

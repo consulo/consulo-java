@@ -25,8 +25,7 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -37,12 +36,10 @@ public class LawOfDemeterInspection extends BaseInspection {
 
     private static final Key<Integer> key = Key.create("LawOfDemeterInspection");
 
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.lawOfDemeterDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.lawOfDemeterProblemDescriptor().get();
     }

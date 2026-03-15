@@ -35,9 +35,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -67,13 +65,11 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     return true;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.ifCanBeSwitchDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.ifCanBeSwitchProblemDescriptor().get();
@@ -152,7 +148,6 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       myMinimumBranches = minimumBranches;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.ifCanBeSwitchQuickfix();
     }
@@ -216,7 +211,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
         }
       }
 
-      @NonNls StringBuilder switchStatementText = new StringBuilder();
+      StringBuilder switchStatementText = new StringBuilder();
       switchStatementText.append("switch(").append(switchExpression.getText()).append("){");
       PsiType type = switchExpression.getType();
       boolean castToInt = type != null && type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER);
@@ -252,8 +247,8 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     }
 
     @Nullable
-    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass,
-                                                                @Nonnull Class<? extends PsiElement>... stopAt) {
+    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, Class<T> aClass,
+                                                                Class<? extends PsiElement>... stopAt) {
       if (element == null) {
         return null;
       }
@@ -371,7 +366,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     }
 
     private static void dumpBranch(IfStatementBranch branch, boolean castToInt, boolean wrap, boolean renameBreaks, String breakLabelName,
-                                   @NonNls StringBuilder switchStatementText) {
+                                   StringBuilder switchStatementText) {
       dumpComments(branch.getComments(), switchStatementText);
       if (branch.isElse()) {
         switchStatementText.append("default: ");
@@ -385,7 +380,6 @@ public class IfCanBeSwitchInspection extends BaseInspection {
       dumpBody(branch.getStatement(), wrap, renameBreaks, breakLabelName, switchStatementText);
     }
 
-    @NonNls
     private static String getCaseLabelText(PsiExpression expression, boolean castToInt) {
       if (expression instanceof PsiReferenceExpression) {
         PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression;
@@ -423,7 +417,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     }
 
     private static void dumpBody(PsiStatement bodyStatement, boolean wrap, boolean renameBreaks, String breakLabelName,
-                                 @NonNls StringBuilder switchStatementText) {
+                                 StringBuilder switchStatementText) {
       if (wrap) {
         switchStatementText.append('{');
       }
@@ -448,7 +442,7 @@ public class IfCanBeSwitchInspection extends BaseInspection {
     }
 
     private static void appendElement(PsiElement element, boolean renameBreakElements, String breakLabelString,
-                                      @NonNls StringBuilder switchStatementText) {
+                                      StringBuilder switchStatementText) {
       String text = element.getText();
       if (!renameBreakElements) {
         switchStatementText.append(text);

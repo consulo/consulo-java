@@ -25,7 +25,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiNamedElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,14 +33,12 @@ public class LocalVariableOfConcreteClassInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreAbstractClasses = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.localVariableOfConcreteClassDisplayName();
     }
 
     @Override
-    @Nonnull
     @RequiredReadAction
     public String buildErrorString(Object... arg) {
         PsiNamedElement variable = (PsiNamedElement) arg[0];
@@ -65,7 +62,7 @@ public class LocalVariableOfConcreteClassInspection extends BaseInspection {
 
         @Override
         public void visitLocalVariable(
-            @Nonnull PsiLocalVariable variable
+            PsiLocalVariable variable
         ) {
             super.visitLocalVariable(variable);
             PsiTypeElement typeElement = variable.getTypeElement();

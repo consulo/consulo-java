@@ -22,17 +22,16 @@ import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiFile;
 import consulo.java.impl.util.JavaProjectRootsUtil;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaProblemHighlightFilter extends ProblemHighlightFilter {
   @Override
-  public boolean shouldHighlight(@Nonnull PsiFile psiFile) {
+  public boolean shouldHighlight(PsiFile psiFile) {
     return psiFile.getFileType() != JavaFileType.INSTANCE || !JavaProjectRootsUtil.isOutsideSourceRoot(psiFile);
   }
 
   @Override
-  public boolean shouldProcessInBatch(@Nonnull PsiFile psiFile) {
+  public boolean shouldProcessInBatch(PsiFile psiFile) {
     boolean shouldHighlight = shouldHighlightFile(psiFile);
     if (shouldHighlight) {
       if (psiFile.getFileType() == JavaFileType.INSTANCE) {

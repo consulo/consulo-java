@@ -30,7 +30,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author spleaner
@@ -44,7 +43,7 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);
     if (element == null || element instanceof PsiWhiteSpace) {
@@ -66,7 +65,7 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }
@@ -81,7 +80,6 @@ public class ConvertAbsolutePathToRelativeIntentionAction extends BaseIntentionA
     }
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Convert " + (isConvertToRelative() ? "absolute" : "relative") + " path to " + (isConvertToRelative() ? "relative" : "absolute"));

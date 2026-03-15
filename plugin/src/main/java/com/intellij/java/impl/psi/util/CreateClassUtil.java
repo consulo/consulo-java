@@ -19,11 +19,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import consulo.fileTemplate.FileTemplate;
 import consulo.fileTemplate.FileTemplateManager;
 import com.intellij.java.impl.ide.fileTemplates.JavaCreateFromTemplateHandler;
@@ -53,17 +51,17 @@ import consulo.util.lang.text.StringTokenizer;
 public class CreateClassUtil {
   private static final Logger LOG = Logger.getInstance("#com.intellij.j2ee.CreateClassUtil");
 
-  @NonNls public static final String DEFAULT_CLASS_TEMPLATE = "#DEFAULT_CLASS_TEMPLATE";
-  @NonNls private static final String DO_NOT_CREATE_CLASS_TEMPLATE = "#DO_NOT_CREATE_CLASS_TEMPLATE";
-  @NonNls private static final String CLASS_NAME_PROPERTY = "Class_Name";
-  @NonNls private static final String INTERFACE_NAME_PROPERTY = "Interface_Name";
+  public static final String DEFAULT_CLASS_TEMPLATE = "#DEFAULT_CLASS_TEMPLATE";
+  private static final String DO_NOT_CREATE_CLASS_TEMPLATE = "#DO_NOT_CREATE_CLASS_TEMPLATE";
+  private static final String CLASS_NAME_PROPERTY = "Class_Name";
+  private static final String INTERFACE_NAME_PROPERTY = "Interface_Name";
 
   private CreateClassUtil() {}
 
   @Nullable
-  private static PsiClass createClassFromTemplate(@Nonnull Properties attributes, @Nullable String templateName,
-                                                  @Nonnull PsiDirectory directoryRoot,
-                                                  @Nonnull String className) throws IncorrectOperationException {
+  private static PsiClass createClassFromTemplate(Properties attributes, @Nullable String templateName,
+                                                  PsiDirectory directoryRoot,
+                                                  String className) throws IncorrectOperationException {
     if (templateName == null) return null;
     if (templateName.equals(DO_NOT_CREATE_CLASS_TEMPLATE)) return null;
 
@@ -103,8 +101,7 @@ public class CreateClassUtil {
     }
   }
 
-  @Nonnull
-  private static PsiDirectory createParentDirectories(@Nonnull PsiDirectory directoryRoot, @Nonnull String className) throws IncorrectOperationException {
+  private static PsiDirectory createParentDirectories(PsiDirectory directoryRoot, String className) throws IncorrectOperationException {
     PsiJavaPackage currentPackage = JavaDirectoryService.getInstance().getPackage(directoryRoot);
     String packagePrefix = currentPackage == null? null : currentPackage.getQualifiedName() + ".";
     String packageName = extractPackage(packagePrefix != null && className.startsWith(packagePrefix)?
@@ -153,12 +150,12 @@ public class CreateClassUtil {
   }
 
   @Nullable
-  public static PsiClass createClassNamed(String newClassName, String templateName, @Nonnull PsiDirectory directory) throws IncorrectOperationException {
+  public static PsiClass createClassNamed(String newClassName, String templateName, PsiDirectory directory) throws IncorrectOperationException {
     return createClassNamed(newClassName, FileTemplateManager.getInstance(directory.getProject()).getDefaultProperties(), templateName, directory);
   }
 
   @Nullable
-  public static PsiClass createClassNamed(String newClassName, Map classProperties, String templateName, @Nonnull PsiDirectory directory)
+  public static PsiClass createClassNamed(String newClassName, Map classProperties, String templateName, PsiDirectory directory)
     throws IncorrectOperationException {
     Properties defaultProperties = FileTemplateManager.getInstance(directory.getProject()).getDefaultProperties();
     Properties properties = new Properties(defaultProperties);
@@ -169,9 +166,9 @@ public class CreateClassUtil {
 
   @Nullable
   private static PsiClass createClassNamed(@Nullable String newClassName,
-                                           @Nonnull Properties properties,
+                                           Properties properties,
                                            String templateName,
-                                           @Nonnull PsiDirectory directory) throws IncorrectOperationException {
+                                           PsiDirectory directory) throws IncorrectOperationException {
     if (newClassName == null) {
       return null;
     }

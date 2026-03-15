@@ -2,15 +2,13 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a reference to some module inside a Java module declaration.
  */
 public interface PsiJavaModuleReferenceElement extends PsiElement {
-  @Nonnull
   String getReferenceText();
 
   @Override

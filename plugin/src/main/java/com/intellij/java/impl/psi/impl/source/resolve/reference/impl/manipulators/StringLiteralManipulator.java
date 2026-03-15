@@ -24,7 +24,6 @@ import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -54,7 +53,6 @@ public class StringLiteralManipulator extends AbstractElementManipulator<PsiLite
     return getValueRange(element);
   }
 
-  @Nonnull
   @Override
   public Class<PsiLiteralExpression> getElementClass() {
     return PsiLiteralExpression.class;

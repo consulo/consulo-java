@@ -1,4 +1,3 @@
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -20,6 +19,5 @@ class Test {
       obj = <warning descr="'null' is assigned to a variable that is annotated with @NotNull">null</warning>;
     }
 
-    @Nonnull
 	private volatile Object obj;
 }

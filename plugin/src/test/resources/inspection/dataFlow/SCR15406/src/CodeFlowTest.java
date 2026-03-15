@@ -1,4 +1,3 @@
-import jakarta.annotation.Nonnull;
 
 public class CodeFlowTest {
   public static void main (String[] args) {
@@ -18,7 +17,6 @@ public class CodeFlowTest {
       exception.printStackTrace();
   }
 
-  @Nonnull
   private static String getString () throws SomeException {
     if (Math.random() < 0.5)
       throw new SomeException();

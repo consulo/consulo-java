@@ -29,7 +29,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -38,13 +37,11 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.ChangeVariableTypeToRhsTypeIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ChangeVariableTypeToRhsTypeIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ChangeVariableTypeToRhsTypePredicate();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.changeVariableTypeToRhsTypeIntentionFamilyName();
@@ -61,7 +58,7 @@ public class ChangeVariableTypeToRhsTypeIntention extends MutablyNamedIntention 
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiElement parent = element.getParent();
         if (!(parent instanceof PsiVariable)) {
             return;

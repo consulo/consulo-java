@@ -72,10 +72,8 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -93,10 +91,9 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
     private boolean myIsStatic;
 
     public static final
-    @NonNls
     Key<MethodBreakpoint> CATEGORY = BreakpointCategory.lookup("method_breakpoints");
 
-    protected MethodBreakpoint(@Nonnull Project project, XBreakpoint breakpoint) {
+    protected MethodBreakpoint(Project project, XBreakpoint breakpoint) {
         super(project, breakpoint);
     }
 
@@ -105,7 +102,6 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
     }
 
     @Override
-    @Nonnull
     public Key<MethodBreakpoint> getCategory() {
         return CATEGORY;
     }
@@ -116,7 +112,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
     }
 
     @Override
-    protected void reload(@Nonnull PsiFile psiFile) {
+    protected void reload(PsiFile psiFile) {
         setMethodName(null);
         mySignature = null;
 
@@ -135,7 +131,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
         }
     }
 
-    private static void createRequestForSubClasses(@Nonnull MethodBreakpointBase breakpoint, @Nonnull DebugProcessImpl debugProcess, @Nonnull ReferenceType baseType) {
+    private static void createRequestForSubClasses(MethodBreakpointBase breakpoint, DebugProcessImpl debugProcess, ReferenceType baseType) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         RequestManagerImpl requestsManager = debugProcess.getRequestsManager();
         ClassPrepareRequest request = requestsManager.createClassPrepareRequest((debuggerProcess, referenceType) ->
@@ -155,7 +151,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
         AtomicBoolean changed = new AtomicBoolean();
 
         XTopicBreakpointListener listener = new XTopicBreakpointListener() {
-            void changed(@Nonnull XBreakpoint b) {
+            void changed(XBreakpoint b) {
                 if (b == breakpoint.getXBreakpoint()) {
                     changed.set(true);
 
@@ -167,12 +163,12 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
             }
 
             @Override
-            public void breakpointRemoved(@Nonnull XBreakpoint b) {
+            public void breakpointRemoved(XBreakpoint b) {
                 changed(b);
             }
 
             @Override
-            public void breakpointChanged(@Nonnull XBreakpoint b) {
+            public void breakpointChanged(XBreakpoint b) {
                 changed(b);
             }
         };
@@ -182,7 +178,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 
         new Task.Backgroundable(debugProcess.getProject(), "Creating Method Breakpoint...", true) {
             @Override
-            public void run(@Nonnull ProgressIndicator progressIndicator) {
+            public void run(ProgressIndicator progressIndicator) {
                 indicatorRef.set(progressIndicator);
 
                 processPreparedSubTypes(baseType, subType -> createRequestForPreparedClassEmulated(breakpoint, debugProcess, subType, false), progressIndicator);
@@ -209,7 +205,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
         MethodBreakpointBase.disableEmulation(this);
     }
 
-    static void createRequestForPreparedClassEmulated(@Nonnull MethodBreakpointBase breakpoint, @Nonnull DebugProcessImpl debugProcess, @Nonnull ReferenceType classType, boolean base) {
+    static void createRequestForPreparedClassEmulated(MethodBreakpointBase breakpoint, DebugProcessImpl debugProcess, ReferenceType classType, boolean base) {
         if (!base && !shouldCreateRequest(breakpoint, breakpoint.getXBreakpoint(), debugProcess, true)) {
             return;
         }
@@ -273,7 +269,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
     }
 
     @Override
-    protected void createRequestForPreparedClass(@Nonnull DebugProcessImpl debugProcess, @Nonnull ReferenceType classType) {
+    protected void createRequestForPreparedClass(DebugProcessImpl debugProcess, ReferenceType classType) {
         if (isEmulated()) {
             createRequestForPreparedClassEmulated(this, debugProcess, classType, true);
         }
@@ -282,7 +278,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
         }
     }
 
-    private void createRequestForPreparedClassOriginal(@Nonnull DebugProcessImpl debugProcess, @Nonnull ReferenceType classType) {
+    private void createRequestForPreparedClassOriginal(DebugProcessImpl debugProcess, ReferenceType classType) {
         try {
             boolean hasMethod = false;
             for (Method method : classType.allMethods()) {
@@ -334,7 +330,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 
 
     @Override
-    public String getEventMessage(@Nonnull LocatableEvent event) {
+    public String getEventMessage(LocatableEvent event) {
         final Location location = event.location();
         final String locationQName = DebuggerUtilsEx.getLocationMethodQName(location);
         String locationFileName;
@@ -373,19 +369,16 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
     }
 
     @Override
-    @Nonnull
     protected Image getInvalidIcon(boolean isMuted) {
         return isMuted ? ExecutionDebugIconGroup.breakpointBreakpointmethodmuted() : ExecutionDebugIconGroup.breakpointBreakpointmethoddisabled();
     }
 
     @Override
-    @Nonnull
     protected Image getVerifiedIcon(boolean isMuted) {
         return isMuted ? ExecutionDebugIconGroup.breakpointBreakpointmethodmuted() : ExecutionDebugIconGroup.breakpointBreakpointmethodvalid();
     }
 
     @Override
-    @Nonnull
     protected Image getVerifiedWarningsIcon(boolean isMuted) {
         return isMuted ? ExecutionDebugIconGroup.breakpointBreakpointmethodmuted() : ExecutionDebugIconGroup.breakpointBreakpointmethodvalid();
     }
@@ -413,14 +406,14 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
     }
 
     @Override
-    public boolean evaluateCondition(@Nonnull EvaluationContextImpl context, @Nonnull LocatableEvent event) throws EvaluateException {
+    public boolean evaluateCondition(EvaluationContextImpl context, LocatableEvent event) throws EvaluateException {
         if (!matchesEvent(event, context.getDebugProcess())) {
             return false;
         }
         return super.evaluateCondition(context, event);
     }
 
-    public boolean matchesEvent(@Nonnull final LocatableEvent event, final DebugProcessImpl process) throws EvaluateException {
+    public boolean matchesEvent(final LocatableEvent event, final DebugProcessImpl process) throws EvaluateException {
         if (isEmulated()) {
             return true;
         }
@@ -432,7 +425,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
     }
 
     @Nullable
-    public static MethodBreakpoint create(@Nonnull Project project, XBreakpoint xBreakpoint) {
+    public static MethodBreakpoint create(Project project, XBreakpoint xBreakpoint) {
         final MethodBreakpoint breakpoint = new MethodBreakpoint(project, xBreakpoint);
         return (MethodBreakpoint) breakpoint.init();
     }
@@ -446,7 +439,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
      * finds FQ method's class name and method's signature
      */
     @Nullable
-    private static MethodDescriptor getMethodDescriptor(@Nonnull final Project project, @Nonnull final PsiFile psiJavaFile, @Nonnull final SourcePosition sourcePosition) {
+    private static MethodDescriptor getMethodDescriptor(final Project project, final PsiFile psiJavaFile, final SourcePosition sourcePosition) {
         final PsiDocumentManager docManager = PsiDocumentManager.getInstance(project);
         final Document document = docManager.getDocument(psiJavaFile);
         if (document == null) {
@@ -492,12 +485,12 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
 
     @Nullable
     @SuppressWarnings("unchecked")
-    static <T extends EventRequest> T findRequest(@Nonnull DebugProcessImpl debugProcess, Class<T> requestClass, Requestor requestor) {
+    static <T extends EventRequest> T findRequest(DebugProcessImpl debugProcess, Class<T> requestClass, Requestor requestor) {
         return (T) debugProcess.getRequestsManager().findRequests(requestor).stream().filter(eventRequest -> requestClass.isInstance(eventRequest)).findFirst().orElse(null);
     }
 
     @Override
-    public void readExternal(@Nonnull Element breakpointNode) throws InvalidDataException {
+    public void readExternal(Element breakpointNode) throws InvalidDataException {
         super.readExternal(breakpointNode);
         try {
             getProperties().WATCH_ENTRY = Boolean.valueOf(JDOMExternalizerUtil.readField(breakpointNode, "WATCH_ENTRY"));
@@ -554,7 +547,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
         int methodLine;
     }
 
-    private static boolean instanceOf(@Nullable ReferenceType type, @Nonnull ReferenceType superType) {
+    private static boolean instanceOf(@Nullable ReferenceType type, ReferenceType superType) {
         if (type == null) {
             return false;
         }

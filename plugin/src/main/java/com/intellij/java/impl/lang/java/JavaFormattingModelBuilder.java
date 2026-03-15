@@ -37,15 +37,13 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
   private static final Logger LOG = Logger.getInstance(JavaFormattingModelBuilder.class);
 
   @Override
-  @Nonnull
   public FormattingModel createModel(FormattingContext context) {
     CodeStyleSettings settings = context.getCodeStyleSettings();
     PsiElement element = context.getPsiElement();
@@ -98,7 +96,7 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
    * @return given node range if there is no error-element before it; combined range otherwise
    */
   @Nullable
-  private static TextRange combineWithErrorElementIfPossible(@Nonnull ASTNode node) {
+  private static TextRange combineWithErrorElementIfPossible(ASTNode node) {
     if (node.getElementType() == TokenType.ERROR_ELEMENT) {
       return node.getTextRange();
     }
@@ -128,7 +126,6 @@ public class JavaFormattingModelBuilder implements FormattingModelBuilderEx {
     return result;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

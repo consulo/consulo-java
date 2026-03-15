@@ -43,8 +43,7 @@ import consulo.language.psi.PsiFileFactory;
 import consulo.project.Project;
 import consulo.util.lang.LocalTimeCounter;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.impl.application.options.JavaDocFormattingPanel.*;
 
@@ -53,7 +52,6 @@ import static com.intellij.java.impl.application.options.JavaDocFormattingPanel.
  */
 @ExtensionImpl
 public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSettingsProvider {
-  @Nonnull
   @Override
   public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings modelSettings) {
     return new CodeStyleAbstractConfigurable(settings, modelSettings, JavaLanguageLocalize.javaLanguageDisplayName()) {
@@ -75,14 +73,13 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
     return new JavaCodeStyleSettings(settings);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }
 
   @Override
-  public String getCodeSample(@Nonnull SettingsType settingsType) {
+  public String getCodeSample(SettingsType settingsType) {
     if (settingsType == SettingsType.SPACING_SETTINGS) {
       return SPACING_SAMPLE;
     }
@@ -97,7 +94,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   }
 
   @Override
-  public int getRightMargin(@Nonnull SettingsType settingsType) {
+  public int getRightMargin(SettingsType settingsType) {
     if (settingsType == SettingsType.WRAPPING_AND_BRACES_SETTINGS) {
       return 37;
     }
@@ -105,7 +102,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
   }
 
   @Override
-  public void customizeSettings(@Nonnull CodeStyleSettingsCustomizable consumer, @Nonnull SettingsType settingsType) {
+  public void customizeSettings(CodeStyleSettingsCustomizable consumer, SettingsType settingsType) {
     if (settingsType == SettingsType.SPACING_SETTINGS) {
       consumer.showAllStandardOptions();
       consumer.showCustomOption(JavaCodeStyleSettings.class, "SPACES_WITHIN_ANGLE_BRACKETS", "Angle brackets", CodeStyleSettingsCustomizable.SPACES_WITHIN);
@@ -316,8 +313,7 @@ public class JavaLanguageCodeStyleSettingsProvider extends LanguageCodeStyleSett
 
 
   @Override
-  @Nonnull
-  public DocCommentSettings getDocCommentSettings(@Nonnull CodeStyleSettings rootSettings) {
+  public DocCommentSettings getDocCommentSettings(CodeStyleSettings rootSettings) {
     return new DocCommentSettings() {
       private final JavaCodeStyleSettings mySettings =
           rootSettings.getCustomSettings(JavaCodeStyleSettings.class);

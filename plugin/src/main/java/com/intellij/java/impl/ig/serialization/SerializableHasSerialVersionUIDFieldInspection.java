@@ -24,26 +24,22 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class SerializableHasSerialVersionUIDFieldInspection extends SerializableInspection {
     @Pattern("[a-zA-Z_0-9.-]+")
     @Override
-    @Nonnull
     public String getID() {
         return "serial";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.serializableClassWithoutSerialversionuidDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.serializableClassWithoutSerialversionuidProblemDescriptor().get();
     }
@@ -60,7 +56,7 @@ public class SerializableHasSerialVersionUIDFieldInspection extends Serializable
 
     private class SerializableHasSerialVersionUIDFieldVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
                 return;
             }

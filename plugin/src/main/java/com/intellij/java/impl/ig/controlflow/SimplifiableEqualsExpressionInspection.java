@@ -30,19 +30,15 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class SimplifiableEqualsExpressionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.simplifiableEqualsExpressionDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.simplifiableEqualsExpressionProblemDescriptor(infos[0]).get();
@@ -61,7 +57,6 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
             myMethodName = methodName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.simplifiableEqualsExpressionQuickfix(myMethodName);
@@ -80,7 +75,7 @@ public class SimplifiableEqualsExpressionInspection extends BaseInspection {
                 return;
             }
             PsiExpression operand = ParenthesesUtils.stripParentheses(operands[1]);
-            @NonNls StringBuilder newExpressionText = new StringBuilder();
+            StringBuilder newExpressionText = new StringBuilder();
             if (operand instanceof PsiPrefixExpression) {
                 PsiPrefixExpression prefixExpression = (PsiPrefixExpression) operand;
                 if (!JavaTokenType.EXCL.equals(prefixExpression.getOperationTokenType())) {

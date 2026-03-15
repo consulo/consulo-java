@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.util.PsiUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public final class EmptySubstitutor implements PsiSubstitutor {
   }
 
   @Override
-  public PsiType substitute(@Nonnull PsiTypeParameter typeParameter) {
+  public PsiType substitute(PsiTypeParameter typeParameter) {
     return JavaPsiFacade.getElementFactory(typeParameter.getProject()).createType(typeParameter);
   }
 
@@ -42,41 +41,36 @@ public final class EmptySubstitutor implements PsiSubstitutor {
   }
 
   @Override
-  public PsiType substituteWithBoundsPromotion(@Nonnull PsiTypeParameter typeParameter) {
+  public PsiType substituteWithBoundsPromotion(PsiTypeParameter typeParameter) {
     return JavaPsiFacade.getElementFactory(typeParameter.getProject()).createType(typeParameter);
   }
 
-  @Nonnull
   @Override
-  public PsiSubstitutor put(@Nonnull PsiTypeParameter classParameter, PsiType mapping) {
+  public PsiSubstitutor put(PsiTypeParameter classParameter, PsiType mapping) {
     if (mapping != null) {
       PsiUtil.ensureValidType(mapping);
     }
     return PsiSubstitutorFactory.getInstance().createSubstitutor(classParameter, mapping);
   }
 
-  @Nonnull
   @Override
-  public PsiSubstitutor putAll(@Nonnull PsiClass parentClass, PsiType[] mappings) {
+  public PsiSubstitutor putAll(PsiClass parentClass, PsiType[] mappings) {
     if (!parentClass.hasTypeParameters())
       return this;
     return PsiSubstitutorFactory.getInstance().createSubstitutor(parentClass, mappings);
   }
 
-  @Nonnull
   @Override
-  public PsiSubstitutor putAll(@Nonnull PsiSubstitutor another) {
+  public PsiSubstitutor putAll(PsiSubstitutor another) {
     return another;
   }
 
-  @Nonnull
   @Override
-  public PsiSubstitutor putAll(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
+  public PsiSubstitutor putAll(Map<? extends PsiTypeParameter, ? extends PsiType> map) {
     return map.isEmpty() ? EMPTY : PsiSubstitutorFactory.getInstance().createSubstitutor(map);
   }
 
   @Override
-  @Nonnull
   public Map<PsiTypeParameter, PsiType> getSubstitutionMap() {
     return Collections.emptyMap();
   }

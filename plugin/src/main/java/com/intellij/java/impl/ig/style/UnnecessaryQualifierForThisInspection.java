@@ -31,17 +31,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryQualifierForThisInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryQualifierForThisDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryQualifierForThisProblemDescriptor().get();
     }
@@ -55,7 +52,6 @@ public class UnnecessaryQualifierForThisInspection extends BaseInspection {
     }
 
     private static class UnnecessaryQualifierForThisFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryQualifierForThisRemoveQuickfix();
@@ -70,7 +66,7 @@ public class UnnecessaryQualifierForThisInspection extends BaseInspection {
 
     private static class UnnecessaryQualifierForThisVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitThisExpression(@Nonnull PsiThisExpression thisExpression) {
+        public void visitThisExpression(PsiThisExpression thisExpression) {
             super.visitThisExpression(thisExpression);
             PsiJavaCodeReferenceElement qualifier = thisExpression.getQualifier();
             if (qualifier == null) {

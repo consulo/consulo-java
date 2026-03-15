@@ -20,14 +20,12 @@ import com.intellij.java.language.psi.*;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Danila Ponomarenko
  */
 public abstract class BaseBracesIntention extends MutablyNamedIntention {
-    @Nonnull
     @Override
     protected final LocalizeValue getTextForElement(PsiElement element) {
         PsiElement body = getSurroundingStatement(element);
@@ -38,11 +36,9 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
         return getMessageKey(getKeyword(body.getParent(), body));
     }
 
-    @Nonnull
     protected abstract LocalizeValue getMessageKey(String key);
 
-    @Nonnull
-    private static String getKeyword(@Nonnull PsiElement parent, @Nonnull PsiElement element) {
+    private static String getKeyword(PsiElement parent, PsiElement element) {
         if (parent instanceof PsiIfStatement) {
             PsiIfStatement ifStatement = (PsiIfStatement) parent;
             PsiStatement elseBranch = ifStatement.getElseBranch();
@@ -55,7 +51,7 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
 
 
     @Nullable
-    protected static PsiStatement getSurroundingStatement(@Nonnull PsiElement element) {
+    protected static PsiStatement getSurroundingStatement(PsiElement element) {
         PsiElement parent = element.getParent();
         if (parent instanceof PsiIfStatement) {
             PsiIfStatement ifStatement = (PsiIfStatement) parent;
@@ -82,7 +78,7 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
         return null;
     }
 
-    private static boolean isBetweenThen(@Nonnull PsiIfStatement ifStatement, @Nonnull PsiElement element) {
+    private static boolean isBetweenThen(PsiIfStatement ifStatement, PsiElement element) {
         PsiElement rParenth = ifStatement.getRParenth();
         PsiElement elseElement = ifStatement.getElseElement();
 
@@ -101,7 +97,7 @@ public abstract class BaseBracesIntention extends MutablyNamedIntention {
         return new TextRange(rParenthTextRangeTextRange.getEndOffset(), elseElementTextRange.getStartOffset()).contains(elementTextRange);
     }
 
-    private static boolean isBetweenElse(@Nonnull PsiIfStatement ifStatement, @Nonnull PsiElement element) {
+    private static boolean isBetweenElse(PsiIfStatement ifStatement, PsiElement element) {
         PsiElement elseElement = ifStatement.getElseElement();
 
         if (elseElement == null) {

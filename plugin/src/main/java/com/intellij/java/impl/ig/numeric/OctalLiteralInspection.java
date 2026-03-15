@@ -23,26 +23,22 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class OctalLiteralInspection extends BaseInspection {
     @Pattern(VALID_ID_PATTERN)
     @Override
-    @Nonnull
     public String getID() {
         return "OctalInteger";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.octalLiteralDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.octalLiteralProblemDescriptor().get();
     }
@@ -52,7 +48,6 @@ public class OctalLiteralInspection extends BaseInspection {
         return true;
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         return new InspectionGadgetsFix[]{
@@ -68,7 +63,7 @@ public class OctalLiteralInspection extends BaseInspection {
 
     private static class OctalLiteralVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitLiteralExpression(@Nonnull PsiLiteralExpression literal) {
+        public void visitLiteralExpression(PsiLiteralExpression literal) {
             super.visitLiteralExpression(literal);
             PsiType type = literal.getType();
             if (type == null) {

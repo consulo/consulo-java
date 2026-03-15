@@ -19,16 +19,13 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 public abstract class CyclomaticComplexityInspection extends MethodMetricInspection {
 
-  @Nonnull
   public String getID() {
     return "OverlyComplexMethod";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.cyclomaticComplexityDisplayName();
   }
@@ -41,7 +38,6 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
     return InspectionGadgetsLocalize.methodComplexityLimitOption().get();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     Integer complexity = (Integer)infos[0];
     return InspectionGadgetsLocalize.cyclomaticComplexityProblemDescriptor(complexity).get();
@@ -54,7 +50,7 @@ public abstract class CyclomaticComplexityInspection extends MethodMetricInspect
   private class MethodComplexityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

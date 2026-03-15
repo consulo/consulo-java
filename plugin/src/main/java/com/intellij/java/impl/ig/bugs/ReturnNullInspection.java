@@ -31,8 +31,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -49,20 +48,17 @@ public class ReturnNullInspection extends BaseInspection {
     public boolean m_ignorePrivateMethods = false;
 
     @Override
-    @Nonnull
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ReturnOfNull";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.returnOfNullDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.returnOfNullProblemDescriptor().get();
     }
@@ -101,7 +97,7 @@ public class ReturnNullInspection extends BaseInspection {
 
         @Override
         public void visitLiteralExpression(
-            @Nonnull PsiLiteralExpression value
+            PsiLiteralExpression value
         ) {
             super.visitLiteralExpression(value);
             String text = value.getText();

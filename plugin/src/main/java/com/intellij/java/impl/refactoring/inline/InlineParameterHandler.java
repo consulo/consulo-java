@@ -44,8 +44,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -301,7 +300,6 @@ public class InlineParameterHandler extends JavaInlineActionHandler {
         return value1 != null && value2 != null && value1.equals(value2);
     }
 
-    @Nonnull
     private static LocalizeValue getCannotInlineMessage(PsiParameter psiParameter, PsiMethod method) {
         if (psiParameter.isVarArgs()) {
             return RefactoringLocalize.inlineParameterErrorVarargs();

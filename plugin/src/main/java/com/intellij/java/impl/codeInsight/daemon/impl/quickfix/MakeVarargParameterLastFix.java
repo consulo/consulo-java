@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -39,18 +38,17 @@ public class MakeVarargParameterLastFix implements SyntheticIntentionAction {
   private final PsiParameter myParameter;
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.makeVarargParameterLastText(myParameter.getName());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myParameter.isValid() && myParameter.getManager().isInProject(myParameter);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myParameter)) return;
     myParameter.getParent().add(myParameter);
     myParameter.delete();

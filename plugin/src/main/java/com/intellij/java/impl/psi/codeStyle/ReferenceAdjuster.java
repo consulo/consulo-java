@@ -26,8 +26,7 @@ import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Max Medvedev
@@ -37,7 +36,7 @@ public interface ReferenceAdjuster extends LanguageExtension {
   ExtensionPointCacheKey<ReferenceAdjuster, ByLanguageValue<ReferenceAdjuster>> KEY = ExtensionPointCacheKey.create("ReferenceAdjuster", LanguageOneToOne.build());
 
   @Nullable
-  static ReferenceAdjuster forLanguage(@Nonnull Language language) {
+  static ReferenceAdjuster forLanguage(Language language) {
     return Application.get().getExtensionPoint(ReferenceAdjuster.class).getOrBuildCache(KEY).get(language);
   }
 

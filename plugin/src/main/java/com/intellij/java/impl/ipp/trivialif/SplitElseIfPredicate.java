@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiStatement;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import org.jetbrains.annotations.NonNls;
 
 class SplitElseIfPredicate implements PsiElementPredicate {
 
@@ -30,7 +29,7 @@ class SplitElseIfPredicate implements PsiElementPredicate {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
-    @NonNls String text = element.getText();
+    String text = element.getText();
     if (!PsiKeyword.ELSE.equals(text)) {
       return false;
     }

@@ -23,7 +23,6 @@ import consulo.language.icon.IconDescriptor;
 import consulo.language.icon.IconDescriptorUpdater;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -33,7 +32,7 @@ import jakarta.annotation.Nonnull;
 public class TestIconDescriptorUpdater implements IconDescriptorUpdater {
   @RequiredReadAction
   @Override
-  public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement element, int flags) {
+  public void updateIcon(IconDescriptor iconDescriptor, PsiElement element, int flags) {
     for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
       if (framework.isIgnoredMethod(element)) {
         iconDescriptor.setMainIcon(AllIcons.RunConfigurations.IgnoredTest);

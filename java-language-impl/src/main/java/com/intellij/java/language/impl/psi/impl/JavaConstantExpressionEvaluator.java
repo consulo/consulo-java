@@ -28,8 +28,7 @@ import consulo.util.collection.Maps;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ObjectUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Supplier;
@@ -91,10 +90,10 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
     }
   };
 
-  private Object getCached(@Nonnull PsiElement element) {
+  private Object getCached(PsiElement element) {
     return map().get(element);
   }
-  private Object cache(@Nonnull PsiElement element, @Nullable Object value) {
+  private Object cache(PsiElement element, @Nullable Object value) {
     value = Maps.cacheOrGet(map(), element, value == null ? NO_VALUE : value);
     if (value == NO_VALUE) {
       value = null;
@@ -102,7 +101,6 @@ public class JavaConstantExpressionEvaluator extends JavaRecursiveElementWalking
     return value;
   }
 
-  @Nonnull
   private ConcurrentMap<PsiElement, Object> map() {
     return myMapFactory.get();
   }

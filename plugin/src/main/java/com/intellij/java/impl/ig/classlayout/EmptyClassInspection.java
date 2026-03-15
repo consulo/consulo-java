@@ -29,8 +29,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,14 +44,12 @@ public class EmptyClassInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean ignoreThrowables = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.emptyClassDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         Object element = infos[0];
         if (element instanceof PsiAnonymousClass) {
@@ -97,7 +93,6 @@ public class EmptyClassInspection extends BaseInspection {
         return panel;
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         Object info = infos[0];
@@ -123,7 +118,7 @@ public class EmptyClassInspection extends BaseInspection {
             if (javaFile.getClasses().length != 0) {
                 return;
             }
-            @NonNls String fileName = javaFile.getName();
+            String fileName = javaFile.getName();
             if ("package-info.java".equals(fileName)) {
                 return;
             }
@@ -131,7 +126,7 @@ public class EmptyClassInspection extends BaseInspection {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             //don't call super, to prevent drilldown
     /*  if (JspPsiUtil.isInJspFile(aClass.getContainingFile())) {
         return;

@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiResourceList;
 import com.intellij.java.language.psi.PsiTryStatement;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -157,11 +156,10 @@ public abstract class Trap {
 
   private final PsiElement anchor;
 
-  public Trap(@Nonnull PsiElement anchor) {
+  public Trap(PsiElement anchor) {
     this.anchor = anchor;
   }
 
-  @Nonnull
   public PsiElement getAnchor() {
     return anchor;
   }

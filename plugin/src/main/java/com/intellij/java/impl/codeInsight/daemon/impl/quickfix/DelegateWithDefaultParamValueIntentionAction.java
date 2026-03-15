@@ -42,8 +42,7 @@ import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -55,7 +54,7 @@ import java.util.HashSet;
 @IntentionMetaData(ignoreId = "java.DelegateWithDefaultParamValueIntentionAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBaseIntentionAction implements Iconable, LowPriorityAction {
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     PsiParameter parameter = PsiTreeUtil.getParentOfType(element, PsiParameter.class);
     if (parameter != null) {
       if (!parameter.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
@@ -96,7 +95,7 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(final Project project, final Editor editor, PsiElement element) throws IncorrectOperationException {
     final PsiParameter[] parameters = getParams(element);
     if (parameters == null || parameters.length == 0) return;
     final PsiMethod method = (PsiMethod)parameters[0].getDeclarationScope();
@@ -171,7 +170,6 @@ public class DelegateWithDefaultParamValueIntentionAction extends PsiElementBase
     return new PsiParameter[]{PsiTreeUtil.getParentOfType(element, PsiParameter.class)};
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Generate delegated method with default parameter value");

@@ -10,8 +10,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariable
 import com.intellij.java.language.psi.*;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Objects;
@@ -50,11 +49,10 @@ public abstract class ContractReturnValue {
             : JavaAnalysisLocalize.contractReturnValidatorReturnTypeMustBeBoolean().get();
 
     private final
-    @Nonnull
     String myName;
     private final int myOrdinal;
 
-    private ContractReturnValue(@Nonnull String name, int ordinal) {
+    private ContractReturnValue(String name, int ordinal) {
         myName = name;
         myOrdinal = ordinal;
     }
@@ -84,7 +82,6 @@ public abstract class ContractReturnValue {
      * @return null if this contract return value makes sense for the supplied return type.
      * Otherwise the human-readable error message is returned.
      */
-    @Nonnull
     public final LocalizeValue getMethodCompatibilityProblem(PsiMethod method) {
         return validators()
             .map(fn -> fn.apply(method))
@@ -217,7 +214,6 @@ public abstract class ContractReturnValue {
      * @return a ContractReturnValue object. Returns an object which represents any possible value if the supplied ordinal does not
      * correspond to any valid ContractReturnValue.
      */
-    @Nonnull
     public static ContractReturnValue valueOf(int ordinal) {
         switch (ordinal) {
             case 0:
@@ -252,7 +248,7 @@ public abstract class ContractReturnValue {
      * @return ContractReturnValue object which corresponds to given string representation; null if given value is not supported.
      */
     @Nullable
-    public static ContractReturnValue valueOf(@Nonnull String value) {
+    public static ContractReturnValue valueOf(String value) {
         switch (value) {
             case "_":
                 return returnAny();

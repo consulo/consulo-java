@@ -17,9 +17,7 @@ package consulo.deadCodeNotWorking.impl;
 
 import consulo.language.editor.inspection.InspectionTool;
 import consulo.util.lang.function.BooleanConsumer;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -30,7 +28,7 @@ import java.util.function.BooleanSupplier;
 public class CheckBox extends JCheckBox
 {
 	@Deprecated
-	public CheckBox(@Nonnull String label, @Nonnull InspectionTool owner, @NonNls String property)
+	public CheckBox(String label, InspectionTool owner, String property)
 	{
 		super(label, getPropertyValue(owner, property));
 		ButtonModel model = getModel();
@@ -38,7 +36,7 @@ public class CheckBox extends JCheckBox
 		model.addChangeListener(listener);
 	}
 
-	public CheckBox(@Nonnull String label, @Nonnull BooleanSupplier getter, @Nonnull BooleanConsumer setter)
+	public CheckBox(String label, BooleanSupplier getter, BooleanConsumer setter)
 	{
 		super(label, getter.getAsBoolean());
 		ButtonModel model = getModel();

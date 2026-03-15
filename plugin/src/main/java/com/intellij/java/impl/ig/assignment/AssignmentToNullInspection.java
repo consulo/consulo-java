@@ -28,7 +28,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,13 +36,11 @@ public class AssignmentToNullInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreAssignmentsToFields = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentToNullDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.assignmentToNullProblemDescriptor().get();
@@ -78,7 +75,7 @@ public class AssignmentToNullInspection extends BaseInspection {
 
         @Override
         public void visitLiteralExpression(
-            @Nonnull PsiLiteralExpression value
+            PsiLiteralExpression value
         ) {
             super.visitLiteralExpression(value);
             String text = value.getText();

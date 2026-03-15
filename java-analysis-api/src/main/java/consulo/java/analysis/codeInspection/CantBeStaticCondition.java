@@ -3,7 +3,6 @@ package consulo.java.analysis.codeInspection;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -11,5 +10,5 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface CantBeStaticCondition {
-  boolean cantBeStatic(@Nonnull PsiElement element);
+  boolean cantBeStatic(PsiElement element);
 }

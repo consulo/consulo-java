@@ -15,11 +15,9 @@
  */
 package com.intellij.codeInsight.completion;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author ik
@@ -37,7 +35,6 @@ public abstract class KeywordCompletionTest extends LightCompletionTestCase {
   private static final String[] INTERFACE_SCOPE_KEYWORDS = {
     "package", "public", "private", "protected", "transient", "volatile", "static", "import", "final", "class", "interface", "abstract", "default"};
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();
@@ -130,7 +127,7 @@ public abstract class KeywordCompletionTest extends LightCompletionTestCase {
   }
 
   // todo: check included/excluded variants separately
-  protected void doTest(int finalCount, @NonNls String... values) {
+  protected void doTest(int finalCount, String... values) {
     configureByFile(BASE_PATH + "/" + getTestName(true) + ".java");
     testByCount(finalCount, values);
   }

@@ -30,15 +30,12 @@ import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
 
 public class StackTraceLine {
   private final Project myProject;
   private final String myLine;
-  @NonNls
   protected static final String AT_STR = "at";
   protected static final String AT__STR = AT_STR + " ";
-  @NonNls
   protected static final String INIT_MESSAGE = "<init>";
 
   public StackTraceLine(Project project, final String line) {

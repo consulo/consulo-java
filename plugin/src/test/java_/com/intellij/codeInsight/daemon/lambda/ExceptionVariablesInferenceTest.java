@@ -16,10 +16,9 @@
 package com.intellij.codeInsight.daemon.lambda;
 
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
-import org.jetbrains.annotations.NonNls;
 
 public abstract class ExceptionVariablesInferenceTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/exceptions";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/exceptions";
 
   public void testUnboundExceptions() throws Exception {
     doTest();

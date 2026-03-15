@@ -29,7 +29,7 @@ import com.intellij.java.language.psi.PsiThrowStatement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.ast.TokenSet;
 import consulo.util.lang.CharArrayUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LeaveCodeBlockEnterProcessor implements EnterProcessor
 {

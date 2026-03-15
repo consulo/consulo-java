@@ -22,26 +22,21 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class TeardownIsPublicVoidNoArgInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "TearDownWithIncorrectSignature";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.teardownIsPublicVoidNoArgDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.teardownIsPublicVoidNoArgProblemDescriptor().get();
   }
@@ -55,9 +50,9 @@ public class TeardownIsPublicVoidNoArgInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       //note: no call to super;
-      @NonNls String methodName = method.getName();
+      String methodName = method.getName();
       if (!"tearDown".equals(methodName)) {
         return;
       }

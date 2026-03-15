@@ -42,8 +42,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -210,7 +209,6 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler {
         return callToInline;
     }
 
-    @Nonnull
     @RequiredReadAction
     public static LocalizeValue getCannotInlineMessage(PsiClass psiClass) {
         if (psiClass instanceof PsiTypeParameter) {
@@ -327,7 +325,6 @@ public class InlineToAnonymousClassHandler extends JavaInlineActionHandler {
         return redundantImplements;
     }
 
-    @Nonnull
     @RequiredReadAction
     private static LocalizeValue getCannotInlineDueToUsagesMessage(PsiClass aClass) {
         boolean hasUsages = false;

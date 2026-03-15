@@ -33,7 +33,6 @@ import consulo.language.psi.resolve.BaseScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.util.dataholder.Key;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,7 +66,7 @@ public class VariablesProcessor
 
   /** Always return true since we wanna get all vars in scope */
   @Override
-  public boolean execute(@Nonnull PsiElement pe, ResolveState state){
+  public boolean execute(PsiElement pe, ResolveState state){
     if(pe instanceof PsiVariable){
       final PsiVariable pvar = (PsiVariable)pe;
       final String pvar_name = pvar.getName();
@@ -95,7 +94,7 @@ public class VariablesProcessor
   }
 
   @Override
-  public <T> T getHint(@Nonnull Key<T> hintKey) {
+  public <T> T getHint(Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       return (T)this;
     }

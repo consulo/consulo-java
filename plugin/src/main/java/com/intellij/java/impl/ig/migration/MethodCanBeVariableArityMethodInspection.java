@@ -29,8 +29,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import javax.swing.*;
 
@@ -43,13 +41,11 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreOverridingMethods = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.methodCanBeVariableArityMethodDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.methodCanBeVariableArityMethodProblemDescriptor().get();
@@ -76,7 +72,6 @@ public class MethodCanBeVariableArityMethodInspection extends BaseInspection {
 
     private static class MethodCanBeVariableArityMethodFix extends InspectionGadgetsFix {
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.convertToVariableArityMethodQuickfix();

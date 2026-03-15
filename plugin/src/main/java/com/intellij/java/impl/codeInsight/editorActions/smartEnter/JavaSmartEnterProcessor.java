@@ -45,8 +45,7 @@ import consulo.ui.ex.action.IdeActions;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.CharArrayUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,7 +113,6 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
   private static final int MAX_ATTEMPTS = 20;
   private static final Key<Long> SMART_ENTER_TIMESTAMP = Key.create("smartEnterOriginalTimestamp");
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
@@ -126,14 +124,14 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
   private final JavadocFixer myJavadocFixer = new JavadocFixer();
 
   @Override
-  public boolean process(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile psiFile) {
+  public boolean process(Project project, Editor editor, PsiFile psiFile) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("codeassists.complete.statement");
 
     return invokeProcessor(editor, psiFile, false);
   }
 
   @Override
-  public boolean processAfterCompletion(@Nonnull Editor editor, @Nonnull PsiFile psiFile) {
+  public boolean processAfterCompletion(Editor editor, PsiFile psiFile) {
     return invokeProcessor(editor, psiFile, true);
   }
 
@@ -153,7 +151,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     return true;
   }
 
-  private void process(@Nonnull Editor editor, @Nonnull PsiFile file, int attempt, boolean afterCompletion) throws TooManyAttemptsException {
+  private void process(Editor editor, PsiFile file, int attempt, boolean afterCompletion) throws TooManyAttemptsException {
     if (attempt > MAX_ATTEMPTS) {
       throw new TooManyAttemptsException();
     }
@@ -321,7 +319,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
         PsiPackageStatement ? statementAtCaret : null;
   }
 
-  protected void moveCaretInsideBracesIfAny(@Nonnull Editor editor, @Nonnull PsiFile file) throws IncorrectOperationException {
+  protected void moveCaretInsideBracesIfAny(Editor editor, PsiFile file) throws IncorrectOperationException {
     int caretOffset = editor.getCaretModel().getOffset();
     CharSequence chars = editor.getDocument().getCharsSequence();
 
@@ -360,7 +358,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     mySkipEnter = skipEnter;
   }
 
-  protected static void plainEnter(@Nonnull Editor editor) {
+  protected static void plainEnter(Editor editor) {
     getEnterHandler().execute(editor, ((EditorEx) editor).getDataContext());
   }
 
@@ -368,7 +366,7 @@ public class JavaSmartEnterProcessor extends SmartEnterProcessor {
     return EditorActionManager.getInstance().getActionHandler(IdeActions.ACTION_EDITOR_START_NEW_LINE);
   }
 
-  protected static boolean isModified(@Nonnull Editor editor) {
+  protected static boolean isModified(Editor editor) {
     Long timestamp = editor.getUserData(SMART_ENTER_TIMESTAMP);
     return editor.getDocument().getModificationStamp() != timestamp.longValue();
   }

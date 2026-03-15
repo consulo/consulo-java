@@ -23,7 +23,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -37,7 +36,6 @@ public abstract class IfStatementWithTooManyBranchesInspection extends BaseInspe
      */
     public int m_limit = DEFAULT_BRANCH_LIMIT;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesDisplayName();
@@ -48,7 +46,6 @@ public abstract class IfStatementWithTooManyBranchesInspection extends BaseInspe
         return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         Integer branchCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesProblemDescriptor(branchCount).get();
@@ -60,7 +57,7 @@ public abstract class IfStatementWithTooManyBranchesInspection extends BaseInspe
 
     private class IfStatementWithTooManyBranchesVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+        public void visitIfStatement(PsiIfStatement statement) {
             super.visitIfStatement(statement);
             PsiElement parent = statement.getParent();
             if (parent instanceof PsiIfStatement) {

@@ -28,8 +28,7 @@ import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
@@ -49,7 +48,6 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
         myJavaCodeFoldingSettingsProvider = javaCodeFoldingSettingsProvider;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return "editor.preferences.folding.java";
@@ -61,16 +59,14 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
         return "editor.preferences.folding";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.javaLanguageDisplayName();
     }
 
     @RequiredUIAccess
-    @Nonnull
     @Override
-    protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable uiDisposable) {
+    protected Component createLayout(PropertyBuilder propertyBuilder, Disposable uiDisposable) {
         VerticalLayout layout = VerticalLayout.create();
 
         JavaCodeFoldingSettings settings = myJavaCodeFoldingSettingsProvider.get();
@@ -140,9 +136,9 @@ public class JavaCodeFoldingConfigurable extends SimpleConfigurableByProperties 
     @RequiredUIAccess
     private void checkBox(LocalizeValue text,
                           VerticalLayout layout,
-                          @Nonnull PropertyBuilder builder,
-                          @Nonnull Supplier<Boolean> getter,
-                          @Nonnull Consumer<Boolean> setter) {
+                          PropertyBuilder builder,
+                          Supplier<Boolean> getter,
+                          Consumer<Boolean> setter) {
         CheckBox checkBox = CheckBox.create(text);
         builder.add(checkBox, getter, setter);
         layout.add(checkBox);

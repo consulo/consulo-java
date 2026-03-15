@@ -30,24 +30,20 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertVarargParameterToArrayIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ConvertVarargParameterToArrayIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.convertVarargParameterToArrayIntentionName();
     }
 
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new ConvertVarargParameterToArrayPredicate();
     }
 
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiParameterList parameterList = (PsiParameterList) element;
         convertVarargsToArray(parameterList);
@@ -100,7 +96,7 @@ public class ConvertVarargParameterToArrayIntention extends Intention {
         PsiExpressionList argumentList =
             methodCallExpression.getArgumentList();
         PsiExpression[] arguments = argumentList.getExpressions();
-        @NonNls StringBuilder builder = new StringBuilder("new ");
+        StringBuilder builder = new StringBuilder("new ");
         builder.append(arrayTypeText);
         builder.append("[]{");
         if (arguments.length > indexOfFirstVarargArgument) {

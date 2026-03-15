@@ -22,21 +22,19 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LightClassTypeReference extends LightClassReferenceBase implements PsiJavaCodeReferenceElement {
 
-  @Nonnull
   private final
   PsiClassType myType;
 
-  private LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull String text, @Nonnull PsiClassType type) {
+  private LightClassTypeReference(PsiManager manager, String text, PsiClassType type) {
     super(manager, text);
     myType = type;
   }
 
-  public LightClassTypeReference(@Nonnull PsiManager manager, @Nonnull PsiClassType type) {
+  public LightClassTypeReference(PsiManager manager, PsiClassType type) {
     this(manager, type.getCanonicalText(true), type);
   }
 
@@ -46,7 +44,6 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
     return myType.resolve();
   }
 
-  @Nonnull
   @Override
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     return myType.resolveGenerics();
@@ -68,12 +65,10 @@ public class LightClassTypeReference extends LightClassReferenceBase implements 
     return myType.isValid();
   }
 
-  @Nonnull
   public PsiClassType getType() {
     return myType;
   }
 
-  @Nonnull
   @Override
   public GlobalSearchScope getResolveScope() {
     return myType.getResolveScope();

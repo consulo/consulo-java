@@ -45,7 +45,6 @@ import consulo.util.lang.LocalTimeCounter;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -125,7 +124,7 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable {
   public void reset() {
     new WriteCommandAction(null) {
       @Override
-      protected void run(@Nonnull Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         myEditor.getDocument().setText(template.getTemplate());
       }
     }.execute();

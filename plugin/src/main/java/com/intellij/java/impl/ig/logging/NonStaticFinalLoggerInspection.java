@@ -28,7 +28,6 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 import javax.swing.*;
@@ -47,19 +46,16 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
     private final List<String> loggerClassNames = new ArrayList();
 
     @Override
-    @Nonnull
     public String getID() {
         return "NonConstantLogger";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonConstantLoggerDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonConstantLoggerProblemDescriptor().get();
     }
@@ -71,13 +67,13 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
     }
 
     @Override
-    public void readSettings(@Nonnull Element element) throws InvalidDataException {
+    public void readSettings(Element element) throws InvalidDataException {
         super.readSettings(element);
         parseString(loggerClassName, loggerClassNames);
     }
 
     @Override
-    public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+    public void writeSettings(Element element) throws WriteExternalException {
         loggerClassName = formatString(loggerClassNames);
         super.writeSettings(element);
     }
@@ -97,7 +93,7 @@ public class NonStaticFinalLoggerInspection extends BaseInspection {
     private class NonStaticFinalLoggerVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (aClass.isInterface() || aClass.isEnum() || aClass.isAnnotationType()) {
                 return;
             }

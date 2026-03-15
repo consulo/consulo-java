@@ -25,9 +25,8 @@ import consulo.application.util.NullableLazyValue;
 import consulo.internal.com.sun.jdi.ClassLoaderReference;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class EvaluationContextImpl implements EvaluationContext
 {
@@ -37,14 +36,14 @@ public final class EvaluationContextImpl implements EvaluationContext
 	private boolean myAutoLoadClasses = true;
 	private ClassLoaderReference myClassLoader;
 
-	public EvaluationContextImpl(@Nonnull SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy, @Nullable Value thisObject)
+	public EvaluationContextImpl(SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy, @Nullable Value thisObject)
 	{
 		myThisObject = NullableLazyValue.of(() -> thisObject);
 		myFrameProxy = frameProxy;
 		mySuspendContext = suspendContext;
 	}
 
-	public EvaluationContextImpl(@Nonnull SuspendContextImpl suspendContext, @Nonnull StackFrameProxyImpl frameProxy)
+	public EvaluationContextImpl(SuspendContextImpl suspendContext, StackFrameProxyImpl frameProxy)
 	{
 		myThisObject = NullableLazyValue.of(() ->
 		{
@@ -68,7 +67,6 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return myThisObject.getValue();
 	}
 
-	@Nonnull
 	@Override
 	public SuspendContextImpl getSuspendContext()
 	{
@@ -81,7 +79,6 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return myFrameProxy;
 	}
 
-	@Nonnull
 	@Override
 	public DebugProcessImpl getDebugProcess()
 	{

@@ -20,8 +20,6 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
 import consulo.util.lang.BitUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -30,28 +28,27 @@ import java.util.List;
 import java.util.Set;
 
 abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, PsiMethod> {
-  JavaMethodElementType(@NonNls final String name) {
+  JavaMethodElementType(final String name) {
     super(name);
   }
 
   @Override
-  public PsiMethod createPsi(@Nonnull final PsiMethodStub stub) {
+  public PsiMethod createPsi(final PsiMethodStub stub) {
     return getPsiFactory(stub).createMethod(stub);
   }
 
   @Override
-  public PsiMethod createPsi(@Nonnull final ASTNode node) {
+  public PsiMethod createPsi(final ASTNode node) {
     if (node instanceof AnnotationMethodElement) {
       return new PsiAnnotationMethodImpl(node);
     }
     return new PsiMethodImpl(node);
   }
 
-  @Nonnull
   @Override
-  public PsiMethodStub createStub(@Nonnull final LighterAST tree,
-                                  @Nonnull final LighterASTNode node,
-                                  final @Nonnull StubElement parentStub) {
+  public PsiMethodStub createStub(final LighterAST tree,
+                                  final LighterASTNode node,
+                                  final StubElement parentStub) {
     String name = null;
     boolean isConstructor = true;
     boolean isVarArgs = false;
@@ -104,7 +101,7 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
   }
 
   @Override
-  public void serialize(@Nonnull final PsiMethodStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(final PsiMethodStub stub, final StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     TypeInfo.writeTYPE(dataStream, stub.getReturnTypeText());
     dataStream.writeByte(((PsiMethodStubImpl)stub).getFlags());
@@ -113,9 +110,8 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
     }
   }
 
-  @Nonnull
   @Override
-  public PsiMethodStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiMethodStub deserialize(final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     String name = dataStream.readNameString();
     final TypeInfo type = TypeInfo.readTYPE(dataStream);
     byte flags = dataStream.readByte();
@@ -124,7 +120,7 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
   }
 
   @Override
-  public void indexStub(@Nonnull final PsiMethodStub stub, @Nonnull final IndexSink sink) {
+  public void indexStub(final PsiMethodStub stub, final IndexSink sink) {
     final String name = stub.getName();
     if (name != null) {
       sink.occurrence(JavaStubIndexKeys.METHODS, name);
@@ -152,8 +148,7 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
     }
   }
 
-  @Nonnull
-  private static Set<String> getVisibleTypeParameters(@Nonnull StubElement<?> stub) {
+  private static Set<String> getVisibleTypeParameters(StubElement<?> stub) {
     Set<String> result = null;
     while (stub != null) {
       Set<String> names = getOwnTypeParameterNames(stub);
@@ -169,7 +164,7 @@ abstract class JavaMethodElementType extends JavaStubElementType<PsiMethodStub, 
     return result == null ? Collections.emptySet() : result;
   }
 
-  private static boolean isStatic(@Nonnull StubElement<?> stub) {
+  private static boolean isStatic(StubElement<?> stub) {
     if (stub instanceof PsiMemberStub) {
       PsiModifierListStub modList = stub.findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
       if (modList != null) {

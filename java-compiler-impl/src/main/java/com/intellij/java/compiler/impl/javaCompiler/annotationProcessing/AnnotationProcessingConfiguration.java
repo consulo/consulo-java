@@ -15,7 +15,6 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.annotationProcessing;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,18 +26,14 @@ import java.util.Set;
 public interface AnnotationProcessingConfiguration {
   boolean isEnabled();
 
-  @Nonnull
   String getProcessorPath();
 
-  @Nonnull
   String getGeneratedSourcesDirectoryName(boolean forTests);
 
   boolean isOutputRelativeToContentRoot();
 
-  @Nonnull
   Set<String> getProcessors();
 
-  @Nonnull
   Map<String, String> getProcessorOptions();
 
   boolean isObtainProcessorsFromClasspath();

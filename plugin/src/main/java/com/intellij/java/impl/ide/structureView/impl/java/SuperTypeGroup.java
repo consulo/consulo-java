@@ -27,7 +27,7 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.navigation.ItemPresentation;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;

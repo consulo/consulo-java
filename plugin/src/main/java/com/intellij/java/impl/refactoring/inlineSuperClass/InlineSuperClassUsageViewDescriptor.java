@@ -23,7 +23,6 @@ package com.intellij.java.impl.refactoring.inlineSuperClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
-import jakarta.annotation.Nonnull;
 
 public class InlineSuperClassUsageViewDescriptor extends UsageViewDescriptorAdapter{
   private final PsiClass myClass;
@@ -32,7 +31,6 @@ public class InlineSuperClassUsageViewDescriptor extends UsageViewDescriptorAdap
     myClass = aClass;
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myClass};
   }

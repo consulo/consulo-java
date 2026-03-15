@@ -33,15 +33,12 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ManualArrayToCollectionCopyInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.manualArrayToCollectionCopyDisplayName();
   }
@@ -52,7 +49,6 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.manualArrayToCollectionCopyProblemDescriptor().get();
   }
@@ -65,7 +61,6 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
   private static class ManualArrayToCollectionCopyFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.manualArrayToCollectionCopyReplaceQuickfix();
     }
@@ -124,7 +119,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
         return null;
       }
       String arrayText = iteratedValue.getText();
-      @NonNls StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new StringBuilder();
       if (PsiUtil.isLanguageLevel5OrHigher(foreachStatement)) {
         buffer.append("java.util.Collections.addAll(");
         buffer.append(collectionText);
@@ -197,7 +192,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
       else {
         limit = condition.getLOperand();
       }
-      @NonNls String toOffsetText =
+      String toOffsetText =
         buildToOffsetText(limit, tokenType == JavaTokenType.LE ||
                                  tokenType == JavaTokenType.GE);
       if (toOffsetText == null) {
@@ -206,7 +201,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
       if (fromOffsetText.equals("0") &&
           toOffsetText.equals(arrayText + ".length") &&
           PsiUtil.isLanguageLevel5OrHigher(forStatement)) {
-        @NonNls StringBuilder buffer =
+        StringBuilder buffer =
           new StringBuilder("java.util.Collections.addAll(");
         buffer.append(collectionText);
         buffer.append(',');
@@ -215,7 +210,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
         return buffer.toString();
       }
       else {
-        @NonNls StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder();
         buffer.append(collectionText);
         buffer.append('.');
         buffer.append("addAll(java.util.Arrays.asList(");
@@ -436,7 +431,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @Nonnull PsiForStatement statement) {
+      PsiForStatement statement) {
       super.visitForStatement(statement);
       PsiStatement initialization = statement.getInitialization();
       if (!(initialization instanceof PsiDeclarationStatement)) {
@@ -598,7 +593,7 @@ public class ManualArrayToCollectionCopyInspection extends BaseInspection {
       if (method == null) {
         return false;
       }
-      @NonNls String name = method.getName();
+      String name = method.getName();
       if (!name.equals("add")) {
         return false;
       }

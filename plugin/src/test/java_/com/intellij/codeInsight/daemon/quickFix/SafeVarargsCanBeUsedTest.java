@@ -17,11 +17,9 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.PossibleHeapPollutionVarargsInspection;
-import jakarta.annotation.Nonnull;
 
 
 public abstract class SafeVarargsCanBeUsedTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

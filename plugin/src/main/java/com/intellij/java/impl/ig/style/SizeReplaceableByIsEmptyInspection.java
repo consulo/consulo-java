@@ -36,9 +36,7 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.collection.OrderedSet;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,14 +49,12 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public OrderedSet<String> ignoredTypes = new OrderedSet<>();
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.sizeReplaceableByIsemptyDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(infos[0]).get();
     }
@@ -84,7 +80,6 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
     }
 
     private static class SizeReplaceableByIsEmptyFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.sizeReplaceableByIsemptyQuickfix();
@@ -106,7 +101,7 @@ public class SizeReplaceableByIsEmptyInspection extends BaseInspection {
             if (qualifierExpression == null) {
                 return;
             }
-            @NonNls String newExpression = qualifierExpression.getText();
+            String newExpression = qualifierExpression.getText();
             IElementType tokenType = binaryExpression.getOperationTokenType();
             if (!JavaTokenType.EQEQ.equals(tokenType)) {
                 newExpression = '!' + newExpression;

@@ -22,7 +22,6 @@ import consulo.language.psi.PsiNamedElement;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,7 +31,7 @@ public class NonCodeAnnotationGenerator {
   private final PsiModifierListOwner myOwner;
   private final StringBuilder myOutput;
 
-  NonCodeAnnotationGenerator(@Nonnull PsiModifierListOwner owner, StringBuilder output) {
+  NonCodeAnnotationGenerator(PsiModifierListOwner owner, StringBuilder output) {
     myOwner = owner;
     myOutput = output;
   }
@@ -66,7 +65,6 @@ public class NonCodeAnnotationGenerator {
     myOutput.append("</ul>\n");
   }
 
-  @Nonnull
   public static MultiMap<PsiModifierListOwner, AnnotationDocGenerator> getSignatureNonCodeAnnotations(PsiModifierListOwner owner) {
     MultiMap<PsiModifierListOwner, AnnotationDocGenerator> generators = MultiMap.createLinked();
     for (PsiModifierListOwner each : getSignatureOwners(owner)) {
@@ -78,7 +76,6 @@ public class NonCodeAnnotationGenerator {
     return generators;
   }
 
-  @Nonnull
   private static List<PsiModifierListOwner> getSignatureOwners(PsiModifierListOwner owner) {
     List<PsiModifierListOwner> allOwners = new ArrayList<>();
     allOwners.add(owner);
@@ -88,7 +85,6 @@ public class NonCodeAnnotationGenerator {
     return allOwners;
   }
 
-  @Nonnull
   public static String getNonCodeHeader(Collection<? extends AnnotationDocGenerator> values) {
     boolean hasExternal = values.stream().anyMatch(AnnotationDocGenerator::isExternal);
     boolean hasInferred = values.stream().anyMatch(AnnotationDocGenerator::isInferred);

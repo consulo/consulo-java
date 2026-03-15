@@ -20,8 +20,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class JavaEditorFileSwapper extends EditorFileSwapper {
@@ -57,7 +56,7 @@ public class JavaEditorFileSwapper extends EditorFileSwapper {
 
   @Nullable
   @RequiredReadAction
-  public static VirtualFile findSourceFile(@Nonnull Project project, @Nonnull VirtualFile file) {
+  public static VirtualFile findSourceFile(Project project, VirtualFile file) {
     PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
     if (psiFile instanceof PsiCompiledFile && psiFile instanceof PsiClassOwner) {
       PsiClass[] classes = ((PsiClassOwner) psiFile).getClasses();

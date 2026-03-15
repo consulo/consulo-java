@@ -24,8 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -39,13 +37,11 @@ public class CastToConcreteClassInspection extends BaseInspection {
   public boolean ignoreInEquals = true;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.castToConcreteClassDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     PsiType type= (PsiType)infos[0];
     return InspectionGadgetsLocalize.castToConcreteClassProblemDescriptor(type.getPresentableText()).get();
@@ -67,7 +63,7 @@ public class CastToConcreteClassInspection extends BaseInspection {
   private class CastToConcreteClassVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
+    public void visitTypeCastExpression(PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
       PsiTypeElement typeElement = expression.getCastType();
       if (typeElement == null) {
@@ -89,7 +85,7 @@ public class CastToConcreteClassInspection extends BaseInspection {
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls String referenceName = methodExpression.getReferenceName();
+      String referenceName = methodExpression.getReferenceName();
       if (!"cast".equals(referenceName)) {
         return;
       }

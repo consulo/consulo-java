@@ -15,7 +15,6 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 
 public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequiresStatementStub> implements PsiRequiresStatement {
   private final NotNullLazyValue<PsiJavaModuleReferenceElement> myModuleReference;
@@ -23,7 +22,6 @@ public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequire
   public ClsRequiresStatementImpl(PsiRequiresStatementStub stub) {
     super(stub);
     myModuleReference = new AtomicNotNullLazyValue<PsiJavaModuleReferenceElement>() {
-      @Nonnull
       @Override
       protected PsiJavaModuleReferenceElement compute() {
         return new ClsJavaModuleReferenceElementImpl(ClsRequiresStatementImpl.this, getStub().getModuleName());
@@ -47,7 +45,7 @@ public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequire
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     StringUtil.repeatSymbol(buffer, ' ', indentLevel);
     buffer.append("requires ");
     appendText(getModifierList(), indentLevel, buffer);
@@ -55,7 +53,7 @@ public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequire
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.REQUIRES_STATEMENT);
     setMirror(getModifierList(), SourceTreeToPsiMap.<PsiRequiresStatement>treeToPsiNotNull(element).getModifierList());
   }
@@ -67,7 +65,7 @@ public class ClsRequiresStatementImpl extends ClsRepositoryPsiElement<PsiRequire
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     PsiModifierList modifierList = getModifierList();
     return modifierList != null && modifierList.hasModifierProperty(name);
   }

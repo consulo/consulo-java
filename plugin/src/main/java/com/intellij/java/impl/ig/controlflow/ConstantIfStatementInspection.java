@@ -30,11 +30,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantIfStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.constantIfStatementDisplayName();
@@ -46,7 +44,6 @@ public class ConstantIfStatementInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.constantIfStatementProblemDescriptor().get();
     }
@@ -65,7 +62,6 @@ public class ConstantIfStatementInspection extends BaseInspection {
     }
 
     private static class ConstantIfStatementFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();

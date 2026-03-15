@@ -11,7 +11,6 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
 
 class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJavaModuleReferenceElement {
   private final PsiElement myParent;
@@ -25,7 +24,6 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     return PsiElement.EMPTY_ARRAY;
   }
@@ -36,16 +34,15 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append(getReferenceText());
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.MODULE_REFERENCE);
   }
 
-  @Nonnull
   @Override
   public String getReferenceText() {
     return myText;
@@ -67,7 +64,7 @@ class ClsJavaModuleReferenceElementImpl extends ClsElementImpl implements PsiJav
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitModuleReferenceElement(this);
     } else {

@@ -1,8 +1,7 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface PsiForeachStatementBase extends PsiLoopStatement {
   /**
@@ -18,7 +17,6 @@ public interface PsiForeachStatementBase extends PsiLoopStatement {
    *
    * @return the opening parenthesis.
    */
-  @Nonnull
   PsiJavaToken getLParenth();
 
   /**

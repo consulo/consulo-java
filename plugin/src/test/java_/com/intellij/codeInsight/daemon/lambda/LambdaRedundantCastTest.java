@@ -15,16 +15,13 @@
  */
 package com.intellij.codeInsight.daemon.lambda;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
 
 public abstract class LambdaRedundantCastTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/redundantCast";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/redundantCast";
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

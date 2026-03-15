@@ -23,18 +23,14 @@ import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class WaitNotInLoopInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.waitNotInLoopDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.waitNotInLoopProblemDescriptor().get();
   }
@@ -47,11 +43,11 @@ public class WaitNotInLoopInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.WAIT.equals(methodName)) {
         return;

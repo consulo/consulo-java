@@ -43,8 +43,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -118,7 +117,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 
     @Override
     @Nullable
-    public RefGraphAnnotator getAnnotator(@Nonnull RefManager refManager) {
+    public RefGraphAnnotator getAnnotator(RefManager refManager) {
         return new CanBeFinalAnnotator(refManager);
     }
 
@@ -126,12 +125,12 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor processor,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
+        Object state
     ) {
         if (refEntity instanceof RefJavaElement refElement) {
             if (refElement instanceof RefParameter || !refElement.isReferenced() || refElement.isSyntheticJSP() || refElement.isFinal()
@@ -192,13 +191,13 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 
         manager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull RefEntity refEntity) {
+            public void visitElement(RefEntity refEntity) {
                 if (problemsProcessor.getDescriptions(refEntity) == null) {
                     return;
                 }
                 refEntity.accept(new RefJavaVisitor() {
                     @Override
-                    public void visitMethod(@Nonnull RefMethod refMethod) {
+                    public void visitMethod(RefMethod refMethod) {
                         if (!refMethod.isStatic() && !PsiModifier.PRIVATE.equals(refMethod.getAccessModifier())
                             && !(refMethod instanceof RefImplicitConstructor)) {
                             globalContext.enqueueDerivedMethodsProcessor(refMethod, derivedMethod -> {
@@ -210,7 +209,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
                     }
 
                     @Override
-                    public void visitClass(@Nonnull RefClass refClass) {
+                    public void visitClass(RefClass refClass) {
                         if (!refClass.isAnonymous()) {
                             globalContext.enqueueDerivedClassesProcessor(
                                 refClass,
@@ -224,7 +223,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
                     }
 
                     @Override
-                    public void visitField(@Nonnull RefField refField) {
+                    public void visitField(RefField refField) {
                         globalContext.enqueueFieldUsagesProcessor(
                             refField,
                             psiReference -> {
@@ -252,20 +251,17 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
         return new AcceptSuggested(null);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionCanBeFinalDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }
@@ -277,7 +273,6 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
             myManager = manager;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix();
@@ -285,7 +280,7 @@ public class CanBeFinalInspection extends GlobalJavaInspectionTool implements Ol
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) {
                 return;
             }

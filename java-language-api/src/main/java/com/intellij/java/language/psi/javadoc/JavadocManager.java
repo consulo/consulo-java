@@ -21,8 +21,7 @@ import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author mike
@@ -38,7 +37,6 @@ public interface JavadocManager {
     }
   }
   
-  @Nonnull
   JavadocTagInfo[] getTagInfos(PsiElement context);
 
   @Nullable

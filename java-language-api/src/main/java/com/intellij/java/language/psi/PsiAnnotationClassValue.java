@@ -5,11 +5,10 @@ import com.intellij.java.language.jvm.JvmClass;
 import com.intellij.java.language.jvm.annotation.JvmAnnotationClassValue;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class PsiAnnotationClassValue extends PsiAnnotationAttributeValue<PsiClassObjectAccessExpression> implements JvmAnnotationClassValue {
-    PsiAnnotationClassValue(@Nonnull PsiClassObjectAccessExpression value) {
+    PsiAnnotationClassValue(PsiClassObjectAccessExpression value) {
         super(value);
     }
 

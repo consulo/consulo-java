@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import org.jetbrains.annotations.NonNls;
 
 class EqualsPredicate implements PsiElementPredicate {
 
@@ -44,7 +43,7 @@ class EqualsPredicate implements PsiElementPredicate {
     if (qualifier == null) {
       return false;
     }
-    @NonNls String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"equals".equals(methodName)) {
       return false;
     }

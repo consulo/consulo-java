@@ -26,9 +26,7 @@ package com.intellij.refactoring;
 
 import static org.junit.Assert.assertFalse;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.JavaLanguage;
 import consulo.language.psi.PsiElement;
@@ -41,14 +39,13 @@ import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class RenameFieldTest extends LightRefactoringTestCase
 {
-	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{
 		return JavaTestUtil.getJavaTestDataPath();
 	}
 
-	protected void doTest(@NonNls String newName, @NonNls String ext) throws Exception
+	protected void doTest(String newName, String ext) throws Exception
 	{
 		String suffix = getTestName(false);
 		configureByFile("/refactoring/renameField/before" + suffix + "." + ext);

@@ -23,17 +23,14 @@ import consulo.language.editor.highlight.LanguageVersionableSyntaxHighlighterFac
 import consulo.language.editor.highlight.SyntaxHighlighter;
 import consulo.language.version.LanguageVersion;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaSyntaxHighlighterFactory extends LanguageVersionableSyntaxHighlighterFactory {
-  @Nonnull
   @Override
-  public SyntaxHighlighter getSyntaxHighlighter(@Nonnull LanguageVersion languageVersion) {
+  public SyntaxHighlighter getSyntaxHighlighter(LanguageVersion languageVersion) {
     return new JavaFileHighlighter(languageVersion);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

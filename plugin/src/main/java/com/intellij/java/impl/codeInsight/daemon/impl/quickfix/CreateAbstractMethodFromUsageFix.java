@@ -23,13 +23,12 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix {
-    public CreateAbstractMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall) {
+    public CreateAbstractMethodFromUsageFix(PsiMethodCallExpression methodCall) {
         super(methodCall);
     }
 
@@ -38,7 +37,6 @@ public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix {
         return JavaQuickFixLocalize.createAbstractMethodFromUsageText(name);
     }
 
-    @Nonnull
     @Override
     protected List<PsiClass> getTargetClasses(PsiElement element) {
         List<PsiClass> result = new ArrayList<PsiClass>();
@@ -52,7 +50,7 @@ public class CreateAbstractMethodFromUsageFix extends CreateMethodFromUsageFix {
     }
 
     @Override
-    protected String getVisibility(PsiClass parentClass, @Nonnull PsiClass targetClass) {
+    protected String getVisibility(PsiClass parentClass, PsiClass targetClass) {
         String result = super.getVisibility(parentClass, targetClass);
         return PsiModifier.PUBLIC.equals(result) ? result : PsiModifier.PROTECTED;
     }

@@ -9,7 +9,6 @@ import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.PsiFile;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -27,13 +26,12 @@ public class HighlightVisitorFactoryImpl implements HighlightVisitorFactory
 	}
 
 	@Override
-	public boolean suitableForFile(@Nonnull PsiFile file)
+	public boolean suitableForFile(PsiFile file)
 	{
 		// both PsiJavaFile and PsiCodeFragment must match
 		return file instanceof PsiImportHolder && !InjectedLanguageManager.getInstance(file.getProject()).isInjectedFragment(file);
 	}
 
-	@Nonnull
 	@Override
 	public HighlightVisitor createVisitor()
 	{

@@ -22,7 +22,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageViewUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,24 +31,23 @@ public class VariableTypeFromCallFix implements SyntheticIntentionAction {
   private final PsiType myExpressionType;
   private final PsiVariable myVar;
 
-  private VariableTypeFromCallFix(@Nonnull PsiClassType type, @Nonnull PsiVariable var) {
+  private VariableTypeFromCallFix(PsiClassType type, PsiVariable var) {
     myExpressionType = type;
     myVar = var;
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.fixVariableTypeText(UsageViewUtil.getType(myVar), myVar.getName(), myExpressionType.getCanonicalText());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myExpressionType.isValid() && myVar.isValid();
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     TypeMigrationRules rules = new TypeMigrationRules(project);
     rules.setBoundScope(PsiSearchHelper.SERVICE.getInstance(project).getUseScope(myVar));
 
@@ -62,8 +60,7 @@ public class VariableTypeFromCallFix implements SyntheticIntentionAction {
   }
 
 
-  @Nonnull
-  public static List<IntentionAction> getQuickFixActions(@Nonnull PsiMethodCallExpression methodCall, @Nonnull PsiExpressionList list) {
+  public static List<IntentionAction> getQuickFixActions(PsiMethodCallExpression methodCall, PsiExpressionList list) {
     JavaResolveResult result = methodCall.getMethodExpression().advancedResolve(false);
     PsiMethod method = (PsiMethod)result.getElement();
     PsiSubstitutor substitutor = result.getSubstitutor();
@@ -118,8 +115,8 @@ public class VariableTypeFromCallFix implements SyntheticIntentionAction {
     return actions;
   }
 
-  private static List<IntentionAction> getParameterTypeChangeFixes(@Nonnull PsiMethod method,
-                                                                   @Nonnull PsiExpression expression,
+  private static List<IntentionAction> getParameterTypeChangeFixes(PsiMethod method,
+                                                                   PsiExpression expression,
                                                                    PsiType parameterType) {
     if (!(expression instanceof PsiReferenceExpression)) {
       return Collections.emptyList();

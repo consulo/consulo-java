@@ -18,8 +18,7 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -32,13 +31,11 @@ import java.util.List;
 public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJavaLocalInspectionTool {
     public boolean REPORT_CONVERTIBLE_METHOD_CALLS = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesProbableBugs();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionSuspiciousCollectionsMethodCallsDisplayName();
@@ -59,10 +56,9 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
         );
     }
 
-    @Nonnull
     @Override
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -71,7 +67,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression methodCall) {
+            public void visitMethodCallExpression(PsiMethodCallExpression methodCall) {
                 PsiExpression[] args = methodCall.getArgumentList().getExpressions();
                 if (args.length < 1) {
                     return;
@@ -89,7 +85,7 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
 
             @Override
             @RequiredReadAction
-            public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
+            public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
                 PsiType functionalInterfaceType = expression.getFunctionalInterfaceType();
                 PsiClassType.ClassResolveResult functionalInterfaceResolveResult =
                     PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
@@ -115,7 +111,6 @@ public class SuspiciousCollectionsMethodCallsInspection extends AbstractBaseJava
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "SuspiciousMethodCalls";
     }

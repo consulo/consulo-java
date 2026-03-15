@@ -38,7 +38,7 @@ import consulo.language.editor.inspection.reference.RefVisitor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class RefParameterImpl extends RefJavaElementImpl implements RefParameter {
   private static final int USED_FOR_READING_MASK = 0x10000;

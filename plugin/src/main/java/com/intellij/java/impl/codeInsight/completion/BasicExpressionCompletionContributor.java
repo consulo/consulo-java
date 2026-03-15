@@ -35,8 +35,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -105,7 +104,7 @@ public class BasicExpressionCompletionContributor {
 
     PsiScopesUtil.treeWalkUp(new BaseScopeProcessor() {
       @Override
-      public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
+      public boolean execute(PsiElement element, ResolveState state) {
         if (element instanceof PsiLocalVariable) {
           if (!matcher.prefixMatches(((PsiLocalVariable) element).getName())) {
             return true;
@@ -136,8 +135,7 @@ public class BasicExpressionCompletionContributor {
     }
   }
 
-  @Nonnull
-  private static LookupElement expressionToLookupElement(@Nonnull PsiExpression expression) {
+  private static LookupElement expressionToLookupElement(PsiExpression expression) {
     if (expression instanceof PsiReferenceExpression) {
       PsiReferenceExpression refExpr = (PsiReferenceExpression) expression;
       if (!refExpr.isQualified()) {

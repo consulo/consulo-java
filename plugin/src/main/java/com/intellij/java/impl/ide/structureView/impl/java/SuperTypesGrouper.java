@@ -24,8 +24,6 @@ import consulo.ide.localize.IdeLocalize;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -35,10 +33,8 @@ import java.util.Map;
 
 public class SuperTypesGrouper implements Grouper {
   public static final Key<WeakReference<PsiMethod>> SUPER_METHOD_KEY = Key.create("StructureTreeBuilder.SUPER_METHOD_KEY");
-  @NonNls
   public static final String ID = "SHOW_INTERFACES";
 
-  @Nonnull
   public Collection<Group> group(Object parent, Collection<TreeElement> children) {
     if (isParentGrouped((AbstractTreeNode) parent)) return Collections.emptyList();
     Map<Group, SuperTypeGroup> groups = new HashMap<>();
@@ -109,7 +105,6 @@ public class SuperTypesGrouper implements Grouper {
 
   }
 
-  @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(
       IdeLocalize.actionStructureviewGroupMethodsByDefiningType().get(),
@@ -118,7 +113,6 @@ public class SuperTypesGrouper implements Grouper {
     );
   }
 
-  @Nonnull
   public String getName() {
     return ID;
   }

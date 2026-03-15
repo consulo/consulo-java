@@ -27,7 +27,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -43,7 +42,6 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
   public boolean onlyCheckImmutables = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.constantNamingConventionDisplayName();
   }
@@ -59,7 +57,6 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
@@ -100,7 +97,7 @@ public class ConstantNamingConventionInspection extends ConventionInspection {
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       super.visitField(field);
       if (field instanceof PsiEnumConstant) {
         return;

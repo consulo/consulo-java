@@ -35,7 +35,6 @@ import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.primitive.ints.IntList;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
@@ -70,16 +69,16 @@ public class IntroduceParameterDialog extends RefactoringDialog {
   private final IntroduceParameterSettingsPanel myPanel;
   private boolean myHasWriteAccess = false;
 
-  IntroduceParameterDialog(@Nonnull Project project,
-                           @Nonnull List<UsageInfo> classMembersList,
+  IntroduceParameterDialog(Project project,
+                           List<UsageInfo> classMembersList,
                            PsiExpression[] occurrences,
                            PsiLocalVariable onLocalVariable,
                            PsiExpression onExpression,
-                           @Nonnull NameSuggestionsGenerator generator,
-                           @Nonnull TypeSelectorManager typeSelectorManager,
-                           @Nonnull PsiMethod methodToSearchFor,
-                           @Nonnull PsiMethod methodToReplaceIn,
-                           @Nonnull IntList parametersToRemove,
+                           NameSuggestionsGenerator generator,
+                           TypeSelectorManager typeSelectorManager,
+                           PsiMethod methodToSearchFor,
+                           PsiMethod methodToReplaceIn,
+                           IntList parametersToRemove,
                            boolean mustBeFinal) {
     super(project, true);
     myPanel = new IntroduceParameterSettingsPanel(onLocalVariable, onExpression, methodToReplaceIn, parametersToRemove);

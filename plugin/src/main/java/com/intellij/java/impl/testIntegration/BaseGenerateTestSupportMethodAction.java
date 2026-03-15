@@ -44,8 +44,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopup;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Collections;
@@ -54,7 +53,7 @@ import java.util.List;
 public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
     protected static final Logger LOG = Logger.getInstance(BaseGenerateTestSupportMethodAction.class);
 
-    public BaseGenerateTestSupportMethodAction(TestIntegrationUtils.MethodKind methodKind, @Nonnull LocalizeValue text) {
+    public BaseGenerateTestSupportMethodAction(TestIntegrationUtils.MethodKind methodKind, LocalizeValue text) {
         super(new MyHandler(methodKind), text);
     }
 
@@ -89,7 +88,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
 
     @Override
     @RequiredReadAction
-    protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+    protected boolean isValidForFile(Project project, Editor editor, PsiFile file) {
         if (file instanceof PsiCompiledElement) {
             return false;
         }
@@ -113,7 +112,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
 
         @Override
         @RequiredUIAccess
-        public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+        public void invoke(Project project, Editor editor, PsiFile file) {
             PsiClass targetClass = findTargetClass(editor, file);
             List<TestFramework> frameworks = TestIntegrationUtils.findSuitableFrameworks(targetClass);
             if (frameworks.isEmpty()) {
@@ -128,7 +127,7 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
             JList<TestFramework> list = new JBList<>(frameworks.toArray(new TestFramework[frameworks.size()]));
             list.setCellRenderer(new ColoredListCellRenderer<>() {
                 @Override
-                protected void customizeCellRenderer(@Nonnull JList jList, TestFramework framework, int i, boolean b, boolean b1) {
+                protected void customizeCellRenderer(JList jList, TestFramework framework, int i, boolean b, boolean b1) {
                     setIcon(framework.getIcon());
                     append(framework.getName());
                 }

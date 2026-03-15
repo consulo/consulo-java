@@ -16,17 +16,15 @@
 package com.intellij.java.impl.ig.psiutils;
 
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class StringUtils {
 
-  @NonNls private static final Set<String> keywordTable =
+  private static final Set<String> keywordTable =
     new HashSet<String>();
-  @NonNls private static final String AN = "an";
+  private static final String AN = "an";
 
   static {
     keywordTable.add("abstract");
@@ -89,8 +87,7 @@ public class StringUtils {
   }
 
   @SuppressWarnings({"HardCodedStringLiteral"})
-  @Nonnull
-  public static String createSingularFromName(@Nonnull String name) {
+  public static String createSingularFromName(String name) {
     int nameLength = name.length();
     String singularName;
     if (name.endsWith("ies")) {
@@ -122,7 +119,6 @@ public class StringUtils {
     }
   }
 
-  @Nonnull
   private static String prependIndefiniteArticle(
     String singularName) {
     switch (singularName.charAt(0)) {

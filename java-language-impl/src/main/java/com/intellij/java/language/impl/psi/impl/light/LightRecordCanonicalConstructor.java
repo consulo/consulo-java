@@ -6,10 +6,9 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.SyntheticElement;
-import jakarta.annotation.Nonnull;
 
 public class LightRecordCanonicalConstructor extends LightMethod implements SyntheticElement {
-    public LightRecordCanonicalConstructor(@Nonnull PsiMethod method, @Nonnull PsiClass containingClass) {
+    public LightRecordCanonicalConstructor(PsiMethod method, PsiClass containingClass) {
         super(method.getManager(), method, containingClass);
     }
 
@@ -18,7 +17,6 @@ public class LightRecordCanonicalConstructor extends LightMethod implements Synt
         return getNavigationElement().getTextOffset();
     }
 
-    @Nonnull
     @Override
     public PsiElement getNavigationElement() {
         return getContainingClass();

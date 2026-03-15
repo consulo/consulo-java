@@ -22,7 +22,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import java.util.HashSet;
@@ -32,14 +31,12 @@ import java.util.Set;
 public class ClassInheritanceDepthInspection extends ClassMetricInspection {
     private static final int CLASS_INHERITANCE_LIMIT = 2;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ClassTooDeepInInheritanceTree";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classTooDeepDisplayName();
@@ -53,7 +50,6 @@ public class ClassInheritanceDepthInspection extends ClassMetricInspection {
         return InspectionGadgetsLocalize.classTooDeepInheritanceDepthLimitOption().get();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer count = (Integer) infos[0];
         return InspectionGadgetsLocalize.classTooDeepProblemDescriptor(count).get();
@@ -66,7 +62,7 @@ public class ClassInheritanceDepthInspection extends ClassMetricInspection {
     private class ClassNestingLevel extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // note: no call to super
             if (aClass.isEnum()) {
                 return;

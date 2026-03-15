@@ -27,7 +27,6 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.StubPsiFactory;
 import consulo.language.psi.stub.PsiFileStubImpl;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.IStubFileElementType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -53,14 +52,12 @@ public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements
 		myFactory = compiled ? ClsStubPsiFactory.INSTANCE : SourceStubPsiFactory.INSTANCE;
 	}
 
-	@Nonnull
 	@Override
 	public IStubFileElementType getType()
 	{
 		return JavaStubElementTypes.JAVA_FILE;
 	}
 
-	@Nonnull
 	@Override
 	public PsiClass[] getClasses()
 	{
@@ -92,7 +89,6 @@ public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements
 		return myCompiled;
 	}
 
-	@Nonnull
 	@Override
 	public StubPsiFactory getPsiFactory()
 	{

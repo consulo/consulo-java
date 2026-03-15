@@ -15,13 +15,11 @@
  */
 package com.intellij.java.language.jvm;
 
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface JvmNamedElement extends JvmElement
 {
 
-	@NonNls
 	@Nullable
 	String getName();
 }

@@ -3,7 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm;
 
 import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
 import consulo.internal.org.objectweb.asm.tree.LabelNode;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

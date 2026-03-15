@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This inspection finds instances of null checks followed by an instanceof check
@@ -45,13 +44,11 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class PointlessNullCheckInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.pointlessNullcheckDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.pointlessNullcheckProblemDescriptor().get();
@@ -75,7 +72,6 @@ public class PointlessNullCheckInspection extends BaseInspection {
             myExpressionText = expressionText;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.pointlessNullcheckSimplifyQuickfix(myExpressionText);

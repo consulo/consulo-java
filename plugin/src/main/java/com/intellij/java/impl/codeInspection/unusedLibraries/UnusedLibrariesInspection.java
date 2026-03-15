@@ -43,8 +43,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -58,7 +57,6 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
 
     @Override
     public
-    @Nonnull
     JComponent createOptionsPanel() {
         return new SingleCheckboxOptionsPanel(
             JavaAnalysisLocalize.donTReportUnusedJarsInsideUsedLibrary().get(),
@@ -69,8 +67,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
 
     @Override
     public
-    @Nonnull
-    RefGraphAnnotator getAnnotator(@Nonnull RefManager refManager) {
+    RefGraphAnnotator getAnnotator(RefManager refManager) {
         return new UnusedLibraryGraphAnnotator(refManager);
     }
 
@@ -82,11 +79,11 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     @Override
     @RequiredReadAction
     public void runInspection(
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-        @Nonnull Object state
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        Object state
     ) {
         RefManager refManager = globalContext.getRefManager();
         for (Module module : ModuleManager.getInstance(globalContext.getProject()).getModules()) {
@@ -102,7 +99,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
         }
     }
 
-    private CommonProblemDescriptor[] getDescriptors(@Nonnull InspectionManager manager, RefModule refModule, Module module) {
+    private CommonProblemDescriptor[] getDescriptors(InspectionManager manager, RefModule refModule, Module module) {
         VirtualFile[] givenRoots = AccessRule.read(
             () -> OrderEnumerator.orderEntries(module).withoutSdk()
                 .withoutModuleSourceEntries()
@@ -158,8 +155,8 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     }
 
     private static void appendUsedRootDependencies(
-        @Nonnull Set<VirtualFile> usedRoots,
-        @Nonnull VirtualFile[] givenRoots
+        Set<VirtualFile> usedRoots,
+        VirtualFile[] givenRoots
     ) {
         //classes per root
         Map<VirtualFile, Set<String>> fromClasses = new HashMap<>();
@@ -168,13 +165,11 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
         collectClassesPerRoots(givenRoots, fromClasses, toClasses);
 
         Graph<VirtualFile> graph = GraphGenerator.generate(new InboundSemiGraph<>() {
-            @Nonnull
             @Override
             public Collection<VirtualFile> getNodes() {
                 return Arrays.asList(givenRoots);
             }
 
-            @Nonnull
             @Override
             public Iterator<VirtualFile> getIn(VirtualFile n) {
                 Set<String> classesInCurrentRoot = fromClasses.get(n);
@@ -236,27 +231,24 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "UnusedLibrary";
     }
 
     @Override
     public
-    @Nonnull
     QuickFix<?> getQuickFix(String hint) {
         return new RemoveUnusedLibrary(hint, null);
     }
 
     @Nullable
     @Override
-    public String getHint(@Nonnull QuickFix fix) {
+    public String getHint(QuickFix fix) {
         return fix instanceof RemoveUnusedLibrary removeUnusedLibrary && removeUnusedLibrary.myFiles == null
             ? removeUnusedLibrary.myLibraryName : null;
     }
@@ -270,7 +262,6 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
             myFiles = files;
         }
 
-        @Nonnull
         public LocalizeValue getName() {
             return myFiles == null
                 ? JavaAnalysisLocalize.detachLibraryQuickfixName()
@@ -279,7 +270,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ModuleProblemDescriptor descriptor) {
+        public void applyFix(Project project, ModuleProblemDescriptor descriptor) {
             Module module = descriptor.getModule();
 
             ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();

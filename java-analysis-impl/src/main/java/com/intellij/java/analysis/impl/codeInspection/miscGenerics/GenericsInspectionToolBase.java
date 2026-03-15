@@ -22,8 +22,7 @@ import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public abstract class GenericsInspectionToolBase<State> extends BaseJavaBatchLoc
   }
 
   @Override
-  public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+  public ProblemDescriptor[] checkClass(PsiClass aClass, InspectionManager manager, boolean isOnTheFly, State state) {
     final PsiClassInitializer[] initializers = aClass.getInitializers();
     if (initializers.length == 0) return null;
     List<ProblemDescriptor> descriptors = new ArrayList<ProblemDescriptor>();
@@ -53,7 +52,7 @@ public abstract class GenericsInspectionToolBase<State> extends BaseJavaBatchLoc
   }
 
   @Override
-  public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+  public ProblemDescriptor[] checkField(PsiField field, InspectionManager manager, boolean isOnTheFly, State state) {
     final PsiExpression initializer = field.getInitializer();
     if (initializer != null) {
       return getDescriptions(initializer, manager, isOnTheFly, state);
@@ -65,7 +64,7 @@ public abstract class GenericsInspectionToolBase<State> extends BaseJavaBatchLoc
   }
 
   @Override
-  public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod psiMethod, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+  public ProblemDescriptor[] checkMethod(PsiMethod psiMethod, InspectionManager manager, boolean isOnTheFly, State state) {
     final PsiCodeBlock body = psiMethod.getBody();
     if (body != null) {
       return getDescriptions(body, manager, isOnTheFly, state);

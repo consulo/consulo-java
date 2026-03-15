@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import consulo.externalService.statistic.FeatureUsageTracker;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -48,7 +47,6 @@ public class JavaStatementsSurroundDescriptor implements SurroundDescriptor {
   };
 
   @Override
-  @Nonnull
   public Surrounder[] getSurrounders() {
     return SURROUNDERS;
   }
@@ -59,7 +57,6 @@ public class JavaStatementsSurroundDescriptor implements SurroundDescriptor {
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
     PsiElement[] statements = CodeInsightUtil.findStatementsInRange(file, startOffset, endOffset);
     if (statements.length == 0) return PsiElement.EMPTY_ARRAY;
@@ -67,7 +64,6 @@ public class JavaStatementsSurroundDescriptor implements SurroundDescriptor {
     return statements;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

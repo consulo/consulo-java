@@ -60,8 +60,7 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.ref.Reference;
@@ -91,11 +90,11 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     private volatile Reference<TreeElement> myMirrorFileElement;
     private volatile ClsPackageStatementImpl myPackageStatement;
 
-    public ClsFileImpl(@Nonnull FileViewProvider viewProvider) {
+    public ClsFileImpl(FileViewProvider viewProvider) {
         this(viewProvider, false);
     }
 
-    private ClsFileImpl(@Nonnull FileViewProvider viewProvider, boolean forDecompiling) {
+    private ClsFileImpl(FileViewProvider viewProvider, boolean forDecompiling) {
         super(viewProvider.getManager(), viewProvider);
         myIsForDecompiling = forDecompiling;
         //noinspection ResultOfMethodCallIgnored
@@ -121,20 +120,17 @@ public class ClsFileImpl extends PsiBinaryFileImpl
 
     @RequiredReadAction
     @Override
-    @Nonnull
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;
     }
 
     @RequiredReadAction
     @Override
-    @Nonnull
     public PsiElement[] getChildren() {
         PsiJavaModule module = getModuleDeclaration();
         return module != null ? new PsiElement[]{module} : getClasses();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiClass[] getClasses() {
@@ -181,7 +177,6 @@ public class ClsFileImpl extends PsiBinaryFileImpl
         return !StringUtil.isEmpty(packageName) ? packageName : null;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public String getPackageName() {
@@ -201,24 +196,21 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     @Override
-    public boolean importClass(@Nonnull PsiClass aClass) {
+    public boolean importClass(PsiClass aClass) {
         throw new UnsupportedOperationException("Cannot add imports to compiled classes");
     }
 
     @Override
-    @Nonnull
     public PsiElement[] getOnDemandImports(boolean includeImplicit, boolean checkIncludes) {
         return PsiJavaCodeReferenceElement.EMPTY_ARRAY;
     }
 
     @Override
-    @Nonnull
     public PsiClass[] getSingleClassImports(boolean checkIncludes) {
         return PsiClass.EMPTY_ARRAY;
     }
 
     @Override
-    @Nonnull
     public String[] getImplicitlyImportedPackages() {
         return ArrayUtil.EMPTY_STRING_ARRAY;
     }
@@ -229,7 +221,6 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     @Override
-    @Nonnull
     public PsiJavaCodeReferenceElement[] getImplicitlyImportedPackageReferences() {
         return PsiJavaCodeReferenceElement.EMPTY_ARRAY;
     }
@@ -239,7 +230,6 @@ public class ClsFileImpl extends PsiBinaryFileImpl
         return null;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public LanguageLevel getLanguageLevel() {
@@ -263,7 +253,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl
 
     @RequiredWriteAction
     @Override
-    public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+    public PsiElement setName(String name) throws IncorrectOperationException {
         throw ClsElementImpl.cannotModifyException(this);
     }
 
@@ -277,12 +267,12 @@ public class ClsFileImpl extends PsiBinaryFileImpl
      */
     @RequiredReadAction
     @Deprecated
-    public void appendMirrorText(@SuppressWarnings("unused") int indentLevel, @Nonnull StringBuilder buffer) {
+    public void appendMirrorText(@SuppressWarnings("unused") int indentLevel, StringBuilder buffer) {
         appendMirrorText(buffer);
     }
 
     @RequiredReadAction
-    private void appendMirrorText(@Nonnull StringBuilder buffer) {
+    private void appendMirrorText(StringBuilder buffer) {
         buffer.append(BANNER);
 
         PsiJavaModule module = getModuleDeclaration();
@@ -304,12 +294,12 @@ public class ClsFileImpl extends PsiBinaryFileImpl
      */
     @RequiredReadAction
     @Deprecated
-    public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    public void setMirror(TreeElement element) throws InvalidMirrorException {
         setFileMirror(element);
     }
 
     @RequiredReadAction
-    private void setFileMirror(@Nonnull TreeElement element) {
+    private void setFileMirror(TreeElement element) {
         PsiElement mirrorElement = SourceTreeToPsiMap.treeToPsiNotNull(element);
         if (!(mirrorElement instanceof PsiJavaFile mirrorFile)) {
             throw new InvalidMirrorException("Unexpected mirror file: " + mirrorElement);
@@ -326,7 +316,6 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     @Override
-    @Nonnull
     public PsiElement getNavigationElement() {
         for (ClsCustomNavigationPolicy navigationPolicy : ClsCustomNavigationPolicy.EP_NAME.getExtensionList()) {
             try {
@@ -349,7 +338,6 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     @Override
-    @Nonnull
     @RequiredReadAction
     public PsiElement getMirror() {
         TreeElement mirrorTreeElement = SoftReference.dereference(myMirrorFileElement);
@@ -429,7 +417,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor javaElementVisitor) {
             javaElementVisitor.visitJavaFile(this);
         }
@@ -473,14 +461,12 @@ public class ClsFileImpl extends PsiBinaryFileImpl
         return 0;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public char[] textToCharArray() {
         return getMirror().textToCharArray();
     }
 
-    @Nonnull
     @RequiredReadAction
     public PsiClassHolderFileStub<?> getStub() {
         return (PsiClassHolderFileStub)getStubTree().getRoot();
@@ -489,10 +475,10 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     @Override
     @RequiredReadAction
     public boolean processDeclarations(
-        @Nonnull PsiScopeProcessor processor,
-        @Nonnull ResolveState state,
+        PsiScopeProcessor processor,
+        ResolveState state,
         PsiElement lastParent,
-        @Nonnull PsiElement place
+        PsiElement place
     ) {
         processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
         ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
@@ -509,7 +495,6 @@ public class ClsFileImpl extends PsiBinaryFileImpl
 
     @RequiredReadAction
     @Override
-    @Nonnull
     public StubTree getStubTree() {
         getApplication().assertReadAccessAllowed();
 
@@ -545,7 +530,6 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     @RequiredReadAction
-    @Nonnull
     @Override
     public StubbedSpine getStubbedSpine() {
         return getStubTree().getSpine();
@@ -578,14 +562,13 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     @Override
-    public void putInfo(@Nonnull Map<String, String> info) {
+    public void putInfo(Map<String, String> info) {
         PsiFileImpl.putInfo(this, info);
     }
 
     // default decompiler implementation
 
-    @Nonnull
-    public static CharSequence decompile(@Nonnull VirtualFile file) {
+    public static CharSequence decompile(VirtualFile file) {
         PsiManager manager = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject());
         ClsFileImpl clsFile = new ClsFileImpl(new ClassFileViewProvider(manager, file), true);
         StringBuilder buffer = new StringBuilder();
@@ -594,7 +577,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     @Nullable
-    public static PsiJavaFileStub buildFileStub(@Nonnull VirtualFile file, @Nonnull byte[] bytes) throws ClsFormatException {
+    public static PsiJavaFileStub buildFileStub(VirtualFile file, byte[] bytes) throws ClsFormatException {
         try {
             if (ClassFileViewProvider.isInnerClass(file, bytes)) {
                 return null;
@@ -655,11 +638,11 @@ public class ClsFileImpl extends PsiBinaryFileImpl
     }
 
     static class FileContentPair extends Pair<VirtualFile, ClassReader> {
-        FileContentPair(@Nonnull VirtualFile file, @Nonnull ClassReader content) {
+        FileContentPair(VirtualFile file, ClassReader content) {
             super(file, content);
         }
 
-        public @Nonnull ClassReader getContent() {
+        public ClassReader getContent() {
             return second;
         }
 

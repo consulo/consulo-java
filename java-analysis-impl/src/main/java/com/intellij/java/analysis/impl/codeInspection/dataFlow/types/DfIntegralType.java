@@ -3,17 +3,14 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents an integral primitive (int or long)
  */
 public interface DfIntegralType extends DfPrimitiveType {
-  @Nonnull
   LongRangeSet getRange();
 
-  @Nonnull
-  default DfType meetRelation(@Nonnull RelationType relation, @Nonnull DfType other) {
+  default DfType meetRelation(RelationType relation, DfType other) {
     if (other == DfTypes.TOP) return this;
     if (other instanceof DfIntegralType) {
       return meetRange(((DfIntegralType)other).getRange().fromRelation(relation));
@@ -21,6 +18,5 @@ public interface DfIntegralType extends DfPrimitiveType {
     return DfTypes.BOTTOM;
   }
 
-  @Nonnull
-  DfType meetRange(@Nonnull LongRangeSet range);
+  DfType meetRange(LongRangeSet range);
 }

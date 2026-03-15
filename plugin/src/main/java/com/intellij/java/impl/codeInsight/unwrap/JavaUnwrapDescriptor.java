@@ -20,7 +20,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.unwrap.UnwrapDescriptorBase;
 import consulo.language.editor.refactoring.unwrap.Unwrapper;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Konstantin Bulenkov
@@ -46,7 +45,6 @@ public class JavaUnwrapDescriptor extends UnwrapDescriptorBase {
     };
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

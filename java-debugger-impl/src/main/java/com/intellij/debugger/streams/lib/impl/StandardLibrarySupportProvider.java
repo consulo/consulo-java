@@ -13,7 +13,6 @@ import consulo.execution.debug.stream.trace.dsl.Dsl;
 import consulo.execution.debug.stream.trace.dsl.impl.DslImpl;
 import consulo.execution.debug.stream.wrapper.StreamChainBuilder;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -27,25 +26,21 @@ public final class StandardLibrarySupportProvider extends JvmLibrarySupportProvi
     private static final LibrarySupport SUPPORT = new StandardLibrarySupport();
     private static final Dsl DSL = new DslImpl(new JavaStatementFactory());
 
-    @Nonnull
     @Override
     public String getLanguageId() {
         return "JAVA";
     }
 
-    @Nonnull
     @Override
-    public TraceExpressionBuilder getExpressionBuilder(@Nonnull Project project) {
+    public TraceExpressionBuilder getExpressionBuilder(Project project) {
         return new JavaTraceExpressionBuilder(project, SUPPORT.createHandlerFactory(DSL), DSL);
     }
 
-    @Nonnull
     @Override
     public StreamChainBuilder getChainBuilder() {
         return BUILDER;
     }
 
-    @Nonnull
     @Override
     public LibrarySupport getLibrarySupport() {
         return SUPPORT;

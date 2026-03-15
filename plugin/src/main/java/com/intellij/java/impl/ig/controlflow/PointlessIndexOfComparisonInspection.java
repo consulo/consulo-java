@@ -25,18 +25,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PointlessIndexOfComparisonInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.pointlessIndexofComparisonDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         PsiBinaryExpression expression = (PsiBinaryExpression) infos[0];
         PsiExpression lhs = expression.getLOperand();
@@ -57,7 +54,7 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
     }
 
     static boolean createContainsExpressionValue(
-        @Nonnull PsiJavaToken sign, boolean flipped
+        PsiJavaToken sign, boolean flipped
     ) {
         IElementType tokenType = sign.getTokenType();
         if (tokenType.equals(JavaTokenType.EQEQ)) {
@@ -166,7 +163,7 @@ public class PointlessIndexOfComparisonInspection extends BaseInspection {
         }
 
         private static boolean isIndexOfCall(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();

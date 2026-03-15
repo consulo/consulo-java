@@ -25,7 +25,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.proximity.ProximityLocation;
 import consulo.language.util.proximity.ProximityWeigher;
 import consulo.util.dataholder.NotNullLazyKey;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -34,14 +33,12 @@ import jakarta.annotation.Nonnull;
 public class SamePsiMemberWeigher extends ProximityWeigher {
   private static final NotNullLazyKey<Boolean, ProximityLocation> INSIDE_PSI_MEMBER = NotNullLazyKey.create("insidePsiMember", new NotNullFunction<ProximityLocation, Boolean>() {
     @Override
-    @Nonnull
     public Boolean apply(ProximityLocation proximityLocation) {
       return PsiTreeUtil.getContextOfType(proximityLocation.getPosition(), PsiMember.class, false) != null;
     }
   });
   private static final NotNullLazyKey<PsiElement, ProximityLocation> PHYSICAL_POSITION = NotNullLazyKey.create("physicalPosition", new NotNullFunction<ProximityLocation, PsiElement>() {
     @Override
-    @Nonnull
     public PsiElement apply(ProximityLocation location) {
       PsiElement position = location.getPosition();
       assert position != null;
@@ -64,7 +61,7 @@ public class SamePsiMemberWeigher extends ProximityWeigher {
   });
 
   @Override
-  public Comparable weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
+  public Comparable weigh(PsiElement element, ProximityLocation location) {
     PsiElement position = location.getPosition();
     if (position == null) {
       return null;

@@ -19,7 +19,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.language.psi.PsiExpression;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ConditionalGotoInstruction extends Instruction implements BranchingInstruction {
   private ControlFlow.ControlFlowOffset myOffset;

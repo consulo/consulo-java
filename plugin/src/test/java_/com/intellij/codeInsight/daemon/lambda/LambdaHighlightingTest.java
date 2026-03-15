@@ -15,17 +15,14 @@
  */
 package com.intellij.codeInsight.daemon.lambda;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
 public abstract class LambdaHighlightingTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/highlighting";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/highlighting";
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

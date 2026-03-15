@@ -27,22 +27,18 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessarySuperConstructorInspection extends BaseInspection {
-    @Nonnull
     public String getID() {
         return "UnnecessaryCallToSuper";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessarySuperConstructorDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessarySuperConstructorProblemDescriptor().get();
     }
@@ -52,7 +48,6 @@ public class UnnecessarySuperConstructorInspection extends BaseInspection {
     }
 
     private static class UnnecessarySuperConstructorFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessarySuperConstructorRemoveQuickfix();
         }
@@ -71,7 +66,7 @@ public class UnnecessarySuperConstructorInspection extends BaseInspection {
 
     private static class UnnecessarySuperConstructorVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             PsiReferenceExpression methodExpression = call.getMethodExpression();
             String methodText = methodExpression.getText();

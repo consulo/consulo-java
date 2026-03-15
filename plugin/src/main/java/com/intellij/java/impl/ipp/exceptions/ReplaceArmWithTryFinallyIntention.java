@@ -24,27 +24,24 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceArmWithTryFinallyIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplaceArmWithTryFinallyIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceArmWithTryFinallyIntentionName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new AutomaticResourceManagementPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiJavaToken token = (PsiJavaToken) element;
         PsiTryStatement tryStatement =

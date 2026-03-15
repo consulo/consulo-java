@@ -49,9 +49,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -73,7 +71,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
 
   @Override
   @RequiredUIAccess
-  public void invoke(@Nonnull final Project project, @Nonnull final Editor editor, @Nonnull final PsiFile file) {
+  public void invoke(final Project project, final Editor editor, final PsiFile file) {
     if (!LanguageEditorUtil.checkModificationAllowed(editor)) {
       return;
     }
@@ -130,7 +128,7 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
 
     clearModifiers(method);
 
-    @NonNls StringBuilder call = new StringBuilder();
+    StringBuilder call = new StringBuilder();
 
     PsiModifierList modifierList = null;
 
@@ -467,7 +465,6 @@ public class GenerateDelegateHandler implements DelegateMethodHandler {
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

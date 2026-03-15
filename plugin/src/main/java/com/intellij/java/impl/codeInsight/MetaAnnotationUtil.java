@@ -38,8 +38,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
@@ -60,7 +59,7 @@ public class MetaAnnotationUtil {
     }
   };
 
-  public static Collection<PsiClass> getAnnotationTypesWithChildren(@Nonnull Module module, String annotationName, boolean includeTests) {
+  public static Collection<PsiClass> getAnnotationTypesWithChildren(Module module, String annotationName, boolean includeTests) {
     Project project = module.getProject();
 
     Map<Pair<String, Boolean>, Collection<PsiClass>> map = CachedValuesManager.getManager(project).getCachedValue(module, () ->
@@ -123,7 +122,6 @@ public class MetaAnnotationUtil {
     }, false);
   }
 
-  @Nonnull
   private static Collection<PsiClass> getAnnotationTypesWithChildren(PsiClass annotationClass, GlobalSearchScope scope) {
     Set<PsiClass> classes = Sets.newHashSet(HASHING_STRATEGY);
 
@@ -161,7 +159,7 @@ public class MetaAnnotationUtil {
   /**
    * Check if listOwner is annotated with annotations or listOwner's annotations contain given annotations
    */
-  public static boolean isMetaAnnotated(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations) {
+  public static boolean isMetaAnnotated(PsiModifierListOwner listOwner, Collection<String> annotations) {
     if (AnnotationUtil.isAnnotated(listOwner, annotations, false)) {
       return true;
     }
@@ -208,8 +206,7 @@ public class MetaAnnotationUtil {
   }
 
 
-  @Nonnull
-  public static Stream<PsiAnnotation> findMetaAnnotations(@Nonnull PsiModifierListOwner listOwner, @Nonnull Collection<String> annotations) {
+  public static Stream<PsiAnnotation> findMetaAnnotations(PsiModifierListOwner listOwner, Collection<String> annotations) {
     Stream<PsiAnnotation> directAnnotations = Stream.of(AnnotationUtil.findAnnotations(listOwner, annotations));
 
     Stream<PsiClass> lazyResolvedAnnotations = Stream.generate(() -> getResolvedClassesInAnnotationsList(listOwner)).limit(1).flatMap(it -> it.stream());

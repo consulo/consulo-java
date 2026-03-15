@@ -1,5 +1,4 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class CastPreventsNPEDetection {
     @Nullable Object getParent() {
@@ -13,7 +12,6 @@ class CastPreventsNPEDetection {
 }
 
 class ChildCastImpl extends CastPreventsNPEDetection {
-    @Nonnull
     @Override
     Object getParent() {
         return super.getParent();    //To change body of overridden methods use File | Settings | File Templates.

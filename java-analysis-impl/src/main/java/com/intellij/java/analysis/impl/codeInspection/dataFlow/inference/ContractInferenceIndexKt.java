@@ -27,9 +27,8 @@ import consulo.language.psi.stub.StubbedSpine;
 import consulo.language.psi.stub.gist.GistManager;
 import consulo.language.psi.stub.gist.PsiFileGist;
 import consulo.language.psi.util.LanguageCachedValueUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +39,6 @@ class ContractInferenceIndexKt {
   private static PsiFileGist<Map<Integer, MethodData>> gist = GistManager.getInstance().newPsiFileGist("javaContractInference", 19, MethodDataExternalizer.INSTANCE, file -> indexFile(file.getNode
       ().getLighterAST()));
 
-  @Nonnull
   private static Map<Integer, MethodData> indexFile(LighterAST tree) {
     InferenceVisitor visitor = new InferenceVisitor(tree);
     visitor.visitNode(tree.getRoot());

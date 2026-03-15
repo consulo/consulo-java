@@ -25,35 +25,34 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
  */
 public class AddAnnotationFix extends AddAnnotationPsiFix implements SyntheticIntentionAction {
     @RequiredReadAction
-    public AddAnnotationFix(@Nonnull String fqn, @Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String... annotationsToRemove) {
+    public AddAnnotationFix(String fqn, PsiModifierListOwner modifierListOwner, String... annotationsToRemove) {
         this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
     }
 
     @RequiredReadAction
     public AddAnnotationFix(
-        @Nonnull String fqn,
-        @Nonnull PsiModifierListOwner modifierListOwner,
-        @Nonnull PsiNameValuePair[] values,
-        @Nonnull String... annotationsToRemove
+        String fqn,
+        PsiModifierListOwner modifierListOwner,
+        PsiNameValuePair[] values,
+        String... annotationsToRemove
     ) {
         super(fqn, modifierListOwner, values, annotationsToRemove);
     }
 
     @Override
     @RequiredUIAccess
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return isAvailable();
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         applyFix();
     }
 

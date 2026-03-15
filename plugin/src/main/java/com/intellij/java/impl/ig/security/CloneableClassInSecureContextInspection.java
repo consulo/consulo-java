@@ -25,17 +25,14 @@ import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CloneableClassInSecureContextInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.cloneableClassInSecureContextDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.cloneableClassInSecureContextProblemDescriptor().get();
   }
@@ -47,7 +44,7 @@ public class CloneableClassInSecureContextInspection extends BaseInspection {
   private static class CloneableClassInSecureContextVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass instanceof PsiTypeParameter) {
         return;
       }

@@ -26,8 +26,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.NoDataException;
 import com.intellij.java.debugger.PositionManager;
@@ -81,7 +79,6 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 		myGeneratedClassPatternMatcher = Pattern.compile(generatedClassPattern.replaceAll("\\*", ".*")).matcher("");
 	}
 
-	@NonNls
 	protected abstract String getGeneratedClassesPackage();
 
 	protected String getGeneratedClassesNamePattern()
@@ -134,8 +131,7 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 	}
 
 	@Override
-	@Nonnull
-	public List<ReferenceType> getAllClasses(@Nonnull SourcePosition classPosition) throws NoDataException
+	public List<ReferenceType> getAllClasses(SourcePosition classPosition) throws NoDataException
 	{
 		checkSourcePositionFileType(classPosition);
 
@@ -159,7 +155,6 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 		return result;
 	}
 
-	@Nonnull
 	@Override
 	public Set<LanguageFileType> getAcceptedFileTypes()
 	{
@@ -176,8 +171,7 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 	}
 
 	@Override
-	@Nonnull
-	public List<Location> locationsOfLine(@Nonnull final ReferenceType type, @Nonnull final SourcePosition position) throws NoDataException
+	public List<Location> locationsOfLine(final ReferenceType type, final SourcePosition position) throws NoDataException
 	{
 		List<Location> locations = locationsOfClassAt(type, position);
 		return locations != null ? locations : Collections.emptyList();
@@ -242,7 +236,7 @@ public abstract class JSR45PositionManager<Scope> implements PositionManager
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position) throws NoDataException
+	public ClassPrepareRequest createPrepareRequest(final ClassPrepareRequestor requestor, final SourcePosition position) throws NoDataException
 	{
 		checkSourcePositionFileType(position);
 

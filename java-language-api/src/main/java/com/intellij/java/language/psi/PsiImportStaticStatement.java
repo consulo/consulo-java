@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java <code>import static</code> statement.

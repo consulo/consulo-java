@@ -37,8 +37,7 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -76,7 +75,6 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  @Nonnull
   public List<PsiType> getPreciseCatchTypes() {
     final PsiParameter parameter = getParameter();
     if (parameter == null) return Collections.emptyList();
@@ -150,7 +148,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
     return Collections.singletonList(declaredType);
   }
 
-  private static Collection<PsiClassType> getThrownTypes(@Nonnull PsiTryStatement statement) {
+  private static Collection<PsiClassType> getThrownTypes(PsiTryStatement statement) {
     Collection<PsiClassType> types = ContainerUtil.newArrayList();
     PsiCodeBlock tryBlock = statement.getTryBlock();
     if (tryBlock != null) {
@@ -182,7 +180,6 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  @Nonnull
   public PsiTryStatement getTryStatement() {
     return (PsiTryStatement) getParent();
   }
@@ -200,7 +197,7 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitCatchSection(this);
     } else {
@@ -255,10 +252,10 @@ public class PsiCatchSectionImpl extends CompositePsiElement implements PsiCatch
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     if (lastParent == null || lastParent.getParent() != this)
       // Parent element should not see our vars

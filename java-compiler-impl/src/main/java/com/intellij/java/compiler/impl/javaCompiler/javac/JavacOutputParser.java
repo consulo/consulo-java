@@ -24,8 +24,7 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFileManager;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import java.util.regex.Pattern;
 public class JavacOutputParser extends OutputParser implements JavacResourcesReaderConstants
 {
 	private final int myTabSize;
-	@NonNls
 	private String WARNING_PREFIX = "warning:"; // default value
 
 	public JavacOutputParser(Project project)
@@ -88,7 +86,7 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 
 		if (colonIndex1 >= 0)
 		{ // looks like found something like file path
-			@NonNls String part1 = line.substring(0, colonIndex1).trim();
+			String part1 = line.substring(0, colonIndex1).trim();
 			if (part1.equalsIgnoreCase("error") /*jikes*/ || part1.equalsIgnoreCase("Caused by"))
 			{
 				addMessage(callback, CompilerMessageCategory.ERROR, line.substring(colonIndex1));
@@ -211,7 +209,7 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 		final int colonIndex = line1.indexOf(':');
 		if (colonIndex > 0)
 		{
-			@NonNls String part1 = line1.substring(0, colonIndex).trim();
+			String part1 = line1.substring(0, colonIndex).trim();
 			// jikes
 			if ("symbol".equals(part1))
 			{
@@ -227,7 +225,7 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 		return messages;
 	}
 
-	private void addJavacPattern(@NonNls final String line)
+	private void addJavacPattern(final String line)
 	{
 		final int dividerIndex = line.indexOf(CATEGORY_VALUE_DIVIDER);
 		if (dividerIndex < 0)
@@ -314,9 +312,9 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
 	/**
 	 * made public for Tests, do not use this method directly
 	 */
-	public static Matcher createMatcher(@NonNls final String resourceBundleValue)
+	public static Matcher createMatcher(final String resourceBundleValue)
 	{
-		@NonNls String regexp = resourceBundleValue.replaceAll("([\\[\\]\\(\\)\\.\\*])", "\\\\$1");
+		String regexp = resourceBundleValue.replaceAll("([\\[\\]\\(\\)\\.\\*])", "\\\\$1");
 		regexp = regexp.replaceAll("\\{\\d+\\}", "(.+)");
 		return Pattern.compile(regexp, Pattern.CASE_INSENSITIVE).matcher("");
 	}

@@ -22,7 +22,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class RemoveModifierFix extends InspectionGadgetsFix {
 
@@ -32,7 +31,6 @@ public class RemoveModifierFix extends InspectionGadgetsFix {
     this.modifierText = modifierText;
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.removeModifierQuickfix(modifierText);
   }

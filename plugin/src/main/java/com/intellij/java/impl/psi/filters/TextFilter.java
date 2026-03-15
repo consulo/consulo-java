@@ -18,7 +18,6 @@ package com.intellij.java.impl.psi.filters;
 import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.filter.PlainTextFilter;
 import consulo.xml.psi.xml.XmlTag;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,15 +27,15 @@ import org.jetbrains.annotations.NonNls;
  * To change this template use Options | File Templates.
  */
 public class TextFilter extends PlainTextFilter {
-  public TextFilter(@NonNls String value) {
+  public TextFilter(String value) {
     super(value);
   }
 
-  public TextFilter(@NonNls String... values) {
+  public TextFilter(String... values) {
     super(values);
   }
 
-  public TextFilter(@NonNls String value1, @NonNls String value2) {
+  public TextFilter(String value1, String value2) {
     super(value1, value2);
   }
 

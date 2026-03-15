@@ -27,39 +27,34 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonFinalFieldInImmutableInspection extends BaseJavaLocalInspectionTool {
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesConcurrencyAnnotationIssues();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaAnalysisLocalize.inspectionNonFinalFieldInImmutableDisplayName();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "NonFinalFieldInImmutable";
     }
 
-    @Nonnull
     @Override
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
     ) {
         return new JavaElementVisitor() {
             @Override
-            public void visitField(@Nonnull PsiField field) {
+            public void visitField(PsiField field) {
                 super.visitField(field);
                 if (field.isFinal()) {
                     return;

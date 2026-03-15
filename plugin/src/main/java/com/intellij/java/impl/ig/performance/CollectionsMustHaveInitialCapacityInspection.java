@@ -25,8 +25,7 @@ import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizer;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 
@@ -48,13 +47,13 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
   public boolean myIgnoreFields;
 
   @Override
-  public void readSettings(@Nonnull Element node) throws InvalidDataException {
+  public void readSettings(Element node) throws InvalidDataException {
     mySettings.readSettings(node);
     myIgnoreFields = JDOMExternalizer.readBoolean(node, "ignoreFields");
   }
 
   @Override
-  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+  public void writeSettings(Element node) throws WriteExternalException {
     mySettings.writeSettings(node);
     if (myIgnoreFields) {
       JDOMExternalizer.write(node, "ignoreFields", true);
@@ -72,19 +71,16 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
 
   @Pattern(VALID_ID_PATTERN)
   @Override
-  @Nonnull
   public String getID() {
     return "CollectionWithoutInitialCapacity";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.collectionsMustHaveInitialCapacityDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.collectionsMustHaveInitialCapacityProblemDescriptor().get();
   }
@@ -97,7 +93,7 @@ public class CollectionsMustHaveInitialCapacityInspection extends BaseInspection
   private class CollectionInitialCapacityVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (myIgnoreFields && expression.getParent() instanceof PsiField) {
         return;

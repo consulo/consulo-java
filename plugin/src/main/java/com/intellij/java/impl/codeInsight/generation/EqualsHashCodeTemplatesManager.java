@@ -29,9 +29,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Couple;
 import consulo.util.lang.StringUtil;
 import jakarta.inject.Singleton;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -48,7 +46,6 @@ import java.util.Set;
 @ServiceAPI(ComponentScope.APPLICATION)
 @ServiceImpl
 public class EqualsHashCodeTemplatesManager extends TemplatesManager {
-  @Nonnull
   public static EqualsHashCodeTemplatesManager getInstance() {
     return ServiceManager.getService(EqualsHashCodeTemplatesManager.class);
   }
@@ -67,15 +64,10 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
   private static final String EQUALS_SUFFIX = "equals";
   private static final String HASH_CODE_SUFFIX = "hashCode";
 
-  @NonNls
   public static final String INTELLI_J_DEFAULT = "Default";
-  @NonNls
   public static final String EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG = "Equals/HashCodeBuilder (Apache commons-lang)";
-  @NonNls
   public static final String EQUALS_HASH_CODE_BUILDER_APACHE_COMMONS_LANG_3 = "Equals/HashCodeBuilder (Apache commons-lang 3)";
-  @NonNls
   public static final String OBJECTS_EQUAL_AND_HASH_CODE_GUAVA = "Objects.equal and hashCode (Guava)";
-  @NonNls
   public static final String JAVA_UTIL_OBJECTS_EQUALS_AND_HASH_CODE = "java.util.Objects.equals and hashCode (java 7+)";
 
   @Override
@@ -131,7 +123,6 @@ public class EqualsHashCodeTemplatesManager extends TemplatesManager {
     return ArrayUtil.toStringArray(names);
   }
 
-  @Nonnull
   public static String getTemplateBaseName(TemplateResource resource) {
     return StringUtil.trimEnd(StringUtil.trimEnd(resource.getFileName(), EQUALS_SUFFIX), HASH_CODE_SUFFIX).trim();
   }

@@ -1,7 +1,6 @@
 package com.intellij.psi.resolve;
 
 import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author ven
@@ -68,7 +67,7 @@ public abstract class TypeInferenceTest extends Resolve15TestCase {
     checkResolvesTo(CommonClassNames.JAVA_LANG_OBJECT);
   }
 
-  private void checkResolvesTo(@NonNls String typeName) throws Exception {
+  private void checkResolvesTo(String typeName) throws Exception {
     PsiReferenceExpression ref = configure();
     PsiType type = ref.getType();
     assertNotNull(type);

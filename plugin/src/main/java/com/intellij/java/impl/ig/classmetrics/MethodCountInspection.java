@@ -25,7 +25,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -41,14 +40,12 @@ public class MethodCountInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean ignoreGettersAndSetters = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ClassWithTooManyMethods";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.tooManyMethodsDisplayName();
@@ -89,7 +86,6 @@ public class MethodCountInspection extends BaseInspection {
 
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer count = (Integer) infos[0];
         return InspectionGadgetsLocalize.tooManyMethodsProblemDescriptor(count).get();
@@ -103,7 +99,7 @@ public class MethodCountInspection extends BaseInspection {
     private class MethodCountVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // note: no call to super
             int methodCount = calculateTotalMethodCount(aClass);
             if (methodCount <= m_limit) {

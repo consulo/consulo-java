@@ -49,7 +49,6 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -249,22 +248,18 @@ public class IntroduceParameterObjectDialog extends RefactoringDialog {
         return myInnerClassNameTextField.getText().trim();
     }
 
-    @Nonnull
     public String getPackageName() {
         return packageTextField.getText().trim();
     }
 
-    @Nonnull
     public String getExistingClassName() {
         return existingClassField.getText().trim();
     }
 
-    @Nonnull
     public String getClassName() {
         return classNameField.getText().trim();
     }
 
-    @Nonnull
     public List<PsiParameter> getParametersToExtract() {
         List<PsiParameter> out = new ArrayList<>();
         for (VariableData info : parameterInfo) {

@@ -22,8 +22,7 @@ import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.scheme.JobDescriptor;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author max
@@ -32,10 +31,10 @@ import jakarta.annotation.Nullable;
 public class DummyEntryPointsTool extends UnusedDeclarationInspection {
     @Override
     public void runInspection(
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor problemDescriptionsProcessor,
         Object state
     ) {
     }
@@ -46,20 +45,17 @@ public class DummyEntryPointsTool extends UnusedDeclarationInspection {
         return JobDescriptor.EMPTY_ARRAY;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionDeadCodeEntryPointsDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return LocalizeValue.empty();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         //noinspection InspectionDescriptionNotFoundInspection
         return "";

@@ -24,17 +24,14 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ObjectAllocationInLoopInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.objectAllocationInLoopDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.objectAllocationInLoopProblemDescriptor().get();
     }
@@ -47,7 +44,7 @@ public class ObjectAllocationInLoopInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             if (!ControlFlowUtils.isInLoop(expression)) {
                 return;

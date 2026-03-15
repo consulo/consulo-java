@@ -27,8 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Set;
@@ -43,13 +42,11 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
   public boolean countGettersAndSetters = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.fieldAccessedSynchronizedAndUnsynchronizedDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.fieldAccessedSynchronizedAndUnsynchronizedProblemDescriptor().get();
   }
@@ -80,7 +77,7 @@ public class FieldAccessedSynchronizedAndUnsynchronizedInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       if (!containsSynchronization(aClass)) {
         return;
       }

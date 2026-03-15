@@ -6,7 +6,6 @@ package consulo.java.analysis.codeInspection;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
@@ -19,5 +18,5 @@ public interface ImplicitResourceCloser {
    * @return true if variable closed properly
    */
   @Contract(pure = true)
-  boolean isSafelyClosed(@Nonnull PsiVariable variable);
+  boolean isSafelyClosed(PsiVariable variable);
 }

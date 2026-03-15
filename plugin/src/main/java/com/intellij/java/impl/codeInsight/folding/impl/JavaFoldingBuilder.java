@@ -32,20 +32,19 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.ex.awt.FontUtil;
-import jakarta.annotation.Nonnull;
 
 import java.awt.*;
 
 @ExtensionImpl
 public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
   @Override
-  protected boolean isBelowRightMargin(@Nonnull Project project, int lineLength) {
+  protected boolean isBelowRightMargin(Project project, int lineLength) {
     CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(project);
     return lineLength <= settings.getRightMargin(JavaLanguage.INSTANCE);
   }
 
   @Override
-  protected boolean shouldShowExplicitLambdaType(@Nonnull PsiAnonymousClass anonymousClass, @Nonnull PsiNewExpression expression) {
+  protected boolean shouldShowExplicitLambdaType(PsiAnonymousClass anonymousClass, PsiNewExpression expression) {
     PsiElement parent = expression.getParent();
     if (parent instanceof PsiReferenceExpression || parent instanceof PsiAssignmentExpression) {
       return true;
@@ -56,18 +55,15 @@ public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
   }
 
   @Override
-  @Nonnull
   protected String rightArrow() {
     return getRightArrow();
   }
 
-  @Nonnull
   public static String getRightArrow() {
     Font font = EditorColorsManager.getInstance().getGlobalScheme().getFont(EditorFontType.PLAIN);
     return FontUtil.rightArrow(font);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

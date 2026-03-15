@@ -17,16 +17,15 @@ package com.intellij.java.language.psi.tree.java;
 
 import com.intellij.java.language.JavaLanguage;
 import consulo.language.ast.IElementType;
-import org.jetbrains.annotations.NonNls;
 
 public class IJavaElementType extends IElementType {
   private final boolean myLeftBound;
 
-  public IJavaElementType(@NonNls final String debugName) {
+  public IJavaElementType(final String debugName) {
     this(debugName, false);
   }
 
-  public IJavaElementType(@NonNls final String debugName, final boolean leftBound) {
+  public IJavaElementType(final String debugName, final boolean leftBound) {
     super(debugName, JavaLanguage.INSTANCE);
     myLeftBound = leftBound;
   }

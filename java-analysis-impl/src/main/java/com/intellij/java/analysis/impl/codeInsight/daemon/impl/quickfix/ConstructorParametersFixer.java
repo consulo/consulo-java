@@ -19,7 +19,6 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import consulo.document.util.TextRange;
-import jakarta.annotation.Nonnull;
 
 /**
  * Propose to cast one argument to corresponding type
@@ -31,10 +30,10 @@ import jakarta.annotation.Nonnull;
  */
 public class ConstructorParametersFixer {
     public static void registerFixActions(
-        @Nonnull PsiJavaCodeReferenceElement ctrRef,
+        PsiJavaCodeReferenceElement ctrRef,
         PsiConstructorCall constructorCall,
-        @Nonnull HighlightInfo.Builder highlightInfo,
-        @Nonnull TextRange fixRange
+        HighlightInfo.Builder highlightInfo,
+        TextRange fixRange
     ) {
         JavaResolveResult resolved = ctrRef.advancedResolve(false);
         PsiClass aClass = (PsiClass)resolved.getElement();

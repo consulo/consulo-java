@@ -23,7 +23,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -64,19 +63,16 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
     public Scope ignoreScope = Scope.NONE;
 
     @Override
-    @Nonnull
     public String getID() {
         return "ConstructorWithTooManyParameters";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.parametersPerConstructorDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer parameterCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.parametersPerConstructorProblemDescriptor(parameterCount).get();
@@ -150,7 +146,7 @@ public class ParametersPerConstructorInspection extends MethodMetricInspection {
     private class ParametersPerConstructorVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             // note: no call to super
             if (method.getNameIdentifier() == null) {
                 return;

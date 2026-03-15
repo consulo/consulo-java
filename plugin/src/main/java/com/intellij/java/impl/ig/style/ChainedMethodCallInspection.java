@@ -28,8 +28,7 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -43,13 +42,11 @@ public class ChainedMethodCallInspection extends BaseInspection {
   public boolean m_ignoreThisSuperCalls = true;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.chainedMethodCallDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.chainedMethodCallProblemDescriptor().get();
   }
@@ -91,7 +88,7 @@ public class ChainedMethodCallInspection extends BaseInspection {
   private class ChainedMethodCallVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression reference = expression.getMethodExpression();
       PsiExpression qualifier = reference.getQualifierExpression();

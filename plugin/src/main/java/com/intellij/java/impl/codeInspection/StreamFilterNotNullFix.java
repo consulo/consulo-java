@@ -32,20 +32,18 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
 
 public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction {
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return JavaInspectionsLocalize.inspectionDataFlowFilterNotnullQuickfix();
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiFunctionalExpression function = findFunction(descriptor.getStartElement());
         if (function == null) {
             return;
@@ -66,8 +64,7 @@ public class StreamFilterNotNullFix implements LocalQuickFix, HighPriorityAction
         LambdaCanBeMethodReferenceInspection.replaceAllLambdasWithMethodReferences(result.getArgumentList());
     }
 
-    @Nonnull
-    private static String suggestVariableName(@Nonnull PsiFunctionalExpression function, @Nonnull PsiExpression qualifier) {
+    private static String suggestVariableName(PsiFunctionalExpression function, PsiExpression qualifier) {
         String name = null;
         if (function instanceof PsiLambdaExpression) {
             PsiParameter parameter = ArrayUtil.getFirstElement(((PsiLambdaExpression) function).getParameterList().getParameters());

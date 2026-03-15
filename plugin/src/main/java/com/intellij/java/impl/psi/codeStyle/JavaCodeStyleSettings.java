@@ -9,7 +9,6 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.jetbrains.annotations.TestOnly;
 
@@ -22,7 +21,7 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
   private static final String DO_NOT_IMPORT_INNER_ITEM = "CLASS";
   private static final String COLLECTION_ITEM_ATTRIBUTE = "name";
 
-  public JavaCodeStyleSettings(@Nonnull CodeStyleSettings container) {
+  public JavaCodeStyleSettings(CodeStyleSettings container) {
     super("JavaCodeStyleSettings", container);
     initImportsByDefault();
   }
@@ -238,14 +237,14 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
   public String BUILDER_METHODS = "";
   public boolean KEEP_BUILDER_METHODS_INDENTS = false;
 
-  private final @Nonnull
+  private final 
   Set<String> myBuilderMethodsNameCache = new HashSet<>();
-  private @Nonnull
+  private 
   String myCachedBuilderMethods = "";
 
   public int SWITCH_EXPRESSIONS_WRAP = CommonCodeStyleSettings.WRAP_AS_NEEDED;
 
-  public boolean isBuilderMethod(@Nonnull String methodName) {
+  public boolean isBuilderMethod(String methodName) {
     if (!StringUtil.equals(BUILDER_METHODS, myCachedBuilderMethods)) {
       myCachedBuilderMethods = BUILDER_METHODS;
       myBuilderMethodsNameCache.clear();
@@ -369,7 +368,7 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
 
   @SuppressWarnings("deprecation")
   @Override
-  protected void importLegacySettings(@Nonnull CodeStyleSettings rootSettings) {
+  protected void importLegacySettings(CodeStyleSettings rootSettings) {
     USE_EXTERNAL_ANNOTATIONS = rootSettings.USE_EXTERNAL_ANNOTATIONS;
     INSERT_OVERRIDE_ANNOTATION = rootSettings.INSERT_OVERRIDE_ANNOTATION;
     REPEAT_SYNCHRONIZED = rootSettings.REPEAT_SYNCHRONIZED;
@@ -422,13 +421,13 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
   }
 
   @Override
-  public void writeExternal(Element parentElement, @Nonnull CustomCodeStyleSettings parentSettings) throws WriteExternalException {
+  public void writeExternal(Element parentElement, CustomCodeStyleSettings parentSettings) throws WriteExternalException {
     super.writeExternal(parentElement, parentSettings);
     writeExternalCollection(parentElement, myRepeatAnnotations, REPEAT_ANNOTATIONS, REPEAT_ANNOTATIONS_ITEM);
     writeExternalCollection(parentElement, myDoNotImportInner, DO_NOT_IMPORT_INNER, DO_NOT_IMPORT_INNER_ITEM);
   }
 
-  public static JavaCodeStyleSettings getInstance(@Nonnull PsiFile file) {
+  public static JavaCodeStyleSettings getInstance(PsiFile file) {
     return CodeStyle.getCustomSettings(file, JavaCodeStyleSettings.class);
   }
 
@@ -436,7 +435,7 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
    * For production code use {@link #getInstance(PsiFile)}
    */
   @TestOnly
-  public static JavaCodeStyleSettings getInstance(@Nonnull Project project) {
+  public static JavaCodeStyleSettings getInstance(Project project) {
     return CodeStyle.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
   }
 
@@ -480,7 +479,6 @@ public class JavaCodeStyleSettings extends CustomCodeStyleSettings implements Im
     REPLACE_CAST = REPLACE_INSTANCEOF = false;
   }
 
-  @Nonnull
   @Override
   public List<String> getKnownTagNames() {
     return Arrays.asList(getTagName(), REPEAT_ANNOTATIONS, DO_NOT_IMPORT_INNER);

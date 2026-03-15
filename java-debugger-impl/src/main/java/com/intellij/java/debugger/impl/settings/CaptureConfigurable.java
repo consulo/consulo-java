@@ -49,8 +49,7 @@ import consulo.util.xml.serializer.XmlSerializer;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileWrapper;
 import consulo.virtualFileSystem.archive.ArchiveFileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jetbrains.annotations.Debugger;
@@ -71,7 +70,6 @@ public class CaptureConfigurable implements SearchableConfigurable {
     private MyTableModel myTableModel;
     private JCheckBox myCaptureVariables;
 
-    @Nonnull
     @Override
     public String getId() {
         return "reference.idesettings.debugger.capture";
@@ -121,7 +119,7 @@ public class CaptureConfigurable implements SearchableConfigurable {
             }
 
             @Override
-            public void actionPerformed(@Nonnull AnActionEvent e) {
+            public void actionPerformed(AnActionEvent e) {
                 selectedCapturePoints(table).forEach(c ->
                 {
                     try {
@@ -142,7 +140,7 @@ public class CaptureConfigurable implements SearchableConfigurable {
             }
 
             @Override
-            public void actionPerformed(@Nonnull AnActionEvent e) {
+            public void actionPerformed(AnActionEvent e) {
                 selectedCapturePoints(table).forEach(c -> c.myEnabled = true);
                 table.repaint();
             }
@@ -154,7 +152,7 @@ public class CaptureConfigurable implements SearchableConfigurable {
             }
 
             @Override
-            public void actionPerformed(@Nonnull AnActionEvent e) {
+            public void actionPerformed(AnActionEvent e) {
                 selectedCapturePoints(table).forEach(c -> c.myEnabled = false);
                 table.repaint();
             }
@@ -162,12 +160,12 @@ public class CaptureConfigurable implements SearchableConfigurable {
 
         new DumbAwareAction("Toggle") {
             @Override
-            public void update(@Nonnull AnActionEvent e) {
+            public void update(AnActionEvent e) {
                 e.getPresentation().setEnabled(table.getSelectedRowCount() == 1);
             }
 
             @Override
-            public void actionPerformed(@Nonnull final AnActionEvent e) {
+            public void actionPerformed(final AnActionEvent e) {
                 selectedCapturePoints(table).forEach(c -> c.myEnabled = !c.myEnabled);
                 table.repaint();
             }
@@ -175,7 +173,7 @@ public class CaptureConfigurable implements SearchableConfigurable {
 
         decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Import"), LocalizeValue.of("Import"), AllIcons.Actions.Install) {
             @Override
-            public void actionPerformed(@Nonnull final AnActionEvent e) {
+            public void actionPerformed(final AnActionEvent e) {
                 FileChooserDescriptor descriptor = new FileChooserDescriptor(true, false, true, false, true, true) {
                     @Override
                     public boolean isFileVisible(VirtualFile file, boolean showHiddenFiles) {
@@ -216,7 +214,7 @@ public class CaptureConfigurable implements SearchableConfigurable {
         });
         decorator.addExtraAction(new DumbAwareActionButton(LocalizeValue.of("Export"), LocalizeValue.of("Export"), AllIcons.Actions.Export) {
             @Override
-            public void actionPerformed(@Nonnull final AnActionEvent e) {
+            public void actionPerformed(final AnActionEvent e) {
                 VirtualFileWrapper wrapper = FileChooserFactory.getInstance().createSaveFileDialog(new FileSaverDescriptor("Export Selected Capture Points to File...", "", "xml"), e.getData(Project.KEY))
                     .save(null, null);
                 if (wrapper == null) {
@@ -521,7 +519,6 @@ public class CaptureConfigurable implements SearchableConfigurable {
         myTableModel.fireTableDataChanged();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaDebuggerLocalize.asyncStacktracesConfigurableDisplayName();

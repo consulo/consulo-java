@@ -23,17 +23,14 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaAnnotationSupport implements PsiAnnotationSupport {
   @Override
-  @Nonnull
-  public PsiLiteral createLiteralValue(@Nonnull String value, @Nonnull PsiElement context) {
+  public PsiLiteral createLiteralValue(String value, PsiElement context) {
     return (PsiLiteral)JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createExpressionFromText("\"" + StringUtil.escapeStringCharacters(value) + "\"", null);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

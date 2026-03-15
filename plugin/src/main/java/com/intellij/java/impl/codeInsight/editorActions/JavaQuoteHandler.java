@@ -31,7 +31,6 @@ import consulo.language.editor.action.SimpleTokenSetQuoteHandler;
 import consulo.language.psi.PsiElement;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -97,7 +96,7 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
   }
 
   @Override
-  public boolean isAppropriateElementTypeForLiteral(@Nonnull IElementType tokenType) {
+  public boolean isAppropriateElementTypeForLiteral(IElementType tokenType) {
     return isAppropriateElementTypeForLiteralStatic(tokenType);
   }
 
@@ -118,7 +117,6 @@ public class JavaQuoteHandler extends SimpleTokenSetQuoteHandler implements Java
         || tokenType == JavaTokenType.CHARACTER_LITERAL;
   }
 
-  @Nonnull
   @Override
   public FileType getFileType() {
     return JavaFileType.INSTANCE;

@@ -31,7 +31,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ import java.util.List;
 public class IntroduceVariableHandler extends IntroduceVariableBase implements JavaIntroduceVariableHandlerBase {
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiExpression expression) {
+    public void invoke(Project project, Editor editor, PsiExpression expression) {
         invokeImpl(project, expression, editor);
     }
 
@@ -97,7 +96,7 @@ public class IntroduceVariableHandler extends IntroduceVariableBase implements J
 
     @Override
     @RequiredUIAccess
-    protected void showErrorMessage(Project project, Editor editor, @Nonnull LocalizeValue message) {
+    protected void showErrorMessage(Project project, Editor editor, LocalizeValue message) {
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INTRODUCE_VARIABLE);
     }
 

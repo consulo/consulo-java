@@ -28,8 +28,7 @@ import consulo.internal.com.sun.jdi.request.MethodExitRequest;
 import consulo.java.debugger.impl.JavaRegistry;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -231,7 +230,6 @@ public class MethodReturnValueWatcher
 		return myEntryRequest;
 	}
 
-	@Nonnull
 	private MethodExitRequest createExitRequest()
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread(); // to ensure EventRequestManager synchronization
@@ -243,7 +241,6 @@ public class MethodReturnValueWatcher
 		return myExitRequest;
 	}
 
-	@Nonnull
 	private <T extends EventRequest> T prepareRequest(T request)
 	{
 		request.setSuspendPolicy(JavaRegistry.DEBUGGER_WATCH_RETURN_SPEEDUP ? EventRequest.SUSPEND_EVENT_THREAD : EventRequest.SUSPEND_NONE);

@@ -1,7 +1,5 @@
-import jakarta.annotation.Nonnull;
 
 class Test {
-    @Nonnull
 	Object d;
 
     public boolean equals(Object o) {

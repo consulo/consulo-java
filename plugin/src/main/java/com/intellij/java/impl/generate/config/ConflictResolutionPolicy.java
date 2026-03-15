@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.generate.config;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -48,5 +47,5 @@ public interface ConflictResolutionPolicy
 	 * @throws IncorrectOperationException is thrown if there is an IDEA error.
 	 */
 	@Nullable
-	PsiMethod applyMethod(PsiClass clazz, PsiMethod existingMethod, @Nonnull PsiMethod newMethod, Editor editor);
+	PsiMethod applyMethod(PsiClass clazz, PsiMethod existingMethod, PsiMethod newMethod, Editor editor);
 }

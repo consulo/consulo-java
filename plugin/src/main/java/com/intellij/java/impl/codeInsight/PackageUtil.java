@@ -43,8 +43,7 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -221,7 +220,7 @@ public class PackageUtil
 	@Nullable
 	@RequiredReadAction
 	public static PsiDirectory findOrCreateDirectoryForPackage(
-		@Nonnull Module module,
+		Module module,
 		String packageName,
 		@Nullable PsiDirectory baseDir,
 		boolean askUserToCreate
@@ -234,7 +233,7 @@ public class PackageUtil
 	@RequiredReadAction
 	@RequiredUIAccess
 	public static PsiDirectory findOrCreateDirectoryForPackage(
-		@Nonnull Module module,
+		Module module,
 		String packageName,
 		PsiDirectory baseDir,
 		boolean askUserToCreate,
@@ -406,7 +405,7 @@ public class PackageUtil
 	}
 
 	@RequiredReadAction
-	private static PsiDirectory getWritableModuleDirectory(@Nonnull Query<VirtualFile> vFiles, @Nonnull Module module, PsiManager manager)
+	private static PsiDirectory getWritableModuleDirectory(Query<VirtualFile> vFiles, Module module, PsiManager manager)
 	{
 		for (VirtualFile vFile : vFiles)
 		{
@@ -536,8 +535,7 @@ public class PackageUtil
 		return convertRoots(project, files);
 	}
 
-	@Nonnull
-	public static PsiDirectory findOrCreateSubdirectory(@Nonnull PsiDirectory directory, @Nonnull String directoryName)
+	public static PsiDirectory findOrCreateSubdirectory(PsiDirectory directory, String directoryName)
 	{
 		PsiDirectory subDirectory = directory.findSubdirectory(directoryName);
 		if (subDirectory == null)

@@ -47,8 +47,7 @@ import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -99,7 +98,7 @@ public class ToggleFieldBreakpointAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public void update(@Nonnull AnActionEvent event) {
+    public void update(AnActionEvent event) {
         event.getPresentation().setVisible(getPlace(event) != null);
     }
 

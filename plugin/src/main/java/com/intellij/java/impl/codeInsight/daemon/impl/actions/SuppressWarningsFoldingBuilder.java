@@ -34,16 +34,14 @@ import consulo.language.psi.PsiElement;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 @ExtensionImpl
 public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
-  @Nonnull
   @Override
-  public FoldingDescriptor[] buildFoldRegions(@Nonnull PsiElement root, @Nonnull Document document, boolean quick) {
+  public FoldingDescriptor[] buildFoldRegions(PsiElement root, Document document, boolean quick) {
     if (!(root instanceof PsiJavaFile) || quick || !JavaCodeFoldingSettings.getInstance().isCollapseSuppressWarnings()) {
       return FoldingDescriptor.EMPTY;
     }
@@ -64,7 +62,7 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
   }
 
   @Override
-  public String getPlaceholderText(@Nonnull ASTNode node) {
+  public String getPlaceholderText(ASTNode node) {
     PsiElement element = node.getPsi();
     if (element instanceof PsiAnnotation) {
       return "/" + StringUtil.join(((PsiAnnotation)element).getParameterList().getAttributes(), new Function<PsiNameValuePair, String>() {
@@ -98,11 +96,10 @@ public class SuppressWarningsFoldingBuilder extends FoldingBuilderEx {
 
 
   @Override
-  public boolean isCollapsedByDefault(@Nonnull ASTNode node) {
+  public boolean isCollapsedByDefault(ASTNode node) {
     return JavaCodeFoldingSettings.getInstance().isCollapseSuppressWarnings();
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

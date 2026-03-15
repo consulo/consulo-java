@@ -24,7 +24,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Dmitry Batkovich
@@ -40,7 +39,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!myValue.isValid() || !myExpectedType.isValid() || !(myExpectedType instanceof PsiClassType)) {
       return false;
     }
@@ -50,7 +49,7 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     String newText = myValue.getText();
     newText = StringUtil.stripQuotesAroundValue(newText);
     newText = "\"" + newText + "\"";
@@ -60,7 +59,6 @@ public class SurroundWithQuotesAnnotationParameterValueFix implements SyntheticI
     editor.getCaretModel().moveToOffset(newElement.getTextOffset() + newElement.getTextLength());
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Surround annotation parameter value with quotes");

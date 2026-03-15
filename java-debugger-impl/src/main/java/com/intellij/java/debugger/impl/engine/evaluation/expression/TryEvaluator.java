@@ -21,21 +21,19 @@ import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import consulo.internal.com.sun.jdi.ObjectReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author egor
  */
 public class TryEvaluator implements Evaluator
 {
-	@Nonnull
 	private final Evaluator myBodyEvaluator;
 	private final List<CatchEvaluator> myCatchBlockEvaluators;
 	@Nullable
 	private final Evaluator myFinallyEvaluator;
 
-	public TryEvaluator(@Nonnull Evaluator bodyEvaluator, List<CatchEvaluator> catchBlockEvaluators, @Nullable Evaluator finallyEvaluator)
+	public TryEvaluator(Evaluator bodyEvaluator, List<CatchEvaluator> catchBlockEvaluators, @Nullable Evaluator finallyEvaluator)
 	{
 		myBodyEvaluator = bodyEvaluator;
 		myCatchBlockEvaluators = catchBlockEvaluators;

@@ -33,10 +33,8 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static consulo.util.lang.StringUtil.unescapeStringCharacters;
 
@@ -116,7 +114,6 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     return textWasChanged ? buffer.toString() : null;
   }
 
-  @Nonnull
   protected String unescape(String text, PsiElement token) {
     return unescapeStringCharacters(text);
   }
@@ -137,7 +134,7 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
 
     if (isStringLiteral(token)) {
       StringBuilder buffer = new StringBuilder(text.length());
-      @NonNls String breaker = getLineBreaker(token);
+      String breaker = getLineBreaker(token);
       String[] lines = LineTokenizer.tokenize(text.toCharArray(), false, true);
       for (int i = 0; i < lines.length; i++) {
         buffer.append(escapeCharCharacters(lines[i], token));
@@ -187,18 +184,17 @@ public class StringLiteralCopyPasteProcessor implements CopyPastePreProcessor {
     return elementAtSelectionStart;
   }
 
-  protected boolean isCharLiteral(@Nonnull PsiElement token) {
+  protected boolean isCharLiteral(PsiElement token) {
     ASTNode node = token.getNode();
     return node != null && node.getElementType() == JavaTokenType.CHARACTER_LITERAL;
   }
 
-  protected boolean isStringLiteral(@Nonnull PsiElement token) {
+  protected boolean isStringLiteral(PsiElement token) {
     ASTNode node = token.getNode();
     return node != null && node.getElementType() == JavaTokenType.STRING_LITERAL;
   }
 
-  @Nonnull
-  protected String escapeCharCharacters(@Nonnull String s, @Nonnull PsiElement token) {
+  protected String escapeCharCharacters(String s, PsiElement token) {
     StringBuilder buffer = new StringBuilder();
     StringUtil.escapeStringCharacters(s.length(), s, isStringLiteral(token) ? "\"" : "\'", buffer);
     return buffer.toString();

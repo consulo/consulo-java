@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java <code>super</code> expression in a super method call. Note that the qualifier of

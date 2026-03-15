@@ -24,11 +24,8 @@ import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 import com.intellij.java.impl.codeInspection.varScopeCanBeNarrowed.ParameterCanBeLocalInspection;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public abstract class ConvertParameterToLocalVariableTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/inspection";
@@ -55,7 +52,6 @@ public abstract class ConvertParameterToLocalVariableTest extends LightQuickFixT
 
 
   @Override
-  @NonNls
   protected String getBasePath() {
     return "/quickFix/ConvertParameterToLocalVariable";
   }

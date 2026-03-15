@@ -32,7 +32,6 @@ import consulo.language.editor.template.macro.MacroCallNode;
 import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -43,7 +42,7 @@ public class HighlightUtil {
   private HighlightUtil() {
   }
 
-  public static void highlightElements(@Nonnull Collection<? extends PsiElement> elementCollection) {
+  public static void highlightElements(Collection<? extends PsiElement> elementCollection) {
     if (elementCollection.isEmpty()) {
       return;
     }
@@ -73,7 +72,7 @@ public class HighlightUtil {
     });
   }
 
-  public static void highlightElement(@Nonnull PsiElement element) {
+  public static void highlightElement(PsiElement element) {
     List<PsiElement> elements = Collections.singletonList(element);
     highlightElements(elements);
   }

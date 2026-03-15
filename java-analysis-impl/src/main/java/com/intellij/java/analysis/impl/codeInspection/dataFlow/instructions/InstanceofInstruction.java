@@ -23,8 +23,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -36,7 +35,7 @@ public class InstanceofInstruction extends BinopInstruction
 	@Nullable
 	private final PsiType myCastType;
 
-	public InstanceofInstruction(PsiExpression psiAnchor, @Nullable PsiExpression left, @Nonnull PsiType castType)
+	public InstanceofInstruction(PsiExpression psiAnchor, @Nullable PsiExpression left, PsiType castType)
 	{
 		super(JavaTokenType.INSTANCEOF_KEYWORD, psiAnchor, PsiType.BOOLEAN);
 		myLeft = left;

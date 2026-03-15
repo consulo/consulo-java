@@ -26,8 +26,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,12 +37,12 @@ public class PsiFieldMember extends PsiElementClassMember<PsiField> implements P
 {
 	private static final int FIELD_OPTIONS = PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE | PsiFormatUtilBase.TYPE_AFTER;
 
-	public PsiFieldMember(@Nonnull PsiField field)
+	public PsiFieldMember(PsiField field)
 	{
 		super(field, PsiFormatUtil.formatVariable(field, FIELD_OPTIONS, PsiSubstitutor.EMPTY));
 	}
 
-	public PsiFieldMember(@Nonnull PsiField psiMember, PsiSubstitutor substitutor)
+	public PsiFieldMember(PsiField psiMember, PsiSubstitutor substitutor)
 	{
 		super(psiMember, substitutor, PsiFormatUtil.formatVariable(psiMember, FIELD_OPTIONS, PsiSubstitutor.EMPTY));
 	}

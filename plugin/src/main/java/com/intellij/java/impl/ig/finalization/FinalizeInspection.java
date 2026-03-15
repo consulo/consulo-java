@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -34,20 +33,17 @@ public class FinalizeInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreTrivialFinalizers = true;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "FinalizeDeclaration";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.finalizeDeclarationDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.finalizeDeclarationProblemDescriptor().get();
     }
@@ -65,7 +61,7 @@ public class FinalizeInspection extends BaseInspection {
     private class FinalizeDeclaredVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //note: no call to super;
             String methodName = method.getName();
             if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {

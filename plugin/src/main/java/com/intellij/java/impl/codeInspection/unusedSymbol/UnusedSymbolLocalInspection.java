@@ -20,7 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.unusedSymbol.UnusedSymbolL
 import com.intellij.java.impl.codeInspection.deadCode.UnusedDeclarationInspection;
 import com.intellij.java.language.psi.PsiModifier;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

@@ -33,7 +33,6 @@ import consulo.language.editor.template.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -49,18 +48,18 @@ public class InstanceofExpressionPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
+  public boolean isApplicable(PsiElement context, Document copyDocument, int newOffset) {
     return JavaPostfixTemplatesUtils.isNotPrimitiveTypeExpression(JavaPostfixTemplatesUtils.getTopmostExpression(context));
   }
 
   @Override
-  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
+  public void expand(PsiElement context, Editor editor) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     if (!JavaPostfixTemplatesUtils.isNotPrimitiveTypeExpression(expression)) return;
     surroundExpression(context.getProject(), editor, expression);
   }
 
-  private static void surroundExpression(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiExpression expr)
+  private static void surroundExpression(Project project, Editor editor, PsiExpression expr)
     throws IncorrectOperationException {
     assert expr.isValid();
     PsiType[] types = GuessManager.getInstance(project).guessTypeToCast(expr);

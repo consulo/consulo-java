@@ -5,17 +5,16 @@ import com.intellij.java.language.psi.PsiRecordComponent;
 import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
 public class LightCompactConstructorParameter extends LightParameter implements LightRecordMember {
-  private final @Nonnull PsiRecordComponent myRecordComponent;
+  private final PsiRecordComponent myRecordComponent;
 
-  public LightCompactConstructorParameter(@Nonnull String name,
-                                          @Nonnull PsiType type,
-                                          @Nonnull PsiElement declarationScope,
-                                          @Nonnull PsiRecordComponent component) {
+  public LightCompactConstructorParameter(String name,
+                                          PsiType type,
+                                          PsiElement declarationScope,
+                                          PsiRecordComponent component) {
     super(name, type, declarationScope);
     myRecordComponent = component;
     setModifierList(new LightRecordComponentModifierList(this, myManager, myRecordComponent));
@@ -32,7 +31,6 @@ public class LightCompactConstructorParameter extends LightParameter implements 
   }
 
   @Override
-  @Nonnull
   public PsiRecordComponent getRecordComponent() {
     return myRecordComponent;
   }
@@ -42,7 +40,6 @@ public class LightCompactConstructorParameter extends LightParameter implements 
     return myRecordComponent.getTextOffset();
   }
 
-  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     return myRecordComponent.getNavigationElement();

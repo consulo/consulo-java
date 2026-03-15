@@ -11,7 +11,6 @@ import com.intellij.testFramework.PlatformTestUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 
@@ -184,7 +183,7 @@ public abstract class SafeDeleteTest extends MultiFileTestCase
 		doSingleFileTest();
 	}
 
-	private void doTest(@NonNls final String qClassName) throws Exception
+	private void doTest(final String qClassName) throws Exception
 	{
 		doTest(new PerformAction()
 		{

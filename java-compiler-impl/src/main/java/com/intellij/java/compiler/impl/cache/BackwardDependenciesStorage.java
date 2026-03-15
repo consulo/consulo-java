@@ -24,7 +24,6 @@ import consulo.disposer.Disposable;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.*;
 
-import jakarta.annotation.Nonnull;
 import java.io.*;
 import java.util.*;
 
@@ -48,7 +47,6 @@ public class BackwardDependenciesStorage implements Flushable, Disposable
 
 		myCache = new SLRUCache<Integer, ReferencerSetHolder>(cacheSize * 2, cacheSize)
 		{
-			@Nonnull
 			public ReferencerSetHolder createValue(Integer key)
 			{
 				return new ReferencerSetHolder(key);

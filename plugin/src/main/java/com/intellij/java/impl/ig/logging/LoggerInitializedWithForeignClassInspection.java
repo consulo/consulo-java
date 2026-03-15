@@ -32,10 +32,8 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -46,9 +44,9 @@ import java.util.List;
 @ExtensionImpl
 public class LoggerInitializedWithForeignClassInspection extends BaseInspection {
 
-  @NonNls private static final String DEFAULT_LOGGER_CLASS_NAMES =
+  private static final String DEFAULT_LOGGER_CLASS_NAMES =
     "org.apache.log4j.Logger,org.slf4j.LoggerFactory,org.apache.commons.logging.LogFactory,java.util.logging.Logger";
-  @NonNls private static final String DEFAULT_FACTORY_METHOD_NAMES = "getLogger,getLogger,getLog,getLogger";
+  private static final String DEFAULT_FACTORY_METHOD_NAMES = "getLogger,getLogger,getLog,getLogger";
 
   @SuppressWarnings({"PublicField"})
   public String loggerClassName = DEFAULT_LOGGER_CLASS_NAMES;
@@ -59,13 +57,11 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   private final List<String> loggerFactoryMethodNames = new ArrayList();
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.loggerInitializedWithForeignClassDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.loggerInitializedWithForeignClassProblemDescriptor().get();
   }
@@ -95,7 +91,6 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.loggerInitializedWithForeignClassQuickfix(newClassName);
     }
@@ -200,7 +195,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(loggerClassName, loggerFactoryClassNames);
     parseString(loggerFactoryMethodName, loggerFactoryMethodNames);
@@ -211,7 +206,7 @@ public class LoggerInitializedWithForeignClassInspection extends BaseInspection 
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(Element element) throws WriteExternalException {
     loggerClassName = formatString(loggerFactoryClassNames);
     loggerFactoryMethodName = formatString(loggerFactoryMethodNames);
     super.writeSettings(element);

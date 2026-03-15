@@ -23,7 +23,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,7 +35,6 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
      */
     public int m_limit = DEFAULT_BRANCH_LIMIT;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.switchStatementWithTooManyBranchesDisplayName();
@@ -47,7 +45,6 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
         return new SingleIntegerFieldOptionsPanel(message.get(), this, "m_limit");
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         Integer branchCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.ifStatementWithTooManyBranchesProblemDescriptor(branchCount).get();
@@ -59,7 +56,7 @@ public abstract class SwitchStatementWithTooManyBranchesInspection extends BaseI
 
     private class SwitchStatementWithTooManyBranchesVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+        public void visitSwitchStatement(PsiSwitchStatement statement) {
             PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return;

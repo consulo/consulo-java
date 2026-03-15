@@ -24,7 +24,6 @@ import consulo.language.psi.PsiFile;
 import consulo.xml.codeInsight.completion.XmlCompletionContributor;
 import consulo.xml.lang.xml.XMLLanguage;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**
@@ -66,7 +65,6 @@ public class XmlBasicToClassNameDelegator extends CompletionContributor {
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return XMLLanguage.INSTANCE;

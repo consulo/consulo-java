@@ -29,10 +29,8 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -46,21 +44,18 @@ public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection 
     @SuppressWarnings("PublicField")
     public boolean ignoreCantWrap = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ThrowInsideCatchBlockWhichIgnoresCaughtException";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.exceptionFromCatchWhichDoesntWrapDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.exceptionFromCatchWhichDoesntWrapProblemDescriptor().get();
     }
@@ -92,7 +87,7 @@ public class ExceptionFromCatchWhichDoesntWrapInspection extends BaseInspection 
             if (parameter == null) {
                 return;
             }
-            @NonNls String parameterName = parameter.getName();
+            String parameterName = parameter.getName();
             if ("ignore".equals(parameterName) || "ignored".equals(parameterName)) {
                 return;
             }

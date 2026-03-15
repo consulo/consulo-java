@@ -25,20 +25,17 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class SynchronizeOnNonFinalFieldInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.synchronizeOnNonFinalFieldDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.synchronizeOnNonFinalFieldProblemDescriptor().get();
   }
@@ -65,7 +62,7 @@ public class SynchronizeOnNonFinalFieldInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @Nonnull PsiSynchronizedStatement statement) {
+      PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       PsiExpression lockExpression = statement.getLockExpression();
       if (!(lockExpression instanceof PsiReferenceExpression)) {

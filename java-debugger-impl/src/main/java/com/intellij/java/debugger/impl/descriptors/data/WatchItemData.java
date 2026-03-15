@@ -19,7 +19,7 @@ import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.ui.impl.watch.WatchItemDescriptor;
 import consulo.project.Project;
 import consulo.internal.com.sun.jdi.Value;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev

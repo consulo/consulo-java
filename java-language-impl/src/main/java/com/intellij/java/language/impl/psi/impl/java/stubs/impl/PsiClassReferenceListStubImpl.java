@@ -14,19 +14,17 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> implements PsiClassReferenceListStub {
-  @Nonnull
   private final TypeInfo[] myInfos;
   private volatile PsiClassType[] myTypes;
 
-  public PsiClassReferenceListStubImpl(@Nonnull JavaClassReferenceListElementType type, StubElement parent, @Nonnull String[] names) {
+  public PsiClassReferenceListStubImpl(JavaClassReferenceListElementType type, StubElement parent, String[] names) {
     this(type, parent, ContainerUtil.map2Array(names, TypeInfo.class, TypeInfo::fromString));
   }
 
-  public PsiClassReferenceListStubImpl(@Nonnull JavaClassReferenceListElementType type, StubElement parent,
-                                       @Nonnull TypeInfo[] infos) {
+  public PsiClassReferenceListStubImpl(JavaClassReferenceListElementType type, StubElement parent,
+                                       TypeInfo[] infos) {
     super(parent, type);
     for (TypeInfo info : infos) {
       if (info == null) throw new IllegalArgumentException();
@@ -36,7 +34,6 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
   }
 
   @Override
-  @Nonnull
   public PsiClassType[] getReferencedTypes() {
     PsiClassType[] types = myTypes;
     if (types == null) {
@@ -51,7 +48,6 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
       myInfos[0].getTypeAnnotations().isEmpty();
   }
 
-  @Nonnull
   private PsiClassType[] createTypes() {
     PsiClassType[] types = myInfos.length == 0 ? PsiClassType.EMPTY_ARRAY : new PsiClassType[myInfos.length];
 
@@ -95,19 +91,17 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
   }
 
   @Override
-  @Nonnull
   public String[] getReferencedNames() {
     if (myInfos.length == 0 || shouldSkipSoleObject()) return ArrayUtil.EMPTY_STRING_ARRAY;
     return ContainerUtil.map2Array(myInfos, String.class, info -> info.text());
   }
 
   @Override
-  public @Nonnull TypeInfo[] getTypes() {
+  public TypeInfo[] getTypes() {
     if (myInfos.length == 0 || shouldSkipSoleObject()) return TypeInfo.EMPTY_ARRAY;
     return myInfos.clone();
   }
 
-  @Nonnull
   @Override
   public PsiReferenceList.Role getRole() {
     return JavaClassReferenceListElementType.elementTypeToRole(getStubType());

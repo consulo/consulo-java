@@ -19,7 +19,6 @@ import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -32,7 +31,6 @@ public class JavaIdentifier extends LightIdentifier {
     myElement = element;
   }
 
-  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     return myElement;

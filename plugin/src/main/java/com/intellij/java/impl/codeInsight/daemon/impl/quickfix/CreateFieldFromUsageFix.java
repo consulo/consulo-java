@@ -30,7 +30,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Mike
@@ -131,7 +130,7 @@ public class CreateFieldFromUsageFix extends CreateVarFromUsageFix {
     });
   }
 
-  private static boolean shouldCreateFinalMember(@Nonnull PsiReferenceExpression ref, @Nonnull PsiClass targetClass) {
+  private static boolean shouldCreateFinalMember(PsiReferenceExpression ref, PsiClass targetClass) {
     if (!PsiTreeUtil.isAncestor(targetClass, ref, true)) {
       return false;
     }

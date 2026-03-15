@@ -28,7 +28,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -105,7 +104,7 @@ class ExtractedClassBuilder {
     if (requiresBackPointer) {
       calculateBackpointerName();
     }
-    @NonNls StringBuffer out = new StringBuffer(1024);
+    StringBuffer out = new StringBuffer(1024);
     if (packageName.length() > 0) out.append("package " + packageName + ';');
 
     out.append("public ");
@@ -302,7 +301,7 @@ class ExtractedClassBuilder {
   }
 
 
-  private void outputConstructor(@NonNls StringBuffer out) {
+  private void outputConstructor(StringBuffer out) {
     out.append("\t").append(hasEnumConstants() ? "" : "public ").append(className).append('(');
     if (requiresBackPointer) {
       String parameterName = myJavaCodeStyleManager.propertyNameToVariableName(backPointerName, VariableKind.PARAMETER);
@@ -377,7 +376,6 @@ class ExtractedClassBuilder {
   }
 
   private class Mutator extends JavaElementVisitor {
-    @NonNls
     private final StringBuffer out;
 
     private Mutator(StringBuffer out) {

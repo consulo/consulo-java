@@ -32,9 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class IndexOfReplaceableByContainsInspection
@@ -46,13 +44,11 @@ public class IndexOfReplaceableByContainsInspection
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.indexofReplaceableByContainsDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiBinaryExpression expression = (PsiBinaryExpression)infos[0];
     PsiExpression lhs = expression.getLOperand();
@@ -114,14 +110,13 @@ public class IndexOfReplaceableByContainsInspection
       replaceExpression(expression, newExpressionText);
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.replaceIndexofWithContainsQuickfix();
     }
   }
 
   static String createContainsExpressionText(
-    @Nonnull PsiMethodCallExpression call,
+    PsiMethodCallExpression call,
     boolean flipped, IElementType tokenType) {
     PsiReferenceExpression methodExpression =
       call.getMethodExpression();
@@ -136,7 +131,7 @@ public class IndexOfReplaceableByContainsInspection
     }
     PsiExpressionList argumentList = call.getArgumentList();
     PsiExpression expression = argumentList.getExpressions()[0];
-    @NonNls String newExpressionText =
+    String newExpressionText =
       qualifierText + ".contains(" + expression.getText() + ')';
     if (tokenType.equals(JavaTokenType.EQEQ)) {
       return '!' + newExpressionText;
@@ -234,7 +229,7 @@ public class IndexOfReplaceableByContainsInspection
     }
 
     private static boolean isIndexOfCall(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       String methodName = methodExpression.getReferenceName();

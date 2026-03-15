@@ -3,20 +3,17 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.language.psi.PsiPrimitiveType;
-import jakarta.annotation.Nonnull;
 
 class DfIntConstantType extends DfConstantType<Integer> implements DfIntType {
   DfIntConstantType(int value) {
     super(value);
   }
 
-  @Nonnull
   @Override
   public PsiPrimitiveType getPsiType() {
     return DfIntType.super.getPsiType();
   }
 
-  @Nonnull
   @Override
   public LongRangeSet getRange() {
     return LongRangeSet.point(getValue());

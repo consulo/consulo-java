@@ -16,36 +16,35 @@
 package com.intellij.java.impl.ig.methodmetrics;
 
 import com.intellij.java.language.psi.*;
-import jakarta.annotation.Nonnull;
 
 class CyclomaticComplexityVisitor extends JavaRecursiveElementVisitor {
   private int m_complexity = 1;
 
   @Override
-  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(PsiAnonymousClass aClass) {
     // to call to super, to keep this from drilling down
   }
 
   @Override
-  public void visitForStatement(@Nonnull PsiForStatement statement) {
+  public void visitForStatement(PsiForStatement statement) {
     super.visitForStatement(statement);
     m_complexity++;
   }
 
   @Override
-  public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+  public void visitForeachStatement(PsiForeachStatement statement) {
     super.visitForeachStatement(statement);
     m_complexity++;
   }
 
   @Override
-  public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+  public void visitIfStatement(PsiIfStatement statement) {
     super.visitIfStatement(statement);
     m_complexity++;
   }
 
   @Override
-  public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+  public void visitDoWhileStatement(PsiDoWhileStatement statement) {
     super.visitDoWhileStatement(statement);
     m_complexity++;
   }
@@ -57,7 +56,7 @@ class CyclomaticComplexityVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+  public void visitSwitchStatement(PsiSwitchStatement statement) {
     super.visitSwitchStatement(statement);
     PsiCodeBlock body = statement.getBody();
     if (body == null) {
@@ -79,7 +78,7 @@ class CyclomaticComplexityVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+  public void visitWhileStatement(PsiWhileStatement statement) {
     super.visitWhileStatement(statement);
     m_complexity++;
   }

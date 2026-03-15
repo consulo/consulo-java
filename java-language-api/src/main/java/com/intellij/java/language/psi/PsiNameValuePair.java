@@ -19,8 +19,7 @@ import com.intellij.java.language.jvm.annotation.JvmAnnotationAttribute;
 import com.intellij.java.language.jvm.annotation.JvmAnnotationAttributeValue;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a single element-value pair of an annotation parameter list.
@@ -64,8 +63,7 @@ public interface PsiNameValuePair extends PsiElement, JvmAnnotationAttribute {
   @Nullable
   PsiAnnotationMemberValue getValue();
 
-  @Nonnull
-  PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue);
+  PsiAnnotationMemberValue setValue(PsiAnnotationMemberValue newValue);
 
   /**
    * @return a element representing the annotation attribute's value. The main difference to {@link #getValue()} is that this method
@@ -78,7 +76,6 @@ public interface PsiNameValuePair extends PsiElement, JvmAnnotationAttribute {
     return getValue();
   }
 
-  @Nonnull
   @Override
   default String getAttributeName() {
     return PsiJvmConversionHelper.getAnnotationAttributeName(this);

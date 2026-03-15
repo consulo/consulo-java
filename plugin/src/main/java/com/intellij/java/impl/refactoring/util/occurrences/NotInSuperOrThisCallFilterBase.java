@@ -19,7 +19,6 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiExpressionList;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author dsl
@@ -37,5 +36,5 @@ public abstract class NotInSuperOrThisCallFilterBase implements OccurrenceFilter
     return !getKeywordText().equals(text);
   }
 
-  protected abstract @NonNls String getKeywordText();
+  protected abstract String getKeywordText();
 }

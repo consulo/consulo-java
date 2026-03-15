@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.portability.mediatype;
 
-import org.jetbrains.annotations.NonNls;
 
 public enum TextMediaType {
   CALENDAR("text/calendar"),
@@ -67,7 +66,7 @@ public enum TextMediaType {
 
   private final String contentType;
 
-  TextMediaType(@NonNls String contentType) {
+  TextMediaType(String contentType) {
     this.contentType = contentType;
   }
 

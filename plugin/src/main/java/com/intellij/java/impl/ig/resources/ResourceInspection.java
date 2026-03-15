@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.resources;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -25,13 +24,13 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.BaseInspection;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class ResourceInspection extends BaseInspection {
 
   @Nullable
   protected static PsiVariable getVariable(
-    @Nonnull PsiElement element) {
+    PsiElement element) {
     if (element instanceof PsiAssignmentExpression) {
       PsiAssignmentExpression assignment =
         (PsiAssignmentExpression)element;
@@ -108,8 +107,8 @@ public abstract class ResourceInspection extends BaseInspection {
   }
 
   protected static boolean isResourceClosedInFinally(
-    @Nonnull PsiTryStatement tryStatement,
-    @Nonnull PsiVariable variable) {
+    PsiTryStatement tryStatement,
+    PsiVariable variable) {
     PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
     if (finallyBlock == null) {
       return false;
@@ -253,7 +252,7 @@ public abstract class ResourceInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
       if (!containsClose) {
         super.visitElement(element);
       }
@@ -261,7 +260,7 @@ public abstract class ResourceInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
+      PsiMethodCallExpression call) {
       if (containsClose) {
         return;
       }

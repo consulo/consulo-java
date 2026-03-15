@@ -49,7 +49,6 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -73,7 +72,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
     public MoveClassToInnerProcessor(
         Project project,
         PsiClass[] classesToMove,
-        @Nonnull PsiClass targetClass,
+        PsiClass targetClass,
         boolean searchInComments,
         boolean searchInNonJavaFiles,
         MoveCallback moveCallback
@@ -98,13 +97,11 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new MoveMultipleElementsViewDescriptor(myClassesToMove, myTargetClass.getQualifiedName());
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public UsageInfo[] findUsages() {
@@ -121,13 +118,13 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
         return showConflicts(getConflicts(usages), usages);
     }
 
     @Override
-    protected void refreshElements(@Nonnull PsiElement[] elements) {
+    protected void refreshElements(PsiElement[] elements) {
         myProject.getApplication().runReadAction(() -> {
             PsiClass[] classesToMove = new PsiClass[elements.length];
             for (int i = 0; i < classesToMove.length; i++) {
@@ -139,7 +136,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         if (!prepareWritable(usages)) {
             return;
         }
@@ -232,7 +229,6 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.moveClassToInnerCommandName(
@@ -242,9 +238,8 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
         );
     }
 
-    @Nonnull
     @Override
-    protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull UsageViewDescriptor descriptor) {
+    protected Collection<? extends PsiElement> getElementsToWrite(UsageViewDescriptor descriptor) {
         List<PsiElement> result = new ArrayList<>();
         result.addAll(super.getElementsToWrite(descriptor));
         result.add(myTargetClass);
@@ -345,11 +340,10 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
 
     private static class ConflictsCollector {
         private final PsiClass myClassToMove;
-        @Nonnull
         private final MultiMap<PsiElement, LocalizeValue> myConflicts;
         private final Set<PsiElement> myReportedContainers = new HashSet<>();
 
-        public ConflictsCollector(PsiClass classToMove, @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts) {
+        public ConflictsCollector(PsiClass classToMove, MultiMap<PsiElement, LocalizeValue> conflicts) {
             myClassToMove = classToMove;
             myConflicts = conflicts;
         }

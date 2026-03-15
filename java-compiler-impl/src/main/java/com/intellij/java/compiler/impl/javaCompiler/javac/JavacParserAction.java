@@ -17,7 +17,7 @@ package com.intellij.java.compiler.impl.javaCompiler.javac;
 
 import com.intellij.java.compiler.impl.OutputParser;
 import com.intellij.java.compiler.impl.ParserAction;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.regex.Matcher;

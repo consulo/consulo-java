@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -41,7 +40,7 @@ class ClassAccessVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     super.visitMethodCallExpression(expression);
     PsiMethod method = expression.resolveMethod();
     if (method == null) {

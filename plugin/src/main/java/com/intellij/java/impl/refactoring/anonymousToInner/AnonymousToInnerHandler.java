@@ -41,9 +41,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -64,13 +62,13 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
   protected boolean myMakeStatic;
   private final Set<PsiTypeParameter> myTypeParametersToCreate = new LinkedHashSet<PsiTypeParameter>();
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
     if (elements.length == 1 && elements[0] instanceof PsiAnonymousClass) {
       invoke(project, dataContext.getData(Editor.KEY), (PsiAnonymousClass)elements[0]);
     }
   }
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) return;
 
     int offset = editor.getCaretModel().getOffset();
@@ -162,7 +160,7 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
     myTargetClass.add(aClass);
 
     PsiNewExpression newExpr = (PsiNewExpression) myAnonClass.getParent();
-    @NonNls StringBuilder buf = new StringBuilder();
+    StringBuilder buf = new StringBuilder();
     buf.append("new ");
     buf.append(aClass.getName());
     if (!myTypeParametersToCreate.isEmpty()) {
@@ -471,7 +469,7 @@ public class AnonymousToInnerHandler implements RefactoringActionHandler {
     PsiElementFactory factory = JavaPsiFacade.getInstance(constructor.getProject()).getElementFactory();
     for (VariableInfo info : myVariableInfos) {
       if (info.saveInField) {
-        @NonNls String text = info.fieldName + "=a;";
+        String text = info.fieldName + "=a;";
         boolean useThis = info.passAsParameter && info.parameterName.equals(info.fieldName);
         if (useThis) {
           text = "this." + text;

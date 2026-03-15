@@ -30,17 +30,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalizeNotProtectedInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.finalizeNotDeclaredProtectedDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.finalizeNotDeclaredProtectedProblemDescriptor().get();
     }
@@ -54,7 +51,6 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
     }
 
     private static class ProtectedFinalizeFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.makeProtectedQuickfix();
@@ -76,7 +72,7 @@ public class FinalizeNotProtectedInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //note: no call to super;
             String methodName = method.getName();
             if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {

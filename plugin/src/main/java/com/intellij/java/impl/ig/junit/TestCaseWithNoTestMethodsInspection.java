@@ -27,8 +27,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -38,19 +37,16 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
     public boolean ignoreSupers = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "JUnitTestCaseWithNoTests";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.testCaseWithNoTestMethodsDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.testCaseWithNoTestMethodsProblemDescriptor().get();
     }
@@ -71,7 +67,7 @@ public class TestCaseWithNoTestMethodsInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (aClass.isInterface()
                 || aClass.isEnum()
                 || aClass.isAnnotationType()

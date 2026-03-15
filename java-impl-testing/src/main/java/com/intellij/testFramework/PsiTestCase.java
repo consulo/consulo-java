@@ -35,7 +35,6 @@ import consulo.language.impl.internal.psi.PsiManagerImpl;
 import consulo.language.util.IncorrectOperationException;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 
 import java.io.File;
@@ -77,7 +76,7 @@ public abstract class PsiTestCase extends ModuleTestCase
 		return PsiFileFactory.getInstance(myProject).createFileFromText(fileName, type, text);
 	}
 
-	protected PsiFile createFile(@NonNls String fileName, String text) throws Exception
+	protected PsiFile createFile(String fileName, String text) throws Exception
 	{
 		return createFile(myModule, fileName, text);
 	}

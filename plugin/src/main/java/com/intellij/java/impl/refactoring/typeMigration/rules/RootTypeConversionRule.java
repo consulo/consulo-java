@@ -29,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Comparing;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 
@@ -75,7 +74,7 @@ public class RootTypeConversionRule extends TypeConversionRule {
                                     @Override
                                     public PsiExpression replace(
                                         PsiExpression expression,
-                                        @Nonnull TypeEvaluator evaluator
+                                        TypeEvaluator evaluator
                                     ) throws IncorrectOperationException {
                                         PsiMethodReferenceExpression methodReferenceExpression =
                                             (PsiMethodReferenceExpression)expression;
@@ -197,7 +196,6 @@ public class RootTypeConversionRule extends TypeConversionRule {
     }
 
     private static class MyStaticMethodConversionDescriptor extends TypeConversionDescriptorBase {
-        @Nonnull
         private final String myTargetClassQName;
 
         private MyStaticMethodConversionDescriptor(PsiClass replacer) {
@@ -206,7 +204,7 @@ public class RootTypeConversionRule extends TypeConversionRule {
 
         @Override
         @RequiredWriteAction
-        public PsiExpression replace(PsiExpression expression, @Nonnull TypeEvaluator evaluator) throws IncorrectOperationException {
+        public PsiExpression replace(PsiExpression expression, TypeEvaluator evaluator) throws IncorrectOperationException {
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression)expression;
             PsiExpression qualifierExpression = methodCallExpression.getMethodExpression().getQualifierExpression();
             PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(expression.getProject());

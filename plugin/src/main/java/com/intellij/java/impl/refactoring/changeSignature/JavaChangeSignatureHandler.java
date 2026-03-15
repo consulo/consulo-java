@@ -35,13 +35,12 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         PsiElement element = findTargetMember(file, editor);
         if (element == null) {
@@ -67,7 +66,7 @@ public class JavaChangeSignatureHandler implements ChangeSignatureHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, @Nullable DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, @Nullable DataContext dataContext) {
         if (elements.length != 1) {
             return;
         }

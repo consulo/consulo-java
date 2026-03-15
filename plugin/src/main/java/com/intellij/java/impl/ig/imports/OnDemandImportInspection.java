@@ -25,17 +25,14 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OnDemandImportInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.importDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.importProblemDescriptor().get();
     }
@@ -47,7 +44,7 @@ public class OnDemandImportInspection extends BaseInspection {
     private static class PackageImportVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so it doesn't drill down
             PsiElement parent = aClass.getParent();
             if (!(parent instanceof PsiJavaFile)) {

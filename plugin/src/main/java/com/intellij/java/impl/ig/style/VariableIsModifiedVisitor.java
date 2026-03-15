@@ -17,16 +17,14 @@ package com.intellij.java.impl.ig.style;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 
 class VariableIsModifiedVisitor extends JavaRecursiveElementVisitor {
 
-  @NonNls private static final Set<String> updateNames = new HashSet<String>(9);
+  private static final Set<String> updateNames = new HashSet<String>(9);
 
   static {
     updateNames.add("append");
@@ -50,7 +48,7 @@ class VariableIsModifiedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (!modified) {
       super.visitElement(element);
     }
@@ -58,7 +56,7 @@ class VariableIsModifiedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression call) {
+    PsiMethodCallExpression call) {
     if (modified) {
       return;
     }

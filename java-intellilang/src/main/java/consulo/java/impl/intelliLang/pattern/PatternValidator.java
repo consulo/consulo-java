@@ -42,7 +42,6 @@ import consulo.util.concurrent.AsyncResult;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 import java.text.MessageFormat;
@@ -67,7 +66,6 @@ public class PatternValidator extends LocalInspectionTool {
         myConfiguration = Configuration.getInstance();
     }
 
-    @Nonnull
     @Override
     public InspectionToolState<?> createStateProvider() {
         return new PatternValidatorState();
@@ -78,43 +76,38 @@ public class PatternValidator extends LocalInspectionTool {
         return true;
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return PATTERN_VALIDATION;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Validate Annotated Patterns");
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "PatternValidation";
     }
 
-    @Nonnull
     @Override
     public PsiElementVisitor buildVisitor(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
-        @Nonnull LocalInspectionToolSession session,
-        @Nonnull Object state
+        LocalInspectionToolSession session,
+        Object state
     ) {
         PatternValidatorState inspectionState = (PatternValidatorState) state;
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public final void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+            public final void visitReferenceExpression(PsiReferenceExpression expression) {
                 visitExpression(expression);
             }
 
@@ -137,7 +130,7 @@ public class PatternValidator extends LocalInspectionTool {
 
             @Override
             @RequiredReadAction
-            public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+            public void visitReturnStatement(PsiReturnStatement statement) {
                 PsiExpression returnValue = statement.getReturnValue();
                 if (returnValue != null) {
                     check(returnValue, holder, false);
@@ -146,7 +139,7 @@ public class PatternValidator extends LocalInspectionTool {
 
             @Override
             @RequiredReadAction
-            public void visitVariable(@Nonnull PsiVariable var) {
+            public void visitVariable(PsiVariable var) {
                 PsiExpression initializer = var.getInitializer();
                 if (initializer != null) {
                     // variable/field initializer
@@ -156,7 +149,7 @@ public class PatternValidator extends LocalInspectionTool {
 
             @Override
             @RequiredReadAction
-            public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+            public void visitAssignmentExpression(PsiAssignmentExpression expression) {
                 PsiExpression e = expression.getRExpression();
                 if (e != null) {
                     check(e, holder, false);
@@ -165,7 +158,7 @@ public class PatternValidator extends LocalInspectionTool {
             }
 
             @RequiredReadAction
-            private void check(@Nonnull PsiExpression expression, ProblemsHolder holder, boolean isAnnotationValue) {
+            private void check(PsiExpression expression, ProblemsHolder holder, boolean isAnnotationValue) {
                 if (expression instanceof PsiConditionalExpression conditional) {
                     PsiExpression e = conditional.getThenExpression();
                     if (e != null) {
@@ -328,13 +321,12 @@ public class PatternValidator extends LocalInspectionTool {
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Introduce Variable");
         }
 
         @Override
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             RefactoringActionHandler handler = JavaRefactoringActionHandlerFactory.getInstance().createIntroduceVariableHandler();
             AsyncResult<DataContext> dataContextContainer = DataManager.getInstance().getDataContextFromFocus();
             dataContextContainer.doWhenDone(dataContext -> handler.invoke(project, new PsiElement[]{myExpr}, dataContext));

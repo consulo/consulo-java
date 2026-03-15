@@ -15,8 +15,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
 
@@ -29,7 +28,7 @@ public class PsiDeconstructionListImpl extends CompositePsiElement implements Ps
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDeconstructionList(this);
     }
@@ -39,7 +38,7 @@ public class PsiDeconstructionListImpl extends CompositePsiElement implements Ps
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (PRIMARY_PATTERN_SET.contains(child.getElementType())) {
       JavaSourceUtil.deleteSeparatingComma(this, child);
     }
@@ -70,7 +69,6 @@ public class PsiDeconstructionListImpl extends CompositePsiElement implements Ps
   }
 
   @Override
-  @Nonnull
   public PsiPattern[] getDeconstructionComponents() {
     PsiPattern[] children = PsiTreeUtil.getChildrenOfType(this, PsiPattern.class);
     if (children == null) {
@@ -85,10 +83,10 @@ public class PsiDeconstructionListImpl extends CompositePsiElement implements Ps
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     PsiPattern[] components = getDeconstructionComponents();
     for (PsiPattern component : components) {
       component.processDeclarations(processor, state, null, place);

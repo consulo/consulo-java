@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a method which is declared on an annotation interface and

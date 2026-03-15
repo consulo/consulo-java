@@ -22,11 +22,9 @@ package com.intellij.java.impl.refactoring.replaceConstructorWithBuilder;
 
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
-import jakarta.annotation.Nonnull;
 
 public class ReplaceConstructorWithBuilderViewDescriptor extends UsageViewDescriptorAdapter{
 
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[0];
   }

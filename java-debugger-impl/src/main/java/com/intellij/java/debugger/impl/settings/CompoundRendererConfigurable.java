@@ -43,8 +43,6 @@ import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -74,15 +72,13 @@ class CompoundRendererConfigurable extends JPanel {
     private final JLabel myExpandedLabel;
     private JBTable myTable;
     private final JBCheckBox myAppendDefaultChildren;
-    @NonNls
     private static final String EMPTY_PANEL_ID = "EMPTY";
-    @NonNls
     private static final String DATA_PANEL_ID = "DATA";
     private static final int NAME_TABLE_COLUMN = 0;
     private static final int EXPRESSION_TABLE_COLUMN = 1;
     private static final int ONDEMAND_TABLE_COLUMN = 2;
 
-    public CompoundRendererConfigurable(@Nonnull Disposable parentDisposable) {
+    public CompoundRendererConfigurable(Disposable parentDisposable) {
         super(new CardLayout());
 
         if (myProject == null) {
@@ -116,7 +112,7 @@ class CompoundRendererConfigurable extends JPanel {
 
         final ItemListener updateListener = new ItemListener() {
             @Override
-            public void itemStateChanged(@Nonnull ItemEvent e) {
+            public void itemStateChanged(ItemEvent e) {
                 updateEnabledState();
             }
         };
@@ -126,7 +122,7 @@ class CompoundRendererConfigurable extends JPanel {
 
         myClassNameField = new ClassNameEditorWithBrowseButton(new ActionListener() {
             @Override
-            public void actionPerformed(@Nonnull ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {
                 PsiClass psiClass = DebuggerUtils.getInstance().chooseClassDialog(DebuggerBundle.message("title.compound.renderer.configurable.choose.renderer.reference.type"), myProject);
                 if (psiClass != null) {
                     String qName = JVMNameUtil.getNonAnonymousClassName(psiClass);
@@ -137,7 +133,7 @@ class CompoundRendererConfigurable extends JPanel {
         }, myProject);
         myClassNameField.getEditorTextField().addFocusListener(new FocusAdapter() {
             @Override
-            public void focusLost(@Nonnull FocusEvent e) {
+            public void focusLost(FocusEvent e) {
                 updateContext(myClassNameField.getText());
             }
         });
@@ -251,9 +247,8 @@ class CompoundRendererConfigurable extends JPanel {
         TableColumn exprColumn = myTable.getColumnModel().getColumn(EXPRESSION_TABLE_COLUMN);
         exprColumn.setCellEditor(editor);
         exprColumn.setCellRenderer(new DefaultTableCellRenderer() {
-            @Nonnull
             @Override
-            public Component getTableCellRendererComponent(@Nonnull JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 final TextWithImports textWithImports = (TextWithImports) value;
                 final String text = (textWithImports != null) ? textWithImports.getText() : "";
                 return super.getTableCellRendererComponent(table, text, isSelected, hasFocus, row, column);
@@ -419,7 +414,6 @@ class CompoundRendererConfigurable extends JPanel {
             return true;
         }
 
-        @Nonnull
         @Override
         public Class getColumnClass(int columnIndex) {
             switch (columnIndex) {
@@ -471,7 +465,6 @@ class CompoundRendererConfigurable extends JPanel {
             }
         }
 
-        @Nonnull
         @Override
         public String getColumnName(int columnIndex) {
             switch (columnIndex) {

@@ -26,8 +26,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -40,7 +39,6 @@ public class AddNewArrayExpressionFix implements SyntheticIntentionAction {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         PsiType type = getType(myInitializer);
         return JavaQuickFixLocalize.addNewArrayText(type.getPresentableText());
@@ -48,12 +46,12 @@ public class AddNewArrayExpressionFix implements SyntheticIntentionAction {
 
     @Nullable
     @Override
-    public PsiElement getElementToMakeWritable(@Nonnull PsiFile currentFile) {
+    public PsiElement getElementToMakeWritable(PsiFile currentFile) {
         return myInitializer;
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (!myInitializer.isValid() || !myInitializer.getManager().isInProject(myInitializer)) {
             return false;
         }
@@ -61,11 +59,11 @@ public class AddNewArrayExpressionFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         doFix(myInitializer);
     }
 
-    public static void doFix(@Nonnull PsiArrayInitializerExpression initializer) {
+    public static void doFix(PsiArrayInitializerExpression initializer) {
         PsiType type = getType(initializer);
         if (type == null) {
             return;
@@ -74,7 +72,7 @@ public class AddNewArrayExpressionFix implements SyntheticIntentionAction {
         doFix(type, initializer);
     }
 
-    private static void doFix(@Nonnull PsiType type, PsiArrayInitializerExpression initializer) {
+    private static void doFix(PsiType type, PsiArrayInitializerExpression initializer) {
         Project project = initializer.getProject();
         PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
         String text = "new " + type.getPresentableText() + "[]{}";

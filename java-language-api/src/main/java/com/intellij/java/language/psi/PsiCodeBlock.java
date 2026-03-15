@@ -16,9 +16,8 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java code block, usually surrounded by curly braces.
@@ -35,7 +34,6 @@ public interface PsiCodeBlock extends PsiElement, PsiModifiableCodeBlock {
    *
    * @return the array of statements.
    */
-  @Nonnull
   PsiStatement[] getStatements();
 
   /**

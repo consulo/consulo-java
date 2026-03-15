@@ -50,7 +50,6 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -122,15 +121,14 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
         return "";
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usageInfos) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
         return new WrapReturnValueUsageViewDescriptor(method, usageInfos);
     }
 
     @Override
     @RequiredReadAction
-    public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+    public void findUsages(List<FixableUsageInfo> usages) {
         findUsagesForMethod(method, usages);
         for (PsiMethod overridingMethod : OverridingMethodsSearch.search(method)) {
             findUsagesForMethod(overridingMethod, usages);
@@ -170,7 +168,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         PsiClass existingClass =
             JavaPsiFacade.getInstance(myProject).findClass(myQualifiedName, GlobalSearchScope.allScope(myProject));
@@ -186,7 +184,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
                 if (methodBody != null) {
                     methodBody.accept(new JavaRecursiveElementWalkingVisitor() {
                         @Override
-                        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+                        public void visitReturnStatement(PsiReturnStatement statement) {
                             super.visitReturnStatement(statement);
                             if (PsiTreeUtil.getParentOfType(statement, PsiMethod.class) != method) {
                                 return;
@@ -217,7 +215,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
                         body.accept(new JavaRecursiveElementWalkingVisitor() {
                             @Override
                             @RequiredReadAction
-                            public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+                            public void visitAssignmentExpression(PsiAssignmentExpression expression) {
                                 super.visitAssignmentExpression(expression);
                                 if (expression.getLExpression() instanceof PsiReferenceExpression lRefExpr
                                     && lRefExpr.resolve() == myDelegateField
@@ -261,7 +259,7 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
+    protected void performRefactoring(UsageInfo[] usageInfos) {
         if (!myUseExistingClass && !buildClass()) {
             return;
         }
@@ -329,7 +327,6 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
         return true;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {
@@ -350,11 +347,11 @@ public class WrapReturnValueProcessor extends FixableUsagesRefactoringProcessor 
         }
 
         @Override
-        public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+        public void visitLambdaExpression(PsiLambdaExpression expression) {
         }
 
         @Override
-        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+        public void visitReturnStatement(PsiReturnStatement statement) {
             super.visitReturnStatement(statement);
 
             if (PsiTreeUtil.getParentOfType(statement, PsiMethod.class) != myMethod) {

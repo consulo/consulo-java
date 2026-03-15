@@ -23,7 +23,7 @@ import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiRecursiveElementWalkingVisitor;
 import consulo.project.Project;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;

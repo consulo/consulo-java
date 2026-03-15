@@ -21,24 +21,20 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SystemPropertiesInspection extends BaseInspection {
     @Override
-    @Nonnull
     public String getID() {
         return "AccessOfSystemProperties";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.systemPropertiesDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         boolean isGetSystemProperty = (Boolean) infos[0];
         boolean isIntegerGetInteger = (Boolean) infos[1];
@@ -60,7 +56,7 @@ public class SystemPropertiesInspection extends BaseInspection {
 
     private static class SystemPropertiesVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             boolean isGetSystemProperty = isGetSystemProperty(expression);
             boolean isIntegerGetInteger = isIntegerGetInteger(expression);

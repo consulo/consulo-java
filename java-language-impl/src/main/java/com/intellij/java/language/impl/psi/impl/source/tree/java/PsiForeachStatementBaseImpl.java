@@ -12,7 +12,6 @@ import consulo.language.ast.ASTNode;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
@@ -34,7 +33,6 @@ public class PsiForeachStatementBaseImpl extends PsiLoopStatementImpl implements
   }
 
   @Override
-  @Nonnull
   public PsiJavaToken getLParenth() {
     return (PsiJavaToken)Objects.requireNonNull(findChildByRoleAsPsiElement(ChildRole.LPARENTH));
   }
@@ -76,7 +74,7 @@ public class PsiForeachStatementBaseImpl extends PsiLoopStatementImpl implements
   }
 
   @Override
-  public int getChildRole(@Nonnull ASTNode child) {
+  public int getChildRole(ASTNode child) {
     LOG.assertTrue(child.getTreeParent() == this);
 
     IElementType i = child.getElementType();

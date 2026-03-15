@@ -20,14 +20,13 @@ import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
-import jakarta.annotation.Nonnull;
 
 public class AddDefaultConstructorFix extends AddMethodFix {
     public AddDefaultConstructorFix(PsiClass aClass) {
         this(aClass, PsiUtil.getMaximumModifierForMember(aClass, false));
     }
 
-    public AddDefaultConstructorFix(PsiClass aClass, @Nonnull @PsiModifier.ModifierConstant String modifier) {
+    public AddDefaultConstructorFix(PsiClass aClass, @PsiModifier.ModifierConstant String modifier) {
         super(generateConstructor(aClass.getName(), modifier), aClass);
         setText(JavaQuickFixLocalize.addDefaultConstructorText(VisibilityUtil.toPresentableText(modifier), aClass.getName()));
     }

@@ -35,7 +35,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -48,19 +47,16 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
     private static final Logger LOG = Logger.getInstance(AnonymousCanBeMethodReferenceInspection.class);
 
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Anonymous type can be replaced with method reference");
@@ -71,22 +67,19 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
         return true;
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "Anonymous2MethodRef";
     }
 
-    @Nonnull
     @Override
     public InspectionToolState<? extends AnonymousCanBeMethodReferenceInspectionState> createStateProvider() {
         return new AnonymousCanBeMethodReferenceInspectionState();
     }
 
-    @Nonnull
     @Override
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         AnonymousCanBeMethodReferenceInspectionState state
@@ -94,7 +87,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+            public void visitAnonymousClass(PsiAnonymousClass aClass) {
                 super.visitAnonymousClass(aClass);
                 if (AnonymousCanBeLambdaInspection.canBeConvertedToLambda(
                     aClass,
@@ -141,7 +134,6 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
     }
 
     private static class ReplaceWithMethodRefFix implements LocalQuickFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Replace with method reference");
@@ -149,7 +141,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             if (descriptor.getPsiElement() instanceof PsiNewExpression newExpression) {
                 PsiAnonymousClass anonymousClass = newExpression.getAnonymousClass();
                 if (anonymousClass == null) {
@@ -180,7 +172,7 @@ public class AnonymousCanBeMethodReferenceInspection extends BaseJavaBatchLocalI
     }
 
     @RequiredWriteAction
-    static void replaceWithMethodReference(@Nonnull Project project, String methodRefText, PsiType castType, PsiElement replacementTarget) {
+    static void replaceWithMethodReference(Project project, String methodRefText, PsiType castType, PsiElement replacementTarget) {
         Collection<PsiComment> comments = ContainerUtil.map(
             PsiTreeUtil.findChildrenOfType(replacementTarget, PsiComment.class),
             comment -> (PsiComment) comment.copy()

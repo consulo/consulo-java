@@ -23,26 +23,22 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class EnumAsNameInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "EnumAsIdentifier";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.useEnumAsIdentifierDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.useEnumAsIdentifierProblemDescriptor().get();
     }
@@ -65,7 +61,7 @@ public class EnumAsNameInspection extends BaseInspection {
     private static class EnumAsNameVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             super.visitVariable(variable);
             String variableName = variable.getName();
             if (!PsiKeyword.ENUM.equals(variableName)) {
@@ -75,7 +71,7 @@ public class EnumAsNameInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             String name = method.getName();
             if (!PsiKeyword.ENUM.equals(name)) {
@@ -85,7 +81,7 @@ public class EnumAsNameInspection extends BaseInspection {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             //note: no call to super, to avoid drill-down
             String name = aClass.getName();
             if (!PsiKeyword.ENUM.equals(name)) {

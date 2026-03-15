@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -37,20 +36,18 @@ import java.util.Set;
 @IntentionMetaData(ignoreId = "java.ReplaceOnDemandImportIntention", fileExtensions = "java", categories = {"Java",
     "Declaration"})
 public class ReplaceOnDemandImportIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceOnDemandImportIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new OnDemandImportPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiImportStatementBase importStatementBase =
             (PsiImportStatementBase) element;

@@ -11,15 +11,13 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 public class PsiJavaModuleReferenceImpl extends PsiReferenceBase.Poly<PsiJavaModuleReferenceElement> implements PsiJavaModuleReference {
-  public PsiJavaModuleReferenceImpl(@Nonnull PsiJavaModuleReferenceElement element) {
+  public PsiJavaModuleReferenceImpl(PsiJavaModuleReferenceElement element) {
     super(element, new TextRange(0, element.getTextLength()), false);
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText() {
     return getElement().getReferenceText();
@@ -31,13 +29,12 @@ public class PsiJavaModuleReferenceImpl extends PsiReferenceBase.Poly<PsiJavaMod
   }
 
   @Override
-  @Nonnull
   public ResolveResult[] multiResolve(boolean incompleteCode) {
     return ResolveCache.getInstance(getProject()).resolveWithCaching(this, Resolver.INSTANCE, false, incompleteCode);
   }
 
   @Override
-  public PsiElement handleElementRename(@Nonnull String newName) throws IncorrectOperationException {
+  public PsiElement handleElementRename(String newName) throws IncorrectOperationException {
     PsiJavaModuleReferenceElement element = getElement();
     if (element instanceof PsiCompiledElement) {
       throw new IncorrectOperationException(JavaCoreBundle.message("psi.error.attempt.to.edit.class.file", element.getContainingFile()));
@@ -54,8 +51,7 @@ public class PsiJavaModuleReferenceImpl extends PsiReferenceBase.Poly<PsiJavaMod
     private static final ResolveCache.PolyVariantResolver<PsiJavaModuleReferenceImpl> INSTANCE = new Resolver();
 
     @Override
-    @Nonnull
-    public ResolveResult[] resolve(@Nonnull PsiJavaModuleReferenceImpl reference, boolean incompleteCode) {
+    public ResolveResult[] resolve(PsiJavaModuleReferenceImpl reference, boolean incompleteCode) {
       PsiJavaModuleReferenceElement refElement = reference.getElement();
       PsiFile file = refElement.getContainingFile();
       String moduleName = reference.getCanonicalText();

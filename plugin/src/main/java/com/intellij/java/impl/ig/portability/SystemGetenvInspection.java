@@ -22,23 +22,18 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SystemGetenvInspection extends BaseInspection {
-    @Nonnull
     public String getID() {
         return "CallToSystemGetenv";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.systemGetenvCallDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.systemGetenvCallProblemDescriptor().get();
     }
@@ -49,7 +44,7 @@ public class SystemGetenvInspection extends BaseInspection {
 
     private static class SystemGetenvVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

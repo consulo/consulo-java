@@ -28,9 +28,8 @@ import consulo.language.codeStyle.lineIndent.JavaLikeLangLineIndentProvider;
 import consulo.language.codeStyle.lineIndent.SemanticEditorPosition;
 import consulo.language.codeStyle.lineIndent.SemanticEditorPositionFactory;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 
 import static consulo.language.codeStyle.Indent.Type.CONTINUATION;
@@ -70,25 +69,24 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 		SYNTAX_MAP.put(JavaTokenType.TRY_KEYWORD, TryKeyword);
 	}
 
-	@Nullable
 	@Override
-	protected SemanticEditorPosition.SyntaxElement mapType(@Nonnull IElementType tokenType)
+	protected SemanticEditorPosition.@Nullable SyntaxElement mapType(IElementType tokenType)
 	{
 		return SYNTAX_MAP.get(tokenType);
 	}
 
 	@Override
-	public boolean isSuitableForLanguage(@Nonnull Language language)
+	public boolean isSuitableForLanguage(Language language)
 	{
 		return language.isKindOf(JavaLanguage.INSTANCE);
 	}
 
 	@Nullable
 	@Override
-	protected Indent getIndentInBlock(@Nonnull Project project,
-									  @Nonnull Document document,
+	protected Indent getIndentInBlock(Project project,
+									  Document document,
 									  @Nullable Language language,
-									  @Nonnull SemanticEditorPosition blockStartPosition)
+									  SemanticEditorPosition blockStartPosition)
 	{
 		SemanticEditorPosition beforeStart = blockStartPosition.before().beforeOptional(Whitespace);
 		if(beforeStart.isAt(JavaTokenType.EQ) ||
@@ -109,7 +107,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 	}
 
 	@Override
-	protected boolean isInArray(@Nonnull SemanticEditorPositionFactory factory, int offset)
+	protected boolean isInArray(SemanticEditorPositionFactory factory, int offset)
 	{
 		SemanticEditorPosition position = getPosition(factory, offset);
 		position.moveBefore();
@@ -124,7 +122,7 @@ public class JavaLineIndentProvider extends JavaLikeLangLineIndentProvider
 	}
 
 	@Override
-	protected boolean isIndentProvider(@Nonnull SemanticEditorPosition position, boolean ignoreLabels)
+	protected boolean isIndentProvider(SemanticEditorPosition position, boolean ignoreLabels)
 	{
 		return !(position.afterOptionalMix(Whitespace, BlockComment).after().isAt(Colon)
 				&& position.isAt(JavaTokenType.IDENTIFIER));

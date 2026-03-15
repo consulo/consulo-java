@@ -22,7 +22,6 @@ import consulo.project.ui.view.tree.AbstractTreeNode;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
 import consulo.language.psi.*;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +36,6 @@ public class ClassSmartPointerNode extends BaseSmartPointerPsiNode<SmartPsiEleme
   }
 
   @Override
-  @Nonnull
   public Collection<AbstractTreeNode> getChildrenImpl() {
     PsiClass parent = getPsiClass();
     final ArrayList<AbstractTreeNode> treeNodes = new ArrayList<AbstractTreeNode>();

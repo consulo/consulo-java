@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.engine.DebuggerUtils;
@@ -41,28 +40,23 @@ import consulo.util.xml.serializer.WriteExternalException;
 import consulo.language.psi.PsiElement;
 import consulo.internal.com.sun.jdi.Value;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class EnumerationChildrenRenderer extends TypeRenderer implements ChildrenRenderer
 {
 	public static final
-	@NonNls
 	String UNIQUE_ID = "EnumerationChildrenRenderer";
 
 	private boolean myAppendDefaultChildren;
 	private List<ChildInfo> myChildren;
 
 	public static final
-	@NonNls
 	String APPEND_DEFAULT_NAME = "AppendDefault";
 	public static final
-	@NonNls
 	String CHILDREN_EXPRESSION = "ChildrenExpression";
 	public static final
-	@NonNls
 	String CHILD_NAME = "Name";
 	public static final
-	@NonNls
 	String CHILD_ONDEMAND = "OnDemand";
 
 	public EnumerationChildrenRenderer()

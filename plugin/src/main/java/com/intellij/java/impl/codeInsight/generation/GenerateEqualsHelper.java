@@ -34,7 +34,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -44,15 +43,10 @@ import java.util.*;
 public class GenerateEqualsHelper implements Runnable {
   private static final Logger LOG = Logger.getInstance(GenerateEqualsHelper.class);
 
-  @NonNls
   private static final String INSTANCE_NAME = "instanceBaseName";
-  @NonNls
   private static final String BASE_PARAM_NAME = "baseParamName";
-  @NonNls
   private static final String SUPER_HAS_EQUALS = "superHasEquals";
-  @NonNls
   private static final String CHECK_PARAMETER_WITH_INSTANCEOF = "checkParameterWithInstanceof";
-  @NonNls
   private static final String SUPER_HAS_HASH_CODE = "superHasHashCode";
 
   private final PsiClass myClass;
@@ -126,7 +120,7 @@ public class GenerateEqualsHelper implements Runnable {
         hashCode = createHashCode();
       } else {
         if (!mySuperHasHashCode) {
-          @NonNls String text = "";
+          String text = "";
           if (shouldAddOverrideAnnotation(myClass)) {
             text += "@Override\n";
           }
@@ -165,7 +159,7 @@ public class GenerateEqualsHelper implements Runnable {
   }
 
   private PsiMethod createEquals() throws IncorrectOperationException {
-    @NonNls StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = new StringBuilder();
     CodeStyleSettings styleSettings = CodeStyleSettingsManager.getSettings(myProject);
     ArrayList<PsiField> equalsFields = new ArrayList<PsiField>();
     ContainerUtil.addAll(equalsFields, myEqualsFields);
@@ -225,7 +219,7 @@ public class GenerateEqualsHelper implements Runnable {
   }
 
   private PsiMethod createHashCode() throws IncorrectOperationException {
-    @NonNls StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = new StringBuilder();
 
     HashMap<String, Object> contextMap = new HashMap<String, Object>();
     contextMap.put(SUPER_HAS_HASH_CODE, mySuperHasHashCode);

@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -32,13 +31,11 @@ import java.util.Set;
 
 @ExtensionImpl
 public class DuplicateBooleanBranchInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.duplicateBooleanBranchDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.duplicateBooleanBranchProblemDescriptor().get();
     }

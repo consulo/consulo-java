@@ -20,8 +20,7 @@ import consulo.module.content.ProjectRootManager;
 import consulo.usage.UsageViewShortNameLocation;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -65,7 +64,7 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
 
   @RequiredReadAction
   @Override
-  public PsiElement getParent(@Nonnull PsiElement psiElement) {
+  public PsiElement getParent(PsiElement psiElement) {
     if (psiElement instanceof PsiPackage) {
       PsiPackage parentPackage = ((PsiPackage) psiElement).getParentPackage();
       if (parentPackage != null && parentPackage.getQualifiedName().length() > 0) {
@@ -77,7 +76,7 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
 
   @Nullable
   @Override
-  public PsiElement adjustElement(@Nonnull PsiElement psiElement) {
+  public PsiElement adjustElement(PsiElement psiElement) {
     ProjectFileIndex index = ProjectRootManager.getInstance(psiElement.getProject()).getFileIndex();
     PsiFile containingFile = psiElement.getContainingFile();
     if (containingFile != null) {
@@ -103,13 +102,11 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
     return psiElement;
   }
 
-  @Nonnull
   @Override
   protected Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }
 
-  @Nonnull
   @Override
   protected List<NodeProvider<?>> getApplicableNodeProviders() {
     return myNodeProviders;

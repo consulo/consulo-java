@@ -7,7 +7,6 @@ import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.CompositePsiElement;
-import jakarta.annotation.Nonnull;
 
 abstract class PsiLoopStatementImpl extends CompositePsiElement implements PsiLoopStatement {
   protected PsiLoopStatementImpl(IElementType type) {
@@ -15,7 +14,7 @@ abstract class PsiLoopStatementImpl extends CompositePsiElement implements PsiLo
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (child == getBody()) {
       replaceChildInternal(child, (TreeElement)JavaPsiFacade.getElementFactory(getProject()).createStatementFromText("{}", null));
     }

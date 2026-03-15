@@ -24,12 +24,11 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.annotation.UsedInPlugin;
 
-import jakarta.annotation.Nonnull;
 
 @UsedInPlugin
 public class LocationUtil
 {
-	public static boolean isJarAttached(@Nonnull Location location, @Nonnull final PsiJavaPackage aPackage, final String... fqn)
+	public static boolean isJarAttached(Location location, final PsiJavaPackage aPackage, final String... fqn)
 	{
 		return isJarAttached(location, aPackage.getDirectories(), fqn);
 	}
@@ -38,12 +37,12 @@ public class LocationUtil
 	 * @see #isJarAttached(Location, PsiDirectory[], String...) or {@link #isJarAttached(Location, PsiJavaPackage, String...)}
 	 */
 	@Deprecated
-	public static boolean isJarAttached(@Nonnull Location location, String fqn, PsiDirectory[] directories)
+	public static boolean isJarAttached(Location location, String fqn, PsiDirectory[] directories)
 	{
 		return isJarAttached(location, directories, fqn);
 	}
 
-	public static boolean isJarAttached(@Nonnull Location location, final PsiDirectory[] directories, final String... fqns)
+	public static boolean isJarAttached(Location location, final PsiDirectory[] directories, final String... fqns)
 	{
 		final JavaPsiFacade facade = JavaPsiFacade.getInstance(location.getProject());
 		final Module locationModule = location.getModule();

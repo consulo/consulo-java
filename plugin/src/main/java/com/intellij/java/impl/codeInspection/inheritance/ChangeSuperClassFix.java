@@ -25,26 +25,22 @@ import consulo.language.editor.intention.LowPriorityAction;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.TestOnly;
 
 /**
  * @author Dmitry Batkovich <dmitry.batkovich@jetbrains.com>
  */
 public class ChangeSuperClassFix implements LocalQuickFix {
-    @Nonnull
     private final PsiClass myNewSuperClass;
-    @Nonnull
     private final PsiClass myOldSuperClass;
     private final int myPercent;
 
-    public ChangeSuperClassFix(@Nonnull PsiClass newSuperClass, int percent, @Nonnull PsiClass oldSuperClass) {
+    public ChangeSuperClassFix(PsiClass newSuperClass, int percent, PsiClass oldSuperClass) {
         myNewSuperClass = newSuperClass;
         myOldSuperClass = oldSuperClass;
         myPercent = percent;
     }
 
-    @Nonnull
     @TestOnly
     public PsiClass getNewSuperClass() {
         return myNewSuperClass;
@@ -55,14 +51,13 @@ public class ChangeSuperClassFix implements LocalQuickFix {
         return myPercent;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return LocalizeValue.localizeTODO(String.format("Make extends '%s' - %s%%", myNewSuperClass.getQualifiedName(), myPercent));
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problemDescriptor) {
+    public void applyFix(Project project, ProblemDescriptor problemDescriptor) {
         changeSuperClass((PsiClass) problemDescriptor.getPsiElement(), myOldSuperClass, myNewSuperClass);
     }
 
@@ -73,9 +68,9 @@ public class ChangeSuperClassFix implements LocalQuickFix {
      * 2. not checks that myNewSuperClass not exists in currently existed supers
      */
     private static void changeSuperClass(
-        @Nonnull final PsiClass aClass,
-        @Nonnull final PsiClass oldSuperClass,
-        @Nonnull final PsiClass newSuperClass
+        final PsiClass aClass,
+        final PsiClass oldSuperClass,
+        final PsiClass newSuperClass
     ) {
         if (!FileModificationService.getInstance().preparePsiElementForWrite(aClass)) {
             return;
@@ -120,7 +115,7 @@ public class ChangeSuperClassFix implements LocalQuickFix {
     }
 
     public static class LowPriority extends ChangeSuperClassFix implements LowPriorityAction {
-        public LowPriority(@Nonnull PsiClass newSuperClass, int percent, @Nonnull PsiClass oldSuperClass) {
+        public LowPriority(PsiClass newSuperClass, int percent, PsiClass oldSuperClass) {
             super(newSuperClass, percent, oldSuperClass);
         }
     }

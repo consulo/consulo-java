@@ -20,7 +20,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
-import jakarta.annotation.Nonnull;
 
 class MigrationUsagesViewDescriptor implements UsageViewDescriptor
 {
@@ -39,7 +38,6 @@ class MigrationUsagesViewDescriptor implements UsageViewDescriptor
 	}
 
 	@Override
-	@Nonnull
 	public PsiElement[] getElements()
 	{
 		return PsiElement.EMPTY_ARRAY;

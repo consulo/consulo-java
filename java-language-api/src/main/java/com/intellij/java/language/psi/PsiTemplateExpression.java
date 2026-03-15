@@ -2,8 +2,7 @@
 package com.intellij.java.language.psi;
 
 import org.jetbrains.annotations.Contract;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a template expression. It consists of a template processor and a template (or a plain string literal
@@ -24,7 +23,6 @@ public interface PsiTemplateExpression extends PsiExpression, PsiCall {
    *
    * @return the argument type of this template expression.
    */
-  @Nonnull
   ArgumentType getArgumentType();
 
   /**
@@ -44,7 +42,6 @@ public interface PsiTemplateExpression extends PsiExpression, PsiCall {
    * empty resolve result if the method cannot be resolved (e.g., processor has an invalid type)
    */
   @Override
-  @Nonnull
   JavaResolveResult resolveMethodGenerics();
 
   /**

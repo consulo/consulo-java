@@ -11,7 +11,6 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
 import com.intellij.java.impl.refactoring.util.RefactoringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -20,10 +19,10 @@ import java.util.Set;
 
 public class ChangeMethodSignatureFromUsageReverseOrderFix extends ChangeMethodSignatureFromUsageFix {
     public ChangeMethodSignatureFromUsageReverseOrderFix(
-        @Nonnull PsiMethod targetMethod,
-        @Nonnull PsiExpression[] expressions,
-        @Nonnull PsiSubstitutor substitutor,
-        @Nonnull PsiElement context,
+        PsiMethod targetMethod,
+        PsiExpression[] expressions,
+        PsiSubstitutor substitutor,
+        PsiElement context,
         boolean changeAllUsages,
         int minUsagesNumberToShowDialog
     ) {
@@ -32,7 +31,7 @@ public class ChangeMethodSignatureFromUsageReverseOrderFix extends ChangeMethodS
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (myTargetMethod.isValid()
             && myExpressions.length > myTargetMethod.getParameterList().getParametersCount()
             && super.isAvailable(project, editor, file)) {

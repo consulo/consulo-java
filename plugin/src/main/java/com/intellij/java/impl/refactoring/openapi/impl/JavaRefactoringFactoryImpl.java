@@ -29,7 +29,6 @@ import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -65,16 +64,16 @@ public class JavaRefactoringFactoryImpl extends JavaRefactoringFactory {
   }
 
   @Override
-  public MoveDestination createSourceFolderPreservingMoveDestination(@Nonnull String targetPackage) {
+  public MoveDestination createSourceFolderPreservingMoveDestination(String targetPackage) {
     return new MultipleRootsMoveDestination(createPackageWrapper(targetPackage));
   }
 
-  private PackageWrapper createPackageWrapper(@Nonnull String targetPackage) {
+  private PackageWrapper createPackageWrapper(String targetPackage) {
     return new PackageWrapper(PsiManager.getInstance(myProject), targetPackage);
   }
 
   @Override
-  public MoveDestination createSourceRootMoveDestination(@Nonnull String targetPackageQualifiedName, @Nonnull VirtualFile sourceRoot) {
+  public MoveDestination createSourceRootMoveDestination(String targetPackageQualifiedName, VirtualFile sourceRoot) {
     PsiDirectory directory = PsiManager.getInstance(myProject).findDirectory(sourceRoot);
     LOG.assertTrue(directory != null && JavaDirectoryService.getInstance().isSourceRoot(directory), "Should pass source root");
     return new AutocreatingSingleSourceRootMoveDestination(createPackageWrapper(targetPackageQualifiedName),

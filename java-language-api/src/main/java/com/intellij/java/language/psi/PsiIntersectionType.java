@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -31,22 +30,19 @@ import java.util.*;
 public class PsiIntersectionType extends PsiType.Stub {
   private final PsiType[] myConjuncts;
 
-  private PsiIntersectionType(@Nonnull PsiType[] conjuncts) {
+  private PsiIntersectionType(PsiType[] conjuncts) {
     super(TypeAnnotationProvider.EMPTY);
     myConjuncts = conjuncts;
   }
 
-  @Nonnull
-  public static PsiType createIntersection(@Nonnull List<PsiType> conjuncts) {
+  public static PsiType createIntersection(List<PsiType> conjuncts) {
     return createIntersection(conjuncts.toArray(createArray(conjuncts.size())));
   }
 
-  @Nonnull
   public static PsiType createIntersection(PsiType... conjuncts) {
     return createIntersection(true, conjuncts);
   }
 
-  @Nonnull
   public static PsiType createIntersection(boolean flatten, PsiType... conjuncts) {
     assert conjuncts.length > 0;
     if (flatten) {
@@ -101,24 +97,20 @@ public class PsiIntersectionType extends PsiType.Stub {
     return types;
   }
 
-  @Nonnull
   public PsiType[] getConjuncts() {
     return myConjuncts;
   }
 
-  @Nonnull
   @Override
   public String getPresentableText(final boolean annotated) {
     return StringUtil.join(myConjuncts, psiType -> psiType.getPresentableText(annotated), " & ");
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText(boolean annotated) {
     return myConjuncts[0].getCanonicalText(annotated);
   }
 
-  @Nonnull
   @Override
   public String getInternalCanonicalText() {
     return StringUtil.join(myConjuncts, PsiType::getInternalCanonicalText, " & ");
@@ -135,12 +127,12 @@ public class PsiIntersectionType extends PsiType.Stub {
   }
 
   @Override
-  public boolean equalsToText(@Nonnull String text) {
+  public boolean equalsToText(String text) {
     return false;
   }
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(PsiTypeVisitor<A> visitor) {
     return visitor.visitIntersectionType(this);
   }
 
@@ -150,12 +142,10 @@ public class PsiIntersectionType extends PsiType.Stub {
   }
 
   @Override
-  @Nonnull
   public PsiType[] getSuperTypes() {
     return myConjuncts;
   }
 
-  @Nonnull
   public PsiType getRepresentative() {
     return myConjuncts[0];
   }

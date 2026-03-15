@@ -31,8 +31,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -66,7 +65,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     protected final RefClass myOwnerClass;
 
     @RequiredReadAction
-    public RefMethodImpl(@Nonnull RefClass ownerClass, PsiMethod method, RefManager manager) {
+    public RefMethodImpl(RefClass ownerClass, PsiMethod method, RefManager manager) {
         super(method, manager);
 
         ((RefClassImpl) ownerClass).add(this);
@@ -75,7 +74,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     }
 
     // To be used only from RefImplicitConstructor.
-    protected RefMethodImpl(@Nonnull LocalizeValue name, RefClass ownerClass) {
+    protected RefMethodImpl(LocalizeValue name, RefClass ownerClass) {
         super(name, ownerClass);
         myOwnerClass = ownerClass;
         ((RefClassImpl) ownerClass).add(this);
@@ -183,7 +182,6 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     }
 
     @Override
-    @Nonnull
     public Collection<RefMethod> getSuperMethods() {
         if (mySuperMethods == null) {
             return EMPTY_METHOD_LIST;
@@ -195,7 +193,6 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     }
 
     @Override
-    @Nonnull
     public Collection<RefMethod> getDerivedMethods() {
         if (myDerivedMethods == null) {
             return EMPTY_METHOD_LIST;
@@ -253,7 +250,6 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     }
 
     @Override
-    @Nonnull
     public RefParameter[] getParameters() {
         if (myParameters == null) {
             return EMPTY_PARAMS_ARRAY;
@@ -308,7 +304,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     }
 
     @RequiredReadAction
-    private void collectUncaughtExceptions(@Nonnull PsiMethod method) {
+    private void collectUncaughtExceptions(PsiMethod method) {
         if (isExternalOverride()) {
             return;
         }
@@ -349,7 +345,7 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
     }
 
     @Override
-    public void accept(@Nonnull RefVisitor visitor) {
+    public void accept(RefVisitor visitor) {
         if (visitor instanceof RefJavaVisitor refJavaVisitor) {
             ReadAction.run(() -> refJavaVisitor.visitMethod(RefMethodImpl.this));
         }
@@ -451,7 +447,6 @@ public class RefMethodImpl extends RefJavaElementImpl implements RefMethod {
         return (RefClass) getOwner();
     }
 
-    @Nonnull
     @Override
     public String getName() {
         if (isValid()) {

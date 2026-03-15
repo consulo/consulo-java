@@ -19,7 +19,6 @@ import consulo.compiler.FileProcessingCompiler;
 import consulo.compiler.ValidityState;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 
@@ -28,20 +27,18 @@ class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 	private final VirtualFile myClassFile;
 	private final boolean myJDK6;
 
-	public InstrumentationItem(@Nonnull VirtualFile classFile, boolean jdk6)
+	public InstrumentationItem(VirtualFile classFile, boolean jdk6)
 	{
 		myJDK6 = jdk6;
 		myClassFile = classFile;
 	}
 
 	@Override
-	@Nonnull
 	public File getFile()
 	{
 		return VirtualFileUtil.virtualToIoFile(myClassFile);
 	}
 
-	@Nonnull
 	public VirtualFile getClassFile()
 	{
 		return myClassFile;

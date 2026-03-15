@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Set;

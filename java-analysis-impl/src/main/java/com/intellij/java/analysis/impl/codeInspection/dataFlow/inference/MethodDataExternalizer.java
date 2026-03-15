@@ -23,7 +23,6 @@ import consulo.util.lang.Pair;
 import consulo.index.io.data.DataExternalizer;
 import consulo.index.io.data.DataInputOutputUtil;
 
-import jakarta.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -61,7 +60,6 @@ class MethodDataExternalizer implements DataExternalizer<Map<Integer, MethodData
 		return map;
 	}
 
-	@Nonnull
 	private static MethodData readMethod(DataInput in) throws IOException
 	{
 		MethodReturnInferenceResult nullity = DataInputOutputUtil.readNullable(in, () -> readNullity(in));

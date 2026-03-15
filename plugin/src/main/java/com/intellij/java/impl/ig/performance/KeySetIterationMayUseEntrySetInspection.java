@@ -32,9 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,13 +42,11 @@ import java.util.List;
 public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetProblemDescriptor().get();
   }
@@ -63,7 +59,6 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
   private static class KeySetIterationMapUseEntrySetFix
       extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.keySetIterationMayUseEntrySetQuickfix();
     }
@@ -172,7 +167,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
     }
 
     private static void replaceParameterAccess(PsiParameter parameter,
-                                               @NonNls String variableName,
+                                               String variableName,
                                                PsiElement map,
                                                PsiElement context) {
       ParameterAccessCollector collector =
@@ -190,11 +185,11 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
     }
 
     private static String createNewVariableName(
-        @Nonnull PsiElement scope, @Nonnull PsiType type) {
+        PsiElement scope, PsiType type) {
       Project project = scope.getProject();
       JavaCodeStyleManager codeStyleManager =
           JavaCodeStyleManager.getInstance(project);
-      @NonNls String baseName;
+      String baseName;
       SuggestedNameInfo suggestions =
           codeStyleManager.suggestVariableName(
               VariableKind.LOCAL_VARIABLE, null, null, type);
@@ -262,7 +257,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
         }
         PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
         PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        @NonNls String methodName = methodExpression.getReferenceName();
+        String methodName = methodExpression.getReferenceName();
         if (!"get".equals(methodName)) {
           return false;
         }
@@ -342,7 +337,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
       }
       PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) iteratedExpression;
       PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-      @NonNls String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!"keySet".equals(methodName)) {
         return false;
       }
@@ -382,7 +377,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
     private boolean getValueFromMap = false;
     private boolean tainted = false;
 
-    GetValueFromMapChecker(@Nonnull PsiVariable map, @Nonnull PsiVariable key) {
+    GetValueFromMapChecker(PsiVariable map, PsiVariable key) {
       this.map = map;
       this.key = key;
     }
@@ -417,7 +412,7 @@ public class KeySetIterationMayUseEntrySetInspection extends BaseInspection {
           !(qualifierExpression instanceof PsiThisExpression || qualifierExpression instanceof PsiSuperExpression)) {
         return;
       }
-      @NonNls String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!"get".equals(methodName)) {
         return;
       }

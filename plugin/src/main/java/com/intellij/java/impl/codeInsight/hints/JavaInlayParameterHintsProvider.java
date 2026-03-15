@@ -15,7 +15,6 @@ import consulo.language.editor.inlay.Option;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -114,7 +113,7 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
     );
 
     @Override
-    public HintInfo.MethodInfo getHintInfo(@Nonnull PsiElement element) {
+    public HintInfo.MethodInfo getHintInfo(PsiElement element) {
         if (element instanceof PsiCallExpression callExpression && !(element instanceof PsiEnumConstant)) {
             PsiMethod resolved = null;
 
@@ -142,15 +141,13 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
         return null;
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
-    public List<InlayInfo> getParameterHints(@Nonnull PsiElement element) {
+    public List<InlayInfo> getParameterHints(PsiElement element) {
         if (element instanceof PsiCall) {
             if (element instanceof PsiEnumConstant && !isShowHintsForEnumConstants.get()) {
                 return Collections.emptyList();
@@ -163,13 +160,11 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
         return Collections.emptyList();
     }
 
-    @Nonnull
     @Override
     public Set<String> getDefaultBlackList() {
         return defaultBlackList;
     }
 
-    @Nonnull
     @Override
     public List<Option> getSupportedOptions() {
         return List.of(
@@ -182,7 +177,6 @@ public class JavaInlayParameterHintsProvider implements InlayParameterHintsProvi
         );
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getPreviewFileText() {
         return LocalizeValue.localizeTODO("class A {\n  native void foo(String name, boolean isChanged);\n  \n  void bar() {\n    foo(\"\", false);\n  }\n}");

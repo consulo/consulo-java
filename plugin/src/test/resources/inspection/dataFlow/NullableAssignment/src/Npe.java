@@ -1,8 +1,6 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class Npe {
-   @Nonnull
    Object aField;
    @Nullable
    Object nullable() {
@@ -12,6 +10,6 @@ public class Npe {
    void bar() {
      Object o = nullable();
      aField = o;
-     @Nonnull Object aLocalVariable = o;
+     Object aLocalVariable = o;
    }
 }

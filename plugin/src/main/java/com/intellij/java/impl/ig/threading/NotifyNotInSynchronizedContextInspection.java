@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.threading;
 
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
@@ -33,12 +32,10 @@ import consulo.annotation.component.ExtensionImpl;
 public class NotifyNotInSynchronizedContextInspection
   extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.notifyNotInSynchronizedContextDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.notifyNotInSynchronizedContextProblemDescriptor().get();
   }
@@ -52,7 +49,7 @@ public class NotifyNotInSynchronizedContextInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       String methodName = methodExpression.getReferenceName();

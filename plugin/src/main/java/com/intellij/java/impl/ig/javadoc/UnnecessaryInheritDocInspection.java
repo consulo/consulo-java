@@ -33,18 +33,14 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class UnnecessaryInheritDocInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryInheritDocDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryInheritDocProblemDescriptor().get();
@@ -56,7 +52,6 @@ public class UnnecessaryInheritDocInspection extends BaseInspection {
     }
 
     private static class UnnecessaryInheritDocFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryInheritDocQuickfix();
@@ -88,7 +83,7 @@ public class UnnecessaryInheritDocInspection extends BaseInspection {
             if (!(tag instanceof PsiInlineDocTag)) {
                 return;
             }
-            @NonNls String name = tag.getName();
+            String name = tag.getName();
             if (!"inheritDoc".equals(name)) {
                 return;
             }

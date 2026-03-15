@@ -25,21 +25,18 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class NonAtomicOperationOnVolatileFieldInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.nonAtomicOperationOnVolatileFieldDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.nonAtomicOperationOnVolatileFieldProblemDescriptor().get();
   }
@@ -51,7 +48,7 @@ public class NonAtomicOperationOnVolatileFieldInspection
 
   private static class NonAtomicOperationOnVolatileFieldVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+    public void visitAssignmentExpression(PsiAssignmentExpression expression) {
       super.visitAssignmentExpression(expression);
       PsiExpression rhs = expression.getRExpression();
       if (rhs == null) {

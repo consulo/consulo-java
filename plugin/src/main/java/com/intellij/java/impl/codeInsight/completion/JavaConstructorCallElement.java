@@ -31,8 +31,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.SystemProperties;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -44,21 +43,18 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
   private static boolean JAVA_COMPLETION_SHOW_CONSTRUCTORS = SystemProperties.getBooleanProperty("java.completion.show.constructors", false);
 
   private static final Key<JavaConstructorCallElement> WRAPPING_CONSTRUCTOR_CALL = Key.create("WRAPPING_CONSTRUCTOR_CALL");
-  @Nonnull
   private final PsiMethod myConstructor;
-  @Nonnull
   private final PsiClassType myType;
-  @Nonnull
   private final PsiSubstitutor mySubstitutor;
 
-  private JavaConstructorCallElement(@Nonnull LookupElement classItem, @Nonnull PsiMethod constructor, @Nonnull PsiClassType type) {
+  private JavaConstructorCallElement(LookupElement classItem, PsiMethod constructor, PsiClassType type) {
     super(classItem);
     myConstructor = constructor;
     myType = type;
     mySubstitutor = myType.resolveGenerics().getSubstitutor();
   }
 
-  private void markClassItemWrapped(@Nonnull LookupElement classItem) {
+  private void markClassItemWrapped(LookupElement classItem) {
     LookupElement delegate = classItem;
     while (true) {
       delegate.putUserData(WRAPPING_CONSTRUCTOR_CALL, this);
@@ -75,7 +71,6 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
     super.handleInsert(context);
   }
 
-  @Nonnull
   @Override
   public PsiMethod getObject() {
     return myConstructor;
@@ -91,7 +86,6 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
     return 31 * super.hashCode() + myConstructor.hashCode();
   }
 
-  @Nonnull
   @Override
   public PsiType getType() {
     return myType;
@@ -110,12 +104,12 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
     presentation.appendTailText(tailText.substring(genericsEnd), true);
   }
 
-  static List<? extends LookupElement> wrap(@Nonnull JavaPsiClassReferenceElement classItem, @Nonnull PsiElement position) {
+  static List<? extends LookupElement> wrap(JavaPsiClassReferenceElement classItem, PsiElement position) {
     PsiClass psiClass = classItem.getObject();
     return wrap(classItem, psiClass, position, () -> JavaPsiFacade.getElementFactory(psiClass.getProject()).createType(psiClass, PsiSubstitutor.EMPTY));
   }
 
-  static List<? extends LookupElement> wrap(@Nonnull LookupElement classItem, @Nonnull PsiClass psiClass, @Nonnull PsiElement position, @Nonnull Supplier<PsiClassType> type) {
+  static List<? extends LookupElement> wrap(LookupElement classItem, PsiClass psiClass, PsiElement position, Supplier<PsiClassType> type) {
     if (JAVA_COMPLETION_SHOW_CONSTRUCTORS && isConstructorCallPlace(position)) {
       List<PsiMethod> constructors = ContainerUtil.filter(psiClass.getConstructors(), c -> shouldSuggestConstructor(psiClass, position, c));
       if (!constructors.isEmpty()) {
@@ -125,15 +119,15 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
     return Collections.singletonList(classItem);
   }
 
-  private static boolean shouldSuggestConstructor(@Nonnull PsiClass psiClass, @Nonnull PsiElement position, PsiMethod constructor) {
+  private static boolean shouldSuggestConstructor(PsiClass psiClass, PsiElement position, PsiMethod constructor) {
     return JavaResolveUtil.isAccessible(constructor, psiClass, constructor.getModifierList(), position, null, null) || willBeAccessibleInAnonymous(psiClass, constructor);
   }
 
-  private static boolean willBeAccessibleInAnonymous(@Nonnull PsiClass psiClass, PsiMethod constructor) {
+  private static boolean willBeAccessibleInAnonymous(PsiClass psiClass, PsiMethod constructor) {
     return !constructor.hasModifierProperty(PsiModifier.PRIVATE) && psiClass.hasModifierProperty(PsiModifier.ABSTRACT);
   }
 
-  private static boolean isConstructorCallPlace(@Nonnull PsiElement position) {
+  private static boolean isConstructorCallPlace(PsiElement position) {
     return LanguageCachedValueUtil.getCachedValue(position, () ->
     {
       boolean result = JavaClassNameCompletionContributor.AFTER_NEW.accepts(position) && !JavaClassNameInsertHandler.isArrayTypeExpected(PsiTreeUtil.getParentOfType(position, PsiNewExpression
@@ -143,7 +137,7 @@ public class JavaConstructorCallElement extends LookupElementDecorator<LookupEle
   }
 
   @Nullable
-  static PsiMethod extractCalledConstructor(@Nonnull LookupElement element) {
+  static PsiMethod extractCalledConstructor(LookupElement element) {
     JavaConstructorCallElement callItem = element.getUserData(WRAPPING_CONSTRUCTOR_CALL);
     return callItem != null ? callItem.getObject() : null;
   }

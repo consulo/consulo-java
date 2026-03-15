@@ -26,9 +26,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +35,7 @@ import java.util.Set;
 public class ConstantMathCallInspection extends BaseInspection {
 
   @SuppressWarnings("StaticCollection")
-  @NonNls static final Set<String> constantMathCall =
+  static final Set<String> constantMathCall =
     new HashSet<String>(23);
 
   static {
@@ -67,13 +65,11 @@ public class ConstantMathCallInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.constantMathCallDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.constantMathCallProblemDescriptor().get();
   }
@@ -85,7 +81,6 @@ public class ConstantMathCallInspection extends BaseInspection {
 
   private static class MakeStrictFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
     }
@@ -137,8 +132,7 @@ public class ConstantMathCallInspection extends BaseInspection {
 
   @SuppressWarnings({"NestedMethodCall", "FloatingPointEquality"})
   @Nullable
-  @NonNls
-  static String createValueString(@NonNls String name, double value) {
+  static String createValueString(String name, double value) {
     if ("abs".equals(name)) {
       return Double.toString(Math.abs(value));
     }
@@ -294,8 +288,7 @@ public class ConstantMathCallInspection extends BaseInspection {
   }
 
   @Nullable
-  @NonNls
-  static String createValueString(@NonNls String name, long value) {
+  static String createValueString(String name, long value) {
     if ("abs".equals(name)) {
       return Long.toString(Math.abs(value));
     }
@@ -311,7 +304,7 @@ public class ConstantMathCallInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

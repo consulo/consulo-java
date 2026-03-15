@@ -19,8 +19,7 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.Ref;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,31 +28,26 @@ public final class ClassInnerStuffCache {
   private final PsiExtensibleClass myClass;
   private final Ref<Pair<Long, Interner<PsiMember>>> myInterner = Ref.create();
 
-  public ClassInnerStuffCache(@Nonnull PsiExtensibleClass aClass) {
+  public ClassInnerStuffCache(PsiExtensibleClass aClass) {
     myClass = aClass;
   }
 
-  @Nonnull
   public PsiMethod[] getConstructors() {
     return copy(LanguageCachedValueUtil.getProjectPsiDependentCache(myClass, PsiImplUtil::getConstructors));
   }
 
-  @Nonnull
   public PsiField[] getFields() {
     return copy(LanguageCachedValueUtil.getProjectPsiDependentCache(myClass, __ -> calcFields()));
   }
 
-  @Nonnull
   public PsiMethod[] getMethods() {
     return copy(LanguageCachedValueUtil.getProjectPsiDependentCache(myClass, __ -> calcMethods()));
   }
 
-  @Nonnull
   public PsiClass[] getInnerClasses() {
     return copy(LanguageCachedValueUtil.getProjectPsiDependentCache(myClass, __ -> calcInnerClasses()));
   }
 
-  @Nonnull
   public PsiRecordComponent[] getRecordComponents() {
     return copy(LanguageCachedValueUtil.getProjectPsiDependentCache(myClass, __ -> calcRecordComponents()));
   }
@@ -67,7 +61,6 @@ public final class ClassInnerStuffCache {
     }
   }
 
-  @Nonnull
   public PsiMethod[] findMethodsByName(String name, boolean checkBases) {
     if (checkBases) {
       return PsiClassImplUtil.findMethodsByName(myClass, name, true);
@@ -97,14 +90,12 @@ public final class ClassInnerStuffCache {
     return value.length == 0 ? value : value.clone();
   }
 
-  @Nonnull
   private PsiField[] calcFields() {
     List<PsiField> own = myClass.getOwnFields();
     List<PsiField> ext = internMembers(PsiAugmentProvider.collectAugments(myClass, PsiField.class, null));
     return ArrayUtil.mergeCollections(own, ext, PsiField.ARRAY_FACTORY);
   }
 
-  @Nonnull
   private <T extends PsiMember> List<T> internMembers(List<T> members) {
     return ContainerUtil.map(members, this::internMember);
   }
@@ -124,27 +115,23 @@ public final class ClassInnerStuffCache {
     }
   }
 
-  @Nonnull
   private PsiMethod[] calcMethods() {
     List<PsiMethod> own = myClass.getOwnMethods();
     List<PsiMethod> ext = internMembers(PsiAugmentProvider.collectAugments(myClass, PsiMethod.class, null));
     return ArrayUtil.mergeCollections(own, ext, PsiMethod.ARRAY_FACTORY);
   }
 
-  @Nonnull
   private PsiClass[] calcInnerClasses() {
     List<PsiClass> own = myClass.getOwnInnerClasses();
     List<PsiClass> ext = internMembers(PsiAugmentProvider.collectAugments(myClass, PsiClass.class, null));
     return ArrayUtil.mergeCollections(own, ext, PsiClass.ARRAY_FACTORY);
   }
 
-  @Nonnull
   private PsiRecordComponent[] calcRecordComponents() {
     PsiRecordHeader header = myClass.getRecordHeader();
     return header == null ? PsiRecordComponent.EMPTY_ARRAY : header.getRecordComponents();
   }
 
-  @Nonnull
   private Map<String, PsiField> getFieldsMap() {
     Map<String, PsiField> cachedFields = new HashMap<>();
     for (PsiField field : myClass.getOwnFields()) {
@@ -160,7 +147,6 @@ public final class ClassInnerStuffCache {
     });
   }
 
-  @Nonnull
   private Map<String, PsiMethod[]> getMethodsMap() {
     List<PsiMethod> ownMethods = myClass.getOwnMethods();
     return ConcurrentFactoryMap.createMap(name -> {
@@ -172,7 +158,6 @@ public final class ClassInnerStuffCache {
     });
   }
 
-  @Nonnull
   private Map<String, PsiClass> getInnerClassesMap() {
     Map<String, PsiClass> cachedInners = new HashMap<>();
     for (PsiClass psiClass : myClass.getOwnInnerClasses()) {

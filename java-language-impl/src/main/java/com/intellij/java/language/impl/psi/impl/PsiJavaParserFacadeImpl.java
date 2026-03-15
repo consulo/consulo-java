@@ -39,10 +39,8 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -104,9 +102,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     PRIMITIVE_TYPES.put(PsiType.NULL.getCanonicalText(), PsiType.NULL);
   }
 
-  @Nonnull
   @Override
-  public PsiAnnotation createAnnotationFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiAnnotation createAnnotationFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, ANNOTATION, level(context)), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiAnnotation)) {
@@ -115,21 +112,18 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiAnnotation) element;
   }
 
-  @Nonnull
   @Override
-  public PsiDocTag createDocTagFromText(@Nonnull final String text) throws IncorrectOperationException {
+  public PsiDocTag createDocTagFromText(final String text) throws IncorrectOperationException {
     return createDocCommentFromText("/**\n" + text + "\n */").getTags()[0];
   }
 
-  @Nonnull
   @Override
-  public PsiDocComment createDocCommentFromText(@Nonnull String docCommentText) throws IncorrectOperationException {
+  public PsiDocComment createDocCommentFromText(String docCommentText) throws IncorrectOperationException {
     return createDocCommentFromText(docCommentText, null);
   }
 
-  @Nonnull
   @Override
-  public PsiDocComment createDocCommentFromText(@Nonnull String text, @Nullable PsiElement context) throws IncorrectOperationException {
+  public PsiDocComment createDocCommentFromText(String text, @Nullable PsiElement context) throws IncorrectOperationException {
     final PsiMethod method = createMethodFromText(text.trim() + "void m();", context);
     final PsiDocComment comment = method.getDocComment();
     if (comment == null) {
@@ -138,9 +132,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return comment;
   }
 
-  @Nonnull
   @Override
-  public PsiClass createClassFromText(@Nonnull final String body, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiClass createClassFromText(final String body, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiJavaFile aFile = createDummyJavaFile("class _Dummy_ {\n" + body +"\n}");
     final PsiClass[] classes = aFile.getClasses();
     if (classes.length != 1) {
@@ -149,9 +142,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return classes[0];
   }
 
-  @Nonnull
   @Override
-  public PsiField createFieldFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiField createFieldFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, DECLARATION, level(context)), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiField)) {
@@ -160,9 +152,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiField) element;
   }
 
-  @Nonnull
   @Override
-  public PsiMethod createMethodFromText(@Nonnull final String text, @Nullable final PsiElement context, final LanguageLevel level) throws IncorrectOperationException {
+  public PsiMethod createMethodFromText(final String text, @Nullable final PsiElement context, final LanguageLevel level) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, DECLARATION, level), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiMethod)) {
@@ -171,15 +162,13 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiMethod) element;
   }
 
-  @Nonnull
   @Override
-  public final PsiMethod createMethodFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public final PsiMethod createMethodFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     return createMethodFromText(text, context, LanguageLevel.HIGHEST);
   }
 
-  @Nonnull
   @Override
-  public PsiParameter createParameterFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiParameter createParameterFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, PARAMETER, level(context)), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiParameter)) {
@@ -188,9 +177,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiParameter) element;
   }
 
-  @Nonnull
   @Override
-  public PsiResourceVariable createResourceFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiResourceVariable createResourceFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, RESOURCE, level(context)), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiResourceVariable)) {
@@ -199,15 +187,13 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiResourceVariable) element;
   }
 
-  @Nonnull
   @Override
-  public PsiType createTypeFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiType createTypeFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     return createTypeInner(text, context, false);
   }
 
-  @Nonnull
   @Override
-  public PsiTypeElement createTypeElementFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiTypeElement createTypeElementFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final LanguageLevel level = level(context);
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, TYPE, level), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
@@ -230,9 +216,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return element.getType();
   }
 
-  @Nonnull
   @Override
-  public PsiJavaCodeReferenceElement createReferenceFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiJavaCodeReferenceElement createReferenceFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final boolean isStaticImport = context instanceof PsiImportStaticStatement && !((PsiImportStaticStatement) context).isOnDemand();
     final boolean mayHaveDiamonds = context instanceof PsiNewExpression && PsiUtil.getLanguageLevel(context).isAtLeast(LanguageLevel.JDK_1_7);
     final JavaParserUtil.ParserWrapper wrapper = isStaticImport ? STATIC_IMPORT_REF : mayHaveDiamonds ? DIAMOND_REF : REFERENCE;
@@ -244,9 +229,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiJavaCodeReferenceElement) element;
   }
 
-  @Nonnull
   @Override
-  public PsiCodeBlock createCodeBlockFromText(@Nonnull final CharSequence text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiCodeBlock createCodeBlockFromText(final CharSequence text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, CODE_BLOCK, level(context), true), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiCodeBlock)) {
@@ -255,9 +239,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiCodeBlock) element;
   }
 
-  @Nonnull
   @Override
-  public PsiStatement createStatementFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiStatement createStatementFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, STATEMENT, level(context)), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiStatement)) {
@@ -266,9 +249,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiStatement) element;
   }
 
-  @Nonnull
   @Override
-  public PsiExpression createExpressionFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiExpression createExpressionFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, EXPRESSION, level(context)), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiExpression)) {
@@ -277,14 +259,13 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiExpression) element;
   }
 
-  protected PsiJavaFile createDummyJavaFile(@NonNls final String text) {
+  protected PsiJavaFile createDummyJavaFile(final String text) {
     final FileType type = JavaFileType.INSTANCE;
     return (PsiJavaFile) PsiFileFactory.getInstance(myManager.getProject()).createFileFromText(DUMMY_FILE_NAME, type, text);
   }
 
-  @Nonnull
   @Override
-  public PsiTypeParameter createTypeParameterFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiTypeParameter createTypeParameterFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, TYPE_PARAMETER, level(context)), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiTypeParameter)) {
@@ -293,9 +274,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiTypeParameter) element;
   }
 
-  @Nonnull
   @Override
-  public PsiComment createCommentFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiComment createCommentFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final PsiJavaFile aFile = createDummyJavaFile(text);
     for (PsiElement aChildren : aFile.getChildren()) {
       if (aChildren instanceof PsiComment) {
@@ -311,9 +291,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     throw new IncorrectOperationException("Incorrect comment '" + text + "'");
   }
 
-  @Nonnull
   @Override
-  public PsiEnumConstant createEnumConstantFromText(@Nonnull final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
+  public PsiEnumConstant createEnumConstantFromText(final String text, @Nullable final PsiElement context) throws IncorrectOperationException {
     final DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, ENUM_CONSTANT, level(context)), context);
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiEnumConstant)) {
@@ -322,8 +301,7 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiEnumConstant) element;
   }
 
-  @Nonnull
-  public PsiType createPrimitiveTypeFromText(@Nonnull String text) throws IncorrectOperationException {
+  public PsiType createPrimitiveTypeFromText(String text) throws IncorrectOperationException {
     PsiPrimitiveType primitiveType = getPrimitiveType(text);
     if (primitiveType == null) {
       throw new IncorrectOperationException("Incorrect primitive type '" + text + "'");
@@ -331,9 +309,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return primitiveType;
   }
 
-  @Nonnull
   @Override
-  public PsiJavaModule createModuleFromText(@Nonnull String text, @Nullable PsiElement context) throws IncorrectOperationException {
+  public PsiJavaModule createModuleFromText(String text, @Nullable PsiElement context) throws IncorrectOperationException {
     DummyHolder holder = DummyHolderFactory.createHolder(myManager, new JavaDummyElement(text, MODULE, LanguageLevel.JDK_1_9), context);
     PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
     if (!(element instanceof PsiJavaModule)) {
@@ -342,9 +319,8 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return (PsiJavaModule) element;
   }
 
-  @Nonnull
   @Override
-  public PsiStatement createModuleStatementFromText(@Nonnull String text, @Nullable PsiElement context) throws IncorrectOperationException {
+  public PsiStatement createModuleStatementFromText(String text, @Nullable PsiElement context) throws IncorrectOperationException {
     String template = "module M { " + text + "; }";
     PsiJavaModule module = createModuleFromText(template, context);
     PsiStatement statement = PsiTreeUtil.getChildOfType(module, PsiStatement.class);
@@ -354,15 +330,13 @@ public class PsiJavaParserFacadeImpl implements PsiJavaParserFacade {
     return statement;
   }
 
-  @Nonnull
   @Override
-  public PsiJavaModuleReferenceElement createModuleReferenceFromText(@Nonnull String text, @Nullable PsiElement context) throws IncorrectOperationException {
+  public PsiJavaModuleReferenceElement createModuleReferenceFromText(String text, @Nullable PsiElement context) throws IncorrectOperationException {
     return createModuleFromText("module " + text + " {}", context).getNameIdentifier();
   }
 
-  @Nonnull
   @Override
-  public PsiType createPrimitiveType(@Nonnull String text, @Nonnull PsiAnnotation[] annotations) throws IncorrectOperationException {
+  public PsiType createPrimitiveType(String text, PsiAnnotation[] annotations) throws IncorrectOperationException {
     return createPrimitiveTypeFromText(text).annotate(TypeAnnotationProvider.Static.create(annotations));
   }
 

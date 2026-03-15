@@ -53,8 +53,7 @@ import consulo.java.debugger.impl.JavaRegistry;
 import consulo.logging.Logger;
 import consulo.util.collection.Maps;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -95,7 +94,6 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
     myInsertEvaluator = new MyEvaluator(myCapturePoint.myInsertKeyExpression);
   }
 
-  @Nonnull
   @Override
   protected JavaMethodBreakpointProperties getProperties() {
     return myProperties;
@@ -198,7 +196,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
     bpts.add(breakpoint);
   }
 
-  public static <T> void putProcessUserData(@Nonnull Key<T> key, @Nullable T value, DebugProcessImpl debugProcess) {
+  public static <T> void putProcessUserData(Key<T> key, @Nullable T value, DebugProcessImpl debugProcess) {
     debugProcess.putUserData(key, value);
     debugProcess.addDebugProcessListener(new DebugProcessListener() {
       @Override
@@ -209,7 +207,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
   }
 
   @Nullable
-  public static CapturePoint getMatchingDisabledInsertionPoint(@Nonnull StackFrameProxyImpl frame) {
+  public static CapturePoint getMatchingDisabledInsertionPoint(StackFrameProxyImpl frame) {
     try {
       Location location = frame.location();
       String className = location.declaringType().name();
@@ -227,7 +225,7 @@ public class StackCapturingLineBreakpoint extends WildcardMethodBreakpoint {
   }
 
   @Nullable
-  public static List<StackFrameItem> getRelatedStack(@Nonnull StackFrameProxyImpl frame, @Nonnull SuspendContextImpl suspendContext) {
+  public static List<StackFrameItem> getRelatedStack(StackFrameProxyImpl frame, SuspendContextImpl suspendContext) {
     DebugProcessImpl debugProcess = suspendContext.getDebugProcess();
     Map<Object, List<StackFrameItem>> capturedStacks = debugProcess.getUserData(CAPTURED_STACKS);
     if (ContainerUtil.isEmpty(capturedStacks)) {

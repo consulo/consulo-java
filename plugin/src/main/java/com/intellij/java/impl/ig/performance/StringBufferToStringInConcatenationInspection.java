@@ -28,18 +28,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringBufferToStringInConcatenationInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringBufferToStringInConcatenationDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringBufferToStringInConcatenationProblemDescriptor().get();
     }
@@ -55,7 +52,6 @@ public class StringBufferToStringInConcatenationInspection extends BaseInspectio
     }
 
     private static class StringBufferToStringFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.stringBufferToStringInConcatenationRemoveQuickfix();
         }
@@ -77,7 +73,7 @@ public class StringBufferToStringInConcatenationInspection extends BaseInspectio
 
     private static class StringBufferToStringVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             if (!ExpressionUtils.isStringConcatenationOperand(expression)) {
                 return;

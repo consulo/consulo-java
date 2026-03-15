@@ -1,14 +1,12 @@
-import jakarta.annotation.Nonnull;
 
 class Test {
-  @Nonnull
-  public String noNull(@Nonnull String text) {
+  public String noNull(String text) {
     assert text != null;
     return "";
   }
 
   private void foo() {
-    @Nonnull String str = "";
+    String str = "";
     assert str != null;
   }
 }

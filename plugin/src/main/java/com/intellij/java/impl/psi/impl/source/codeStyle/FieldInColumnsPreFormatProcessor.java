@@ -29,7 +29,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * There is a possible case that the project is configured to keep fields in columns:
@@ -52,9 +51,8 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class FieldInColumnsPreFormatProcessor implements PreFormatProcessor {
 
-  @Nonnull
   @Override
-  public TextRange process(@Nonnull ASTNode element, @Nonnull TextRange range) {
+  public TextRange process(ASTNode element, TextRange range) {
     //region Checking that everything is ready to expand the range for the 'fields in columns'.
     PsiElement psi = element.getPsi();
     if (psi == null || !psi.isValid()) {

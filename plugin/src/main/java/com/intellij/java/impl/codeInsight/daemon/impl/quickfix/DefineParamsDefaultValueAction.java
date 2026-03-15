@@ -49,8 +49,7 @@ import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -76,7 +75,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!JavaLanguage.INSTANCE.equals(element.getLanguage())) {
       return false;
     }
@@ -98,7 +97,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     PsiParameter[] parameters = getParams(element);
     if (parameters == null || parameters.length == 0) {
       return;
@@ -167,7 +166,7 @@ public class DefineParamsDefaultValueAction extends PsiElementBaseIntentionActio
     }
   }
 
-  public static void startTemplate(@Nonnull Project project, Editor editor, PsiExpression[] argsToBeDelegated, PsiMethod delegateMethod) {
+  public static void startTemplate(Project project, Editor editor, PsiExpression[] argsToBeDelegated, PsiMethod delegateMethod) {
     TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(delegateMethod);
     RangeMarker rangeMarker = editor.getDocument().createRangeMarker(delegateMethod.getTextRange());
     for (PsiExpression exprToBeDefault : argsToBeDelegated) {

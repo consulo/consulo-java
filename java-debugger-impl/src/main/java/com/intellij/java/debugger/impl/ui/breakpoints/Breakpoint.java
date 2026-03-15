@@ -70,10 +70,8 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.ThreeState;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -87,23 +85,20 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 	final XBreakpoint<P> myXBreakpoint;
 	protected final Project myProject;
 
-	@NonNls
 	private static final String LOG_MESSAGE_OPTION_NAME = "LOG_MESSAGE";
 	protected boolean myCachedVerifiedState = false;
 
-	protected Breakpoint(@Nonnull Project project, XBreakpoint<P> xBreakpoint)
+	protected Breakpoint(Project project, XBreakpoint<P> xBreakpoint)
 	{
 		myProject = project;
 		myXBreakpoint = xBreakpoint;
 	}
 
-	@Nonnull
 	public Project getProject()
 	{
 		return myProject;
 	}
 
-	@Nonnull
 	protected P getProperties()
 	{
 		return myXBreakpoint.getProperties();
@@ -228,7 +223,7 @@ public abstract class Breakpoint<P extends JavaBreakpointProperties> implements 
 		debugProcess.getVirtualMachineProxy().classesByName(classToBeLoaded).stream().filter(ReferenceType::isPrepared).forEach(aList -> processClassPrepare(debugProcess, aList));
 	}
 
-	protected void createOrWaitPrepare(final DebugProcessImpl debugProcess, @Nonnull final SourcePosition classPosition)
+	protected void createOrWaitPrepare(final DebugProcessImpl debugProcess, final SourcePosition classPosition)
 	{
 		debugProcess.getRequestsManager().callbackOnPrepareClasses(this, classPosition);
 

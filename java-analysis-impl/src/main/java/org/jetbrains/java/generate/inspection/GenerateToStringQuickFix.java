@@ -24,7 +24,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jetbrains.java.generate.GenerateToStringActionHandler;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Quick fix to run Generate toString() to fix any code inspection problems.
@@ -41,13 +40,12 @@ public class GenerateToStringQuickFix implements LocalQuickFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("Generate toString()");
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor desc) {
+  public void applyFix(Project project, ProblemDescriptor desc) {
     final PsiClass clazz = PsiTreeUtil.getParentOfType(desc.getPsiElement(), PsiClass.class);
     if (clazz == null) {
       return; // no class to fix

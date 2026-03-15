@@ -18,7 +18,6 @@ package com.intellij.java.debugger.impl.ui.impl.watch;
 import java.util.Collection;
 import java.util.function.Function;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.expression.ExpressionEvaluator;
 import com.intellij.java.compiler.ClassObject;
@@ -28,7 +27,7 @@ import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.PsiCodeFragment;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.SystemProperties;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 // TODO [VISTALL] disabled
 // todo: consider batching compilations in order not to start a separate process for every class that needs to be compiled
@@ -44,7 +43,6 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 	}  */
 
 	@Override
-	@Nonnull
 	protected Collection<ClassObject> compile(@Nullable JavaSdkVersion debuggeeVersion) throws EvaluateException
 	{
 		if(myCompiledClasses == null)
@@ -124,8 +122,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return myCompiledClasses;
 	}
 
-	@Nonnull
-	private static String getSourceOption(@Nonnull LanguageLevel languageLevel)
+	private static String getSourceOption(LanguageLevel languageLevel)
 	{
 		return "1." + Integer.valueOf(3 + languageLevel.ordinal());
 	}
@@ -151,7 +148,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 	} */
 
 	@Nullable
-	public static ExpressionEvaluator create(@Nonnull Project project, @Nullable PsiElement psiContext, @Nonnull Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
+	public static ExpressionEvaluator create(Project project, @Nullable PsiElement psiContext, Function<PsiElement, PsiCodeFragment> fragmentFactory) throws EvaluateException
 	{
 		/*if(DEBUGGER_COMPILING_EVALUATOR && psiContext != null)
 		{
@@ -176,8 +173,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 		return null;
 	}
 
-	@Nonnull
-	private static PsiElement findPhysicalContext(@Nonnull PsiElement element)
+	private static PsiElement findPhysicalContext(PsiElement element)
 	{
 		while(!element.isPhysical())
 		{

@@ -33,7 +33,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentionAction {
   protected static final Logger LOG = Logger.getInstance(QualifyThisOrSuperArgumentFix.class);
@@ -41,7 +40,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
   protected final PsiClass myPsiClass;
   private LocalizeValue myText = LocalizeValue.empty();
 
-  public QualifyThisOrSuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
+  public QualifyThisOrSuperArgumentFix(PsiExpression expression, PsiClass psiClass) {
     myExpression = expression;
     myPsiClass = psiClass;
   }
@@ -51,7 +50,6 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
     return true;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return myText;
@@ -62,7 +60,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
   protected abstract PsiExpression getQualifier(PsiManager manager);
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!myExpression.isValid()) {
       return false;
     }
@@ -74,7 +72,7 @@ public abstract class QualifyThisOrSuperArgumentFix implements SyntheticIntentio
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     myExpression.replace(getQualifier(PsiManager.getInstance(project)));
   }
 }

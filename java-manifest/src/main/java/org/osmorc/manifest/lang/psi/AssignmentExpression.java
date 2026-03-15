@@ -25,7 +25,6 @@
 
 package org.osmorc.manifest.lang.psi;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
@@ -42,7 +41,7 @@ public interface AssignmentExpression extends PsiNamedElement, StubBasedPsiEleme
 
   String getValue();
 
-  PsiElement setName(@Nonnull String name);
+  PsiElement setName(String name);
 
-  void setValue(@Nonnull String value);
+  void setValue(String value);
 }

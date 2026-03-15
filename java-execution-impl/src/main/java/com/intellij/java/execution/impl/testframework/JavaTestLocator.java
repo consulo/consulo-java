@@ -28,7 +28,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,9 +38,8 @@ public class JavaTestLocator implements SMTestLocator {
 
   public static final JavaTestLocator INSTANCE = new JavaTestLocator();
 
-  @Nonnull
   @Override
-  public List<Location> getLocation(@Nonnull String protocol, @Nonnull String path, @Nonnull Project project, @Nonnull GlobalSearchScope scope) {
+  public List<Location> getLocation(String protocol, String path, Project project, GlobalSearchScope scope) {
     List<Location> results = Collections.emptyList();
 
     String paramName = null;
@@ -67,7 +65,7 @@ public class JavaTestLocator implements SMTestLocator {
     return results;
   }
 
-  private static List<Location> collectMethodNavigatables(@Nonnull String path, @Nonnull Project project, @Nonnull GlobalSearchScope scope, String paramName) {
+  private static List<Location> collectMethodNavigatables(String path, Project project, GlobalSearchScope scope, String paramName) {
     List<Location> results = Collections.emptyList();
     String className = StringUtil.getPackageName(path);
     if (!StringUtil.isEmpty(className)) {
@@ -90,7 +88,7 @@ public class JavaTestLocator implements SMTestLocator {
     return results;
   }
 
-  private static Location createClassNavigatable(String paramName, @Nonnull PsiClass aClass) {
+  private static Location createClassNavigatable(String paramName, PsiClass aClass) {
     return paramName != null ? PsiMemberParameterizedLocation.getParameterizedLocation(aClass, paramName) : new PsiLocation<>(aClass.getProject(), aClass);
   }
 }

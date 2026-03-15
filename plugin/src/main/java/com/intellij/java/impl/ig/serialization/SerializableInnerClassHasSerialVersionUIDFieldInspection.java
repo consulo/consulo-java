@@ -21,22 +21,18 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SerializableInnerClassHasSerialVersionUIDFieldInspection extends SerializableInspection {
-    @Nonnull
     public String getID() {
         return "SerializableNonStaticInnerClassWithoutSerialVersionUID";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.serializableInnerClassHasSerialVersionUidFieldDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.serializableInnerClassHasSerialVersionUidFieldProblemDescriptor().get();
     }

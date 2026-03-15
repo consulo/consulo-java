@@ -28,14 +28,12 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplacePostfixExpressionWithOperatorAssignmentIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplacePostfixExpressionWithOperatorAssignmentIntention
     extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.replacePostfixExpressionWithOperatorAssignmentIntentionFamilyName();
@@ -58,14 +56,13 @@ public class ReplacePostfixExpressionWithOperatorAssignmentIntention
         return IntentionPowerPackLocalize.replaceSomeOperatorWithOtherIntentionName(signText, replacementText);
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ReplacePostfixExpressionWithOperatorAssignmentPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiPostfixExpression postfixExpression =
             (PsiPostfixExpression) element;

@@ -25,8 +25,7 @@ import consulo.application.util.RecursionManager;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Service for resolving references to declarations.
@@ -62,7 +61,6 @@ public interface PsiResolveHelper {
    * @param place        place where constructor is invoked (used for checking access)
    * @return the result of the resolve, or {@link JavaResolveResult#EMPTY} if the resolve failed.
    */
-  @Nonnull
   JavaResolveResult resolveConstructor(PsiClassType type, PsiExpressionList argumentList, PsiElement place);
 
   /**
@@ -75,10 +73,9 @@ public interface PsiResolveHelper {
    * @param place        place where constructor is invoked (used for checking access)
    * @return the result of the resolve, or {@link JavaResolveResult#EMPTY} if the resolve failed.
    */
-  @Nonnull
-  JavaResolveResult[] multiResolveConstructor(@Nonnull PsiClassType type,
-                                              @Nonnull PsiExpressionList argumentList,
-                                              @Nonnull PsiElement place);
+  JavaResolveResult[] multiResolveConstructor(PsiClassType type,
+                                              PsiExpressionList argumentList,
+                                              PsiElement place);
 
   /**
    * Resolves a call expression and returns an array of possible resolve results.
@@ -88,8 +85,7 @@ public interface PsiResolveHelper {
    *                                 can be returned as a candidate for the resolve.
    * @return the array of resolve results.
    */
-  @Nonnull
-  CandidateInfo[] getReferencedMethodCandidates(@Nonnull PsiCallExpression call, boolean dummyImplicitConstructor);
+  CandidateInfo[] getReferencedMethodCandidates(PsiCallExpression call, boolean dummyImplicitConstructor);
 
   /**
    * Resolves a call expression and returns an array of possible resolve results.
@@ -100,8 +96,7 @@ public interface PsiResolveHelper {
    * @param checkVarargs             true if varargs method should lead to 2 candidates in the result array
    * @return the array of resolve results.
    */
-  @Nonnull
-  CandidateInfo[] getReferencedMethodCandidates(@Nonnull PsiCallExpression call,
+  CandidateInfo[] getReferencedMethodCandidates(PsiCallExpression call,
                                                 boolean dummyImplicitConstructor,
                                                 boolean checkVarargs);
 
@@ -114,7 +109,7 @@ public interface PsiResolveHelper {
    * @return the resolve result, or null if the resolve was not successful.
    */
   @Nullable
-  PsiClass resolveReferencedClass(@Nonnull String referenceText, PsiElement context);
+  PsiClass resolveReferencedClass(String referenceText, PsiElement context);
 
   /**
    * Resolves a reference to a variable, given the text of the reference and the context
@@ -125,7 +120,7 @@ public interface PsiResolveHelper {
    * @return the resolve result, or null if the resolve was not successful.
    */
   @Nullable
-  PsiVariable resolveReferencedVariable(@Nonnull String referenceText, PsiElement context);
+  PsiVariable resolveReferencedVariable(String referenceText, PsiElement context);
 
   /**
    * Resolves a reference to a variable, given the text of the reference and the context
@@ -137,50 +132,47 @@ public interface PsiResolveHelper {
    * in a given context.
    */
   @Nullable
-  PsiVariable resolveAccessibleReferencedVariable(@Nonnull String referenceText, PsiElement context);
+  PsiVariable resolveAccessibleReferencedVariable(String referenceText, PsiElement context);
 
-  boolean isAccessible(@Nonnull PsiMember member,
+  boolean isAccessible(PsiMember member,
                        @Nullable PsiModifierList modifierList,
-                       @Nonnull PsiElement place,
+                       PsiElement place,
                        @Nullable PsiClass accessObjectClass,
                        @Nullable PsiElement currentFileResolveScope);
 
-  boolean isAccessible(@Nonnull PsiMember member, @Nonnull PsiElement place, @Nullable PsiClass accessObjectClass);
+  boolean isAccessible(PsiMember member, PsiElement place, @Nullable PsiClass accessObjectClass);
 
   /**
    * @return {@link PsiType#NULL} iff no type could be inferred
    * null         iff the type inferred is raw
    * inferred type otherwise
    */
-  PsiType inferTypeForMethodTypeParameter(@Nonnull PsiTypeParameter typeParameter,
-                                          @Nonnull PsiParameter[] parameters,
-                                          @Nonnull PsiExpression[] arguments,
-                                          @Nonnull PsiSubstitutor partialSubstitutor,
+  PsiType inferTypeForMethodTypeParameter(PsiTypeParameter typeParameter,
+                                          PsiParameter[] parameters,
+                                          PsiExpression[] arguments,
+                                          PsiSubstitutor partialSubstitutor,
                                           @Nullable PsiElement parent,
-                                          @Nonnull ParameterTypeInferencePolicy policy);
+                                          ParameterTypeInferencePolicy policy);
 
-  @Nonnull
-  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
-                                    @Nonnull PsiParameter[] parameters,
-                                    @Nonnull PsiExpression[] arguments,
-                                    @Nonnull PsiSubstitutor partialSubstitutor,
-                                    @Nonnull PsiElement parent,
-                                    @Nonnull ParameterTypeInferencePolicy policy);
+  PsiSubstitutor inferTypeArguments(PsiTypeParameter[] typeParameters,
+                                    PsiParameter[] parameters,
+                                    PsiExpression[] arguments,
+                                    PsiSubstitutor partialSubstitutor,
+                                    PsiElement parent,
+                                    ParameterTypeInferencePolicy policy);
 
-  @Nonnull
-  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
-                                    @Nonnull PsiParameter[] parameters,
-                                    @Nonnull PsiExpression[] arguments,
-                                    @Nonnull PsiSubstitutor partialSubstitutor,
-                                    @Nonnull PsiElement parent,
-                                    @Nonnull ParameterTypeInferencePolicy policy,
-                                    @Nonnull LanguageLevel languageLevel);
+  PsiSubstitutor inferTypeArguments(PsiTypeParameter[] typeParameters,
+                                    PsiParameter[] parameters,
+                                    PsiExpression[] arguments,
+                                    PsiSubstitutor partialSubstitutor,
+                                    PsiElement parent,
+                                    ParameterTypeInferencePolicy policy,
+                                    LanguageLevel languageLevel);
 
-  @Nonnull
-  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
-                                    @Nonnull PsiType[] leftTypes,
-                                    @Nonnull PsiType[] rightTypes,
-                                    @Nonnull LanguageLevel languageLevel);
+  PsiSubstitutor inferTypeArguments(PsiTypeParameter[] typeParameters,
+                                    PsiType[] leftTypes,
+                                    PsiType[] rightTypes,
+                                    LanguageLevel languageLevel);
 
   PsiType getSubstitutionForTypeParameter(PsiTypeParameter typeParam,
                                           PsiType param,

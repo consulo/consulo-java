@@ -16,29 +16,24 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
  */
 public class ConfigFileInfo {
-  @Nonnull
   private final ConfigFileMetaData myMetaData;
-  @Nonnull
   private final String myUrl;
 
 
-  public ConfigFileInfo(@Nonnull ConfigFileMetaData metaData, @Nonnull String url) {
+  public ConfigFileInfo(ConfigFileMetaData metaData, String url) {
     myMetaData = metaData;
     myUrl = url;
   }
 
-  @Nonnull
   public ConfigFileMetaData getMetaData() {
     return myMetaData;
   }
 
-  @Nonnull
   public String getUrl() {
     return myUrl;
   }

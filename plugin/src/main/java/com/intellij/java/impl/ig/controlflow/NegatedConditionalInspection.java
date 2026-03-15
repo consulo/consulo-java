@@ -30,7 +30,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -42,21 +41,18 @@ public class NegatedConditionalInspection extends BaseInspection {
      */
     public boolean m_ignoreNegatedNullComparison = true;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ConditionalExpressionWithNegatedCondition";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.negatedConditionalDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.negatedConditionalProblemDescriptor().get();
     }
@@ -78,7 +74,6 @@ public class NegatedConditionalInspection extends BaseInspection {
     }
 
     private static class NegatedConditionalFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.negatedConditionalInvertQuickfix();

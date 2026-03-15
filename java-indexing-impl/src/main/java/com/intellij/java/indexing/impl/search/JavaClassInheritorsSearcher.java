@@ -40,7 +40,6 @@ import consulo.project.Project;
 import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.collection.Stack;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 import java.util.HashSet;
@@ -52,16 +51,15 @@ import java.util.function.Supplier;
 public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, ClassInheritorsSearch.SearchParameters> implements ClassInheritorsSearchExecutor {
     private static final Logger LOG = Logger.getInstance(JavaClassInheritorsSearcher.class);
 
-    @Nonnull
     private final Application myApplication;
 
     @Inject
-    public JavaClassInheritorsSearcher(@Nonnull Application application) {
+    public JavaClassInheritorsSearcher(Application application) {
         myApplication = application;
     }
 
     @Override
-    public void processQuery(@Nonnull ClassInheritorsSearch.SearchParameters parameters, @Nonnull Predicate<? super PsiClass> consumer) {
+    public void processQuery(ClassInheritorsSearch.SearchParameters parameters, Predicate<? super PsiClass> consumer) {
         PsiClass baseClass = parameters.getClassToProcess();
         SearchScope searchScope = parameters.getScope();
 
@@ -86,10 +84,10 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
     }
 
     private static void processInheritors(
-        @Nonnull Predicate<? super PsiClass> consumer,
-        @Nonnull PsiClass baseClass,
-        @Nonnull SearchScope searchScope,
-        @Nonnull ClassInheritorsSearch.SearchParameters parameters
+        Predicate<? super PsiClass> consumer,
+        PsiClass baseClass,
+        SearchScope searchScope,
+        ClassInheritorsSearch.SearchParameters parameters
     ) {
         Project project = PsiUtilCore.getProjectInReadAction(baseClass);
         Application app = project.getApplication();
@@ -162,13 +160,13 @@ public class JavaClassInheritorsSearcher extends QueryExecutorBase<PsiClass, Cla
         }
     }
 
-    private static boolean isJavaLangObject(Application application, @Nonnull PsiClass baseClass) {
+    private static boolean isJavaLangObject(Application application, PsiClass baseClass) {
         return application.runReadAction(
             (Supplier<Boolean>)() -> baseClass.isValid() && CommonClassNames.JAVA_LANG_OBJECT.equals(baseClass.getQualifiedName())
         );
     }
 
-    private static boolean isFinal(Application application, @Nonnull PsiClass baseClass) {
+    private static boolean isFinal(Application application, PsiClass baseClass) {
         return application.runReadAction((Supplier<Boolean>)baseClass::isFinal);
     }
 }

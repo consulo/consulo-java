@@ -27,7 +27,6 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -40,13 +39,11 @@ public class NestedMethodCallInspection extends BaseInspection {
   public boolean m_ignoreFieldInitializations = true;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.nestedMethodCallDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.nestedMethodCallProblemDescriptor().get();
   }
@@ -75,7 +72,7 @@ public class NestedMethodCallInspection extends BaseInspection {
   private class NestedMethodCallVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiExpression outerExpression = expression;
       while (outerExpression != null && outerExpression.getParent() instanceof PsiExpression) {

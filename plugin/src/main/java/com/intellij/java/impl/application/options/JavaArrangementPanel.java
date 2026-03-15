@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.application.options;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.codeStyle.ui.setting.arrangement.ArrangementSettingsPanel;
 import com.intellij.java.language.impl.JavaFileType;
@@ -28,7 +27,7 @@ import consulo.language.codeStyle.CodeStyleSettings;
  * @since 8/8/12 8:57 AM
  */
 public class JavaArrangementPanel extends ArrangementSettingsPanel {
-    public JavaArrangementPanel(@Nonnull CodeStyleSettings settings) {
+    public JavaArrangementPanel(CodeStyleSettings settings) {
         super(settings, JavaLanguage.INSTANCE);
     }
 
@@ -37,7 +36,6 @@ public class JavaArrangementPanel extends ArrangementSettingsPanel {
         return 80;
     }
 
-    @Nonnull
     @Override
     protected FileType getFileType() {
         return JavaFileType.INSTANCE;

@@ -13,8 +13,7 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.navigation.NavigationItem;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.Header;
@@ -40,7 +39,6 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
         myHeaderParser = headerParser;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public Collection<Object> getItems(String prefix, boolean cached, CompletionParameters parameters) {
@@ -69,7 +67,7 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
 
     @Nullable
     @Override
-    protected Image getIcon(@Nonnull Object item) {
+    protected Image getIcon(Object item) {
         if (item instanceof NavigationItem navigationItem) {
             ItemPresentation itemPresentation = ItemPresentationProvider.getItemPresentation(navigationItem);
             if (itemPresentation != null) {
@@ -79,9 +77,8 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
         return null;
     }
 
-    @Nonnull
     @Override
-    protected String getLookupString(@Nonnull Object item) {
+    protected String getLookupString(Object item) {
         if (item instanceof PsiElement element) {
             ExtensionPoint<QualifiedNameProvider> point = element.getApplication().getExtensionPoint(QualifiedNameProvider.class);
             String qualifiedFromExtensions = point.computeSafeIfAny(provider -> provider.getQualifiedName(element));
@@ -94,13 +91,13 @@ public class HeaderValueCompletionProvider extends TextFieldWithAutoCompletionLi
 
     @Nullable
     @Override
-    protected String getTailText(@Nonnull Object item) {
+    protected String getTailText(Object item) {
         return null;
     }
 
     @Nullable
     @Override
-    protected String getTypeText(@Nonnull Object item) {
+    protected String getTypeText(Object item) {
         return null;
     }
 

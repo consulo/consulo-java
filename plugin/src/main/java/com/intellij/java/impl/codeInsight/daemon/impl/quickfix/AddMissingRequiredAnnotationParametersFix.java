@@ -35,7 +35,6 @@ import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.SortedSet;
@@ -62,7 +61,6 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
         myMissedElements = missedElements;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         if (myMissedElements.size() == 1) {
@@ -74,12 +72,12 @@ public class AddMissingRequiredAnnotationParametersFix implements SyntheticInten
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return myAnnotation.isValid();
     }
 
     @Override
-    public void invoke(@Nonnull Project project,
+    public void invoke(Project project,
                        Editor editor,
                        PsiFile file) throws IncorrectOperationException {
         PsiNameValuePair[] addedParameters = myAnnotation.getParameterList().getAttributes();

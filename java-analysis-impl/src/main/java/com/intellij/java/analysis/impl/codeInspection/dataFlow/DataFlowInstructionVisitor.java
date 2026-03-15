@@ -24,8 +24,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ThreeState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
 
@@ -233,10 +232,10 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
 
     @Override
     protected void beforeExpressionPush(
-        @Nonnull DfaValue value,
-        @Nonnull PsiExpression expression,
+        DfaValue value,
+        PsiExpression expression,
         @Nullable TextRange range,
-        @Nonnull DfaMemoryState memState
+        DfaMemoryState memState
     ) {
         if (!expression.isPhysical()) {
             Application application = Application.get();
@@ -255,10 +254,10 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
 
     @Override
     protected void onMethodCall(
-        @Nonnull DfaValue result,
-        @Nonnull PsiExpression expression,
-        @Nonnull DfaCallArguments arguments,
-        @Nonnull DfaMemoryState memState
+        DfaValue result,
+        PsiExpression expression,
+        DfaCallArguments arguments,
+        DfaMemoryState memState
     ) {
         PsiReferenceExpression reference = USELESS_SAME_ARGUMENTS.getReferenceIfMatched(expression);
         if (reference != null) {
@@ -274,9 +273,9 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     @Override
     @RequiredReadAction
     protected void beforeMethodReferenceResultPush(
-        @Nonnull DfaValue value,
-        @Nonnull PsiMethodReferenceExpression methodRef,
-        @Nonnull DfaMemoryState state
+        DfaValue value,
+        PsiMethodReferenceExpression methodRef,
+        DfaMemoryState state
     ) {
         if (OptionalUtil.OPTIONAL_OF_NULLABLE.methodReferenceMatches(methodRef)) {
             processOfNullableResult(value, state, methodRef.getReferenceNameElement());
@@ -290,7 +289,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         }
     }
 
-    private void processOfNullableResult(@Nonnull DfaValue value, @Nonnull DfaMemoryState memState, PsiElement anchor) {
+    private void processOfNullableResult(DfaValue value, DfaMemoryState memState, PsiElement anchor) {
         DfaValueFactory factory = value.getFactory();
         DfaValue optionalValue = SpecialField.OPTIONAL_VALUE.createValue(factory, value);
         ThreeState present;
@@ -347,8 +346,8 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     @Override
     protected boolean checkNotNullable(
         DfaMemoryState state,
-        @Nonnull DfaValue value,
-        @Nullable NullabilityProblemKind.NullabilityProblem<?> problem
+        DfaValue value,
+        NullabilityProblemKind.@Nullable NullabilityProblem<?> problem
     ) {
         if (problem != null && problem.getKind() == NullabilityProblemKind.nullableReturn && !state.isNotNull(value)) {
             myAlwaysReturnsNotNull = false;
@@ -364,7 +363,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
     }
 
     @Override
-    protected void reportMutabilityViolation(boolean receiver, @Nonnull PsiElement anchor) {
+    protected void reportMutabilityViolation(boolean receiver, PsiElement anchor) {
         if (receiver) {
             if (anchor instanceof PsiMethodReferenceExpression methodRefExpr) {
                 anchor = methodRefExpr.getReferenceNameElement();
@@ -422,7 +421,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             if (OptionalUtil.OPTIONAL_OF_NULLABLE.test(call)) {
                 processOfNullableResult(myValue, myMemState, call.getArgumentList().getExpressions()[0]);
@@ -430,7 +429,7 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
         }
 
         @Override
-        public void visitCallExpression(@Nonnull PsiCallExpression call) {
+        public void visitCallExpression(PsiCallExpression call) {
             super.visitCallExpression(call);
             Boolean isFailing = myFailingCalls.get(call);
             if (isFailing != null || hasNonTrivialFailingContracts(call)) {
@@ -441,13 +440,12 @@ final class DataFlowInstructionVisitor extends StandardInstructionVisitor {
 
     static class ExpressionChunk {
         final
-        @Nonnull
         PsiExpression myExpression;
         final
         @Nullable
         TextRange myRange;
 
-        ExpressionChunk(@Nonnull PsiExpression expression, @Nullable TextRange range) {
+        ExpressionChunk(PsiExpression expression, @Nullable TextRange range) {
             myExpression = expression;
             myRange = range;
         }

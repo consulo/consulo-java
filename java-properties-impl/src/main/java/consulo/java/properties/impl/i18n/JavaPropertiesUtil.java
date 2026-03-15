@@ -16,7 +16,6 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.ResolveResult;
 import consulo.project.Project;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -83,10 +82,10 @@ public class JavaPropertiesUtil {
     }
 
     public static boolean isValidPropertyReference(
-        @Nonnull Project project,
-        @Nonnull PsiLiteralExpression expression,
-        @Nonnull String key,
-        @Nonnull SimpleReference<String> outResourceBundle
+        Project project,
+        PsiLiteralExpression expression,
+        String key,
+        SimpleReference<String> outResourceBundle
     ) {
         Map<String, Object> annotationAttributeValues = new HashMap<>();
         annotationAttributeValues.put(AnnotationUtil.PROPERTY_KEY_RESOURCE_BUNDLE_PARAMETER, null);

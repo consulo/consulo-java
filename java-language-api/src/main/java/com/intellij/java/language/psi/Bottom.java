@@ -16,7 +16,6 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.scope.GlobalSearchScope;
-import jakarta.annotation.Nonnull;
 
 /**
  * Used in Generify refactoring
@@ -62,7 +61,7 @@ public class Bottom extends PsiType {
   }
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(PsiTypeVisitor<A> visitor) {
     if (visitor instanceof PsiTypeVisitorEx) {
       return ((PsiTypeVisitorEx<A>)visitor).visitBottom(this);
     }
@@ -72,7 +71,6 @@ public class Bottom extends PsiType {
   }
 
   @Override
-  @Nonnull
   public PsiType[] getSuperTypes() {
     throw new UnsupportedOperationException();
   }

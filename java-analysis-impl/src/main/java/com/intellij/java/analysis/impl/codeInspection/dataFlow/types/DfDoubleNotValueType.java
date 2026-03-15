@@ -3,7 +3,6 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.language.psi.PsiKeyword;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +13,7 @@ class DfDoubleNotValueType extends DfAntiConstantType<Double> implements DfDoubl
     }
 
     @Override
-    public boolean isSuperType(@Nonnull DfType other) {
+    public boolean isSuperType(DfType other) {
         if (other == DfTypes.BOTTOM || other.equals(this)) {
             return true;
         }
@@ -27,9 +26,8 @@ class DfDoubleNotValueType extends DfAntiConstantType<Double> implements DfDoubl
         return false;
     }
 
-    @Nonnull
     @Override
-    public DfType join(@Nonnull DfType other) {
+    public DfType join(DfType other) {
         if (isSuperType(other)) {
             return this;
         }
@@ -44,9 +42,8 @@ class DfDoubleNotValueType extends DfAntiConstantType<Double> implements DfDoubl
         return DfTypes.TOP;
     }
 
-    @Nonnull
     @Override
-    public DfType meet(@Nonnull DfType other) {
+    public DfType meet(DfType other) {
         if (isSuperType(other)) {
             return other;
         }

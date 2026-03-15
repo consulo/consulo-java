@@ -22,9 +22,7 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import static org.junit.Assert.fail;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.DefaultHighlightVisitorBasedInspection;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.inspection.LocalQuickFix;
@@ -62,14 +60,13 @@ public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase 
   }
 
   @Override
-  @NonNls
   protected String getBasePath() {
     return "/codeInsight/daemonCodeAnalyzer/quickFix/fixAllAnnotator";
   }
 
   public static class MyAnnotator implements Annotator {
     @Override
-    public void annotate(@Nonnull PsiElement element, @Nonnull AnnotationHolder holder) {
+    public void annotate(PsiElement element, AnnotationHolder holder) {
       if (element instanceof PsiMethod) {
         Annotation annotation = holder.createErrorAnnotation(((PsiMethod)element).getNameIdentifier(), null);
         annotation.registerUniversalFix(new MyFix(), null, null);
@@ -79,26 +76,23 @@ public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase 
 
     static class MyFix implements IntentionAction, LocalQuickFix {
 
-      @Nonnull
       @Override
       public String getText() {
         return getName();
       }
 
-      @Nonnull
       @Override
       public String getName() {
         return "MyFix";
       }
 
-      @Nonnull
       @Override
       public String getFamilyName() {
         return getName();
       }
 
       @Override
-      public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+      public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         if (element != null) {
           PsiElement parent = element.getParent();
@@ -109,12 +103,12 @@ public abstract class FixAllAnnotatorQuickfixTest extends LightQuickFixTestCase 
       }
 
       @Override
-      public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+      public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return true;
       }
 
       @Override
-      public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+      public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         fail();
       }
 

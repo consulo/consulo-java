@@ -29,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -38,11 +37,10 @@ public class AddAssertStatementFix implements LocalQuickFix {
     private static final Logger LOG = Logger.getInstance(AddAssertStatementFix.class);
     private final String myText;
 
-    public AddAssertStatementFix(@Nonnull String text) {
+    public AddAssertStatementFix(String text) {
         myText = text;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return InspectionLocalize.inspectionAssertQuickfix(myText);
@@ -50,7 +48,7 @@ public class AddAssertStatementFix implements LocalQuickFix {
 
     @Override
     @RequiredWriteAction
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         PsiElement anchorElement = RefactoringUtil.getParentStatement(element, false);
         LOG.assertTrue(anchorElement != null);

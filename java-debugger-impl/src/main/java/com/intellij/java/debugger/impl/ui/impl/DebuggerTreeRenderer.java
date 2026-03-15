@@ -42,8 +42,7 @@ import consulo.ui.ex.util.TextAttributesUtil;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -54,7 +53,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
     private static final SimpleTextAttributes OBJECT_ID_HIGHLIGHT_ATTRIBUTES = new SimpleTextAttributes(SimpleTextAttributes.STYLE_PLAIN, new JBColor(Color.lightGray, Gray._130));
 
     @Override
-    public void customizeCellRenderer(@Nonnull JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+    public void customizeCellRenderer(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row, boolean hasFocus) {
         final DebuggerTreeNodeImpl node = (DebuggerTreeNodeImpl) value;
 
         if (node != null) {

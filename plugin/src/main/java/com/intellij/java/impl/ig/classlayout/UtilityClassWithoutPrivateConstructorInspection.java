@@ -41,8 +41,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -57,14 +56,12 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
     @SuppressWarnings({"PublicField"})
     public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorProblemDescriptor().get();
     }
@@ -87,7 +84,6 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
         return panel;
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         List<InspectionGadgetsFix> fixes = new ArrayList();
@@ -108,7 +104,6 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
     }
 
     private static class CreateEmptyPrivateConstructor extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorCreateQuickfix();
@@ -154,7 +149,6 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
     }
 
     private static class MakeConstructorPrivateFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.utilityClassWithoutPrivateConstructorMakeQuickfix();
@@ -189,7 +183,7 @@ public class UtilityClassWithoutPrivateConstructorInspection extends BaseInspect
     private class UtilityClassWithoutPrivateConstructorVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so that it doesn't drill down to inner classes
             if (aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
                 return;

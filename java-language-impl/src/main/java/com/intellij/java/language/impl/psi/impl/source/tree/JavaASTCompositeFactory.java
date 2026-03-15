@@ -21,7 +21,6 @@ import consulo.language.impl.ast.CompositeElement;
 import consulo.language.ast.IElementType;
 import consulo.java.language.impl.psi.CoreJavaASTCompositeFactory;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -29,7 +28,6 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaASTCompositeFactory extends CoreJavaASTCompositeFactory {
   @Override
-  @Nonnull
   public CompositeElement createComposite(final IElementType type) {
     if (type == DOC_TAG_VALUE_ELEMENT) {
       return new PsiDocTagValueImpl();

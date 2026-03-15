@@ -24,7 +24,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,13 +33,11 @@ public abstract class OverlyLargePrimitiveArrayInitializerInspection extends Bas
      */
     public int m_limit = 64;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.largeInitializerPrimitiveTypeArrayDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer numElements = (Integer) infos[0];
         return InspectionGadgetsLocalize.largeInitializerPrimitiveTypeArrayProblemDescriptor(numElements).get();

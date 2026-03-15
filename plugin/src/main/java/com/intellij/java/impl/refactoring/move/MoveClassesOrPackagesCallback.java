@@ -26,7 +26,7 @@ import com.intellij.java.impl.refactoring.MoveDestination;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.editor.refactoring.move.MoveCallback;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface MoveClassesOrPackagesCallback extends MoveCallback {
 

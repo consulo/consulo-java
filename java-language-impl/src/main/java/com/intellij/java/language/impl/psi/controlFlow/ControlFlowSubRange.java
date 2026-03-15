@@ -17,8 +17,6 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.language.psi.PsiElement;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +36,6 @@ public class ControlFlowSubRange implements ControlFlow
 	}
 
 	@Override
-	@Nonnull
 	public List<Instruction> getInstructions()
 	{
 		if(myInstructions == null)
@@ -93,14 +90,14 @@ public class ControlFlowSubRange implements ControlFlow
 	}
 
 	@Override
-	public int getStartOffset(@Nonnull PsiElement element)
+	public int getStartOffset(PsiElement element)
 	{
 		return patchOffset(myControlFlow.getStartOffset(element));
 		//return (myControlFlow.getStartOffset(element));
 	}
 
 	@Override
-	public int getEndOffset(@Nonnull PsiElement element)
+	public int getEndOffset(PsiElement element)
 	{
 		return patchOffset(myControlFlow.getEndOffset(element));
 		//return myControlFlow.getEndOffset(element);
@@ -120,7 +117,7 @@ public class ControlFlowSubRange implements ControlFlow
 
 	public String toString()
 	{
-		@NonNls StringBuilder buffer = new StringBuilder();
+		StringBuilder buffer = new StringBuilder();
 		buffer.
 				append("CF range:[").
 				append(myStart).

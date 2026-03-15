@@ -24,7 +24,6 @@ import consulo.application.ApplicationManager;
 import consulo.ide.impl.idea.openapi.vfs.newvfs.impl.VirtualFileSystemEntry;
 import com.intellij.refactoring.RefactoringTestCase;
 import com.intellij.java.impl.refactoring.util.InlineUtil;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 
@@ -44,7 +43,7 @@ public abstract class InlineLibraryMethodTest extends RefactoringTestCase {
                                            " public static File createTempFile(String pr, String postfix){return createTempFile(pr, postfix, null);}\n" +
                                            " public static File createTempFile(String pr, String postfix, String base){return new File();}\n" +
                                            "}");
-    @NonNls String fileName = "/refactoring/inlineMethod/" + getTestName(false) + ".java";
+    String fileName = "/refactoring/inlineMethod/" + getTestName(false) + ".java";
     configureByFile(fileName);
 
     PsiClass fileClass = getJavaFacade().findClass("mycompany.File");

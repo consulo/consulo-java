@@ -27,10 +27,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.util.lang.CharArrayUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Maxim.Mossienko
@@ -87,7 +85,7 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
   }
 
   @Override
-  public void showParameterInfo(@Nonnull PsiAnnotationParameterList element, CreateParameterInfoContext context) {
+  public void showParameterInfo(PsiAnnotationParameterList element, CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset() + 1, this);
   }
 
@@ -98,7 +96,7 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
   }
 
   @Override
-  public void updateParameterInfo(@Nonnull PsiAnnotationParameterList o, UpdateParameterInfoContext context) {
+  public void updateParameterInfo(PsiAnnotationParameterList o, UpdateParameterInfoContext context) {
     CharSequence chars = context.getEditor().getDocument().getCharsSequence();
     int offset1 = CharArrayUtil.shiftForward(chars, context.getEditor().getCaretModel().getOffset(), " \t");
     char c = chars.charAt(offset1);
@@ -120,7 +118,7 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
 
   @Override
   public void updateUI(PsiAnnotationMethod p, ParameterInfoUIContext context) {
-    @NonNls StringBuffer buffer = new StringBuffer();
+    StringBuffer buffer = new StringBuffer();
     int highlightStartOffset;
     int highlightEndOffset;
     buffer.append(p.getReturnType().getPresentableText());
@@ -147,7 +145,6 @@ public class AnnotationParameterInfoHandler implements ParameterInfoHandler<PsiA
     return PsiUtil.isAnnotationMethod(resolved) ? (PsiAnnotationMethod) resolved : null;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

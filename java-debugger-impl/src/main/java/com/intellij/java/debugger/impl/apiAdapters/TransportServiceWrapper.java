@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import consulo.process.ExecutionException;
@@ -33,7 +32,6 @@ public class TransportServiceWrapper
 {
 	private static final Logger LOGGER = Logger.getInstance(TransportServiceWrapper.class);
 
-	@Nonnull
 	public static TransportServiceWrapper createTransportService(int type) throws ExecutionException
 	{
 		Class<?> transportClass = null;
@@ -73,7 +71,6 @@ public class TransportServiceWrapper
 		myDelegateObject = (TransportService) constructor.newInstance(ArrayUtil.EMPTY_OBJECT_ARRAY);
 	}
 
-	@Nonnull
 	public TransportService.ListenKey startListening() throws IOException
 	{
 		return myDelegateObject.startListening();
@@ -84,7 +81,6 @@ public class TransportServiceWrapper
 		myDelegateObject.stopListening(listenKey);
 	}
 
-	@Nonnull
 	public String transportId()
 	{
 		if(myDelegateClass == TransportClassDelegates.getSharedMemoryTransportServiceClass())

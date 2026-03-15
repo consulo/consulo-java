@@ -17,10 +17,8 @@ package com.intellij.lang.java.parser;
 
 import java.io.IOException;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.impl.parser.JavaParserUtil;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.language.ast.ASTNode;
 import consulo.language.parser.PsiBuilder;
@@ -44,7 +42,7 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 	private LanguageLevel myLanguageLevel;
 
 	@SuppressWarnings({"JUnitTestCaseWithNonTrivialConstructors"})
-	public JavaParsingTestCase(@NonNls String dataPath)
+	public JavaParsingTestCase(String dataPath)
 	{
 		super("psi/" + dataPath, "java");
 	}
@@ -62,9 +60,8 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 		myLanguageLevel = LanguageLevel.JDK_1_6;
 	}
 
-	@Nonnull
 	@Override
-	public LanguageVersion resolveLanguageVersion(@Nonnull FileType fileType)
+	public LanguageVersion resolveLanguageVersion(FileType fileType)
 	{
 		return myLanguageLevel.toLangVersion();
 	}
@@ -111,7 +108,6 @@ public abstract class JavaParsingTestCase extends ParsingTestCase
 		final FileViewProvider viewProvider = new SingleRootFileViewProvider(PsiManager.getInstance(myProject), virtualFile, true);
 		return new PsiJavaFileImpl(viewProvider)
 		{
-			@Nonnull
 			@Override
 			protected FileElement createFileElement(CharSequence text)
 			{

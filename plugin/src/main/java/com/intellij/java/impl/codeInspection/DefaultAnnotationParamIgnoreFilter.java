@@ -2,8 +2,7 @@ package com.intellij.java.impl.codeInspection;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
-import jakarta.annotation.Nullable;
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Allows skipping DefaultAnnotationParamInspection for specific annotations parameters
@@ -16,5 +15,5 @@ public interface DefaultAnnotationParamIgnoreFilter {
    * @param annotationParameterName name of the annotation param
    * @return true to skip inspection for {@code annotationParameterName} and annotation {@code annotationFQN}
    */
-  boolean ignoreAnnotationParam(@Nullable String annotationFQN, @Nonnull String annotationParameterName);
+  boolean ignoreAnnotationParam(@Nullable String annotationFQN, String annotationParameterName);
 }

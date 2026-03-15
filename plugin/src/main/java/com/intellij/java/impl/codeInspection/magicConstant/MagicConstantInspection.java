@@ -56,11 +56,8 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -68,43 +65,38 @@ import java.util.*;
 public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   public static final Key<Boolean> NO_ANNOTATIONS_FOUND = Key.create("REPORTED_NO_ANNOTATIONS_FOUND");
 
-  @Nonnull
   @Override
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesProbableBugs();
   }
 
-  @Nls
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Magic Constant");
   }
 
-  @Nonnull
   @Override
   public String getShortName() {
     return "MagicConstant";
   }
 
-  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder, boolean isOnTheFly, @Nonnull LocalInspectionToolSession session, Object state) {
+  public PsiElementVisitor buildVisitorImpl(final ProblemsHolder holder, boolean isOnTheFly, LocalInspectionToolSession session, Object state) {
     return new JavaElementVisitor() {
       @Override
-      public void visitJavaFile(@Nonnull PsiJavaFile file) {
+      public void visitJavaFile(PsiJavaFile file) {
         checkAnnotationsJarAttached(file, holder);
       }
 
       @Override
       @RequiredReadAction
-      public void visitCallExpression(@Nonnull PsiCallExpression callExpression) {
+      public void visitCallExpression(PsiCallExpression callExpression) {
         checkCall(callExpression, holder);
       }
 
       @Override
       @RequiredReadAction
-      public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+      public void visitAssignmentExpression(PsiAssignmentExpression expression) {
         PsiExpression r = expression.getRExpression();
         if (r == null) {
           return;
@@ -124,7 +116,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
       @Override
       @RequiredReadAction
-      public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+      public void visitReturnStatement(PsiReturnStatement statement) {
         PsiExpression value = statement.getReturnValue();
         if (value == null) {
           return;
@@ -139,7 +131,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
       @Override
       @RequiredReadAction
-      public void visitNameValuePair(@Nonnull PsiNameValuePair pair) {
+      public void visitNameValuePair(PsiNameValuePair pair) {
         PsiAnnotationMemberValue value = pair.getValue();
         if (!(value instanceof PsiExpression)) {
           return;
@@ -157,7 +149,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
       @Override
       @RequiredReadAction
-      public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+      public void visitBinaryExpression(PsiBinaryExpression expression) {
         IElementType tokenType = expression.getOperationTokenType();
         if (tokenType != JavaTokenType.EQEQ && tokenType != JavaTokenType.NE) {
           return;
@@ -194,7 +186,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     project.putUserData(NO_ANNOTATIONS_FOUND, null);
   }
 
-  private static void checkAnnotationsJarAttached(@Nonnull PsiFile file, @Nonnull ProblemsHolder holder) {
+  private static void checkAnnotationsJarAttached(PsiFile file, ProblemsHolder holder) {
     Project project = file.getProject();
     if (!holder.isOnTheFly()) {
       Boolean found = project.getUserData(NO_ANNOTATIONS_FOUND);
@@ -245,7 +237,6 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     String text = "No external annotations attached to the JDK " + finalJdk.getName() +
       (path == null ? "" : " (" + FileUtil.toSystemDependentName(path) + ")") + ", some issues will not be found";
     holder.registerProblem(file, text, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, new LocalQuickFix() {
-      @Nonnull
       @Override
       public LocalizeValue getName() {
         return LocalizeValue.localizeTODO("Attach annotations");
@@ -253,7 +244,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
       @Override
       @RequiredUIAccess
-      public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+      public void applyFix(Project project, ProblemDescriptor descriptor) {
         project.getApplication().runWriteAction(() -> {
           SdkModificator modificator = finalJdk.getSdkModificator();
           DefaultJavaSdkTypeImpl.attachJdkAnnotations(modificator);
@@ -279,7 +270,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   @RequiredReadAction
-  private static void checkCall(@Nonnull PsiCallExpression methodCall, @Nonnull ProblemsHolder holder) {
+  private static void checkCall(PsiCallExpression methodCall, ProblemsHolder holder) {
     PsiMethod method = methodCall.resolveMethod();
     if (method == null) {
       return;
@@ -309,7 +300,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     final PsiAnnotationMemberValue[] values;
     final boolean canBeOred;
 
-    private AllowedValues(@Nonnull PsiAnnotationMemberValue[] values, boolean canBeOred) {
+    private AllowedValues(PsiAnnotationMemberValue[] values, boolean canBeOred) {
       this.values = values;
       this.canBeOred = canBeOred;
     }
@@ -352,7 +343,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     }
 
     @RequiredReadAction
-    public boolean isSubsetOf(@Nonnull AllowedValues other, @Nonnull PsiManager manager) {
+    public boolean isSubsetOf(AllowedValues other, PsiManager manager) {
       for (PsiAnnotationMemberValue value : values) {
         boolean found = false;
         for (PsiAnnotationMemberValue otherValue : other.values) {
@@ -370,10 +361,10 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   private static AllowedValues getAllowedValuesFromMagic(
-    @Nonnull PsiModifierListOwner element,
-    @Nonnull PsiType type,
-    @Nonnull PsiAnnotation magic,
-    @Nonnull PsiManager manager
+    PsiModifierListOwner element,
+    PsiType type,
+    PsiAnnotation magic,
+    PsiManager manager
   ) {
     PsiAnnotationMemberValue[] allowedValues;
     boolean canBeOred;
@@ -416,10 +407,10 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   private static PsiAnnotationMemberValue[] readFromClass(
-    @NonNls @Nonnull String attributeName,
-    @Nonnull PsiAnnotation magic,
-    @Nonnull PsiType type,
-    @Nonnull PsiManager manager
+    String attributeName,
+    PsiAnnotation magic,
+    PsiType type,
+    PsiManager manager
   ) {
     PsiAnnotationMemberValue fromClassAttr = magic.findAttributeValue(attributeName);
     PsiType fromClassType = fromClassAttr instanceof PsiClassObjectAccessExpression classObjectAccessExpression
@@ -455,7 +446,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   @RequiredReadAction
-  static AllowedValues getAllowedValues(@Nonnull PsiModifierListOwner element, PsiType type, Set<PsiClass> visited) {
+  static AllowedValues getAllowedValues(PsiModifierListOwner element, PsiType type, Set<PsiClass> visited) {
     PsiAnnotation[] annotations = getAllAnnotations(element);
     PsiManager manager = element.getManager();
     for (PsiAnnotation annotation : annotations) {
@@ -503,7 +494,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   @RequiredReadAction
-  private static AllowedValues parseBeanInfo(@Nonnull PsiModifierListOwner owner, @Nonnull PsiManager manager) {
+  private static AllowedValues parseBeanInfo(PsiModifierListOwner owner, PsiManager manager) {
     PsiMethod method = null;
     if (owner instanceof PsiParameter) {
       PsiParameter parameter = (PsiParameter) owner;
@@ -618,16 +609,16 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
     return new AllowedValues(array, false);
   }
 
-  private static PsiType getType(@Nonnull PsiModifierListOwner element) {
+  private static PsiType getType(PsiModifierListOwner element) {
     return element instanceof PsiVariable ? ((PsiVariable) element).getType() : element instanceof PsiMethod ? ((PsiMethod) element).getReturnType() : null;
   }
 
   @RequiredReadAction
   private static void checkMagicParameterArgument(
-    @Nonnull PsiParameter parameter,
-    @Nonnull PsiExpression argument,
-    @Nonnull AllowedValues allowedValues,
-    @Nonnull ProblemsHolder holder
+    PsiParameter parameter,
+    PsiExpression argument,
+    AllowedValues allowedValues,
+    ProblemsHolder holder
   ) {
     PsiManager manager = PsiManager.getInstance(holder.getProject());
 
@@ -637,7 +628,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   @RequiredReadAction
-  private static void registerProblem(@Nonnull PsiExpression argument, @Nonnull AllowedValues allowedValues, @Nonnull ProblemsHolder holder) {
+  private static void registerProblem(PsiExpression argument, AllowedValues allowedValues, ProblemsHolder holder) {
     String values = StringUtil.join(
       allowedValues.values,
       value -> {
@@ -660,10 +651,10 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
   @RequiredReadAction
   private static boolean isAllowed(
-    @Nonnull PsiElement scope,
-    @Nonnull PsiExpression argument,
-    @Nonnull AllowedValues allowedValues,
-    @Nonnull PsiManager manager,
+    PsiElement scope,
+    PsiExpression argument,
+    AllowedValues allowedValues,
+    PsiManager manager,
     Set<PsiExpression> visited
   ) {
     if (isGoodExpression(argument, allowedValues, scope, manager, visited)) {
@@ -677,10 +668,10 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
   @RequiredReadAction
   private static boolean isGoodExpression(
-    @Nonnull PsiExpression e,
-    @Nonnull AllowedValues allowedValues,
-    @Nonnull PsiElement scope,
-    @Nonnull PsiManager manager,
+    PsiExpression e,
+    AllowedValues allowedValues,
+    PsiElement scope,
+    PsiManager manager,
     @Nullable Set<PsiExpression> visited
   ) {
     PsiExpression expression = PsiUtil.deparenthesizeExpression(e);
@@ -752,7 +743,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
   private static final Key<Map<String, PsiExpression>> LITERAL_EXPRESSION_CACHE = Key.create("LITERAL_EXPRESSION_CACHE");
 
-  private static PsiExpression getLiteralExpression(@Nonnull PsiExpression context, @Nonnull PsiManager manager, @Nonnull String text) {
+  private static PsiExpression getLiteralExpression(PsiExpression context, PsiManager manager, String text) {
     Map<String, PsiExpression> cache = LITERAL_EXPRESSION_CACHE.get(manager);
     if (cache == null) {
       cache = ContainerUtil.createConcurrentSoftValueMap();
@@ -767,7 +758,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   @RequiredReadAction
-  private static boolean isOneOf(@Nonnull PsiExpression expression, @Nonnull AllowedValues allowedValues, @Nonnull PsiManager manager) {
+  private static boolean isOneOf(PsiExpression expression, AllowedValues allowedValues, PsiManager manager) {
     for (PsiAnnotationMemberValue allowedValue : allowedValues.values) {
       if (same(allowedValue, expression, manager)) {
         return true;
@@ -777,7 +768,7 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
   }
 
   @RequiredReadAction
-  private static boolean same(PsiElement e1, PsiElement e2, @Nonnull PsiManager manager) {
+  private static boolean same(PsiElement e1, PsiElement e2, PsiManager manager) {
     if (e1 instanceof PsiLiteralExpression literal1 && e2 instanceof PsiLiteralExpression literal2) {
       return Comparing.equal(literal1.getValue(), literal2.getValue());
     }
@@ -794,10 +785,10 @@ public class MagicConstantInspection extends BaseJavaLocalInspectionTool {
 
   @RequiredReadAction
   private static boolean processValuesFlownTo(
-    @Nonnull PsiExpression argument,
-    @Nonnull PsiElement scope,
-    @Nonnull PsiManager manager,
-    @Nonnull Processor<PsiExpression> processor
+    PsiExpression argument,
+    PsiElement scope,
+    PsiManager manager,
+    Processor<PsiExpression> processor
   ) {
     SliceAnalysisParams params = new SliceAnalysisParams();
     params.dataFlowToThis = true;

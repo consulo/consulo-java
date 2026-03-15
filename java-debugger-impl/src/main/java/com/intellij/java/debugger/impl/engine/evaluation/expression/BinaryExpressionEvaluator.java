@@ -31,7 +31,6 @@ import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.ast.IElementType;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 class BinaryExpressionEvaluator implements Evaluator
 {
@@ -41,7 +40,7 @@ class BinaryExpressionEvaluator implements Evaluator
 	private final IElementType myOpType;
 	private final String myExpectedType; // a result of PsiType.getCanonicalText()
 
-	public BinaryExpressionEvaluator(@Nonnull Evaluator leftOperand, @Nonnull Evaluator rightOperand, @Nonnull IElementType opType, String expectedType)
+	public BinaryExpressionEvaluator(Evaluator leftOperand, Evaluator rightOperand, IElementType opType, String expectedType)
 	{
 		myLeftOperand = DisableGC.create(leftOperand);
 		myRightOperand = DisableGC.create(rightOperand);

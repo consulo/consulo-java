@@ -24,25 +24,21 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @ExtensionImpl
 public class StaticInheritanceInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.staticInheritanceDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.staticInheritanceProblemDescriptor().get();
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         return new InspectionGadgetsFix[]{new StaticInheritanceFix(false), new StaticInheritanceFix(true)};
@@ -57,7 +53,7 @@ public class StaticInheritanceInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so it doesn't drill down
             PsiReferenceList implementsList = aClass.getImplementsList();
             if (implementsList == null) {

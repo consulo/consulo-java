@@ -18,14 +18,13 @@ package com.intellij.java.impl.ig.cloneable;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
-import jakarta.annotation.Nonnull;
 
 class CallToSuperCloneVisitor extends JavaRecursiveElementVisitor {
 
   private boolean callToSuperCloneFound = false;
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (callToSuperCloneFound) {
       return;
     }
@@ -34,7 +33,7 @@ class CallToSuperCloneVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     if (callToSuperCloneFound) {
       return;
     }

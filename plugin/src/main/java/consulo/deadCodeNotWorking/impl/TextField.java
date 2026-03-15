@@ -16,8 +16,6 @@
 package consulo.deadCodeNotWorking.impl;
 
 import consulo.language.editor.inspection.InspectionTool;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -27,8 +25,8 @@ import java.lang.reflect.Field;
 @Deprecated
 public class TextField extends JTextField
 {
-	public TextField(@Nonnull InspectionTool owner,
-					 @NonNls String property)
+	public TextField(InspectionTool owner,
+					 String property)
 	{
 		super(getPropertyValue(owner, property));
 		DocumentListener documentListener =

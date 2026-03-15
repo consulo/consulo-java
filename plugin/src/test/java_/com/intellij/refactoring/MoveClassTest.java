@@ -31,7 +31,6 @@ import com.intellij.java.impl.refactoring.move.moveClassesOrPackages.SingleSourc
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 
@@ -94,7 +93,7 @@ public abstract class MoveClassTest extends RefactoringTestCase {
     doTest("unusedImport", new String[]{"p2.F2"}, "p1");
   }
 
-  private void doTest(@NonNls String testName, @NonNls String[] classNames, @NonNls String newPackageName) throws Exception{
+  private void doTest(String testName, String[] classNames, String newPackageName) throws Exception{
     String root = JavaTestUtil.getJavaTestDataPath() + "/refactoring/moveClass/" + testName;
 
     String rootBefore = root + "/before";

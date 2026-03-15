@@ -17,7 +17,6 @@ package com.intellij.java.impl.refactoring.wrapreturnvalue;
 
 import consulo.annotation.component.ActionImpl;
 import consulo.java.localize.JavaLocalize;
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
@@ -35,7 +34,7 @@ public class WrapReturnValueAction extends BaseRefactoringAction {
     }
 
     @Override
-    protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
+    protected RefactoringActionHandler getHandler(DataContext context) {
         return new WrapReturnValueHandler();
     }
 
@@ -46,10 +45,10 @@ public class WrapReturnValueAction extends BaseRefactoringAction {
 
     @Override
     protected boolean isAvailableOnElementInEditorAndFile(
-        @Nonnull PsiElement element,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull DataContext context
+        PsiElement element,
+        Editor editor,
+        PsiFile file,
+        DataContext context
     ) {
         PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
         if (psiMethod != null && !(psiMethod instanceof PsiCompiledElement)) {
@@ -60,7 +59,7 @@ public class WrapReturnValueAction extends BaseRefactoringAction {
     }
 
     @Override
-    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    public boolean isEnabledOnElements(PsiElement[] elements) {
         if (elements.length != 1) {
             return false;
         }

@@ -41,7 +41,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: cdr
@@ -54,7 +53,6 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
     myReplaceInWholeProject = replaceInWholeProject;
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     LocalizeValue scope = myReplaceInWholeProject ? InspectionGadgetsLocalize.theWholeProject() : InspectionGadgetsLocalize.thisClass();
     return InspectionGadgetsLocalize.staticInheritanceReplaceQuickfix(scope);
@@ -81,7 +79,7 @@ class StaticInheritanceFix extends InspectionGadgetsFix {
 
     ProgressManager.getInstance().run(new Task.Modal(project, "Replacing usages of " + iface.getName(), false) {
 
-      public void run(@Nonnull ProgressIndicator indicator) {
+      public void run(ProgressIndicator indicator) {
         for (final PsiField field : allFields) {
           Query<PsiReference> search = ReferencesSearch.search(field, implementingClass.getUseScope(), false);
           for (PsiReference reference : search) {

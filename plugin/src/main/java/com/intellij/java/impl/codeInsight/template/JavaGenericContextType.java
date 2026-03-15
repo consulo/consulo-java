@@ -5,7 +5,6 @@ import consulo.language.editor.template.context.EverywhereContextType;
 import consulo.language.psi.PsiElement;
 
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaGenericContextType extends JavaCodeContextType implements JavaLikeCodeContextType {
@@ -14,7 +13,7 @@ public class JavaGenericContextType extends JavaCodeContextType implements JavaL
   }
 
   @Override
-  protected boolean isInContext(@Nonnull PsiElement element) {
+  protected boolean isInContext(PsiElement element) {
     return true;
   }
 }

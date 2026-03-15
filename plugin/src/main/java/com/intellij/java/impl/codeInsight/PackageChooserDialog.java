@@ -46,8 +46,7 @@ import consulo.ui.ex.awt.tree.TreeUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -67,7 +66,7 @@ public class PackageChooserDialog extends DialogWrapper implements PackageChoose
   private final String myTitle;
   private Module myModule;
 
-  public PackageChooserDialog(String title, @Nonnull Module module) {
+  public PackageChooserDialog(String title, Module module) {
     super(module.getProject(), true);
     setTitle(title);
     myTitle = title;
@@ -242,7 +241,6 @@ public class PackageChooserDialog extends DialogWrapper implements PackageChoose
     return getSelectedPackages();
   }
 
-  @Nonnull
   private DefaultMutableTreeNode addPackage(PsiJavaPackage aPackage) {
     String qualifiedPackageName = aPackage.getQualifiedName();
     PsiJavaPackage parentPackage = aPackage.getParentPackage();
@@ -380,7 +378,7 @@ public class PackageChooserDialog extends DialogWrapper implements PackageChoose
     }
 
     @RequiredUIAccess
-    public void actionPerformed(@Nonnull AnActionEvent e) {
+    public void actionPerformed(AnActionEvent e) {
       createNewPackage();
     }
 

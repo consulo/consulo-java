@@ -41,7 +41,6 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -63,15 +62,14 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
         myDelegateMethodInfos = memberInfos;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usageInfos) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
         return new RemoveMiddlemanUsageViewDescriptor(field);
     }
 
     @Override
     @RequiredReadAction
-    public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+    public void findUsages(List<FixableUsageInfo> usages) {
         for (MemberInfo memberInfo : myDelegateMethodInfos) {
             if (!memberInfo.isChecked()) {
                 continue;
@@ -87,7 +85,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         for (MemberInfo memberInfo : myDelegateMethodInfos) {
             if (memberInfo.isChecked()
@@ -136,7 +134,7 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
+    protected void performRefactoring(UsageInfo[] usageInfos) {
         if (getter != null) {
             try {
                 if (containingClass.findMethodBySignature(getter, false) == null) {
@@ -151,7 +149,6 @@ public class RemoveMiddlemanProcessor extends FixableUsagesRefactoringProcessor 
         super.performRefactoring(usageInfos);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {

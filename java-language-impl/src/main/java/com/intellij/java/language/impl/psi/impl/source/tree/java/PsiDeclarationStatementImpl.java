@@ -33,7 +33,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiDeclarationStatementImpl extends CompositePsiElement implements PsiDeclarationStatement {
   public PsiDeclarationStatementImpl() {
@@ -41,7 +40,6 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getDeclaredElements() {
     return getChildrenAsPsiElements(DECLARED_ELEMENT_BIT_SET, PsiElement.ARRAY_FACTORY);
   }
@@ -55,7 +53,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (DECLARED_ELEMENT_BIT_SET.contains(child.getElementType())) {
       PsiElement[] declaredElements = getDeclaredElements();
       int length = declaredElements.length;
@@ -95,7 +93,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDeclarationStatement(this);
     }
@@ -109,7 +107,7 @@ public class PsiDeclarationStatementImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     PsiElement[] decls = getDeclaredElements();
     for (PsiElement decl : decls) {

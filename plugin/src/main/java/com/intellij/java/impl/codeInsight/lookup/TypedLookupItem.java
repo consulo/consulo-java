@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInsight.lookup;
 import consulo.language.editor.completion.ClassConditionKey;
 import com.intellij.java.language.psi.PsiType;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter

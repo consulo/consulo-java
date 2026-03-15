@@ -34,28 +34,23 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public abstract class StaticImportMemberFix<T extends PsiMember> implements SyntheticIntentionAction, HintAction, PriorityAction {
     private List<T> candidates;
 
-    @Nonnull
     @Override
     public Priority getPriority() {
         return Priority.TOP;
     }
 
-    @Nonnull
     protected abstract LocalizeValue getBaseText();
 
-    @Nonnull
     protected abstract String getMemberPresentableText(T t);
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         LocalizeValue text = getBaseText();
         if (candidates != null && candidates.size() == 1) {
@@ -68,7 +63,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return PsiUtil.isLanguageLevel5OrHigher(file) && file instanceof PsiJavaFile && getElement() != null && getElement().isValid() && getQualifierExpression() == null && resolveRef() == null &&
             file.getManager().isInProject(file) && !(candidates == null ? candidates = getMembersToImport(false) : candidates).isEmpty();
     }
@@ -77,7 +72,6 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
         return getMembersToImport(false);
     }
 
-    @Nonnull
     protected abstract List<T> getMembersToImport(boolean applicableOnly);
 
     public static boolean isExcluded(PsiMember method) {
@@ -85,8 +79,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
         return name != null && JavaProjectCodeInsightSettings.getSettings(method.getProject()).isExcluded(name);
     }
 
-    @Nonnull
-    protected abstract QuestionAction createQuestionAction(List<T> methodsToImport, @Nonnull Project project, Editor editor);
+    protected abstract QuestionAction createQuestionAction(List<T> methodsToImport, Project project, Editor editor);
 
     @Nullable
     protected abstract PsiElement getElement();
@@ -98,7 +91,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
     protected abstract PsiElement resolveRef();
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -151,7 +144,7 @@ public abstract class StaticImportMemberFix<T extends PsiMember> implements Synt
     }
 
     @Override
-    public boolean showHint(@Nonnull Editor editor) {
+    public boolean showHint(Editor editor) {
         PsiElement callExpression = getElement();
         if (callExpression == null || getQualifierExpression() != null) {
             return false;

@@ -47,10 +47,8 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
 import consulo.util.xml.serializer.JDOMExternalizableStringList;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +60,6 @@ import java.util.*;
  */
 @ExtensionImpl
 public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
-  @NonNls
   public static final String SHORT_NAME = "FieldCanBeLocal";
   public final JDOMExternalizableStringList EXCLUDE_ANNOS = new JDOMExternalizableStringList();
 
@@ -77,25 +74,22 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesClassStructure();
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionLocalize.inspectionFieldCanBeLocalDisplayName();
   }
 
   @Override
-  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }
 
   @Override
-  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+  public void writeSettings(Element node) throws WriteExternalException {
     if (!EXCLUDE_ANNOS.isEmpty()) {
       super.writeSettings(node);
     }
@@ -114,17 +108,16 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
     return panel;
   }
 
-  @Nonnull
   @Override
   public PsiElementVisitor buildVisitorImpl(
-    @Nonnull final ProblemsHolder holder,
+    final ProblemsHolder holder,
     boolean isOnTheFly,
     LocalInspectionToolSession session,
     Object state
   ) {
     return new JavaElementVisitor() {
       @Override
-      public void visitJavaFile(@Nonnull PsiJavaFile file) {
+      public void visitJavaFile(PsiJavaFile file) {
         for (PsiClass aClass : file.getClasses()) {
           doCheckClass(aClass, holder, EXCLUDE_ANNOS);
         }
@@ -175,7 +168,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
 
       @Override
       @RequiredReadAction
-      public void visitMethod(@Nonnull PsiMethod method) {
+      public void visitMethod(PsiMethod method) {
         super.visitMethod(method);
 
         PsiCodeBlock body = method.getBody();
@@ -186,7 +179,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
 
       @Override
       @RequiredReadAction
-      public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+      public void visitLambdaExpression(PsiLambdaExpression expression) {
         super.visitLambdaExpression(expression);
         PsiElement body = expression.getBody();
         if (body != null) {
@@ -196,7 +189,7 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
 
       @RequiredReadAction
       @Override
-      public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
+      public void visitClassInitializer(PsiClassInitializer initializer) {
         super.visitClassInitializer(initializer);
         checkCodeBlock(initializer.getBody(), candidates, usedFields);
       }
@@ -254,12 +247,12 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
   private static void removeFieldsReferencedFromInitializers(final PsiClass aClass, final Set<PsiField> candidates) {
     aClass.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override
-      public void visitMethod(@Nonnull PsiMethod method) {
+      public void visitMethod(PsiMethod method) {
         //do not go inside method
       }
 
       @Override
-      public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
+      public void visitClassInitializer(PsiClassInitializer initializer) {
         //do not go inside class initializer
       }
 
@@ -289,19 +282,18 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
     @Override
     @Nullable
     @RequiredReadAction
-    protected PsiField getVariable(@Nonnull ProblemDescriptor descriptor) {
+    protected PsiField getVariable(ProblemDescriptor descriptor) {
       return PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiField.class);
     }
 
     @Override
-    protected void beforeDelete(@Nonnull Project project, @Nonnull PsiField variable, @Nonnull PsiElement newDeclaration) {
+    protected void beforeDelete(Project project, PsiField variable, PsiElement newDeclaration) {
       PsiDocComment docComment = variable.getDocComment();
       if (docComment != null) moveDocCommentToDeclaration(project, docComment, newDeclaration);
     }
 
-    @Nonnull
     @Override
-    protected String suggestLocalName(@Nonnull Project project, @Nonnull PsiField field, @Nonnull PsiCodeBlock scope) {
+    protected String suggestLocalName(Project project, PsiField field, PsiCodeBlock scope) {
       JavaCodeStyleManager styleManager = JavaCodeStyleManager.getInstance(project);
 
       String propertyName = styleManager.variableNameToPropertyName(field.getName(), VariableKind.FIELD);
@@ -311,9 +303,9 @@ public class FieldCanBeLocalInspection extends BaseLocalInspectionTool {
 
     @RequiredReadAction
     private static void moveDocCommentToDeclaration(
-      @Nonnull Project project,
-      @Nonnull PsiDocComment docComment,
-      @Nonnull PsiElement declaration
+      Project project,
+      PsiDocComment docComment,
+      PsiElement declaration
     ) {
       StringBuilder buf = new StringBuilder();
       for (PsiElement psiElement : docComment.getDescriptionElements()) {

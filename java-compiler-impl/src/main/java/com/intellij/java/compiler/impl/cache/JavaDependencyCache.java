@@ -30,8 +30,7 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.Trinity;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +63,7 @@ public class JavaDependencyCache implements DependencyCache {
     private final String myStoreDirectoryPath;
     private static final String SYMBOLTABLE_FILE_NAME = "java-symboltable.dat";
 
-    public JavaDependencyCache(@Nonnull String cacheDir) {
+    public JavaDependencyCache(String cacheDir) {
         myStoreDirectoryPath = cacheDir + File.separator + ".java-dependency-info";
         mySymbolTableFilePath = myStoreDirectoryPath + "/" + SYMBOLTABLE_FILE_NAME;
     }
@@ -129,7 +128,7 @@ public class JavaDependencyCache implements DependencyCache {
         myToUpdate.add(qName);
     }
 
-    public int reparseClassFile(@Nonnull File file, @Nullable byte[] fileContent) throws ClsFormatException, CacheCorruptedException {
+    public int reparseClassFile(File file, @Nullable byte[] fileContent) throws ClsFormatException, CacheCorruptedException {
         SymbolTable symbolTable = getSymbolTable();
 
         int qName = getNewClassesCache().importClassInfo(new ClassFileReader(file, symbolTable, fileContent), symbolTable);
@@ -234,7 +233,7 @@ public class JavaDependencyCache implements DependencyCache {
     }
 
     @Override
-    public String relativePathToQName(@Nonnull String path, char separator) {
+    public String relativePathToQName(String path, char separator) {
         return JavaMakeUtil.relativeClassPathToQName(path, separator);
     }
 

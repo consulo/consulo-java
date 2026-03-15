@@ -26,7 +26,6 @@ import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.module.extension.ModuleExtensionHelper;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Jeka
@@ -41,7 +40,6 @@ public class RemoteConfigurationType extends ConfigurationTypeBase {
             PlatformIconGroup.runconfigurationsRemote()
         );
         addFactory(new ConfigurationFactory(this) {
-            @Nonnull
             @Override
             public String getId() {
                 return "Java Remote";
@@ -53,13 +51,12 @@ public class RemoteConfigurationType extends ConfigurationTypeBase {
             }
 
             @Override
-            public boolean isApplicable(@Nonnull Project project) {
+            public boolean isApplicable(Project project) {
                 return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
             }
         });
     }
 
-    @Nonnull
     public static RemoteConfigurationType getInstance() {
         return Application.get().getExtensionPoint(ConfigurationType.class)
             .findExtensionOrFail(RemoteConfigurationType.class);

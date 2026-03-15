@@ -1,11 +1,8 @@
 // Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.Collections;
@@ -88,7 +85,7 @@ public enum JavaFeature {
     STRING_TEMPLATES(LanguageLevel.JDK_21_PREVIEW, "feature.string.templates"),
     UNNAMED_PATTERNS_AND_VARIABLES(LanguageLevel.JDK_22, "feature.unnamed.vars") {
         @Override
-        public boolean isSufficient(@Nonnull LanguageLevel useSiteLevel) {
+        public boolean isSufficient(LanguageLevel useSiteLevel) {
             return super.isSufficient(useSiteLevel) || LanguageLevel.JDK_21_PREVIEW == useSiteLevel;
         }
     },
@@ -108,19 +105,19 @@ public enum JavaFeature {
     PRIMITIVE_TYPES_IN_PATTERNS(LanguageLevel.JDK_23_PREVIEW, "feature.primitive.types.in.patterns"),
     ;
 
-    private final @Nonnull LanguageLevel myLevel;
+    private final LanguageLevel myLevel;
 
     @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE)
-    private final @Nonnull String myKey;
+    private final String myKey;
     private final boolean myCanBeCustomized;
     private final Set<LanguageLevel> myObsoletePreviewLevels;
 
-    JavaFeature(@Nonnull LanguageLevel level, @Nonnull @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE) String key) {
+    JavaFeature(LanguageLevel level, @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE) String key) {
         this(level, key, false);
     }
 
-    JavaFeature(@Nonnull LanguageLevel level, @Nonnull @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE) String key,
-                @Nonnull LanguageLevel... obsoletePreviewLevels) {
+    JavaFeature(LanguageLevel level, @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE) String key,
+                LanguageLevel... obsoletePreviewLevels) {
         myLevel = level;
         myKey = key;
         myCanBeCustomized = false;
@@ -133,7 +130,7 @@ public enum JavaFeature {
         }
     }
 
-    JavaFeature(@Nonnull LanguageLevel level, @Nonnull @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE) String key,
+    JavaFeature(LanguageLevel level, @PropertyKey(resourceBundle = JavaPsiBundle.BUNDLE) String key,
                 boolean canBeCustomized) {
         myLevel = level;
         myKey = key;
@@ -144,7 +141,7 @@ public enum JavaFeature {
     /**
      * @return Human-readable feature name
      */
-    public @Nonnull @Nls String getFeatureName() {
+    public String getFeatureName() {
         return JavaPsiBundle.message(myKey);
     }
 
@@ -153,7 +150,7 @@ public enum JavaFeature {
      * Note that this doesn't mean that the feature is available on every language level which is higher.
      * In most of the cases, {@code PsiUtil.isAvailable(PsiElement)} or {@link #isSufficient(LanguageLevel)} should be used instead.
      */
-    public @Nonnull LanguageLevel getMinimumLevel() {
+    public LanguageLevel getMinimumLevel() {
         return myLevel;
     }
 
@@ -166,7 +163,7 @@ public enum JavaFeature {
     }
 
     @Contract(pure = true)
-    public boolean isSufficient(@Nonnull LanguageLevel useSiteLevel) {
+    public boolean isSufficient(LanguageLevel useSiteLevel) {
         return (useSiteLevel.isAtLeast(myLevel) ||
             useSiteLevel.isUnsupported() && myObsoletePreviewLevels.contains(useSiteLevel)) &&
             (!myLevel.isPreview() || useSiteLevel.isPreview());
@@ -188,7 +185,7 @@ public enum JavaFeature {
     // Should correspond to jdk.internal.javac.PreviewFeature.Feature enum
     @Nullable
     @Contract(pure = true)
-    public static JavaFeature convertFromPreviewFeatureName(@Nonnull @NonNls String feature) {
+    public static JavaFeature convertFromPreviewFeatureName(String feature) {
         switch (feature) {
             case "PATTERN_MATCHING_IN_INSTANCEOF":
                 return PATTERNS;

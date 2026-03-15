@@ -20,14 +20,13 @@ import consulo.execution.debug.stream.trace.TraceElement;
 import consulo.execution.debug.stream.trace.Value;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class JavaCollectionTreeBuilder implements CollectionTreeBuilder {
     private final Project project;
     private final MyNodeManager nodeManager;
 
-    public JavaCollectionTreeBuilder(@Nonnull Project project) {
+    public JavaCollectionTreeBuilder(Project project) {
         this.project = project;
         this.nodeManager = new MyNodeManager(project);
     }
@@ -53,37 +52,33 @@ public class JavaCollectionTreeBuilder implements CollectionTreeBuilder {
         }
     }
 
-    @Nonnull
     @Override
-    public XNamedValue createXNamedValue(@Nullable Value value, @Nonnull GenericEvaluationContext evaluationContext) {
+    public XNamedValue createXNamedValue(@Nullable Value value, GenericEvaluationContext evaluationContext) {
         consulo.internal.com.sun.jdi.Value jvmValue = value instanceof JvmValue ? ((JvmValue) value).getValue() : null;
         PrimitiveValueDescriptor valueDescriptor = new PrimitiveValueDescriptor(project, jvmValue);
         return new InstanceJavaValue(valueDescriptor, ((JavaEvaluationContext) evaluationContext).getContext(), nodeManager);
     }
 
-    @Nonnull
     @Override
-    public Object getKey(@Nonnull XValueContainer container, @Nonnull Object nullMarker) {
+    public Object getKey(XValueContainer container, Object nullMarker) {
         consulo.internal.com.sun.jdi.Value jvmValue = ((JavaValue) container).getDescriptor().getValue();
         return jvmValue != null ? jvmValue : nullMarker;
     }
 
-    @Nonnull
     @Override
-    public Object getKey(@Nonnull TraceElement traceElement, @Nonnull Object nullMarker) {
+    public Object getKey(TraceElement traceElement, Object nullMarker) {
         Value value = traceElement.getValue();
         consulo.internal.com.sun.jdi.Value jvmValue = value instanceof JvmValue ? ((JvmValue) value).getValue() : null;
         return jvmValue != null ? jvmValue : nullMarker;
     }
 
-    @Nonnull
     @Override
     public XDebuggerEditorsProvider getEditorsProvider() {
         return new JavaDebuggerEditorsProvider();
     }
 
     @Override
-    public boolean isSupported(@Nonnull XValueContainer container) {
+    public boolean isSupported(XValueContainer container) {
         return container instanceof JavaValue;
     }
 }

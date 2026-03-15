@@ -23,7 +23,6 @@ import consulo.project.Project;
 import consulo.document.util.TextRange;
 import consulo.document.util.UnfairTextRange;
 import consulo.language.psi.*;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +45,6 @@ public class PsiSelectionSearcher {
    * @param <T>             type based on PsiElement type
    * @return elements in selection
    */
-  @Nonnull
   public static <T extends PsiElement> List<T> searchElementsInSelection(Editor editor,
                                                                          Project project,
                                                                          final Class<T> filter,

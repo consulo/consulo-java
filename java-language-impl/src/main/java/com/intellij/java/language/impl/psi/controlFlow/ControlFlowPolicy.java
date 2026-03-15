@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiVariable;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ControlFlowPolicy {
   @Nullable

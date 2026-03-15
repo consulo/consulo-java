@@ -18,9 +18,7 @@ package com.intellij.codeInsight.daemon;
 import static org.junit.Assert.assertNotNull;
 
 import com.intellij.java.language.psi.CommonClassNames;
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
@@ -33,9 +31,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.IdeaTestUtil;
 
 public abstract class GenericsHighlightingTest extends LightDaemonAnalyzerTestCase {
-  @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/genericsHighlighting";
+  private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/genericsHighlighting";
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new UncheckedWarningLocalInspection(), new UnusedSymbolLocalInspection(), new UnusedImportLocalInspection()};
@@ -46,7 +43,7 @@ public abstract class GenericsHighlightingTest extends LightDaemonAnalyzerTestCa
     return getTestName(false).contains("Jdk14") ? IdeaTestUtil.getMockJdk14() : super.getProjectJDK();
   }
 
-  private void doTest(@Nonnull LanguageLevel languageLevel, @Nonnull JavaSdkVersion sdkVersion, boolean checkWarnings) {
+  private void doTest(LanguageLevel languageLevel, JavaSdkVersion sdkVersion, boolean checkWarnings) {
     //LanguageLevelProjectExtension.getInstance(getJavaFacade().getProject()).setLanguageLevel(languageLevel);
     IdeaTestUtil.setTestVersion(sdkVersion, getModule(), myTestRootDisposable);
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, false);

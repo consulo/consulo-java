@@ -15,26 +15,23 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Skavish
  */
 public class TagDescription
 {
-	@Nonnull
 	public final String name;
 	@Nullable
 	public final String desc;
 
-	public TagDescription(@Nonnull String name, @Nullable String desc)
+	public TagDescription(String name, @Nullable String desc)
 	{
 		this.name = name;
 		this.desc = desc;
 	}
 
-	@Nonnull
 	@Override
 	public String toString()
 	{

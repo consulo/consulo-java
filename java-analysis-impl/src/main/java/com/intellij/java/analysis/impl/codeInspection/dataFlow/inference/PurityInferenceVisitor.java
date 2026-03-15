@@ -9,8 +9,7 @@ import com.intellij.java.language.impl.psi.impl.source.JavaLightTreeUtil;
 import consulo.language.ast.LightTreeUtil;
 import consulo.language.ast.IElementType;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +102,7 @@ class PurityInferenceVisitor
 		mutatedRefs.add(mutated);
 	}
 
-	private boolean isCall(@Nonnull LighterASTNode element, IElementType type)
+	private boolean isCall(LighterASTNode element, IElementType type)
 	{
 		return type == NEW_EXPRESSION &&
 				(LightTreeUtil.firstChildOfType(tree, element, EXPRESSION_LIST) != null ||
@@ -111,7 +110,7 @@ class PurityInferenceVisitor
 				type == METHOD_CALL_EXPRESSION;
 	}
 
-	private boolean isMutatingOperation(@Nonnull LighterASTNode element)
+	private boolean isMutatingOperation(LighterASTNode element)
 	{
 		return LightTreeUtil.firstChildOfType(tree, element, JavaTokenType.PLUSPLUS) != null ||
 				LightTreeUtil.firstChildOfType(tree, element, JavaTokenType.MINUSMINUS) != null;

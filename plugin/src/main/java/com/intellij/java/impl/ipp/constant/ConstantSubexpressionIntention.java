@@ -28,14 +28,12 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConstantSubexpressionIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ConstantSubexpressionIntention extends MutablyNamedIntention {
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new ConstantSubexpressionPredicate();
     }
@@ -61,14 +59,13 @@ public class ConstantSubexpressionIntention extends MutablyNamedIntention {
         return IntentionPowerPackLocalize.constantExpressionIntentionName(text);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.constantSubexpressionIntentionFamilyName();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiJavaToken token;
         if (element instanceof PsiJavaToken) {
             token = (PsiJavaToken) element;

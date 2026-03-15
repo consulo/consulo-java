@@ -31,8 +31,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -41,14 +40,12 @@ public class OverlyStrongTypeCastInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean ignoreInMatchingInstanceof = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overlyStrongTypeCastDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         PsiType expectedType = (PsiType) infos[0];
         String typeText = expectedType.getPresentableText();
@@ -68,7 +65,6 @@ public class OverlyStrongTypeCastInspection extends BaseInspection {
     }
 
     private static class OverlyStrongCastFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.overlyStrongTypeCastWeakenQuickfix();
@@ -102,7 +98,7 @@ public class OverlyStrongTypeCastInspection extends BaseInspection {
 
     private class OverlyStrongTypeCastVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
+        public void visitTypeCastExpression(PsiTypeCastExpression expression) {
             super.visitTypeCastExpression(expression);
             PsiExpression operand = expression.getOperand();
             if (operand == null) {

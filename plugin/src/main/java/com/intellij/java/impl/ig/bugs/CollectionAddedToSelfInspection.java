@@ -25,19 +25,16 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CollectionAddedToSelfInspection extends BaseInspection {
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.collectionAddedToSelfDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.collectionAddedToSelfProblemDescriptor().get();
     }
@@ -52,7 +49,7 @@ public class CollectionAddedToSelfInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression call) {
+            PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             PsiReferenceExpression methodExpression =
                 call.getMethodExpression();

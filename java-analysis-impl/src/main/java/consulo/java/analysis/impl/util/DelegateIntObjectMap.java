@@ -4,8 +4,7 @@ import consulo.util.collection.primitive.ints.IntObjConsumer;
 import consulo.util.collection.primitive.ints.IntObjectMap;
 import consulo.util.collection.primitive.ints.IntSet;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -28,14 +27,12 @@ public class DelegateIntObjectMap<V> implements IntObjectMap<V>
 	}
 
 	@Override
-	@Nonnull
 	public IntSet keySet()
 	{
 		return myDelegate.keySet();
 	}
 
 	@Override
-	@Nonnull
 	public int[] keys()
 	{
 		return myDelegate.keys();
@@ -74,14 +71,12 @@ public class DelegateIntObjectMap<V> implements IntObjectMap<V>
 	}
 
 	@Override
-	@Nonnull
 	public Set<IntObjectEntry<V>> entrySet()
 	{
 		return myDelegate.entrySet();
 	}
 
 	@Override
-	@Nonnull
 	public Collection<V> values()
 	{
 		return myDelegate.values();

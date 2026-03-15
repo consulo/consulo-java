@@ -61,7 +61,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Predicates;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -160,7 +159,6 @@ public class JavaDocCompletionContributor extends CompletionContributor {
         );
     }
 
-    @Nonnull
     @RequiredReadAction
     private List<LookupElement> completeJavadocReference(PsiElement position, PsiJavaReference ref) {
         JavaCompletionProcessor processor = new JavaCompletionProcessor(
@@ -213,7 +211,7 @@ public class JavaDocCompletionContributor extends CompletionContributor {
 
     @Override
     @RequiredReadAction
-    public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result) {
+    public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
         PsiElement position = parameters.getPosition();
         if (PsiJavaPatterns.psiElement(JavaDocTokenType.DOC_COMMENT_DATA).accepts(position)) {
             PsiParameter param = getDocTagParam(position.getParent());
@@ -249,8 +247,8 @@ public class JavaDocCompletionContributor extends CompletionContributor {
 
     @RequiredReadAction
     private void suggestLinkWrappingVariants(
-        @Nonnull CompletionParameters parameters,
-        @Nonnull CompletionResultSet result,
+        CompletionParameters parameters,
+        CompletionResultSet result,
         PsiElement position
     ) {
         PrefixMatcher matcher = result.getPrefixMatcher();
@@ -279,7 +277,6 @@ public class JavaDocCompletionContributor extends CompletionContributor {
         }
     }
 
-    @Nonnull
     private static <T extends LookupElement> InsertHandler<T> wrapIntoLinkTag(InsertHandler<T> delegate) {
         return (context, item) ->
         {
@@ -334,7 +331,6 @@ public class JavaDocCompletionContributor extends CompletionContributor {
         }
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;
@@ -344,9 +340,9 @@ public class JavaDocCompletionContributor extends CompletionContributor {
         @Override
         @RequiredReadAction
         public void addCompletions(
-            @Nonnull CompletionParameters parameters,
+            CompletionParameters parameters,
             ProcessingContext context,
-            @Nonnull CompletionResultSet result
+            CompletionResultSet result
         ) {
             List<String> ret = new ArrayList<>();
             PsiElement position = parameters.getPosition();

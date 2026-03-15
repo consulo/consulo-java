@@ -37,7 +37,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,14 +49,13 @@ import java.util.List;
 @IntentionMetaData(ignoreId = "java.MoveFieldAssignmentToInitializerAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction {
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionMoveFieldAssignmentToDeclaration();
   }
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiAssignmentExpression assignment = getAssignmentUnderCaret(editor, file);
     if (assignment == null) {
       return false;
@@ -119,7 +117,7 @@ public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction 
       private PsiCodeBlock currentInitializingBlock; //ctr or class initializer
 
       @Override
-      public void visitCodeBlock(@Nonnull PsiCodeBlock block) {
+      public void visitCodeBlock(PsiCodeBlock block) {
         PsiElement parent = block.getParent();
         if (parent instanceof PsiClassInitializer || parent instanceof PsiMethod method && method.isConstructor()) {
           currentInitializingBlock = block;
@@ -173,7 +171,7 @@ public class MoveFieldAssignmentToInitializerAction extends BaseIntentionAction 
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiAssignmentExpression assignment = getAssignmentUnderCaret(editor, file);
     if (assignment == null) return;
     PsiField field = getAssignedField(assignment);

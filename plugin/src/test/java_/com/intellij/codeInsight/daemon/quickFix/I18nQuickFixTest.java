@@ -1,6 +1,5 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.i18n.I18nInspection;
@@ -12,7 +11,6 @@ import consulo.util.lang.Comparing;
 public abstract class I18nQuickFixTest extends LightQuickFix15TestCase {
   private boolean myMustBeAvailableAfterInvoke;
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new I18nInspection()};

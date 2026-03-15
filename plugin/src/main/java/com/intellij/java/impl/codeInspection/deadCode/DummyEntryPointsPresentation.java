@@ -28,13 +28,12 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionToolWrapper;
-import jakarta.annotation.Nonnull;
 
 public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation {
   private static final RefEntryPointFilter myFilter = new RefEntryPointFilter();
   private QuickFixAction[] myQuickFixActions;
 
-  public DummyEntryPointsPresentation(@Nonnull InspectionToolWrapper toolWrapper, @Nonnull GlobalInspectionContextImpl context) {
+  public DummyEntryPointsPresentation(InspectionToolWrapper toolWrapper, GlobalInspectionContextImpl context) {
     super(toolWrapper, context);
   }
 
@@ -44,7 +43,7 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
   }
 
   @Override
-  public QuickFixAction[] getQuickFixes(@Nonnull RefEntity[] refElements) {
+  public QuickFixAction[] getQuickFixes(RefEntity[] refElements) {
     if (myQuickFixActions == null) {
       myQuickFixActions = new QuickFixAction[]{new MoveEntriesToSuspicious(getToolWrapper())};
     }
@@ -57,12 +56,12 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
   }
 
   private class MoveEntriesToSuspicious extends QuickFixAction {
-    private MoveEntriesToSuspicious(@Nonnull InspectionToolWrapper toolWrapper) {
+    private MoveEntriesToSuspicious(InspectionToolWrapper toolWrapper) {
       super(InspectionLocalize.inspectionDeadCodeRemoveFromEntryPointQuickfix(), null, null, toolWrapper);
     }
 
     @Override
-    protected boolean applyFix(@Nonnull RefEntity[] refElements) {
+    protected boolean applyFix(RefEntity[] refElements) {
       EntryPointsManager entryPointsManager = getContext().getExtension(GlobalJavaInspectionContext.CONTEXT)
         .getEntryPointsManager(getContext().getRefManager());
       for (RefEntity refEntity : refElements) {
@@ -75,20 +74,18 @@ public class DummyEntryPointsPresentation extends UnusedDeclarationPresentation 
     }
   }
 
-  @Nonnull
   @Override
   public InspectionNode createToolNode(
-    @Nonnull GlobalInspectionContextImpl context,
-    @Nonnull InspectionNode node,
-    @Nonnull InspectionRVContentProvider provider,
-    @Nonnull InspectionTreeNode parentNode,
+    GlobalInspectionContextImpl context,
+    InspectionNode node,
+    InspectionRVContentProvider provider,
+    InspectionTreeNode parentNode,
     boolean showStructure
   ) {
     return node;
   }
 
   @Override
-  @Nonnull
   public HTMLComposerBase getComposer() {
     return new DeadHTMLComposer(this);
   }

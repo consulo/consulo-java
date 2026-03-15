@@ -25,8 +25,7 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -43,13 +42,11 @@ public class DuplicateConditionInspection extends BaseInspection {
     // This is a dirty fix of 'squared' algorithm performance issue.
     private static final int LIMIT_DEPTH = 20;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.duplicateConditionDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.duplicateConditionProblemDescriptor().get();
     }
@@ -67,7 +64,7 @@ public class DuplicateConditionInspection extends BaseInspection {
     private class DuplicateConditionVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+        public void visitIfStatement(PsiIfStatement statement) {
             super.visitIfStatement(statement);
             PsiElement parent = statement.getParent();
             if (parent instanceof PsiIfStatement) {

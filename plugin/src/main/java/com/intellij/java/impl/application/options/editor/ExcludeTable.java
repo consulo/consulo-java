@@ -28,9 +28,8 @@ import consulo.ui.ex.awt.table.ComboBoxTableRenderer;
 import consulo.ui.ex.awt.table.ListTableModel;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -70,7 +69,6 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item> {
         @Override
         public TableCellRenderer getRenderer(Item pair) {
             return new DefaultTableCellRenderer() {
-                @Nonnull
                 @Override
                 public Component getTableCellRendererComponent(
                     JTable table,
@@ -136,7 +134,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item> {
     };
     private final Project myProject;
 
-    public ExcludeTable(@Nonnull Project project) {
+    public ExcludeTable(Project project) {
         myProject = project;
         getTableView().getEmptyText().setText(ApplicationBundle.message("exclude.from.imports.no.exclusions"));
     }
@@ -231,7 +229,7 @@ class ExcludeTable extends ListTableWithButtons<ExcludeTable.Item> {
         String exclude;
         ExclusionScope scope;
 
-        Item(@Nonnull String exclude, ExclusionScope scope) {
+        Item(String exclude, ExclusionScope scope) {
             this.exclude = exclude;
             this.scope = scope;
         }

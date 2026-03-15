@@ -27,7 +27,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,17 +35,14 @@ import java.util.Set;
 public class MethodOverridesPackageLocalMethodInspection
   extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "MethodOverridesPrivateMethodOfSuperclass";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.methodOverridesPackageLocalMethodDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.methodOverridesPackageLocalMethodProblemDescriptor().get();
   }
@@ -67,7 +63,7 @@ public class MethodOverridesPackageLocalMethodInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       PsiClass aClass = method.getContainingClass();
       if (aClass == null) {
         return;

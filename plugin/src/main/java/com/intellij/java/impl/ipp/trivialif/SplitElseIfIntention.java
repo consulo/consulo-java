@@ -26,18 +26,15 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SplitElseIfIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class SplitElseIfIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.splitElseIfIntentionName();
     }
 
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new SplitElseIfPredicate();
     }

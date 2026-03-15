@@ -35,8 +35,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,7 +47,6 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
   private volatile Pair<TextRange, Identikit> myMirror;
 
   @Override
-  @Nonnull
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }
@@ -88,7 +86,6 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
     return this;
   }
 
-  @Nonnull
   protected PsiElement[] getChildren(@Nullable PsiElement... children) {
     if (children == null) {
       return PsiElement.EMPTY_ARRAY;
@@ -104,29 +101,28 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
   }
 
   @Override
-  public void checkAdd(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public void checkAdd(PsiElement element) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
-  @Nonnull
-  static IncorrectOperationException cannotModifyException(@Nonnull PsiCompiledElement element) {
+  static IncorrectOperationException cannotModifyException(PsiCompiledElement element) {
     VirtualFile virtualFile = PsiUtilCore.getVirtualFile(element);
     String path = virtualFile == null ? "?" : virtualFile.getPresentableUrl();
     return new IncorrectOperationException(JavaCoreBundle.message("psi.error.attempt.to.edit.class.file", path));
   }
 
   @Override
-  public PsiElement add(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement add(PsiElement element) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
   @Override
-  public PsiElement addBefore(@Nonnull PsiElement element, PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addBefore(PsiElement element, PsiElement anchor) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
   @Override
-  public PsiElement addAfter(@Nonnull PsiElement element, PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addAfter(PsiElement element, PsiElement anchor) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
@@ -141,17 +137,17 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
   }
 
   @Override
-  public PsiElement replace(@Nonnull PsiElement newElement) throws IncorrectOperationException {
+  public PsiElement replace(PsiElement newElement) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
-  public abstract void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer);
+  public abstract void appendMirrorText(int indentLevel, StringBuilder buffer);
 
   protected int getIndentSize() {
     return JavaCodeStyleSettingsFacade.getInstance(getProject()).getIndentSize();
   }
 
-  public abstract void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException;
+  public abstract void setMirror(TreeElement element) throws InvalidMirrorException;
 
   @Override
   public PsiElement getMirror() {
@@ -210,19 +206,18 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
   }
 
   @Override
-  @Nonnull
   public char[] textToCharArray() {
     PsiElement mirror = getMirror();
     return mirror != null ? mirror.textToCharArray() : ArrayUtil.EMPTY_CHAR_ARRAY;
   }
 
   @Override
-  public boolean textMatches(@Nonnull CharSequence text) {
+  public boolean textMatches(CharSequence text) {
     return getText().equals(text.toString());
   }
 
   @Override
-  public boolean textMatches(@Nonnull PsiElement element) {
+  public boolean textMatches(PsiElement element) {
     return getText().equals(element.getText());
   }
 
@@ -231,14 +226,14 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
     return null;
   }
 
-  static void goNextLine(int indentLevel, @Nonnull StringBuilder buffer) {
+  static void goNextLine(int indentLevel, StringBuilder buffer) {
     buffer.append('\n');
     for (int i = 0; i < indentLevel; i++) {
       buffer.append(' ');
     }
   }
 
-  protected static void appendText(@Nullable PsiElement stub, int indentLevel, @Nonnull StringBuilder buffer) {
+  protected static void appendText(@Nullable PsiElement stub, int indentLevel, StringBuilder buffer) {
     if (stub == null) {
       return;
     }
@@ -247,7 +242,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
 
   protected static final String NEXT_LINE = "go_to_next_line_and_indent";
 
-  protected static void appendText(@Nullable PsiElement stub, int indentLevel, @Nonnull StringBuilder buffer, @Nonnull String separator) {
+  protected static void appendText(@Nullable PsiElement stub, int indentLevel, StringBuilder buffer, String separator) {
     if (stub == null) {
       return;
     }
@@ -262,7 +257,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
     }
   }
 
-  protected void setMirrorCheckingType(@Nonnull TreeElement element, @Nullable IElementType type) throws InvalidMirrorException {
+  protected void setMirrorCheckingType(TreeElement element, @Nullable IElementType type) throws InvalidMirrorException {
     // uncomment for extended consistency check
     //if (myMirror != null) {
     //  throw new InvalidMirrorException("Mirror should be null: " + myMirror);
@@ -292,11 +287,11 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
     }
   }
 
-  protected static <T extends PsiElement> void setMirrors(@Nonnull T[] stubs, @Nonnull T[] mirrors) throws InvalidMirrorException {
+  protected static <T extends PsiElement> void setMirrors(T[] stubs, T[] mirrors) throws InvalidMirrorException {
     setMirrors(Arrays.asList(stubs), Arrays.asList(mirrors));
   }
 
-  protected static <T extends PsiElement> void setMirrors(@Nonnull List<T> stubs, @Nonnull List<T> mirrors) throws InvalidMirrorException {
+  protected static <T extends PsiElement> void setMirrors(List<T> stubs, List<T> mirrors) throws InvalidMirrorException {
     if (stubs.size() != mirrors.size()) {
       throw new InvalidMirrorException(stubs, mirrors);
     }
@@ -306,7 +301,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
   }
 
   protected static class InvalidMirrorException extends RuntimeException {
-    public InvalidMirrorException(@Nonnull String message) {
+    public InvalidMirrorException(String message) {
       super(message);
     }
 
@@ -314,7 +309,7 @@ public abstract class ClsElementImpl extends PsiElementBase implements PsiCompil
       this("stub:" + stubElement + "; mirror:" + mirrorElement);
     }
 
-    public InvalidMirrorException(@Nonnull List<? extends PsiElement> stubElements, @Nonnull List<? extends PsiElement> mirrorElements) {
+    public InvalidMirrorException(List<? extends PsiElement> stubElements, List<? extends PsiElement> mirrorElements) {
       this("stub:" + stubElements + "; mirror:" + mirrorElements);
     }
   }

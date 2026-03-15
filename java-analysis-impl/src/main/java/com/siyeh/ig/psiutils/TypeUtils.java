@@ -22,10 +22,8 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,26 +46,26 @@ public class TypeUtils {
   }
 
   @Contract("_, null -> false")
-  public static boolean typeEquals(@NonNls @Nonnull String typeName, @Nullable PsiType targetType) {
+  public static boolean typeEquals(String typeName, @Nullable PsiType targetType) {
     return targetType != null && targetType.equalsToText(typeName);
   }
 
-  public static PsiClassType getType(@Nonnull String fqName, @Nonnull PsiElement context) {
+  public static PsiClassType getType(String fqName, PsiElement context) {
     final Project project = context.getProject();
     final PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
     final GlobalSearchScope scope = context.getResolveScope();
     return factory.createTypeByFQClassName(fqName, scope);
   }
 
-  public static PsiClassType getType(@Nonnull PsiClass aClass) {
+  public static PsiClassType getType(PsiClass aClass) {
     return JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory().createType(aClass);
   }
 
-  public static PsiClassType getObjectType(@Nonnull PsiElement context) {
+  public static PsiClassType getObjectType(PsiElement context) {
     return getType(CommonClassNames.JAVA_LANG_OBJECT, context);
   }
 
-  public static PsiClassType getStringType(@Nonnull PsiElement context) {
+  public static PsiClassType getStringType(PsiElement context) {
     return getType(CommonClassNames.JAVA_LANG_STRING, context);
   }
 
@@ -104,7 +102,7 @@ public class TypeUtils {
         ".OptionalLong").equals(qualifiedName) || "com.google.common.base.Optional".equals(qualifiedName);
   }
 
-  public static boolean isExpressionTypeAssignableWith(@Nonnull PsiExpression expression, @Nonnull Iterable<String> rhsTypeTexts) {
+  public static boolean isExpressionTypeAssignableWith(PsiExpression expression, Iterable<String> rhsTypeTexts) {
     final PsiType type = expression.getType();
     if (type == null) {
       return false;
@@ -119,12 +117,12 @@ public class TypeUtils {
     return false;
   }
 
-  public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @Nonnull String typeName) {
+  public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, String typeName) {
     return expressionHasTypeOrSubtype(expression, new String[]{typeName}) != null;
   }
 
   //getTypeIfOneOfOrSubtype
-  public static String expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @Nonnull String... typeNames) {
+  public static String expressionHasTypeOrSubtype(@Nullable PsiExpression expression, String... typeNames) {
     if (expression == null) {
       return null;
     }
@@ -148,7 +146,7 @@ public class TypeUtils {
     return null;
   }
 
-  public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, @NonNls @Nonnull Iterable<String> typeNames) {
+  public static boolean expressionHasTypeOrSubtype(@Nullable PsiExpression expression, Iterable<String> typeNames) {
     if (expression == null) {
       return false;
     }
@@ -172,7 +170,7 @@ public class TypeUtils {
     return false;
   }
 
-  public static boolean variableHasTypeOrSubtype(@Nullable PsiVariable variable, @NonNls @Nonnull String... typeNames) {
+  public static boolean variableHasTypeOrSubtype(@Nullable PsiVariable variable, String... typeNames) {
     if (variable == null) {
       return false;
     }
@@ -268,7 +266,6 @@ public class TypeUtils {
    * @param type type to get the default value for
    * @return the textual representation of default value
    */
-  @NonNls
   public static String getDefaultValue(PsiType type) {
     if (PsiType.INT.equals(type)) {
       return "0";

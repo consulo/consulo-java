@@ -2,7 +2,6 @@
 package com.intellij.java.language.psi.javadoc;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -15,6 +14,5 @@ public interface PsiSnippetAttributeValue extends PsiElement {
    * Returns the content of the attribute value (without quotes, if any)
    */
   @Contract(pure = true)
-  @Nonnull
   String getValue();
 }

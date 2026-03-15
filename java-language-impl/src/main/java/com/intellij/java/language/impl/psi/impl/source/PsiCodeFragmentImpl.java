@@ -42,10 +42,8 @@ import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.LinkedHashMap;
 import java.util.StringTokenizer;
@@ -62,7 +60,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	private GlobalSearchScope myResolveScope;
 	private IntentionActionsFilter myIntentionActionsFilter;
 
-	public PsiCodeFragmentImpl(Project project, IElementType contentElementType, boolean isPhysical, @NonNls String name, CharSequence text, @Nullable PsiElement context)
+	public PsiCodeFragmentImpl(Project project, IElementType contentElementType, boolean isPhysical, String name, CharSequence text, @Nullable PsiElement context)
 	{
 		super(TokenType.CODE_FRAGMENT, contentElementType, new SingleRootFileViewProvider(PsiManager.getInstance(project), new LightVirtualFile(name, FileTypeManager.getInstance()
 				.getFileTypeByFileName(name), text), isPhysical));
@@ -72,7 +70,6 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@Nonnull
 	public Language getLanguage()
 	{
 		return getContentElementType().getLanguage();
@@ -94,7 +91,6 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	private FileViewProvider myViewProvider;
 
 	@Override
-	@Nonnull
 	public FileViewProvider getViewProvider()
 	{
 		if(myViewProvider != null)
@@ -105,7 +101,6 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@Nonnull
 	public FileType getFileType()
 	{
 		return JavaFileType.INSTANCE;
@@ -178,7 +173,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -191,7 +186,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place)
+	public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place)
 	{
 		final ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
 
@@ -318,7 +313,7 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	public void setIntentionActionsFilter(@Nonnull final IntentionActionsFilter filter)
+	public void setIntentionActionsFilter(final IntentionActionsFilter filter)
 	{
 		myIntentionActionsFilter = filter;
 	}
@@ -342,7 +337,6 @@ public class PsiCodeFragmentImpl extends PsiFileImpl implements JavaCodeFragment
 	}
 
 	@Override
-	@Nonnull
 	public GlobalSearchScope getResolveScope()
 	{
 		if(myResolveScope != null)

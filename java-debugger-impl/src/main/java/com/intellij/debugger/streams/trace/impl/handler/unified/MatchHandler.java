@@ -14,7 +14,6 @@ import consulo.execution.debug.stream.wrapper.TerminatorStreamCall;
 import consulo.execution.debug.stream.wrapper.impl.CallArgumentImpl;
 import consulo.execution.debug.stream.wrapper.impl.IntermediateStreamCallImpl;
 import consulo.execution.debug.stream.wrapper.impl.TerminatorStreamCallImpl;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +28,13 @@ public class MatchHandler extends HandlerBase.Terminal {
     private final PeekTraceHandler myPeekHandler;
     private final Variable myPredicateVariable;
 
-    public MatchHandler(@Nonnull TerminatorStreamCall call, @Nonnull Dsl dsl) {
+    public MatchHandler(TerminatorStreamCall call, Dsl dsl) {
         super(dsl);
         this.call = call;
         this.myPeekHandler = new PeekTraceHandler(0, "filterMatch", call.getTypeBefore(), call.getTypeBefore(), dsl);
         this.myPredicateVariable = dsl.variable(new ClassTypeImpl(call.getArguments().get(0).getType()), PREDICATE_NAME);
     }
 
-    @Nonnull
     @Override
     public List<VariableDeclaration> additionalVariablesDeclaration() {
         List<VariableDeclaration> variables = new ArrayList<>();
@@ -46,7 +44,6 @@ public class MatchHandler extends HandlerBase.Terminal {
         return variables;
     }
 
-    @Nonnull
     @Override
     public CodeBlock prepareResult() {
         return dsl.block(block -> {
@@ -60,9 +57,8 @@ public class MatchHandler extends HandlerBase.Terminal {
         });
     }
 
-    @Nonnull
     @Override
-    public TerminatorStreamCall transformCall(@Nonnull TerminatorStreamCall call) {
+    public TerminatorStreamCall transformCall(TerminatorStreamCall call) {
         List<CallArgument> args = call.getArguments();
         assert args.size() == 1 : "Only predicate should be specified";
         CallArgument predicate = args.get(0);
@@ -73,13 +69,11 @@ public class MatchHandler extends HandlerBase.Terminal {
         return transformArgs(call, List.of(new CallArgumentImpl(predicate.getType(), newPredicate)));
     }
 
-    @Nonnull
     @Override
     public Expression getResultExpression() {
         return new TextExpression("result");
     }
 
-    @Nonnull
     @Override
     public List<IntermediateStreamCall> additionalCallsBefore() {
         List<IntermediateStreamCall> result = new ArrayList<>(myPeekHandler.additionalCallsBefore());
@@ -93,7 +87,7 @@ public class MatchHandler extends HandlerBase.Terminal {
         return result;
     }
 
-    private TerminatorStreamCall transformArgs(@Nonnull TerminatorStreamCall call, @Nonnull List<CallArgument> args) {
+    private TerminatorStreamCall transformArgs(TerminatorStreamCall call, List<CallArgument> args) {
         return new TerminatorStreamCallImpl(
             call.getName(),
             call.getGenericArguments(),

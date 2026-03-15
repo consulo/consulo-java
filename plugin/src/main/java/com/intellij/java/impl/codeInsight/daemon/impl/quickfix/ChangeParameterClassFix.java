@@ -38,23 +38,22 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.function.Function;
 
 public class ChangeParameterClassFix extends ExtendsListFix {
-    public ChangeParameterClassFix(@Nonnull PsiClass aClassToExtend, @Nonnull PsiClassType parameterClass) {
+    public ChangeParameterClassFix(PsiClass aClassToExtend, PsiClassType parameterClass) {
         super(aClassToExtend, parameterClass, true);
     }
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         return
             super.isAvailable(project, file, startElement, endElement)
@@ -66,11 +65,11 @@ public class ChangeParameterClassFix extends ExtendsListFix {
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         final PsiClass myClass = (PsiClass) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {

@@ -25,22 +25,19 @@ import consulo.virtualFileSystem.BinaryFileDecompiler;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
  */
 @ExtensionImpl
 public class ClassBinaryFileDecompiler implements BinaryFileDecompiler {
-  @Nonnull
   @Override
   public FileType getFileType() {
     return JavaClassFileType.INSTANCE;
   }
 
   @Override
-  @Nonnull
-  public CharSequence decompile(@Nonnull VirtualFile file) {
+  public CharSequence decompile(VirtualFile file) {
     ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
     if (decompiler instanceof ClassFileDecompiler.Full) {
       PsiManager manager = PsiManager.getInstance(ProjectManager.getInstance().getDefaultProject());
@@ -50,8 +47,7 @@ public class ClassBinaryFileDecompiler implements BinaryFileDecompiler {
     return decompileText(file);
   }
 
-  @Nonnull
-  public static CharSequence decompileText(@Nonnull VirtualFile file) {
+  public static CharSequence decompileText(VirtualFile file) {
     ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
     if (decompiler instanceof ClassFileDecompiler.Light) {
       return ((ClassFileDecompiler.Light) decompiler).getText(file);

@@ -65,8 +65,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -83,9 +82,8 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
         return element != null && element.getLanguage() == JavaLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
-    public UsageInfo[] findUsages(@Nonnull ChangeInfo info) {
+    public UsageInfo[] findUsages(ChangeInfo info) {
         if (info instanceof JavaChangeInfo javaChangeInfo) {
             return new JavaChangeSignatureUsageSearcher(javaChangeInfo).findUsages();
         }
@@ -94,10 +92,9 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
         }
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
-    public MultiMap<PsiElement, LocalizeValue> findConflicts(@Nonnull ChangeInfo info, SimpleReference<UsageInfo[]> refUsages) {
+    public MultiMap<PsiElement, LocalizeValue> findConflicts(ChangeInfo info, SimpleReference<UsageInfo[]> refUsages) {
         if (info instanceof JavaChangeInfo javaChangeInfo) {
             return new ConflictSearcher(javaChangeInfo).findConflicts(refUsages);
         }
@@ -109,10 +106,10 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
     @Override
     @RequiredWriteAction
     public boolean processUsage(
-        @Nonnull ChangeInfo changeInfo,
-        @Nonnull UsageInfo usage,
+        ChangeInfo changeInfo,
+        UsageInfo usage,
         boolean beforeMethodChange,
-        @Nonnull UsageInfo[] usages
+        UsageInfo[] usages
     ) {
         if (!isJavaUsage(usage)) {
             return false;
@@ -609,7 +606,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
                 }
 
                 @Override
-                public boolean execute(@Nonnull PsiElement pe, ResolveState state) {
+                public boolean execute(PsiElement pe, ResolveState state) {
                     super.execute(pe, state);
                     return size() < 2;
                 }
@@ -665,7 +662,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
     }
 
     @Override
-    public boolean shouldPreviewUsages(@Nonnull ChangeInfo changeInfo, @Nonnull UsageInfo[] usages) {
+    public boolean shouldPreviewUsages(ChangeInfo changeInfo, UsageInfo[] usages) {
         return false;
     }
 
@@ -719,7 +716,7 @@ public class JavaChangeSignatureUsageProcessor implements ChangeSignatureUsagePr
     @RequiredReadAction
     public void registerConflictResolvers(
         List<ResolveSnapshotProvider.ResolveSnapshot> snapshots,
-        @Nonnull ResolveSnapshotProvider resolveSnapshotProvider,
+        ResolveSnapshotProvider resolveSnapshotProvider,
         UsageInfo[] usages,
         ChangeInfo changeInfo
     ) {

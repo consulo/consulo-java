@@ -31,8 +31,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -43,13 +42,12 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(RemoveRedundantElseAction.class);
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.removeRedundantElseFix();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (element instanceof PsiKeyword &&
         element.getParent() instanceof PsiIfStatement &&
         PsiKeyword.ELSE.equals(element.getText())) {
@@ -70,7 +68,7 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   }
 
   @Nullable
-  private static PsiStatement getPrevThenBranch(@Nonnull PsiElement thenBranch) {
+  private static PsiStatement getPrevThenBranch(PsiElement thenBranch) {
     PsiElement ifStatement = thenBranch.getParent();
     PsiElement parent = ifStatement.getParent();
     if (parent instanceof PsiIfStatement && ((PsiIfStatement) parent).getElseBranch() == ifStatement) {
@@ -79,7 +77,7 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
     return null;
   }
 
-  private static boolean cantCompleteNormally(@Nonnull PsiStatement thenBranch, PsiElement block) {
+  private static boolean cantCompleteNormally(PsiStatement thenBranch, PsiElement block) {
     try {
       ControlFlow controlFlow = ControlFlowFactory.getInstance(thenBranch.getProject()).getControlFlow(block, LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance());
       int startOffset = controlFlow.getStartOffset(thenBranch);
@@ -91,7 +89,7 @@ public class RemoveRedundantElseAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
     LOG.assertTrue(ifStatement != null && ifStatement.getElseBranch() != null);

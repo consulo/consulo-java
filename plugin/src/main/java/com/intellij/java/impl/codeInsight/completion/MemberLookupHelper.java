@@ -23,8 +23,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -127,8 +126,7 @@ public class MemberLookupHelper
 		return type;
 	}
 
-	@Nonnull
-	static String getMethodParameterString(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor)
+	static String getMethodParameterString(PsiMethod method, PsiSubstitutor substitutor)
 	{
 		return PsiFormatUtil.formatMethod(method, substitutor, PsiFormatUtilBase.SHOW_PARAMETERS, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_TYPE);
 	}

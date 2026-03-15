@@ -15,7 +15,6 @@
  */
 package com.intellij.jam;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.document.util.TextRange;
 import consulo.language.pom.PomRenameableTarget;
@@ -25,7 +24,7 @@ import consulo.language.psi.ElementManipulators;
 import com.intellij.java.language.psi.PsiLiteral;
 import consulo.util.lang.ObjectUtil;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -40,7 +39,6 @@ public class JamPomTarget extends DelegatePsiTarget implements PsiDeclaredTarget
     myNameAttr = nameAttr;
   }
 
-  @Nonnull
   public String getName() {
     String value = myNameAttr.getStringValue();
     if (value == null) {
@@ -49,7 +47,7 @@ public class JamPomTarget extends DelegatePsiTarget implements PsiDeclaredTarget
     return value;
   }
 
-  public JamPomTarget setName(@Nonnull String newName) {
+  public JamPomTarget setName(String newName) {
     myNameAttr.setStringValue(newName);
     return this;
   }

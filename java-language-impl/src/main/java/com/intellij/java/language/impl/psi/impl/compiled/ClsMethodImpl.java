@@ -43,8 +43,7 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -56,7 +55,6 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
         super(stub);
 
         myReturnType = isConstructor() ? null : new AtomicNotNullLazyValue<>() {
-            @Nonnull
             @Override
             protected PsiTypeElement compute() {
                 PsiMethodStub stub = getStub();
@@ -68,7 +66,6 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
 
         final String text = getStub().getDefaultValueText();
         myDefaultValue = StringUtil.isEmptyOrSpaces(text) ? null : new AtomicNotNullLazyValue<>() {
-            @Nonnull
             @Override
             protected PsiAnnotationMemberValue compute() {
                 return ClsParsingUtil.createMemberValueFromText(text, getManager(), ClsMethodImpl.this);
@@ -76,7 +73,6 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
         };
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiElement[] getChildren() {
@@ -97,25 +93,21 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findSuperMethods() {
         return PsiSuperMethodImplUtil.findSuperMethods(this);
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findSuperMethods(boolean checkAccess) {
         return PsiSuperMethodImplUtil.findSuperMethods(this, checkAccess);
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findSuperMethods(PsiClass parentClass) {
         return PsiSuperMethodImplUtil.findSuperMethods(this, parentClass);
     }
 
     @Override
-    @Nonnull
     public List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess) {
         return PsiSuperMethodImplUtil.findSuperMethodSignaturesIncludingStatic(this, checkAccess);
     }
@@ -126,13 +118,11 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findDeepestSuperMethods() {
         return PsiSuperMethodImplUtil.findDeepestSuperMethods(this);
     }
 
     @Override
-    @Nonnull
     public HierarchicalMethodSignature getHierarchicalMethodSignature() {
         return PsiSuperMethodImplUtil.getHierarchicalMethodSignature(this);
     }
@@ -149,24 +139,21 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    @Nonnull
     public PsiModifierList getModifierList() {
         return getStub().findChildStubByType(JavaStubElementTypes.MODIFIER_LIST).getPsi();
     }
 
     @Override
-    public boolean hasModifierProperty(@Nonnull String name) {
+    public boolean hasModifierProperty(String name) {
         return getModifierList().hasModifierProperty(name);
     }
 
     @Override
-    @Nonnull
     public PsiParameterList getParameterList() {
         return getStub().findChildStubByType(JavaStubElementTypes.PARAMETER_LIST).getPsi();
     }
 
     @Override
-    @Nonnull
     public PsiReferenceList getThrowsList() {
         return getStub().findChildStubByType(JavaStubElementTypes.THROWS_LIST).getPsi();
     }
@@ -202,13 +189,12 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    @Nonnull
-    public MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor) {
+    public MethodSignature getSignature(PsiSubstitutor substitutor) {
         return MethodSignatureBackedByPsiMethod.create(this, substitutor);
     }
 
     @Override
-    public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+    public void appendMirrorText(int indentLevel, StringBuilder buffer) {
         appendText(getDocComment(), indentLevel, buffer, NEXT_LINE);
         appendText(getModifierList(), indentLevel, buffer, "");
         appendText(getTypeParameterList(), indentLevel, buffer, " ");
@@ -239,7 +225,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    public void setMirror(TreeElement element) throws InvalidMirrorException {
         setMirrorCheckingType(element, null);
 
         PsiMethod mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -262,7 +248,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor javaElementVisitor) {
             javaElementVisitor.visitMethod(this);
         }
@@ -273,10 +259,10 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
 
     @Override
     public boolean processDeclarations(
-        @Nonnull PsiScopeProcessor processor,
-        @Nonnull ResolveState state,
+        PsiScopeProcessor processor,
+        ResolveState state,
         PsiElement lastParent,
-        @Nonnull PsiElement place
+        PsiElement place
     ) {
         processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
         if (lastParent == null) {
@@ -326,7 +312,6 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    @Nonnull
     public PsiElement getNavigationElement() {
         for (ClsCustomNavigationPolicy customNavigationPolicy : ClsCustomNavigationPolicy.EP_NAME.getExtensions()) {
             try {
@@ -354,7 +339,6 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
     }
 
     @Override
-    @Nonnull
     public PsiTypeParameter[] getTypeParameters() {
         return PsiImplUtil.getTypeParameters(this);
     }
@@ -369,7 +353,6 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
         return PsiClassImplUtil.isMethodEquivalentTo(this, another);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public SearchScope getUseScope() {

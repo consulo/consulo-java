@@ -9,8 +9,7 @@ import com.intellij.java.language.psi.javadoc.PsiSnippetAttributeValue;
 import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -20,13 +19,13 @@ public class PsiSnippetAttributeImpl extends CompositePsiElement implements PsiS
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiElement getNameIdentifier() {
     return Objects.requireNonNull(findPsiChildByType(JavaDocTokenType.DOC_TAG_ATTRIBUTE_NAME));
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     super.accept(visitor);
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitSnippetAttribute(this);

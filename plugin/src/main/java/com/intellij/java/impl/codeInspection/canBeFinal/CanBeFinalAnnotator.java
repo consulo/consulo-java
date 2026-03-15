@@ -31,7 +31,6 @@ import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -42,7 +41,7 @@ class CanBeFinalAnnotator extends RefGraphAnnotatorEx {
   private final RefManager myManager;
   public static long CAN_BE_FINAL_MASK;
 
-  public CanBeFinalAnnotator(@Nonnull RefManager manager) {
+  public CanBeFinalAnnotator(RefManager manager) {
     myManager = manager;
   }
 

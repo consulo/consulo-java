@@ -13,11 +13,10 @@ import consulo.util.collection.FilteringIterator;
 import consulo.util.collection.MultiMap;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -84,7 +83,6 @@ public final class LiveVariablesAnalyzer {
     return null;
   }
 
-  @Nonnull
   private static List<DfaVariableValue> getReadVariables(Instruction instruction) {
     if (instruction instanceof PushInstruction && !((PushInstruction) instruction).isReferenceWrite()) {
       DfaValue value = ((PushInstruction) instruction).getValue();

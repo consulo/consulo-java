@@ -67,8 +67,7 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -91,7 +90,6 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
      * @param toCopyJavaDoc true if copy JavaDoc from method declaration
      * @return list of method prototypes
      */
-    @Nonnull
     @RequiredWriteAction
     public static List<PsiMethod> overrideOrImplementMethod(PsiClass aClass, PsiMethod method, boolean toCopyJavaDoc)
         throws IncorrectOperationException {
@@ -300,7 +298,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         });
     }
 
-    public static void annotate(@Nonnull PsiMethod result, String fqn, String... annosToRemove) throws IncorrectOperationException {
+    public static void annotate(PsiMethod result, String fqn, String... annosToRemove) throws IncorrectOperationException {
         Project project = result.getProject();
         AddAnnotationFix fix = new AddAnnotationFix(fqn, result, annosToRemove);
         if (fix.isAvailable(project, null, result.getContainingFile())) {
@@ -308,7 +306,6 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         }
     }
 
-    @Nonnull
     @RequiredWriteAction
     public static List<PsiGenerationInfo<PsiMethod>> overrideOrImplementMethods(
         PsiClass aClass,
@@ -321,7 +318,6 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         return convert2GenerationInfos(methods);
     }
 
-    @Nonnull
     @RequiredWriteAction
     public static List<PsiMethod> overrideOrImplementMethodCandidates(
         PsiClass aClass,
@@ -357,7 +353,6 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         return generationInfo != null ? generationInfo : new PsiGenerationInfo<>(s);
     }
 
-    @Nonnull
     public static String callSuper(PsiMethod superMethod, PsiMethod overriding) {
         StringBuilder buffer = new StringBuilder();
         if (!superMethod.isConstructor() && !PsiType.VOID.equals(superMethod.getReturnType())) {
@@ -493,7 +488,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         new WriteCommandAction(project, aClass.getContainingFile()) {
             @Override
             @RequiredUIAccess
-            protected void run(@Nonnull Result result) throws Throwable {
+            protected void run(Result result) throws Throwable {
                 overrideOrImplementMethodsInRightPlace(
                     editor,
                     aClass,
@@ -679,7 +674,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     }
 
     @RequiredWriteAction
-    public static List<PsiGenerationInfo<PsiMethod>> overrideOrImplement(PsiClass psiClass, @Nonnull PsiMethod baseMethod)
+    public static List<PsiGenerationInfo<PsiMethod>> overrideOrImplement(PsiClass psiClass, PsiMethod baseMethod)
         throws IncorrectOperationException {
         FileEditorManager fileEditorManager = FileEditorManager.getInstance(baseMethod.getProject());
         List<PsiGenerationInfo<PsiMethod>> results = new ArrayList<>();

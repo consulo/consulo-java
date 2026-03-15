@@ -34,7 +34,6 @@ import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.*;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
@@ -114,7 +113,7 @@ public class SpecialAnnotationsUtil {
             PlatformIconGroup.actionsRegex()
           ) {
             @Override
-            public void actionPerformed(@Nonnull AnActionEvent e) {
+            public void actionPerformed(AnActionEvent e) {
               String selectedPattern = Messages.showInputDialog(
                 InspectionLocalize.specialAnnotationsListAnnotationPattern().get(),
                 InspectionLocalize.specialAnnotationsListAnnotationPattern().get(),
@@ -140,24 +139,23 @@ public class SpecialAnnotationsUtil {
   }
 
   public static IntentionAction createAddToSpecialAnnotationsListIntentionAction(
-    @Nonnull LocalizeValue text,
-    @Nonnull LocalizeValue family,
+    LocalizeValue text,
+    LocalizeValue family,
     final List<String> targetList,
     final String qualifiedName
   ) {
     return new SyntheticIntentionAction() {
       @Override
-      @Nonnull
       public LocalizeValue getText() {
         return text;
       }
 
-      public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+      public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return true;
       }
 
       @Override
-      public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+      public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         SpecialAnnotationsUtilBase.doQuickFixInternal(project, targetList, qualifiedName);
       }
 

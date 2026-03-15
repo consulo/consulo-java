@@ -28,7 +28,6 @@ import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.ui.ex.awt.util.ListUtil;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -76,7 +75,7 @@ public class UiUtils {
   public static JPanel createAddRemoveTreeClassChooserPanel(
     ListTable table,
     String chooserTitle,
-    @NonNls String... ancestorClasses
+    String... ancestorClasses
   ) {
     ClassFilter filter;
     if (ancestorClasses.length == 0) {

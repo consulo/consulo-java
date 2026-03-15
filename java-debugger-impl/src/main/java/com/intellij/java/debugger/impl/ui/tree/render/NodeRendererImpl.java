@@ -15,8 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import org.jdom.Element;
 import com.intellij.java.debugger.DebuggerContext;
@@ -47,12 +46,12 @@ public abstract class NodeRendererImpl implements NodeRenderer
 		this("unnamed");
 	}
 
-	protected NodeRendererImpl(@Nonnull String presentableName)
+	protected NodeRendererImpl(String presentableName)
 	{
 		this(presentableName, false);
 	}
 
-	protected NodeRendererImpl(@Nonnull String presentableName, boolean enabledDefaultValue)
+	protected NodeRendererImpl(String presentableName, boolean enabledDefaultValue)
 	{
 		myProperties = new BasicRendererProperties(enabledDefaultValue);
 		myProperties.setName(presentableName);

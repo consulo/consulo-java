@@ -16,7 +16,6 @@
  */
 package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.*;
 
@@ -27,19 +26,19 @@ import consulo.document.util.TextRange;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.editor.surroundWith.Surrounder;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 abstract class JavaStatementsSurrounder implements Surrounder {
   @Override
-  public boolean isApplicable(@Nonnull PsiElement[] elements) {
+  public boolean isApplicable(PsiElement[] elements) {
     return true;
   }
 
   @Override
   @Nullable
-  public TextRange surroundElements(@Nonnull Project project,
-                                    @Nonnull Editor editor,
-                                    @Nonnull PsiElement[] elements) throws IncorrectOperationException {
+  public TextRange surroundElements(Project project,
+                                    Editor editor,
+                                    PsiElement[] elements) throws IncorrectOperationException {
     PsiElement container = elements[0].getParent();
     if (container == null) return null;
     return surroundStatements (project, editor, container, elements);

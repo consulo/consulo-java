@@ -25,8 +25,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.RemoveBooleanEqualityIntention", fileExtensions = "java", categories = {
@@ -43,14 +41,12 @@ public class RemoveBooleanEqualityIntention extends MutablyNamedIntention {
         return IntentionPowerPackLocalize.removeBooleanEqualityIntentionName(sign.getText());
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.removeBooleanEqualityIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new BooleanLiteralEqualityPredicate();
     }
@@ -64,10 +60,10 @@ public class RemoveBooleanEqualityIntention extends MutablyNamedIntention {
         IElementType tokenType = exp.getOperationTokenType();
         boolean isEquals = JavaTokenType.EQEQ.equals(tokenType);
         PsiExpression lhs = exp.getLOperand();
-        @NonNls String lhsText = lhs.getText();
+        String lhsText = lhs.getText();
         PsiExpression rhs = exp.getROperand();
         assert rhs != null;
-        @NonNls String rhsText = rhs.getText();
+        String rhsText = rhs.getText();
         if (PsiKeyword.TRUE.equals(lhsText)) {
             if (isEquals) {
                 replaceExpression(rhsText, exp);

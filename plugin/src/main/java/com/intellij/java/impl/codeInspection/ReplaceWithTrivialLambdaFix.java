@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Tagir Valeev
@@ -38,14 +37,13 @@ public class ReplaceWithTrivialLambdaFix implements LocalQuickFix {
         myValue = String.valueOf(value);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return JavaInspectionsLocalize.inspectionReplaceWithTrivialLambdaFixName(myValue);
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiMethodReferenceExpression methodRef = ObjectUtil.tryCast(descriptor.getStartElement(), PsiMethodReferenceExpression.class);
         if (methodRef == null) {
             return;

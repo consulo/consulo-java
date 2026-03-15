@@ -27,7 +27,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -35,7 +34,7 @@ import jakarta.annotation.Nonnull;
 public class SPIAnnotator implements Annotator {
   @Override
   @RequiredReadAction
-  public void annotate(@Nonnull PsiElement element, @Nonnull AnnotationHolder holder) {
+  public void annotate(PsiElement element, AnnotationHolder holder) {
     VirtualFile file = PsiUtilCore.getVirtualFile(element);
     if (file != null) {
       String serviceProviderName = file.getName();

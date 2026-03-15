@@ -23,8 +23,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -36,7 +34,7 @@ public class JDBCExecuteWithNonConstantStringInspection
   /**
    * @noinspection StaticCollection
    */
-  @NonNls private static final Set<String> s_execMethodNames =
+  private static final Set<String> s_execMethodNames =
     new HashSet<String>(4);
 
   static {
@@ -48,13 +46,11 @@ public class JDBCExecuteWithNonConstantStringInspection
 
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.jdbcExecuteWithNonConstantStringDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.jdbcExecuteWithNonConstantStringProblemDescriptor().get();
   }
@@ -68,7 +64,7 @@ public class JDBCExecuteWithNonConstantStringInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression = expression
         .getMethodExpression();

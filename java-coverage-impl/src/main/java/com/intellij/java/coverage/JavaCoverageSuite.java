@@ -13,8 +13,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
     private final CoverageEngine myCoverageEngine;
 
     //read external only
-    public JavaCoverageSuite(@Nonnull JavaCoverageEngine coverageSupportProvider) {
+    public JavaCoverageSuite(JavaCoverageEngine coverageSupportProvider) {
         super();
         myCoverageEngine = coverageSupportProvider;
     }
@@ -51,7 +50,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         boolean tracingEnabled,
         boolean trackTestFolders,
         CoverageRunner coverageRunner,
-        @Nonnull JavaCoverageEngine coverageSupportProvider,
+        JavaCoverageEngine coverageSupportProvider,
         Project project
     ) {
         super(name, coverageDataFileProvider, lastCoverageTimeStamp, coverageByTestEnabled,
@@ -63,7 +62,6 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         myCoverageEngine = coverageSupportProvider;
     }
 
-    @Nonnull
     public String[] getFilteredPackageNames() {
         if (myFilters == null || myFilters.length == 0) {
             return ArrayUtil.EMPTY_STRING_ARRAY;
@@ -80,7 +78,6 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         return ArrayUtil.toStringArray(result);
     }
 
-    @Nonnull
     public String[] getFilteredClassNames() {
         if (myFilters == null) {
             return ArrayUtil.EMPTY_STRING_ARRAY;
@@ -165,7 +162,6 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         return map;
     }
 
-    @Nonnull
     @Override
     public CoverageEngine getCoverageEngine() {
         return myCoverageEngine;
@@ -196,7 +192,7 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         return filteredPackageNames.length == 0 && getFilteredClassNames().length == 0;
     }
 
-    public @Nonnull
+    public 
     List<PsiJavaPackage> getCurrentSuitePackages(Project project) {
         List<PsiJavaPackage> packages = new ArrayList<>();
         PsiManager psiManager = PsiManager.getInstance(project);
@@ -239,7 +235,6 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
         return false;
     }
 
-    @Nonnull
     public List<PsiClass> getCurrentSuiteClasses(Project project) {
         List<PsiClass> classes = new ArrayList<>();
         PsiManager psiManager = PsiManager.getInstance(project);

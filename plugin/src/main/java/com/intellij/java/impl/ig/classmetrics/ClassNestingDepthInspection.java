@@ -22,21 +22,18 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class ClassNestingDepthInspection extends ClassMetricInspection {
     private static final int CLASS_NESTING_LIMIT = 1;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "InnerClassTooDeeplyNested";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.innerClassTooDeeplyNestedDisplayName();
@@ -50,7 +47,6 @@ public class ClassNestingDepthInspection extends ClassMetricInspection {
         return InspectionGadgetsLocalize.innerClassTooDeeplyNestedNestingLimitOption().get();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer nestingLevel = (Integer) infos[0];
         return InspectionGadgetsLocalize.innerClassTooDeeplyNestedProblemDescriptor(nestingLevel).get();
@@ -63,7 +59,7 @@ public class ClassNestingDepthInspection extends ClassMetricInspection {
     private class ClassNestingLevel extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // note: no call to super
             if (aClass instanceof PsiTypeParameter) {
                 return;

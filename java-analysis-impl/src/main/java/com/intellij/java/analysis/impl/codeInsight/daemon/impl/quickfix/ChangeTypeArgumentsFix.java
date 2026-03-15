@@ -39,8 +39,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPriorityAction {
     private final PsiMethod myTargetMethod;
@@ -50,10 +49,10 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
     private final PsiNewExpression myNewExpression;
 
     ChangeTypeArgumentsFix(
-        @Nonnull PsiMethod targetMethod,
+        PsiMethod targetMethod,
         PsiClass psiClass,
-        @Nonnull PsiExpression[] expressions,
-        @Nonnull PsiElement context
+        PsiExpression[] expressions,
+        PsiElement context
     ) {
         myTargetMethod = targetMethod;
         myPsiClass = psiClass;
@@ -61,7 +60,6 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
         myNewExpression = PsiTreeUtil.getParentOfType(context, PsiNewExpression.class);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         PsiSubstitutor substitutor = inferTypeArguments();
@@ -76,7 +74,7 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         PsiTypeParameter[] typeParameters = myPsiClass.getTypeParameters();
         if (typeParameters.length > 0
             && myNewExpression != null && myNewExpression.isValid() && myNewExpression.getArgumentList() != null) {
@@ -114,7 +112,7 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -148,9 +146,9 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
     }
 
     public static void registerIntentions(
-        @Nonnull JavaResolveResult[] candidates,
-        @Nonnull PsiExpressionList list,
-        @Nullable HighlightInfo.Builder highlightInfo,
+        JavaResolveResult[] candidates,
+        PsiExpressionList list,
+        HighlightInfo.@Nullable Builder highlightInfo,
         PsiClass psiClass
     ) {
         if (highlightInfo == null || candidates.length == 0) {
@@ -163,11 +161,11 @@ public class ChangeTypeArgumentsFix implements SyntheticIntentionAction, HighPri
     }
 
     private static void registerIntention(
-        @Nonnull PsiExpression[] expressions,
-        @Nonnull HighlightInfo.Builder highlightInfo,
+        PsiExpression[] expressions,
+        HighlightInfo.Builder highlightInfo,
         PsiClass psiClass,
-        @Nonnull JavaResolveResult candidate,
-        @Nonnull PsiElement context
+        JavaResolveResult candidate,
+        PsiElement context
     ) {
         if (!candidate.isStaticsScopeCorrect()) {
             return;

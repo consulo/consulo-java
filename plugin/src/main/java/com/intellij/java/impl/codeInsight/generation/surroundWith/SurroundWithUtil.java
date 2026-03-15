@@ -29,9 +29,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 
 public class SurroundWithUtil {
@@ -120,7 +119,7 @@ public class SurroundWithUtil {
     return false;
   }
 
-  public static TextRange getRangeToSelect (@Nonnull PsiCodeBlock block) {
+  public static TextRange getRangeToSelect (PsiCodeBlock block) {
     PsiElement first = block.getFirstBodyElement();
     if (first instanceof PsiWhiteSpace) {
       first = first.getNextSibling();
@@ -156,7 +155,7 @@ public class SurroundWithUtil {
    * @param container     code block that surrounds target statements
    * @param statements    target statements being surrounded
    */
-  public static void indentCommentIfNecessary(@Nonnull PsiCodeBlock container, @Nullable PsiElement[] statements) {
+  public static void indentCommentIfNecessary(PsiCodeBlock container, @Nullable PsiElement[] statements) {
     if (statements == null || statements.length <= 0) {
       return;
     }

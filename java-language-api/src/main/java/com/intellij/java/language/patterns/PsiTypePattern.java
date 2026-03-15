@@ -23,7 +23,6 @@ import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.util.ProcessingContext;
 import consulo.language.pattern.ObjectPattern;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -35,7 +34,7 @@ public class PsiTypePattern extends ObjectPattern<PsiType,PsiTypePattern> {
 
   public PsiTypePattern arrayOf(final ElementPattern pattern) {
     return with(new PatternCondition<PsiType>("arrayOf") {
-      public boolean accepts(@Nonnull final PsiType psiType, final ProcessingContext context) {
+      public boolean accepts(final PsiType psiType, final ProcessingContext context) {
         return psiType instanceof PsiArrayType &&
                pattern.getCondition().accepts(((PsiArrayType)psiType).getComponentType(), context);
       }
@@ -44,7 +43,7 @@ public class PsiTypePattern extends ObjectPattern<PsiType,PsiTypePattern> {
 
   public PsiTypePattern classType(final ElementPattern<? extends PsiClass> pattern) {
     return with(new PatternCondition<PsiType>("classType") {
-      public boolean accepts(@Nonnull final PsiType psiType, final ProcessingContext context) {
+      public boolean accepts(final PsiType psiType, final ProcessingContext context) {
         return psiType instanceof PsiClassType &&
                pattern.getCondition().accepts(((PsiClassType)psiType).resolve(), context);
       }

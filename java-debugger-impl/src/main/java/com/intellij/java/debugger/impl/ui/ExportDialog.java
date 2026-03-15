@@ -37,8 +37,6 @@ import consulo.project.Project;
 import consulo.ui.ModalityState;
 import consulo.ui.ex.awt.*;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +51,7 @@ public class ExportDialog extends DialogWrapper {
     private final Project myProject;
     private final DebugProcessImpl myDebugProcess;
     private final CopyToClipboardAction myCopyToClipboardAction = new CopyToClipboardAction();
-    private static final @NonNls String DEFAULT_REPORT_FILE_NAME = "threads_report.txt";
+    private static final String DEFAULT_REPORT_FILE_NAME = "threads_report.txt";
 
     public ExportDialog(DebugProcessImpl debugProcess, String destinationDirectory) {
         super(debugProcess.getProject(), true);
@@ -74,7 +72,6 @@ public class ExportDialog extends DialogWrapper {
         setHorizontalStretch(1.5f);
     }
 
-    @Nonnull
     protected Action[] createActions() {
         return new Action[]{getOKAction(), myCopyToClipboardAction, getCancelAction(), getHelpAction()};
     }

@@ -27,11 +27,10 @@ import consulo.util.collection.Maps;
 import consulo.util.concurrent.ConcurrencyUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.dataholder.NotNullLazyKey;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +56,7 @@ public class JavaResolveCache {
   private static final Object NULL = Key.create("NULL");
 
   @Inject
-  public JavaResolveCache(@Nonnull Project project) {
+  public JavaResolveCache(Project project) {
     project.getMessageBus().connect().subscribe(AnyPsiChangeListener.class, new AnyPsiChangeListener() {
       @Override
       public void beforePsiChanged(boolean isPhysical) {
@@ -75,7 +74,7 @@ public class JavaResolveCache {
   }
 
   @Nullable
-  public <T extends PsiExpression> PsiType getType(@Nonnull T expr, @Nonnull Function<? super T, ? extends PsiType> f) {
+  public <T extends PsiExpression> PsiType getType(T expr, Function<? super T, ? extends PsiType> f) {
     ConcurrentMap<PsiExpression, PsiType> map = myCalculatedTypes.get();
     if (map == null) {
       map = ConcurrencyUtil.cacheOrGet(myCalculatedTypes, Maps.newConcurrentWeakKeySoftValueHashMap());
@@ -115,9 +114,9 @@ public class JavaResolveCache {
     return type == TypeConversionUtil.NULL_TYPE ? null : type;
   }
 
-  private static <T extends PsiExpression> void reportUnstableType(@Nonnull PsiExpression expr,
-                                                                   @Nonnull PsiType type,
-                                                                   @Nonnull PsiType alreadyCached) {
+  private static <T extends PsiExpression> void reportUnstableType(PsiExpression expr,
+                                                                   PsiType type,
+                                                                   PsiType alreadyCached) {
     PsiFile file = expr.getContainingFile();
     LOG.error("Different types returned for the same PSI " + expr.getTextRange() + " on different threads: "
                 + type + " != " + alreadyCached,
@@ -125,8 +124,8 @@ public class JavaResolveCache {
   }
 
   @Nullable
-  public Object computeConstantValueWithCaching(@Nonnull PsiVariable variable,
-                                                @Nonnull ConstValueComputer computer,
+  public Object computeConstantValueWithCaching(PsiVariable variable,
+                                                ConstValueComputer computer,
                                                 Set<PsiVariable> visitedVars) {
     boolean physical = variable.isPhysical();
 
@@ -151,6 +150,6 @@ public class JavaResolveCache {
 
   @FunctionalInterface
   public interface ConstValueComputer {
-    Object execute(@Nonnull PsiVariable variable, Set<PsiVariable> visitedVars);
+    Object execute(PsiVariable variable, Set<PsiVariable> visitedVars);
   }
 }

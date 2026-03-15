@@ -30,8 +30,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
 import consulo.util.lang.Comparing;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.util.List;
 
@@ -40,21 +39,21 @@ import java.util.List;
  * @since 12:39/19.05.13
  */
 public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl>, SwingMutableModuleExtension {
-  public JavaMutableModuleExtensionImpl(@Nonnull String id, @Nonnull ModuleRootLayer moduleRootLayer) {
+  public JavaMutableModuleExtensionImpl(String id, ModuleRootLayer moduleRootLayer) {
     super(id, moduleRootLayer);
   }
 
   @RequiredUIAccess
   @Nullable
   @Override
-  public JComponent createConfigurablePanel(@Nonnull Disposable disposable, @Nonnull Runnable updateOnCheck) {
+  public JComponent createConfigurablePanel(Disposable disposable, Runnable updateOnCheck) {
     return new JavaModuleExtensionPanel(this, updateOnCheck);
   }
 
   @RequiredUIAccess
   @Nullable
   @Override
-  public Component createConfigurationComponent(@Nonnull Disposable disposable, @Nonnull Runnable runnable) {
+  public Component createConfigurationComponent(Disposable disposable, Runnable runnable) {
     return VerticalLayout.create().add(Label.create("Unsupported platform"));
   }
 
@@ -64,7 +63,6 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
   }
 
   @Override
-  @Nonnull
   public MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel() {
     return myLanguageLevel;
   }
@@ -75,18 +73,18 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
   }
 
   @Override
-  public void setCompilerArguments(@Nonnull List<String> arguments) {
+  public void setCompilerArguments(List<String> arguments) {
     myCompilerArguments.clear();
     myCompilerArguments.addAll(arguments);
   }
 
   @Override
-  public void setSpecialDirLocation(@Nonnull SpecialDirLocation specialDirLocation) {
+  public void setSpecialDirLocation(SpecialDirLocation specialDirLocation) {
     mySpecialDirLocation = specialDirLocation;
   }
 
   @Override
-  public boolean isModified(@Nonnull JavaModuleExtensionImpl javaModuleExtension) {
+  public boolean isModified(JavaModuleExtensionImpl javaModuleExtension) {
     if (isModifiedImpl(javaModuleExtension)) {
       return true;
     }
@@ -109,7 +107,6 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
     return false;
   }
 
-  @Nonnull
   @Override
   public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk() {
     return (MutableModuleInheritableNamedPointer<Sdk>) super.getInheritableSdk();

@@ -43,8 +43,7 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -57,7 +56,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	static final String REFACTORING_NAME = RefactoringBundle.message("move.instance.method.title");
 
 	@RequiredUIAccess
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		PsiElement element = dataContext.getData(PsiElement.KEY);
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -90,7 +89,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 	}
 
 	@RequiredUIAccess
-	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
+	public void invoke(Project project, PsiElement[] elements, DataContext dataContext)
 	{
 		if (elements.length != 1 || !(elements[0] instanceof PsiMethod))
 		{
@@ -265,7 +264,7 @@ public class MoveInstanceMethodHandler implements RefactoringActionHandler
 			element.accept(new JavaRecursiveElementWalkingVisitor()
 			{
 				@Override
-				public void visitTypeElement(@Nonnull PsiTypeElement type)
+				public void visitTypeElement(PsiTypeElement type)
 				{
 					super.visitTypeElement(type);
 					hasParameters[0] |= type.getType().accept(searcher);

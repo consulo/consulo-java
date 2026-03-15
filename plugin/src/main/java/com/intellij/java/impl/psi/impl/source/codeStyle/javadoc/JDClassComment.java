@@ -17,10 +17,9 @@ package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Class comment
@@ -32,13 +31,13 @@ public class JDClassComment extends JDParamListOwnerComment
 	private List<String> myAuthorsList;
 	private String myVersion;
 
-	public JDClassComment(@Nonnull CommentFormatter formatter)
+	public JDClassComment(CommentFormatter formatter)
 	{
 		super(formatter);
 	}
 
 	@Override
-	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(String prefix, StringBuilder sb)
 	{
 		super.generateSpecial(prefix, sb);
 		String continuationPrefix = prefix + javadocContinuationIndent();
@@ -61,7 +60,7 @@ public class JDClassComment extends JDParamListOwnerComment
 		}
 	}
 
-	public void addAuthor(@Nonnull String author)
+	public void addAuthor(String author)
 	{
 		if(myAuthorsList == null)
 		{
@@ -76,7 +75,7 @@ public class JDClassComment extends JDParamListOwnerComment
 		return myVersion;
 	}
 
-	public void setVersion(@Nonnull String version)
+	public void setVersion(String version)
 	{
 		this.myVersion = version;
 	}

@@ -20,7 +20,6 @@ import consulo.document.util.TextRange;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.*;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -35,12 +34,11 @@ public class PartialWhitespaceBlock extends SimpleJavaBlock {
                                 Indent indent,
                                 CommonCodeStyleSettings settings,
                                 JavaCodeStyleSettings javaSettings,
-                                @Nonnull FormattingMode formattingMode) {
+                                FormattingMode formattingMode) {
     super(node, wrap, AlignmentStrategy.wrap(alignment), indent, settings, javaSettings, formattingMode);
     myRange = range;
   }
 
-  @Nonnull
   @Override
   public TextRange getTextRange() {
     return myRange;

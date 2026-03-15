@@ -20,14 +20,13 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiAnnotationMemberValue;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElementRef;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class JamClassAttributeElement extends JamAttributeElement<PsiClass> {
 
-  public JamClassAttributeElement(@Nonnull PsiElementRef<PsiAnnotation> parent, String attributeName) {
+  public JamClassAttributeElement(PsiElementRef<PsiAnnotation> parent, String attributeName) {
     super(attributeName, parent);
   }
 

@@ -27,7 +27,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.project.Project;
 import consulo.util.lang.function.Condition;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -92,7 +91,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
 
         @Override
         @RequiredReadAction
-        public void visitThrowStatement(@Nonnull PsiThrowStatement statement) {
+        public void visitThrowStatement(PsiThrowStatement statement) {
           super.visitThrowStatement(statement);
           List<PsiClassType> actualTypes = ExceptionUtil.getUnhandledExceptions(statement, myPlace);
           for (PsiClassType actualType : actualTypes) {
@@ -112,7 +111,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
 
         @Override
         @RequiredReadAction
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
           super.visitMethodCallExpression(expression);
           PsiReference reference = expression.getMethodExpression().getReference();
           if (reference == null) return;
@@ -127,7 +126,7 @@ public class HighlightExceptionsHandler extends HighlightUsagesHandlerBase<PsiCl
 
         @Override
         @RequiredReadAction
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
           super.visitNewExpression(expression);
           PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
           if (classReference == null) return;

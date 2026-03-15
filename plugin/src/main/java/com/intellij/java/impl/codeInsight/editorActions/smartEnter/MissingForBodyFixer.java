@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiForStatement;
 import com.intellij.java.language.psi.PsiStatement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by IntelliJ IDEA.

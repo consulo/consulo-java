@@ -33,7 +33,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,7 +50,6 @@ public class BringVariableIntoScopeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     PsiLocalVariable variable = myOutOfScopeVariable;
 
@@ -61,7 +59,7 @@ public class BringVariableIntoScopeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
     if (myUnresolvedReference.isQualified()) return false;
     final String referenceName = myUnresolvedReference.getReferenceName();
@@ -98,7 +96,7 @@ public class BringVariableIntoScopeFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     LOG.assertTrue(myOutOfScopeVariable != null);
     PsiManager manager = file.getManager();
     myOutOfScopeVariable.normalizeDeclaration();

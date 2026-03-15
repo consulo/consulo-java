@@ -35,7 +35,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -95,7 +94,7 @@ public class LocalVariablesUtil
 {
 	private static final Logger LOG = Logger.getInstance(LocalVariablesUtil.class);
 
-	public static Map<DecompiledLocalVariable, Value> fetchValues(@Nonnull StackFrameProxyImpl frameProxy, DebugProcess process, boolean full) throws Exception
+	public static Map<DecompiledLocalVariable, Value> fetchValues(StackFrameProxyImpl frameProxy, DebugProcess process, boolean full) throws Exception
 	{
 		Map<DecompiledLocalVariable, Value> map = new LinkedHashMap<>(); // LinkedHashMap for correct order
 
@@ -213,7 +212,6 @@ public class LocalVariablesUtil
 		return slots;
 	}
 
-	@Nonnull
 	private static List<DecompiledLocalVariable> collectVariablesFromBytecode(VirtualMachineProxyImpl vm, Location location, MultiMap<Integer, String> namesMap)
 	{
 		if(!vm.canGetBytecodes())
@@ -277,8 +275,7 @@ public class LocalVariablesUtil
 		return Collections.emptyList();
 	}
 
-	@Nonnull
-	private static MultiMap<Integer, String> calcNames(@Nonnull final StackFrameContext context, final int firstLocalsSlot)
+	private static MultiMap<Integer, String> calcNames(final StackFrameContext context, final int firstLocalsSlot)
 	{
 		SourcePosition position = ContextUtil.getSourcePosition(context);
 		if(position != null)

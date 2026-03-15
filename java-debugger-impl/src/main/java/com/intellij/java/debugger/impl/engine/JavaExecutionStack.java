@@ -32,8 +32,7 @@ import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.logging.Logger;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -50,7 +49,7 @@ public class JavaExecutionStack extends XExecutionStack {
     private volatile boolean myTopFrameReady = false;
     private final MethodsTracker myTracker = new MethodsTracker();
 
-    public JavaExecutionStack(@Nonnull ThreadReferenceProxyImpl threadProxy, @Nonnull DebugProcessImpl debugProcess, boolean current) {
+    public JavaExecutionStack(ThreadReferenceProxyImpl threadProxy, DebugProcessImpl debugProcess, boolean current) {
         super(calcRepresentation(threadProxy), calcIcon(threadProxy, current));
         myThreadProxy = threadProxy;
         myDebugProcess = debugProcess;
@@ -71,7 +70,6 @@ public class JavaExecutionStack extends XExecutionStack {
         }
     }
 
-    @Nonnull
     ThreadReferenceProxyImpl getThreadProxy() {
         return myThreadProxy;
     }
@@ -92,7 +90,7 @@ public class JavaExecutionStack extends XExecutionStack {
         }
     }
 
-    private static XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl stackFrameProxy, @Nonnull MethodsTracker tracker) {
+    private static XStackFrame createStackFrame(StackFrameProxyImpl stackFrameProxy, MethodsTracker tracker) {
         StackFrameDescriptorImpl descriptor = new StackFrameDescriptorImpl(stackFrameProxy, tracker);
         DebugProcessImpl debugProcess = (DebugProcessImpl) descriptor.getDebugProcess();
         Location location = descriptor.getLocation();
@@ -200,7 +198,7 @@ public class JavaExecutionStack extends XExecutionStack {
         }
     }
 
-    private static boolean showFrame(@Nonnull XStackFrame frame) {
+    private static boolean showFrame(XStackFrame frame) {
         if (XDebuggerSettingsManager.getInstance().getDataViewSettings().isShowLibraryStackFrames()) {
             return true;
         }

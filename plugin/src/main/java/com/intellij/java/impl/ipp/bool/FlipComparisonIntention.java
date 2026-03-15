@@ -29,7 +29,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipComparisonIntention", fileExtensions = "java", categories = {
@@ -55,20 +54,18 @@ public class FlipComparisonIntention extends MutablyNamedIntention {
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.flipComparisonIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ComparisonPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiBinaryExpression expression = (PsiBinaryExpression) element;
         PsiExpression lhs = expression.getLOperand();
         PsiExpression rhs = expression.getROperand();

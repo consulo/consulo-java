@@ -5,7 +5,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraints;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -17,13 +16,11 @@ public class DfNullConstantType extends DfConstantType<Object> implements DfRefe
     super(null);
   }
 
-  @Nonnull
   @Override
   public DfaNullability getNullability() {
     return DfaNullability.NULL;
   }
 
-  @Nonnull
   @Override
   public TypeConstraint getConstraint() {
     return TypeConstraints.TOP;
@@ -34,21 +31,18 @@ public class DfNullConstantType extends DfConstantType<Object> implements DfRefe
     return DfTypes.NOT_NULL_OBJECT;
   }
 
-  @Nonnull
   @Override
   public PsiType getPsiType() {
     return PsiType.NULL;
   }
 
-  @Nonnull
   @Override
   public DfReferenceType dropNullability() {
     return DfTypes.OBJECT_OR_NULL;
   }
 
-  @Nonnull
   @Override
-  public DfType join(@Nonnull DfType other) {
+  public DfType join(DfType other) {
     if (isSuperType(other)) return this;
     if (other.isSuperType(this)) return other;
     if (!(other instanceof DfReferenceType)) return TOP;

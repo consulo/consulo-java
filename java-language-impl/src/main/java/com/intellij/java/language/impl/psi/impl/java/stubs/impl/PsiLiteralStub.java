@@ -22,30 +22,26 @@ import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiLiteralExpre
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class PsiLiteralStub extends StubBase<PsiLiteralExpressionImpl>
 {
-	@Nonnull
 	private final String myLiteralText;
 	private volatile IElementType myLiteralType;
 
-	public PsiLiteralStub(StubElement parent, @Nonnull String literalText)
+	public PsiLiteralStub(StubElement parent, String literalText)
 	{
 		super(parent, JavaStubElementTypes.LITERAL_EXPRESSION);
 		myLiteralText = literalText;
 	}
 
-	@Nonnull
 	public String getLiteralText()
 	{
 		return myLiteralText;
 	}
 
-	@Nonnull
 	public IElementType getLiteralType()
 	{
 		IElementType type = myLiteralType;

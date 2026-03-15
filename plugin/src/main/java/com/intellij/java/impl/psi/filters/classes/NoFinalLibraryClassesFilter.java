@@ -7,7 +7,7 @@ import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.util.lang.reflect.ReflectionUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class NoFinalLibraryClassesFilter implements ElementFilter {
   @Override

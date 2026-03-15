@@ -10,8 +10,7 @@ import consulo.language.psi.SyntaxTraverser;
 import consulo.project.Project;
 import consulo.util.collection.SmartList;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -76,7 +75,7 @@ public class BlockUtils {
    * @param statement the statement to replace
    * @return a new statement equivalent to the argument, but inside a block
    */
-  public static <T extends PsiStatement> T expandSingleStatementToBlockStatement(@Nonnull T statement) {
+  public static <T extends PsiStatement> T expandSingleStatementToBlockStatement(T statement) {
     if (statement instanceof PsiBlockStatement) {
       return statement;
     }
@@ -150,7 +149,7 @@ public class BlockUtils {
     return forward ? element.getNextSibling() : element.getPrevSibling();
   }
 
-  public static boolean containsConflictingDeclarations(@Nonnull PsiCodeBlock block, @Nonnull PsiCodeBlock parentBlock) {
+  public static boolean containsConflictingDeclarations(PsiCodeBlock block, PsiCodeBlock parentBlock) {
     final PsiStatement[] statements = block.getStatements();
     if (statements.length == 0) {
       return false;
@@ -194,7 +193,7 @@ public class BlockUtils {
     return false;
   }
 
-  public static void inlineCodeBlock(@Nonnull PsiStatement orig, PsiCodeBlock codeBlock) {
+  public static void inlineCodeBlock(PsiStatement orig, PsiCodeBlock codeBlock) {
     PsiJavaToken lBrace = codeBlock.getLBrace();
     PsiJavaToken rBrace = codeBlock.getRBrace();
     if (lBrace == null || rBrace == null) {

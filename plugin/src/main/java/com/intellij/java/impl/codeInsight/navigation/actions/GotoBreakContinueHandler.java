@@ -23,7 +23,7 @@ import consulo.language.editor.navigation.GotoDeclarationHandlerBase;
 import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole

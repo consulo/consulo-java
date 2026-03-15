@@ -18,7 +18,6 @@ package com.intellij.java.language.impl.psi.impl.source;
 import com.intellij.java.language.psi.HierarchicalMethodSignature;
 import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -29,17 +28,16 @@ import java.util.List;
 public class HierarchicalMethodSignatureImpl extends HierarchicalMethodSignature {
   private List<HierarchicalMethodSignature> mySupers;
 
-  public HierarchicalMethodSignatureImpl(@Nonnull MethodSignatureBackedByPsiMethod signature) {
+  public HierarchicalMethodSignatureImpl(MethodSignatureBackedByPsiMethod signature) {
     super(signature);
   }
 
-  public void addSuperSignature(@Nonnull HierarchicalMethodSignature superSignatureHierarchical) {
+  public void addSuperSignature(HierarchicalMethodSignature superSignatureHierarchical) {
     if (mySupers == null) mySupers = new SmartList<HierarchicalMethodSignature>();
     mySupers.add(superSignatureHierarchical);
   }
 
   @Override
-  @Nonnull
   public List<HierarchicalMethodSignature> getSuperSignatures() {
     return mySupers == null ? Collections.<HierarchicalMethodSignature>emptyList() : mySupers;
   }

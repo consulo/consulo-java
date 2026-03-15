@@ -27,15 +27,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole
  */
 public class SuppressByJavaCommentFix extends SuppressByCommentFix
 {
-  public SuppressByJavaCommentFix(@Nonnull HighlightDisplayKey key) {
+  public SuppressByJavaCommentFix(HighlightDisplayKey key) {
     super(key, PsiStatement.class);
   }
 
@@ -56,9 +55,9 @@ public class SuppressByJavaCommentFix extends SuppressByCommentFix
   }
 
   @Override
-  protected void createSuppression(@Nonnull final Project project,
-                                   @Nonnull final PsiElement element,
-                                   @Nonnull final PsiElement container) throws IncorrectOperationException {
+  protected void createSuppression(final Project project,
+                                   final PsiElement element,
+                                   final PsiElement container) throws IncorrectOperationException {
     PsiElement declaredElement = JavaSuppressionUtil.getElementToAnnotate(element, container);
     if (declaredElement == null) {
       suppressWithComment(project, element, container);

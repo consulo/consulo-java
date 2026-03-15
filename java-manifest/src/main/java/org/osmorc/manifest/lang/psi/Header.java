@@ -26,8 +26,7 @@ package org.osmorc.manifest.lang.psi;
 
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.StubBasedPsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.osmorc.manifest.lang.psi.stub.HeaderStub;
 
 /**
@@ -43,7 +42,6 @@ public interface Header extends PsiNamedElement, StubBasedPsiElement<HeaderStub>
   /**
    * @return a list of clauses which describe the values of this header.
    */
-  @Nonnull
   Clause[] getClauses();
 
   /**
@@ -54,5 +52,5 @@ public interface Header extends PsiNamedElement, StubBasedPsiElement<HeaderStub>
   @Nullable
   Object getSimpleConvertedValue();
 
-  void addClause(@Nonnull String text);
+  void addClause(String text);
 }

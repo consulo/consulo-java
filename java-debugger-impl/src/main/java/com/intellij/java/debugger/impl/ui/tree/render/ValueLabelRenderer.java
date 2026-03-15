@@ -19,7 +19,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: lex

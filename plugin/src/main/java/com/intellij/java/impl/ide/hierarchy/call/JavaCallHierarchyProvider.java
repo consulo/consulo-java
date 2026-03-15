@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -36,7 +35,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaCallHierarchyProvider implements CallHierarchyProvider {
     @Override
-    public PsiElement getTarget(@Nonnull DataContext dataContext) {
+    public PsiElement getTarget(DataContext dataContext) {
         Project project = dataContext.getData(Project.KEY);
         if (project == null) {
             return null;
@@ -47,18 +46,16 @@ public class JavaCallHierarchyProvider implements CallHierarchyProvider {
     }
 
     @Override
-    @Nonnull
     public HierarchyBrowser createHierarchyBrowser(PsiElement target) {
         return new CallHierarchyBrowser(target.getProject(), (PsiMethod)target);
     }
 
     @Override
     @RequiredReadAction
-    public void browserActivated(@Nonnull HierarchyBrowser hierarchyBrowser) {
+    public void browserActivated(HierarchyBrowser hierarchyBrowser) {
         ((CallHierarchyBrowser)hierarchyBrowser).changeView(CallHierarchyBrowserBase.CALLER_TYPE);
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

@@ -7,7 +7,6 @@ import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 
-import jakarta.annotation.Nonnull;
 import org.junit.Assert;
 import com.intellij.JavaTestUtil;
 import consulo.language.psi.PsiElement;
@@ -25,7 +24,6 @@ import consulo.codeInsight.TargetElementUtilEx;
 public abstract class RenameCollisionsTest extends LightRefactoringTestCase {
   private static final String BASE_PATH = "/refactoring/renameCollisions/";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

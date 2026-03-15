@@ -32,8 +32,7 @@ import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,11 +43,11 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
     private final LocalizeValue myMessage;
     private final boolean myIsAvailable;
 
-    public DeleteSideEffectsAwareFix(@Nonnull PsiStatement statement, PsiExpression expression) {
+    public DeleteSideEffectsAwareFix(PsiStatement statement, PsiExpression expression) {
         this(statement, expression, false);
     }
 
-    public DeleteSideEffectsAwareFix(@Nonnull PsiStatement statement, PsiExpression expression, boolean alwaysAvailable) {
+    public DeleteSideEffectsAwareFix(PsiStatement statement, PsiExpression expression, boolean alwaysAvailable) {
         super(statement);
         SmartPointerManager manager = SmartPointerManager.getInstance(statement.getProject());
         myStatementPtr = manager.createSmartPsiElementPointer(statement);
@@ -72,31 +71,29 @@ public class DeleteSideEffectsAwareFix extends LocalQuickFixAndIntentionActionOn
             sideEffects.get(0) != PsiUtil.skipParenthesizedExprDown(expression);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myMessage;
     }
 
-    @Nonnull
     public LocalizeValue getFamilyName() {
         return JavaQuickFixLocalize.extractSideEffectsFamilyName();
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project,
-                               @Nonnull PsiFile file,
-                               @Nonnull PsiElement startElement,
-                               @Nonnull PsiElement endElement) {
+    public boolean isAvailable(Project project,
+                               PsiFile file,
+                               PsiElement startElement,
+                               PsiElement endElement) {
         return myIsAvailable;
     }
 
     @Override
-    public void invoke(@Nonnull Project project,
-                       @Nonnull PsiFile file,
+    public void invoke(Project project,
+                       PsiFile file,
                        @Nullable Editor editor,
-                       @Nonnull PsiElement startElement,
-                       @Nonnull PsiElement endElement) {
+                       PsiElement startElement,
+                       PsiElement endElement) {
         PsiStatement statement = myStatementPtr.getElement();
         if (statement == null) {
             return;

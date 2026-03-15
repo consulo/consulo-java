@@ -29,10 +29,9 @@ import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
 public class QualifySuperArgumentFix extends QualifyThisOrSuperArgumentFix {
-    public QualifySuperArgumentFix(@Nonnull PsiExpression expression, @Nonnull PsiClass psiClass) {
+    public QualifySuperArgumentFix(PsiExpression expression, PsiClass psiClass) {
         super(expression, psiClass);
     }
 
@@ -48,7 +47,7 @@ public class QualifySuperArgumentFix extends QualifyThisOrSuperArgumentFix {
     }
 
     @RequiredWriteAction
-    public static void registerQuickFixAction(@Nonnull PsiSuperExpression expr, HighlightInfo.Builder hlBuilder) {
+    public static void registerQuickFixAction(PsiSuperExpression expr, HighlightInfo.Builder hlBuilder) {
         LOG.assertTrue(expr.getQualifier() == null);
         PsiClass containingClass = PsiTreeUtil.getParentOfType(expr, PsiClass.class);
         if (containingClass != null && containingClass.isInterface()) {

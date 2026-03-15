@@ -19,8 +19,7 @@ import com.intellij.java.language.jvm.JvmField;
 import consulo.util.collection.ArrayFactory;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java field or enum constant.
@@ -45,12 +44,10 @@ public interface PsiField extends PsiMember, PsiVariable, PsiDocCommentOwner, Jv
 	void setInitializer(@Nullable PsiExpression initializer) throws IncorrectOperationException;
 
 	@Override
-	@Nonnull
 	PsiIdentifier getNameIdentifier();
 
 	/* This explicit declaration is required to force javac generate bridge method 'JvmType getType()'; without it calling
 	JvmField#getType() method on instances which weren't recompiled against the new API will cause AbstractMethodError. */
-	@Nonnull
 	@Override
 	PsiType getType();
 }

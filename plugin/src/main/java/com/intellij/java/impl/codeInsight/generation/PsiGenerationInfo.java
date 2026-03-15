@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.generation;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.language.impl.codeInsight.generation.GenerationInfo;
 import consulo.logging.Logger;
@@ -28,7 +28,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -39,13 +38,13 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 	private final boolean myMergeIfExists;
 	private static final Logger LOG = Logger.getInstance(PsiGenerationInfo.class);
 
-	public PsiGenerationInfo(@Nonnull T member)
+	public PsiGenerationInfo(T member)
 	{
 		myMember = member;
 		myMergeIfExists = true;
 	}
 
-	public PsiGenerationInfo(@Nonnull T member, boolean mergeIfExists)
+	public PsiGenerationInfo(T member, boolean mergeIfExists)
 	{
 		myMember = member;
 		myMergeIfExists = mergeIfExists;
@@ -58,7 +57,7 @@ public class PsiGenerationInfo<T extends PsiMember> extends GenerationInfoBase i
 	}
 
 	@Override
-	public void insert(@Nonnull PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
+	public void insert(PsiClass aClass, @Nullable PsiElement anchor, boolean before) throws IncorrectOperationException
 	{
 		PsiMember existingMember;
 		if(myMember instanceof PsiField)

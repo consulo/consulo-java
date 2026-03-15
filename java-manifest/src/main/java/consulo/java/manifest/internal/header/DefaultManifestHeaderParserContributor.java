@@ -3,7 +3,6 @@ package consulo.java.manifest.internal.header;
 import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.manifest.lang.headerparser.impl.SimpleHeaderParser;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserContributor;
 import org.osmorc.manifest.lang.headerparser.ManifestHeaderParserRegistrator;
 import org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser;
@@ -15,7 +14,7 @@ import org.osmorc.manifest.lang.headerparser.impl.GenericComplexHeaderParser;
 @ExtensionImpl
 public class DefaultManifestHeaderParserContributor implements ManifestHeaderParserContributor {
   @Override
-  public void contribute(@Nonnull ManifestHeaderParserRegistrator registrator) {
+  public void contribute(ManifestHeaderParserRegistrator registrator) {
     registrator.register("Created-By", new SimpleHeaderParser());
     registrator.register("Signature-Version", new SimpleHeaderParser());
     registrator.register("Class-Path", new SimpleHeaderParser());

@@ -28,8 +28,7 @@ import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiReference;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Max Medvedev
@@ -39,31 +38,28 @@ public abstract class EncapsulateFieldHelper implements LanguageExtension {
  private static final ExtensionPointCacheKey<EncapsulateFieldHelper, ByLanguageValue<EncapsulateFieldHelper>> KEY = ExtensionPointCacheKey.create("EncapsulateFieldHelper", LanguageOneToOne.build());
 
   @Nullable
-  public static EncapsulateFieldHelper forLanguage(@Nonnull Language language) {
+  public static EncapsulateFieldHelper forLanguage(Language language) {
     return Application.get().getExtensionPoint(EncapsulateFieldHelper.class).getOrBuildCache(KEY).get(language);
   }
 
-  @Nonnull
-  public abstract PsiField[] getApplicableFields(@Nonnull PsiClass aClass);
+  public abstract PsiField[] getApplicableFields(PsiClass aClass);
 
-  @Nonnull
-  public abstract String suggestSetterName(@Nonnull PsiField field);
+  public abstract String suggestSetterName(PsiField field);
 
-  @Nonnull
-  public abstract String suggestGetterName(@Nonnull PsiField field);
+  public abstract String suggestGetterName(PsiField field);
 
   @Nullable
-  public abstract PsiMethod generateMethodPrototype(@Nonnull PsiField field, @Nonnull String methodName, boolean isGetter);
+  public abstract PsiMethod generateMethodPrototype(PsiField field, String methodName, boolean isGetter);
 
-  public abstract boolean processUsage(@Nonnull EncapsulateFieldUsageInfo usage,
-                                       @Nonnull EncapsulateFieldsDescriptor descriptor,
+  public abstract boolean processUsage(EncapsulateFieldUsageInfo usage,
+                                       EncapsulateFieldsDescriptor descriptor,
                                        PsiMethod setter,
                                        PsiMethod getter);
 
   @Nullable
-  public abstract EncapsulateFieldUsageInfo createUsage(@Nonnull EncapsulateFieldsDescriptor descriptor,
-                                                        @Nonnull FieldDescriptor fieldDescriptor,
-                                                        @Nonnull PsiReference reference);
+  public abstract EncapsulateFieldUsageInfo createUsage(EncapsulateFieldsDescriptor descriptor,
+                                                        FieldDescriptor fieldDescriptor,
+                                                        PsiReference reference);
 
   @Deprecated
   public static EncapsulateFieldHelper getHelper(Language lang) {

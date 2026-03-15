@@ -40,8 +40,7 @@ import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -55,7 +54,7 @@ public class I18nizeAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public void update(@Nonnull AnActionEvent e) {
+    public void update(AnActionEvent e) {
         boolean active = getHandler(e) != null;
         if (ActionPlaces.isPopupPlace(e.getPlace())) {
             e.getPresentation().setVisible(active);
@@ -125,10 +124,10 @@ public class I18nizeAction extends AnAction {
 
     @RequiredUIAccess
     public static void doI18nSelectedString(
-        @Nonnull Project project,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile psiFile,
-        @Nonnull I18nQuickFixHandler handler
+        Project project,
+        Editor editor,
+        PsiFile psiFile,
+        I18nQuickFixHandler handler
     ) {
         try {
             handler.checkApplicability(psiFile, editor);
@@ -184,7 +183,7 @@ public class I18nizeAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public void actionPerformed(@Nonnull AnActionEvent e) {
+    public void actionPerformed(AnActionEvent e) {
         Editor editor = getEditor(e);
         Project project = editor.getProject();
         assert project != null;

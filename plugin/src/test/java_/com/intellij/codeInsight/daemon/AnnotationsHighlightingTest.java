@@ -15,14 +15,13 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.LanguageLevel;
 
 /**
  * @author ven
  */
 public abstract class AnnotationsHighlightingTest extends LightDaemonAnalyzerTestCase {
-  @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/annotations";
+  private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/annotations";
 
   public void testWrongPlace() { doTest(false); }
   public void testNotValueNameOmitted() { doTest(false); }

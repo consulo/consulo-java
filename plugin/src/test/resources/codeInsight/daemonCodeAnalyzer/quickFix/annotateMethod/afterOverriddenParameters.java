@@ -1,5 +1,4 @@
 // "Annotate overridden method parameters as '@NotNull'" "true"
-import jakarta.annotation.Nonnull;
 
 abstract class P2 {
     @jakarta.annotation.Nonnull

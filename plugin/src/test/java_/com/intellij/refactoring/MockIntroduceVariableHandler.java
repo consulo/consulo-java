@@ -11,7 +11,6 @@ import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableSet
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManagerImpl;
 import consulo.util.collection.MultiMap;
 import junit.framework.Assert;
-import org.jetbrains.annotations.NonNls;
 
 /**
  *  @author dsl
@@ -24,16 +23,16 @@ class MockIntroduceVariableHandler extends IntroduceVariableBase {
   private final String myExpectedTypeCanonicalName;
   private final boolean myLookForType;
 
-  public MockIntroduceVariableHandler(@NonNls String name, boolean replaceAll,
+  public MockIntroduceVariableHandler(String name, boolean replaceAll,
                                       boolean declareFinal, boolean replaceLValues,
-                                      @NonNls String expectedTypeCanonicalName) {
+                                      String expectedTypeCanonicalName) {
 
     this(name, replaceAll, declareFinal, replaceLValues, expectedTypeCanonicalName, false);
   }
 
-  public MockIntroduceVariableHandler(@NonNls String name, boolean replaceAll,
+  public MockIntroduceVariableHandler(String name, boolean replaceAll,
                                       boolean declareFinal, boolean replaceLValues,
-                                      @NonNls String expectedTypeCanonicalName, boolean lookForType) {
+                                      String expectedTypeCanonicalName, boolean lookForType) {
 
     myName = name;
     myReplaceAll = replaceAll;

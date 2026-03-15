@@ -46,8 +46,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole
@@ -179,8 +178,8 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     return Result.CONTINUE;
   }
 
-  private static boolean shouldInsertStatementBody(@Nonnull PsiElement statement,
-                                                   @Nonnull Document doc,
+  private static boolean shouldInsertStatementBody(PsiElement statement,
+                                                   Document doc,
                                                    @Nullable PsiElement prev) {
     PsiStatement block = statement instanceof PsiWhileStatement ? ((PsiWhileStatement) statement).getBody() : (
         (PsiIfStatement) statement).getThenBranch();
@@ -207,15 +206,15 @@ public class JavaTypedHandler extends TypedHandlerDelegate {
     return next.getNode().getElementType() == JavaTokenType.RPARENTH;
   }
 
-  private static int startLine(@Nonnull Document doc, @Nonnull PsiElement psiElement) {
+  private static int startLine(Document doc, PsiElement psiElement) {
     return doc.getLineNumber(psiElement.getTextRange().getStartOffset());
   }
 
   @Override
   public Result charTyped(char c,
                           Project project,
-                          @Nonnull Editor editor,
-                          @Nonnull PsiFile file) {
+                          Editor editor,
+                          PsiFile file) {
     if (myJavaLTTyped) {
       myJavaLTTyped = false;
       handleAfterJavaLT(editor, JavaTokenType.LT, JavaTokenType.GT, INVALID_INSIDE_REFERENCE);

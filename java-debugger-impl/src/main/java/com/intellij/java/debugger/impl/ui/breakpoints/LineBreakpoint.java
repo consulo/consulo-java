@@ -57,8 +57,7 @@ import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.util.ArrayList;
@@ -441,7 +440,7 @@ public class LineBreakpoint<P extends JavaBreakpointProperties> extends Breakpoi
         return ContextUtil.getContextElement(getSourcePosition());
     }
 
-    public static LineBreakpoint create(@Nonnull Project project, XBreakpoint xBreakpoint) {
+    public static LineBreakpoint create(Project project, XBreakpoint xBreakpoint) {
         LineBreakpoint breakpoint = new LineBreakpoint(project, xBreakpoint);
         return (LineBreakpoint) breakpoint.init();
     }

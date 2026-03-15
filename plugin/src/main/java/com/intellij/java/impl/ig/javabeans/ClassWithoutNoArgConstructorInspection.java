@@ -25,7 +25,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,7 +35,6 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
      */
     public boolean m_ignoreClassesWithNoConstructors = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classWithoutNoArgConstructorDisplayName();
@@ -47,7 +45,6 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
         return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreClassesWithNoConstructors");
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.classWithoutNoArgConstructorProblemDescriptor().get();
     }
@@ -60,7 +57,7 @@ public class ClassWithoutNoArgConstructorInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so it doesn't drill down
             if (aClass.isInterface() || aClass.isEnum() ||
                 aClass.isAnnotationType()) {

@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.generate.config;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
@@ -38,5 +37,5 @@ public interface InsertNewMethodStrategy
 	 * @return if the policy was executed normally (not cancelled)
 	 */
 	@Nullable
-	PsiMethod insertNewMethod(PsiClass clazz, @Nonnull PsiMethod newMethod, Editor editor);
+	PsiMethod insertNewMethod(PsiClass clazz, PsiMethod newMethod, Editor editor);
 }

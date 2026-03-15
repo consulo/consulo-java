@@ -30,7 +30,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,13 +55,11 @@ public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspe
     binaryPromotionOperators.add(JavaTokenType.OR);
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     final PsiExpression expression = (PsiExpression) infos[0];
@@ -76,7 +73,6 @@ public abstract class UnnecessaryExplicitNumericCastInspection extends BaseInspe
 
   private static class UnnecessaryExplicitNumericCastFix extends InspectionGadgetsFix {
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.unnecessaryExplicitNumericCastQuickfix();

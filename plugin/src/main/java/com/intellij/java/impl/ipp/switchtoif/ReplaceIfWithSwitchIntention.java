@@ -30,9 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,20 +38,18 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceIfWithSwitchIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceIfWithSwitchIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceIfWithSwitchIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new IfToSwitchPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) {
+    public void processIntention(PsiElement element) {
         PsiJavaToken switchToken = (PsiJavaToken) element;
         PsiIfStatement ifStatement = (PsiIfStatement) switchToken.getParent();
         if (ifStatement == null) {
@@ -111,7 +107,7 @@ public class ReplaceIfWithSwitchIntention extends Intention {
             }
         }
 
-        @NonNls StringBuilder switchStatementText = new StringBuilder();
+        StringBuilder switchStatementText = new StringBuilder();
         switchStatementText.append("switch(").append(switchExpression.getText()).append("){");
         PsiType type = switchExpression.getType();
         boolean castToInt = type != null && type.equalsToText(CommonClassNames.JAVA_LANG_INTEGER);
@@ -147,8 +143,8 @@ public class ReplaceIfWithSwitchIntention extends Intention {
     }
 
     @Nullable
-    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass,
-                                                                @Nonnull Class<? extends PsiElement>... stopAt) {
+    public static <T extends PsiElement> T getPrevSiblingOfType(@Nullable PsiElement element, Class<T> aClass,
+                                                                Class<? extends PsiElement>... stopAt) {
         if (element == null) {
             return null;
         }
@@ -266,7 +262,7 @@ public class ReplaceIfWithSwitchIntention extends Intention {
     }
 
     private static void dumpBranch(IfStatementBranch branch, boolean castToInt, boolean wrap, boolean renameBreaks, String breakLabelName,
-                                   @NonNls StringBuilder switchStatementText) {
+                                   StringBuilder switchStatementText) {
         dumpComments(branch.getComments(), switchStatementText);
         if (branch.isElse()) {
             switchStatementText.append("default: ");
@@ -280,7 +276,6 @@ public class ReplaceIfWithSwitchIntention extends Intention {
         dumpBody(branch.getStatement(), wrap, renameBreaks, breakLabelName, switchStatementText);
     }
 
-    @NonNls
     private static String getCaseLabelText(PsiExpression expression, boolean castToInt) {
         if (expression instanceof PsiReferenceExpression) {
             PsiReferenceExpression referenceExpression = (PsiReferenceExpression) expression;
@@ -318,7 +313,7 @@ public class ReplaceIfWithSwitchIntention extends Intention {
     }
 
     private static void dumpBody(PsiStatement bodyStatement, boolean wrap, boolean renameBreaks, String breakLabelName,
-                                 @NonNls StringBuilder switchStatementText) {
+                                 StringBuilder switchStatementText) {
         if (wrap) {
             switchStatementText.append('{');
         }
@@ -343,7 +338,7 @@ public class ReplaceIfWithSwitchIntention extends Intention {
     }
 
     private static void appendElement(PsiElement element, boolean renameBreakElements, String breakLabelString,
-                                      @NonNls StringBuilder switchStatementText) {
+                                      StringBuilder switchStatementText) {
         String text = element.getText();
         if (!renameBreakElements) {
             switchStatementText.append(text);

@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
 class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 {
@@ -27,13 +26,13 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 
 	private boolean checked;
 
-	ParameterClassCheckVisitor(@Nonnull PsiParameter parameter)
+	ParameterClassCheckVisitor(PsiParameter parameter)
 	{
 		this.parameter = parameter;
 	}
 
 	@Override
-	public void visitElement(@Nonnull PsiElement element)
+	public void visitElement(PsiElement element)
 	{
 		if(!checked)
 		{
@@ -42,7 +41,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression)
+	public void visitMethodCallExpression(PsiMethodCallExpression expression)
 	{
 		if(checked)
 		{
@@ -151,7 +150,7 @@ class ParameterClassCheckVisitor extends JavaRecursiveElementWalkingVisitor
 	}
 
 	@Override
-	public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression expression)
+	public void visitInstanceOfExpression(PsiInstanceOfExpression expression)
 	{
 		if(checked)
 		{

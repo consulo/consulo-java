@@ -34,7 +34,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -44,7 +43,7 @@ public class GenerateSuperMethodCallHandler implements CodeInsightActionHandler 
 
     @Override
     @RequiredWriteAction
-    public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!LanguageEditorUtil.checkModificationAllowed(editor)) {
             return;
         }

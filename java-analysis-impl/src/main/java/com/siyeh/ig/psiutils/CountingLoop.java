@@ -21,8 +21,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.ast.IElementType;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
 
@@ -34,24 +33,20 @@ import static consulo.util.lang.ObjectUtil.tryCast;
 public class CountingLoop
 {
 	final
-	@Nonnull
   PsiLocalVariable myCounter;
 	final
-	@Nonnull
   PsiLoopStatement myLoop;
 	final
-	@Nonnull
 	PsiExpression myInitializer;
 	final
-	@Nonnull
 	PsiExpression myBound;
 	final boolean myIncluding;
 	final boolean myDescending;
 
-	private CountingLoop(@Nonnull PsiLoopStatement loop,
-						 @Nonnull PsiLocalVariable counter,
-						 @Nonnull PsiExpression initializer,
-						 @Nonnull PsiExpression bound,
+	private CountingLoop(PsiLoopStatement loop,
+						 PsiLocalVariable counter,
+						 PsiExpression initializer,
+						 PsiExpression bound,
 						 boolean including,
 						 boolean descending)
 	{
@@ -66,7 +61,6 @@ public class CountingLoop
 	/**
 	 * @return loop counter variable
 	 */
-	@Nonnull
 	public PsiLocalVariable getCounter()
 	{
 		return myCounter;
@@ -75,7 +69,6 @@ public class CountingLoop
 	/**
 	 * @return loop statement
 	 */
-	@Nonnull
 	public PsiLoopStatement getLoop()
 	{
 		return myLoop;
@@ -84,7 +77,6 @@ public class CountingLoop
 	/**
 	 * @return counter variable initial value
 	 */
-	@Nonnull
 	public PsiExpression getInitializer()
 	{
 		return myInitializer;
@@ -93,7 +85,6 @@ public class CountingLoop
 	/**
 	 * @return loop bound
 	 */
-	@Nonnull
 	public PsiExpression getBound()
 	{
 		return myBound;

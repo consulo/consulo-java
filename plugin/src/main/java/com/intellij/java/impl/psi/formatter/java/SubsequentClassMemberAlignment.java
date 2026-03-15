@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.codeStyle.AlignmentStrategy;
 import consulo.language.ast.ASTNode;
@@ -42,7 +41,7 @@ public class SubsequentClassMemberAlignment extends ChildAlignmentStrategyProvid
 	}
 
 	@Override
-	public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
+	public AlignmentStrategy getNextChildStrategy(ASTNode child)
 	{
 		AlignmentStrategy fieldInColumnsAlignment = myFieldsAligner.getNextChildStrategy(child);
 		AlignmentStrategy oneLineMethodsAlignment = myOneLineMethodsAligner.getNextChildStrategy(child);

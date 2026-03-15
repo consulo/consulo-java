@@ -19,8 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ig.psiutils.PsiElementOrderComparator;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -29,7 +28,7 @@ class ScopeUtils {
   private ScopeUtils() {}
 
   @Nullable
-  public static PsiElement findTighterDeclarationLocation(@Nonnull PsiElement sibling, @Nonnull PsiVariable variable) {
+  public static PsiElement findTighterDeclarationLocation(PsiElement sibling, PsiVariable variable) {
     PsiElement prevSibling = sibling.getPrevSibling();
     while (prevSibling instanceof PsiWhiteSpace || prevSibling instanceof PsiComment) {
       prevSibling = prevSibling.getPrevSibling();
@@ -44,7 +43,7 @@ class ScopeUtils {
   }
 
   @Nullable
-  public static PsiElement getChildWhichContainsElement(@Nonnull PsiElement ancestor, @Nonnull PsiElement element) {
+  public static PsiElement getChildWhichContainsElement(PsiElement ancestor, PsiElement element) {
     PsiElement child = element;
     PsiElement parent = child.getParent();
     while (!parent.equals(ancestor)) {
@@ -58,7 +57,7 @@ class ScopeUtils {
   }
 
   @Nullable
-  public static PsiElement getCommonParent(@Nonnull PsiElement[] referenceElements) {
+  public static PsiElement getCommonParent(PsiElement[] referenceElements) {
     Arrays.sort(referenceElements, PsiElementOrderComparator.getInstance());
     PsiElement commonParent = null;
     for (PsiElement referenceElement : referenceElements) {
@@ -120,7 +119,7 @@ class ScopeUtils {
   }
 
   @Nullable
-  public static PsiElement moveOutOfLoopsAndClasses(@Nonnull PsiElement scope, @Nonnull PsiElement maxScope) {
+  public static PsiElement moveOutOfLoopsAndClasses(PsiElement scope, PsiElement maxScope) {
     PsiElement result = maxScope;
     if (result instanceof PsiLoopStatement) {
       return result;

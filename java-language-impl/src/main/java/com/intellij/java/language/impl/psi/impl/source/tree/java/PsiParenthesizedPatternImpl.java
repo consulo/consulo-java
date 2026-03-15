@@ -11,8 +11,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiParenthesizedPatternImpl extends CompositePsiElement implements PsiParenthesizedPattern, Constants {
   public PsiParenthesizedPatternImpl() {
@@ -20,7 +19,7 @@ public class PsiParenthesizedPatternImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitParenthesizedPattern(this);
     }
@@ -42,10 +41,10 @@ public class PsiParenthesizedPatternImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     final PsiPattern pattern = getPattern();
     if (pattern == null) return true;
 

@@ -5,8 +5,7 @@ import com.intellij.java.language.jvm.JvmModifier;
 import com.intellij.java.language.jvm.JvmModifiersOwner;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Not all PsiModifierListOwner inheritors are JvmModifiersOwners, e.g. {@link PsiLocalVariable} or {@link PsiRequiresStatement}.
@@ -17,24 +16,23 @@ import jakarta.annotation.Nullable;
  */
 public interface PsiJvmModifiersOwner extends PsiModifierListOwner, JvmModifiersOwner {
   @Override
-  @Nonnull
   default PsiAnnotation[] getAnnotations() {
     return PsiModifierListOwner.super.getAnnotations();
   }
 
   @Nullable
   @Override
-  default PsiAnnotation getAnnotation(@Nonnull String fqn) {
+  default PsiAnnotation getAnnotation(String fqn) {
     return PsiModifierListOwner.super.getAnnotation(fqn);
   }
 
   @Override
-  default boolean hasAnnotation(@Nonnull String fqn) {
+  default boolean hasAnnotation(String fqn) {
     return PsiModifierListOwner.super.hasAnnotation(fqn);
   }
 
   @Override
-  default boolean hasModifier(@Nonnull JvmModifier modifier) {
+  default boolean hasModifier(JvmModifier modifier) {
     return PsiModifierListOwner.super.hasModifier(modifier);
   }
 

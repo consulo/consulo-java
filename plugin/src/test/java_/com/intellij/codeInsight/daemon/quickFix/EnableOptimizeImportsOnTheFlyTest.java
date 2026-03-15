@@ -4,11 +4,9 @@ import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.unusedImport.UnusedImportLocalInspection;
-import jakarta.annotation.Nonnull;
 
 
 public abstract class EnableOptimizeImportsOnTheFlyTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new UnusedImportLocalInspection()};

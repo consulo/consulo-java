@@ -26,8 +26,7 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.xml.XmlStringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -36,14 +35,12 @@ public class RefusedBequestInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreEmptySuperMethods = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.refusedBequestDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.refusedBequestProblemDescriptor().get();
     }
@@ -66,7 +63,7 @@ public class RefusedBequestInspection extends BaseInspection {
     private class RefusedBequestVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             PsiCodeBlock body = method.getBody();
             if (body == null) {
@@ -137,7 +134,7 @@ public class RefusedBequestInspection extends BaseInspection {
             return null;
         }
 
-        private boolean containsSuperCall(@Nonnull PsiElement context, @Nonnull PsiMethod method) {
+        private boolean containsSuperCall(PsiElement context, PsiMethod method) {
             SuperCallVisitor visitor = new SuperCallVisitor(method);
             context.accept(visitor);
             return visitor.hasSuperCall();
@@ -154,7 +151,7 @@ public class RefusedBequestInspection extends BaseInspection {
         }
 
         @Override
-        public void visitElement(@Nonnull PsiElement element) {
+        public void visitElement(PsiElement element) {
             if (hasSuperCall) {
                 return;
             }
@@ -163,7 +160,7 @@ public class RefusedBequestInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             if (hasSuperCall) {
                 return;

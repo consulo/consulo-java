@@ -25,7 +25,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,17 +32,14 @@ import java.util.List;
 @ExtensionImpl
 public class MultipleTypedDeclarationInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.multipleTypedDeclarationDisplayName();
   }
 
-  @Nonnull
   public String getID() {
     return "VariablesOfDifferentTypesInDeclaration";
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.multipleTypedDeclarationProblemDescriptor().get();
   }
@@ -85,7 +81,7 @@ public class MultipleTypedDeclarationInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       super.visitField(field);
       if (!childrenContainTypeElement(field)) {
         return;

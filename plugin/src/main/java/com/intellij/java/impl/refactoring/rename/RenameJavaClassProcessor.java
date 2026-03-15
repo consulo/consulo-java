@@ -47,8 +47,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -59,7 +58,7 @@ import java.util.regex.Pattern;
 @ExtensionImpl
 public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     @Override
-    public boolean canProcessElement(@Nonnull PsiElement element) {
+    public boolean canProcessElement(PsiElement element) {
         return element instanceof PsiClass;
     }
 
@@ -134,7 +133,7 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
 
     @Nullable
     @Override
-    public Pair<String, String> getTextOccurrenceSearchStrings(@Nonnull PsiElement element, @Nonnull String newName) {
+    public Pair<String, String> getTextOccurrenceSearchStrings(PsiElement element, String newName) {
         if (element instanceof PsiClass aClass && aClass.getParent() instanceof PsiClass) {
             String dollaredStringToSearch = ClassUtil.getJVMClassName(aClass);
             String dollaredStringToReplace =
@@ -196,7 +195,6 @@ public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
                 for (PsiTypeParameter typeParameter : owner.getTypeParameters()) {
                     if (Comparing.equal(newName, typeParameter.getName())) {
                         result.add(new UnresolvableCollisionUsageInfo(typeParam, typeParameter) {
-                            @Nonnull
                             @Override
                             public LocalizeValue getDescription() {
                                 return LocalizeValue.localizeTODO(

@@ -20,7 +20,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaInstructionSta
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.InstructionVisitor;
 import com.intellij.java.language.psi.PsiMethodReferenceExpression;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
@@ -29,7 +28,7 @@ import java.util.Objects;
  */
 public class MethodReferenceInstruction extends ExpressionPushingInstruction<PsiMethodReferenceExpression>
 {
-	public MethodReferenceInstruction(@Nonnull PsiMethodReferenceExpression expression)
+	public MethodReferenceInstruction(PsiMethodReferenceExpression expression)
 	{
 		super(expression);
 	}
@@ -46,7 +45,6 @@ public class MethodReferenceInstruction extends ExpressionPushingInstruction<Psi
 	}
 
 	@Override
-	@Nonnull
 	public PsiMethodReferenceExpression getExpression()
 	{
 		return Objects.requireNonNull(super.getExpression());

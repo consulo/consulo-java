@@ -58,8 +58,7 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Predicates;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -163,7 +162,7 @@ public class JavaCompletionUtil {
         );
     }
 
-    public static boolean isInExcludedPackage(@Nonnull PsiMember member, boolean allowInstanceInnerClasses) {
+    public static boolean isInExcludedPackage(PsiMember member, boolean allowInstanceInnerClasses) {
         String name = PsiUtil.getMemberQualifiedName(member);
         if (name == null) {
             return false;
@@ -181,8 +180,7 @@ public class JavaCompletionUtil {
         return JavaProjectCodeInsightSettings.getSettings(member.getProject()).isExcluded(name);
     }
 
-    @Nonnull
-    public static <T extends PsiType> T originalize(@Nonnull T type) {
+    public static <T extends PsiType> T originalize(T type) {
         if (!type.isValid()) {
             return type;
         }
@@ -246,11 +244,11 @@ public class JavaCompletionUtil {
     }
 
     @Nullable
-    public static PsiType getQualifiedMemberReferenceType(@Nullable PsiType qualifierType, @Nonnull final PsiMember member) {
+    public static PsiType getQualifiedMemberReferenceType(@Nullable PsiType qualifierType, final PsiMember member) {
         final SimpleReference<PsiSubstitutor> subst = SimpleReference.create(PsiSubstitutor.EMPTY);
         class MyProcessor implements PsiScopeProcessor, NameHint, ElementClassHint {
             @Override
-            public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
+            public boolean execute(PsiElement element, ResolveState state) {
                 if (element == member) {
                     subst.set(state.get(PsiSubstitutor.KEY));
                 }
@@ -263,19 +261,19 @@ public class JavaCompletionUtil {
             }
 
             @Override
-            public String getName(@Nonnull ResolveState state) {
+            public String getName(ResolveState state) {
                 return member.getName();
             }
 
             @Override
-            public boolean shouldProcess(@Nonnull DeclarationKind kind) {
+            public boolean shouldProcess(DeclarationKind kind) {
                 return member instanceof PsiEnumConstant ? kind == DeclarationKind.ENUM_CONST :
                     member instanceof PsiField ? kind == DeclarationKind.FIELD :
                         kind == DeclarationKind.METHOD;
             }
 
             @Override
-            public <T> T getHint(@Nonnull Key<T> hintKey) {
+            public <T> T getHint(Key<T> hintKey) {
                 //noinspection unchecked
                 return hintKey == NameHint.KEY || hintKey == ElementClassHint.KEY ? (T)this : null;
             }
@@ -413,12 +411,10 @@ public class JavaCompletionUtil {
         return set;
     }
 
-    @Nonnull
-    static PsiReferenceExpression createReference(@Nonnull String text, @Nonnull PsiElement context) {
+    static PsiReferenceExpression createReference(String text, PsiElement context) {
         return (PsiReferenceExpression)JavaPsiFacade.getElementFactory(context.getProject()).createExpressionFromText(text, context);
     }
 
-    @Nonnull
     private static List<PsiType> getQualifierCastTypes(PsiJavaReference javaReference, CompletionParameters parameters) {
         if (javaReference instanceof PsiReferenceExpression refExpr) {
             PsiExpression qualifier = refExpr.getQualifierExpression();
@@ -441,11 +437,11 @@ public class JavaCompletionUtil {
     }
 
     private static boolean shouldCast(
-        @Nonnull LookupElement item,
-        @Nonnull PsiTypeLookupItem castTypeItem,
+        LookupElement item,
+        PsiTypeLookupItem castTypeItem,
         @Nullable PsiType plainQualifier,
-        @Nonnull JavaCompletionProcessor processor,
-        @Nonnull Set<? extends PsiType> expectedTypes
+        JavaCompletionProcessor processor,
+        Set<? extends PsiType> expectedTypes
     ) {
         PsiType castType = castTypeItem.getType();
         if (plainQualifier == null) {
@@ -488,12 +484,11 @@ public class JavaCompletionUtil {
         return containsMember(castType, o, true) && !containsMember(plainQualifier, o, true);
     }
 
-    @Nonnull
-    private static LookupElement castQualifier(@Nonnull LookupElement item, @Nonnull PsiTypeLookupItem castTypeItem) {
+    private static LookupElement castQualifier(LookupElement item, PsiTypeLookupItem castTypeItem) {
         return new LookupElementDecorator<>(item) {
             @Override
             @RequiredReadAction
-            public void handleInsert(@Nonnull InsertionContext context) {
+            public void handleInsert(InsertionContext context) {
                 Document document = context.getEditor().getDocument();
                 context.commitDocument();
                 PsiFile file = context.getFile();
@@ -532,8 +527,8 @@ public class JavaCompletionUtil {
     }
 
     private static PsiTypeLookupItem findQualifierCast(
-        @Nonnull LookupElement item,
-        @Nonnull List<? extends PsiTypeLookupItem> castTypeItems,
+        LookupElement item,
+        List<? extends PsiTypeLookupItem> castTypeItems,
         @Nullable PsiType plainQualifier,
         JavaCompletionProcessor processor,
         Set<? extends PsiType> expectedTypes
@@ -546,13 +541,12 @@ public class JavaCompletionUtil {
         return type instanceof PsiClassType classType ? classType.rawType() : type;
     }
 
-    @Nonnull
     @RequiredReadAction
     public static LookupElement highlightIfNeeded(
         @Nullable PsiType qualifierType,
-        @Nonnull LookupElement item,
-        @Nonnull Object object,
-        @Nonnull PsiElement place
+        LookupElement item,
+        Object object,
+        PsiElement place
     ) {
         if (shouldMarkRed(object, place)) {
             return PrioritizedLookupElement.withExplicitProximity(
@@ -586,7 +580,7 @@ public class JavaCompletionUtil {
     }
 
     @RequiredReadAction
-    private static boolean shouldMarkRed(@Nonnull Object object, @Nonnull PsiElement place) {
+    private static boolean shouldMarkRed(Object object, PsiElement place) {
         if (!(object instanceof PsiMember member)) {
             return false;
         }
@@ -601,7 +595,7 @@ public class JavaCompletionUtil {
     }
 
     @Contract("null, _, _ -> false")
-    private static boolean containsMember(@Nullable PsiType qualifierType, @Nonnull Object object, boolean checkBases) {
+    private static boolean containsMember(@Nullable PsiType qualifierType, Object object, boolean checkBases) {
         if (!(object instanceof PsiMember member)) {
             return false;
         }
@@ -681,7 +675,7 @@ public class JavaCompletionUtil {
         return Collections.singletonList(LookupItemUtil.objectToLookupItem(completion));
     }
 
-    public static boolean hasAccessibleConstructor(@Nonnull PsiType type, @Nonnull PsiElement place) {
+    public static boolean hasAccessibleConstructor(PsiType type, PsiElement place) {
         if (type instanceof PsiArrayType) {
             return true;
         }
@@ -695,7 +689,7 @@ public class JavaCompletionUtil {
         return methods.length == 0 || Arrays.stream(methods).anyMatch(constructor -> isConstructorCompletable(constructor, place));
     }
 
-    private static boolean isConstructorCompletable(@Nonnull PsiMethod constructor, @Nonnull PsiElement place) {
+    private static boolean isConstructorCompletable(PsiMethod constructor, PsiElement place) {
         if (!(constructor instanceof PsiCompiledElement)) {
             return true; // it's possible to use a quick fix to make accessible after completion
         }
@@ -708,7 +702,7 @@ public class JavaCompletionUtil {
     }
 
     @RequiredReadAction
-    public static LinkedHashSet<String> getAllLookupStrings(@Nonnull PsiMember member) {
+    public static LinkedHashSet<String> getAllLookupStrings(PsiMember member) {
         LinkedHashSet<String> allLookupStrings = new LinkedHashSet<>();
         String name = member.getName();
         allLookupStrings.add(name);
@@ -734,7 +728,7 @@ public class JavaCompletionUtil {
     }
 
     @RequiredWriteAction
-    public static void insertClassReference(@Nonnull PsiClass psiClass, @Nonnull PsiFile file, int offset) {
+    public static void insertClassReference(PsiClass psiClass, PsiFile file, int offset) {
         insertClassReference(psiClass, file, offset, offset);
     }
 
@@ -859,8 +853,8 @@ public class JavaCompletionUtil {
 
     @RequiredUIAccess
     public static void insertParentheses(
-        @Nonnull InsertionContext context,
-        @Nonnull LookupElement item,
+        InsertionContext context,
+        LookupElement item,
         boolean overloadsMatter,
         boolean hasParams
     ) {
@@ -869,8 +863,8 @@ public class JavaCompletionUtil {
 
     @RequiredUIAccess
     public static void insertParentheses(
-        @Nonnull InsertionContext context,
-        @Nonnull LookupElement item,
+        InsertionContext context,
+        LookupElement item,
         boolean overloadsMatter,
         boolean hasParams,
         boolean forceClosingParenthesis
@@ -916,7 +910,7 @@ public class JavaCompletionUtil {
 
                 @Override
                 @RequiredReadAction
-                protected PsiElement findExistingLeftParenthesis(@Nonnull InsertionContext context) {
+                protected PsiElement findExistingLeftParenthesis(InsertionContext context) {
                     PsiElement token = super.findExistingLeftParenthesis(context);
                     return isPartOfLambda(token) ? null : token;
                 }
@@ -1062,14 +1056,14 @@ public class JavaCompletionUtil {
         return true;
     }
 
-    public static FakePsiElement createContextWithXxxVariable(@Nonnull PsiElement place, @Nonnull PsiType varType) {
+    public static FakePsiElement createContextWithXxxVariable(PsiElement place, PsiType varType) {
         return new FakePsiElement() {
             @Override
             public boolean processDeclarations(
-                @Nonnull PsiScopeProcessor processor,
-                @Nonnull ResolveState state,
+                PsiScopeProcessor processor,
+                ResolveState state,
                 PsiElement lastParent,
-                @Nonnull PsiElement place
+                PsiElement place
             ) {
                 return processor.execute(new LightVariableBuilder("xxx", varType, place), ResolveState.initial());
             }
@@ -1081,8 +1075,7 @@ public class JavaCompletionUtil {
         };
     }
 
-    @Nonnull
-    public static String escapeXmlIfNeeded(InsertionContext context, @Nonnull String generics) {
+    public static String escapeXmlIfNeeded(InsertionContext context, String generics) {
         //if (context.getFile().getViewProvider().getBaseLanguage() == StdLanguages.JSPX)
         //{
         //    return StringUtil.escapeXmlEntities(generics);
@@ -1105,7 +1098,7 @@ public class JavaCompletionUtil {
         return false;
     }
 
-    public static int findQualifiedNameStart(@Nonnull InsertionContext context) {
+    public static int findQualifiedNameStart(InsertionContext context) {
         int start = context.getTailOffset() - 1;
         while (start >= 0) {
             char ch = context.getDocument().getCharsSequence().charAt(start);

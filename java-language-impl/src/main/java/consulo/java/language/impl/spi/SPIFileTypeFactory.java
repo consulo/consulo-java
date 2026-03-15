@@ -4,7 +4,6 @@ import com.intellij.java.language.impl.spi.SPIFileType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.virtualFileSystem.fileType.FileTypeConsumer;
 import consulo.virtualFileSystem.fileType.FileTypeFactory;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -13,7 +12,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class SPIFileTypeFactory extends FileTypeFactory {
   @Override
-  public void createFileTypes(@Nonnull FileTypeConsumer fileTypeConsumer) {
+  public void createFileTypes(FileTypeConsumer fileTypeConsumer) {
     fileTypeConsumer.consume(SPIFileType.INSTANCE);
   }
 }

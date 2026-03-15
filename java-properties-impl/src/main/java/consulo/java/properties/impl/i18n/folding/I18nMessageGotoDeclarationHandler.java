@@ -26,7 +26,7 @@ import consulo.language.editor.navigation.GotoDeclarationHandlerBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Konstantin Bulenkov

@@ -28,7 +28,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.language.editor.completion.WordCompletionElementFilter;
 import consulo.language.version.LanguageVersion;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaWordCompletionFilter implements WordCompletionElementFilter {
@@ -40,7 +39,6 @@ public class JavaWordCompletionFilter implements WordCompletionElementFilter {
     return ENABLED_TOKENS.contains(element);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

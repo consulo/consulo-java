@@ -29,13 +29,12 @@ import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ShowModulePropertiesFix extends IntentionAndQuickFixAction implements SyntheticIntentionAction {
     private final String myModuleName;
 
-    public ShowModulePropertiesFix(@Nonnull PsiElement context) {
+    public ShowModulePropertiesFix(PsiElement context) {
         this(ModuleUtilCore.findModuleForPsiElement(context));
     }
 
@@ -43,7 +42,6 @@ public class ShowModulePropertiesFix extends IntentionAndQuickFixAction implemen
         myModuleName = module == null ? null : module.getName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         AnAction action = ActionManager.getInstance().getAction(IdeActions.MODULE_SETTINGS);
@@ -51,12 +49,12 @@ public class ShowModulePropertiesFix extends IntentionAndQuickFixAction implemen
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return myModuleName != null;
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, PsiFile file, @Nullable Editor editor) {
+    public void applyFix(Project project, PsiFile file, @Nullable Editor editor) {
         ShowSettingsUtil.getInstance().showProjectStructureDialog(project, projectStructureSelector -> {
             projectStructureSelector.select(myModuleName, null, true);
         });

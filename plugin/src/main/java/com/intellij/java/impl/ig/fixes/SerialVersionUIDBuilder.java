@@ -25,8 +25,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -38,7 +36,7 @@ import java.util.*;
 
 public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
 
-  @NonNls private static final String ACCESS_METHOD_NAME_PREFIX = "access$";
+  private static final String ACCESS_METHOD_NAME_PREFIX = "access$";
 
   private final PsiClass clazz;
   private int index = -1;
@@ -77,7 +75,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
         return name1.compareTo(name2);
       }
     };
-  @NonNls private static final String CLASS_ACCESS_METHOD_PREFIX = "class$";
+  private static final String CLASS_ACCESS_METHOD_PREFIX = "class$";
 
   private SerialVersionUIDBuilder(PsiClass clazz) {
     super();
@@ -227,7 +225,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
       }
 
       dataOutputStream.flush();
-      @NonNls String algorithm = "SHA";
+      String algorithm = "SHA";
       MessageDigest digest = MessageDigest.getInstance(algorithm);
       byte[] digestBytes = digest.digest(byteArrayOutputStream.toByteArray());
       long serialVersionUID = 0L;
@@ -255,7 +253,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
       nonPrivateMethods.add(syntheticMethod);
     }
     PsiType unwrappedType = type;
-    @NonNls StringBuffer fieldNameBuffer;
+    StringBuffer fieldNameBuffer;
     if (type instanceof PsiArrayType) {
       fieldNameBuffer = new StringBuffer();
       fieldNameBuffer.append("array");
@@ -376,7 +374,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression methodCallExpression) {
+    PsiMethodCallExpression methodCallExpression) {
     // for navigating the psi tree in the order javac navigates its AST
     PsiExpressionList argumentList =
       methodCallExpression.getArgumentList();
@@ -419,7 +417,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @Nonnull PsiReferenceExpression expression) {
+    PsiReferenceExpression expression) {
     super.visitReferenceExpression(expression);
     PsiElement element = expression.resolve();
     PsiElement elementParentClass =
@@ -459,7 +457,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
           MemberSignature.createTypeSignature(type).replace('/',
                                                             '.');
         String className = clazz.getQualifiedName();
-        @NonNls StringBuilder signatureBuffer =
+        StringBuilder signatureBuffer =
           new StringBuilder("(");
         if (!isStatic) {
           signatureBuffer.append('L').append(className).append(';');
@@ -468,7 +466,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
         if (!field.getContainingClass().equals(clazz)) {
           return;
         }
-        @NonNls String name = null;
+        String name = null;
         PsiElement parent = expression.getParent();
         if (parent instanceof PsiAssignmentExpression) {
           PsiAssignmentExpression assignment = (PsiAssignmentExpression)parent;
@@ -527,7 +525,7 @@ public class SerialVersionUIDBuilder extends JavaRecursiveElementVisitor {
           String returnTypeSignature =
             MemberSignature.createTypeSignature(method.getReturnType())
               .replace('/', '.');
-          @NonNls StringBuilder signatureBuffer =
+          StringBuilder signatureBuffer =
             new StringBuilder();
           signatureBuffer.append("(L");
           signatureBuffer.append(clazz.getQualifiedName())

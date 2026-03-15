@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring.changeSignature;
 import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import com.intellij.java.language.psi.*;
 import consulo.language.editor.refactoring.changeSignature.ChangeInfo;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -36,16 +35,13 @@ public interface JavaChangeInfo extends ChangeInfo {
 
   CanonicalTypes.Type getNewReturnType();
 
-  @Nonnull
   JavaParameterInfo[] getNewParameters();
 
   @PsiModifier.ModifierConstant
   String getNewVisibility();
 
-  @Nonnull
   String[] getOldParameterNames();
 
-  @Nonnull
   String[] getOldParameterTypes();
 
   ThrownExceptionInfo[] getNewExceptions();

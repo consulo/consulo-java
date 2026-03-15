@@ -1,5 +1,4 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class BrokenAlignment {
 
@@ -8,7 +7,7 @@ public class BrokenAlignment {
     output2(object);
   }
 
-  public static void output2(@Nonnull Object value) {
+  public static void output2(Object value) {
     System.out.println(value);
   }
 }

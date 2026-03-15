@@ -32,7 +32,6 @@ import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author mike
@@ -54,13 +53,12 @@ public class SurroundWithTryCatchFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.surroundWithTryCatchFix();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myStatement != null &&
            myStatement.isValid() &&
            (!(myStatement instanceof PsiExpressionStatement) ||
@@ -68,7 +66,7 @@ public class SurroundWithTryCatchFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     int col = editor.getCaretModel().getLogicalPosition().column;

@@ -28,7 +28,6 @@ import consulo.language.psi.stub.StubIndex;
 import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -40,14 +39,13 @@ public class JavaFullClassNameIndex extends IntStubIndexExtension<PsiClass> {
     return ourInstance;
   }
 
-  @Nonnull
   @Override
   public StubIndexKey<Integer, PsiClass> getKey() {
     return JavaStubIndexKeys.CLASS_FQN;
   }
 
   @Override
-  public Collection<PsiClass> get(@Nonnull final Integer integer, @Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiClass> get(final Integer integer, final Project project, final ProjectAwareSearchScope scope) {
     return StubIndex.getElements(getKey(), integer, project, new JavaSourceFilterScope(scope), PsiClass.class);
   }
 }

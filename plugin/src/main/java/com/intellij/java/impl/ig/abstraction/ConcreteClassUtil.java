@@ -17,7 +17,7 @@ package com.intellij.java.impl.ig.abstraction;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.impl.ig.psiutils.LibraryUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class ConcreteClassUtil {
 

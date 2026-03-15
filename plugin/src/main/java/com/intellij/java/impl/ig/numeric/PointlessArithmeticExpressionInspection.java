@@ -29,7 +29,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -62,7 +61,6 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
         return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreExpressionsContainingConstants");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.pointlessArithmeticExpressionDisplayName();
@@ -74,7 +72,6 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         String replacementExpression = calculateReplacementExpression((PsiExpression) infos[0]);
         return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(replacementExpression).get();
@@ -131,7 +128,6 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
     }
 
     private class PointlessArithmeticFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
         }
@@ -151,7 +147,7 @@ public class PointlessArithmeticExpressionInspection extends BaseInspection {
 
     private class PointlessArithmeticVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+        public void visitBinaryExpression(PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
             PsiExpression rhs = expression.getROperand();
             if (rhs == null) {

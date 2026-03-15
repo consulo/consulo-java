@@ -17,7 +17,6 @@ package com.intellij.java.analysis.codeInspection.reference;
 
 import consulo.language.editor.inspection.reference.RefVisitor;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Visitor for reference graph nodes.
@@ -28,23 +27,23 @@ import jakarta.annotation.Nonnull;
  */
 public class RefJavaVisitor extends RefVisitor
 {
-  public void visitField(@Nonnull RefField field) {
+  public void visitField(RefField field) {
     visitElement(field);
   }
 
-  public void visitMethod(@Nonnull RefMethod method) {
+  public void visitMethod(RefMethod method) {
     visitElement(method);
   }
 
-  public void visitParameter(@Nonnull RefParameter parameter) {
+  public void visitParameter(RefParameter parameter) {
     visitElement(parameter);
   }
 
-  public void visitClass(@Nonnull RefClass aClass) {
+  public void visitClass(RefClass aClass) {
     visitElement(aClass);
   }
 
-  public void visitPackage(@Nonnull RefPackage aPackage) {
+  public void visitPackage(RefPackage aPackage) {
     visitElement(aPackage);
   }
 }

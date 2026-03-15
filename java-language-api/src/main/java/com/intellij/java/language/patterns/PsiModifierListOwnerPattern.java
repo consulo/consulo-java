@@ -23,15 +23,13 @@ import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.PsiElementPattern;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self extends PsiModifierListOwnerPattern<T,Self>> extends PsiElementPattern<T,Self> {
-  public PsiModifierListOwnerPattern(@Nonnull final InitialPatternCondition<T> condition) {
+  public PsiModifierListOwnerPattern(final InitialPatternCondition<T> condition) {
     super(condition);
   }
 
@@ -41,7 +39,7 @@ public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self ex
 
   public Self withModifiers(final String... modifiers) {
     return with(new PatternCondition<T>("withModifiers") {
-      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
+      public boolean accepts(final T t, final ProcessingContext context) {
         return ContainerUtil.and(modifiers, s -> t.hasModifierProperty(s));
       }
     });
@@ -49,31 +47,31 @@ public class PsiModifierListOwnerPattern<T extends PsiModifierListOwner, Self ex
 
   public Self withoutModifiers(final String... modifiers) {
     return with(new PatternCondition<T>("withoutModifiers") {
-      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
+      public boolean accepts(final T t, final ProcessingContext context) {
         return ContainerUtil.and(modifiers, s -> !t.hasModifierProperty(s));
       }
     });
   }
 
-  public Self withAnnotation(@NonNls final String qualifiedName) {
+  public Self withAnnotation(final String qualifiedName) {
     return with(new PatternCondition<T>("withAnnotation") {
-      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
+      public boolean accepts(final T t, final ProcessingContext context) {
         final PsiModifierList modifierList = t.getModifierList();
         return modifierList != null && modifierList.findAnnotation(qualifiedName) != null;
       }
     });
   }
 
-  public Self withAnnotations(@NonNls final String... qualifiedNames) {
+  public Self withAnnotations(final String... qualifiedNames) {
     return with(new PatternCondition<T>("withAnnotations") {
-      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
+      public boolean accepts(final T t, final ProcessingContext context) {
         return AnnotationUtil.findAnnotation(t, qualifiedNames) != null;
       }
     });
   }
 
   public static class Capture<T extends PsiModifierListOwner> extends PsiModifierListOwnerPattern<T, Capture<T>> {
-    public Capture(@Nonnull InitialPatternCondition<T> condition) {
+    public Capture(InitialPatternCondition<T> condition) {
       super(condition);
     }
   }

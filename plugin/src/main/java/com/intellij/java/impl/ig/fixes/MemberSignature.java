@@ -16,22 +16,21 @@
 package com.intellij.java.impl.ig.fixes;
 
 import com.intellij.java.language.psi.*;
-import org.jetbrains.annotations.NonNls;
 
 import java.lang.reflect.Modifier;
 
 public class MemberSignature implements Comparable<MemberSignature> {
-  @NonNls private static final String CONSTRUCTOR_NAME = "<init>";
-  @NonNls private static final String INITIALIZER_SIGNATURE = "()V";
-  @NonNls private static final MemberSignature ASSERTIONS_DISABLED_FIELD =
+  private static final String CONSTRUCTOR_NAME = "<init>";
+  private static final String INITIALIZER_SIGNATURE = "()V";
+  private static final MemberSignature ASSERTIONS_DISABLED_FIELD =
     new MemberSignature("$assertionsDisabled", Modifier.STATIC | Modifier.FINAL, "Z");
-  @NonNls private static final MemberSignature CLASS_ACCESS_METHOD =
+  private static final MemberSignature CLASS_ACCESS_METHOD =
     new MemberSignature("class$", Modifier.STATIC, "(Ljava.lang.String;)Ljava.lang.Class;");
-  @NonNls private static final MemberSignature PACKAGE_PRIVATE_CONSTRUCTOR =
+  private static final MemberSignature PACKAGE_PRIVATE_CONSTRUCTOR =
     new MemberSignature(CONSTRUCTOR_NAME, 0, INITIALIZER_SIGNATURE);
-  @NonNls private static final MemberSignature PUBLIC_CONSTRUCTOR =
+  private static final MemberSignature PUBLIC_CONSTRUCTOR =
     new MemberSignature(CONSTRUCTOR_NAME, Modifier.PUBLIC, INITIALIZER_SIGNATURE);
-  @NonNls private static final MemberSignature STATIC_INITIALIZER =
+  private static final MemberSignature STATIC_INITIALIZER =
     new MemberSignature("<clinit>", Modifier.STATIC, INITIALIZER_SIGNATURE);
 
   private final int modifiers;
@@ -57,7 +56,7 @@ public class MemberSignature implements Comparable<MemberSignature> {
     }
   }
 
-  public MemberSignature(@NonNls String name, int modifiers, @NonNls String signature) {
+  public MemberSignature(String name, int modifiers, String signature) {
     super();
     this.name = name;
     this.modifiers = modifiers;
@@ -134,7 +133,7 @@ public class MemberSignature implements Comparable<MemberSignature> {
   }
 
   public static String createPrimitiveType(PsiPrimitiveType primitiveType) {
-    @NonNls String primitypeTypeSignature;
+    String primitypeTypeSignature;
     if (primitiveType.equals(PsiType.INT)) {
       primitypeTypeSignature = "I";
     }

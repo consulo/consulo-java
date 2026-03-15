@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.scope;
 
-import org.jetbrains.annotations.NonNls;
 
 /**
  * Created by IntelliJ IDEA.
@@ -25,7 +24,7 @@ import org.jetbrains.annotations.NonNls;
  * To change this template use Options | File Templates.
  */
 public class MethodProcessorSetupFailedException extends Exception{
-  public MethodProcessorSetupFailedException(@NonNls String message){
+  public MethodProcessorSetupFailedException(String message){
     super(message);
   }
 

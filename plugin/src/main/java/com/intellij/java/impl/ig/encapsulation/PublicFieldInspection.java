@@ -29,8 +29,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,14 +44,12 @@ public class PublicFieldInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.publicFieldDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.publicFieldProblemDescriptor().get();
     }
@@ -72,7 +69,6 @@ public class PublicFieldInspection extends BaseInspection {
         return panel;
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         List<InspectionGadgetsFix> fixes = new ArrayList();
@@ -95,7 +91,7 @@ public class PublicFieldInspection extends BaseInspection {
     private class PublicFieldVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
                 return;
             }

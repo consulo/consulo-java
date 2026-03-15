@@ -3,10 +3,8 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
 
 public interface DfFloatType extends DfFloatingPointType {
-  @Nonnull
   @Override
   default PsiPrimitiveType getPsiType() {
     return PsiType.FLOAT;

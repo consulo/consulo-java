@@ -17,7 +17,6 @@ package com.intellij.java.impl.refactoring.changeSignature;
 
 import consulo.language.editor.refactoring.changeSignature.PsiCallReference;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -25,7 +24,7 @@ import jakarta.annotation.Nonnull;
 public class CallReferenceUsageInfo extends UsageInfo {
   private final PsiCallReference myReference;
 
-  public CallReferenceUsageInfo(@Nonnull PsiCallReference reference) {
+  public CallReferenceUsageInfo(PsiCallReference reference) {
     super(reference);
     myReference = reference;
   }

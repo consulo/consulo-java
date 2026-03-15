@@ -27,7 +27,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -48,7 +47,7 @@ public abstract class MethodArgumentFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return
         myToType != null
         && myToType.isValid()
@@ -64,7 +63,7 @@ public abstract class MethodArgumentFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiExpression expression = myArgList.getExpressions()[myIndex];
 

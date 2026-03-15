@@ -28,13 +28,11 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
 public abstract class ClassIndependentOfModuleInspection extends BaseGlobalInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classIndependentOfModuleDisplayName();
@@ -44,11 +42,11 @@ public abstract class ClassIndependentOfModuleInspection extends BaseGlobalInspe
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        Object state
     ) {
         if (!(refEntity instanceof RefClass refClass)) {
             return null;

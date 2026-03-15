@@ -24,8 +24,7 @@ import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 
 @ServiceAPI(ComponentScope.APPLICATION)
@@ -43,29 +42,27 @@ public interface BatchSuppressManager {
     }
   }
 
-  @Nonnull
-  SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key);
+  SuppressQuickFix[] createBatchSuppressActions(HighlightDisplayKey key);
 
-  boolean isSuppressedFor(@Nonnull PsiElement element, String toolId);
+  boolean isSuppressedFor(PsiElement element, String toolId);
 
-  PsiElement getElementMemberSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
-
-  @Nullable
-  PsiElement getAnnotationMemberSuppressedIn(@Nonnull PsiModifierListOwner owner, String inspectionToolID);
+  PsiElement getElementMemberSuppressedIn(PsiDocCommentOwner owner, String inspectionToolID);
 
   @Nullable
-  PsiElement getDocCommentToolSuppressedIn(@Nonnull PsiDocCommentOwner owner, String inspectionToolID);
-
-  @Nonnull
-  Collection<String> getInspectionIdsSuppressedInAnnotation(@Nonnull PsiModifierListOwner owner);
+  PsiElement getAnnotationMemberSuppressedIn(PsiModifierListOwner owner, String inspectionToolID);
 
   @Nullable
-  String getSuppressedInspectionIdsIn(@Nonnull PsiElement element);
+  PsiElement getDocCommentToolSuppressedIn(PsiDocCommentOwner owner, String inspectionToolID);
+
+  Collection<String> getInspectionIdsSuppressedInAnnotation(PsiModifierListOwner owner);
 
   @Nullable
-  PsiElement getElementToolSuppressedIn(@Nonnull PsiElement place, String toolId);
+  String getSuppressedInspectionIdsIn(PsiElement element);
 
-  boolean canHave15Suppressions(@Nonnull PsiElement file);
+  @Nullable
+  PsiElement getElementToolSuppressedIn(PsiElement place, String toolId);
 
-  boolean alreadyHas14Suppressions(@Nonnull PsiDocCommentOwner commentOwner);
+  boolean canHave15Suppressions(PsiElement file);
+
+  boolean alreadyHas14Suppressions(PsiDocCommentOwner commentOwner);
 }

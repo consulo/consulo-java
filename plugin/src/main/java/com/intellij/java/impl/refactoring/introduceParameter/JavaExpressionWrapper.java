@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.introduceParameter;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
@@ -27,11 +26,10 @@ import com.intellij.java.language.psi.PsiType;
 public class JavaExpressionWrapper implements IntroduceParameterData.ExpressionWrapper {
   private final PsiExpression myExpression;
 
-  public JavaExpressionWrapper(@Nonnull PsiExpression expression) {
+  public JavaExpressionWrapper(PsiExpression expression) {
     myExpression = expression;
   }
 
-  @Nonnull
   @Override
   public String getText() {
     return myExpression.getText();
@@ -42,7 +40,6 @@ public class JavaExpressionWrapper implements IntroduceParameterData.ExpressionW
     return myExpression.getType();
   }
 
-  @Nonnull
   @Override
   public PsiElement getExpression() {
     return myExpression;

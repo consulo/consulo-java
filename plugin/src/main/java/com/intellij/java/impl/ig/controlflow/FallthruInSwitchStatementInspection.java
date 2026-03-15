@@ -29,25 +29,21 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.regex.Pattern;
 
 @ExtensionImpl
 public class FallthruInSwitchStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.fallthruInSwitchStatementDisplayName();
     }
 
-    @Nonnull
     public String getID() {
         return "fallthrough";
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.fallthruInSwitchStatementProblemDescriptor().get();
     }
@@ -62,7 +58,6 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
     }
 
     private static class FallthruInSwitchStatementFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.fallthruInSwitchStatementQuickfix();
@@ -83,7 +78,7 @@ public class FallthruInSwitchStatementInspection extends BaseInspection {
         private static final Pattern commentPattern = Pattern.compile("(?i)falls?\\s*thro?u");
 
         @Override
-        public void visitSwitchStatement(@Nonnull PsiSwitchStatement switchStatement) {
+        public void visitSwitchStatement(PsiSwitchStatement switchStatement) {
             super.visitSwitchStatement(switchStatement);
             PsiCodeBlock body = switchStatement.getBody();
             if (body == null) {

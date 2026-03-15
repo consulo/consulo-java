@@ -27,7 +27,6 @@ import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -42,8 +41,8 @@ public class MethodSuperSearcher implements SuperMethodsSearchExecutor {
 
     @Override
     public boolean execute(
-        @Nonnull SuperMethodsSearch.SearchParameters queryParameters,
-        @Nonnull Predicate<? super MethodSignatureBackedByPsiMethod> consumer
+        SuperMethodsSearch.SearchParameters queryParameters,
+        Predicate<? super MethodSignatureBackedByPsiMethod> consumer
     ) {
         PsiClass parentClass = queryParameters.getPsiClass();
         PsiMethod method = queryParameters.getMethod();

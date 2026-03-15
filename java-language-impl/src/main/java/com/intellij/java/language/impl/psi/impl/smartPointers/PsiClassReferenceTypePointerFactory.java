@@ -24,8 +24,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by Max Medvedev on 10/25/13
@@ -36,7 +35,7 @@ public class PsiClassReferenceTypePointerFactory implements ClassTypePointerFact
 
   @Nullable
   @Override
-  public SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project) {
+  public SmartTypePointer createClassTypePointer(PsiClassType classType, Project project) {
     if (classType instanceof PsiClassReferenceType) {
       return new ClassReferenceTypePointer((PsiClassReferenceType)classType, project);
     }
@@ -49,7 +48,7 @@ public class PsiClassReferenceTypePointerFactory implements ClassTypePointerFact
     private final String myReferenceText;
     private final Project myProject;
 
-    ClassReferenceTypePointer(@Nonnull PsiClassReferenceType type, Project project) {
+    ClassReferenceTypePointer(PsiClassReferenceType type, Project project) {
       super(type);
       myProject = project;
 

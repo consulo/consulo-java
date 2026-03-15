@@ -24,16 +24,13 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestedAssignmentInspection extends BaseInspection {
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nestedAssignmentDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nestedAssignmentProblemDescriptor().get();
     }
@@ -46,7 +43,7 @@ public class NestedAssignmentInspection extends BaseInspection {
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression expression
+            PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
             PsiElement parent = expression.getParent();

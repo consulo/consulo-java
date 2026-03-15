@@ -34,7 +34,6 @@ import consulo.module.content.ProjectRootManager;
 import consulo.usage.UsageViewBundle;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -43,7 +42,7 @@ import jakarta.annotation.Nonnull;
 public class JavaFindUsagesProvider implements FindUsagesProvider {
 
   @Override
-  public boolean canFindUsagesFor(@Nonnull PsiElement element) {
+  public boolean canFindUsagesFor(PsiElement element) {
     if (element instanceof PsiDirectory) {
       PsiPackage psiPackage = JavaDirectoryService.getInstance().getPackage((PsiDirectory) element);
       return psiPackage != null && psiPackage.getQualifiedName().length() != 0;
@@ -59,7 +58,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
   }
 
   @Override
-  public String getHelpId(@Nonnull PsiElement element) {
+  public String getHelpId(PsiElement element) {
     if (element instanceof PsiPackage) {
       return HelpID.FIND_PACKAGE_USAGES;
     }
@@ -76,8 +75,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
   }
 
   @Override
-  @Nonnull
-  public String getType(@Nonnull PsiElement element) {
+  public String getType(PsiElement element) {
     if (element instanceof PsiDirectory) {
       return LangBundle.message("terms.directory");
     }
@@ -137,8 +135,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
   }
 
   @Override
-  @Nonnull
-  public String getDescriptiveName(@Nonnull PsiElement element) {
+  public String getDescriptiveName(PsiElement element) {
     if (ThrowSearchUtil.isSearchable(element)) {
       return ThrowSearchUtil.getSearchableTypeName(element);
     }
@@ -214,8 +211,7 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
   }
 
   @Override
-  @Nonnull
-  public String getNodeText(@Nonnull PsiElement element, boolean useFullName) {
+  public String getNodeText(PsiElement element, boolean useFullName) {
     if (element instanceof PsiDirectory) {
       return getPackageName((PsiDirectory) element, false);
     }
@@ -350,7 +346,6 @@ public class JavaFindUsagesProvider implements FindUsagesProvider {
     return null;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

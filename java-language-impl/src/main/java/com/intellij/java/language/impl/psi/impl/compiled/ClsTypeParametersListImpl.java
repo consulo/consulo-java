@@ -28,18 +28,17 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
  */
 public class ClsTypeParametersListImpl extends ClsRepositoryPsiElement<PsiTypeParameterListStub> implements PsiTypeParameterList {
-  public ClsTypeParametersListImpl(@Nonnull PsiTypeParameterListStub stub) {
+  public ClsTypeParametersListImpl(PsiTypeParameterListStub stub) {
     super(stub);
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     final PsiTypeParameter[] params = getTypeParameters();
     if (params.length != 0) {
       buffer.append('<');
@@ -52,13 +51,13 @@ public class ClsTypeParametersListImpl extends ClsRepositoryPsiElement<PsiTypePa
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(getTypeParameters(), SourceTreeToPsiMap.<PsiTypeParameterList>treeToPsiNotNull(element).getTypeParameters());
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitTypeParameterList(this);
     }
@@ -79,10 +78,10 @@ public class ClsTypeParametersListImpl extends ClsRepositoryPsiElement<PsiTypePa
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     final PsiTypeParameter[] typeParameters = getTypeParameters();
     for (PsiTypeParameter parameter : typeParameters) {
       if (!processor.execute(parameter, state)) return false;

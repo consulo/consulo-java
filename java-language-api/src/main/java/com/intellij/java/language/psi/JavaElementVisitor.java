@@ -3,354 +3,353 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.javadoc.*;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
 
 public abstract class JavaElementVisitor extends PsiElementVisitor {
-  public void visitAnnotation(@Nonnull PsiAnnotation annotation) {
+  public void visitAnnotation(PsiAnnotation annotation) {
     visitElement(annotation);
   }
 
-  public void visitAnnotationArrayInitializer(@Nonnull PsiArrayInitializerMemberValue initializer) {
+  public void visitAnnotationArrayInitializer(PsiArrayInitializerMemberValue initializer) {
     visitElement(initializer);
   }
 
-  public void visitAnnotationMethod(@Nonnull PsiAnnotationMethod method) {
+  public void visitAnnotationMethod(PsiAnnotationMethod method) {
     visitMethod(method);
   }
 
-  public void visitAnnotationParameterList(@Nonnull PsiAnnotationParameterList list) {
+  public void visitAnnotationParameterList(PsiAnnotationParameterList list) {
     visitElement(list);
   }
 
-  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(PsiAnonymousClass aClass) {
     visitClass(aClass);
   }
 
-  public void visitArrayAccessExpression(@Nonnull PsiArrayAccessExpression expression) {
+  public void visitArrayAccessExpression(PsiArrayAccessExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitArrayInitializerExpression(@Nonnull PsiArrayInitializerExpression expression) {
+  public void visitArrayInitializerExpression(PsiArrayInitializerExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitAssertStatement(@Nonnull PsiAssertStatement statement) {
+  public void visitAssertStatement(PsiAssertStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+  public void visitAssignmentExpression(PsiAssignmentExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+  public void visitBinaryExpression(PsiBinaryExpression expression) {
     visitPolyadicExpression(expression);
   }
 
-  public void visitBlockStatement(@Nonnull PsiBlockStatement statement) {
+  public void visitBlockStatement(PsiBlockStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+  public void visitBreakStatement(PsiBreakStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitCallExpression(@Nonnull PsiCallExpression callExpression) {
+  public void visitCallExpression(PsiCallExpression callExpression) {
     visitExpression(callExpression);
   }
 
-  public void visitCaseLabelElementList(@Nonnull PsiCaseLabelElementList list) {
+  public void visitCaseLabelElementList(PsiCaseLabelElementList list) {
     visitElement(list);
   }
 
-  public void visitCatchSection(@Nonnull PsiCatchSection section) {
+  public void visitCatchSection(PsiCatchSection section) {
     visitElement(section);
   }
 
-  public void visitClass(@Nonnull PsiClass aClass) {
+  public void visitClass(PsiClass aClass) {
     visitElement(aClass);
   }
 
-  public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
+  public void visitClassInitializer(PsiClassInitializer initializer) {
     visitElement(initializer);
   }
 
-  public void visitClassObjectAccessExpression(@Nonnull PsiClassObjectAccessExpression expression) {
+  public void visitClassObjectAccessExpression(PsiClassObjectAccessExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitCodeBlock(@Nonnull PsiCodeBlock block) {
+  public void visitCodeBlock(PsiCodeBlock block) {
     visitElement(block);
   }
 
-  public void visitCodeFragment(@Nonnull JavaCodeFragment codeFragment) {
+  public void visitCodeFragment(JavaCodeFragment codeFragment) {
     visitFile(codeFragment);
   }
 
-  public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression) {
+  public void visitConditionalExpression(PsiConditionalExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
+  public void visitContinueStatement(PsiContinueStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitDeclarationStatement(@Nonnull PsiDeclarationStatement statement) {
+  public void visitDeclarationStatement(PsiDeclarationStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitDeconstructionList(@Nonnull PsiDeconstructionList deconstructionList) {
+  public void visitDeconstructionList(PsiDeconstructionList deconstructionList) {
     visitElement(deconstructionList);
   }
 
-  public void visitDeconstructionPattern(@Nonnull PsiDeconstructionPattern deconstructionPattern) {
+  public void visitDeconstructionPattern(PsiDeconstructionPattern deconstructionPattern) {
     visitPattern(deconstructionPattern);
   }
 
-  public void visitDefaultCaseLabelElement(@Nonnull PsiDefaultCaseLabelElement element) {
+  public void visitDefaultCaseLabelElement(PsiDefaultCaseLabelElement element) {
     visitElement(element);
   }
 
-  public void visitDocComment(@Nonnull PsiDocComment comment) {
+  public void visitDocComment(PsiDocComment comment) {
     visitComment(comment);
   }
 
-  public void visitDocTag(@Nonnull PsiDocTag tag) {
+  public void visitDocTag(PsiDocTag tag) {
     visitElement(tag);
   }
 
-  public void visitDocTagValue(@Nonnull PsiDocTagValue value) {
+  public void visitDocTagValue(PsiDocTagValue value) {
     visitElement(value);
   }
 
-  public void visitDocToken(@Nonnull PsiDocToken token) {
+  public void visitDocToken(PsiDocToken token) {
     visitElement(token);
   }
 
-  public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+  public void visitDoWhileStatement(PsiDoWhileStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitEmptyStatement(@Nonnull PsiEmptyStatement statement) {
+  public void visitEmptyStatement(PsiEmptyStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitEnumConstant(@Nonnull PsiEnumConstant enumConstant) {
+  public void visitEnumConstant(PsiEnumConstant enumConstant) {
     visitField(enumConstant);
   }
 
-  public void visitEnumConstantInitializer(@Nonnull PsiEnumConstantInitializer enumConstantInitializer) {
+  public void visitEnumConstantInitializer(PsiEnumConstantInitializer enumConstantInitializer) {
     visitAnonymousClass(enumConstantInitializer);
   }
 
-  public void visitExpression(@Nonnull PsiExpression expression) {
+  public void visitExpression(PsiExpression expression) {
     visitElement(expression);
   }
 
-  public void visitExpressionList(@Nonnull PsiExpressionList list) {
+  public void visitExpressionList(PsiExpressionList list) {
     visitElement(list);
   }
 
-  public void visitExpressionListStatement(@Nonnull PsiExpressionListStatement statement) {
+  public void visitExpressionListStatement(PsiExpressionListStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
+  public void visitExpressionStatement(PsiExpressionStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitField(@Nonnull PsiField field) {
+  public void visitField(PsiField field) {
     visitVariable(field);
   }
 
-  public void visitForeachPatternStatement(@Nonnull PsiForeachPatternStatement statement) {
+  public void visitForeachPatternStatement(PsiForeachPatternStatement statement) {
     visitForeachStatementBase(statement);
   }
 
-  public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+  public void visitForeachStatement(PsiForeachStatement statement) {
     visitForeachStatementBase(statement);
   }
 
-  public void visitForeachStatementBase(@Nonnull PsiForeachStatementBase statement) {
+  public void visitForeachStatementBase(PsiForeachStatementBase statement) {
     visitStatement(statement);
   }
 
-  public void visitForStatement(@Nonnull PsiForStatement statement) {
+  public void visitForStatement(PsiForStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitFragment(@Nonnull PsiFragment fragment) {
+  public void visitFragment(PsiFragment fragment) {
     visitElement(fragment);
   }
 
-  public void visitIdentifier(@Nonnull PsiIdentifier identifier) {
+  public void visitIdentifier(PsiIdentifier identifier) {
     visitJavaToken(identifier);
   }
 
-  public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+  public void visitIfStatement(PsiIfStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitImplicitClass(@Nonnull PsiImplicitClass aClass) {
+  public void visitImplicitClass(PsiImplicitClass aClass) {
     visitClass(aClass);
   }
 
-  public void visitImplicitVariable(@Nonnull ImplicitVariable variable) {
+  public void visitImplicitVariable(ImplicitVariable variable) {
     visitLocalVariable(variable);
   }
 
-  public void visitImportList(@Nonnull PsiImportList list) {
+  public void visitImportList(PsiImportList list) {
     visitElement(list);
   }
 
-  public void visitImportStatement(@Nonnull PsiImportStatement statement) {
+  public void visitImportStatement(PsiImportStatement statement) {
     visitElement(statement);
   }
 
-  public void visitImportStaticReferenceElement(@Nonnull PsiImportStaticReferenceElement reference) {
+  public void visitImportStaticReferenceElement(PsiImportStaticReferenceElement reference) {
     visitReferenceElement(reference);
   }
 
-  public void visitImportStaticStatement(@Nonnull PsiImportStaticStatement statement) {
+  public void visitImportStaticStatement(PsiImportStaticStatement statement) {
     visitElement(statement);
   }
 
-  public void visitInlineDocTag(@Nonnull PsiInlineDocTag tag) {
+  public void visitInlineDocTag(PsiInlineDocTag tag) {
     visitDocTag(tag);
   }
 
-  public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression expression) {
+  public void visitInstanceOfExpression(PsiInstanceOfExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitJavaFile(@Nonnull PsiJavaFile file) {
+  public void visitJavaFile(PsiJavaFile file) {
     visitFile(file);
   }
 
-  public void visitJavaToken(@Nonnull PsiJavaToken token) {
+  public void visitJavaToken(PsiJavaToken token) {
     visitElement(token);
   }
 
-  public void visitKeyword(@Nonnull PsiKeyword keyword) {
+  public void visitKeyword(PsiKeyword keyword) {
     visitJavaToken(keyword);
   }
 
-  public void visitLabeledStatement(@Nonnull PsiLabeledStatement statement) {
+  public void visitLabeledStatement(PsiLabeledStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+  public void visitLambdaExpression(PsiLambdaExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+  public void visitLiteralExpression(PsiLiteralExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+  public void visitLocalVariable(PsiLocalVariable variable) {
     visitVariable(variable);
   }
 
-  public void visitMethod(@Nonnull PsiMethod method) {
+  public void visitMethod(PsiMethod method) {
     visitElement(method);
   }
 
-  public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+  public void visitMethodCallExpression(PsiMethodCallExpression expression) {
     visitCallExpression(expression);
   }
 
-  public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
+  public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
     visitReferenceExpression(expression);
   }
 
-  public void visitModifierList(@Nonnull PsiModifierList list) {
+  public void visitModifierList(PsiModifierList list) {
     visitElement(list);
   }
 
-  public void visitModule(@Nonnull PsiJavaModule module) {
+  public void visitModule(PsiJavaModule module) {
     visitElement(module);
   }
 
-  public void visitModuleReferenceElement(@Nonnull PsiJavaModuleReferenceElement refElement) {
+  public void visitModuleReferenceElement(PsiJavaModuleReferenceElement refElement) {
     visitElement(refElement);
   }
 
-  public void visitModuleStatement(@Nonnull PsiStatement statement) {
+  public void visitModuleStatement(PsiStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitNameValuePair(@Nonnull PsiNameValuePair pair) {
+  public void visitNameValuePair(PsiNameValuePair pair) {
     visitElement(pair);
   }
 
-  public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+  public void visitNewExpression(PsiNewExpression expression) {
     visitCallExpression(expression);
   }
 
-  public void visitPackage(@Nonnull PsiJavaPackage aPackage) {
+  public void visitPackage(PsiJavaPackage aPackage) {
     visitElement(aPackage);
   }
 
-  public void visitPackageAccessibilityStatement(@Nonnull PsiPackageAccessibilityStatement statement) {
+  public void visitPackageAccessibilityStatement(PsiPackageAccessibilityStatement statement) {
     visitModuleStatement(statement);
   }
 
-  public void visitPackageStatement(@Nonnull PsiPackageStatement statement) {
+  public void visitPackageStatement(PsiPackageStatement statement) {
     visitElement(statement);
   }
 
-  public void visitParameter(@Nonnull PsiParameter parameter) {
+  public void visitParameter(PsiParameter parameter) {
     visitVariable(parameter);
   }
 
-  public void visitParameterList(@Nonnull PsiParameterList list) {
+  public void visitParameterList(PsiParameterList list) {
     visitElement(list);
   }
 
-  public void visitParenthesizedExpression(@Nonnull PsiParenthesizedExpression expression) {
+  public void visitParenthesizedExpression(PsiParenthesizedExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitParenthesizedPattern(@Nonnull PsiParenthesizedPattern pattern) {
+  public void visitParenthesizedPattern(PsiParenthesizedPattern pattern) {
     visitPattern(pattern);
   }
 
-  public void visitPattern(@Nonnull PsiPattern pattern) {
+  public void visitPattern(PsiPattern pattern) {
     visitElement(pattern);
   }
 
-  public void visitPatternVariable(@Nonnull PsiPatternVariable variable) {
+  public void visitPatternVariable(PsiPatternVariable variable) {
     visitParameter(variable);
   }
 
-  public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
+  public void visitPolyadicExpression(PsiPolyadicExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression) {
+  public void visitPostfixExpression(PsiPostfixExpression expression) {
     visitUnaryExpression(expression);
   }
 
-  public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+  public void visitPrefixExpression(PsiPrefixExpression expression) {
     visitUnaryExpression(expression);
   }
 
-  public void visitProvidesStatement(@Nonnull PsiProvidesStatement statement) {
+  public void visitProvidesStatement(PsiProvidesStatement statement) {
     visitModuleStatement(statement);
   }
 
-  public void visitReceiverParameter(@Nonnull PsiReceiverParameter parameter) {
+  public void visitReceiverParameter(PsiReceiverParameter parameter) {
     visitVariable(parameter);
   }
 
-  public void visitRecordComponent(@Nonnull PsiRecordComponent recordComponent) {
+  public void visitRecordComponent(PsiRecordComponent recordComponent) {
     visitVariable(recordComponent);
   }
 
-  public void visitRecordHeader(@Nonnull PsiRecordHeader recordHeader) {
+  public void visitRecordHeader(PsiRecordHeader recordHeader) {
     visitElement(recordHeader);
   }
 
-  public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+  public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
     visitElement(reference);
   }
 
@@ -363,150 +362,150 @@ public abstract class JavaElementVisitor extends PsiElementVisitor {
    * All other visitor must decide themselves what implementation (visitReferenceElement() or visitExpression() or none or LOG.error())
    * is appropriate for them.
    */
-  public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+  public void visitReferenceExpression(PsiReferenceExpression expression) {
   }
 
-  public void visitReferenceList(@Nonnull PsiReferenceList list) {
+  public void visitReferenceList(PsiReferenceList list) {
     visitElement(list);
   }
 
-  public void visitReferenceParameterList(@Nonnull PsiReferenceParameterList list) {
+  public void visitReferenceParameterList(PsiReferenceParameterList list) {
     visitElement(list);
   }
 
-  public void visitRequiresStatement(@Nonnull PsiRequiresStatement statement) {
+  public void visitRequiresStatement(PsiRequiresStatement statement) {
     visitModuleStatement(statement);
   }
 
-  public void visitResourceExpression(@Nonnull PsiResourceExpression expression) {
+  public void visitResourceExpression(PsiResourceExpression expression) {
     visitElement(expression);
   }
 
-  public void visitResourceList(@Nonnull PsiResourceList resourceList) {
+  public void visitResourceList(PsiResourceList resourceList) {
     visitElement(resourceList);
   }
 
-  public void visitResourceVariable(@Nonnull PsiResourceVariable variable) {
+  public void visitResourceVariable(PsiResourceVariable variable) {
     visitLocalVariable(variable);
   }
 
-  public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+  public void visitReturnStatement(PsiReturnStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitSnippetAttribute(@Nonnull PsiSnippetAttribute attribute) {
+  public void visitSnippetAttribute(PsiSnippetAttribute attribute) {
     visitElement(attribute);
   }
 
-  public void visitSnippetAttributeList(@Nonnull PsiSnippetAttributeList attributeList) {
+  public void visitSnippetAttributeList(PsiSnippetAttributeList attributeList) {
     visitElement(attributeList);
   }
 
-  public void visitSnippetAttributeValue(@Nonnull PsiSnippetAttributeValue attributeValue) {
+  public void visitSnippetAttributeValue(PsiSnippetAttributeValue attributeValue) {
     visitElement(attributeValue);
   }
 
-  public void visitSnippetDocTagBody(@Nonnull PsiSnippetDocTagBody body) {
+  public void visitSnippetDocTagBody(PsiSnippetDocTagBody body) {
     visitElement(body);
   }
 
-  public void visitSnippetDocTagValue(@Nonnull PsiSnippetDocTagValue value) {
+  public void visitSnippetDocTagValue(PsiSnippetDocTagValue value) {
     visitElement(value);
   }
 
-  public void visitSnippetTag(@Nonnull PsiSnippetDocTag snippetDocTag) {
+  public void visitSnippetTag(PsiSnippetDocTag snippetDocTag) {
     visitInlineDocTag(snippetDocTag);
   }
 
-  public void visitStatement(@Nonnull PsiStatement statement) {
+  public void visitStatement(PsiStatement statement) {
     visitElement(statement);
   }
 
-  public void visitSuperExpression(@Nonnull PsiSuperExpression expression) {
+  public void visitSuperExpression(PsiSuperExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitSwitchExpression(@Nonnull PsiSwitchExpression expression) {
+  public void visitSwitchExpression(PsiSwitchExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitSwitchLabeledRuleStatement(@Nonnull PsiSwitchLabeledRuleStatement statement) {
+  public void visitSwitchLabeledRuleStatement(PsiSwitchLabeledRuleStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitSwitchLabelStatement(@Nonnull PsiSwitchLabelStatement statement) {
+  public void visitSwitchLabelStatement(PsiSwitchLabelStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+  public void visitSwitchStatement(PsiSwitchStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
+  public void visitSynchronizedStatement(PsiSynchronizedStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitTemplate(@Nonnull PsiTemplate template) {
+  public void visitTemplate(PsiTemplate template) {
     visitElement(template);
   }
 
-  public void visitTemplateExpression(@Nonnull PsiTemplateExpression expression) {
+  public void visitTemplateExpression(PsiTemplateExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitThisExpression(@Nonnull PsiThisExpression expression) {
+  public void visitThisExpression(PsiThisExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitThrowStatement(@Nonnull PsiThrowStatement statement) {
+  public void visitThrowStatement(PsiThrowStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+  public void visitTryStatement(PsiTryStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
+  public void visitTypeCastExpression(PsiTypeCastExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitTypeElement(@Nonnull PsiTypeElement type) {
+  public void visitTypeElement(PsiTypeElement type) {
     visitElement(type);
   }
 
-  public void visitTypeParameter(@Nonnull PsiTypeParameter classParameter) {
+  public void visitTypeParameter(PsiTypeParameter classParameter) {
     visitClass(classParameter);
   }
 
-  public void visitTypeParameterList(@Nonnull PsiTypeParameterList list) {
+  public void visitTypeParameterList(PsiTypeParameterList list) {
     visitElement(list);
   }
 
-  public void visitTypeTestPattern(@Nonnull PsiTypeTestPattern pattern) {
+  public void visitTypeTestPattern(PsiTypeTestPattern pattern) {
     visitPattern(pattern);
   }
 
-  public void visitUnaryExpression(@Nonnull PsiUnaryExpression expression) {
+  public void visitUnaryExpression(PsiUnaryExpression expression) {
     visitExpression(expression);
   }
 
-  public void visitUnnamedPattern(@Nonnull PsiUnnamedPattern pattern) {
+  public void visitUnnamedPattern(PsiUnnamedPattern pattern) {
     visitPattern(pattern);
   }
 
-  public void visitUsesStatement(@Nonnull PsiUsesStatement statement) {
+  public void visitUsesStatement(PsiUsesStatement statement) {
     visitModuleStatement(statement);
   }
 
-  public void visitVariable(@Nonnull PsiVariable variable) {
+  public void visitVariable(PsiVariable variable) {
     visitElement(variable);
   }
 
-  public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+  public void visitWhileStatement(PsiWhileStatement statement) {
     visitStatement(statement);
   }
 
-  public void visitYieldStatement(@Nonnull PsiYieldStatement statement) {
+  public void visitYieldStatement(PsiYieldStatement statement) {
     visitStatement(statement);
   }
 }

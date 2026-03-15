@@ -17,7 +17,6 @@ package com.intellij.java.language.impl.psi.scope.processor;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 import consulo.util.dataholder.Key;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifier;
@@ -53,7 +52,7 @@ public abstract class VariablesProcessor extends BaseScopeProcessor implements E
 
   /** Always return true since we wanna get all vars in scope */
   @Override
-  public boolean execute(@Nonnull PsiElement pe, ResolveState state){
+  public boolean execute(PsiElement pe, ResolveState state){
     if(pe instanceof PsiVariable){
       final PsiVariable pvar = (PsiVariable)pe;
       if(!myStaticSensitiveFlag || !myStaticScopeFlag || pvar.hasModifierProperty(PsiModifier.STATIC)){
@@ -80,7 +79,7 @@ public abstract class VariablesProcessor extends BaseScopeProcessor implements E
   }
 
   @Override
-  public <T> T getHint(@Nonnull Key<T> hintKey) {
+  public <T> T getHint(Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       return (T)this;
     }

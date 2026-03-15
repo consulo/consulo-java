@@ -28,8 +28,7 @@ import consulo.language.psi.SyntheticElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -38,14 +37,13 @@ import jakarta.annotation.Nullable;
 @IntentionMetaData(ignoreId = "java.EncapsulateFieldAction", categories = {"Java", "Refactorings"}, fileExtensions = "java")
 public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionEncapsulateFieldText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (element instanceof SyntheticElement) {
       return false;
     }
@@ -55,7 +53,7 @@ public class EncapsulateFieldAction extends BaseRefactoringIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     PsiField field = getField(element);
     if (field == null) {
       return;

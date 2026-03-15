@@ -17,7 +17,7 @@ package com.intellij.java.impl.generate.template;
 
 import java.io.Serializable;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A template contains the method body and the filename of the resource where

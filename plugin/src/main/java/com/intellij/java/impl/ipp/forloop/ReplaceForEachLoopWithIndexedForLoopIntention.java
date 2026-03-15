@@ -31,28 +31,24 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceForEachLoopWithIndexedForLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceForEachLoopWithIndexedForLoopIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new IndexedForEachLoopPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiForeachStatement statement = (PsiForeachStatement) element.getParent();
         if (statement == null) {
             return;
@@ -78,7 +74,7 @@ public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
             context = statement;
         }
         String iteratedValueText = getReferenceToIterate(iteratedValue, context);
-        @NonNls StringBuilder newStatement = new StringBuilder();
+        StringBuilder newStatement = new StringBuilder();
         String indexText = createVariableName("i", PsiType.INT, statement);
         createForLoopDeclaration(statement, iteratedValue, isArray, iteratedValueText, newStatement, indexText);
         Project project = statement.getProject();
@@ -256,7 +252,7 @@ public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
 
     public static String createVariableName(
         @Nullable String baseName,
-        @Nonnull PsiExpression assignedExpression) {
+        PsiExpression assignedExpression) {
         Project project = assignedExpression.getProject();
         JavaCodeStyleManager codeStyleManager =
             JavaCodeStyleManager.getInstance(project);
@@ -272,8 +268,8 @@ public class ReplaceForEachLoopWithIndexedForLoopIntention extends Intention {
     }
 
     public static String createVariableName(@Nullable String baseName,
-                                            @Nonnull PsiType type,
-                                            @Nonnull PsiElement context) {
+                                            PsiType type,
+                                            PsiElement context) {
         Project project = context.getProject();
         JavaCodeStyleManager codeStyleManager =
             JavaCodeStyleManager.getInstance(project);

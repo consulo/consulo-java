@@ -31,12 +31,10 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class UnnecessarySemicolonInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessarySemicolonDisplayName();
@@ -48,7 +46,6 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessarySemicolonProblemDescriptor().get();
     }
@@ -64,7 +61,6 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
     }
 
     private static class UnnecessarySemicolonFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessarySemicolonRemoveQuickfix();
@@ -111,7 +107,7 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             super.visitClass(aClass);
 
             findUnnecessarySemicolonsAfterEnumConstants(aClass);
@@ -146,7 +142,7 @@ public class UnnecessarySemicolonInspection extends BaseInspection {
             registerError(element);
         }
 
-        private void findUnnecessarySemicolonsAfterEnumConstants(@Nonnull PsiClass aClass) {
+        private void findUnnecessarySemicolonsAfterEnumConstants(PsiClass aClass) {
             PsiElement child = aClass.getFirstChild();
             while (child != null) {
                 if (child instanceof PsiJavaToken) {

@@ -30,8 +30,7 @@ import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -43,19 +42,16 @@ import java.util.Set;
  */
 @ExtensionImpl
 public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool {
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.redundantThrowsDeclaration();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "RedundantThrowsDeclaration";
@@ -64,8 +60,8 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
     @Nullable
     @Override
     public ProblemDescriptor[] checkFile(
-        @Nonnull PsiFile file,
-        @Nonnull final InspectionManager manager,
+        PsiFile file,
+        final InspectionManager manager,
         final boolean isOnTheFly,
         Object state
     ) {
@@ -73,7 +69,7 @@ public class RedundantThrowsDeclaration extends BaseJavaBatchLocalInspectionTool
         file.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
             @RequiredReadAction
-            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+            public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
                 ProblemDescriptor descriptor = checkExceptionsNeverThrown(reference, manager, isOnTheFly);
                 if (descriptor != null) {
                     problems.add(descriptor);

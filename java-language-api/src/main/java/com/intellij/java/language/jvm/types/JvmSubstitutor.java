@@ -15,13 +15,12 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.language.jvm.JvmTypeParameter;
-import jakarta.annotation.Nonnull;
 
 public interface JvmSubstitutor
 {
 
 	@Nullable
-	JvmType substitute(@Nonnull JvmTypeParameter typeParameter);
+	JvmType substitute(JvmTypeParameter typeParameter);
 }

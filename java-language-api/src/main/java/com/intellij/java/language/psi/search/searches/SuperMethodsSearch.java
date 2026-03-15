@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.util.MethodSignatureBackedByPsiMethod;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
 import consulo.application.util.query.ExtensibleQueryFactory;
 import consulo.application.util.query.Query;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author max

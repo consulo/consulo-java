@@ -10,8 +10,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -112,7 +111,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
      * @return a new matcher
      */
     @Contract(pure = true)
-    static Simple instanceCall(@Nonnull String className, String... methodNames) {
+    static Simple instanceCall(String className, String... methodNames) {
         return new Simple(className, Set.of(methodNames), null, CallType.INSTANCE);
     }
 
@@ -124,7 +123,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
      * @return a new matcher
      */
     @Contract(pure = true)
-    static Simple exactInstanceCall(@Nonnull String className, String... methodNames) {
+    static Simple exactInstanceCall(String className, String... methodNames) {
         return new Simple(className, Set.of(methodNames), null, CallType.EXACT_INSTANCE);
     }
 
@@ -136,7 +135,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
      * @return a new matcher
      */
     @Contract(pure = true)
-    static Simple staticCall(@Nonnull String className, String... methodNames) {
+    static Simple staticCall(String className, String... methodNames) {
         return new Simple(className, Set.of(methodNames), null, CallType.STATIC);
     }
 
@@ -170,7 +169,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
      * @return call matcher with additional check before actual call matching
      */
     @Contract(pure = true)
-    default CallMatcher withContextFilter(@Nonnull Predicate<? super PsiElement> filter) {
+    default CallMatcher withContextFilter(Predicate<? super PsiElement> filter) {
         return new CallMatcher() {
             @Override
             public Stream<String> names() {
@@ -212,7 +211,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
      * @return call matcher, that matches element for file with given language level or higher
      */
     @Contract(pure = true)
-    default CallMatcher withLanguageLevelAtLeast(@Nonnull LanguageLevel level) {
+    default CallMatcher withLanguageLevelAtLeast(LanguageLevel level) {
         return withContextFilter(element -> PsiUtil.getLanguageLevel(element).isAtLeast(level));
     }
 
@@ -221,15 +220,13 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
             new Simple("", Collections.singleton("values"), ArrayUtil.EMPTY_STRING_ARRAY, CallType.ENUM_STATIC);
         static final Simple ENUM_VALUE_OF =
             new Simple("", Collections.singleton("valueOf"), new String[]{CommonClassNames.JAVA_LANG_STRING}, CallType.ENUM_STATIC);
-        @Nonnull
         private final String myClassName;
-        @Nonnull
         private final Set<String> myNames;
         @Nullable
         private final String[] myParameters;
         private final CallType myCallType;
 
-        private Simple(@Nonnull String className, @Nonnull Set<String> names, @Nullable String[] parameters, CallType callType) {
+        private Simple(String className, Set<String> names, @Nullable String[] parameters, CallType callType) {
             myClassName = className;
             myNames = names;
             myParameters = parameters;
@@ -265,7 +262,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
          * @throws IllegalStateException if this matcher is already limited to parameters count or types
          */
         @Contract(pure = true)
-        public Simple parameterTypes(@Nonnull String... types) {
+        public Simple parameterTypes(String... types) {
             if (myParameters != null) {
                 throw new IllegalStateException("Parameters are already registered");
             }
@@ -328,7 +325,7 @@ public interface CallMatcher extends Predicate<PsiMethodCallExpression> {
             return methodMatches(method);
         }
 
-        private boolean parametersMatch(@Nonnull PsiParameterList parameterList) {
+        private boolean parametersMatch(PsiParameterList parameterList) {
             if (myParameters == null) {
                 return true;
             }

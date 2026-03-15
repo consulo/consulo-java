@@ -23,9 +23,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -40,10 +38,8 @@ public class CanonicalTypes {
   private CanonicalTypes() { }
 
   public abstract static class Type {
-    @Nonnull
     public abstract PsiType getType(PsiElement context, PsiManager manager) throws IncorrectOperationException;
 
-    @NonNls
     public abstract String getTypeText();
 
     public abstract void addImportsTo(JavaCodeFragment codeFragment);
@@ -60,7 +56,6 @@ public class CanonicalTypes {
       myType = type;
     }
 
-    @Nonnull
     public PsiType getType(PsiElement context, PsiManager manager) {
       return myType;
     }
@@ -79,7 +74,6 @@ public class CanonicalTypes {
       myComponentType = componentType;
     }
 
-    @Nonnull
     public PsiType getType(PsiElement context, PsiManager manager) throws IncorrectOperationException {
       return myComponentType.getType(context, manager).createArrayType();
     }
@@ -105,7 +99,6 @@ public class CanonicalTypes {
       myComponentType = componentType;
     }
 
-    @Nonnull
     public PsiType getType(PsiElement context, PsiManager manager) throws IncorrectOperationException {
       return new PsiEllipsisType(myComponentType.getType(context, manager));
     }
@@ -133,7 +126,6 @@ public class CanonicalTypes {
       myBound = bound;
     }
 
-    @Nonnull
     public PsiType getType(PsiElement context, PsiManager manager) throws IncorrectOperationException {
       if(myBound == null) return PsiWildcardType.createUnbounded(context.getManager());
       if (myIsExtending) {
@@ -166,7 +158,6 @@ public class CanonicalTypes {
       myText = text;
     }
 
-    @Nonnull
     public PsiType getType(PsiElement context, PsiManager manager) throws IncorrectOperationException {
       return JavaPsiFacade.getInstance(context.getProject()).getElementFactory().createTypeFromText(myText, context);
     }
@@ -194,7 +185,6 @@ public class CanonicalTypes {
       mySubstitutor = substitutor;
     }
 
-    @Nonnull
     public PsiType getType(PsiElement context, PsiManager manager) throws IncorrectOperationException {
       JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
       PsiElementFactory factory = facade.getElementFactory();
@@ -238,7 +228,6 @@ public class CanonicalTypes {
       myTypes = types;
     }
 
-    @Nonnull
     @Override
     public PsiType getType(PsiElement context, PsiManager manager) throws IncorrectOperationException {
       List<PsiType> types = ContainerUtil.map(myTypes, type -> type.getType(context, manager));
@@ -318,7 +307,7 @@ public class CanonicalTypes {
     }
   }
 
-  public static Type createTypeWrapper(@Nonnull PsiType type) {
+  public static Type createTypeWrapper(PsiType type) {
     return type.accept(Creator.INSTANCE);
   }
 }

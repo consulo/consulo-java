@@ -21,7 +21,6 @@ import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PatternConditionPlus;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.BiPredicate;
 
@@ -45,7 +44,7 @@ public class PsiParameterPattern extends PsiModifierListOwnerPattern<PsiParamete
         return processor.test((PsiMethod)scope, context);
       }
 
-      public boolean accepts(@Nonnull final PsiParameter t, final ProcessingContext context) {
+      public boolean accepts(final PsiParameter t, final ProcessingContext context) {
         if (!super.accepts(t, context)) return false;
         final PsiMethod psiMethod = (PsiMethod)t.getDeclarationScope();
 

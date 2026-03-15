@@ -30,7 +30,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
 
-import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfiguration<JavaRunConfigurationModule>> extends AnAction {
@@ -42,7 +41,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
 
   @RequiredUIAccess
   @Override
-  public void actionPerformed(@Nonnull AnActionEvent e) {
+  public void actionPerformed(AnActionEvent e) {
     final Project project = e.getData(Project.KEY);
     LOG.assertTrue(project != null);
     @SuppressWarnings("unchecked")
@@ -57,7 +56,7 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
 
   @RequiredUIAccess
   @Override
-  public void update(@Nonnull AnActionEvent e) {
+  public void update(AnActionEvent e) {
     final Presentation presentation = e.getPresentation();
     presentation.setVisible(false);
     final Project project = e.getData(Project.KEY);

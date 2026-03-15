@@ -15,9 +15,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.scheme.InspectionProfileEntry;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.compiler.JavacQuirksInspection;
@@ -30,7 +28,7 @@ import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspe
  * For "heavyweight" tests use AdvHighlightingTest
  */
 public abstract class AmbiguousMethodCallTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/ambiguousCalls";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/ambiguousCalls";
 
   private void doTest(boolean checkWarnings, boolean checkInfos, InspectionProfileEntry... tools) throws Exception {
     for (InspectionProfileEntry tool : tools) { enableInspectionTool(tool); }
@@ -42,7 +40,6 @@ public abstract class AmbiguousMethodCallTest extends LightDaemonAnalyzerTestCas
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, checkWeakWarnings, checkInfos);
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

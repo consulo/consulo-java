@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a PSI element which can be used as the value of an annotation element.
@@ -31,7 +30,6 @@ public interface PsiAnnotationMemberValue extends PsiElement {
     PsiAnnotationMemberValue[] EMPTY_ARRAY = new PsiAnnotationMemberValue[0];
 
     ArrayFactory<PsiAnnotationMemberValue> ARRAY_FACTORY = new ArrayFactory<>() {
-        @Nonnull
         @Override
         public PsiAnnotationMemberValue[] create(int count) {
             return count == 0 ? EMPTY_ARRAY : new PsiAnnotationMemberValue[count];

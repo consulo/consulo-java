@@ -30,9 +30,8 @@ import consulo.language.psi.PsiFile;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Range;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -49,7 +48,6 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
         return file.getLanguage().isKindOf(JavaLanguage.INSTANCE);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public List<SmartStepTarget> findSmartStepTargets(SourcePosition position) {
@@ -111,7 +109,7 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
                 }
 
                 @Override
-                public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+                public void visitLambdaExpression(PsiLambdaExpression expression) {
                     targets.add(new LambdaSmartStepTarget(
                         expression,
                         getCurrentParamName(),
@@ -130,7 +128,7 @@ public class JavaSmartStepIntoHandler extends JvmSmartStepIntoHandler {
                 }
 
                 @Override
-                public void visitExpressionList(@Nonnull PsiExpressionList expressionList) {
+                public void visitExpressionList(PsiExpressionList expressionList) {
                     PsiMethod psiMethod = myContextStack.isEmpty() ? null : myContextStack.peek();
                     if (psiMethod != null) {
                         String methodName = psiMethod.getName();

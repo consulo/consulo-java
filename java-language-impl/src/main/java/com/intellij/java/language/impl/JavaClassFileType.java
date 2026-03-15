@@ -20,7 +20,6 @@ import consulo.localize.LocalizeValue;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
 
 public class JavaClassFileType implements FileType {
 
@@ -30,19 +29,16 @@ public class JavaClassFileType implements FileType {
   }
 
   @Override
-  @Nonnull
   public String getId() {
     return "CLASS";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDescription() {
     return JavaLanguageLocalize.filetypeDescriptionClass();
   }
 
   @Override
-  @Nonnull
   public String getDefaultExtension() {
     return "class";
   }

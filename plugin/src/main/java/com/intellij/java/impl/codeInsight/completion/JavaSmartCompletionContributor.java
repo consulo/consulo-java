@@ -48,8 +48,7 @@ import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.reflect.ReflectionUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -128,7 +127,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor {
 
     extend(CompletionType.SMART, psiElement(), new CompletionProvider() {
       @Override
-      public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
+      public void addCompletions(CompletionParameters parameters, ProcessingContext context, CompletionResultSet result) {
         if (SmartCastProvider.shouldSuggestCast(parameters)) {
           return;
         }
@@ -220,7 +219,6 @@ public class JavaSmartCompletionContributor extends CompletionContributor {
     extend(CompletionType.SMART, psiElement(), new MethodReferenceCompletionProvider());
   }
 
-  @Nonnull
   private static Consumer<LookupElement> decorateWithoutTypeCheck(CompletionResultSet result, Collection<ExpectedTypeInfo> infos) {
     return lookupElement -> result.addElement(decorate(lookupElement, infos));
   }
@@ -238,7 +236,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result) {
+  public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
     if (parameters.getPosition() instanceof PsiComment) {
       return;
     }
@@ -250,12 +248,10 @@ public class JavaSmartCompletionContributor extends CompletionContributor {
     return new SmartCompletionDecorator(lookupElement, infos);
   }
 
-  @Nonnull
   public static ExpectedTypeInfo[] getExpectedTypes(CompletionParameters parameters) {
     return getExpectedTypes(parameters.getPosition(), parameters.getCompletionType() == CompletionType.SMART);
   }
 
-  @Nonnull
   public static ExpectedTypeInfo[] getExpectedTypes(PsiElement position, boolean voidable) {
     if (psiElement().withParent(psiElement(PsiReferenceExpression.class).withParent(PsiThrowStatement.class)).accepts(position)) {
       PsiElementFactory factory = JavaPsiFacade.getInstance(position.getProject()).getElementFactory();
@@ -309,7 +305,7 @@ public class JavaSmartCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public void beforeCompletion(@Nonnull CompletionInitializationContext context) {
+  public void beforeCompletion(CompletionInitializationContext context) {
     if (context.getCompletionType() != CompletionType.SMART) {
       return;
     }
@@ -345,7 +341,6 @@ public class JavaSmartCompletionContributor extends CompletionContributor {
     context.setDummyIdentifier(CompletionUtilCore.DUMMY_IDENTIFIER_TRIMMED);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

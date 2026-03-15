@@ -16,7 +16,6 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -24,14 +23,13 @@ public interface ControlFlow
 {
 	ControlFlow EMPTY = new ControlFlowImpl();
 
-	@Nonnull
 	List<Instruction> getInstructions();
 
 	int getSize();
 
-	int getStartOffset(@Nonnull PsiElement element);
+	int getStartOffset(PsiElement element);
 
-	int getEndOffset(@Nonnull PsiElement element);
+	int getEndOffset(PsiElement element);
 
 	PsiElement getElement(int offset);
 

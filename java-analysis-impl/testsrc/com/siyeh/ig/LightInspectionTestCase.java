@@ -17,9 +17,7 @@ package com.siyeh.ig;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Language;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Bas Leijdekkers
@@ -38,13 +36,12 @@ public abstract class LightInspectionTestCase extends LightCodeInsightFixtureTes
 
   protected abstract LocalInspectionTool getInspection();
 
-  @NonNls
   protected String[] getEnvironmentClasses() {
     return new String[]{};
   }
 
-  protected final void doTest(@Language("JAVA") @Nonnull @NonNls String classText) {
-    @NonNls final StringBuilder newText = new StringBuilder();
+  protected final void doTest(@Language("JAVA") String classText) {
+    final StringBuilder newText = new StringBuilder();
     int start = 0;
     int end = classText.indexOf("/*");
     while (end >= 0) {

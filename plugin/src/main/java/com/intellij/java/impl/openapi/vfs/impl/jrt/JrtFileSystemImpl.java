@@ -19,8 +19,7 @@ import consulo.virtualFileSystem.event.BulkFileListener;
 import consulo.virtualFileSystem.event.VFileContentChangeEvent;
 import consulo.virtualFileSystem.event.VFileDeleteEvent;
 import consulo.virtualFileSystem.event.VFileEvent;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -31,42 +30,36 @@ public class JrtFileSystemImpl extends BaseArchiveFileSystem implements JrtFileS
   private final Map<String, ArchiveHandler> myHandlers = Collections.synchronizedMap(Maps.newHashMap(FileUtil.PATH_HASHING_STRATEGY));
   private final AtomicBoolean mySubscribed = new AtomicBoolean(false);
 
-  @Nonnull
   @Override
   public String getProtocol() {
     return PROTOCOL;
   }
 
-  @Nonnull
   @Override
-  public String normalize(@Nonnull String path) {
+  public String normalize(String path) {
     int p = path.indexOf(SEPARATOR);
     return p > 0 ? FileUtil.normalize(path.substring(0, p)) + path.substring(p) : super.normalize(path);
   }
 
-  @Nonnull
   @Override
-  public String extractLocalPath(@Nonnull String rootPath) {
+  public String extractLocalPath(String rootPath) {
     return StringUtil.trimEnd(rootPath, SEPARATOR);
   }
 
-  @Nonnull
   @Override
-  public String composeRootPath(@Nonnull String localPath) {
+  public String composeRootPath(String localPath) {
     return localPath + SEPARATOR;
   }
 
-  @Nonnull
   @Override
-  public String extractRootPath(@Nonnull String entryPath) {
+  public String extractRootPath(String entryPath) {
     int separatorIndex = entryPath.indexOf(SEPARATOR);
     assert separatorIndex >= 0 : "Path passed to JrtFileSystem must have a separator '!/' but got: " + entryPath;
     return entryPath.substring(0, separatorIndex + SEPARATOR.length());
   }
 
-  @Nonnull
   @Override
-  public ArchiveHandler getHandler(@Nonnull VirtualFile entryFile) {
+  public ArchiveHandler getHandler(VirtualFile entryFile) {
     checkSubscription();
 
     String homePath = extractLocalPath(extractRootPath(entryFile.getPath()));
@@ -90,7 +83,7 @@ public class JrtFileSystemImpl extends BaseArchiveFileSystem implements JrtFileS
     }
     app.getMessageBus().connect(app).subscribe(BulkFileListener.class, new BulkFileListener() {
       @Override
-      public void after(@Nonnull List<? extends VFileEvent> events) {
+      public void after(List<? extends VFileEvent> events) {
         Set<VirtualFile> toRefresh = null;
 
         for (VFileEvent e : events) {
@@ -132,7 +125,7 @@ public class JrtFileSystemImpl extends BaseArchiveFileSystem implements JrtFileS
   }
 
   @Override
-  protected boolean isCorrectFileType(@Nonnull VirtualFile local) {
+  protected boolean isCorrectFileType(VirtualFile local) {
     String path = local.getPath();
     return OwnJdkUtil.isModularRuntime(path) && !OwnJdkUtil.isExplodedModularRuntime(path);
   }
@@ -145,7 +138,7 @@ public class JrtFileSystemImpl extends BaseArchiveFileSystem implements JrtFileS
 
   @Nullable
   @Override
-  public VirtualFile findLocalVirtualFileByPath(@Nonnull String s) {
+  public VirtualFile findLocalVirtualFileByPath(String s) {
     return findLocalByRootPath(s);
   }
 

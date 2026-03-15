@@ -25,7 +25,6 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,19 +34,16 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
     public boolean onlyWarnOnLoop = true;
 
     @Override
-    @Nonnull
     public String getID() {
         return "NonConstantStringShouldBeStringBuffer";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringReplaceableByStringBufferDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringReplaceableByStringBufferProblemDescriptor().get();
     }
@@ -65,7 +61,7 @@ public class StringReplaceableByStringBufferInspection extends BaseInspection {
 
     private class StringReplaceableByStringBufferVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+        public void visitLocalVariable(PsiLocalVariable variable) {
             super.visitLocalVariable(variable);
             PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
             if (codeBlock == null) {

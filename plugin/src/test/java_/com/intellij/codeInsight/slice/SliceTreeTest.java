@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.intellij.java.impl.slicer.*;
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.scope.AnalysisScope;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import consulo.language.editor.rawHighlight.HighlightInfo;
@@ -36,7 +35,7 @@ import consulo.disposer.Disposer;
  * @author cdr
  */
 public abstract class SliceTreeTest extends LightDaemonAnalyzerTestCase {
-  private SliceTreeStructure configureTree(@NonNls String name) throws Exception {
+  private SliceTreeStructure configureTree(String name) throws Exception {
     configureByFile("/codeInsight/slice/backward/"+ name +".java");
     PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
     PsiElement element = new SliceHandler(true).getExpressionAtCaret(getEditor(), getFile());
@@ -265,7 +264,7 @@ public abstract class SliceTreeTest extends LightDaemonAnalyzerTestCase {
                             "");
   }
 
-  private static void checkStructure(SliceNode root, @NonNls String dataExpected) {
+  private static void checkStructure(SliceNode root, String dataExpected) {
     List<SliceNode> actualNodes = new ArrayList<SliceNode>((Collection<? extends SliceNode>)root.getChildren());
     Collections.sort(actualNodes, SliceTreeBuilder.SLICE_NODE_COMPARATOR);
 

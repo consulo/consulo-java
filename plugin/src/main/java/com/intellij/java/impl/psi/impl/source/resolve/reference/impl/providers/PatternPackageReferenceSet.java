@@ -4,7 +4,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.util.lang.PatternUtil;
 import consulo.application.util.function.Processor;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;

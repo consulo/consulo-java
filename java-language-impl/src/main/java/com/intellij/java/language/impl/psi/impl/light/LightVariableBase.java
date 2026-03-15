@@ -24,8 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -55,7 +54,6 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
     return new LightModifierList(getManager());
   }
 
-  @Nonnull
   public PsiElement getDeclarationScope() {
     return myScope;
   }
@@ -71,19 +69,17 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  @Nonnull
   public String getName() {
     return StringUtil.notNullize(getNameIdentifier().getText());
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }
 
   @Override
-  @Nonnull
   public PsiType getType() {
     if (myType == null) {
       myType = computeType();
@@ -91,13 +87,11 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
     return myType;
   }
 
-  @Nonnull
   protected PsiType computeType() {
     return PsiType.VOID;
   }
 
   @Override
-  @Nonnull
   public PsiTypeElement getTypeElement() {
     return JavaPsiFacade.getInstance(getProject()).getElementFactory().createTypeElement(myType);
   }
@@ -108,7 +102,7 @@ public abstract class LightVariableBase extends LightElement implements PsiVaria
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return getModifierList().hasModifierProperty(name);
   }
 

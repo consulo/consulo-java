@@ -28,7 +28,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,14 +41,14 @@ public class MoveJavaClassHandler implements MoveClassHandler {
     private static final Logger LOG = Logger.getInstance(MoveJavaClassHandler.class);
 
     @Override
-    public void finishMoveClass(@Nonnull PsiClass aClass) {
+    public void finishMoveClass(PsiClass aClass) {
         if (aClass.getContainingFile() instanceof PsiJavaFile) {
             ChangeContextUtil.decodeContextInfo(aClass, null, null);
         }
     }
 
     @Override
-    public void prepareMove(@Nonnull PsiClass aClass) {
+    public void prepareMove(PsiClass aClass) {
         if (aClass.getContainingFile() instanceof PsiJavaFile) {
             ChangeContextUtil.encodeContextInfo(aClass, true);
         }
@@ -57,7 +56,7 @@ public class MoveJavaClassHandler implements MoveClassHandler {
 
     @Override
     @RequiredWriteAction
-    public PsiClass doMoveClass(@Nonnull PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException {
+    public PsiClass doMoveClass(PsiClass aClass, PsiDirectory moveDestination) throws IncorrectOperationException {
         PsiFile file = aClass.getContainingFile();
         PsiJavaPackage newPackage = JavaDirectoryService.getInstance().getPackage(moveDestination);
 
@@ -94,7 +93,7 @@ public class MoveJavaClassHandler implements MoveClassHandler {
         newClass.getContainingFile().accept(new JavaRecursiveElementVisitor() {
             @Override
             @RequiredWriteAction
-            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+            public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
                 if (reference.isValid() && reference.isReferenceTo(oldClass)) {
                     PsiImportStatementBase importStatement = PsiTreeUtil.getParentOfType(reference, PsiImportStatementBase.class);
                     if (importStatement != null) {
@@ -122,7 +121,7 @@ public class MoveJavaClassHandler implements MoveClassHandler {
             aClass.accept(new JavaRecursiveElementWalkingVisitor() {
                 @Override
                 @RequiredWriteAction
-                public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+                public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
                     if (reference.isQualified() && reference.isReferenceTo(aClass)) {
                         if (reference.getQualifier() instanceof PsiJavaCodeReferenceElement codeRefElem
                             && codeRefElem.isReferenceTo(aPackage)) {

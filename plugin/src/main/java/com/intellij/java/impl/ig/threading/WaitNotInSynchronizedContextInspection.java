@@ -24,28 +24,23 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class WaitNotInSynchronizedContextInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "WaitWhileNotSynced";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.waitNotInSynchronizedContextDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     String text;
     if (infos.length > 0) {
@@ -68,11 +63,11 @@ public class WaitNotInSynchronizedContextInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.WAIT.equals(methodName)) {
         return;
@@ -110,7 +105,7 @@ public class WaitNotInSynchronizedContextInspection
       }
     }
 
-    private static boolean isSynchronizedOn(@Nonnull PsiElement element,
+    private static boolean isSynchronizedOn(PsiElement element,
                                             @Nullable PsiElement target) {
       if (target == null) {
         return false;
@@ -136,7 +131,7 @@ public class WaitNotInSynchronizedContextInspection
     }
 
     private static boolean isSynchronizedOnThis(
-      @Nonnull PsiElement element) {
+      PsiElement element) {
       PsiElement context =
         PsiTreeUtil.getParentOfType(element, PsiMethod.class,
                                     PsiSynchronizedStatement.class);

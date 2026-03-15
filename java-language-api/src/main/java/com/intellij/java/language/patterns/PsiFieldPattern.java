@@ -18,7 +18,7 @@ package com.intellij.java.language.patterns;
 import com.intellij.java.language.psi.PsiField;
 import consulo.language.pattern.InitialPatternCondition;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter

@@ -24,8 +24,7 @@ import com.intellij.java.language.psi.augment.TypeAnnotationModifier;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ import java.util.List;
 public class NullityAnnotationModifier extends TypeAnnotationModifier {
   @Nullable
   @Override
-  public TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @Nonnull PsiClassType boundType) {
+  public TypeAnnotationProvider modifyAnnotations(PsiType inferenceVariableType, PsiClassType boundType) {
     PsiAnnotation[] annotations = inferenceVariableType.getAnnotations();
     for (PsiAnnotation annotation : annotations) {
       String qName = annotation.getQualifiedName();
@@ -48,7 +47,6 @@ public class NullityAnnotationModifier extends TypeAnnotationModifier {
     return null;
   }
 
-  @Nonnull
   private static TypeAnnotationProvider removeAnnotation(PsiAnnotation[] annotations, PsiAnnotation annotation) {
     List<PsiAnnotation> list = ContainerUtil.newArrayList(annotations);
     list.remove(annotation);
@@ -60,7 +58,7 @@ public class NullityAnnotationModifier extends TypeAnnotationModifier {
     return () -> array;
   }
 
-  private static boolean isMatchingAnnotation(@Nonnull PsiClassType boundType, PsiAnnotation annotation, String qName) {
+  private static boolean isMatchingAnnotation(PsiClassType boundType, PsiAnnotation annotation, String qName) {
     NullableNotNullManager manager = NullableNotNullManager.getInstance(annotation.getProject());
     return (manager.getNullables().contains(qName) || manager.getNotNulls().contains(qName)) && boundType.findAnnotation(qName) != null;
   }

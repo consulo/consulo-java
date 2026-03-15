@@ -33,14 +33,13 @@ import consulo.language.impl.ast.SharedImplUtil;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.util.CharTable;
 
-import jakarta.annotation.Nonnull;
 
 public class FieldElement extends CompositeElement {
   public FieldElement() {
     super(Constants.FIELD);
   }
 
-  protected FieldElement(@Nonnull IElementType type) {
+  protected FieldElement(IElementType type) {
     super(type);
   }
 
@@ -50,7 +49,7 @@ public class FieldElement extends CompositeElement {
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (getChildRole(child) == ChildRole.INITIALIZER) {
       ASTNode eq = findChildByRole(ChildRole.INITIALIZER_EQ);
       if (eq != null) {

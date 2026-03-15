@@ -29,8 +29,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -39,14 +38,12 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean ignorePrivateMethods = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.returnDateCalendarFieldDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         String type = (String) infos[0];
         return InspectionGadgetsLocalize.returnDateCalendarFieldProblemDescriptor(type).get();
@@ -71,7 +68,6 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
             myType = type;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.returnDateCalendarFieldQuickfix(myType);
@@ -105,7 +101,7 @@ public class ReturnOfDateFieldInspection extends BaseInspection {
     private class ReturnOfDateFieldVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+        public void visitReturnStatement(PsiReturnStatement statement) {
             super.visitReturnStatement(statement);
             PsiExpression returnValue = statement.getReturnValue();
             if (!(returnValue instanceof PsiReferenceExpression)) {

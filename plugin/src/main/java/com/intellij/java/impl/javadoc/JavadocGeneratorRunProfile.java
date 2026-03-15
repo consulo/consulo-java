@@ -59,8 +59,6 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.PathsList;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.webBrowser.BrowserUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -83,12 +81,12 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     myConfiguration = configuration;
   }
 
-  public static Sdk getSdk(@Nonnull Project project) {
+  public static Sdk getSdk(Project project) {
     return PathUtilEx.getAnyJdk(project);
   }
 
   @Override
-  public RunProfileState getState(@Nonnull Executor executor, @Nonnull ExecutionEnvironment env) throws ExecutionException {
+  public RunProfileState getState(Executor executor, ExecutionEnvironment env) throws ExecutionException {
     return new MyJavaCommandLineState(myConfiguration, myProject, myGenerationScope, env);
   }
 
@@ -103,7 +101,6 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
   }
 
   @Override
-  @Nonnull
   public Module[] getModules() {
     return Module.EMPTY_ARRAY;
   }
@@ -111,7 +108,6 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
   private static class MyJavaCommandLineState extends CommandLineState {
     private final AnalysisScope myGenerationOptions;
     private final Project myProject;
-    @NonNls
     private static final String INDEX_HTML = "index.html";
     private JavadocConfiguration myConfiguration;
 
@@ -145,8 +141,8 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
         }
       }
       cmdLine.setWorkDirectory((File) null);
-      @NonNls String javadocExecutableName = File.separator + (Platform.current().os().isWindows() ? "javadoc.exe" : "javadoc");
-      @NonNls String exePath = jdkPath.replace('/', File.separatorChar) + javadocExecutableName;
+      String javadocExecutableName = File.separator + (Platform.current().os().isWindows() ? "javadoc.exe" : "javadoc");
+      String exePath = jdkPath.replace('/', File.separatorChar) + javadocExecutableName;
       if (new File(exePath).exists()) {
         cmdLine.setExePath(exePath);
       } else { //try to use wrapper jdk
@@ -163,7 +159,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     }
 
     private void setupProgramParameters(Sdk jdk, GeneralCommandLine cmdLine) throws CantRunException {
-      @NonNls ParametersList parameters = cmdLine.getParametersList();
+      ParametersList parameters = cmdLine.getParametersList();
 
       if (myConfiguration.LOCALE != null && myConfiguration.LOCALE.length() > 0) {
         parameters.add("-locale");
@@ -293,7 +289,6 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     }
 
     @Override
-    @Nonnull
     protected ProcessHandler startProcess() throws ExecutionException {
       ProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
       ProcessTerminatedListener.attach(handler, myProject, JavadocBundle.message("javadoc.generate.exited"));

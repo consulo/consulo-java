@@ -22,8 +22,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -43,13 +42,11 @@ public class ExceptionUtils {
     s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_ERROR);
   }
 
-  @Nonnull
   public static Set<PsiClassType> calculateExceptionsThrown(@Nullable PsiElement element) {
     return calculateExceptionsThrown(element, new LinkedHashSet<>(5));
   }
 
-  @Nonnull
-  public static Set<PsiClassType> calculateExceptionsThrown(@Nullable PsiElement element, @Nonnull Set<PsiClassType> out) {
+  public static Set<PsiClassType> calculateExceptionsThrown(@Nullable PsiElement element, Set<PsiClassType> out) {
     if (element == null) {
       return out;
     }
@@ -205,7 +202,7 @@ public class ExceptionUtils {
     return out;
   }
 
-  public static boolean isExceptionArgument(@Nonnull PsiExpression expression) {
+  public static boolean isExceptionArgument(PsiExpression expression) {
     final PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(expression, PsiNewExpression.class, true, PsiCodeBlock.class, PsiClass.class);
     if (newExpression != null) {
       final PsiType newExpressionType = newExpression.getType();
@@ -263,7 +260,7 @@ public class ExceptionUtils {
     }
 
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+    public void visitTryStatement(PsiTryStatement statement) {
       final Set<PsiType> exceptionsHandled = getExceptionTypesHandled(statement);
 
       for (PsiClassType resourceException : calculateExceptionsThrown(statement.getResourceList())) {
@@ -282,7 +279,7 @@ public class ExceptionUtils {
       }
     }
 
-    private static boolean isExceptionHandled(Set<PsiType> exceptionsHandled, @Nonnull PsiType thrownType) {
+    private static boolean isExceptionHandled(Set<PsiType> exceptionsHandled, PsiType thrownType) {
       if (exceptionsHandled.contains(thrownType)) {
         return true;
       }

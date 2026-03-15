@@ -1,7 +1,6 @@
 package com.intellij.java.analysis.impl.find.findUsages;
 
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -10,7 +9,7 @@ public class JavaVariableFindUsagesOptions extends JavaFindUsagesOptions {
   public boolean isReadAccess = true;
   public boolean isWriteAccess = true;
 
-  public JavaVariableFindUsagesOptions(@Nonnull Project project) {
+  public JavaVariableFindUsagesOptions(Project project) {
     super(project);
     isSearchForTextOccurrences = false;
   }

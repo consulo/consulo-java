@@ -1,7 +1,6 @@
-import jakarta.annotation.Nonnull;
 
 class Test {
-  void foo(@Nonnull String s) {
+  void foo(String s) {
     s.substring(0);
   }
 

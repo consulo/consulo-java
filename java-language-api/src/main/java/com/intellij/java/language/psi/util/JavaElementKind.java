@@ -6,7 +6,6 @@ import com.intellij.java.language.psi.javadoc.PsiSnippetDocTagBody;
 import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a kind of element that appears in Java source code.
@@ -46,12 +45,10 @@ public enum JavaElementKind {
     TYPE_ARGUMENTS(JavaLanguageLocalize.elementTypeArgumentsNominative(), JavaLanguageLocalize.elementTypeArgumentsAccusative()),
     SEMICOLON(JavaLanguageLocalize.elementTypeSemicolonNominative(), JavaLanguageLocalize.elementTypeSemicolonAccusative());
 
-    @Nonnull
     private final LocalizeValue myNameNominative;
-    @Nonnull
     private final LocalizeValue myNameAccusative;
 
-    JavaElementKind(@Nonnull LocalizeValue nameNominative, @Nonnull LocalizeValue nameAccusative) {
+    JavaElementKind(LocalizeValue nameNominative, LocalizeValue nameAccusative) {
         myNameNominative = nameNominative;
         myNameAccusative = nameAccusative;
     }
@@ -66,7 +63,6 @@ public enum JavaElementKind {
     /**
      * @return human-readable name of the item having the object role in the sentence (accusative case)
      */
-    @Nonnull
     public LocalizeValue object() {
         return myNameAccusative;
     }
@@ -75,7 +71,6 @@ public enum JavaElementKind {
      * @return less descriptive type for this type; usually result can be described in a single word
      * (e.g. LOCAL_VARIABLE is replaced with VARIABLE).
      */
-    @Nonnull
     public JavaElementKind lessDescriptive() {
         return switch (this) {
             case ABSTRACT_METHOD -> METHOD;
@@ -90,7 +85,7 @@ public enum JavaElementKind {
      * @param element element to get the kind from
      * @return resulting kind
      */
-    public static JavaElementKind fromElement(@Nonnull PsiElement element) {
+    public static JavaElementKind fromElement(PsiElement element) {
         if (element instanceof PsiClass psiClass) {
             if (psiClass instanceof PsiAnonymousClass) {
                 return ANONYMOUS_CLASS;

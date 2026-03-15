@@ -30,18 +30,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ArrayEqualityInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.arrayComparisonDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.arrayComparisonProblemDescriptor().get();
     }
@@ -59,7 +56,6 @@ public class ArrayEqualityInspection extends BaseInspection {
             this.deepEquals = deepEquals;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return deepEquals
@@ -109,7 +105,7 @@ public class ArrayEqualityInspection extends BaseInspection {
     private static class ArrayEqualityVisitor extends BaseInspectionVisitor {
         @Override
         @RequiredReadAction
-        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+        public void visitBinaryExpression(PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
             PsiExpression rhs = expression.getROperand();
             if (rhs == null) {

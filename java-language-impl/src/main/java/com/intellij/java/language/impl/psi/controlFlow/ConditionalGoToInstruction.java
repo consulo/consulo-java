@@ -16,7 +16,6 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import com.intellij.java.language.psi.PsiExpression;
-import org.jetbrains.annotations.NonNls;
 
 
 public class ConditionalGoToInstruction extends ConditionalBranchingInstruction {
@@ -28,7 +27,7 @@ public class ConditionalGoToInstruction extends ConditionalBranchingInstruction 
   }
 
   public String toString() {
-    final @NonNls String sRole = "["+role.toString()+"]";
+    final String sRole = "["+role.toString()+"]";
     return "COND_GOTO " + sRole + " " + offset;
   }
 

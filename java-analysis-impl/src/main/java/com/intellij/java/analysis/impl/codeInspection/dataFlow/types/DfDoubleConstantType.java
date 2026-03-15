@@ -2,7 +2,6 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.language.psi.PsiPrimitiveType;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
@@ -11,21 +10,18 @@ class DfDoubleConstantType extends DfConstantType<Double> implements DfDoubleTyp
     super(value);
   }
 
-  @Nonnull
   @Override
-  public DfType join(@Nonnull DfType other) {
+  public DfType join(DfType other) {
     if (other.isSuperType(this)) return other;
     if (other instanceof DfDoubleType) return DfTypes.DOUBLE;
     return DfTypes.TOP;
   }
 
-  @Nonnull
   @Override
   public PsiPrimitiveType getPsiType() {
     return DfDoubleType.super.getPsiType();
   }
 
-  @Nonnull
   @Override
   public DfType tryNegate() {
     return new DfDoubleNotValueType(Collections.singleton(getValue()));

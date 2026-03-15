@@ -30,20 +30,16 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MergeIfOrIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class MergeIfOrIntention extends Intention {
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.mergeIfOrIntentionName();
     }
 
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new MergeIfOrPredicate();
     }
@@ -98,7 +94,7 @@ public class MergeIfOrIntention extends Intention {
             return;
         }
         String parentThenBranchText = parentThenBranch.getText();
-        @NonNls StringBuilder statement = new StringBuilder();
+        StringBuilder statement = new StringBuilder();
         statement.append("if(");
         statement.append(parentConditionText);
         statement.append("||");

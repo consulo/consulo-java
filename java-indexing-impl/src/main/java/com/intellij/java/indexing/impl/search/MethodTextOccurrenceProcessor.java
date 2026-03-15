@@ -25,7 +25,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.*;
 import consulo.language.psi.search.RequestResultProcessor;
 
-import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
@@ -38,7 +37,7 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
   protected final PsiClass myContainingClass;
   protected final boolean myStrictSignatureSearch;
 
-  public MethodTextOccurrenceProcessor(@Nonnull final PsiClass aClass,
+  public MethodTextOccurrenceProcessor(final PsiClass aClass,
                                        final boolean strictSignatureSearch,
                                        final PsiMethod... methods) {
     super(strictSignatureSearch, Arrays.asList(methods));
@@ -49,9 +48,9 @@ public class MethodTextOccurrenceProcessor extends RequestResultProcessor {
   }
 
   @Override
-  public final boolean processTextOccurrence(@Nonnull PsiElement element,
+  public final boolean processTextOccurrence(PsiElement element,
                                              int offsetInElement,
-                                             @Nonnull final Predicate<? super PsiReference> consumer) {
+                                             final Predicate<? super PsiReference> consumer) {
     for (PsiReference ref : myReferenceService.getReferences(element, new PsiReferenceService.Hints(myMethods[0],
                                                                                                     offsetInElement))) {
       if (ReferenceRange.containsOffsetInElement(ref, offsetInElement) && !processReference(consumer, ref)) {

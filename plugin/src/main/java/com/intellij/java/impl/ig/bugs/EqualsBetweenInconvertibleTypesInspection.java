@@ -23,17 +23,14 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EqualsBetweenInconvertibleTypesInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.equalsBetweenInconvertibleTypesDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiType comparedType = (PsiType) infos[0];
         PsiType comparisonType = (PsiType) infos[1];
@@ -56,7 +53,7 @@ public class EqualsBetweenInconvertibleTypesInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
             if (!MethodCallUtils.isEqualsCall(expression)) {

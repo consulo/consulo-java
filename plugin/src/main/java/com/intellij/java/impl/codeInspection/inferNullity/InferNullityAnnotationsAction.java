@@ -64,8 +64,7 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -90,7 +89,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
     @Override
     @RequiredUIAccess
-    protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
+    protected void analyze(Project project, AnalysisScope scope) {
         boolean annotateLocalVars = myAnnotateLocalVariablesCb.getValueOrError();
         ApplicationPropertiesComponent.getInstance().setValue(ANNOTATE_LOCAL_VARIABLES, annotateLocalVars);
         myAnnotateLocalVariablesCb = null;
@@ -160,9 +159,9 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
     protected void processUsages(
         boolean annotateLocalVars,
-        @Nonnull Project project,
-        @Nonnull AnalysisScope scope,
-        @Nonnull UsageInfo[] usageInfos
+        Project project,
+        AnalysisScope scope,
+        UsageInfo[] usageInfos
     ) {
         if (usageInfos.length < 5) {
             applyRunnable(project, () -> usageInfos).run();
@@ -174,10 +173,10 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
     @RequiredUIAccess
     public static boolean addAnnotationsDependency(
-        @Nonnull Project project,
-        @Nonnull Set<Module> modulesWithoutAnnotations,
-        @Nonnull String annoFQN,
-        @Nonnull LocalizeValue title
+        Project project,
+        Set<Module> modulesWithoutAnnotations,
+        String annoFQN,
+        LocalizeValue title
     ) {
         Library annotationsLib = LibraryUtil.findLibraryByClass(annoFQN, project);
         if (annotationsLib != null) {
@@ -225,8 +224,8 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
     @Nullable
     protected UsageInfo[] findUsages(
         boolean annotateLocalVars,
-        @Nonnull Project project,
-        @Nonnull AnalysisScope scope,
+        Project project,
+        AnalysisScope scope,
         int fileCount
     ) {
         NullityInferrer inferrer = new NullityInferrer(annotateLocalVars, project);
@@ -274,7 +273,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             try {
                 new WriteCommandAction(project, INFER_NULLITY_ANNOTATIONS.get()) {
                     @Override
-                    protected void run(@Nonnull Result result) throws Throwable {
+                    protected void run(Result result) throws Throwable {
                         UsageInfo[] infos = computable.get();
                         if (infos.length > 0) {
 
@@ -321,9 +320,9 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
 
     private void showUsageView(
         boolean annotateLocalVars,
-        @Nonnull Project project,
+        Project project,
         UsageInfo[] usageInfos,
-        @Nonnull AnalysisScope scope
+        AnalysisScope scope
     ) {
         UsageTarget[] targets = UsageTarget.EMPTY_ARRAY;
         SimpleReference<Usage[]> convertUsagesRef = new SimpleReference<>();
@@ -372,14 +371,12 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
         );
     }
 
-    @Nonnull
     private Supplier<UsageSearcher> rerunFactory(
         boolean annotateLocalVars,
-        @Nonnull Project project,
-        @Nonnull AnalysisScope scope
+        Project project,
+        AnalysisScope scope
     ) {
         return () -> new UsageInfoSearcherAdapter() {
-            @Nonnull
             @Override
             protected UsageInfo[] findUsages() {
                 return ObjectUtil.notNull(
@@ -389,7 +386,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
             }
 
             @Override
-            public void generate(@Nonnull Predicate<Usage> processor) {
+            public void generate(Predicate<Usage> processor) {
                 processUsages(processor, project);
             }
         };

@@ -27,19 +27,16 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ClassNameDiffersFromFileNameInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classNameDiffersFromFileNameDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.classNameDiffersFromFileNameProblemDescriptor().get();
     }
@@ -74,7 +71,7 @@ public class ClassNameDiffersFromFileNameInspection extends BaseInspection {
     private static class ClassNameDiffersFromFileNameVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             PsiElement parent = aClass.getParent();
             if (!(parent instanceof PsiJavaFile)) {
                 return;

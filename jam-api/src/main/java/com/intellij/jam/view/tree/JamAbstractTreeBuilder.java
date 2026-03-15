@@ -25,7 +25,6 @@ import consulo.ui.ex.tree.AlphaComparator;
 import consulo.ui.ex.tree.NodeDescriptor;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -56,7 +55,7 @@ public class JamAbstractTreeBuilder extends AbstractTreeBuilder {
     return super.isAutoExpandNode(nodeDescriptor) || ((SimpleNode)nodeDescriptor).isAutoExpandNode();
   }
 
-  protected final void expandNodeChildren(@Nonnull final DefaultMutableTreeNode node) {
+  protected final void expandNodeChildren(final DefaultMutableTreeNode node) {
     Object element = ((NodeDescriptor)node.getUserObject()).getElement();
     VirtualFile virtualFile = null;
     if (element instanceof PsiDirectory){

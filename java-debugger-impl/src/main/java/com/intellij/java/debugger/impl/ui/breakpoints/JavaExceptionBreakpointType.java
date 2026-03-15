@@ -34,8 +34,7 @@ import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.function.Supplier;
@@ -51,13 +50,11 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
         super("java-exception", DebuggerBundle.message("exception.breakpoints.tab.title"));
     }
 
-    @Nonnull
     @Override
     public Image getEnabledIcon() {
         return ExecutionDebugIconGroup.breakpointBreakpointexception();
     }
 
-    @Nonnull
     @Override
     public Image getDisabledIcon() {
         return ExecutionDebugIconGroup.breakpointBreakpointexceptiondisabled();
@@ -92,13 +89,13 @@ public class JavaExceptionBreakpointType extends JavaBreakpointTypeBase<JavaExce
 
     @Nullable
     @Override
-    public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>> createCustomPropertiesPanel(@Nonnull Project project) {
+    public XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>> createCustomPropertiesPanel(Project project) {
         return new ExceptionBreakpointPropertiesPanel();
     }
 
     @Nullable
     @Override
-    public XBreakpoint<JavaExceptionBreakpointProperties> createDefaultBreakpoint(@Nonnull XBreakpointCreator<JavaExceptionBreakpointProperties>
+    public XBreakpoint<JavaExceptionBreakpointProperties> createDefaultBreakpoint(XBreakpointCreator<JavaExceptionBreakpointProperties>
                                                                                       creator) {
         return creator.createBreakpoint(new JavaExceptionBreakpointProperties());
     }

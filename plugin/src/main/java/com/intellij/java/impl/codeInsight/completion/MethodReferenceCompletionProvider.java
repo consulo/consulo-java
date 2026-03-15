@@ -33,7 +33,6 @@ import consulo.language.util.ProcessingContext;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -44,9 +43,9 @@ public class MethodReferenceCompletionProvider implements CompletionProvider {
     @Override
     @RequiredReadAction
     public void addCompletions(
-        @Nonnull CompletionParameters parameters,
+        CompletionParameters parameters,
         ProcessingContext context,
-        @Nonnull final CompletionResultSet result
+        final CompletionResultSet result
     ) {
         if (!PsiUtil.isLanguageLevel8OrHigher(parameters.getOriginalFile())) {
             return;

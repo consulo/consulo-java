@@ -24,8 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.TargetElementUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole
@@ -35,7 +34,7 @@ public class JavaTypeDeclarationProvider extends TypeDeclarationProvider {
   @RequiredReadAction
   @Nullable
   @Override
-  public PsiElement[] getSymbolTypeDeclarations(@Nonnull PsiElement targetElement, Editor editor, int offset) {
+  public PsiElement[] getSymbolTypeDeclarations(PsiElement targetElement, Editor editor, int offset) {
     PsiType type;
     if (targetElement instanceof PsiVariable) {
       type = ((PsiVariable) targetElement).getType();

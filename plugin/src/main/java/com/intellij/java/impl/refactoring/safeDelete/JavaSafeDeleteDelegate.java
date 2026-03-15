@@ -27,8 +27,7 @@ import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiReference;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public interface JavaSafeDeleteDelegate extends LanguageExtension {
   ExtensionPointCacheKey<JavaSafeDeleteDelegate, ByLanguageValue<JavaSafeDeleteDelegate>> KEY = ExtensionPointCacheKey.create("JavaSafeDeleteDelegate", LanguageOneToOne.build());
 
   @Nullable
-  static JavaSafeDeleteDelegate forLanguage(@Nonnull Language language) {
+  static JavaSafeDeleteDelegate forLanguage(Language language) {
     return Application.get().getExtensionPoint(JavaSafeDeleteDelegate.class).getOrBuildCache(KEY).get(language);
   }
 

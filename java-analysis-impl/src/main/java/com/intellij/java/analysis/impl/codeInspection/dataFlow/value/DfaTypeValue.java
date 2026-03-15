@@ -7,9 +7,8 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,16 +16,14 @@ import java.util.Map;
 public class DfaTypeValue extends DfaValue
 {
 	private final
-	@Nonnull
 	DfType myType;
 
-	DfaTypeValue(@Nonnull DfaValueFactory factory, @Nonnull DfType type)
+	DfaTypeValue(DfaValueFactory factory, DfType type)
 	{
 		super(factory);
 		myType = type;
 	}
 
-	@Nonnull
 	@Override
 	public DfType getDfType()
 	{
@@ -73,8 +70,7 @@ public class DfaTypeValue extends DfaValue
 			myFactory = factory;
 		}
 
-		@Nonnull
-		DfaTypeValue create(@Nonnull DfType type)
+		DfaTypeValue create(DfType type)
 		{
 			return myValues.computeIfAbsent(type, t -> new DfaTypeValue(myFactory, t));
 		}

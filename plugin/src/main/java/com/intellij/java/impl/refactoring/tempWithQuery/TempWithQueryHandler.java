@@ -47,7 +47,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +59,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         Set<String> flags = Set.of(
             TargetElementUtilExtender.ELEMENT_NAME_ACCEPTED,
             TargetElementUtilExtender.REFERENCED_ELEMENT_ACCEPTED,
@@ -188,7 +187,7 @@ public class TempWithQueryHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length == 1 && elements[0] instanceof PsiLocalVariable localVar && dataContext != null) {
             PsiFile file = dataContext.getData(PsiFile.KEY);
             Editor editor = dataContext.getData(Editor.KEY);

@@ -37,8 +37,7 @@ import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 /**
@@ -60,9 +59,9 @@ public class JavaI18nUtil {
     return psiElement.getTextRange();
   }
 
-  public static boolean mustBePropertyKey(@Nonnull Project project,
-                                          @Nonnull PsiLiteralExpression expression,
-                                          @Nonnull Map<String, Object> annotationAttributeValues) {
+  public static boolean mustBePropertyKey(Project project,
+                                          PsiLiteralExpression expression,
+                                          Map<String, Object> annotationAttributeValues) {
     final PsiElement parent = expression.getParent();
     if (parent instanceof PsiVariable) {
       final PsiAnnotation annotation = AnnotationUtil.findAnnotation((PsiVariable)parent, AnnotationUtil.PROPERTY_KEY);
@@ -73,8 +72,8 @@ public class JavaI18nUtil {
     return isPassedToAnnotatedParam(project, expression, AnnotationUtil.PROPERTY_KEY, annotationAttributeValues, null);
   }
 
-  public static boolean isPassedToAnnotatedParam(@Nonnull Project project,
-                                                 @Nonnull PsiExpression expression,
+  public static boolean isPassedToAnnotatedParam(Project project,
+                                                 PsiExpression expression,
                                                  final String annFqn,
                                                  @Nullable Map<String, Object> annotationAttributeValues,
                                                  @Nullable final Set<PsiModifierListOwner> nonNlsTargets) {
@@ -130,8 +129,7 @@ public class JavaI18nUtil {
       }
     };
 
-  @Nonnull
-  public static PsiExpression getToplevelExpression(@Nonnull final Project project, @Nonnull final PsiExpression expression) {
+  public static PsiExpression getToplevelExpression(final Project project, final PsiExpression expression) {
     if (expression instanceof PsiBinaryExpression || expression.getParent() instanceof PsiBinaryExpression) {  //can be large, cache
       return CachedValuesManager.getManager(project).getParameterizedCachedValue(expression, TOP_LEVEL_EXPRESSION, TOP_LEVEL_PROVIDER, true,
                                                                                  Pair.create(project, expression));
@@ -139,8 +137,7 @@ public class JavaI18nUtil {
     return getTopLevel(project, expression);
   }
 
-  @Nonnull
-  private static PsiExpression getTopLevel(Project project, @Nonnull PsiExpression expression) {
+  private static PsiExpression getTopLevel(Project project, PsiExpression expression) {
     int i = 0;
     while (expression.getParent() instanceof PsiExpression) {
       i++;
@@ -208,7 +205,7 @@ public class JavaI18nUtil {
   }
 
   private static boolean processAnnotationAttributes(@Nullable Map<String, Object> annotationAttributeValues,
-                                                     @Nonnull PsiAnnotation annotation) {
+                                                     PsiAnnotation annotation) {
     if (annotationAttributeValues != null) {
       final PsiAnnotationParameterList parameterList = annotation.getParameterList();
       final PsiNameValuePair[] attributes = parameterList.getAttributes();
@@ -247,7 +244,7 @@ public class JavaI18nUtil {
                                                 final Collection<String> result) {
     PsiScopesUtil.treeWalkUp(new PsiScopeProcessor() {
       @Override
-      public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+      public boolean execute(PsiElement element, ResolveState state) {
         if (element instanceof PsiMethod) {
           PsiMethod method = (PsiMethod)element;
           PsiType returnType = method.getReturnType();
@@ -260,7 +257,7 @@ public class JavaI18nUtil {
       }
 
       @Override
-      public <T> T getHint(@Nonnull Key<T> hintKey) {
+      public <T> T getHint(Key<T> hintKey) {
         return null;
       }
 

@@ -20,14 +20,13 @@ import consulo.language.psi.*;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
 import consulo.application.util.function.Processor;
 import consulo.application.util.query.Query;
-import jakarta.annotation.Nonnull;
 
 public class SingletonUtil {
 
   private SingletonUtil() {
   }
 
-  public static boolean isSingleton(@Nonnull PsiClass aClass) {
+  public static boolean isSingleton(PsiClass aClass) {
     if (aClass.isInterface() || aClass.isEnum() ||
         aClass.isAnnotationType()) {
       return false;

@@ -43,9 +43,7 @@ import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -79,14 +77,14 @@ public class CreateClassDialog extends DialogWrapper {
       return CreateClassDialog.this.reportBaseInSourceSelectionInTest();
     }
   };
-  @NonNls private static final String RECENTS_KEY = "CreateClassDialog.RecentsKey";
+  private static final String RECENTS_KEY = "CreateClassDialog.RecentsKey";
 
   public CreateClassDialog(
-    @Nonnull Project project,
-    @Nonnull LocalizeValue title,
-    @Nonnull String targetClassName,
-    @Nonnull String targetPackageName,
-    @Nonnull ClassKind kind,
+    Project project,
+    LocalizeValue title,
+    String targetClassName,
+    String targetPackageName,
+    ClassKind kind,
     boolean classNameEditable,
     @Nullable Module defaultModule
   ) {
@@ -125,7 +123,6 @@ public class CreateClassDialog extends DialogWrapper {
     return false;
   }
 
-  @Nonnull
   @Override
   protected Action[] createActions() {
     return new Action[]{getOKAction(), getCancelAction()};
@@ -275,7 +272,6 @@ public class CreateClassDialog extends DialogWrapper {
     return myModule == null? null : PackageUtil.findPossiblePackageDirectoryInModule(myModule, packageName);
   }
 
-  @Nonnull
   public String getClassName() {
     if (myClassNameEditable) {
       return myTfClassName.getText();

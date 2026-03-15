@@ -37,8 +37,7 @@ import consulo.util.nodep.classloader.UrlClassLoader;
 import consulo.util.nodep.text.StringUtilRt;
 import consulo.virtualFileSystem.encoding.ApplicationEncodingManager;
 import consulo.virtualFileSystem.util.PathsList;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,26 +58,26 @@ public class OwnJdkUtil {
      */
     public static final String PROPERTY_DO_NOT_ESCAPE_CLASSPATH_URL = "idea.do.not.escape.classpath.url";
 
-    public static boolean checkForJdk(@Nonnull String homePath) {
+    public static boolean checkForJdk(String homePath) {
         return checkForJdk(new File(FileUtil.toSystemDependentName(homePath)));
     }
 
-    public static boolean checkForJdk(@Nonnull File homePath) {
+    public static boolean checkForJdk(File homePath) {
         return (new File(homePath, "bin/javac").isFile() || new File(
             homePath,
             "bin/javac.exe"
         ).isFile()) && checkForRuntime(homePath.getAbsolutePath());
     }
 
-    public static boolean checkForJre(@Nonnull String homePath) {
+    public static boolean checkForJre(String homePath) {
         return checkForJre(new File(FileUtil.toSystemDependentName(homePath)));
     }
 
-    public static boolean checkForJre(@Nonnull File homePath) {
+    public static boolean checkForJre(File homePath) {
         return new File(homePath, "bin/java").isFile() || new File(homePath, "bin/java.exe").isFile();
     }
 
-    public static boolean checkForRuntime(@Nonnull String homePath) {
+    public static boolean checkForRuntime(String homePath) {
         return new File(homePath, "jre/lib/rt.jar").exists()          // JDK
             || new File(homePath, "lib/rt.jar").exists()              // JRE
             || isModularRuntime(homePath)                             // Jigsaw JDK/JRE
@@ -87,19 +86,19 @@ public class OwnJdkUtil {
             || new File(homePath, "classes").isDirectory();           // custom build
     }
 
-    public static boolean isModularRuntime(@Nonnull String homePath) {
+    public static boolean isModularRuntime(String homePath) {
         return isModularRuntime(new File(FileUtil.toSystemDependentName(homePath)));
     }
 
-    public static boolean isModularRuntime(@Nonnull File homePath) {
+    public static boolean isModularRuntime(File homePath) {
         return new File(homePath, "lib/jrt-fs.jar").isFile() || isExplodedModularRuntime(homePath.getPath());
     }
 
-    public static boolean isExplodedModularRuntime(@Nonnull String homePath) {
+    public static boolean isExplodedModularRuntime(String homePath) {
         return new File(homePath, "modules/java.base").isDirectory();
     }
 
-    public static GeneralCommandLine setupJVMCommandLine(@Nonnull OwnSimpleJavaParameters javaParameters) throws CantRunException {
+    public static GeneralCommandLine setupJVMCommandLine(OwnSimpleJavaParameters javaParameters) throws CantRunException {
         Sdk jdk = javaParameters.getJdk();
         if (jdk == null) {
             throw new CantRunException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified().get());

@@ -6,8 +6,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.PsiElement;
 import org.jetbrains.annotations.Contract;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Vitaliy.Bibaev
@@ -16,26 +15,26 @@ public final class StreamApiUtil {
   private StreamApiUtil() {
   }
 
-  public static boolean isStreamCall(@Nonnull PsiMethodCallExpression expression) {
+  public static boolean isStreamCall(PsiMethodCallExpression expression) {
     return isIntermediateStreamCall(expression) || isProducerStreamCall(expression) || isTerminationStreamCall(expression);
   }
 
-  public static boolean isProducerStreamCall(@Nonnull PsiMethodCallExpression expression) {
+  public static boolean isProducerStreamCall(PsiMethodCallExpression expression) {
     final PsiMethod method = expression.resolveMethod();
 
     return (method != null && method.hasModifierProperty(PsiModifier.STATIC)) ||
            checkStreamCall(expression, false, true);
   }
 
-  public static boolean isIntermediateStreamCall(@Nonnull PsiMethodCallExpression expression) {
+  public static boolean isIntermediateStreamCall(PsiMethodCallExpression expression) {
     return checkStreamCall(expression, true, true);
   }
 
-  public static boolean isTerminationStreamCall(@Nonnull PsiMethodCallExpression expression) {
+  public static boolean isTerminationStreamCall(PsiMethodCallExpression expression) {
     return checkStreamCall(expression, true, false);
   }
 
-  private static boolean checkStreamCall(@Nonnull PsiMethodCallExpression expression,
+  private static boolean checkStreamCall(PsiMethodCallExpression expression,
                                          boolean mustReceiverBeStream,
                                          boolean mustResultBeStream) {
     final PsiMethod method = expression.resolveMethod();

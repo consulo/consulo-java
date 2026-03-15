@@ -29,19 +29,15 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceEqualityWithSafeEqualsIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ReplaceEqualityWithSafeEqualsIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceEqualityWithSafeEqualsIntentionName();
     }
 
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ObjectEqualityPredicate();
     }
@@ -70,7 +66,7 @@ public class ReplaceEqualityWithSafeEqualsIntention extends Intention {
         PsiJavaToken operationSign = exp.getOperationSign();
         IElementType tokenType = operationSign.getTokenType();
         String signText = operationSign.getText();
-        @NonNls StringBuilder buffer = new StringBuilder(lhsText);
+        StringBuilder buffer = new StringBuilder(lhsText);
         buffer.append("==null?");
         buffer.append(rhsText);
         buffer.append(signText);

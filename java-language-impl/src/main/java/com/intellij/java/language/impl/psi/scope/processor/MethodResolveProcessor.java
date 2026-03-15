@@ -25,8 +25,7 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,14 +50,14 @@ public class MethodResolveProcessor implements PsiScopeProcessor, ElementClassHi
     return myMethods.toArray(new PsiMethod[myMethods.size()]);
   }
 
-  public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+  public boolean execute(PsiElement element, ResolveState state) {
     if (element instanceof PsiMethod) {
       ContainerUtil.addIfNotNull(myMethods, (PsiMethod)element);
     }
     return true;
   }
 
-  public <T> T getHint(@Nonnull Key<T> hintKey) {
+  public <T> T getHint(Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       return (T)this;
     }

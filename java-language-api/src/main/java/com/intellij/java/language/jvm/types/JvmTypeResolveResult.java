@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.jvm.JvmTypeDeclaration;
 
 /**
@@ -24,9 +23,7 @@ import com.intellij.java.language.jvm.JvmTypeDeclaration;
 public interface JvmTypeResolveResult
 {
 
-	@Nonnull
 	JvmTypeDeclaration getDeclaration();
 
-	@Nonnull
 	JvmSubstitutor getSubstitutor();
 }

@@ -35,8 +35,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -46,7 +45,7 @@ import java.util.Map;
 @ExtensionImpl
 public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
     @Override
-    public boolean canProcessElement(@Nonnull PsiElement element) {
+    public boolean canProcessElement(PsiElement element) {
         return element instanceof PsiJavaPackage;
     }
 
@@ -80,7 +79,7 @@ public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
     }
 
     @Override
-    public void findExistingNameConflicts(@Nonnull PsiElement element, String newName, MultiMap<PsiElement, LocalizeValue> conflicts) {
+    public void findExistingNameConflicts(PsiElement element, String newName, MultiMap<PsiElement, LocalizeValue> conflicts) {
         PsiJavaPackage aPackage = (PsiJavaPackage) element;
         Project project = element.getProject();
         String qualifiedNameAfterRename = getPackageQualifiedNameAfterRename(aPackage, newName, true);
@@ -110,7 +109,7 @@ public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
 
     @Nullable
     @Override
-    public Runnable getPostRenameCallback(@Nonnull PsiElement element, String newName, RefactoringElementListener listener) {
+    public Runnable getPostRenameCallback(PsiElement element, String newName, RefactoringElementListener listener) {
         Project project = element.getProject();
         PsiJavaPackage psiPackage = (PsiJavaPackage) element;
         String newQualifiedName = PsiUtilCore.getQualifiedNameAfterRename(psiPackage.getQualifiedName(), newName);

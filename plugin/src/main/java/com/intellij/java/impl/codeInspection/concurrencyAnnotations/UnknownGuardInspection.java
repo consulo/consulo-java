@@ -29,35 +29,30 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * check locks according to http://www.javaconcurrencyinpractice.com/annotations/doc/net/jcip/annotations/GuardedBy.html
  */
 @ExtensionImpl
 public class UnknownGuardInspection extends BaseJavaLocalInspectionTool {
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesConcurrencyAnnotationIssues();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Unknown @GuardedBy field");
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "UnknownGuard";
     }
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state

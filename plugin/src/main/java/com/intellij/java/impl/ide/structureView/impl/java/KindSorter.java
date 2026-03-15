@@ -18,8 +18,6 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.Sorter;
 import com.intellij.java.language.psi.PsiMethod;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import java.util.Comparator;
 
@@ -33,7 +31,6 @@ public class KindSorter implements Sorter
 		this.isPopup = isPopup;
 	}
 
-	@NonNls
 	public static final String ID = "KIND";
 	private final boolean isPopup;
 
@@ -83,7 +80,6 @@ public class KindSorter implements Sorter
 	};
 
 	@Override
-	@Nonnull
 	public Comparator getComparator()
 	{
 		return COMPARATOR;
@@ -96,14 +92,12 @@ public class KindSorter implements Sorter
 	}
 
 	@Override
-	@Nonnull
 	public ActionPresentation getPresentation()
 	{
 		throw new IllegalStateException();
 	}
 
 	@Override
-	@Nonnull
 	public String getName()
 	{
 		return ID;

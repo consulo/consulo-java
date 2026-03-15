@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.psi.codeStyle.arrangement;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,27 +25,23 @@ import java.util.List;
  */
 public class JavaArrangementMethodDependencyInfo {
 
-  @Nonnull
   private final List<JavaArrangementMethodDependencyInfo> myDependentMethods
     = new ArrayList<JavaArrangementMethodDependencyInfo>();
   
-  @Nonnull
   private final JavaElementArrangementEntry myAnchorMethod;
 
-  public JavaArrangementMethodDependencyInfo(@Nonnull JavaElementArrangementEntry method) {
+  public JavaArrangementMethodDependencyInfo(JavaElementArrangementEntry method) {
     myAnchorMethod = method;
   }
 
-  public void addDependentMethodInfo(@Nonnull JavaArrangementMethodDependencyInfo info) {
+  public void addDependentMethodInfo(JavaArrangementMethodDependencyInfo info) {
     myDependentMethods.add(info);
   }
   
-  @Nonnull
   public List<JavaArrangementMethodDependencyInfo> getDependentMethodInfos() {
     return myDependentMethods;
   }
 
-  @Nonnull
   public JavaElementArrangementEntry getAnchorMethod() {
     return myAnchorMethod;
   }

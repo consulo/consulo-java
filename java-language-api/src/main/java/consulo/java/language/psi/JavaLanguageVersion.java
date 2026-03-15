@@ -19,7 +19,6 @@ package consulo.java.language.psi;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
 import consulo.language.version.LanguageVersion;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -34,7 +33,6 @@ public class JavaLanguageVersion extends LanguageVersion {
     myLanguageLevel = languageLevel;
   }
 
-  @Nonnull
   public LanguageLevel getLanguageLevel() {
     return myLanguageLevel;
   }

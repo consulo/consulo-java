@@ -34,7 +34,6 @@ import consulo.language.ast.IElementType;
 import consulo.java.manifest.lang.ManifestLanguageVersion;
 import consulo.language.version.LanguageVersion;
 import consulo.language.version.LanguageVersionWithParsing;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -62,7 +61,6 @@ public class ManifestSyntaxHighlighter extends LanguageVersionableSyntaxHighligh
 	}
 
 	@Override
-	@Nonnull
 	public TextAttributesKey[] getTokenHighlights(IElementType tokenType)
 	{
 		return pack(keys.get(tokenType));

@@ -45,8 +45,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -63,12 +62,12 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor processor,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
+        Object state
     ) {
         List<ProblemDescriptor> problems = null;
         if (refEntity instanceof RefMethod refMethod) {
@@ -113,11 +112,11 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
     ) {
         manager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull RefEntity refEntity) {
+            public void visitElement(RefEntity refEntity) {
                 if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
                     refEntity.accept(new RefJavaVisitor() {
                         @Override
-                        public void visitMethod(@Nonnull RefMethod refMethod) {
+                        public void visitMethod(RefMethod refMethod) {
                             globalContext.enqueueMethodUsagesProcessor(refMethod, psiReference -> {
                                 processor.ignoreElement(refMethod);
                                 return false;
@@ -131,20 +130,17 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
         return false;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionSameParameterDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "SameParameterValue";
     }
@@ -166,7 +162,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
 
     @Nullable
     @Override
-    public String getHint(@Nonnull QuickFix fix) {
+    public String getHint(QuickFix fix) {
         InlineParameterValueFix valueFix = (InlineParameterValueFix) fix;
         return valueFix.getParamName() + " " + valueFix.getValue();
     }
@@ -180,7 +176,6 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
             myParameterName = parameterName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionSameParameterFixName(myParameterName, myValue);
@@ -188,7 +183,7 @@ public class SameParameterValueInspection extends GlobalJavaInspectionTool {
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiElement element = descriptor.getPsiElement();
             PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
             LOG.assertTrue(method != null);

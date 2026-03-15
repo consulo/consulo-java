@@ -23,7 +23,6 @@ import consulo.language.editor.refactoring.RenameRefactoring;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class RenameParameterFix extends InspectionGadgetsFix {
   private final String m_targetName;
@@ -34,7 +33,6 @@ public class RenameParameterFix extends InspectionGadgetsFix {
     m_targetName = targetName;
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.renametoQuickfix(m_targetName);
   }

@@ -29,7 +29,6 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.Button;
 
-import jakarta.annotation.Nonnull;
 
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class EntryPointsManager implements Disposable {
@@ -37,13 +36,12 @@ public abstract class EntryPointsManager implements Disposable {
     return project.getInstance(EntryPointsManager.class);
   }
 
-  public abstract void resolveEntryPoints(@Nonnull RefManager manager);
+  public abstract void resolveEntryPoints(RefManager manager);
 
-  public abstract void addEntryPoint(@Nonnull RefElement newEntryPoint, boolean isPersistent);
+  public abstract void addEntryPoint(RefElement newEntryPoint, boolean isPersistent);
 
-  public abstract void removeEntryPoint(@Nonnull RefElement anEntryPoint);
+  public abstract void removeEntryPoint(RefElement anEntryPoint);
 
-  @Nonnull
   public abstract RefElement[] getEntryPoints();
 
   public abstract void cleanup();
@@ -54,5 +52,5 @@ public abstract class EntryPointsManager implements Disposable {
 
   public abstract Button createConfigureAnnotationsBtn();
 
-  public abstract boolean isEntryPoint(@Nonnull PsiElement element);
+  public abstract boolean isEntryPoint(PsiElement element);
 }

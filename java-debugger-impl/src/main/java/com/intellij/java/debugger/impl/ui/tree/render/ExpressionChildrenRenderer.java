@@ -39,16 +39,14 @@ import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionChildrenRenderer extends TypeRenderer implements ChildrenRenderer {
     public static final
-    @NonNls
     String UNIQUE_ID = "ExpressionChildrenRenderer";
     private static final Key<Value> EXPRESSION_VALUE = new Key<>("EXPRESSION_VALUE");
     private static final Key<NodeRenderer> LAST_CHILDREN_RENDERER = new Key<>("LAST_CHILDREN_RENDERER");

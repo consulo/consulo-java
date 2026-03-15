@@ -22,7 +22,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import java.util.HashSet;
@@ -30,20 +29,17 @@ import java.util.Set;
 
 @ExtensionImpl
 public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "LocalVariableUsedAndDeclaredInDifferentSwitchBranches";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.switchStatementWithConfusingDeclarationDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.switchStatementWithConfusingDeclarationProblemDescriptor().get();
     }
@@ -55,7 +51,7 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
     private static class SwitchStatementWithConfusingDeclarationVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+        public void visitSwitchStatement(PsiSwitchStatement statement) {
             PsiCodeBlock body = statement.getBody();
             if (body == null) {
                 return;
@@ -92,7 +88,7 @@ public class SwitchStatementWithConfusingDeclarationInspection extends BaseInspe
             }
 
             @Override
-            public void visitReferenceExpression(@Nonnull PsiReferenceExpression referenceExpression) {
+            public void visitReferenceExpression(PsiReferenceExpression referenceExpression) {
                 super.visitReferenceExpression(referenceExpression);
                 PsiExpression qualifier = referenceExpression.getQualifierExpression();
                 if (qualifier != null) {

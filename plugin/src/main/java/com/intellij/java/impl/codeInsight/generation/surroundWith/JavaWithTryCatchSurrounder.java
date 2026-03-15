@@ -29,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collections;
 import java.util.List;
@@ -62,7 +61,7 @@ public class JavaWithTryCatchSurrounder extends JavaStatementsSurrounder {
       }
     }
 
-    @NonNls StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = new StringBuilder();
     buffer.append("try{\n}");
     for (PsiClassType exception : exceptions) {
       buffer.append("catch(Exception e){\n}");

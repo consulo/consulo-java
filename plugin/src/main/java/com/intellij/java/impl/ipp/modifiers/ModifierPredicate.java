@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -29,7 +28,7 @@ class ModifierPredicate implements PsiElementPredicate {
   @PsiModifier.ModifierConstant
   private final String myModifier;
 
-  public ModifierPredicate(@Nonnull @PsiModifier.ModifierConstant String modifier) {
+  public ModifierPredicate(@PsiModifier.ModifierConstant String modifier) {
     myModifier = modifier;
   }
 

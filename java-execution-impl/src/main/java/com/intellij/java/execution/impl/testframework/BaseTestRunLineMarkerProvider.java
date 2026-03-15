@@ -23,8 +23,7 @@ import consulo.logging.Logger;
 import consulo.project.DumbService;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public abstract class BaseTestRunLineMarkerProvider extends RunLineMarkerContrib
 
     @Override
     @Nullable
-    public Info getInfo(@Nonnull PsiElement e) {
+    public Info getInfo(PsiElement e) {
         if (isIdentifier(e)) {
             PsiElement element = e.getParent();
             if (element instanceof PsiClass psiClass) {
@@ -97,14 +96,12 @@ public abstract class BaseTestRunLineMarkerProvider extends RunLineMarkerContrib
         return framework != null && framework.isTestMethod(method, false);
     }
 
-    @Nonnull
     private static Info getInfo(TestStateStorage.Record state, boolean isClass, int order) {
         AnAction[] actions = ExecutorAction.getActions(order);
         return new Info(getTestStateIcon(state, isClass), element -> JavaExecutionLocalize.runTest().get(), actions);
     }
 
-    @Nonnull
-    protected static Image getTestStateIcon(@Nullable TestStateStorage.Record state, boolean isClass) {
+    protected static Image getTestStateIcon(TestStateStorage.@Nullable Record state, boolean isClass) {
         if (state != null) {
             TestStateInfo.Magnitude magnitude = TestIconMapper.getMagnitude(state.magnitude);
             if (magnitude != null) {

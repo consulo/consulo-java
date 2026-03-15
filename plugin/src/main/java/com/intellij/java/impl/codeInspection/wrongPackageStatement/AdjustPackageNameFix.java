@@ -27,7 +27,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class AdjustPackageNameFix implements LocalQuickFix {
   private static final Logger LOG = Logger.getInstance(AdjustPackageNameFix.class);
@@ -38,18 +37,16 @@ public class AdjustPackageNameFix implements LocalQuickFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return JavaQuickFixLocalize.adjustPackageText(myName);
   }
 
-  @Nonnull
   public LocalizeValue getFamilyName() {
     return JavaQuickFixLocalize.adjustPackageFamily();
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     if (element == null) return;
     PsiFile myFile = element.getContainingFile();

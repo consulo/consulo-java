@@ -32,8 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -44,19 +43,16 @@ public class ConfusingElseInspection extends BaseInspection {
   public boolean reportWhenNoStatementFollow = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "ConfusingElseBranch";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.confusingElseDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.confusingElseProblemDescriptor().get();
   }
@@ -80,7 +76,6 @@ public class ConfusingElseInspection extends BaseInspection {
 
   private static class ConfusingElseFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.confusingElseUnwrapQuickfix();
     }
@@ -120,7 +115,7 @@ public class ConfusingElseInspection extends BaseInspection {
   private class ConfusingElseVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+    public void visitIfStatement(PsiIfStatement statement) {
       super.visitIfStatement(statement);
       PsiStatement thenBranch = statement.getThenBranch();
       if (thenBranch == null) {

@@ -27,7 +27,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
 
 import java.util.*;
@@ -36,11 +35,10 @@ import java.util.stream.Collectors;
 public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
     private final PsiSwitchStatement mySwitchStatement;
 
-    public ConvertSwitchToIfIntention(@Nonnull PsiSwitchStatement switchStatement) {
+    public ConvertSwitchToIfIntention(PsiSwitchStatement switchStatement) {
         mySwitchStatement = switchStatement;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return CommonQuickFixLocalize.fixReplaceXWithY(PsiKeyword.SWITCH, PsiKeyword.IF);
@@ -48,7 +46,7 @@ public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return isAvailable(mySwitchStatement);
     }
 
@@ -72,13 +70,12 @@ public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
 
     @Override
     @RequiredReadAction
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         doProcessIntention(mySwitchStatement);
     }
 
-    @Nonnull
     @Override
-    public PsiElement getElementToMakeWritable(@Nonnull PsiFile file) {
+    public PsiElement getElementToMakeWritable(PsiFile file) {
         return mySwitchStatement;
     }
 
@@ -88,7 +85,7 @@ public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
     }
 
     @RequiredReadAction
-    public static void doProcessIntention(@Nonnull PsiSwitchStatement switchStatement) {
+    public static void doProcessIntention(PsiSwitchStatement switchStatement) {
         PsiExpression switchExpression = switchStatement.getExpression();
         if (switchExpression == null) {
             return;
@@ -213,7 +210,6 @@ public class ConvertSwitchToIfIntention implements SyntheticIntentionAction {
         }
     }
 
-    @Nonnull
     @RequiredReadAction
     private static List<SwitchStatementBranch> extractBranches(
         CommentTracker commentTracker,

@@ -45,7 +45,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.InputValidatorEx;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 
@@ -119,13 +118,11 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
         return JavaModuleExtension.class;
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getErrorTitle() {
         return JavaCoreLocalize.titleCannotCreateClass();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getActionName(PsiDirectory directory, String newName, String templateName) {
         return JavaCoreLocalize.progressCreatingClass(StringUtil.getQualifiedName(
@@ -145,7 +142,7 @@ public class CreateClassAction extends JavaCreateTemplateInPackageAction<PsiClas
     }
 
     @Override
-    protected PsiElement getNavigationElement(@Nonnull PsiClass createdElement) {
+    protected PsiElement getNavigationElement(PsiClass createdElement) {
         return createdElement.getLBrace();
     }
 

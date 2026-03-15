@@ -22,14 +22,12 @@ import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
 import consulo.ui.Component;
 import consulo.ui.event.ComponentEvent;
 import consulo.util.concurrent.AsyncResult;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.List;
 
 @ExtensionAPI(ComponentScope.PROJECT)
 public interface AttachSourcesProvider {
-  @Nonnull
   Collection<AttachSourcesAction> getActions(List<LibraryOrderEntry> orderEntries, PsiFile psiFile);
 
   interface AttachSourcesAction {
@@ -37,7 +35,7 @@ public interface AttachSourcesProvider {
 
     String getBusyText();
 
-    AsyncResult<Void> perform(@Nonnull List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull ComponentEvent<Component> e);
+    AsyncResult<Void> perform(List<LibraryOrderEntry> orderEntriesContainingFile, ComponentEvent<Component> e);
   }
 
   /**

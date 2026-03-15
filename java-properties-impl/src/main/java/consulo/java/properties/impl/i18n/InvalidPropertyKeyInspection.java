@@ -40,8 +40,7 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -52,25 +51,21 @@ import java.util.*;
 @ExtensionImpl
 public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesPropertiesFiles();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return CodeInsightLocalize.inspectionUnresolvedPropertyKeyReferenceName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "UnresolvedPropertyKey";
     }
 
     @Override
-    @Nonnull
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;
     }
@@ -83,8 +78,8 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
     @Override
     @Nullable
     public ProblemDescriptor[] checkMethod(
-        @Nonnull PsiMethod method,
-        @Nonnull InspectionManager manager,
+        PsiMethod method,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -93,7 +88,7 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
 
     @Override
     @Nullable
-    public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkClass(PsiClass aClass, InspectionManager manager, boolean isOnTheFly, Object state) {
         PsiClassInitializer[] initializers = aClass.getInitializers();
         List<ProblemDescriptor> result = new ArrayList<>();
         for (PsiClassInitializer initializer : initializers) {
@@ -108,7 +103,7 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
 
     @Override
     @Nullable
-    public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkField(PsiField field, InspectionManager manager, boolean isOnTheFly, Object state) {
         List<ProblemDescriptor> result = new ArrayList<>();
         appendProblems(manager, isOnTheFly, result, field.getInitializer());
         appendProblems(manager, isOnTheFly, result, field.getModifierList());
@@ -154,11 +149,11 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
         }
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
         }
 
         @Override
@@ -240,11 +235,11 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
 
         @RequiredReadAction
         private static void appendPropertyKeyNotFoundProblem(
-            @Nonnull String bundleName,
-            @Nonnull String key,
-            @Nonnull PsiLiteralExpression expression,
-            @Nonnull InspectionManager manager,
-            @Nonnull List<ProblemDescriptor> problems,
+            String bundleName,
+            String key,
+            PsiLiteralExpression expression,
+            InspectionManager manager,
+            List<ProblemDescriptor> problems,
             boolean onTheFly
         ) {
             List<PropertiesFile> propertiesFiles =
@@ -259,8 +254,7 @@ public class InvalidPropertyKeyInspection extends BaseJavaLocalInspectionTool {
             );
         }
 
-        @Nonnull
-        private static List<PropertiesFile> filterNotInLibrary(@Nonnull Project project, @Nonnull List<PropertiesFile> propertiesFiles) {
+        private static List<PropertiesFile> filterNotInLibrary(Project project, List<PropertiesFile> propertiesFiles) {
             ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 
             List<PropertiesFile> result = new ArrayList<>(propertiesFiles.size());

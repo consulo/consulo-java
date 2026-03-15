@@ -34,8 +34,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -54,13 +53,12 @@ public class SuggestVariableNameMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "a";
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     String[] names = getNames(context);
     if (names == null || names.length == 0) return null;
     return new TextResult(names[0]);
@@ -68,12 +66,12 @@ public class SuggestVariableNameMacro extends Macro {
 
   @Nullable
   @Override
-  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     String[] names = getNames(context);
     if (names == null || names.length < 2) return null;
     LookupItem[] items = new LookupItem[names.length];

@@ -13,8 +13,7 @@ import consulo.util.collection.MultiMap;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -103,7 +102,6 @@ public class MethodBytecodeUtil
 		}, 0);
 	}
 
-	@Nonnull
 	private static Attribute createAttribute(String name, ThrowableConsumer<DataOutputStream, IOException> generator)
 	{
 		BufferExposingByteArrayOutputStream bytes = new BufferExposingByteArrayOutputStream();
@@ -190,7 +188,6 @@ public class MethodBytecodeUtil
 		return null;
 	}
 
-	@Nonnull
 	private static Attribute createCode(ClassWriter cw, Method method, byte[] bytecodes, boolean withLineNumbers)
 	{
 		return createAttribute("Code", dos -> {
@@ -246,7 +243,7 @@ public class MethodBytecodeUtil
 	}
 
 	@Nullable
-	public static Method getLambdaMethod(ReferenceType clsType, @Nonnull VirtualMachineProxy vm)
+	public static Method getLambdaMethod(ReferenceType clsType, VirtualMachineProxy vm)
 	{
 		Ref<Method> methodRef = Ref.create();
 		if(DebuggerUtilsEx.isLambdaClassName(clsType.name()))
@@ -276,7 +273,7 @@ public class MethodBytecodeUtil
 	}
 
 	@Nullable
-	public static Method getBridgeTargetMethod(Method method, @Nonnull VirtualMachineProxy vm)
+	public static Method getBridgeTargetMethod(Method method, VirtualMachineProxy vm)
 	{
 		Ref<Method> methodRef = Ref.create();
 		if(method.isBridge())
@@ -315,7 +312,7 @@ public class MethodBytecodeUtil
 		return methodRef.get();
 	}
 
-	public static List<Location> removeSameLineLocations(@Nonnull List<Location> locations)
+	public static List<Location> removeSameLineLocations(List<Location> locations)
 	{
 		if(locations.size() < 2)
 		{
@@ -334,7 +331,7 @@ public class MethodBytecodeUtil
 		return res;
 	}
 
-	private static Collection<Location> removeMethodSameLineLocations(@Nonnull Method method, @Nonnull List<Location> locations)
+	private static Collection<Location> removeMethodSameLineLocations(Method method, List<Location> locations)
 	{
 		int locationsSize = locations.size();
 		if(locationsSize < 2)

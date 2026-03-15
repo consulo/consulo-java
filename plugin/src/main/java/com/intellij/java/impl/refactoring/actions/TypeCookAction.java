@@ -31,7 +31,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-import jakarta.annotation.Nonnull;
 
 @ActionImpl(id = "Generify")
 public class TypeCookAction extends BaseRefactoringAction {
@@ -50,7 +49,7 @@ public class TypeCookAction extends BaseRefactoringAction {
     }
 
     @Override
-    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    public boolean isEnabledOnElements(PsiElement[] elements) {
         Project project = DataManager.getInstance().getDataContext().getData(Project.KEY);
 
         if (project == null) {
@@ -68,7 +67,7 @@ public class TypeCookAction extends BaseRefactoringAction {
     }
 
     @Override
-    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+    public RefactoringActionHandler getHandler(DataContext dataContext) {
         return getHandler();
     }
 

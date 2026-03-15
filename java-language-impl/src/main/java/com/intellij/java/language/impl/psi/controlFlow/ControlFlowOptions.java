@@ -1,7 +1,6 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.language.impl.psi.controlFlow;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Options for ControlFlow generation.
@@ -22,7 +21,6 @@ public class ControlFlowOptions {
   };
 
   public static final
-  @Nonnull
   ControlFlowOptions NO_CONST_EVALUATE = create(false, false, true);
 
   private final boolean myEnableShortCircuit;

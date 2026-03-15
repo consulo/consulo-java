@@ -29,7 +29,6 @@ import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.StringUtil;
 import consulo.xml.psi.XmlRecursiveElementVisitor;
 import consulo.xml.psi.xml.*;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author lesya
@@ -44,7 +43,7 @@ public class ImportsFormatter extends XmlRecursiveElementVisitor {
 
   private final PostFormatProcessorHelper myPostProcessor;
 
-  public ImportsFormatter(@Nonnull CodeStyleSettings settings, @Nonnull PsiFile file) {
+  public ImportsFormatter(CodeStyleSettings settings, PsiFile file) {
     myPostProcessor = new PostFormatProcessorHelper(settings);
     myDocumentModel = FormattingDocumentModel.create(file);
     myIndentOptions = settings.getIndentOptions(file.getFileType());

@@ -35,9 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -47,16 +45,14 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     private static final CreateBeanPropertyFix[] NO_FIXES = new CreateBeanPropertyFix[0];
 
     protected final String myPropertyName;
-    @Nonnull
     protected final PsiClass myPsiClass;
-    @Nonnull
     protected final PsiType myType;
 
-    public static LocalQuickFix[] createFixes(String propertyName, @Nonnull PsiClass psiClass, @Nullable PsiType type, boolean createSetter) {
+    public static LocalQuickFix[] createFixes(String propertyName, PsiClass psiClass, @Nullable PsiType type, boolean createSetter) {
         return (LocalQuickFix[]) create(propertyName, psiClass, type, createSetter);
     }
 
-    public static IntentionAction[] createActions(String propertyName, @Nonnull PsiClass psiClass, @Nullable PsiType type, boolean createSetter) {
+    public static IntentionAction[] createActions(String propertyName, PsiClass psiClass, @Nullable PsiType type, boolean createSetter) {
         return (IntentionAction[]) create(propertyName, psiClass, type, createSetter);
     }
 
@@ -80,7 +76,6 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
             new CreateBeanPropertyFix(propertyName, psiClass, type) {
 
                 @Override
-                @Nonnull
                 public LocalizeValue getName() {
                     return JavaQuickFixLocalize.createReadableWritablePropertyWithField(myPropertyName);
                 }
@@ -106,7 +101,6 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
                 }
 
                 @Override
-                @Nonnull
                 public LocalizeValue getName() {
                     if (createSetter) {
                         return JavaQuickFixLocalize.createWritablePropertyWithField(myPropertyName);
@@ -119,14 +113,14 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
         };
     }
 
-    protected CreateBeanPropertyFix(String propertyName, @Nonnull PsiClass psiClass, @Nonnull PsiType type) {
+    protected CreateBeanPropertyFix(String propertyName, PsiClass psiClass, PsiType type) {
         myPropertyName = propertyName;
         myPsiClass = psiClass;
         myType = type;
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         applyFix(project);
     }
 
@@ -145,18 +139,17 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         return getName();
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return true;
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         applyFix(project);
     }
 
@@ -177,13 +170,13 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
         String methodName = PropertyUtil.suggestSetterName(myPropertyName);
         String typeName = myType.getCanonicalText();
 
-        @NonNls String text;
+        String text;
         boolean isInterface = myPsiClass.isInterface();
         if (isInterface) {
             text = "public void " + methodName + "(" + typeName + " " + myPropertyName + ");";
         }
         else if (createField) {
-            @NonNls String fieldName = getFieldName();
+            String fieldName = getFieldName();
             if (fieldName.equals(myPropertyName)) {
                 fieldName = "this." + fieldName;
             }
@@ -204,7 +197,7 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
         PsiElementFactory elementFactory = JavaPsiFacade.getInstance(myPsiClass.getProject()).getElementFactory();
         String methodName = PropertyUtil.suggestGetterName(myPropertyName, myType);
         String typeName = myType.getCanonicalText();
-        @NonNls String text;
+        String text;
         boolean isInterface = myPsiClass.isInterface();
         if (createField) {
             String fieldName = getFieldName();
@@ -252,7 +245,6 @@ public abstract class CreateBeanPropertyFix implements LocalQuickFix, SyntheticI
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             if (myCreateSetter) {
                 return JavaQuickFixLocalize.createWritableProperty(myPropertyName);

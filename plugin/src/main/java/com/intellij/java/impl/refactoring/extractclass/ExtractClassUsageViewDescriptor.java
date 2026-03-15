@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewDescriptor;
-import jakarta.annotation.Nonnull;
 
 class ExtractClassUsageViewDescriptor implements UsageViewDescriptor {
     private final PsiClass aClass;
@@ -39,7 +38,6 @@ class ExtractClassUsageViewDescriptor implements UsageViewDescriptor {
         return JavaRefactoringLocalize.extractingFromClass().get();
     }
 
-    @Nonnull
     @Override
     public PsiElement[] getElements() {
         return new PsiElement[]{aClass};

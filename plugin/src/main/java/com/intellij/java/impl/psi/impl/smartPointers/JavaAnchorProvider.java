@@ -21,8 +21,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.SmartPointerAnchorProvider;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dennis.Ushakov
@@ -30,7 +29,7 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class JavaAnchorProvider implements SmartPointerAnchorProvider {
   @Override
-  public PsiElement getAnchor(@Nonnull PsiElement element) {
+  public PsiElement getAnchor(PsiElement element) {
     if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE) || !element.isPhysical()) {
       return null;
     }
@@ -49,7 +48,7 @@ public class JavaAnchorProvider implements SmartPointerAnchorProvider {
 
   @Nullable
   @Override
-  public PsiElement restoreElement(@Nonnull PsiElement anchor) {
+  public PsiElement restoreElement(PsiElement anchor) {
     if (anchor instanceof PsiIdentifier) {
       PsiElement parent = anchor.getParent();
       if (parent instanceof PsiJavaCodeReferenceElement) { // anonymous class, type

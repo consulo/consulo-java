@@ -30,8 +30,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,20 +38,18 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MakeCallChainIntoCallSequenceIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class MakeCallChainIntoCallSequenceIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.makeCallChainIntoCallSequenceIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new MethodCallChainPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         List<String> callTexts = new ArrayList<String>();
         PsiExpression root = (PsiExpression) element;
         while (root instanceof PsiMethodCallExpression) {
@@ -72,7 +68,7 @@ public class MakeCallChainIntoCallSequenceIntention extends Intention {
         }
         String targetText;
         PsiStatement appendStatement;
-        @NonNls String firstStatement;
+        String firstStatement;
         String variableDeclaration;
         boolean showRenameTemplate;
         PsiElement parent = element.getParent();

@@ -35,8 +35,6 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsagePreviewPanel;
 import consulo.usage.UsagePreviewPanelFactory;
 import consulo.usage.UsageViewPresentation;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -98,7 +96,6 @@ class OverridingMethodsDialog extends DialogWrapper {
   }
 
   @Override
-  @Nonnull
   protected Action[] createActions() {
     return new Action[]{
         getOKAction(),
@@ -146,9 +143,9 @@ class OverridingMethodsDialog extends DialogWrapper {
     checkboxColumn.setCellRenderer(new BooleanTableCellRenderer());
 
     // make SPACE check/uncheck selected rows
-    @NonNls InputMap inputMap = myTable.getInputMap();
+    InputMap inputMap = myTable.getInputMap();
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "enable_disable");
-    @NonNls ActionMap actionMap = myTable.getActionMap();
+    ActionMap actionMap = myTable.getActionMap();
     actionMap.put("enable_disable", new AbstractAction() {
       @Override
       public void actionPerformed(ActionEvent e) {

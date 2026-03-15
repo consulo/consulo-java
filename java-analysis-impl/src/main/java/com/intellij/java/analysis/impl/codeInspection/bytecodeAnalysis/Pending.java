@@ -16,20 +16,18 @@
 
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Stream;
 
 final class Pending implements Result {
-  @Nonnull
   final Component[] delta; // sum
 
   Pending(Collection<Component> delta) {
     this(delta.toArray(Component.EMPTY_ARRAY));
   }
 
-  Pending(@Nonnull Component[] delta) {
+  Pending(Component[] delta) {
     this.delta = delta;
   }
 
@@ -47,7 +45,6 @@ final class Pending implements Result {
     return Arrays.hashCode(delta);
   }
 
-  @Nonnull
   Pending copy() {
     Component[] copy = new Component[delta.length];
     for (int i = 0; i < delta.length; i++) {

@@ -30,7 +30,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,7 +44,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
     private final PsiField myField;
     private final String myPropertyName;
 
-    public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field) {
+    public CreateGetterOrSetterFix(boolean createGetter, boolean createSetter, PsiField field) {
         myCreateGetter = createGetter;
         myCreateSetter = createSetter;
         myField = field;
@@ -53,7 +52,6 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         if (myCreateGetter && myCreateSetter) {
             return JavaQuickFixLocalize.createGetterAndSetterForField(myField.getName());
@@ -70,7 +68,7 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (!myField.isValid()) {
             return false;
         }
@@ -95,20 +93,20 @@ public class CreateGetterOrSetterFix implements SyntheticIntentionAction, LowPri
         return true;
     }
 
-    private static boolean isFinal(@Nonnull PsiField field) {
+    private static boolean isFinal(PsiField field) {
         return field.hasModifierProperty(PsiModifier.FINAL);
     }
 
-    private static boolean isStatic(@Nonnull PsiField field) {
+    private static boolean isStatic(PsiField field) {
         return field.hasModifierProperty(PsiModifier.STATIC);
     }
 
-    private static boolean isStaticFinal(@Nonnull PsiField field) {
+    private static boolean isStaticFinal(PsiField field) {
         return isStatic(field) && isFinal(field);
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().preparePsiElementForWrite(myField)) {
             return;
         }

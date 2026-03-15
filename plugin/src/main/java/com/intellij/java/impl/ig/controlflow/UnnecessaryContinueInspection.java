@@ -26,7 +26,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,13 +34,11 @@ public class UnnecessaryContinueInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreInThenBranch = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryContinueDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryContinueProblemDescriptor().get();
     }
@@ -67,7 +64,7 @@ public class UnnecessaryContinueInspection extends BaseInspection {
     private class UnnecessaryContinueVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
+        public void visitContinueStatement(PsiContinueStatement statement) {
       /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;
       }   */

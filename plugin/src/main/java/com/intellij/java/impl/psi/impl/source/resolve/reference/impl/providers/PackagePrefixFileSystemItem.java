@@ -28,10 +28,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -58,13 +56,12 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @Nonnull
   public String getName() {
     return StringUtil.notNullize(myPackages[myIndex].getName());
   }
 
   @Override
-  public PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -89,7 +86,6 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @Nonnull
   public TextRange getTextRange() {
     return TextRange.EMPTY_RANGE;
   }
@@ -116,29 +112,27 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @NonNls
   public String getText() {
     return "";
   }
 
   @Override
-  @Nonnull
   public char[] textToCharArray() {
     return ArrayUtil.EMPTY_CHAR_ARRAY;
   }
 
   @Override
-  public boolean textMatches(@Nonnull @NonNls CharSequence text) {
+  public boolean textMatches(CharSequence text) {
     return false;
   }
 
   @Override
-  public boolean textMatches(@Nonnull PsiElement element) {
+  public boolean textMatches(PsiElement element) {
     return false;
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
   }
 
   @Override
@@ -147,22 +141,22 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement add(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement add(PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public PsiElement addBefore(@Nonnull PsiElement element, PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addBefore(PsiElement element, PsiElement anchor) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public PsiElement addAfter(@Nonnull PsiElement element, PsiElement anchor) throws IncorrectOperationException {
+  public PsiElement addAfter(PsiElement element, PsiElement anchor) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
   @Override
-  public void checkAdd(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public void checkAdd(PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -177,7 +171,7 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  public PsiElement replace(@Nonnull PsiElement newElement) throws IncorrectOperationException {
+  public PsiElement replace(PsiElement newElement) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -215,7 +209,6 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @Nonnull
   public Language getLanguage() {
     return Language.ANY;
   }
@@ -226,7 +219,6 @@ class PackagePrefixFileSystemItem extends PsiElementBase implements PsiFileSyste
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     return myIndex == myPackages.length -1? myDirectory.getChildren() : new PsiElement[] {new PackagePrefixFileSystemItem(myDirectory, myIndex + 1, myPackages)};
   }

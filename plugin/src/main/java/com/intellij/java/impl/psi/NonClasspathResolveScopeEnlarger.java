@@ -13,7 +13,6 @@ import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -23,7 +22,7 @@ import java.util.List;
 @ExtensionImpl
 public class NonClasspathResolveScopeEnlarger extends ResolveScopeEnlarger {
     @Override
-    public SearchScope getAdditionalResolveScope(@Nonnull VirtualFile file, Project project) {
+    public SearchScope getAdditionalResolveScope(VirtualFile file, Project project) {
         ProjectFileIndex index = ProjectFileIndex.getInstance(project);
         if (index.isInLibraryClasses(file) || index.isInContent(file)) {
             return null;

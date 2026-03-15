@@ -43,8 +43,7 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,7 +63,6 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
         myRef = ref;
     }
 
-    @Nonnull
     protected String getPopupTitle() {
         return JavaQuickFixBundle.message("method.to.import.chooser.title");
     }
@@ -143,7 +141,6 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
                 return true;
             }
 
-            @Nonnull
             @Override
             public String getTextFor(T value) {
                 return getElementPresentableName(value);

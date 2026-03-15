@@ -15,9 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.Nls;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
@@ -37,14 +35,13 @@ import com.intellij.java.language.psi.PsiMethod;
 
 
 public abstract class RemoveRedundantUncheckedSuppressionTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     final PossibleHeapPollutionVarargsInspection varargsInspection = new PossibleHeapPollutionVarargsInspection();
     final UncheckedWarningLocalInspection warningLocalInspection = new UncheckedWarningLocalInspection();
     final RedundantSuppressInspection inspection = new RedundantSuppressInspection(){
       @Override
-      protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, @Nonnull InspectionManager manager) {
+      protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, InspectionManager manager) {
         return new InspectionToolWrapper[]{
           new LocalInspectionToolWrapper(varargsInspection),
           new LocalInspectionToolWrapper(warningLocalInspection)
@@ -54,31 +51,25 @@ public abstract class RemoveRedundantUncheckedSuppressionTest extends LightQuick
 
     return new LocalInspectionTool[] {
       new LocalInspectionTool() {
-        @Nls
-        @Nonnull
         @Override
         public String getGroupDisplayName() {
           return inspection.getGroupDisplayName();
         }
 
-        @Nls
-        @Nonnull
         @Override
         public String getDisplayName() {
           return inspection.getDisplayName();
         }
 
-        @Nonnull
         @Override
         public String getShortName() {
           return inspection.getShortName();
         }
 
-        @Nonnull
         @Override
-        public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
+        public PsiElementVisitor buildVisitor(final ProblemsHolder holder,
                                               boolean isOnTheFly,
-                                              @Nonnull LocalInspectionToolSession session) {
+                                              LocalInspectionToolSession session) {
           return new JavaElementVisitor() {
             @Override
             public void visitClass(PsiClass aClass) {

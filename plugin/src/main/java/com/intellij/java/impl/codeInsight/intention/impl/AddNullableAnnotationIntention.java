@@ -28,21 +28,18 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddNullableAnnotationIntention", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class AddNullableAnnotationIntention extends AddAnnotationIntention {
-  @Nonnull
   @Override
-  public Pair<String, String[]> getAnnotations(@Nonnull Project project) {
+  public Pair<String, String[]> getAnnotations(Project project) {
     return new Pair<String, String[]>(NullableNotNullManager.getInstance(project).getDefaultNullable(), getNotNulls(project));
   }
 
-  @Nonnull
-  private static String[] getNotNulls(@Nonnull Project project) {
+  private static String[] getNotNulls(Project project) {
     List<String> notnulls = NullableNotNullManager.getInstance(project).getNotNulls();
     return ArrayUtil.toStringArray(notnulls);
   }

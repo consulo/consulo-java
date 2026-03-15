@@ -4,16 +4,14 @@ package com.intellij.java.language.psi;
 import com.intellij.java.language.jvm.annotation.JvmAnnotationArrayValue;
 import com.intellij.java.language.jvm.annotation.JvmAnnotationAttributeValue;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
 class PsiAnnotationArrayValue extends PsiAnnotationAttributeValue<PsiArrayInitializerMemberValue> implements JvmAnnotationArrayValue {
-    PsiAnnotationArrayValue(@Nonnull PsiArrayInitializerMemberValue value) {
+    PsiAnnotationArrayValue(PsiArrayInitializerMemberValue value) {
         super(value);
     }
 
-    @Nonnull
     @Override
     public List<JvmAnnotationAttributeValue> getValues() {
         return ContainerUtil.map(myElement.getInitializers(), PsiJvmConversionHelper::getAnnotationAttributeValue);

@@ -23,7 +23,6 @@ import consulo.execution.coverage.CoverageEngine;
 import consulo.execution.coverage.CoverageExecutor;
 import consulo.execution.coverage.CoverageRunnerData;
 
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 @ExtensionImpl(id = "DefaultJavaCoverageRunner")
@@ -36,7 +35,7 @@ public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
     }
 
     @Override
-    public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {
+    public boolean canRun(String executorId, RunProfile profile) {
         try {
             return executorId.equals(CoverageExecutor.EXECUTOR_ID)
                 // && profile instanceof ModuleBasedConfiguration
@@ -55,7 +54,6 @@ public class DefaultJavaCoverageRunner extends DefaultJavaProgramRunner {
         return new CoverageRunnerData();
     }
 
-    @Nonnull
     @Override
     public String getRunnerId() {
         return "Cover";

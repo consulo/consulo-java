@@ -19,8 +19,7 @@ import consulo.language.psi.PsiChildLink;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -41,8 +40,7 @@ public class InstanceofLink<Parent extends PsiElement, Child extends PsiElement,
   }
 
   @Override
-  @Nonnull
-  public CastTo createChild(@Nonnull Parent parent) throws IncorrectOperationException {
+  public CastTo createChild(Parent parent) throws IncorrectOperationException {
     return (CastTo) myDelegate.createChild(parent);
   }
 

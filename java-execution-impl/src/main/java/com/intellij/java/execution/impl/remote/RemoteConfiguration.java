@@ -39,7 +39,6 @@ import consulo.project.Project;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 import java.util.Collection;
@@ -85,7 +84,7 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException
+	public RunProfileState getState(final Executor executor, final ExecutionEnvironment env) throws ExecutionException
 	{
 		GenericDebuggerRunnerSettings debuggerSettings = (GenericDebuggerRunnerSettings) env.getRunnerSettings();
 		debuggerSettings.LOCAL = false;
@@ -95,7 +94,6 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	}
 
 	@Override
-	@Nonnull
 	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
 	{
 		SettingsEditorGroup<RemoteConfiguration> group = new SettingsEditorGroup<>();

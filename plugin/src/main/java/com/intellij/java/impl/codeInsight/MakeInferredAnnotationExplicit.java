@@ -44,7 +44,6 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collections;
 
 /**
@@ -60,7 +59,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
     PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     if (owner != null && owner.getLanguage().isKindOf(JavaLanguage.INSTANCE) && isWritable(owner) && ModuleUtilCore.findModuleForPsiElement(
@@ -92,7 +91,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
     PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     assert owner != null;
@@ -132,8 +131,7 @@ public class MakeInferredAnnotationExplicit extends BaseIntentionAction {
 
   }
 
-  @Nonnull
-  private static PsiAnnotation correctAnnotation(@Nonnull PsiAnnotation annotation) {
+  private static PsiAnnotation correctAnnotation(PsiAnnotation annotation) {
     Project project = annotation.getProject();
     JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
     GlobalSearchScope allScope = GlobalSearchScope.allScope(project);

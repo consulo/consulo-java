@@ -30,7 +30,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -41,19 +40,16 @@ import java.util.Collection;
 public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(RedundantLambdaCodeBlockInspection.class);
 
-  @Nonnull
   @Override
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
-  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Statement lambda can be replaced with expression lambda");
@@ -64,15 +60,13 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
     return true;
   }
 
-  @Nonnull
   @Override
   public String getShortName() {
     return "CodeBlock2Expr";
   }
 
-  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -139,14 +133,13 @@ public class RedundantLambdaCodeBlockInspection extends BaseJavaBatchLocalInspec
   }
 
   private static class ReplaceWithExprFix implements LocalQuickFix, HighPriorityAction {
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return LocalizeValue.localizeTODO("Replace with expression lambda");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
       final PsiElement element = descriptor.getPsiElement();
       if (element != null) {
         final PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);

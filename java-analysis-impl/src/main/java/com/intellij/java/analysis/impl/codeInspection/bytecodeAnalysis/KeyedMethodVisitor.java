@@ -6,7 +6,7 @@ import consulo.internal.org.objectweb.asm.MethodVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.tree.MethodNode;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.Direction.Out;
 

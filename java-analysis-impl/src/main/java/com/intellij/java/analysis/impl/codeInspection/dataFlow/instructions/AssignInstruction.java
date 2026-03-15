@@ -27,7 +27,7 @@ import com.intellij.java.language.psi.PsiVariable;
 import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class AssignInstruction extends ExpressionPushingInstruction<PsiAssignmentExpression> {
   private final PsiExpression myRExpression;

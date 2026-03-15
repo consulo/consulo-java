@@ -20,7 +20,6 @@ import consulo.document.util.TextRange;
 import consulo.language.psi.LiteralTextEscaper;
 import consulo.language.psi.PsiLanguageInjectionHost;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiLiteralExpressionImpl;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -33,7 +32,7 @@ public class StringLiteralEscaper<T extends PsiLanguageInjectionHost> extends Li
   }
 
   @Override
-  public boolean decode(@Nonnull final TextRange rangeInsideHost, @Nonnull StringBuilder outChars) {
+  public boolean decode(final TextRange rangeInsideHost, StringBuilder outChars) {
     ProperTextRange.assertProperRange(rangeInsideHost);
     String subText = rangeInsideHost.substring(myHost.getText());
     outSourceOffsets = new int[subText.length()+1];
@@ -41,7 +40,7 @@ public class StringLiteralEscaper<T extends PsiLanguageInjectionHost> extends Li
   }
 
   @Override
-  public int getOffsetInHost(int offsetInDecoded, @Nonnull final TextRange rangeInsideHost) {
+  public int getOffsetInHost(int offsetInDecoded, final TextRange rangeInsideHost) {
     int result = offsetInDecoded < outSourceOffsets.length ? outSourceOffsets[offsetInDecoded] : -1;
     if (result == -1) return -1;
     return (result <= rangeInsideHost.getLength() ? result : rangeInsideHost.getLength()) + rangeInsideHost.getStartOffset();

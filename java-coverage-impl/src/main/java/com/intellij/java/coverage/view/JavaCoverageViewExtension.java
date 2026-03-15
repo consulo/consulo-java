@@ -18,7 +18,7 @@ import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.ui.ex.awt.ColumnInfo;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -298,8 +298,7 @@ public class JavaCoverageViewExtension extends CoverageViewExtension {
         return children;
     }
 
-    @Nullable
-    private PackageAnnotator.ClassCoverageInfo getClassCoverageInfo(final PsiClass aClass) {
+    private PackageAnnotator.@Nullable ClassCoverageInfo getClassCoverageInfo(final PsiClass aClass) {
         return myAnnotator.getClassCoverageInfo(aClass.getApplication().runReadAction(new Supplier<>() {
             @Override
             public String get() {

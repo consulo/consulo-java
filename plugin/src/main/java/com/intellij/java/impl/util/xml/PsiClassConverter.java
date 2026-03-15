@@ -26,8 +26,7 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.xml.util.xml.*;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -51,7 +50,6 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
     return t == null ? null : t.getQualifiedName();
   }
 
-  @Nonnull
   public PsiReference[] createReferences(GenericDomValue<PsiClass> genericDomValue, PsiElement element, ConvertContext context) {
 
     ExtendClass extendClass = genericDomValue.getAnnotation(ExtendClass.class);
@@ -110,7 +108,7 @@ public class PsiClassConverter extends Converter<PsiClass> implements CustomRefe
   }
 
   @Nullable
-  protected GlobalSearchScope getScope(@Nonnull ConvertContext context) {
+  protected GlobalSearchScope getScope(ConvertContext context) {
     return context.getSearchScope();
   }
 

@@ -34,7 +34,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * User: cdr
@@ -47,7 +46,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     element = findJavaCodeUpThere(element);
     PsiFile file = element.getContainingFile();
@@ -78,7 +77,7 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!element.isValid()) {
       return false;
     }
@@ -94,7 +93,6 @@ class SuppressByCommentOutAction extends SuppressIntentionAction implements Synt
     return null;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Suppress with '" + nonNlsCommentPattern + "' comment");

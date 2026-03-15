@@ -17,7 +17,6 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUtil;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -48,7 +47,6 @@ final class NullParameterConstraintChecker extends DataFlowRunner
 		myUsedParameters = new HashSet<>();
 	}
 
-	@Nonnull
 	static PsiParameter [] checkMethodParameters(PsiMethod method)
 	{
 		if(method.getBody() == null)
@@ -84,8 +82,7 @@ final class NullParameterConstraintChecker extends DataFlowRunner
 	}
 
 	@Override
-	@Nonnull
-	protected DfaInstructionState  [] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState)
+	protected DfaInstructionState  [] acceptInstruction(InstructionVisitor visitor, DfaInstructionState instructionState)
 	{
 		Instruction instruction = instructionState.getInstruction();
 		if(instruction instanceof PushInstruction)
@@ -134,7 +131,6 @@ final class NullParameterConstraintChecker extends DataFlowRunner
 		return super.acceptInstruction(visitor, instructionState);
 	}
 
-	@Nonnull
 	@Override
 	protected DfaMemoryState createMemoryState()
 	{
@@ -160,7 +156,7 @@ final class NullParameterConstraintChecker extends DataFlowRunner
 		}
 
 		@Override
-		protected void flushVariable(@Nonnull DfaVariableValue variable, boolean shouldMarkFlushed)
+		protected void flushVariable(DfaVariableValue variable, boolean shouldMarkFlushed)
 		{
 			final PsiModifierListOwner psi = variable.getPsiVariable();
 			if(psi instanceof PsiParameter && myPossiblyViolatedParameters.contains(psi))
@@ -170,7 +166,6 @@ final class NullParameterConstraintChecker extends DataFlowRunner
 			super.flushVariable(variable, shouldMarkFlushed);
 		}
 
-		@Nonnull
 		@Override
 		public DfaMemoryStateImpl createCopy()
 		{

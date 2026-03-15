@@ -32,7 +32,6 @@ import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import consulo.language.codeStyle.FormatterUtil;
-import jakarta.annotation.Nonnull;
 
 public class LabeledJavaBlock extends AbstractJavaBlock
 {
@@ -42,7 +41,7 @@ public class LabeledJavaBlock extends AbstractJavaBlock
 							Indent indent,
 							CommonCodeStyleSettings settings,
 							JavaCodeStyleSettings javaSettings,
-							@Nonnull FormattingMode formattingMode)
+							FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 	}
@@ -83,7 +82,6 @@ public class LabeledJavaBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	@Nonnull
 	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		return new ChildAttributes(Indent.getNoneIndent(), null);

@@ -24,8 +24,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiReferenceExpression {
   private final ClsElementImpl myParent;
@@ -61,7 +60,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public PsiElement bindToElementViaStaticImport(@Nonnull PsiClass aClass) throws IncorrectOperationException {
+  public PsiElement bindToElementViaStaticImport(PsiClass aClass) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -81,7 +80,6 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     if (myQualifier != null) {
       return new PsiElement[]{myQualifier, myNameElement};
@@ -112,13 +110,11 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     return myPatternExpression.advancedResolve(incompleteCode);
   }
 
   @Override
-  @Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     final JavaResolveResult result = advancedResolve(incompleteCode);
     return result != JavaResolveResult.EMPTY ? new JavaResolveResult[]{result} : JavaResolveResult.EMPTY_ARRAY;
@@ -135,7 +131,6 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @Nonnull
   public String getCanonicalText() {
     return myPatternExpression.getCanonicalText();
   }
@@ -156,7 +151,7 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -166,7 +161,6 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @Nonnull
   public Object[] getVariants() {
     return myPatternExpression.getVariants();
   }
@@ -182,17 +176,17 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append(getText());
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.REFERENCE_EXPRESSION);
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceExpression(this);
     }
@@ -202,7 +196,6 @@ public class ClsReferenceExpressionImpl extends ClsElementImpl implements PsiRef
   }
 
   @Override
-  @Nonnull
   public PsiType[] getTypeParameters() {
     return PsiType.EMPTY_ARRAY;
   }

@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import consulo.annotation.access.RequiredReadAction;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +52,6 @@ class SideEffectFilter implements PreContract
 		return contracts;
 	}
 
-	@Nonnull
 	@Override
 	@RequiredReadAction
 	public List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body)

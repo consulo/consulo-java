@@ -23,8 +23,7 @@ import consulo.usage.Usage;
 import consulo.usage.UsageGroup;
 import consulo.usage.UsageTarget;
 import consulo.usage.rule.FileGroupingRule;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class NonJavaFileGroupingRule extends FileGroupingRule {
   public NonJavaFileGroupingRule(Project project) {
@@ -33,7 +32,7 @@ public class NonJavaFileGroupingRule extends FileGroupingRule {
 
   @Nullable
   @Override
-  public UsageGroup getParentGroupFor(@Nonnull Usage usage, @Nonnull UsageTarget[] targets) {
+  public UsageGroup getParentGroupFor(Usage usage, UsageTarget[] targets) {
     FileUsageGroup usageGroup = (FileUsageGroup) super.getParentGroupFor(usage, targets);
     if (usageGroup != null) {
       PsiFile psiFile = usageGroup.getPsiFile();

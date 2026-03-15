@@ -16,7 +16,6 @@
 package com.intellij.java.debugger;
 
 import com.intellij.java.language.psi.PsiClass;
-import jakarta.annotation.Nonnull;
 
 /**
  * Compilers of some java-based languages (like Scala) produce classes with names different from those declared in sources.
@@ -31,5 +30,5 @@ public interface NameMapper {
    * @param aClass a top-level class
    * @return a qualified name of the corresponding compiled class or null if default machanism of getting qualified names must be used  
    */
-  String getQualifiedName(@Nonnull PsiClass aClass);
+  String getQualifiedName(PsiClass aClass);
 }

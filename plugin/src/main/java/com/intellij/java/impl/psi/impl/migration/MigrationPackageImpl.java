@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiPackageManager;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -53,7 +52,7 @@ public class MigrationPackageImpl extends PsiPackageImpl {
   }
 
   @Override
-  public void handleQualifiedNameChange(@Nonnull String newQualifiedName) {
+  public void handleQualifiedNameChange(String newQualifiedName) {
     throw new UnsupportedOperationException();
   }
 

@@ -30,7 +30,6 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Attribute;
 import org.osmorc.manifest.lang.psi.impl.AttributeImpl;
 import org.osmorc.manifest.lang.psi.stub.AttributeStub;
@@ -47,7 +46,7 @@ public class AttributeElementType extends AbstractManifestStubElementType<Attrib
   }
 
   @Override
-  public Attribute createPsi(@Nonnull AttributeStub stub) {
+  public Attribute createPsi(AttributeStub stub) {
     return new AttributeImpl(stub, this);
   }
 
@@ -57,20 +56,19 @@ public class AttributeElementType extends AbstractManifestStubElementType<Attrib
   }
 
   @Override
-  public AttributeStub createStub(@Nonnull Attribute psi, StubElement parentStub) {
+  public AttributeStub createStub(Attribute psi, StubElement parentStub) {
     return new AttributeStubImpl(parentStub, psi.getName(), psi.getValue());
   }
 
-  public void serialize(@Nonnull AttributeStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(AttributeStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeUTFFast(stub.getValue());
   }
 
-  @Nonnull
-  public AttributeStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public AttributeStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new AttributeStubImpl(parentStub, dataStream.readName().toString(), dataStream.readUTFFast());
   }
 
-  public void indexStub(@Nonnull AttributeStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(AttributeStub stub, IndexSink sink) {
   }
 }

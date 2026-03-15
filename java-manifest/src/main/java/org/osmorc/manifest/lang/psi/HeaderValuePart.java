@@ -25,12 +25,11 @@
 
 package org.osmorc.manifest.lang.psi;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.StubBasedPsiElement;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.osmorc.manifest.lang.psi.stub.HeaderValuePartStub;
 
 /**
@@ -49,10 +48,9 @@ public interface HeaderValuePart extends PsiElement, StubBasedPsiElement<HeaderV
    *
    * @return The unwrapped text.
    */
-  @Nonnull
   String getUnwrappedText();
 
-  void setText(@Nonnull String text);
+  void setText(String text);
 
   /**
    * Returns the converted value of this header (.e.g if the header represents a version statement, this will return a {@link org.osmorc.valueobject.Version} object.

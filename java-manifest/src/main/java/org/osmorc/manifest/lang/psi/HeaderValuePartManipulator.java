@@ -31,7 +31,6 @@ import consulo.language.psi.AbstractElementManipulator;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiFileFactory;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestFileType;
 
 /**
@@ -51,7 +50,6 @@ public class HeaderValuePartManipulator extends AbstractElementManipulator<Heade
     return (HeaderValuePart) element.replace(headerValue);
   }
 
-  @Nonnull
   @Override
   public Class<HeaderValuePart> getElementClass() {
     return HeaderValuePart.class;

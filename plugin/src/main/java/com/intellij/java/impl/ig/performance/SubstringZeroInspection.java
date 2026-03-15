@@ -26,18 +26,15 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SubstringZeroInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.substringZeroDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.substringZeroProblemDescriptor().get();
     }
@@ -53,7 +50,6 @@ public class SubstringZeroInspection extends BaseInspection {
     }
 
     private static class SubstringZeroFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
         }
@@ -73,7 +69,7 @@ public class SubstringZeroInspection extends BaseInspection {
 
     private static class SubstringZeroVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

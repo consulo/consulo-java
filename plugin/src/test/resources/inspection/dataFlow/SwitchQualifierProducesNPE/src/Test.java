@@ -1,4 +1,4 @@
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class Test {
     enum E { A, B }

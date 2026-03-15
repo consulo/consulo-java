@@ -28,9 +28,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,20 +47,17 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
         returnSelfNames.add("reverse");
     }
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "MismatchedQueryAndUpdateOfStringBuilder";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.mismatchedStringBuilderQueryUpdateDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         boolean updated = (Boolean) infos[0];
@@ -199,7 +194,6 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
 
     private static class StringBuilderUpdateCalledVisitor extends JavaRecursiveElementVisitor {
 
-        @NonNls
         private static final Set<String> updateNames = new HashSet();
 
         static {
@@ -251,7 +245,6 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
 
     private static class StringBuilderQueryCalledVisitor extends JavaRecursiveElementVisitor {
 
-        @NonNls
         private static final Set<String> queryNames = new HashSet();
 
         static {
@@ -284,7 +277,7 @@ public class MismatchedStringBuilderQueryUpdateInspection extends BaseInspection
         }
 
         @Override
-        public void visitElement(@Nonnull PsiElement element) {
+        public void visitElement(PsiElement element) {
             if (queried) {
                 return;
             }

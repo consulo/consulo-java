@@ -31,8 +31,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 @ExtensionImpl
@@ -41,13 +40,12 @@ public class UnimplementInterfaceAction implements IntentionAction {
   private String myName = "Interface";
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Unimplement " + myName);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
     PsiReference psiReference = TargetElementUtil.findReference(editor);
     if (psiReference == null) return false;
@@ -90,7 +88,7 @@ public class UnimplementInterfaceAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(file)) return;
 
     PsiReference psiReference = TargetElementUtil.findReference(editor);

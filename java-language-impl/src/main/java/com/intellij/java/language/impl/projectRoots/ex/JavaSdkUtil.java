@@ -29,10 +29,9 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.virtualFileSystem.util.PathsList;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 
@@ -41,32 +40,29 @@ public class JavaSdkUtil {
     pathsList.addFirst(getJavaRtJarPath());
   }
 
-  @Nonnull
   @Deprecated
   @DeprecationInfo("Use #getJavaRtJarPath()")
   public static String getIdeaRtJarPath() {
     return getJavaRtJarPath();
   }
 
-  @Nonnull
   public static String getJavaRtJarPath() {
     File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
     File jarFile = new File(pluginPath, "java-rt-shaded.jar");
     return jarFile.getPath();
   }
 
-  @Nonnull
   public static String getJavaRtJarNotShadedPath() {
     File pluginPath = PluginManager.getPluginPath(JavaSdkUtil.class);
     File jarFile = new File(pluginPath, "java-rt.jar");
     return jarFile.getPath();
   }
 
-  public static boolean isLanguageLevelAcceptable(@Nonnull Project project, @Nonnull Module module, @Nonnull LanguageLevel level) {
+  public static boolean isLanguageLevelAcceptable(Project project, Module module, LanguageLevel level) {
     return isJdkSupportsLevel(getRelevantJdk(project, module), level);
   }
 
-  private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, @Nonnull LanguageLevel level) {
+  private static boolean isJdkSupportsLevel(@Nullable final Sdk jdk, LanguageLevel level) {
     if (jdk == null) {
       return true;
     }
@@ -75,13 +71,13 @@ public class JavaSdkUtil {
   }
 
   @Nullable
-  private static Sdk getRelevantJdk(@Nonnull Project project, @Nonnull Module module) {
+  private static Sdk getRelevantJdk(Project project, Module module) {
     Sdk moduleJdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     return moduleJdk == null ? null : moduleJdk;
   }
 
   @Contract("null, _ -> false")
-  public static boolean isJdkAtLeast(@Nullable Sdk jdk, @Nonnull JavaSdkVersion expected) {
+  public static boolean isJdkAtLeast(@Nullable Sdk jdk, JavaSdkVersion expected) {
     if (jdk != null) {
       SdkTypeId type = jdk.getSdkType();
       if (type instanceof JavaSdkType) {

@@ -6,14 +6,13 @@ import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
  * @since 14:32/27.04.13
  */
 public class HeaderUtil {
-	public static HeaderParser getHeaderParser(@Nonnull HeaderValuePart manifestHeaderValue) {
+	public static HeaderParser getHeaderParser(HeaderValuePart manifestHeaderValue) {
     Header manifestHeader = findHeader(manifestHeaderValue);
     String headerName = manifestHeader != null ? manifestHeader.getName() : null;
     return getHeaderParser(headerName);

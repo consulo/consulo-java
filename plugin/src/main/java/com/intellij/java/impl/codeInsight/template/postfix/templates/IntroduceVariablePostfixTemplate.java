@@ -11,7 +11,6 @@ import consulo.document.Document;
 import consulo.language.editor.refactoring.RefactoringSupportProvider;
 import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateWithExpressionSelector;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset;
@@ -23,7 +22,7 @@ public class IntroduceVariablePostfixTemplate extends PostfixTemplateWithExpress
   }
 
   @Override
-  protected void expandForChooseExpression(@Nonnull PsiElement expression, @Nonnull Editor editor) {
+  protected void expandForChooseExpression(PsiElement expression, Editor editor) {
     // for advanced stuff use ((PsiJavaCodeReferenceElement)expression).advancedResolve(true).getElement();
     JavaIntroduceVariableHandlerBase handler =
       (JavaIntroduceVariableHandlerBase)RefactoringSupportProvider.forLanguage(JavaLanguage.INSTANCE)
@@ -33,15 +32,15 @@ public class IntroduceVariablePostfixTemplate extends PostfixTemplateWithExpress
   }
 
   @Override
-  public boolean isApplicable(@Nonnull PsiElement context,
-                              @Nonnull Document copyDocument, int newOffset) {
+  public boolean isApplicable(PsiElement context,
+                              Document copyDocument, int newOffset) {
     // Non-inplace mode would require a modal dialog, which is not allowed under postfix templates
     return PersistentEditorSettings.getInstance().isVariableInplaceRenameEnabled() &&
       super.isApplicable(context, copyDocument, newOffset);
   }
 
   @Override
-  protected void prepareAndExpandForChooseExpression(@Nonnull PsiElement expression, @Nonnull Editor editor) {
+  protected void prepareAndExpandForChooseExpression(PsiElement expression, Editor editor) {
     //no write action
     expandForChooseExpression(expression, editor);
   }

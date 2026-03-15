@@ -82,7 +82,6 @@ import consulo.ui.UIAccess;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.virtualFileSystem.LocalFileSystem;
-import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 
 import javax.annotation.Nonnull;
@@ -265,18 +264,18 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 		return result.toArray(new LocalInspectionTool[result.size()]);
 	}
 
-	protected void doTest(@NonNls @Nonnull String filePath, boolean checkWarnings, boolean checkInfos, boolean checkWeakWarnings) throws Exception
+	protected void doTest(@Nonnull String filePath, boolean checkWarnings, boolean checkInfos, boolean checkWeakWarnings) throws Exception
 	{
 		configureByFile(filePath);
 		doDoTest(checkWarnings, checkInfos, checkWeakWarnings);
 	}
 
-	protected void doTest(@NonNls @Nonnull String filePath, boolean checkWarnings, boolean checkInfos) throws Exception
+	protected void doTest(@Nonnull String filePath, boolean checkWarnings, boolean checkInfos) throws Exception
 	{
 		doTest(filePath, checkWarnings, checkInfos, false);
 	}
 
-	protected void doTest(@NonNls @Nonnull String filePath, @NonNls String projectRoot, boolean checkWarnings, boolean checkInfos) throws Exception
+	protected void doTest(@Nonnull String filePath, String projectRoot, boolean checkWarnings, boolean checkInfos) throws Exception
 	{
 		configureByFile(filePath, projectRoot);
 		doDoTest(checkWarnings, checkInfos);
@@ -284,7 +283,7 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 
 	@Nonnull
 	@SuppressWarnings("TestMethodWithIncorrectSignature")
-	protected HighlightTestInfo testFile(@NonNls @Nonnull String... filePath)
+	protected HighlightTestInfo testFile(@Nonnull String... filePath)
 	{
 		return new HighlightTestInfo(getTestRootDisposable(), filePath)
 		{

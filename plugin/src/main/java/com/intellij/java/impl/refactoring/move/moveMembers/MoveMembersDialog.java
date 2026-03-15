@@ -57,7 +57,7 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.undoRedo.CommandProcessor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;

@@ -46,7 +46,6 @@ import com.intellij.java.impl.refactoring.ui.TypeSelector;
 import com.intellij.java.impl.refactoring.ui.TypeSelectorManager;
 import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
-import jakarta.annotation.Nonnull;
 
 class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariableSettings {
   private final Project myProject;
@@ -95,7 +94,6 @@ class IntroduceVariableDialog extends DialogWrapper implements IntroduceVariable
     super.dispose();
   }
 
-  @Nonnull
   protected Action[] createActions() {
     return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
   }

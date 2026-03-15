@@ -29,7 +29,6 @@ import com.siyeh.ig.ui.ExternalizableStringSet;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -39,13 +38,11 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
     public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonSerializableFieldInSerializableClassDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonSerializableFieldInSerializableClassProblemDescriptor().get();
     }
@@ -56,7 +53,6 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
         return new JComponent[]{SpecialAnnotationsUtil.createSpecialAnnotationsListControl(ignorableAnnotations, message.get())};
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         PsiField field = (PsiField) infos[0];
@@ -70,7 +66,7 @@ public class NonSerializableFieldInSerializableClassInspection extends Serializa
 
     private class NonSerializableFieldInSerializableClassVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             if (field.hasModifierProperty(PsiModifier.TRANSIENT) || field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }

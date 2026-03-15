@@ -25,7 +25,6 @@ import consulo.execution.ui.console.ConsoleView;
 import consulo.execution.ui.console.TextConsoleBuilderFactory;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author lex
@@ -40,7 +39,7 @@ public class RemoteStateState implements RemoteState {
     myConnection = connection;
   }
 
-  public ExecutionResult execute(final Executor executor, @Nonnull final ProgramRunner runner) throws ExecutionException {
+  public ExecutionResult execute(final Executor executor, final ProgramRunner runner) throws ExecutionException {
     ConsoleView consoleView = TextConsoleBuilderFactory.getInstance().createBuilder(myProject).getConsole();
     RemoteDebugProcessHandler process = new RemoteDebugProcessHandler(myProject);
     consoleView.attachToProcess(process);

@@ -28,7 +28,7 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedList;
 

@@ -23,8 +23,7 @@ import consulo.application.util.ParameterizedCachedValueProvider;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.dataholder.Key;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +32,7 @@ public class PsiLambdaNameHelper
 	private static final Key<ParameterizedCachedValue<Map<PsiLambdaExpression, String>, PsiClass>> LAMBDA_NAME = Key.create("ANONYMOUS_CLASS_NAME");
 
 	@Nullable
-	public static String getVMName(@Nonnull PsiLambdaExpression lambdaExpression)
+	public static String getVMName(PsiLambdaExpression lambdaExpression)
 	{
 		final PsiClass upper = PsiTreeUtil.getParentOfType(lambdaExpression, PsiClass.class);
 		if(upper == null)
@@ -77,7 +76,7 @@ public class PsiLambdaNameHelper
 		return "lambda" + getLambdaPrefix(lambdaExpression) + value.getValue(upper).get(lambdaExpression);
 	}
 
-	public static String getLambdaPrefix(@Nonnull PsiLambdaExpression lambdaExpression)
+	public static String getLambdaPrefix(PsiLambdaExpression lambdaExpression)
 	{
 		PsiMember member = PsiTreeUtil.getParentOfType(lambdaExpression, PsiMethod.class, PsiClass.class, PsiField.class);
 		final String methodPrefix;

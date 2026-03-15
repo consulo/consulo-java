@@ -31,14 +31,13 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaImplementationTextSelectioner implements ImplementationTextSelectioner {
   private static final Logger LOG = Logger.getInstance(JavaImplementationTextSelectioner.class);
 
   @Override
-  public int getTextStartOffset(@Nonnull PsiElement parent) {
+  public int getTextStartOffset(PsiElement parent) {
     PsiElement element = parent;
     if (element instanceof PsiDocCommentOwner) {
       PsiDocComment comment = ((PsiDocCommentOwner) element).getDocComment();
@@ -63,11 +62,10 @@ public class JavaImplementationTextSelectioner implements ImplementationTextSele
   }
 
   @Override
-  public int getTextEndOffset(@Nonnull PsiElement element) {
+  public int getTextEndOffset(PsiElement element) {
     return element.getTextRange().getEndOffset();
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

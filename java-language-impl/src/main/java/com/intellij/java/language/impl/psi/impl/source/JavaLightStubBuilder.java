@@ -20,12 +20,10 @@ import consulo.language.parser.ParserDefinition;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.stub.LightStubBuilder;
 import consulo.language.psi.stub.StubElement;
-import jakarta.annotation.Nonnull;
 
 public class JavaLightStubBuilder extends LightStubBuilder {
     @Override
-    @Nonnull
-    protected StubElement<?> createStubForFile(@Nonnull PsiFile file, @Nonnull LighterAST tree) {
+    protected StubElement<?> createStubForFile(PsiFile file, LighterAST tree) {
         if (!(file instanceof PsiJavaFile)) {
             return super.createStubForFile(file, tree);
         }
@@ -42,7 +40,7 @@ public class JavaLightStubBuilder extends LightStubBuilder {
     }
 
     @Override
-    public boolean skipChildProcessingWhenBuildingStubs(@Nonnull ASTNode parent, @Nonnull ASTNode node) {
+    public boolean skipChildProcessingWhenBuildingStubs(ASTNode parent, ASTNode node) {
         IElementType parentType = parent.getElementType();
         IElementType nodeType = node.getElementType();
 
@@ -57,7 +55,7 @@ public class JavaLightStubBuilder extends LightStubBuilder {
         return false;
     }
 
-    private static boolean isCodeBlockWithoutStubs(@Nonnull ASTNode node) {
+    private static boolean isCodeBlockWithoutStubs(ASTNode node) {
         CodeBlockVisitor visitor = new CodeBlockVisitor();
         if (TreeUtil.isCollapsedChameleon(node)) {
             ParserDefinition parserDefinition = ParserDefinition.forLanguage(JavaLanguage.INSTANCE);
@@ -76,11 +74,11 @@ public class JavaLightStubBuilder extends LightStubBuilder {
     }
 
     @Override
-    protected boolean skipChildProcessingWhenBuildingStubs(@Nonnull LighterAST tree, @Nonnull LighterASTNode parent, @Nonnull LighterASTNode node) {
+    protected boolean skipChildProcessingWhenBuildingStubs(LighterAST tree, LighterASTNode parent, LighterASTNode node) {
         return checkByTypes(parent.getTokenType(), node.getTokenType()) || isCodeBlockWithoutStubs(node);
     }
 
-    public static boolean isCodeBlockWithoutStubs(@Nonnull LighterASTNode node) {
+    public static boolean isCodeBlockWithoutStubs(LighterASTNode node) {
         if (node.getTokenType() == JavaElementType.CODE_BLOCK && node instanceof LighterLazyParseableNode) {
             CodeBlockVisitor visitor = new CodeBlockVisitor();
             ((LighterLazyParseableNode) node).accept(visitor);

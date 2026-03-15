@@ -16,19 +16,16 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
  */
 public interface ConfigFileMetaDataProvider {
 
-  @Nonnull
   ConfigFileMetaData[] getMetaData();
 
   @Nullable
-  ConfigFileMetaData findMetaData(@NonNls @Nonnull String id);
+  ConfigFileMetaData findMetaData(String id);
 
 }

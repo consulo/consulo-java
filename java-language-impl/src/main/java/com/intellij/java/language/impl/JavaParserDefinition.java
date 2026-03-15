@@ -43,60 +43,51 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.LanguageUtil;
 import consulo.language.version.LanguageVersion;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
  */
 @ExtensionImpl
 public class JavaParserDefinition implements ParserDefinition {
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }
 
   @Override
-  @Nonnull
-  public Lexer createLexer(@Nonnull LanguageVersion languageVersion) {
+  public Lexer createLexer(LanguageVersion languageVersion) {
     JavaLanguageVersion wrapper = (JavaLanguageVersion) languageVersion;
     return new JavaLexer(wrapper.getLanguageLevel());
   }
 
-  @Nonnull
   @Override
   public IFileElementType getFileNodeType() {
     return JavaStubElementTypes.JAVA_FILE;
   }
 
   @Override
-  @Nonnull
-  public TokenSet getWhitespaceTokens(@Nonnull LanguageVersion languageVersion) {
+  public TokenSet getWhitespaceTokens(LanguageVersion languageVersion) {
     return ElementType.JAVA_WHITESPACE_BIT_SET;
   }
 
   @Override
-  @Nonnull
-  public TokenSet getCommentTokens(@Nonnull LanguageVersion languageVersion) {
+  public TokenSet getCommentTokens(LanguageVersion languageVersion) {
     return ElementType.JAVA_COMMENT_BIT_SET;
   }
 
   @Override
-  @Nonnull
-  public TokenSet getStringLiteralElements(@Nonnull LanguageVersion languageVersion) {
+  public TokenSet getStringLiteralElements(LanguageVersion languageVersion) {
     return TokenSet.create(JavaElementType.LITERAL_EXPRESSION);
   }
 
   @Override
-  @Nonnull
-  public PsiParser createParser(@Nonnull LanguageVersion languageVersion) {
+  public PsiParser createParser(LanguageVersion languageVersion) {
     throw new UnsupportedOperationException();
   }
 
   @RequiredReadAction
   @Override
-  @Nonnull
-  public PsiElement createElement(@Nonnull final ASTNode node) {
+  public PsiElement createElement(final ASTNode node) {
     final IElementType type = node.getElementType();
     if (type instanceof JavaStubElementType) {
       return ((JavaStubElementType) type).createPsi(node);
@@ -106,11 +97,10 @@ public class JavaParserDefinition implements ParserDefinition {
   }
 
   @Override
-  public PsiFile createFile(@Nonnull final FileViewProvider viewProvider) {
+  public PsiFile createFile(final FileViewProvider viewProvider) {
     return new PsiJavaFileImpl(viewProvider);
   }
 
-  @Nonnull
   @Override
   public SpaceRequirements spaceExistanceTypeBetweenTokens(ASTNode left, ASTNode right) {
     final PsiFile containingFile = left.getTreeParent().getPsi().getContainingFile();

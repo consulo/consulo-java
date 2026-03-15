@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiReturnStatement;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 
 public class WrapReturnValue extends FixableUsageInfo {
     private final PsiReturnStatement statement;
@@ -35,7 +34,7 @@ public class WrapReturnValue extends FixableUsageInfo {
     public void fixUsage() throws IncorrectOperationException {
         PsiExpression returnValue = statement.getReturnValue();
         assert returnValue != null;
-        @NonNls String newExpression =
+        String newExpression =
                 "new " + type + '(' + returnValue.getText() + ')';
         MutationUtils.replaceExpression(newExpression, returnValue);
     }

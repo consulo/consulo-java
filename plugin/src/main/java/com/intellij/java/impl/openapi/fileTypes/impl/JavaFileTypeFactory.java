@@ -22,12 +22,11 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.java.language.fileTypes.JModFileType;
 import consulo.virtualFileSystem.fileType.FileTypeConsumer;
 import consulo.virtualFileSystem.fileType.FileTypeFactory;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaFileTypeFactory extends FileTypeFactory {
   @Override
-  public void createFileTypes(@Nonnull FileTypeConsumer consumer) {
+  public void createFileTypes(FileTypeConsumer consumer) {
     consumer.consume(JarArchiveFileType.INSTANCE, "jar;war;apk");
     consumer.consume(JavaClassFileType.INSTANCE);
     consumer.consume(JavaFileType.INSTANCE);

@@ -26,9 +26,8 @@ import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiExpressionCodeFragmentImpl extends PsiCodeFragmentImpl implements PsiExpressionCodeFragment {
   private static final Logger LOG = Logger.getInstance(PsiExpressionCodeFragmentImpl.class);
@@ -36,7 +35,7 @@ public class PsiExpressionCodeFragmentImpl extends PsiCodeFragmentImpl implement
 
   public PsiExpressionCodeFragmentImpl(Project project,
                                        boolean isPhysical,
-                                       @NonNls String name,
+                                       String name,
                                        CharSequence text,
                                        @Nullable PsiType expectedType,
                                        @Nullable PsiElement context) {

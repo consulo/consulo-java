@@ -25,11 +25,8 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.impl.refactoring.changeSignature.JavaChangeSignatureHandler;
 import com.intellij.testFramework.LightCodeInsightTestCase;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public abstract class ChangeSignatureTargetTest extends LightCodeInsightTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();
@@ -53,7 +50,7 @@ public abstract class ChangeSignatureTargetTest extends LightCodeInsightTestCase
 
   private void doTest(String expectedMemberName) throws Exception {
     String basePath = "/refactoring/changeSignatureTarget/" + getTestName(true);
-    @NonNls String filePath = basePath + ".java";
+    String filePath = basePath + ".java";
     configureByFile(filePath);
     PsiElement member = new JavaChangeSignatureHandler().findTargetMember(getFile(), getEditor());
     assertNotNull(member);

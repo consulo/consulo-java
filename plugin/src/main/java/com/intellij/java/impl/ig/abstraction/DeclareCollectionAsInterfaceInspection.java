@@ -33,8 +33,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -52,19 +51,16 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
      */
     public boolean ignorePrivateMethodsAndFields = false;
 
-    @Nonnull
     @Override
     public String getID() {
         return "CollectionDeclaredAsConcreteClass";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.collectionDeclaredByClassDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         String type = (String) infos[0];
@@ -100,7 +96,6 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.declareCollectionAsInterfaceQuickfix(typeString);
         }
@@ -136,7 +131,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
     private class DeclareCollectionAsInterfaceVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             if (isOnTheFly() && DeclarationSearchUtils.isTooExpensiveToSearch(variable, false)) {
                 return;
             }
@@ -169,7 +164,7 @@ public class DeclareCollectionAsInterfaceInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (ignorePrivateMethodsAndFields && method.isPrivate()) {
                 return;

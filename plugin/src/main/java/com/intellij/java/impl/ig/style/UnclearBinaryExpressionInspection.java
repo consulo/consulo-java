@@ -29,18 +29,15 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class UnclearBinaryExpressionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unclearBinaryExpressionDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unclearBinaryExpressionProblemDescriptor().get();
@@ -52,7 +49,6 @@ public class UnclearBinaryExpressionInspection extends BaseInspection {
     }
 
     private static class UnclearBinaryExpressionFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unclearBinaryExpressionQuickfix();

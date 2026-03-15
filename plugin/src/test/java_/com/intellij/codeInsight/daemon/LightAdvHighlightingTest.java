@@ -49,9 +49,7 @@ import com.intellij.psi.xml.XmlTokenType;
 import com.intellij.testFramework.IdeaTestUtil;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -62,7 +60,7 @@ import static org.junit.Assert.*;
  * For "heavyweight" tests use AdvHighlightingTest
  */
 public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
 
   private UnusedSymbolLocalInspection myUnusedSymbolLocalInspection;
 
@@ -76,7 +74,6 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
     setLanguageLevel(LanguageLevel.JDK_1_4);
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{
@@ -222,7 +219,6 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
   public void testUnusedNonPrivateMembers2() {
     ExtensionPoint<EntryPoint> point = Application.get().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME);
     EntryPoint extension = new EntryPoint() {
-      @Nonnull
       @Override
       public String getDisplayName() {
         return "duh";
@@ -302,7 +298,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
 
   public static class MyAnnotator implements Annotator {
     @Override
-    public void annotate(@Nonnull PsiElement psiElement, @Nonnull final AnnotationHolder holder) {
+    public void annotate(PsiElement psiElement, final AnnotationHolder holder) {
       psiElement.accept(new XmlElementVisitor() {
         @Override public void visitXmlTag(XmlTag tag) {
           XmlAttribute attribute = tag.getAttribute("aaa", "");

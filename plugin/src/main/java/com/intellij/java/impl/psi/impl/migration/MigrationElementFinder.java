@@ -24,7 +24,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -40,7 +39,7 @@ public class MigrationElementFinder extends PsiElementFinder implements DumbAwar
   }
 
   @Override
-  public PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass findClass(String qualifiedName, GlobalSearchScope scope) {
     PsiMigrationImpl migration = PsiMigrationManager.getInstance(myProject).getCurrentMigration();
     if (migration != null) {
       return migration.getMigrationClass(qualifiedName);
@@ -48,9 +47,8 @@ public class MigrationElementFinder extends PsiElementFinder implements DumbAwar
     return null;
   }
 
-  @Nonnull
   @Override
-  public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass[] findClasses(String qualifiedName, GlobalSearchScope scope) {
     PsiMigrationImpl migration = PsiMigrationManager.getInstance(myProject).getCurrentMigration();
     if (migration != null) {
       PsiClass migrationClass = migration.getMigrationClass(qualifiedName);
@@ -61,9 +59,8 @@ public class MigrationElementFinder extends PsiElementFinder implements DumbAwar
     return PsiClass.EMPTY_ARRAY;
   }
 
-  @Nonnull
   @Override
-  public PsiClass[] getClasses(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+  public PsiClass[] getClasses(PsiJavaPackage psiPackage, GlobalSearchScope scope) {
     PsiMigrationImpl migration = PsiMigrationManager.getInstance(myProject).getCurrentMigration();
     if (migration != null) {
       List<PsiClass> classes = migration.getMigrationClasses(psiPackage.getQualifiedName());

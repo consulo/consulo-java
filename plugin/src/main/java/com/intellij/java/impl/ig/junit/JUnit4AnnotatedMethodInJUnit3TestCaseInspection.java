@@ -29,8 +29,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,14 +37,12 @@ import java.util.List;
 public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspection {
     private static final String IGNORE = "org.junit.Ignore";
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.junit4TestMethodInClassExtendingJunit3TestcaseDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         if (AnnotationUtil.isAnnotated((PsiMethod) infos[1], IGNORE, false)) {
             return InspectionGadgetsLocalize.ignoreTestMethodInClassExtendingJunit3TestcaseProblemDescriptor().get();
@@ -59,7 +55,6 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
         return true;
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         List<InspectionGadgetsFix> fixes = new ArrayList(3);
@@ -96,11 +91,10 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
 
     private static class RemoveIgnoreAndRename extends RenameFix {
 
-        public RemoveIgnoreAndRename(@NonNls PsiMethod method) {
+        public RemoveIgnoreAndRename(PsiMethod method) {
             super("_" + method.getName());
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.ignoreTestMethodInClassExtendingJunit3TestcaseQuickfix(getTargetName());
@@ -120,7 +114,6 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
             this.className = className;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.convertJunit3TestClassQuickfix(className);
@@ -144,7 +137,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
             }
             PsiMethod[] methods = containingClass.getMethods();
             for (PsiMethod method : methods) {
-                @NonNls String name = method.getName();
+                String name = method.getName();
                 if (method.hasModifierProperty(PsiModifier.STATIC)) {
                     continue;
                 }
@@ -199,10 +192,9 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
 
         private static class SuperLifeCycleCallRemover extends JavaRecursiveElementVisitor {
 
-            @Nonnull
             private final String myLifeCycleMethodName;
 
-            private SuperLifeCycleCallRemover(@Nonnull String lifeCycleMethodName) {
+            private SuperLifeCycleCallRemover(String lifeCycleMethodName) {
                 myLifeCycleMethodName = lifeCycleMethodName;
             }
 
@@ -243,7 +235,7 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
                 if (!"junit.framework.Assert".equals(name)) {
                     return;
                 }
-                @NonNls String newExpressionText = "org.junit.Assert." + expression.getText();
+                String newExpressionText = "org.junit.Assert." + expression.getText();
                 Project project = expression.getProject();
                 PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
                 PsiExpression newExpression = factory.createExpressionFromText(newExpressionText, expression);
@@ -257,7 +249,6 @@ public class JUnit4AnnotatedMethodInJUnit3TestCaseInspection extends BaseInspect
     private static class RemoveTestAnnotationFix extends InspectionGadgetsFix {
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.removeJunit4TestAnnotationQuickfix();
         }

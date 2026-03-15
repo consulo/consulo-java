@@ -20,7 +20,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.scope.GlobalSearchScope;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -28,6 +27,5 @@ import java.util.List;
 public interface JvmElementProvider {
     ExtensionPointName<JvmElementProvider> EP_NAME = ExtensionPointName.create(JvmElementProvider.class);
 
-    @Nonnull
-    List<? extends JvmClass> getClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope);
+    List<? extends JvmClass> getClasses(String qualifiedName, GlobalSearchScope scope);
 }

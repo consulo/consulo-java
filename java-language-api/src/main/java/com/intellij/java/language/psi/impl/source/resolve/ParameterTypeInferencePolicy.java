@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole

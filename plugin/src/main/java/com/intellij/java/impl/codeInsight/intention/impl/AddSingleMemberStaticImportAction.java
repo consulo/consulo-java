@@ -38,8 +38,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddSingleMemberStaticImportAction", categories = {"Java", "Imports"}, fileExtensions = "java")
@@ -59,7 +58,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
    */
   @Nullable
   @RequiredReadAction
-  public static String getStaticImportClass(@Nonnull PsiElement element) {
+  public static String getStaticImportClass(PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return null;
     if (element instanceof PsiIdentifier) {
       PsiElement parent = element.getParent();
@@ -129,7 +128,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     String classQName = getStaticImportClass(element);
     if (classQName != null) {
       setText(CodeInsightLocalize.intentionAddSingleMemberStaticImportText(classQName));
@@ -172,12 +171,12 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
 
     file.accept(new JavaRecursiveElementVisitor() {
       @Override
-      public void visitImportList(@Nonnull PsiImportList list) {
+      public void visitImportList(PsiImportList list) {
       }
 
       @Override
       @RequiredReadAction
-      public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+      public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
         try {
           if (checkParameterizedReference(reference)) return;
 
@@ -239,7 +238,7 @@ public class AddSingleMemberStaticImportAction extends PsiElementBaseIntentionAc
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     invoke(element.getContainingFile(), element);
   }
 }

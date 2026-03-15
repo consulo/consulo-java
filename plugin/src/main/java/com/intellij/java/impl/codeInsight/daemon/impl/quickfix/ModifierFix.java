@@ -41,8 +41,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,14 +53,13 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     private final String myModifier;
     private final boolean myShouldHave;
     private final boolean myShowContainingClass;
-    @Nonnull
     private final LocalizeValue myName;
     private final SmartPsiElementPointer<PsiVariable> myVariable;
 
     @RequiredReadAction
     public ModifierFix(
         PsiModifierList modifierList,
-        @PsiModifier.ModifierConstant @Nonnull String modifier,
+        @PsiModifier.ModifierConstant String modifier,
         boolean shouldHave,
         boolean showContainingClass
     ) {
@@ -75,8 +73,8 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
     @RequiredReadAction
     public ModifierFix(
-        @Nonnull PsiModifierListOwner owner,
-        @PsiModifier.ModifierConstant @Nonnull String modifier,
+        PsiModifierListOwner owner,
+        @PsiModifier.ModifierConstant String modifier,
         boolean shouldHave,
         boolean showContainingClass
     ) {
@@ -90,7 +88,6 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         myVariable = variable == null ? null : SmartPointerManager.getInstance(owner.getProject()).createSmartPsiElementPointer(variable);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myName;
@@ -133,10 +130,10 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     @Override
     @RequiredReadAction
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiModifierList myModifierList = (PsiModifierList)startElement;
         PsiVariable variable = myVariable == null ? null : myVariable.getElement();
@@ -158,11 +155,11 @@ public class ModifierFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     @Override
     @RequiredUIAccess
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiModifierList myModifierList = (PsiModifierList)startElement;
         PsiVariable variable = myVariable == null ? null : myVariable.getElement();

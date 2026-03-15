@@ -19,8 +19,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +42,6 @@ class KnownContract implements PreContract
 		return myContract;
 	}
 
-	@Nonnull
 	@Override
 	public List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body)
 	{

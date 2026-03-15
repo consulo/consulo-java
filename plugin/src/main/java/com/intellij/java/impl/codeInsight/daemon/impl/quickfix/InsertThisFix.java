@@ -20,18 +20,17 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 
 public class InsertThisFix extends InsertConstructorCallFix {
 
-    public InsertThisFix(@Nonnull PsiMethod constructor) {
+    public InsertThisFix(PsiMethod constructor) {
         super(constructor, "this();");
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return super.isAvailable(project, editor, file) && hasConstructorToDelegate();
     }
 

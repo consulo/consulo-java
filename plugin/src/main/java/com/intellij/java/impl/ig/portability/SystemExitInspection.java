@@ -21,22 +21,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SystemExitInspection extends BaseInspection {
-    @Nonnull
     public String getID() {
         return "CallToSystemExit";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.systemExitCallDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         String className = (String) infos[0];
         return InspectionGadgetsLocalize.systemExitCallProblemDescriptor(className).get();
@@ -48,7 +44,7 @@ public class SystemExitInspection extends BaseInspection {
 
     private static class SystemExitVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

@@ -5,8 +5,7 @@ import com.intellij.java.analysis.codeInspection.ex.EntryPointState;
 import consulo.language.editor.inspection.InspectionToolState;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -43,7 +42,6 @@ public class UnusedDeclarationInspectionState implements InspectionToolState<Unu
 		return ADD_NONJAVA_TO_ENTRIES;
 	}
 
-	@Nonnull
 	@SuppressWarnings("unchecked")
 	public <State extends EntryPointState> State getEntryPointState(EntryPointProvider<State> provider)
 	{

@@ -48,8 +48,7 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -64,7 +63,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         @PsiModifier.ModifierConstant String newVisibility,
         String newName,
         PsiType newType,
-        @Nonnull ParameterInfoImpl[] parameterInfo
+        ParameterInfoImpl[] parameterInfo
     ) {
         this(
             project,
@@ -113,7 +112,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         @PsiModifier.ModifierConstant String newVisibility,
         String newName,
         CanonicalTypes.Type newType,
-        @Nonnull ParameterInfoImpl[] parameterInfo,
+        ParameterInfoImpl[] parameterInfo,
         ThrownExceptionInfo[] thrownExceptions,
         Set<PsiMethod> propagateParametersMethods,
         Set<PsiMethod> propagateExceptionsMethods
@@ -147,7 +146,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
         @PsiModifier.ModifierConstant String newVisibility,
         String newName,
         CanonicalTypes.Type newType,
-        @Nonnull ParameterInfoImpl[] parameterInfo,
+        ParameterInfoImpl[] parameterInfo,
         ThrownExceptionInfo[] thrownExceptions,
         Set<PsiMethod> propagateParametersMethods,
         Set<PsiMethod> propagateExceptionsMethods
@@ -174,8 +173,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
     }
 
     @Override
-    @Nonnull
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new ChangeSignatureViewDescriptor(getChangeInfo().getMethod());
     }
 
@@ -193,7 +191,7 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         ExtensionPoint<ChangeSignatureUsageProcessor> extensionPoint =
             myProject.getApplication().getExtensionPoint(ChangeSignatureUsageProcessor.class);
 

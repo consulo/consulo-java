@@ -38,8 +38,7 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Map;
@@ -60,7 +59,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
     }
 
     @Override
-    public void update(@Nonnull AnActionEvent e) {
+    public void update(AnActionEvent e) {
         if (!e.getPresentation().isVisible()) {
             return;
         }
@@ -98,17 +97,17 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
     }
 
     @Override
-    protected FileTemplate getTemplate(@Nonnull Project project, @Nonnull PsiDirectory dir) {
+    protected FileTemplate getTemplate(Project project, PsiDirectory dir) {
         return FileTemplateManager.getInstance(project).getInternalTemplate(INTERNAL_MODULE_INFO_TEMPLATE_NAME);
     }
 
     @Override
-    protected AttributesDefaults getAttributesDefaults(@Nonnull DataContext ctx) {
+    protected AttributesDefaults getAttributesDefaults(DataContext ctx) {
         return new AttributesDefaults(MODULE_INFO_CLASS).withFixedName(true);
     }
 
     @Override
-    protected Map<String, String> getLiveTemplateDefaults(@Nonnull DataContext ctx, @Nonnull PsiFile file) {
+    protected Map<String, String> getLiveTemplateDefaults(DataContext ctx, PsiFile file) {
         Module module = ctx.getData(Module.KEY);
         return Collections.singletonMap("MODULE_NAME", module != null ? AutomaticJavaModule.moduleName(module.getName()) : "module_name");
     }

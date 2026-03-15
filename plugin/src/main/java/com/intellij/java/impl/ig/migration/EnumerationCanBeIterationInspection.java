@@ -40,9 +40,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,13 +49,10 @@ import java.util.List;
 @ExtensionImpl
 public class EnumerationCanBeIterationInspection extends BaseInspection {
 
-  @NonNls
   static final String ITERATOR_TEXT = "iterator()";
 
-  @NonNls
   static final String KEY_SET_ITERATOR_TEXT = "keySet().iterator()";
 
-  @NonNls
   static final String VALUES_ITERATOR_TEXT = "values().iterator()";
 
   private static final int KEEP_NOTHING = 0;
@@ -67,13 +62,11 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   private static final int KEEP_DECLARATION = 2;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.enumerationCanBeIterationDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.enumerationCanBeIterationProblemDescriptor(infos[0]).get();
   }
@@ -87,7 +80,6 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
   private static class EnumerationCanBeIterationFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.enumerationCanBeIterationQuickfix();
     }
@@ -196,7 +188,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       PsiMethodCallExpression methodCallExpression,
       String variableName, PsiType parameterType)
       throws IncorrectOperationException {
-      @NonNls StringBuilder newStatementText = new StringBuilder();
+      StringBuilder newStatementText = new StringBuilder();
       Project project = methodCallExpression.getProject();
       JavaCodeStyleSettings codeStyleSettings =
         CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
@@ -225,7 +217,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
         qualifierText = qualifier.getText() + '.';
       }
       newStatementText.append(qualifierText);
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if ("elements".equals(methodName)) {
         if (TypeUtils.expressionHasTypeOrSubtype(qualifier,
@@ -318,9 +310,9 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
           (PsiMethodCallExpression)referenceGrandParent;
         PsiReferenceExpression foundReferenceExpression =
           callExpression.getMethodExpression();
-        @NonNls String foundName =
+        String foundName =
           foundReferenceExpression.getReferenceName();
-        @NonNls String newExpressionText;
+        String newExpressionText;
         if ("hasMoreElements".equals(foundName)) {
           newExpressionText = newVariableName + ".hasNext()";
         }
@@ -339,7 +331,6 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       return result;
     }
 
-    @NonNls
     private static String createVariableName(PsiElement context) {
       Project project = context.getProject();
       JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
@@ -380,7 +371,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       boolean isElements;
       if ("elements".equals(methodName)) {
@@ -456,7 +447,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
     }
 
     private static boolean isEnumerationMethodCalled(
-      @Nonnull PsiVariable variable, @Nonnull PsiElement context) {
+      PsiVariable variable, PsiElement context) {
       EnumerationMethodCalledVisitor visitor =
         new EnumerationMethodCalledVisitor(variable);
       context.accept(visitor);
@@ -469,7 +460,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
       private final PsiVariable variable;
       private boolean enumerationMethodCalled = false;
 
-      EnumerationMethodCalledVisitor(@Nonnull PsiVariable variable) {
+      EnumerationMethodCalledVisitor(PsiVariable variable) {
         this.variable = variable;
       }
 
@@ -482,7 +473,7 @@ public class EnumerationCanBeIterationInspection extends BaseInspection {
         super.visitMethodCallExpression(expression);
         PsiReferenceExpression methodExpression =
           expression.getMethodExpression();
-        @NonNls String methodName =
+        String methodName =
           methodExpression.getReferenceName();
         if (!"hasMoreElements".equals(methodName) &&
             !"nextElement".equals(methodName)) {

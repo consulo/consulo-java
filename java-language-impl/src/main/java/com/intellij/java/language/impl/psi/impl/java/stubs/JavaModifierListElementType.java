@@ -29,7 +29,6 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 import static com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType.*;
@@ -42,19 +41,18 @@ public class JavaModifierListElementType extends JavaStubElementType<PsiModifier
     super("MODIFIER_LIST");
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new ModifierListElement();
   }
 
   @Override
-  public PsiModifierList createPsi(@Nonnull final PsiModifierListStub stub) {
+  public PsiModifierList createPsi(final PsiModifierListStub stub) {
     return getPsiFactory(stub).createModifierList(stub);
   }
 
   @Override
-  public PsiModifierList createPsi(@Nonnull final ASTNode node) {
+  public PsiModifierList createPsi(final ASTNode node) {
     return new PsiModifierListImpl(node);
   }
 
@@ -64,7 +62,7 @@ public class JavaModifierListElementType extends JavaStubElementType<PsiModifier
   }
 
   @Override
-  public void serialize(@Nonnull final PsiModifierListStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(final PsiModifierListStub stub, final StubOutputStream dataStream) throws IOException {
     dataStream.writeVarInt(stub.getModifiersMask());
   }
 
@@ -85,13 +83,12 @@ public class JavaModifierListElementType extends JavaStubElementType<PsiModifier
     return parentType != null && parentType != LOCAL_VARIABLE && parentType != RESOURCE_VARIABLE && parentType != RESOURCE_LIST;
   }
 
-  @Nonnull
   @Override
-  public PsiModifierListStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiModifierListStub deserialize(final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     return new PsiModifierListStubImpl(parentStub, dataStream.readVarInt());
   }
 
   @Override
-  public void indexStub(@Nonnull final PsiModifierListStub stub, @Nonnull final IndexSink sink) {
+  public void indexStub(final PsiModifierListStub stub, final IndexSink sink) {
   }
 }

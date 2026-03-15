@@ -32,24 +32,21 @@ import consulo.project.Project;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 @Singleton
 @State(name = "JavaAutoRunManager", storages = {@Storage(StoragePathMacros.WORKSPACE_FILE)})
 @ServiceAPI(ComponentScope.PROJECT)
 @ServiceImpl
 public class JavaAutoRunManager extends AbstractAutoTestManager {
-  @Nonnull
   public static JavaAutoRunManager getInstance(Project project) {
     return ServiceManager.getService(project, JavaAutoRunManager.class);
   }
 
   @Inject
-  public JavaAutoRunManager(@Nonnull Project project) {
+  public JavaAutoRunManager(Project project) {
     super(project);
   }
 
-  @Nonnull
   @Override
   protected AutoTestWatcher createWatcher(Project project) {
     return new AutoTestWatcher() {

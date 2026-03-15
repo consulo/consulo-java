@@ -27,8 +27,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -39,20 +37,17 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
      */
     public boolean m_ignoreLoopsWithoutConditions = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.forLoopReplaceableByWhileDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "ForLoopReplaceableByWhile";
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.forLoopReplaceableByWhileProblemDescriptor().get();
     }
@@ -69,7 +64,6 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
     }
 
     private static class ReplaceForByWhileFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.forLoopReplaceableByWhileReplaceQuickfix();
@@ -90,7 +84,7 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
             else {
                 bodyText = body.getText();
             }
-            @NonNls String whileStatement;
+            String whileStatement;
             if (condition == null) {
                 whileStatement = "while(true)" + bodyText;
             }
@@ -112,7 +106,7 @@ public class ForLoopReplaceableByWhileInspection extends BaseInspection {
 
         @Override
         public void visitForStatement(
-            @Nonnull PsiForStatement statement
+            PsiForStatement statement
         ) {
             super.visitForStatement(statement);
             PsiStatement initialization = statement.getInitialization();

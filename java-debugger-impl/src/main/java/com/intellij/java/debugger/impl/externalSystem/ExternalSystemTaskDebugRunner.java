@@ -28,8 +28,7 @@ import consulo.externalSystem.util.ExternalSystemConstants;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Denis Zhdanov
@@ -39,20 +38,19 @@ import jakarta.annotation.Nullable;
 public class ExternalSystemTaskDebugRunner extends GenericDebuggerRunner {
   private static final Logger LOG = Logger.getInstance(ExternalSystemTaskDebugRunner.class);
 
-  @Nonnull
   @Override
   public String getRunnerId() {
     return ExternalSystemConstants.DEBUG_RUNNER_ID;
   }
 
   @Override
-  public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {
+  public boolean canRun(String executorId, RunProfile profile) {
     return profile instanceof ExternalSystemRunConfiguration && DefaultDebugExecutor.EXECUTOR_ID.equals(executorId);
   }
 
   @Nullable
   @Override
-  protected RunContentDescriptor createContentDescriptor(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment environment) throws
+  protected RunContentDescriptor createContentDescriptor(RunProfileState state, ExecutionEnvironment environment) throws
       ExecutionException {
     if (state instanceof ExternalSystemRunConfiguration.MyRunnableState) {
       int port = ((ExternalSystemRunConfiguration.MyRunnableState) state).getDebugPort();

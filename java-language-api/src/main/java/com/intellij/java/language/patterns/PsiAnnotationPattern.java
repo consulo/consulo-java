@@ -23,9 +23,7 @@ import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.PsiElementPattern;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.util.ProcessingContext;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -38,22 +36,22 @@ public class PsiAnnotationPattern extends PsiElementPattern<PsiAnnotation, PsiAn
   public PsiAnnotationPattern qName(final ElementPattern<String> pattern) {
     return with(new PatternCondition<PsiAnnotation>("qName") {
       @Override
-      public boolean accepts(@Nonnull final PsiAnnotation psiAnnotation, final ProcessingContext context) {
+      public boolean accepts(final PsiAnnotation psiAnnotation, final ProcessingContext context) {
         return pattern.getCondition().accepts(psiAnnotation.getQualifiedName(), context);
       }
     });
   }
 
-  public PsiAnnotationPattern qName(@NonNls String qname) {
+  public PsiAnnotationPattern qName(String qname) {
     return qName(StandardPatterns.string().equalTo(qname));
   }
 
-  public PsiAnnotationPattern insideAnnotationAttribute(@Nonnull final String attributeName, @Nonnull final ElementPattern<PsiAnnotation> parentAnnoPattern) {
+  public PsiAnnotationPattern insideAnnotationAttribute(final String attributeName, final ElementPattern<PsiAnnotation> parentAnnoPattern) {
     return with(new PatternCondition<PsiAnnotation>("insideAnnotationAttribute") {
       final PsiNameValuePairPattern attrPattern = PsiJavaPatterns.psiNameValuePair().withName(attributeName).withSuperParent(2, parentAnnoPattern);
 
       @Override
-      public boolean accepts(@Nonnull PsiAnnotation annotation, ProcessingContext context) {
+      public boolean accepts(PsiAnnotation annotation, ProcessingContext context) {
         PsiElement attr = getParent(annotation);
         if (attr instanceof PsiArrayInitializerMemberValue) {
           attr = getParent(attr);

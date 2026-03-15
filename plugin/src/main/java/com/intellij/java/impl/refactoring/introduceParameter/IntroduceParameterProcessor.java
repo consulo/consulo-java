@@ -55,8 +55,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -92,9 +91,9 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
      * if expressionToSearch is null, search for localVariable
      */
     public IntroduceParameterProcessor(
-        @Nonnull Project project,
+        Project project,
         PsiMethod methodToReplaceIn,
-        @Nonnull PsiMethod methodToSearchFor,
+        PsiMethod methodToSearchFor,
         PsiExpression parameterInitializer,
         PsiExpression expressionToSearch,
         PsiLocalVariable localVariable,
@@ -105,7 +104,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         boolean declareFinal,
         boolean generateDelegate,
         PsiType forcedType,
-        @Nonnull IntList parametersToRemove
+        IntList parametersToRemove
     ) {
         super(project);
 
@@ -129,13 +128,11 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         myInitializerWrapper = expressionToSearch == null ? null : new JavaExpressionWrapper(expressionToSearch);
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new IntroduceParameterViewDescriptor(myMethodToSearchFor);
     }
 
-    @Nonnull
     @Override
     public PsiType getForcedType() {
         return myForcedType;
@@ -154,7 +151,6 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         myReplaceFieldsWithGetters = replaceFieldsWithGetters;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -230,7 +226,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 
         @Override
         @RequiredReadAction
-        public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+        public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
             super.visitReferenceElement(reference);
             PsiElement element = reference.resolve();
             if (element != null) {
@@ -324,7 +320,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         private boolean myResult = false;
 
         @Override
-        public void visitSuperExpression(@Nonnull PsiSuperExpression expression) {
+        public void visitSuperExpression(PsiSuperExpression expression) {
             myResult = true;
         }
 
@@ -347,7 +343,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 
         @Override
         @RequiredReadAction
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             if (variable == myLocalVariable) {
                 return;
             }
@@ -375,7 +371,7 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         try {
             PsiElementFactory factory = JavaPsiFacade.getInstance(myManager.getProject()).getElementFactory();
             PsiType initializerType = getInitializerType(myForcedType, myParameterInitializer, myLocalVariable);
@@ -580,7 +576,6 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         }
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {
@@ -609,7 +604,6 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         return myMethodToReplaceIn;
     }
 
-    @Nonnull
     @Override
     public PsiMethod getMethodToSearchFor() {
         return myMethodToSearchFor;
@@ -620,7 +614,6 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         return myInitializerWrapper;
     }
 
-    @Nonnull
     @Override
     public String getParameterName() {
         return myParameterName;
@@ -636,13 +629,11 @@ public class IntroduceParameterProcessor extends BaseRefactoringProcessor implem
         return myGenerateDelegate;
     }
 
-    @Nonnull
     @Override
     public IntList getParametersToRemove() {
         return myParametersToRemove;
     }
 
-    @Nonnull
     @Override
     public Project getProject() {
         return myProject;

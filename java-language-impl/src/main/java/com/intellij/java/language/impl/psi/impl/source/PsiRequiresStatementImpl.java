@@ -22,18 +22,17 @@ import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ref.SoftReference;
-import jakarta.annotation.Nonnull;
 
 import static consulo.util.lang.StringUtil.nullize;
 
 public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStatementStub> implements PsiRequiresStatement {
   private SoftReference<PsiJavaModuleReference> myReference;
 
-  public PsiRequiresStatementImpl(@Nonnull PsiRequiresStatementStub stub) {
+  public PsiRequiresStatementImpl(PsiRequiresStatementStub stub) {
     super(stub, JavaStubElementTypes.REQUIRES_STATEMENT);
   }
 
-  public PsiRequiresStatementImpl(@Nonnull ASTNode node) {
+  public PsiRequiresStatementImpl(ASTNode node) {
     super(node);
   }
 
@@ -59,7 +58,7 @@ public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStat
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     PsiModifierList modifierList = getModifierList();
     return modifierList != null && modifierList.hasModifierProperty(name);
   }
@@ -86,7 +85,7 @@ public class PsiRequiresStatementImpl extends JavaStubPsiElement<PsiRequiresStat
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitRequiresStatement(this);
     } else {

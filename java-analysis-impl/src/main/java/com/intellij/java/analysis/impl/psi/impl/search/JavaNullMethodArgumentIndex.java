@@ -38,8 +38,7 @@ import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -55,13 +54,11 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
   private static final TokenSet CALL_TYPES = TokenSet.create(METHOD_CALL_EXPRESSION, NEW_EXPRESSION, ANONYMOUS_CLASS);
   private boolean myOfflineMode = ApplicationManager.getApplication().isCommandLine() && !ApplicationManager.getApplication().isUnitTestMode();
 
-  @Nonnull
   @Override
   public ID<MethodCallData, Void> getName() {
     return INDEX_ID;
   }
 
-  @Nonnull
   @Override
   public DataIndexer<MethodCallData, Void, FileContent> getIndexer() {
     return inputData ->
@@ -97,7 +94,6 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
     };
   }
 
-  @Nonnull
   private static Set<LighterASTNode> findCallsWithNulls(LighterAST lighterAst, int[] nullOffsets) {
     Set<LighterASTNode> calls = new HashSet<>();
     for (int offset : nullOffsets) {
@@ -114,7 +110,7 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
   }
 
   @Nullable
-  private static IntList getNullParameterIndices(LighterAST lighterAst, @Nonnull LighterASTNode methodCall) {
+  private static IntList getNullParameterIndices(LighterAST lighterAst, LighterASTNode methodCall) {
     final LighterASTNode node = LightTreeUtil.firstChildOfType(lighterAst, methodCall, EXPRESSION_LIST);
     if (node == null) {
       return null;
@@ -134,7 +130,7 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
   }
 
   @Nullable
-  private static String getMethodName(LighterAST lighterAst, @Nonnull LighterASTNode call, IElementType elementType) {
+  private static String getMethodName(LighterAST lighterAst, LighterASTNode call, IElementType elementType) {
     if (elementType == NEW_EXPRESSION || elementType == ANONYMOUS_CLASS) {
       final List<LighterASTNode> refs = LightTreeUtil.getChildrenOfType(lighterAst, call, JAVA_CODE_REFERENCE);
       if (refs.isEmpty()) {
@@ -152,18 +148,17 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
     return null;
   }
 
-  @Nonnull
   @Override
   public KeyDescriptor<MethodCallData> getKeyDescriptor() {
     return new KeyDescriptor<MethodCallData>() {
       @Override
-      public void save(@Nonnull DataOutput out, MethodCallData value) throws IOException {
+      public void save(DataOutput out, MethodCallData value) throws IOException {
         EnumeratorStringDescriptor.INSTANCE.save(out, value.getMethodName());
         DataInputOutputUtil.writeINT(out, value.getNullParameterIndex());
       }
 
       @Override
-      public MethodCallData read(@Nonnull DataInput in) throws IOException {
+      public MethodCallData read(DataInput in) throws IOException {
         return new MethodCallData(EnumeratorStringDescriptor.INSTANCE.read(in), DataInputOutputUtil.readINT(in));
       }
     };
@@ -174,12 +169,11 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
     return 0;
   }
 
-  @Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return new DefaultFileTypeSpecificInputFilter(JavaFileType.INSTANCE) {
       @Override
-      public boolean acceptInput(@Nullable Project project, @Nonnull VirtualFile file) {
+      public boolean acceptInput(@Nullable Project project, VirtualFile file) {
         return JavaStubElementTypes.JAVA_FILE.shouldBuildStubFor(file);
       }
     };
@@ -191,16 +185,14 @@ public class JavaNullMethodArgumentIndex extends ScalarIndexExtension<JavaNullMe
   }
 
   public static final class MethodCallData {
-    @Nonnull
     private final String myMethodName;
     private final int myNullParameterIndex;
 
-    public MethodCallData(@Nonnull String name, int index) {
+    public MethodCallData(String name, int index) {
       myMethodName = name;
       myNullParameterIndex = index;
     }
 
-    @Nonnull
     public String getMethodName() {
       return myMethodName;
     }

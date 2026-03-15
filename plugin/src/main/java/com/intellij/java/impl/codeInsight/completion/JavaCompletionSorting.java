@@ -41,8 +41,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -103,7 +102,6 @@ public class JavaCompletionSorting {
     return result.withRelevanceSorter(sorter);
   }
 
-  @Nonnull
   private static ExpectedTypeInfo[] getExpectedTypesWithDfa(CompletionParameters parameters, PsiElement position) {
     if (psiElement().beforeLeaf(psiElement().withText(".")).accepts(position)) {
       return ExpectedTypeInfo.EMPTY_ARRAY;
@@ -145,9 +143,8 @@ public class JavaCompletionSorting {
     }
 
     return new LookupElementWeigher("statics") {
-      @Nonnull
       @Override
-      public Comparable weigh(@Nonnull LookupElement element) {
+      public Comparable weigh(LookupElement element) {
         Object o = element.getObject();
         if (o instanceof PsiKeyword) {
           return -3;
@@ -214,7 +211,6 @@ public class JavaCompletionSorting {
     return preferByMemberName(expectedMemberName, itemType);
   }
 
-  @Nonnull
   private static ExpectedTypeMatching preferByMemberName(@Nullable String expectedMemberName, @Nullable PsiType itemType) {
     if (expectedMemberName != null) {
       PsiClass itemClass = PsiUtil.resolveClassInClassTypeOnly(itemType);
@@ -333,9 +329,8 @@ public class JavaCompletionSorting {
       myLocation = new CompletionLocation(myParameters);
     }
 
-    @Nonnull
     @Override
-    public MyResult weigh(@Nonnull LookupElement item) {
+    public MyResult weigh(LookupElement item) {
       Object object = item.getObject();
 
       if (object instanceof PsiClass) {
@@ -436,9 +431,8 @@ public class JavaCompletionSorting {
       INACCESSIBLE,
     }
 
-    @Nonnull
     @Override
-    public Comparable weigh(@Nonnull LookupElement element) {
+    public Comparable weigh(LookupElement element) {
       Object object = element.getObject();
       if (object instanceof PsiDocCommentOwner) {
         PsiDocCommentOwner member = (PsiDocCommentOwner) object;
@@ -458,9 +452,8 @@ public class JavaCompletionSorting {
       super("nonGeneric");
     }
 
-    @Nonnull
     @Override
-    public Comparable weigh(@Nonnull LookupElement element) {
+    public Comparable weigh(LookupElement element) {
       Object object = element.getObject();
       if (object instanceof PsiMethod) {
         PsiType type = ((PsiMethod) object).getReturnType();
@@ -483,9 +476,8 @@ public class JavaCompletionSorting {
       super("simple");
     }
 
-    @Nonnull
     @Override
-    public Comparable weigh(@Nonnull LookupElement element) {
+    public Comparable weigh(LookupElement element) {
       PsiTypeLookupItem lookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
       if (lookupItem != null) {
         return lookupItem.getBracketsCount() * 10 + (lookupItem.isAddArrayInitializer() ? 1 : 0);
@@ -522,9 +514,8 @@ public class JavaCompletionSorting {
       return null;
     }
 
-    @Nonnull
     @Override
-    public ExpectedTypeMatching weigh(@Nonnull LookupElement item) {
+    public ExpectedTypeMatching weigh(LookupElement item) {
       if (item.getObject() instanceof PsiClass && !myConstructorPossible) {
         PsiType itemType = JavaCompletionUtil.getLookupElementType(item);
         if (itemType != null) {
@@ -552,9 +543,8 @@ public class JavaCompletionSorting {
       myExpectedTypes = expectedTypes;
     }
 
-    @Nonnull
     @Override
-    public Comparable weigh(@Nonnull LookupElement element) {
+    public Comparable weigh(LookupElement element) {
       String name = getLookupObjectName(element.getObject());
       return -getNameEndMatchingDegree(name, myExpectedTypes);
     }
@@ -568,9 +558,8 @@ public class JavaCompletionSorting {
       myExpectedTypes = expectedTypes;
     }
 
-    @Nonnull
     @Override
-    public Comparable weigh(@Nonnull LookupElement element) {
+    public Comparable weigh(LookupElement element) {
       Object object = element.getObject();
 
       String name = getLookupObjectName(object);
@@ -599,9 +588,8 @@ public class JavaCompletionSorting {
       myExpectedTypes = expectedTypes;
     }
 
-    @Nonnull
     @Override
-    public Comparable weigh(@Nonnull LookupElement element) {
+    public Comparable weigh(LookupElement element) {
       Object object = element.getObject();
       String name = getLookupObjectName(object);
 

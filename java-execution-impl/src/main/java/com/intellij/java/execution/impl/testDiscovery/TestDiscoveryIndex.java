@@ -31,11 +31,10 @@ import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
 import consulo.util.io.PathKt;
 import consulo.util.lang.function.ThrowableFunction;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -60,7 +59,7 @@ public class TestDiscoveryIndex implements Disposable {
     this(project, TestDiscoveryExtension.baseTestDiscoveryPathForProject(project));
   }
 
-  public TestDiscoveryIndex(final Project project, @Nonnull Path basePath) {
+  public TestDiscoveryIndex(final Project project, Path basePath) {
     if (project.isDefault()) {
       return;
     }
@@ -81,7 +80,7 @@ public class TestDiscoveryIndex implements Disposable {
     //}
   }
 
-  public boolean hasTestTrace(@Nonnull String testName) throws IOException {
+  public boolean hasTestTrace(String testName) throws IOException {
     Boolean result = myLocalTestRunDataController.withTestDataHolder(localHolder ->
                                                                      {          // todo: remote run data
                                                                        final int testNameId =
@@ -101,7 +100,7 @@ public class TestDiscoveryIndex implements Disposable {
     return result == Boolean.TRUE;
   }
 
-  public void removeTestTrace(@Nonnull String testName) throws IOException {
+  public void removeTestTrace(String testName) throws IOException {
     myLocalTestRunDataController.withTestDataHolder(localHolder ->
                                                     {
                                                       final int testNameId =
@@ -117,7 +116,7 @@ public class TestDiscoveryIndex implements Disposable {
                                                     });
   }
 
-  public void setRemoteTestRunDataPath(@Nonnull Path path) {
+  public void setRemoteTestRunDataPath(Path path) {
     if (!TestInfoHolder.isValidPath(path)) {
       path = null;
     }
@@ -125,7 +124,7 @@ public class TestDiscoveryIndex implements Disposable {
     // todo: should we remove our local run data ?
   }
 
-  public Collection<String> getTestsByMethodName(@Nonnull String classFQName, @Nonnull String methodName) throws IOException {
+  public Collection<String> getTestsByMethodName(String classFQName, String methodName) throws IOException {
     return myLocalTestRunDataController.withTestDataHolder(new ThrowableFunction<TestInfoHolder, Collection<String>, IOException>() {
       @Override
       public Collection<String> apply(TestInfoHolder localHolder) throws IOException {
@@ -182,8 +181,8 @@ public class TestDiscoveryIndex implements Disposable {
   }
 
 
-  public Collection<String> getTestModulesByMethodName(@Nonnull String classFQName,
-                                                       @Nonnull String methodName,
+  public Collection<String> getTestModulesByMethodName(String classFQName,
+                                                       String methodName,
                                                        String prefix) throws IOException {
     return myLocalTestRunDataController.withTestDataHolder(new ThrowableFunction<TestInfoHolder, Collection<String>, IOException>() {
       @Override
@@ -312,9 +311,9 @@ public class TestDiscoveryIndex implements Disposable {
     }
   }
 
-  public void updateFromTestTrace(@Nonnull File file,
+  public void updateFromTestTrace(File file,
                                   @Nullable final String moduleName,
-                                  @Nonnull final String frameworkPrefix) throws IOException {
+                                  final String frameworkPrefix) throws IOException {
     int fileNameDotIndex = file.getName().lastIndexOf('.');
     final String testName = fileNameDotIndex != -1 ? file.getName().substring(0, fileNameDotIndex) : file.getName();
     doUpdateFromTestTrace(file, testName, moduleName != null ? frameworkPrefix + moduleName : null);
@@ -382,7 +381,6 @@ public class TestDiscoveryIndex implements Disposable {
                                                     });
   }
 
-  @Nonnull
   private static IntObjectMap<IntList> loadClassAndMethodsMap(File file, TestInfoHolder holder) throws IOException {
     DataInputStream inputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(file), 64 * 1024));
     byte[] buffer = IOUtil.allocReadWriteUTFBuffer();

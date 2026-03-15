@@ -16,7 +16,6 @@
 package com.intellij.java.analysis.impl.psi.controlFlow;
 
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 
@@ -28,13 +27,12 @@ class InstructionKey implements Comparable<InstructionKey>
 	private final int myOffset;
 	private final int[] myCallStack; // shared between instructions on the same stack level
 
-	private InstructionKey(int offset, @Nonnull int[] callStack)
+	private InstructionKey(int offset, int[] callStack)
 	{
 		myOffset = offset;
 		myCallStack = callStack;
 	}
 
-	@Nonnull
 	static InstructionKey create(int offset)
 	{
 		return new InstructionKey(offset, ArrayUtil.EMPTY_INT_ARRAY);
@@ -68,7 +66,6 @@ class InstructionKey implements Comparable<InstructionKey>
 		return myOffset;
 	}
 
-	@Nonnull
 	int[] getCallStack()
 	{
 		return myCallStack;
@@ -116,7 +113,7 @@ class InstructionKey implements Comparable<InstructionKey>
 	}
 
 	@Override
-	public int compareTo(@Nonnull InstructionKey key)
+	public int compareTo(InstructionKey key)
 	{
 		int c = myOffset - key.myOffset;
 		if(c != 0)

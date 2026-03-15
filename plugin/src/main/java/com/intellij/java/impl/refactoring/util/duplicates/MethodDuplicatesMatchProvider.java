@@ -30,8 +30,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -62,7 +61,7 @@ class MethodDuplicatesMatchProvider implements MatchProvider {
     boolean needStaticQualifier = isExternal(match);
     boolean nameConflicts = nameConflicts(match);
     String methodName = myMethod.isConstructor() ? "this" : myMethod.getName();
-    @NonNls String text = needQualifier || needStaticQualifier || nameConflicts ? "q." + methodName + "()" : methodName + "()";
+    String text = needQualifier || needStaticQualifier || nameConflicts ? "q." + methodName + "()" : methodName + "()";
     PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) factory.createExpressionFromText(text, null);
     methodCallExpression = (PsiMethodCallExpression) CodeStyleManager.getInstance(myMethod.getManager()).reformat(methodCallExpression);
     PsiParameter[] parameters = myMethod.getParameterList().getParameters();

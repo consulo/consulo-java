@@ -8,7 +8,6 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiModificationTracker;
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 import consulo.application.util.function.Processor;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 
@@ -98,7 +97,7 @@ public abstract class PsiModificationTrackerTest extends LightPlatformCodeInsigh
            });
   }
 
-  private void doReplaceTest(@NonNls String text, @NonNls final String with) {
+  private void doReplaceTest(String text, final String with) {
     doTest(text, new Processor<PsiFile>() {
       @Override
       public boolean process(PsiFile psiFile) {
@@ -108,7 +107,7 @@ public abstract class PsiModificationTrackerTest extends LightPlatformCodeInsigh
     });
   }
 
-  private void doTest(@NonNls String text, Processor<PsiFile> run) {
+  private void doTest(String text, Processor<PsiFile> run) {
     PsiFile file = myFixture.configureByText(JavaFileType.INSTANCE, text);
     PsiModificationTracker modificationTracker = PsiManager.getInstance(getProject()).getModificationTracker();
     long count = modificationTracker.getModificationCount();

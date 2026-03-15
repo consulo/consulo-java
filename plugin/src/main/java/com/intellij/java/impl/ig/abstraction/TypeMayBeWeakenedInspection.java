@@ -32,8 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.*;
@@ -52,13 +51,11 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
     @SuppressWarnings({"PublicField", "SpellCheckingInspection"})
     public boolean onlyWeakentoInterface = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.typeMayBeWeakenedDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         Iterable<PsiClass> weakerClasses = (Iterable<PsiClass>) infos[1];
@@ -106,7 +103,6 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
         return optionsPanel;
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         Iterable<PsiClass> weakerClasses = (Iterable<PsiClass>) infos[1];
@@ -124,11 +120,10 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
     private static class TypeMayBeWeakenedFix extends InspectionGadgetsFix {
         private final String fqClassName;
 
-        TypeMayBeWeakenedFix(@Nonnull String fqClassName) {
+        TypeMayBeWeakenedFix(String fqClassName) {
             this.fqClassName = fqClassName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.typeMayBeWeakenedQuickfix(fqClassName);
@@ -196,7 +191,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
     private class TypeMayBeWeakenedVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             super.visitVariable(variable);
             if (variable instanceof PsiParameter parameter) {
                 PsiElement declarationScope = parameter.getDeclarationScope();
@@ -271,7 +266,7 @@ public class TypeMayBeWeakenedInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (isOnTheFly() && !method.isPrivate()) {
                 // checking methods with greater visibility is too expensive.

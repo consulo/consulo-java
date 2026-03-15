@@ -25,18 +25,15 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NumberEqualityInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.numberComparisonDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.numberComparisonProblemDescriptor().get();
     }
@@ -60,7 +57,7 @@ public class NumberEqualityInspection extends BaseInspection {
 
         @Override
         public void visitBinaryExpression(
-            @Nonnull PsiBinaryExpression expression
+            PsiBinaryExpression expression
         ) {
             super.visitBinaryExpression(expression);
             PsiExpression rhs = expression.getROperand();

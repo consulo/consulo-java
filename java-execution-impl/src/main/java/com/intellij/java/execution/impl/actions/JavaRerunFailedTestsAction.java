@@ -22,21 +22,19 @@ import consulo.execution.test.action.AbstractRerunFailedTestsAction;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.ex.ComponentContainer;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
  * @since 24-Dec-2008
  */
 public class JavaRerunFailedTestsAction extends AbstractRerunFailedTestsAction {
-  public JavaRerunFailedTestsAction(@Nonnull ComponentContainer componentContainer, @Nonnull TestConsoleProperties consoleProperties) {
+  public JavaRerunFailedTestsAction(ComponentContainer componentContainer, TestConsoleProperties consoleProperties) {
     super(componentContainer);
     init(consoleProperties);
   }
 
-  @Nonnull
   @Override
-  protected Filter getFilter(@Nonnull Project project, @Nonnull GlobalSearchScope searchScope) {
+  protected Filter getFilter(Project project, GlobalSearchScope searchScope) {
     return super.getFilter(project, searchScope).and(JavaAwareFilter.METHOD(project, searchScope));
   }
 }

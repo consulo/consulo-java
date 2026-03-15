@@ -19,15 +19,13 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Avdeev
  */
 @ExtensionImpl
 public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLocalInspectionTool<Object> {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLocalize.inspectionDefaultAnnotationParam();
@@ -38,22 +36,19 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
         return true;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "DefaultAnnotationParam";
     }
 
-    @Nonnull
     @Override
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object o
@@ -61,7 +56,7 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitNameValuePair(@Nonnull PsiNameValuePair pair) {
+            public void visitNameValuePair(PsiNameValuePair pair) {
                 PsiAnnotationMemberValue value = pair.getValue();
                 PsiReference reference = pair.getReference();
                 if (!(reference != null && reference.resolve() instanceof PsiAnnotationMethod annotationMethod)) {
@@ -93,10 +88,8 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
         };
     }
 
-    @Nonnull
     private static LocalQuickFix createRemoveParameterFix(PsiAnnotationMemberValue value) {
         return new LocalQuickFixAndIntentionActionOnPsiElement(value) {
-            @Nonnull
             @Override
             public LocalizeValue getText() {
                 return JavaLocalize.quickfixFamilyRemoveRedundantParameter();
@@ -105,11 +98,11 @@ public final class DefaultAnnotationParamInspection extends AbstractBaseJavaLoca
             @Override
             @RequiredWriteAction
             public void invoke(
-                @Nonnull Project project,
-                @Nonnull PsiFile psiFile,
+                Project project,
+                PsiFile psiFile,
                 @Nullable Editor editor,
-                @Nonnull PsiElement startElement,
-                @Nonnull PsiElement endElement
+                PsiElement startElement,
+                PsiElement endElement
             ) {
                 startElement.getParent().delete();
             }

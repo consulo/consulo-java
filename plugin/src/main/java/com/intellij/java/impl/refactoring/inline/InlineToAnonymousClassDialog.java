@@ -25,7 +25,6 @@ import consulo.language.editor.refactoring.inline.InlineOptionsWithSearchSetting
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -43,26 +42,22 @@ public class InlineToAnonymousClassDialog extends InlineOptionsWithSearchSetting
     init();
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getNameLabelText() {
     String className = PsiFormatUtil.formatClass(myClass, PsiFormatUtil.SHOW_NAME);
     return RefactoringLocalize.inlineToAnonymousNameLabel(className);
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getBorderTitle() {
     return RefactoringLocalize.inlineToAnonymousBorderTitle();
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getInlineAllText() {
     return RefactoringLocalize.allReferencesAndRemoveTheClass();
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getInlineThisText() {
     return RefactoringLocalize.thisReferenceOnlyAndKeepTheClass();

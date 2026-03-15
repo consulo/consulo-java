@@ -35,28 +35,25 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceConditionalWithIfIntention", fileExtensions = "java", categories = {"Java", "Conditional Operator"})
 public class ReplaceConditionalWithIfIntention extends Intention {
     private static final Logger LOG = Logger.getInstance(ReplaceConditionalWithIfIntention.class);
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceConditionalWithIfIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ReplaceConditionalWithIfPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiConditionalExpression expression = (PsiConditionalExpression) element;
         replaceConditionalWithIf(expression);
     }
@@ -146,8 +143,8 @@ public class ReplaceConditionalWithIfIntention extends Intention {
         }
     }
 
-    private static void appendElementTextWithoutParentheses(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
-                                                            @Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out) {
+    private static void appendElementTextWithoutParentheses(PsiElement element, PsiElement elementToReplace,
+                                                            @Nullable PsiExpression replacementExpression, StringBuilder out) {
         PsiElement expressionParent = elementToReplace.getParent();
         if (expressionParent instanceof PsiParenthesizedExpression) {
             PsiElement grandParent = expressionParent.getParent();
@@ -160,8 +157,8 @@ public class ReplaceConditionalWithIfIntention extends Intention {
         appendElementText(element, elementToReplace, replacementExpression, out);
     }
 
-    private static void appendElementText(@Nonnull PsiElement element, @Nonnull PsiElement elementToReplace,
-                                          @Nullable PsiExpression replacementExpression, @Nonnull StringBuilder out) {
+    private static void appendElementText(PsiElement element, PsiElement elementToReplace,
+                                          @Nullable PsiExpression replacementExpression, StringBuilder out) {
         if (element.equals(elementToReplace)) {
             String replacementText = (replacementExpression == null) ? "" : replacementExpression.getText();
             out.append(replacementText);

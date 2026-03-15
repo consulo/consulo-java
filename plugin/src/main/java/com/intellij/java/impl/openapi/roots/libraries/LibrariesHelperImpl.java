@@ -22,9 +22,8 @@ import consulo.content.library.Library;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
 import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +35,7 @@ import java.util.List;
 @ServiceImpl
 public class LibrariesHelperImpl extends LibrariesHelper {
   @Override
-  public VirtualFile findJarByClass(Library library, @NonNls String fqn) {
+  public VirtualFile findJarByClass(Library library, String fqn) {
     return library == null ? null : findRootByClass(Arrays.asList(library.getFiles(BinariesOrderRootType.getInstance())), fqn);
   }
 

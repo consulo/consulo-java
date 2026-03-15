@@ -34,8 +34,7 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 import consulo.util.collection.Stack;
 import consulo.virtualFileSystem.VirtualFileManager;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -58,7 +57,7 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
     private static final int IS_USES_DEPRECATION_MASK = 0x200;
     private static final int IS_SYNTHETIC_JSP_ELEMENT = 0x400;
 
-    protected RefJavaElementImpl(@Nonnull LocalizeValue name, RefJavaElement owner) {
+    protected RefJavaElementImpl(LocalizeValue name, RefJavaElement owner) {
         super(name.get(), owner);
         String am = owner.getAccessModifier();
         doSetAccessModifier(am);
@@ -88,7 +87,6 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
     }
 
     @Override
-    @Nonnull
     public Collection<RefClass> getOutTypeReferences() {
         if (myOutTypeReferences == null) {
             return Collections.emptySet();
@@ -104,7 +102,7 @@ public abstract class RefJavaElementImpl extends RefElementImpl implements RefJa
     }
 
     @RequiredReadAction
-    public static LocalizeValue getName(@Nonnull PsiElement element) {
+    public static LocalizeValue getName(PsiElement element) {
         if (element instanceof PsiAnonymousClass psiAnonymousClass) {
             String name = psiAnonymousClass.getBaseClassType().resolve() instanceof PsiClass psiBaseClass ? psiBaseClass.getName() : null;
             return name == null

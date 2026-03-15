@@ -31,9 +31,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 public abstract class Intention extends BaseElementAtCaretIntentionAction {
 
@@ -44,7 +42,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+    public void invoke(Project project, Editor editor, PsiElement element) {
         if (!isWritable(project, element)) {
             return;
         }
@@ -55,16 +53,15 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
         processIntention(editor, matchingElement);
     }
 
-    protected abstract void processIntention(@Nonnull PsiElement element);
+    protected abstract void processIntention(PsiElement element);
 
-    protected void processIntention(Editor editor, @Nonnull PsiElement element) {
+    protected void processIntention(Editor editor, PsiElement element) {
         processIntention(element);
     }
 
-    @Nonnull
     protected abstract PsiElementPredicate getElementPredicate();
 
-    protected static void replaceExpression(@Nonnull String newExpression, @Nonnull PsiExpression expression) {
+    protected static void replaceExpression(String newExpression, PsiExpression expression) {
         Project project = expression.getProject();
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
         PsiExpression newCall = factory.createExpressionFromText(newExpression, expression);
@@ -73,7 +70,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
         codeStyleManager.reformat(insertedElement);
     }
 
-    protected static void replaceExpressionWithNegatedExpression(@Nonnull PsiExpression newExpression, @Nonnull PsiExpression expression) {
+    protected static void replaceExpressionWithNegatedExpression(PsiExpression newExpression, PsiExpression expression) {
         Project project = expression.getProject();
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
         PsiExpression expressionToReplace = expression;
@@ -106,7 +103,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
         codeStyleManager.reformat(insertedElement);
     }
 
-    protected static void replaceExpressionWithNegatedExpressionString(@Nonnull String newExpression, @Nonnull PsiExpression expression) {
+    protected static void replaceExpressionWithNegatedExpressionString(String newExpression, PsiExpression expression) {
         Project project = expression.getProject();
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
         PsiElementFactory factory = psiFacade.getElementFactory();
@@ -131,7 +128,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
         codeStyleManager.reformat(insertedElement);
     }
 
-    protected static void replaceStatement(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
+    protected static void replaceStatement(String newStatementText, PsiStatement statement) {
         Project project = statement.getProject();
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
         PsiStatement newStatement = factory.createStatementFromText(newStatementText, statement);
@@ -140,7 +137,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
         codeStyleManager.reformat(insertedElement);
     }
 
-    protected static void replaceStatementAndShorten(@NonNls @Nonnull String newStatementText, @NonNls @Nonnull PsiStatement statement) {
+    protected static void replaceStatementAndShorten(String newStatementText, PsiStatement statement) {
         Project project = statement.getProject();
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
         PsiElementFactory factory = psiFacade.getElementFactory();
@@ -183,7 +180,7 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+    public boolean isAvailable(Project project, Editor editor, PsiElement element) {
         return findMatchingElement(element, editor) != null;
     }
 
@@ -203,6 +200,5 @@ public abstract class Intention extends BaseElementAtCaretIntentionAction {
     }
 
     @Override
-    @Nonnull
     public abstract LocalizeValue getText();
 }

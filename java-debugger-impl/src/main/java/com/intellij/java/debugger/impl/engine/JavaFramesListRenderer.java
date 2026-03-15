@@ -24,7 +24,6 @@ import consulo.internal.com.sun.jdi.Method;
 import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 
 // Copied from FramesListRenderer
 class JavaFramesListRenderer /*extends ColoredListCellRenderer*/ {
@@ -34,7 +33,7 @@ class JavaFramesListRenderer /*extends ColoredListCellRenderer*/ {
         myColorScheme = EditorColorsManager.getInstance().getGlobalScheme();
     }
 
-    public void customizePresentation(StackFrameDescriptorImpl descriptor, @Nonnull ColoredTextContainer component, StackFrameDescriptorImpl selectedDescriptor) {
+    public void customizePresentation(StackFrameDescriptorImpl descriptor, ColoredTextContainer component, StackFrameDescriptorImpl selectedDescriptor) {
         component.setIcon(ExecutionDebugIconGroup.nodeFrame());
         //final Object selectedValue = list.getSelectedValue();
 

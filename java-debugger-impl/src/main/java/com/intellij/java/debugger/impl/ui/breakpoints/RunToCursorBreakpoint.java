@@ -27,8 +27,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -37,12 +36,11 @@ import jakarta.annotation.Nullable;
 public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProperties>
 {
 	private final boolean myRestoreBreakpoints;
-	@Nonnull
 	protected final SourcePosition myCustomPosition;
 	private String mySuspendPolicy;
 	private final JavaLineBreakpointProperties myProperties = new JavaLineBreakpointProperties();
 
-	protected RunToCursorBreakpoint(@Nonnull Project project, @Nonnull SourcePosition pos, boolean restoreBreakpoints)
+	protected RunToCursorBreakpoint(Project project, SourcePosition pos, boolean restoreBreakpoints)
 	{
 		super(project, null);
 		myCustomPosition = pos;
@@ -50,7 +48,6 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 		myRestoreBreakpoints = restoreBreakpoints;
 	}
 
-	@Nonnull
 	@Override
 	public SourcePosition getSourcePosition()
 	{
@@ -135,7 +132,6 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 		return true;
 	}
 
-	@Nonnull
 	@Override
 	protected JavaLineBreakpointProperties getProperties()
 	{
@@ -148,7 +144,7 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 	}
 
 	@Override
-	protected boolean isMuted(@Nonnull final DebugProcessImpl debugProcess)
+	protected boolean isMuted(final DebugProcessImpl debugProcess)
 	{
 		return false;  // always enabled
 	}
@@ -175,7 +171,7 @@ public class RunToCursorBreakpoint extends LineBreakpoint<JavaLineBreakpointProp
 	}
 
 	@Nullable
-	protected static RunToCursorBreakpoint create(@Nonnull Project project, @Nonnull XSourcePosition position, boolean restoreBreakpoints)
+	protected static RunToCursorBreakpoint create(Project project, XSourcePosition position, boolean restoreBreakpoints)
 	{
 		PsiFile psiFile = PsiManager.getInstance(project).findFile(position.getFile());
 		if(psiFile == null)

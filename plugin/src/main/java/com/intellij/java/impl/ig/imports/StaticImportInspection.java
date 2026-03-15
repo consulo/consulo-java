@@ -27,7 +27,6 @@ import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,7 +35,6 @@ import java.util.List;
 @ExtensionImpl
 public class StaticImportInspection extends StaticImportInspectionBase {
 
-  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     List<InspectionGadgetsFix> result = new SmartList<>();

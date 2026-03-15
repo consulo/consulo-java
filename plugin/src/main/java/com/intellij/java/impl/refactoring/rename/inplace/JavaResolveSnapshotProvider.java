@@ -20,7 +20,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.refactoring.ResolveSnapshotProvider;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: Maxim.Mossienko
@@ -34,7 +33,6 @@ public class JavaResolveSnapshotProvider extends ResolveSnapshotProvider {
     return new JavaResolveSnapshot(scope);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

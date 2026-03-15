@@ -21,8 +21,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.language.editor.completion.lookup.LookupElementBuilder;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
@@ -31,11 +30,11 @@ public class JavaLookupElementBuilder {
   private JavaLookupElementBuilder() {
   }
 
-  public static LookupElementBuilder forField(@Nonnull PsiField field) {
+  public static LookupElementBuilder forField(PsiField field) {
     return forField(field, field.getName(), null);
   }
 
-  public static LookupElementBuilder forField(@Nonnull PsiField field,
+  public static LookupElementBuilder forField(PsiField field,
                                               String lookupString,
                                               @Nullable PsiClass qualifierClass) {
     LookupElementBuilder builder = LookupElementBuilder.create(field, lookupString).withIcon(
@@ -43,12 +42,12 @@ public class JavaLookupElementBuilder {
     return setBoldIfInClass(field, qualifierClass, builder);
   }
 
-  public static LookupElementBuilder forMethod(@Nonnull PsiMethod method, PsiSubstitutor substitutor) {
+  public static LookupElementBuilder forMethod(PsiMethod method, PsiSubstitutor substitutor) {
     return forMethod(method, method.getName(), substitutor, null);
   }
 
-  public static LookupElementBuilder forMethod(@Nonnull PsiMethod method,
-                                               @Nonnull String lookupString, @Nonnull PsiSubstitutor substitutor,
+  public static LookupElementBuilder forMethod(PsiMethod method,
+                                               String lookupString, PsiSubstitutor substitutor,
                                                @Nullable PsiClass qualifierClass) {
     LookupElementBuilder builder = LookupElementBuilder.create(method, lookupString)
       .withIcon(IconDescriptorUpdaters.getIcon(method, 0))
@@ -64,23 +63,23 @@ public class JavaLookupElementBuilder {
     return builder;
   }
 
-  private static LookupElementBuilder setBoldIfInClass(@Nonnull PsiMember member, @Nullable PsiClass psiClass, @Nonnull LookupElementBuilder builder) {
+  private static LookupElementBuilder setBoldIfInClass(PsiMember member, @Nullable PsiClass psiClass, LookupElementBuilder builder) {
     if (psiClass != null && member.getManager().areElementsEquivalent(member.getContainingClass(), psiClass)) {
       return builder.bold();
     }
     return builder;
   }
 
-  public static LookupElementBuilder forClass(@Nonnull PsiClass psiClass) {
+  public static LookupElementBuilder forClass(PsiClass psiClass) {
     return forClass(psiClass, psiClass.getName());
   }
 
-  public static LookupElementBuilder forClass(@Nonnull PsiClass psiClass,
+  public static LookupElementBuilder forClass(PsiClass psiClass,
                                               String lookupString) {
     return forClass(psiClass, lookupString, false);
   }
 
-  public static LookupElementBuilder forClass(@Nonnull PsiClass psiClass,
+  public static LookupElementBuilder forClass(PsiClass psiClass,
                                               String lookupString,
                                               boolean withLocation) {
     LookupElementBuilder builder =

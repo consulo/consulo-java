@@ -23,7 +23,6 @@ import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.GridBag;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -34,14 +33,12 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
 
     public boolean ignoreDeprecatedConstructors = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ClassWithTooManyConstructors";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.tooManyConstructorsDisplayName();
@@ -75,7 +72,6 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
         return panel;
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer count = (Integer) infos[0];
         return InspectionGadgetsLocalize.tooManyConstructorsProblemDescriptor(count).get();
@@ -88,7 +84,7 @@ public abstract class ConstructorCountInspection extends ClassMetricInspection {
     private class ConstructorCountVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             int constructorCount = calculateTotalConstructorCount(aClass);
             if (constructorCount <= getLimit()) {
                 return;

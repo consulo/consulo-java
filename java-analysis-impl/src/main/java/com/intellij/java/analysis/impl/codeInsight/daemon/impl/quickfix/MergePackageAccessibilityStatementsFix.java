@@ -22,8 +22,7 @@ import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,21 +38,19 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
     private final String myPackageName;
     private final Role myRole;
 
-    protected MergePackageAccessibilityStatementsFix(@Nonnull PsiJavaModule javaModule, @Nonnull String packageName, @Nonnull Role role) {
+    protected MergePackageAccessibilityStatementsFix(PsiJavaModule javaModule, String packageName, Role role) {
         super(javaModule);
         myPackageName = packageName;
         myRole = role;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.java9MergeModuleStatementsFixName(getKeyword(), myPackageName);
     }
 
-    @Nonnull
     @Override
-    protected String getReplacementText(@Nonnull List<PsiPackageAccessibilityStatement> statementsToMerge) {
+    protected String getReplacementText(List<PsiPackageAccessibilityStatement> statementsToMerge) {
         List<String> moduleNames = getModuleNames(statementsToMerge);
         if (!moduleNames.isEmpty()) {
             return getKeyword() + " " + myPackageName + " " + PsiKeyword.TO + " " + joinUniqueNames(moduleNames) + ";";
@@ -61,8 +58,7 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
         return getKeyword() + " " + myPackageName + ";";
     }
 
-    @Nonnull
-    private static List<String> getModuleNames(@Nonnull List<PsiPackageAccessibilityStatement> statements) {
+    private static List<String> getModuleNames(List<PsiPackageAccessibilityStatement> statements) {
         List<String> result = new ArrayList<>();
         for (PsiPackageAccessibilityStatement statement : statements) {
             List<String> moduleNames = statement.getModuleNames();
@@ -74,9 +70,8 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
         return result;
     }
 
-    @Nonnull
     @Override
-    protected List<PsiPackageAccessibilityStatement> getStatementsToMerge(@Nonnull PsiJavaModule javaModule) {
+    protected List<PsiPackageAccessibilityStatement> getStatementsToMerge(PsiJavaModule javaModule) {
         return StreamSupport.stream(getStatements(javaModule, myRole).spliterator(), false)
             .filter(statement -> myPackageName.equals(statement.getPackageName()))
             .collect(Collectors.toList());
@@ -93,15 +88,13 @@ public class MergePackageAccessibilityStatementsFix extends MergeModuleStatement
         return null;
     }
 
-    @Nonnull
-    private static Iterable<PsiPackageAccessibilityStatement> getStatements(@Nonnull PsiJavaModule javaModule, @Nonnull Role role) {
+    private static Iterable<PsiPackageAccessibilityStatement> getStatements(PsiJavaModule javaModule, Role role) {
         return switch (role) {
             case OPENS -> javaModule.getOpens();
             case EXPORTS -> javaModule.getExports();
         };
     }
 
-    @Nonnull
     private String getKeyword() {
         return switch (myRole) {
             case OPENS -> PsiKeyword.OPENS;

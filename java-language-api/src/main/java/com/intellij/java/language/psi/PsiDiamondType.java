@@ -20,8 +20,7 @@ import consulo.application.util.RecursionGuard;
 import consulo.application.util.RecursionManager;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,6 @@ public abstract class PsiDiamondType extends PsiType {
 
   public static class DiamondInferenceResult {
     public static final DiamondInferenceResult EXPLICIT_CONSTRUCTOR_TYPE_ARGS = new DiamondInferenceResult() {
-      @Nonnull
       @Override
       public PsiType[] getTypes() {
         return PsiType.EMPTY_ARRAY;
@@ -50,7 +48,6 @@ public abstract class PsiDiamondType extends PsiType {
     };
 
     public static final DiamondInferenceResult NULL_RESULT = new DiamondInferenceResult() {
-      @Nonnull
       @Override
       public PsiType[] getTypes() {
         return PsiType.EMPTY_ARRAY;
@@ -63,7 +60,6 @@ public abstract class PsiDiamondType extends PsiType {
     };
 
     public static final DiamondInferenceResult RAW_RESULT = new DiamondInferenceResult() {
-      @Nonnull
       @Override
       public PsiType[] getTypes() {
         return PsiType.EMPTY_ARRAY;
@@ -76,7 +72,6 @@ public abstract class PsiDiamondType extends PsiType {
     };
 
     public static final DiamondInferenceResult UNRESOLVED_CONSTRUCTOR = new DiamondInferenceResult() {
-      @Nonnull
       @Override
       public PsiType[] getTypes() {
         return PsiType.EMPTY_ARRAY;
@@ -89,7 +84,6 @@ public abstract class PsiDiamondType extends PsiType {
     };
 
     public static final DiamondInferenceResult ANONYMOUS_INNER_RESULT = new DiamondInferenceResult() {
-      @Nonnull
       @Override
       public PsiType[] getTypes() {
         return PsiType.EMPTY_ARRAY;
@@ -112,7 +106,6 @@ public abstract class PsiDiamondType extends PsiType {
       myNewExpressionPresentableText = expressionPresentableText;
     }
 
-    @Nonnull
     public PsiType[] getTypes() {
       return myErrorMessage == null ? myInferredTypes.toArray(createArray(myInferredTypes.size())) : PsiType.EMPTY_ARRAY;
     }

@@ -13,14 +13,12 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.LanguageCachedValueUtil;
-import jakarta.annotation.Nonnull;
 
 public class PsiJavaModuleReferenceElementImpl extends CompositePsiElement implements PsiJavaModuleReferenceElement {
   public PsiJavaModuleReferenceElementImpl() {
     super(JavaElementType.MODULE_REFERENCE);
   }
 
-  @Nonnull
   @Override
   public String getReferenceText() {
     StringBuilder sb = new StringBuilder();
@@ -42,7 +40,7 @@ public class PsiJavaModuleReferenceElementImpl extends CompositePsiElement imple
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitModuleReferenceElement(this);
     } else {

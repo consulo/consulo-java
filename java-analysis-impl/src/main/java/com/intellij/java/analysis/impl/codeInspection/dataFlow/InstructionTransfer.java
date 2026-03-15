@@ -18,7 +18,6 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -47,7 +46,6 @@ public class InstructionTransfer implements TransferTarget
 		return List.of(new DfaInstructionState(runner.getInstruction(offset.getInstructionOffset()), state));
 	}
 
-	@Nonnull
 	@Override
 	public Collection<Integer> getPossibleTargets()
 	{

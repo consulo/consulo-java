@@ -26,8 +26,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -39,14 +38,12 @@ public class PublicInnerClassInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreInterfaces = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.publicInnerClassDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.publicInnerClassProblemDescriptor().get();
     }
@@ -78,7 +75,7 @@ public class PublicInnerClassInspection extends BaseInspection {
     private class PublicInnerClassVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (!aClass.hasModifierProperty(PsiModifier.PUBLIC)) {
                 return;
             }

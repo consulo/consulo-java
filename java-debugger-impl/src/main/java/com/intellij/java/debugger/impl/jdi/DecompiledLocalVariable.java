@@ -17,10 +17,9 @@ package com.intellij.java.debugger.impl.jdi;
 
 import java.util.Collection;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Eugene Zhuravlev
@@ -35,7 +34,7 @@ public class DecompiledLocalVariable
 	private final boolean myIsParam;
 	private final Collection<String> myMatchedNames;
 
-	public DecompiledLocalVariable(int slot, boolean isParam, @Nullable String signature, @Nonnull Collection<String> names)
+	public DecompiledLocalVariable(int slot, boolean isParam, @Nullable String signature, Collection<String> names)
 	{
 		mySlot = slot;
 		myIsParam = isParam;
@@ -59,7 +58,6 @@ public class DecompiledLocalVariable
 		return myIsParam;
 	}
 
-	@Nonnull
 	public String getDefaultName()
 	{
 		return (myIsParam ? PARAM_PREFIX : SLOT_PREFIX) + mySlot;
@@ -79,7 +77,6 @@ public class DecompiledLocalVariable
 		return getDefaultName();
 	}
 
-	@Nonnull
 	public Collection<String> getMatchedNames()
 	{
 		return myMatchedNames;

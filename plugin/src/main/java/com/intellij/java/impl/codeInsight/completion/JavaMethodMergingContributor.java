@@ -22,8 +22,7 @@ import consulo.language.Language;
 import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 
 import static consulo.util.lang.ObjectUtil.assertNotNull;
@@ -35,7 +34,7 @@ import static consulo.util.lang.ObjectUtil.assertNotNull;
 public class JavaMethodMergingContributor extends CompletionContributor {
 
   @Override
-  public AutoCompletionDecision handleAutoCompletionPossibility(@Nonnull AutoCompletionContext context) {
+  public AutoCompletionDecision handleAutoCompletionPossibility(AutoCompletionContext context) {
     CompletionParameters parameters = context.getParameters();
     if (parameters.getCompletionType() != CompletionType.SMART && parameters.getCompletionType() != CompletionType.BASIC) {
       return null;
@@ -94,7 +93,6 @@ public class JavaMethodMergingContributor extends CompletionContributor {
     return o instanceof PsiMethod ? (PsiMethod) o : null;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return Language.ANY;

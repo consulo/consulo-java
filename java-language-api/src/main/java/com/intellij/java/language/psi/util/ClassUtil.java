@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.psi.util;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiDirectory;
@@ -43,7 +42,7 @@ public class ClassUtil
 		return null;
 	}
 
-	public static String extractClassName(@Nonnull String fqName)
+	public static String extractClassName(String fqName)
 	{
 		int i = fqName.lastIndexOf('.');
 		return i == -1 ? fqName : fqName.substring(i + 1);
@@ -75,7 +74,7 @@ public class ClassUtil
 		return null;
 	}
 
-	public static void formatClassName(@Nonnull final PsiClass aClass, final StringBuilder buf)
+	public static void formatClassName(final PsiClass aClass, final StringBuilder buf)
 	{
 		final String qName = aClass.getQualifiedName();
 		if(qName != null)
@@ -110,7 +109,7 @@ public class ClassUtil
 		return (PsiClass) parent;
 	}
 
-	public static int getNonQualifiedClassIdx(@Nonnull final PsiClass psiClass)
+	public static int getNonQualifiedClassIdx(final PsiClass psiClass)
 	{
 		final int[] result = {-1};
 		final PsiClass containingClass = getContainerClass(psiClass);
@@ -147,12 +146,12 @@ public class ClassUtil
 		return result[0];
 	}
 
-	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @Nonnull final PsiClass containingClass)
+	public static PsiClass findNonQualifiedClassByIndex(final String indexName, final PsiClass containingClass)
 	{
 		return findNonQualifiedClassByIndex(indexName, containingClass, false);
 	}
 
-	public static PsiClass findNonQualifiedClassByIndex(final String indexName, @Nonnull final PsiClass containingClass, final boolean jvmCompatible)
+	public static PsiClass findNonQualifiedClassByIndex(final String indexName, final PsiClass containingClass, final boolean jvmCompatible)
 	{
 		String prefix = getDigitPrefix(indexName);
 		final int idx = prefix.length() > 0 ? Integer.parseInt(prefix) : -1;
@@ -218,7 +217,7 @@ public class ClassUtil
 		return result[0];
 	}
 
-	private static String getDigitPrefix(@Nonnull String indexName)
+	private static String getDigitPrefix(String indexName)
 	{
 		int i;
 		for(i = 0; i < indexName.length(); i++)
@@ -295,7 +294,7 @@ public class ClassUtil
 	}
 
 	@Nullable
-	public static String getJVMClassName(@Nonnull PsiClass aClass)
+	public static String getJVMClassName(PsiClass aClass)
 	{
 		final PsiClass containingClass = aClass.getContainingClass();
 		if(containingClass != null)
@@ -318,7 +317,7 @@ public class ClassUtil
 		return findPsiClass(manager, jvmClassName.replace('/', '.'), null, true);
 	}
 
-	public static boolean isTopLevelClass(@Nonnull PsiClass aClass)
+	public static boolean isTopLevelClass(PsiClass aClass)
 	{
 		if(aClass.getContainingClass() != null)
 		{

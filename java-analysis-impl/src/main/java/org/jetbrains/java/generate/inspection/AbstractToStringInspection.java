@@ -21,9 +21,8 @@ import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for inspection support.
@@ -31,7 +30,6 @@ import jakarta.annotation.Nullable;
 public abstract class AbstractToStringInspection extends LocalInspectionTool {
   protected static final Logger log = Logger.getInstance(AbstractToStringInspection.class);
 
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return LocalizeValue.localizeTODO("toString() issues");
   }
@@ -42,7 +40,6 @@ public abstract class AbstractToStringInspection extends LocalInspectionTool {
     return JavaLanguage.INSTANCE;
   }
 
-  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;

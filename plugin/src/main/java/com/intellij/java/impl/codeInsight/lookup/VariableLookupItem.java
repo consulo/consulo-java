@@ -43,8 +43,7 @@ import consulo.ui.color.ColorValue;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 
 /**
@@ -94,7 +93,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
     return StringUtil.trimLog(prefix + initText + suffix, 30);
   }
 
-  private static PsiExpression getInitializer(@Nonnull PsiVariable var) {
+  private static PsiExpression getInitializer(PsiVariable var) {
     PsiElement navigationElement = var.getNavigationElement();
     if (navigationElement instanceof PsiVariable) {
       var = (PsiVariable) navigationElement;
@@ -103,7 +102,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
   }
 
   @Nullable
-  private static ColorValue getInitializerColor(@Nonnull PsiVariable var) {
+  private static ColorValue getInitializerColor(PsiVariable var) {
     if (!JavaColorProvider.isColorType(var.getType())) {
       return null;
     }
@@ -119,17 +118,15 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
   }
 
   @Override
-  @Nonnull
   public PsiType getType() {
     return getSubstitutor().substitute(getObject().getType());
   }
 
-  @Nonnull
   public PsiSubstitutor getSubstitutor() {
     return mySubstitutor;
   }
 
-  public VariableLookupItem setSubstitutor(@Nonnull PsiSubstitutor substitutor) {
+  public VariableLookupItem setSubstitutor(PsiSubstitutor substitutor) {
     mySubstitutor = substitutor;
     return this;
   }
@@ -248,7 +245,7 @@ public class VariableLookupItem extends LookupItem<PsiVariable> implements Typed
     return parent instanceof PsiConditionalExpression && ref == ((PsiConditionalExpression) parent).getThenExpression();
   }
 
-  public static void makeFinalIfNeeded(@Nonnull InsertionContext context, @Nonnull PsiVariable variable) {
+  public static void makeFinalIfNeeded(InsertionContext context, PsiVariable variable) {
     PsiElement place = context.getFile().findElementAt(context.getTailOffset() - 1);
     if (place == null || PsiUtil.isLanguageLevel8OrHigher(place)) {
       return;

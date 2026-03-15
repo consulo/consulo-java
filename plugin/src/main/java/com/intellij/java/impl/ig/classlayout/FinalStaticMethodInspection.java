@@ -24,17 +24,14 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FinalStaticMethodInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.finalStaticMethodDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.finalStaticMethodProblemDescriptor().get();
     }
@@ -55,7 +52,7 @@ public class FinalStaticMethodInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //no call to super, so we don't drill into anonymous classes
             if (!method.hasModifierProperty(PsiModifier.FINAL)
                 || !method.hasModifierProperty(PsiModifier.STATIC)) {

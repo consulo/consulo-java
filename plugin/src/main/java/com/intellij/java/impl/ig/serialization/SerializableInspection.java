@@ -24,7 +24,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 import javax.swing.*;
@@ -83,13 +82,13 @@ public abstract class SerializableInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@Nonnull Element node) throws InvalidDataException {
+  public void readSettings(Element node) throws InvalidDataException {
     super.readSettings(node);
     parseString(superClassString, superClassList);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+  public void writeSettings(Element node) throws WriteExternalException {
     superClassString = formatString(superClassList);
     super.writeSettings(node);
   }

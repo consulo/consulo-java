@@ -46,19 +46,15 @@ import consulo.xml.psi.html.HtmlTag;
 import consulo.xml.psi.xml.XmlFile;
 import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.psi.xml.XmlTagValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return (Boolean) infos[1]
@@ -77,7 +73,6 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
     }
 
     private static class DeletePackageDotHtmlFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoDeleteQuickfix();
@@ -112,7 +107,6 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
             this.aPackage = aPackage;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.packageDotHtmlMayBePackageInfoConvertQuickfix();
@@ -198,7 +192,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
                     continue;
                 }
                 HtmlTag htmlTag = (HtmlTag) child;
-                @NonNls String name = htmlTag.getName();
+                String name = htmlTag.getName();
                 if ("body".equals(name)) {
                     XmlTagValue value = htmlTag.getValue();
                     return value.getText();
@@ -221,7 +215,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
             if (!(file instanceof XmlFile)) {
                 return;
             }
-            @NonNls String fileName = file.getName();
+            String fileName = file.getName();
             if (!"package.html".equals(fileName)) {
                 return;
             }
@@ -237,7 +231,7 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
             registerError(file, aPackage, Boolean.valueOf(exists));
         }
 
-        public static String getPackage(@Nonnull PsiDirectory directory) {
+        public static String getPackage(PsiDirectory directory) {
             VirtualFile virtualFile = directory.getVirtualFile();
             Project project = directory.getProject();
             ProjectRootManager projectRootManager = ProjectRootManager.getInstance(project);

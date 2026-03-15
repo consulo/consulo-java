@@ -19,14 +19,13 @@ import consulo.language.impl.psi.ASTWrapperPsiElement;
 import com.intellij.java.language.impl.spi.parsing.SPIElementTypes;
 import consulo.language.ast.ASTNode;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
  * User: anna
  */
 public class SPIClassProvidersElementList extends ASTWrapperPsiElement {
-  public SPIClassProvidersElementList(@Nonnull ASTNode node) {
+  public SPIClassProvidersElementList(ASTNode node) {
     super(node);
   }
   

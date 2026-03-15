@@ -22,17 +22,13 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.impl.psi.impl.cache.TypeAnnotationContainer;
 import consulo.language.impl.ast.TreeElement;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ClsReferenceParameterListImpl extends ClsElementImpl implements PsiReferenceParameterList
 {
-	@NonNls
 	private static final Pattern EXTENDS_PREFIX = Pattern.compile("^(\\?\\s*extends\\s*)(.*)");
-	@NonNls
 	private static final Pattern SUPER_PREFIX = Pattern.compile("^(\\?\\s*super\\s*)(.*)");
 
 	private final PsiElement myParent;
@@ -40,8 +36,8 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	private volatile PsiType[] myTypeParametersCachedTypes;
 
 	public ClsReferenceParameterListImpl(PsiElement parent,
-										 @Nonnull String[] classParameters,
-										 @Nonnull TypeAnnotationContainer annotations)
+										 String[] classParameters,
+										 TypeAnnotationContainer annotations)
 	{
 		myParent = parent;
 
@@ -78,24 +74,22 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	}
 
 	@Override
-	public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer)
+	public void appendMirrorText(int indentLevel, StringBuilder buffer)
 	{
 	}
 
 	@Override
-	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
+	public void setMirror(TreeElement element) throws InvalidMirrorException
 	{
 	}
 
 	@Override
-	@Nonnull
 	public PsiTypeElement[] getTypeParameterElements()
 	{
 		return myTypeParameters;
 	}
 
 	@Override
-	@Nonnull
 	public PsiType[] getTypeArguments()
 	{
 		PsiType[] cachedTypes = myTypeParametersCachedTypes;
@@ -112,7 +106,6 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	}
 
 	@Override
-	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		return myTypeParameters;

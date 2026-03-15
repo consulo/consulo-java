@@ -27,20 +27,16 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ThrowableInstanceNeverThrownInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.throwableInstanceNeverThrownDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     PsiExpression expression = (PsiExpression)infos[0];
     String type = TypeUtils.expressionHasTypeOrSubtype(
@@ -174,7 +170,7 @@ public class ThrowableInstanceNeverThrownInspection extends BaseInspection {
         (PsiMethodCallExpression)grandParent;
       PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!"initCause".equals(methodName)) {
         return null;

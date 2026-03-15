@@ -28,8 +28,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Batkovich
@@ -39,12 +38,11 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 
     private final PsiType myType;
 
-    public WrapLongWithMathToIntExactFix(PsiType type, @Nonnull PsiExpression expression) {
+    public WrapLongWithMathToIntExactFix(PsiType type, PsiExpression expression) {
         super(expression);
         myType = type;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.wrapLongWithMathToIntText();
@@ -52,21 +50,21 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         startElement.replace(getModifiedExpression(startElement));
     }
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         return startElement.isValid() &&
             startElement.getManager().isInProject(startElement) &&
@@ -75,7 +73,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
             areSameTypes(((PsiExpression) startElement).getType(), PsiType.LONG);
     }
 
-    private static boolean areSameTypes(@Nullable PsiType type, @Nonnull PsiPrimitiveType expected) {
+    private static boolean areSameTypes(@Nullable PsiType type, PsiPrimitiveType expected) {
         return !(type == null ||
             !type.isValid() ||
             (!type.equals(expected) && !expected.getBoxedTypeName().equals(type.getCanonicalText(false))));
@@ -88,15 +86,14 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 
     private static class MyMethodArgumentFix extends MethodArgumentFix implements HighPriorityAction {
         protected MyMethodArgumentFix(
-            @Nonnull PsiExpressionList list,
+            PsiExpressionList list,
             int i,
-            @Nonnull PsiType toType,
-            @Nonnull ArgumentFixerActionFactory fixerActionFactory
+            PsiType toType,
+            ArgumentFixerActionFactory fixerActionFactory
         ) {
             super(list, i, toType, fixerActionFactory);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getText() {
             return myArgList.getExpressions().length == 1
@@ -105,7 +102,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
         }
 
         @Override
-        public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        public boolean isAvailable(Project project, Editor editor, PsiFile file) {
             return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
         }
     }
@@ -121,7 +118,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
         }
 
         @Override
-        public boolean areTypesConvertible(PsiType exprType, PsiType parameterType, @Nonnull PsiElement context) {
+        public boolean areTypesConvertible(PsiType exprType, PsiType parameterType, PsiElement context) {
             return parameterType.isConvertibleFrom(exprType) || (areSameTypes(parameterType, PsiType.INT) && areSameTypes(
                 exprType,
                 PsiType.LONG

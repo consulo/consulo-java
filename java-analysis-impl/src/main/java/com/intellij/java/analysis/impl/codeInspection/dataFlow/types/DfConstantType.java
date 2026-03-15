@@ -7,8 +7,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
@@ -22,16 +21,14 @@ public abstract class DfConstantType<T> implements DfType {
   }
 
   @Override
-  public boolean isSuperType(@Nonnull DfType other) {
+  public boolean isSuperType(DfType other) {
     return other.equals(this) || other == DfTypes.BOTTOM;
   }
 
-  @Nonnull
   public abstract PsiType getPsiType();
 
-  @Nonnull
   @Override
-  public DfType meet(@Nonnull DfType other) {
+  public DfType meet(DfType other) {
     return other.isSuperType(this) ? this : DfTypes.BOTTOM;
   }
 
@@ -62,7 +59,7 @@ public abstract class DfConstantType<T> implements DfType {
    * @param value  constant value
    * @return true if given dfType represents a constant that is equal to given value
    */
-  public static boolean isConst(@Nonnull DfType dfType, @Nullable Object value) {
+  public static boolean isConst(DfType dfType, @Nullable Object value) {
     return dfType instanceof DfConstantType && Objects.equals(((DfConstantType<?>) dfType).getValue(), value);
   }
 
@@ -73,7 +70,7 @@ public abstract class DfConstantType<T> implements DfType {
    * @return the constant of given type; null if the supplied dfType is not a constant or its type class differs from the supplied one.
    */
   @Nullable
-  public static <T> T getConstantOfType(@Nonnull DfType dfType, @Nonnull Class<T> clazz) {
+  public static <T> T getConstantOfType(DfType dfType, Class<T> clazz) {
     return dfType instanceof DfConstantType ? ObjectUtil.tryCast(((DfConstantType<?>) dfType).getValue(), clazz) : null;
   }
 

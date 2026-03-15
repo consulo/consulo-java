@@ -17,7 +17,6 @@ package com.intellij.java.debugger.impl.engine;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
@@ -33,7 +32,7 @@ import consulo.execution.debug.frame.XValueGroup;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author egor
@@ -53,7 +52,6 @@ public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvid
 		myNodeManager = nodeManager;
 	}
 
-	@Nonnull
 	@Override
 	public String getSeparator()
 	{
@@ -74,7 +72,7 @@ public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvid
 	}
 
 	@Override
-	public void computeChildren(@Nonnull final XCompositeNode node)
+	public void computeChildren(final XCompositeNode node)
 	{
 		myEvaluationContext.getDebugProcess().getManagerThread().schedule(new SuspendContextCommandImpl(myEvaluationContext.getSuspendContext())
 		{

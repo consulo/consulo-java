@@ -7,24 +7,21 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.LiveTemplateContributor;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaIterationsLiveTemplateContributor implements LiveTemplateContributor {
     @Override
-    @Nonnull
     public String groupId() {
         return "javaiterations";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue groupName() {
         return LocalizeValue.localizeTODO("Java Iterations");
     }
 
     @Override
-    public void contribute(@Nonnull LiveTemplateContributor.Factory factory) {
+    public void contribute(LiveTemplateContributor.Factory factory) {
         try (Builder builder = factory.newBuilder("javaiterationsFori", "fori", "for(int $INDEX$ = 0; $INDEX$ < $LIMIT$; $INDEX$++) {\n"
             + "  $END$\n"
             + "}", LocalizeValue.localizeTODO("Create iteration loop"))) {

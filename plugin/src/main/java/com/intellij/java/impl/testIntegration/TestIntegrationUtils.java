@@ -42,8 +42,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -56,23 +55,23 @@ public class TestIntegrationUtils {
 
   public enum MethodKind {
     SET_UP("setUp") {
-      public FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework) {
+      public FileTemplateDescriptor getFileTemplateDescriptor(TestFramework framework) {
         return framework.getSetUpMethodFileTemplateDescriptor();
       }
     },
     TEAR_DOWN("tearDown") {
-      public FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework) {
+      public FileTemplateDescriptor getFileTemplateDescriptor(TestFramework framework) {
         return framework.getTearDownMethodFileTemplateDescriptor();
       }
     },
     TEST("test") {
-      public FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework) {
+      public FileTemplateDescriptor getFileTemplateDescriptor(TestFramework framework) {
         return framework.getTestMethodFileTemplateDescriptor();
       }
     },
     DATA("data") {
       @Override
-      public FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework) {
+      public FileTemplateDescriptor getFileTemplateDescriptor(TestFramework framework) {
         if (framework instanceof JavaTestFramework) {
           return ((JavaTestFramework)framework).getParametersMethodFileTemplateDescriptor();
         }
@@ -89,16 +88,16 @@ public class TestIntegrationUtils {
       return myDefaultName;
     }
 
-    public abstract FileTemplateDescriptor getFileTemplateDescriptor(@Nonnull TestFramework framework);
+    public abstract FileTemplateDescriptor getFileTemplateDescriptor(TestFramework framework);
   }
 
-  public static boolean isTest(@Nonnull PsiElement element) {
+  public static boolean isTest(PsiElement element) {
     PsiClass klass = findOuterClass(element);
     return klass != null && TestFrameworks.getInstance().isTestClass(klass);
   }
 
   @Nullable
-  public static PsiClass findOuterClass(@Nonnull PsiElement element) {
+  public static PsiClass findOuterClass(PsiElement element) {
     PsiClass result = PsiTreeUtil.getParentOfType(element, PsiClass.class, false);
     if (result == null) {
        PsiFile containingFile = element.getContainingFile();
@@ -238,7 +237,7 @@ public class TestIntegrationUtils {
     return template;
   }
 
-  public static PsiMethod createDummyMethod(@Nonnull PsiElement context) {
+  public static PsiMethod createDummyMethod(PsiElement context) {
     JVMElementFactory factory = JVMElementFactories.getFactory(context.getLanguage(), context.getProject());
     if (factory == null) factory = JavaPsiFacade.getElementFactory(context.getProject());
     return factory.createMethod("dummy", PsiType.VOID);

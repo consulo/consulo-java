@@ -19,7 +19,6 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NonNls;
 
 class ConvertIntegerToOctalPredicate implements PsiElementPredicate {
 
@@ -32,7 +31,7 @@ class ConvertIntegerToOctalPredicate implements PsiElementPredicate {
     if (!(PsiType.INT.equals(type) || PsiType.LONG.equals(type))) {
       return false;
     }
-    @NonNls String text = expression.getText();
+    String text = expression.getText();
     if (text.charAt(0) != '0') {
       return true;
     }

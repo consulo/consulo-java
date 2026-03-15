@@ -39,7 +39,6 @@ import consulo.ui.ex.awt.JBCheckBox;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -166,12 +165,12 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
   }
 
   @Override
-  public void applyEditorTo(@Nonnull final ApplicationConfiguration configuration) throws ConfigurationException {
+  public void applyEditorTo(final ApplicationConfiguration configuration) throws ConfigurationException {
     myCommonJavaParametersPanel.applyTo(configuration);
   }
 
   @Override
-  public void resetEditorFrom(@Nonnull final ApplicationConfiguration configuration) {
+  public void resetEditorFrom(final ApplicationConfiguration configuration) {
     myCommonJavaParametersPanel.reset(configuration);
   }
 
@@ -196,7 +195,6 @@ public class ApplicationConfigurable extends SettingsEditor<ApplicationConfigura
   }
 
   @Override
-  @Nonnull
   public JComponent createEditor() {
     return myCommonJavaParametersPanel;
   }

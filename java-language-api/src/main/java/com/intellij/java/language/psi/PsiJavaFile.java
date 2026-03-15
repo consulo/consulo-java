@@ -19,8 +19,7 @@ import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.PsiElement;
 import consulo.annotation.access.RequiredReadAction;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java, JSP or class file.
@@ -41,7 +40,6 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
    * file which has no package statement.
    */
   @Override
-  @Nonnull
   String getPackageName();
 
   /**
@@ -61,7 +59,6 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
    * @param checkIncludes   deprecated, no longer used
    * @return the list of PsiClass or PsiPackage elements for the imports.
    */
-  @Nonnull
   PsiElement[] getOnDemandImports(boolean includeImplicit, @Deprecated boolean checkIncludes);
 
   /**
@@ -71,7 +68,6 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
    * @param checkIncludes deprecated, no longer used.
    * @return the list of PsiClass elements for the import.
    */
-  @Nonnull
   PsiClass[] getSingleClassImports(@Deprecated boolean checkIncludes);
 
   /**
@@ -80,7 +76,6 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
    *
    * @return the list of implicitly imported package names.
    */
-  @Nonnull
   String[] getImplicitlyImportedPackages();
 
   /**
@@ -89,7 +84,6 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
    *
    * @return the list of implicitly imported package reference elements.
    */
-  @Nonnull
   PsiJavaCodeReferenceElement[] getImplicitlyImportedPackageReferences();
 
   /**
@@ -102,7 +96,6 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
   @Nullable
   PsiJavaCodeReferenceElement findImportReferenceTo(PsiClass aClass);
 
-  @Nonnull
   LanguageLevel getLanguageLevel();
 
   /**

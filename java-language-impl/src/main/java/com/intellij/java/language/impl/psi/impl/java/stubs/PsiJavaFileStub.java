@@ -19,7 +19,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
@@ -35,6 +34,5 @@ public interface PsiJavaFileStub extends PsiClassHolderFileStub<PsiJavaFile>
 
 	boolean isCompiled();
 
-	@Nonnull
 	StubPsiFactory getPsiFactory();
 }

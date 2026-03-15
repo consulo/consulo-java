@@ -34,7 +34,6 @@ import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.PsiReference;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -49,7 +48,7 @@ public class HighlightUtils {
   }
 
   public static void highlightElements(
-    @Nonnull Collection<? extends PsiElement> elementCollection) {
+    Collection<? extends PsiElement> elementCollection) {
     if (elementCollection.isEmpty()) {
       return;
     }

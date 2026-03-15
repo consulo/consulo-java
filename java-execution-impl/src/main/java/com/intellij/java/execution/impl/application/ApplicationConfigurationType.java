@@ -32,8 +32,7 @@ import consulo.localize.LocalizeValue;
 import consulo.module.extension.ModuleExtensionHelper;
 import consulo.project.Project;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ApplicationConfigurationType implements ConfigurationType {
@@ -41,7 +40,6 @@ public class ApplicationConfigurationType implements ConfigurationType {
 
     public ApplicationConfigurationType() {
         myFactory = new ConfigurationFactory(this) {
-            @Nonnull
             @Override
             public String getId() {
                 // non localized string as id - do change, this can break loading old projects
@@ -54,24 +52,22 @@ public class ApplicationConfigurationType implements ConfigurationType {
             }
 
             @Override
-            public boolean isApplicable(@Nonnull Project project) {
+            public boolean isApplicable(Project project) {
                 return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
             }
 
             @Override
-            public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration) {
+            public void onNewConfigurationCreated(RunConfiguration configuration) {
                 ((ModuleBasedConfiguration)configuration).onNewConfigurationCreated();
             }
         };
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaExecutionLocalize.applicationConfigurationName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getConfigurationTypeDescription() {
         return JavaExecutionLocalize.applicationConfigurationDescription();
@@ -112,12 +108,10 @@ public class ApplicationConfigurationType implements ConfigurationType {
 
 
     @Override
-    @Nonnull
     public String getId() {
         return "JavaApplication";
     }
 
-    @Nonnull
     public static ApplicationConfigurationType getInstance() {
         return Application.get().getExtensionPoint(ConfigurationType.class)
             .findExtensionOrFail(ApplicationConfigurationType.class);

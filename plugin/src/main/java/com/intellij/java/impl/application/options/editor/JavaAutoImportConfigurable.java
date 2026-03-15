@@ -36,8 +36,7 @@ import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.JBLabel;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.TitledSeparator;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import javax.swing.*;
@@ -79,7 +78,6 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
         myExcludeFromImportAndCompletionPanel.add(myExcludePackagesTable.getComponent(), BorderLayout.CENTER);
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return "editor.preferences.import.java";
@@ -91,7 +89,6 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
         return "editor.preferences.import";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.javaLanguageDisplayName();
@@ -210,7 +207,7 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
         mySmartPasteCombo = new JComboBox(InsertImportOption.values());
         mySmartPasteCombo.setRenderer(new ColoredListCellRenderer<>() {
             @Override
-            protected void customizeCellRenderer(@Nonnull JList<? extends InsertImportOption> jList, InsertImportOption o, int i, boolean b, boolean b1) {
+            protected void customizeCellRenderer(JList<? extends InsertImportOption> jList, InsertImportOption o, int i, boolean b, boolean b1) {
                 if (o != null) {
                     append(o.myText);
                 }

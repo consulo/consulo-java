@@ -19,7 +19,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.context.BaseTemplateContextType;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -31,7 +30,7 @@ public class SmartCompletionContextType extends BaseTemplateContextType {
   }
 
   @Override
-  public boolean isInContext(@Nonnull PsiFile file, int offset) {
+  public boolean isInContext(PsiFile file, int offset) {
     return false;
   }
 

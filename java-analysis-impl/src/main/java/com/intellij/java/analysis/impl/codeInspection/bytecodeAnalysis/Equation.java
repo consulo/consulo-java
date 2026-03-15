@@ -16,16 +16,13 @@
 
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import jakarta.annotation.Nonnull;
 
 final class Equation
 {
-	@Nonnull
 	final EKey key;
-	@Nonnull
 	final Result result;
 
-	Equation(@Nonnull EKey key, @Nonnull Result result)
+	Equation(EKey key, Result result)
 	{
 		this.key = key;
 		this.result = result;

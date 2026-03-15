@@ -28,7 +28,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.TestOnly;
 
 /**
@@ -39,7 +38,7 @@ public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         LOG.assertTrue(elements.length >= 1 && elements[0] instanceof PsiExpression, "incorrect invoke() parameters");
         PsiElement tempExpr = elements[0];
         Editor editor;
@@ -75,7 +74,7 @@ public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
      * @return
      */
     @RequiredUIAccess
-    protected abstract boolean invokeImpl(@Nonnull Project project, PsiExpression tempExpr, Editor editor);
+    protected abstract boolean invokeImpl(Project project, PsiExpression tempExpr, Editor editor);
 
     /**
      * @param project
@@ -84,7 +83,7 @@ public abstract class IntroduceHandlerBase implements RefactoringActionHandler {
      * @return
      */
     @RequiredUIAccess
-    protected abstract boolean invokeImpl(@Nonnull Project project, PsiLocalVariable localVariable, Editor editor);
+    protected abstract boolean invokeImpl(Project project, PsiLocalVariable localVariable, Editor editor);
 
     @TestOnly
     public abstract AbstractInplaceIntroducer getInplaceIntroducer();

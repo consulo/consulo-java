@@ -22,7 +22,6 @@ import consulo.language.Language;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.impl.psi.LightElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +43,7 @@ public class LightTypeParameterListBuilder extends LightElement implements PsiTy
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitTypeParameterList(this);
     } else {

@@ -27,7 +27,6 @@ import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.LabeledLayout;
 import consulo.ui.layout.VerticalLayout;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
@@ -44,9 +43,8 @@ public class ThreadsViewConfigurable extends SimpleConfigurableByProperties impl
     }
 
     @RequiredUIAccess
-    @Nonnull
     @Override
-    protected Component createLayout(PropertyBuilder propertyBuilder, @Nonnull Disposable uiDisposable) {
+    protected Component createLayout(PropertyBuilder propertyBuilder, Disposable uiDisposable) {
         ThreadsViewSettings settings = myThreadsViewSettingsProvider.get();
 
         VerticalLayout rootLayout = VerticalLayout.create();
@@ -92,7 +90,6 @@ public class ThreadsViewConfigurable extends SimpleConfigurableByProperties impl
         return rootLayout;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaDebuggerLocalize.threadsViewConfigurableDisplayName();

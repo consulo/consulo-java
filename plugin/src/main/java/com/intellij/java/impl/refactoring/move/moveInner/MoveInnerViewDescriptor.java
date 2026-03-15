@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.localize.UsageLocalize;
-import jakarta.annotation.Nonnull;
 
 class MoveInnerViewDescriptor implements UsageViewDescriptor {
 
@@ -37,7 +36,6 @@ class MoveInnerViewDescriptor implements UsageViewDescriptor {
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myInnerClass};
   }

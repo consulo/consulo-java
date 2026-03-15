@@ -15,8 +15,7 @@
  */
 package com.intellij.java.compiler.artifact.impl.ui;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class ManifestFileConfiguration {
     private String myMainClass;
     private String myManifestFilePath;
 
-    public ManifestFileConfiguration(@Nonnull ManifestFileConfiguration configuration) {
+    public ManifestFileConfiguration(ManifestFileConfiguration configuration) {
         myWritable = configuration.isWritable();
         myClasspath.addAll(configuration.getClasspath());
         myMainClass = configuration.getMainClass();
@@ -39,7 +38,7 @@ public class ManifestFileConfiguration {
     }
 
     public ManifestFileConfiguration(
-        @Nonnull String manifestFilePath,
+        String manifestFilePath,
         @Nullable List<String> classpath,
         @Nullable String mainClass,
         boolean isWritable

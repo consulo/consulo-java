@@ -27,7 +27,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -45,14 +44,14 @@ public class ReplaceConstructorWithFactoryAction extends BaseRefactoringAction {
 
     @Override
     @RequiredReadAction
-    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    protected boolean isEnabledOnElements(PsiElement[] elements) {
         return elements.length == 1
             && (elements[0] instanceof PsiMethod method && method.isConstructor() || elements[0] instanceof PsiClass)
             && elements[0].getLanguage().isKindOf(JavaLanguage.INSTANCE);
     }
 
     @Override
-    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+    protected RefactoringActionHandler getHandler(DataContext dataContext) {
         return new ReplaceConstructorWithFactoryHandler();
     }
 }

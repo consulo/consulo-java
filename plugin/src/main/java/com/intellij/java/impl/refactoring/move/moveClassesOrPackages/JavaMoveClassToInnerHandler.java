@@ -29,7 +29,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -41,7 +40,7 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
   private static final Logger LOG = Logger.getInstance(JavaMoveClassToInnerHandler.class);
 
   @Override
-  public PsiClass moveClass(@Nonnull PsiClass aClass, @Nonnull PsiClass targetClass) {
+  public PsiClass moveClass(PsiClass aClass, PsiClass targetClass) {
     if (aClass.getLanguage() != JavaLanguage.INSTANCE) {
       return null;
     }
@@ -58,7 +57,7 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
   }
 
   @Override
-  public List<PsiElement> filterImports(@Nonnull List<UsageInfo> usageInfos, @Nonnull Project project) {
+  public List<PsiElement> filterImports(List<UsageInfo> usageInfos, Project project) {
     List<PsiElement> importStatements = new ArrayList<PsiElement>();
     if (!CodeStyleSettingsManager.getSettings(project).INSERT_INNER_CLASS_IMPORTS) {
       filterUsagesInImportStatements(usageInfos, importStatements);
@@ -87,7 +86,7 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
     }
   }
 
-  public void retargetClassRefsInMoved(@Nonnull final Map<PsiElement, PsiElement> oldToNewElementsMapping) {
+  public void retargetClassRefsInMoved(final Map<PsiElement, PsiElement> oldToNewElementsMapping) {
     for (PsiElement newClass : oldToNewElementsMapping.values()) {
       if (newClass.getLanguage() != JavaLanguage.INSTANCE) continue;
       newClass.accept(new JavaRecursiveElementVisitor() {
@@ -126,8 +125,8 @@ public class JavaMoveClassToInnerHandler implements MoveClassToInnerHandler {
     return newInnerClass;
   }
 
-  public void retargetNonCodeUsages(@Nonnull Map<PsiElement, PsiElement> oldToNewElementMap,
-                                    @Nonnull final NonCodeUsageInfo[] nonCodeUsages) {
+  public void retargetNonCodeUsages(Map<PsiElement, PsiElement> oldToNewElementMap,
+                                    final NonCodeUsageInfo[] nonCodeUsages) {
     for (PsiElement newClass : oldToNewElementMap.values()) {
       if (newClass.getLanguage() != JavaLanguage.INSTANCE) continue;
       newClass.accept(new PsiRecursiveElementVisitor() {

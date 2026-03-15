@@ -34,8 +34,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
     private static class MyQuickFix implements LocalQuickFix {
         @Override
         @RequiredUIAccess
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiNewExpression arrayCreation = (PsiNewExpression) descriptor.getPsiElement();
             if (arrayCreation == null || !arrayCreation.isValid()) {
                 return;
@@ -62,7 +61,6 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
             InlineUtil.inlineArrayCreationForVarargs(arrayCreation);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionRedundantArrayCreationQuickfix();
@@ -79,20 +77,20 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
         place.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
             @RequiredReadAction
-            public void visitCallExpression(@Nonnull PsiCallExpression expression) {
+            public void visitCallExpression(PsiCallExpression expression) {
                 super.visitCallExpression(expression);
                 checkCall(expression);
             }
 
             @Override
             @RequiredReadAction
-            public void visitEnumConstant(@Nonnull PsiEnumConstant enumConstant) {
+            public void visitEnumConstant(PsiEnumConstant enumConstant) {
                 super.visitEnumConstant(enumConstant);
                 checkCall(enumConstant);
             }
 
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 //do not go inside to prevent multiple signals of the same problem
             }
 
@@ -209,19 +207,16 @@ public class RedundantArrayForVarargsCallInspection extends GenericsInspectionTo
         return true;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionRedundantArrayCreationDisplayName();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "RedundantArrayCreation";

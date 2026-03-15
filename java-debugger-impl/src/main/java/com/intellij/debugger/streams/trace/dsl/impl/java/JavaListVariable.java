@@ -6,7 +6,6 @@ import consulo.execution.debug.stream.trace.dsl.ListVariable;
 import consulo.execution.debug.stream.trace.dsl.VariableDeclaration;
 import consulo.execution.debug.stream.trace.dsl.impl.VariableImpl;
 import consulo.execution.debug.stream.trace.impl.handler.type.ListType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -14,48 +13,41 @@ import jakarta.annotation.Nonnull;
 public class JavaListVariable extends VariableImpl implements ListVariable {
     private final ListType listType;
 
-    public JavaListVariable(@Nonnull ListType type, @Nonnull String name) {
+    public JavaListVariable(ListType type, String name) {
         super(type, name);
         this.listType = type;
     }
 
-    @Nonnull
     @Override
     public ListType getType() {
         return listType;
     }
 
-    @Nonnull
     @Override
-    public Expression get(@Nonnull Expression index) {
+    public Expression get(Expression index) {
         return call("get", index);
     }
 
-    @Nonnull
     @Override
-    public Expression set(@Nonnull Expression index, @Nonnull Expression newValue) {
+    public Expression set(Expression index, Expression newValue) {
         return call("set", index, newValue);
     }
 
-    @Nonnull
     @Override
-    public Expression add(@Nonnull Expression element) {
+    public Expression add(Expression element) {
         return call("add", element);
     }
 
-    @Nonnull
     @Override
-    public Expression contains(@Nonnull Expression element) {
+    public Expression contains(Expression element) {
         return call("contains", element);
     }
 
-    @Nonnull
     @Override
     public Expression size() {
         return call("size");
     }
 
-    @Nonnull
     @Override
     public VariableDeclaration defaultDeclaration() {
         return new JavaVariableDeclaration(this, false, listType.getDefaultValue());

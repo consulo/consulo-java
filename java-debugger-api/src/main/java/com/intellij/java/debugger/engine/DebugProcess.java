@@ -27,9 +27,7 @@ import consulo.project.Project;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.*;
 import consulo.util.dataholder.UserDataHolder;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -37,14 +35,12 @@ import java.util.List;
  */
 public interface DebugProcess extends UserDataHolder
 {
-	@NonNls
 	String JAVA_STRATUM = "Java";
 
 	Project getProject();
 
 	RequestManager getRequestsManager();
 
-	@Nonnull
 	PositionManager getPositionManager();
 
 	VirtualMachineProxy getVirtualMachineProxy();
@@ -96,7 +92,6 @@ public interface DebugProcess extends UserDataHolder
 	/**
 	 * @return the search scope used by debugger to find sources corresponding to classes being executed
 	 */
-	@Nonnull
 	GlobalSearchScope getSearchScope();
 
 	void printToConsole(String text);

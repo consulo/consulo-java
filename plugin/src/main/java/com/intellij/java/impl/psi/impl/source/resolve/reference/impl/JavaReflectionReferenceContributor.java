@@ -27,8 +27,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiReferenceContributor;
 import consulo.language.psi.PsiReferenceRegistrar;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.analysis.impl.psi.impl.source.resolve.reference.impl.JavaReflectionReferenceUtil.*;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiLiteral;
@@ -51,11 +50,11 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor 
       (JAVA_LANG_INVOKE_METHOD_HANDLES_LOOKUP));
 
   @Override
-  public void registerReferenceProviders(@Nonnull PsiReferenceRegistrar registrar) {
+  public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
     registrar.registerReferenceProvider(PATTERN, new JavaReflectionReferenceProvider() {
       @Nullable
       @Override
-      protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context) {
+      protected PsiReference[] getReferencesByMethod(PsiLiteralExpression literalArgument, PsiReferenceExpression methodReference, ProcessingContext context) {
 
         PsiExpression qualifier = methodReference.getQualifierExpression();
         return qualifier != null ? new PsiReference[]{new JavaLangClassMemberReference(literalArgument, qualifier)} : null;
@@ -65,7 +64,7 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor 
     registrar.registerReferenceProvider(CLASS_PATTERN, new JavaReflectionReferenceProvider() {
       @Nullable
       @Override
-      protected PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context) {
+      protected PsiReference[] getReferencesByMethod(PsiLiteralExpression literalArgument, PsiReferenceExpression methodReference, ProcessingContext context) {
 
         String referenceName = methodReference.getReferenceName();
         if (FOR_NAME.equals(referenceName) || LOAD_CLASS.equals(referenceName)) {
@@ -78,7 +77,6 @@ public class JavaReflectionReferenceContributor extends PsiReferenceContributor 
     registrar.registerReferenceProvider(METHOD_HANDLE_PATTERN, new JavaLangInvokeHandleReference.JavaLangInvokeHandleReferenceProvider());
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

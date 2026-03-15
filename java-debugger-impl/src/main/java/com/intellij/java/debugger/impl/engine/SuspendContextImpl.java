@@ -30,8 +30,7 @@ import consulo.internal.com.sun.jdi.event.EventSet;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.util.*;
@@ -62,7 +61,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
 
     private JavaExecutionStack myActiveExecutionStack;
 
-    SuspendContextImpl(@Nonnull DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set) {
+    SuspendContextImpl(DebugProcessImpl debugProcess, @MagicConstant(flagsFromClass = EventRequest.class) int suspendPolicy, int eventVotes, EventSet set) {
         myDebugProcess = debugProcess;
         mySuspendPolicy = suspendPolicy;
         myVotesToVote = eventVotes;
@@ -114,7 +113,6 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
     }
 
     @Override
-    @Nonnull
     public DebugProcessImpl getDebugProcess() {
         return myDebugProcess;
     }
@@ -234,7 +232,7 @@ public abstract class SuspendContextImpl extends XSuspendContext implements Susp
     public void computeExecutionStacks(final XExecutionStackContainer container) {
         myDebugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(this) {
             @Override
-            public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
+            public void contextAction(SuspendContextImpl suspendContext) throws Exception {
                 List<JavaExecutionStack> res = new ArrayList<>();
                 Collection<ThreadReferenceProxyImpl> threads = getDebugProcess().getVirtualMachineProxy().allThreads();
                 JavaExecutionStack currentStack = null;

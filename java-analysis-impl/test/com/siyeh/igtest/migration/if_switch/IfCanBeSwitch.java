@@ -1,4 +1,4 @@
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class IfCanBeSwitch {
   void m1(int i) {  // ok

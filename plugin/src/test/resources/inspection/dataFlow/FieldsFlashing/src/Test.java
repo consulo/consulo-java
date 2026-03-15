@@ -1,4 +1,4 @@
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class TestNullableIntervening   // See http://www.jetbrains.net/jira/browse/IDEA-2845
 {

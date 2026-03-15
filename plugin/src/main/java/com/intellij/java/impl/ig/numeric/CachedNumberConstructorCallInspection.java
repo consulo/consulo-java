@@ -27,7 +27,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -46,13 +45,11 @@ public class CachedNumberConstructorCallInspection
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.cachedNumberConstructorCallDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.cachedNumberConstructorCallProblemDescriptor().get();
   }
@@ -81,7 +78,6 @@ public class CachedNumberConstructorCallInspection
       this.className = className;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.cachedNumberConstructorCallQuickfix(className);
     }
@@ -103,7 +99,7 @@ public class CachedNumberConstructorCallInspection
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression expression) {
+      PsiNewExpression expression) {
       if (!PsiUtil.isLanguageLevel5OrHigher(expression)) {
         return;
       }

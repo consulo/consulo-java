@@ -20,9 +20,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.Queue;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,7 +92,7 @@ public class Util {
     return element;
   }
 
-  public static boolean canBeMigrated(@Nonnull PsiElement[] es) {
+  public static boolean canBeMigrated(PsiElement[] es) {
     return Arrays.stream(es).allMatch(Util::canBeMigrated);
   }
 

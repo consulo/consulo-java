@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -27,7 +26,7 @@ import consulo.language.psi.PsiManager;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Maxim.Medvedev
@@ -38,16 +37,16 @@ public class LightFieldBuilder extends LightVariableBuilder<LightFieldBuilder> i
   private PsiDocComment myDocComment = null;
   private boolean myIsDeprecated = false;
 
-  public LightFieldBuilder(@Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement) {
+  public LightFieldBuilder(String name, String type, PsiElement navigationElement) {
     super(name, JavaPsiFacade.getElementFactory(navigationElement.getProject()).createTypeFromText(type, navigationElement),
           navigationElement);
   }
 
-  public LightFieldBuilder(@Nonnull String name, @Nonnull PsiType type, @Nonnull PsiElement navigationElement) {
+  public LightFieldBuilder(String name, PsiType type, PsiElement navigationElement) {
     super(name, type, navigationElement);
   }
 
-  public LightFieldBuilder(PsiManager manager, @Nonnull String name, @Nonnull PsiType type) {
+  public LightFieldBuilder(PsiManager manager, String name, PsiType type) {
     super(manager, name, type, JavaLanguage.INSTANCE);
   }
 

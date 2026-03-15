@@ -18,8 +18,7 @@ import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author VISTALL
@@ -29,7 +28,7 @@ public abstract class BaseJavaLineBreakpointTypeResolver implements XLineBreakpo
   @Nullable
   @RequiredReadAction
   @Override
-  public XLineBreakpointType<?> resolveBreakpointType(@Nonnull Project project, @Nonnull VirtualFile virtualFile, final int line) {
+  public XLineBreakpointType<?> resolveBreakpointType(Project project, VirtualFile virtualFile, final int line) {
     PsiFile file = PsiManager.getInstance(project).findFile(virtualFile);
     if (file == null) {
       return null;

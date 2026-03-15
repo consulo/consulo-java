@@ -21,17 +21,16 @@ import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.PostFormatProcessor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BracePostFormatProcessor implements PostFormatProcessor {
   @Override
-  public PsiElement processElement(@Nonnull PsiElement source, @Nonnull CodeStyleSettings settings) {
+  public PsiElement processElement(PsiElement source, CodeStyleSettings settings) {
     return new BraceEnforcer(settings).process(source);
   }
 
   @Override
-  public TextRange processText(@Nonnull PsiFile source, @Nonnull TextRange rangeToReformat, @Nonnull CodeStyleSettings settings) {
+  public TextRange processText(PsiFile source, TextRange rangeToReformat, CodeStyleSettings settings) {
     return new BraceEnforcer(settings).processText(source, rangeToReformat);
   }
 }

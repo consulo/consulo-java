@@ -52,8 +52,7 @@ import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -78,8 +77,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 	}
 
 	@Override
-	@Nonnull
-	public List<Location> locationsOfLine(@Nonnull ReferenceType type, @Nonnull SourcePosition position) throws NoDataException
+	public List<Location> locationsOfLine(ReferenceType type, SourcePosition position) throws NoDataException
 	{
 		try
 		{
@@ -93,14 +91,13 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position) throws NoDataException
+	public ClassPrepareRequest createPrepareRequest(final ClassPrepareRequestor requestor, final SourcePosition position) throws NoDataException
 	{
 		throw new IllegalStateException("This class implements MultiRequestPositionManager, corresponding createPrepareRequests version should be used");
 	}
 
-	@Nonnull
 	@Override
-	public List<ClassPrepareRequest> createPrepareRequests(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position) throws NoDataException
+	public List<ClassPrepareRequest> createPrepareRequests(final ClassPrepareRequestor requestor, final SourcePosition position) throws NoDataException
 	{
 		return ReadAction.compute(() ->
 		{
@@ -244,7 +241,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		private final String myExpectedMethodName;
 		private final int myLambdaOrdinal;
 
-		public JavaSourcePosition(@Nonnull SourcePosition delegate, ReferenceType declaringType, Method method, int lambdaOrdinal)
+		public JavaSourcePosition(SourcePosition delegate, ReferenceType declaringType, Method method, int lambdaOrdinal)
 		{
 			super(delegate);
 			myExpectedClassName = declaringType != null ? declaringType.name() : null;
@@ -252,7 +249,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 			myLambdaOrdinal = lambdaOrdinal;
 		}
 
-		public JavaSourcePosition(@Nonnull SourcePosition delegate, int lambdaOrdinal)
+		public JavaSourcePosition(SourcePosition delegate, int lambdaOrdinal)
 		{
 			super(delegate);
 			assert lambdaOrdinal > -1;
@@ -284,7 +281,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 			return null;
 		}
 
-		private static boolean insideBody(@Nonnull PsiElement element, @Nullable PsiElement body)
+		private static boolean insideBody(PsiElement element, @Nullable PsiElement body)
 		{
 			if(!PsiTreeUtil.isAncestor(body, element, false))
 			{
@@ -542,8 +539,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 	}
 
 	@Override
-	@Nonnull
-	public List<ReferenceType> getAllClasses(@Nonnull final SourcePosition position) throws NoDataException
+	public List<ReferenceType> getAllClasses(final SourcePosition position) throws NoDataException
 	{
 		return ReadAction.compute(() ->
 		{
@@ -556,7 +552,7 @@ public class PositionManagerImpl implements PositionManager, MultiRequestPositio
 		});
 	}
 
-	private List<ReferenceType> getClassReferences(@Nonnull final PsiClass psiClass, SourcePosition position)
+	private List<ReferenceType> getClassReferences(final PsiClass psiClass, SourcePosition position)
 	{
 		ApplicationManager.getApplication().assertReadAccessAllowed();
 		boolean isLocalOrAnonymous = false;

@@ -8,7 +8,6 @@ import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.PsiUnnamedPattern;
 import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
 
 
 public class PsiUnnamedPatternImpl extends CompositePsiElement implements PsiUnnamedPattern, Constants {
@@ -17,7 +16,7 @@ public class PsiUnnamedPatternImpl extends CompositePsiElement implements PsiUnn
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiTypeElement getTypeElement() {
     PsiTypeElement type = (PsiTypeElement)findPsiChildByType(JavaElementType.TYPE);
     assert type != null; // guaranteed by parser
@@ -25,7 +24,7 @@ public class PsiUnnamedPatternImpl extends CompositePsiElement implements PsiUnn
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitUnnamedPattern(this);
     }

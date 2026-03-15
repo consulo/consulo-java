@@ -3,7 +3,6 @@ package com.intellij.java.compiler.impl.cache;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.compiler.DependencyCache;
 import consulo.compiler.DependencyCacheFactory;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -11,9 +10,8 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class JavaDependencyCacheFactory implements DependencyCacheFactory {
-  @Nonnull
   @Override
-  public DependencyCache create(@Nonnull String cacheDir) {
+  public DependencyCache create(String cacheDir) {
     return new JavaDependencyCache(cacheDir);
   }
 }

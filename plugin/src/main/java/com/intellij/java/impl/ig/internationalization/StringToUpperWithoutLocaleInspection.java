@@ -26,27 +26,23 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class StringToUpperWithoutLocaleInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "StringToUpperCaseOrToLowerCaseWithoutLocale";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringTouppercaseTolowercaseWithoutLocaleDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringTouppercaseTolowercaseWithoutLocaleProblemDescriptor().get();
     }
@@ -69,7 +65,7 @@ public class StringToUpperWithoutLocaleInspection extends BaseInspection {
 
     private static class StringToUpperWithoutLocaleVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

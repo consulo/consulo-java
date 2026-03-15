@@ -27,32 +27,27 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StaticGuardedByInstanceInspection extends BaseJavaLocalInspectionTool {
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesConcurrencyAnnotationIssues();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Static member guarded by instance field or this");
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "StaticGuardedByInstance";
     }
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state

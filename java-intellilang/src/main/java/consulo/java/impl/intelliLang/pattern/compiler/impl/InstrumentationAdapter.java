@@ -17,7 +17,6 @@ package consulo.java.impl.intelliLang.pattern.compiler.impl;
 
 import consulo.internal.org.objectweb.asm.*;
 import consulo.language.inject.advanced.Configuration;
-import org.jetbrains.annotations.NonNls;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 
 class InstrumentationAdapter extends MethodVisitor implements Opcodes {
-  @NonNls
   private static final String RETURN_VALUE_NAME = "$returnvalue$";
 
   private final Type[] myArgTypes;
@@ -200,7 +198,7 @@ class InstrumentationAdapter extends MethodVisitor implements Opcodes {
     myInstrumenter.myInstrumented = true;
   }
 
-  private void addThrow(@NonNls String throwableClass, @NonNls String ctorSignature, String message) {
+  private void addThrow(String throwableClass, String ctorSignature, String message) {
     mv.visitTypeInsn(Opcodes.NEW, throwableClass);
     mv.visitInsn(Opcodes.DUP);
     mv.visitLdcInsn(message);
@@ -218,7 +216,7 @@ class InstrumentationAdapter extends MethodVisitor implements Opcodes {
       myPatternValue = v;
     }
 
-    public void visit(@NonNls String name, Object value) {
+    public void visit(String name, Object value) {
       av.visit(name, value);
       if ("value".equals(name) && value instanceof String) {
         myPatternValue.set((String)value);

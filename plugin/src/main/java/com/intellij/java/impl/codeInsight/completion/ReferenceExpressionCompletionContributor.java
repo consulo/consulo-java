@@ -47,9 +47,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -72,19 +70,17 @@ public class ReferenceExpressionCompletionContributor {
       .definedInClass(CommonClassNames.JAVA_LANG_OBJECT);
   private static final PrefixMatcher TRUE_MATCHER = new PrefixMatcher("") {
     @Override
-    public boolean prefixMatches(@Nonnull String name) {
+    public boolean prefixMatches(String name) {
       return true;
     }
 
-    @Nonnull
     @Override
-    public PrefixMatcher cloneWithPrefix(@Nonnull String prefix) {
+    public PrefixMatcher cloneWithPrefix(String prefix) {
       return this;
     }
   };
   public static final ElementPattern<PsiElement> IN_SWITCH_LABEL = psiElement().withSuperParent(2, psiElement(PsiSwitchLabelStatement.class).withSuperParent(2, PsiSwitchStatement.class));
 
-  @Nonnull
   private static ElementFilter getReferenceFilter(PsiElement element, boolean allowRecursion) {
     //throw foo
     if (psiElement().withParent(psiElement(PsiReferenceExpression.class).withParent(PsiThrowStatement.class)).accepts(element)) {
@@ -217,7 +213,6 @@ public class ReferenceExpressionCompletionContributor {
     return elements;
   }
 
-  @Nonnull
   public static Set<PsiField> findConstantsUsedInSwitch(@Nullable PsiElement position) {
     if (IN_SWITCH_LABEL.accepts(position)) {
       Set<PsiField> used = new LinkedHashSet<>();
@@ -330,7 +325,7 @@ public class ReferenceExpressionCompletionContributor {
     }
 
     PsiType type = parameters.getDefaultType();
-    @NonNls String canonicalText = type.getCanonicalText();
+    String canonicalText = type.getCanonicalText();
     if ("java.lang.ClassLoader".equals(canonicalText)) {
       return true;
     }
@@ -485,7 +480,7 @@ public class ReferenceExpressionCompletionContributor {
   }
 
   @Nullable
-  public static PsiReferenceExpression createMockReference(PsiElement place, @Nonnull PsiType qualifierType, LookupElement qualifierItem) {
+  public static PsiReferenceExpression createMockReference(PsiElement place, PsiType qualifierType, LookupElement qualifierItem) {
     PsiElementFactory factory = JavaPsiFacade.getElementFactory(place.getProject());
     if (qualifierItem.getObject() instanceof PsiClass) {
       String qname = ((PsiClass) qualifierItem.getObject()).getQualifiedName();
@@ -564,8 +559,8 @@ public class ReferenceExpressionCompletionContributor {
 
   private static void addToArrayConversion(PsiElement element,
                                            final String prefix,
-                                           @NonNls String expressionString,
-                                           @NonNls String presentableString,
+                                           String expressionString,
+                                           String presentableString,
                                            Consumer<LookupElement> result,
                                            PsiElement qualifier) {
     boolean callSpace = CodeStyleSettingsManager.getSettings(element.getProject()).SPACE_WITHIN_METHOD_CALL_PARENTHESES;

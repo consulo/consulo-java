@@ -10,7 +10,6 @@ import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerFeature;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.function.ThrowableRunnable;
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +59,7 @@ class ProcessProxyImpl implements ProcessProxy {
   }
 
   @Override
-  public void attach(@Nonnull ProcessHandler processHandler) {
+  public void attach(ProcessHandler processHandler) {
     processHandler.putUserData(KEY, this);
     execute(() ->
     {

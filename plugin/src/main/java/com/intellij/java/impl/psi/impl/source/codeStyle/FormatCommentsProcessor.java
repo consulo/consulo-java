@@ -18,13 +18,11 @@ import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FormatCommentsProcessor implements PreFormatProcessor {
-  @Nonnull
   @Override
-  public TextRange process(@Nonnull ASTNode element, @Nonnull TextRange range) {
+  public TextRange process(ASTNode element, TextRange range) {
     PsiElement e = SourceTreeToPsiMap.treeElementToPsi(element);
     assert e != null && e.isValid();
     PsiFile file = e.getContainingFile();
@@ -40,8 +38,7 @@ public class FormatCommentsProcessor implements PreFormatProcessor {
   /**
    * Formats PsiDocComments of current ASTNode element and all his children PsiDocComments
    */
-  @Nonnull
-  private static TextRange formatCommentsInner(@Nonnull Project project, @Nonnull ASTNode element, @Nonnull TextRange markedRange) {
+  private static TextRange formatCommentsInner(Project project, ASTNode element, TextRange markedRange) {
     TextRange resultTextRange = markedRange;
     PsiElement elementPsi = element.getPsi();
     assert elementPsi.isValid();

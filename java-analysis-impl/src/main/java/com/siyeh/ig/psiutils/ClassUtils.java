@@ -22,8 +22,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.HashSet;
@@ -137,7 +136,7 @@ public class ClassUtils {
     return JCiPUtil.isImmutable(aClass, checkDocComment);
   }
 
-  public static boolean isImmutableClass(@Nonnull PsiClass aClass) {
+  public static boolean isImmutableClass(PsiClass aClass) {
     String qualifiedName = aClass.getQualifiedName();
     return qualifiedName != null && (immutableTypes.contains(qualifiedName) ||
         qualifiedName.startsWith("com.google.common.collect.Immutable"));

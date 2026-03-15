@@ -28,8 +28,7 @@ import consulo.language.psi.stub.IdFilter;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -50,8 +49,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    @Nonnull
-    public PsiFile[] getFilesByName(@Nonnull String name) {
+    public PsiFile[] getFilesByName(String name) {
         Merger<PsiFile> merger = null;
         for (PsiShortNameProvider cache : myCaches) {
             PsiFile[] classes = cache.getFilesByName(name);
@@ -67,7 +65,6 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    @Nonnull
     public String[] getAllFileNames() {
         Merger<String> merger = new Merger<>();
         for (PsiShortNameProvider cache : myCaches) {
@@ -78,8 +75,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    @Nonnull
-    public PsiClass[] getClassesByName(@Nonnull String name, @Nonnull GlobalSearchScope scope) {
+    public PsiClass[] getClassesByName(String name, GlobalSearchScope scope) {
         Merger<PsiClass> merger = null;
         for (PsiShortNameProvider cache : myCaches) {
             PsiClass[] classes = cache.getClassesByName(name, scope);
@@ -95,7 +91,6 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    @Nonnull
     public String[] getAllClassNames() {
         Merger<String> merger = new Merger<>();
         for (PsiShortNameProvider cache : myCaches) {
@@ -148,15 +143,14 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    public void getAllClassNames(@Nonnull HashSet<String> dest) {
+    public void getAllClassNames(HashSet<String> dest) {
         for (PsiShortNameProvider cache : myCaches) {
             cache.getAllClassNames(dest);
         }
     }
 
     @Override
-    @Nonnull
-    public PsiMethod[] getMethodsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope) {
+    public PsiMethod[] getMethodsByName(String name, GlobalSearchScope scope) {
         Merger<PsiMethod> merger = null;
         for (PsiShortNameProvider cache : myCaches) {
             PsiMethod[] methods = cache.getMethodsByName(name, scope);
@@ -172,8 +166,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    @Nonnull
-    public PsiMethod[] getMethodsByNameIfNotMoreThan(@Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount) {
+    public PsiMethod[] getMethodsByNameIfNotMoreThan(String name, GlobalSearchScope scope, int maxCount) {
         Merger<PsiMethod> merger = null;
         for (PsiShortNameProvider cache : myCaches) {
             PsiMethod[] methods = cache.getMethodsByNameIfNotMoreThan(name, scope, maxCount);
@@ -191,9 +184,8 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
         return result == null ? PsiMethod.EMPTY_ARRAY : result;
     }
 
-    @Nonnull
     @Override
-    public PsiField[] getFieldsByNameIfNotMoreThan(@Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount) {
+    public PsiField[] getFieldsByNameIfNotMoreThan(String name, GlobalSearchScope scope, int maxCount) {
         Merger<PsiField> merger = null;
         for (PsiShortNameProvider cache : myCaches) {
             PsiField[] fields = cache.getFieldsByNameIfNotMoreThan(name, scope, maxCount);
@@ -213,18 +205,18 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
 
     @Override
     public boolean processMethodsWithName(
-        @Nonnull String name,
-        @Nonnull GlobalSearchScope scope,
-        @Nonnull Predicate<PsiMethod> processor
+        String name,
+        GlobalSearchScope scope,
+        Predicate<PsiMethod> processor
     ) {
         return processMethodsWithName(name, processor, scope, null);
     }
 
     @Override
     public boolean processMethodsWithName(
-        @Nonnull String name,
-        @Nonnull Predicate<? super PsiMethod> processor,
-        @Nonnull GlobalSearchScope scope,
+        String name,
+        Predicate<? super PsiMethod> processor,
+        GlobalSearchScope scope,
         @Nullable IdFilter idFilter
     ) {
         for (PsiShortNameProvider cache : myCaches) {
@@ -236,7 +228,6 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    @Nonnull
     public String[] getAllMethodNames() {
         Merger<String> merger = new Merger<>();
         for (PsiShortNameProvider cache : myCaches) {
@@ -247,15 +238,14 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    public void getAllMethodNames(@Nonnull HashSet<String> set) {
+    public void getAllMethodNames(HashSet<String> set) {
         for (PsiShortNameProvider cache : myCaches) {
             cache.getAllMethodNames(set);
         }
     }
 
     @Override
-    @Nonnull
-    public PsiField[] getFieldsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope) {
+    public PsiField[] getFieldsByName(String name, GlobalSearchScope scope) {
         Merger<PsiField> merger = null;
         for (PsiShortNameProvider cache : myCaches) {
             PsiField[] classes = cache.getFieldsByName(name, scope);
@@ -271,7 +261,6 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    @Nonnull
     public String[] getAllFieldNames() {
         Merger<String> merger = null;
         for (PsiShortNameProvider cache : myCaches) {
@@ -288,7 +277,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
     }
 
     @Override
-    public void getAllFieldNames(@Nonnull HashSet<String> set) {
+    public void getAllFieldNames(HashSet<String> set) {
         for (PsiShortNameProvider cache : myCaches) {
             cache.getAllFieldNames(set);
         }
@@ -296,9 +285,9 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
 
     @Override
     public boolean processFieldsWithName(
-        @Nonnull String key,
-        @Nonnull Predicate<? super PsiField> processor,
-        @Nonnull GlobalSearchScope scope,
+        String key,
+        Predicate<? super PsiField> processor,
+        GlobalSearchScope scope,
         @Nullable IdFilter filter
     ) {
         for (PsiShortNameProvider cache : myCaches) {
@@ -311,9 +300,9 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
 
     @Override
     public boolean processClassesWithName(
-        @Nonnull String key,
-        @Nonnull Predicate<? super PsiClass> processor,
-        @Nonnull GlobalSearchScope scope,
+        String key,
+        Predicate<? super PsiClass> processor,
+        GlobalSearchScope scope,
         @Nullable IdFilter filter
     ) {
         for (PsiShortNameProvider cache : myCaches) {
@@ -328,7 +317,7 @@ public class CompositeShortNamesCache extends PsiShortNamesCache {
         private T[] mySingleItem;
         private Set<T> myAllItems;
 
-        public void add(@Nonnull T[] items) {
+        public void add(T[] items) {
             if (items.length == 0) {
                 return;
             }

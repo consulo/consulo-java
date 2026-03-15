@@ -15,14 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.analysis.impl.codeInspection.AnonymousCanBeLambdaInspection;
 import consulo.language.editor.inspection.LocalInspectionTool;
 
 
 public abstract class Anonymous2LambdaInspectionTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

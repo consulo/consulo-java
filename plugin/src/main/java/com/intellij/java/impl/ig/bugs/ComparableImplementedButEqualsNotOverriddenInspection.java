@@ -29,18 +29,15 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ComparableImplementedButEqualsNotOverriddenInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.comparableImplementedButEqualsNotOverriddenDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.comparableImplementedButEqualsNotOverriddenProblemDescriptor().get();
     }

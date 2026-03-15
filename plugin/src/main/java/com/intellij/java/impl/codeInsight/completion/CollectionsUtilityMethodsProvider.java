@@ -20,7 +20,6 @@ import consulo.language.editor.completion.AutoCompletionPolicy;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.psi.PsiElement;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Consumer;
 
@@ -32,12 +31,11 @@ class CollectionsUtilityMethodsProvider {
   private final PsiElement myElement;
   private final PsiType myExpectedType;
   private final PsiType myDefaultType;
-  @Nonnull
   private final Consumer<LookupElement> myResult;
 
   CollectionsUtilityMethodsProvider(PsiElement position,
                                     PsiType expectedType,
-                                    PsiType defaultType, @Nonnull Consumer<LookupElement> result) {
+                                    PsiType defaultType, Consumer<LookupElement> result) {
     myResult = result;
     myElement = position;
     myExpectedType = expectedType;
@@ -77,7 +75,7 @@ class CollectionsUtilityMethodsProvider {
   }
 
   private void addCollectionMethod(String baseClassName,
-                                   String method, @Nonnull PsiClass collectionsClass) {
+                                   String method, PsiClass collectionsClass) {
     if (isClassType(myExpectedType, baseClassName) || isClassType(myExpectedType, CommonClassNames.JAVA_UTIL_COLLECTION)) {
       addMethodItem(myExpectedType, method, collectionsClass);
     } else if (isClassType(myDefaultType, baseClassName) || isClassType(myDefaultType, CommonClassNames.JAVA_UTIL_COLLECTION)) {

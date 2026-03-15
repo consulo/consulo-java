@@ -8,14 +8,13 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.application.Application;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface PropertyAccessorDetector {
   @Nullable
   @RequiredReadAction
-  static PropertyAccessorInfo detectFrom(@Nonnull PsiMethod method) {
+  static PropertyAccessorInfo detectFrom(PsiMethod method) {
     Application application = Application.get();
     for (PropertyAccessorDetector detector : application.getExtensionList(PropertyAccessorDetector.class)) {
       PropertyAccessorInfo accessorInfo = detector.detectPropertyAccessor(method);
@@ -31,9 +30,9 @@ public interface PropertyAccessorDetector {
    */
   @Nullable
   @RequiredReadAction
-  PropertyAccessorInfo detectPropertyAccessor(@Nonnull PsiMethod method);
+  PropertyAccessorInfo detectPropertyAccessor(PsiMethod method);
 
-  record PropertyAccessorInfo(@Nonnull String propertyName, @Nonnull PsiType propertyType, @Nonnull PropertyKind kind) {
+  record PropertyAccessorInfo(String propertyName, PsiType propertyType, PropertyKind kind) {
     public boolean isKindOf(PropertyKind other) {
       return this.kind == other;
     }

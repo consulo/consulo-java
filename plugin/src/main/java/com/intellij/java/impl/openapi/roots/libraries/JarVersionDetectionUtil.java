@@ -24,8 +24,7 @@ import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import consulo.util.io.JarUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
@@ -41,7 +40,7 @@ public class JarVersionDetectionUtil
 	}
 
 	@Nullable
-	public static String detectJarVersion(@Nonnull String detectionClass, @Nonnull Module module)
+	public static String detectJarVersion(String detectionClass, Module module)
 	{
 		for(OrderEntry library : ModuleRootManager.getInstance(module).getOrderEntries())
 		{
@@ -59,7 +58,7 @@ public class JarVersionDetectionUtil
 	}
 
 	@Nullable
-	public static String detectJarVersion(@Nonnull String detectionClass, @Nonnull List<VirtualFile> files)
+	public static String detectJarVersion(String detectionClass, List<VirtualFile> files)
 	{
 		VirtualFile jarRoot = LibrariesHelper.getInstance().findRootByClass(files, detectionClass);
 		return jarRoot != null && jarRoot.getFileSystem() instanceof ArchiveFileSystem ? getMainAttribute(jarRoot, Attributes.Name.IMPLEMENTATION_VERSION) : null;
@@ -84,13 +83,13 @@ public class JarVersionDetectionUtil
 	}
 
 	@Nullable
-	public static String getBundleVersion(@Nonnull File jar)
+	public static String getBundleVersion(File jar)
 	{
 		return JarUtil.getJarAttribute(jar, new Attributes.Name("Bundle-Version"));
 	}
 
 	@Nullable
-	public static String getImplementationVersion(@Nonnull File jar)
+	public static String getImplementationVersion(File jar)
 	{
 		return JarUtil.getJarAttribute(jar, Attributes.Name.IMPLEMENTATION_VERSION);
 	}

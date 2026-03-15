@@ -18,7 +18,6 @@ package com.intellij.lang.java.parser.partial;
 import consulo.language.parser.PsiBuilder;
 import com.intellij.java.language.impl.parser.JavaParser;
 import com.intellij.lang.java.parser.JavaParsingTestCase;
-import org.jetbrains.annotations.NonNls;
 
 public abstract class ExpressionParserTest extends JavaParsingTestCase {
   public ExpressionParserTest() {
@@ -148,7 +147,7 @@ public abstract class ExpressionParserTest extends JavaParsingTestCase {
   public void testLambdaExpression19() { doParserTest("(@A T t) -> (null)"); }
   public void testAmbiguousLambdaExpression() { doParserTest("f( (x) < y , z > (w) -> v )"); }
 
-  private void doParserTest(@NonNls String text) {
+  private void doParserTest(String text) {
     doParserTest(text, new MyTestParser());
   }
   private static class MyTestParser implements TestParser {

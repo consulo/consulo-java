@@ -16,7 +16,6 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 public class GoToInstruction extends BranchingInstruction
 {
@@ -29,12 +28,12 @@ public class GoToInstruction extends BranchingInstruction
 		this(offset, BranchingInstruction.Role.END);
 	}
 
-	GoToInstruction(int offset, @Nonnull Role role)
+	GoToInstruction(int offset, Role role)
 	{
 		this(offset, role, false);
 	}
 
-	GoToInstruction(int offset, @Nonnull Role role, boolean isReturn)
+	GoToInstruction(int offset, Role role, boolean isReturn)
 	{
 		super(offset, role);
 		this.isReturn = isReturn;
@@ -60,7 +59,7 @@ public class GoToInstruction extends BranchingInstruction
 	}
 
 	@Override
-	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
 	{
 		visitor.visitGoToInstruction(this, offset, nextOffset);
 	}

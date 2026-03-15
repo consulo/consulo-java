@@ -1,6 +1,5 @@
 package com.siyeh.igtest.resources;
 
-import jakarta.annotation.Nonnull;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -53,7 +52,7 @@ public class ChannelResourceInspection {
         }
     }
 
-    public static void copyFile(@Nonnull File from, @Nonnull File to)
+    public static void copyFile(File from, File to)
             throws IOException {
         if (from.getCanonicalPath().equals(to.getCanonicalPath()))
             return;

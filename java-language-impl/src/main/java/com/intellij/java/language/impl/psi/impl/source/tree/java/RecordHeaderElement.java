@@ -23,8 +23,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.ast.TokenSet;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class RecordHeaderElement extends CompositeElement implements Constants
 {
@@ -36,7 +35,7 @@ public class RecordHeaderElement extends CompositeElement implements Constants
 	}
 
 	@Override
-	public void deleteChildInternal(@Nonnull ASTNode child)
+	public void deleteChildInternal(ASTNode child)
 	{
 		if(child.getElementType() == JavaElementType.RECORD_COMPONENT)
 		{

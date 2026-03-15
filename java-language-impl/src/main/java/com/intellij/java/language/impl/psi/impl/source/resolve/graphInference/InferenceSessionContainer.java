@@ -30,10 +30,9 @@ import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -67,12 +66,12 @@ public class InferenceSessionContainer {
     }
   }
 
-  static PsiSubstitutor infer(@Nonnull PsiTypeParameter[] typeParameters,
-                              @Nonnull PsiParameter[] parameters,
-                              @Nonnull PsiExpression[] arguments,
-                              @Nonnull PsiSubstitutor partialSubstitutor,
-                              @Nonnull final PsiElement parent,
-                              @Nonnull final ParameterTypeInferencePolicy policy) {
+  static PsiSubstitutor infer(PsiTypeParameter[] typeParameters,
+                              PsiParameter[] parameters,
+                              PsiExpression[] arguments,
+                              PsiSubstitutor partialSubstitutor,
+                              final PsiElement parent,
+                              final ParameterTypeInferencePolicy policy) {
     if (parent instanceof PsiCall) {
       final PsiExpressionList argumentList = ((PsiCall) parent).getArgumentList();
       final MethodCandidateInfo.CurrentCandidateProperties properties = MethodCandidateInfo.getCurrentMethod(argumentList);
@@ -140,12 +139,12 @@ public class InferenceSessionContainer {
   }
 
   private static PsiSubstitutor inferNested(final PsiTypeParameter[] typeParameters,
-                                            @Nonnull final PsiParameter[] parameters,
-                                            @Nonnull final PsiExpression[] arguments,
+                                            final PsiParameter[] parameters,
+                                            final PsiExpression[] arguments,
                                             final PsiSubstitutor partialSubstitutor,
-                                            @Nonnull final PsiCall parent,
-                                            @Nonnull final ParameterTypeInferencePolicy policy,
-                                            @Nonnull final MethodCandidateInfo.CurrentCandidateProperties properties,
+                                            final PsiCall parent,
+                                            final ParameterTypeInferencePolicy policy,
+                                            final MethodCandidateInfo.CurrentCandidateProperties properties,
                                             final InferenceSession parentSession) {
     final CompoundInitialState compoundInitialState = createState(parentSession);
     InitialInferenceState initialInferenceState = compoundInitialState.getInitialState(parent);
@@ -281,7 +280,6 @@ public class InferenceSessionContainer {
     return null;
   }
 
-  @Nonnull
   private static PsiSubstitutor replaceVariables(Collection<InferenceVariable> inferenceVariables) {
     final List<InferenceVariable> targetVars = new ArrayList<InferenceVariable>();
     PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;

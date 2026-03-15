@@ -27,13 +27,11 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceWithOperatorAssignmentIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     public LocalizeValue getTextForElement(PsiElement element) {
         PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;
@@ -46,20 +44,18 @@ public class ReplaceWithOperatorAssignmentIntention extends MutablyNamedIntentio
         return IntentionPowerPackLocalize.replaceAssignmentWithOperatorAssignmentIntentionName(operator);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.replaceWithOperatorAssignmentIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ReplaceableWithOperatorAssignmentPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) {
+    public void processIntention(PsiElement element) {
         PsiAssignmentExpression expression = (PsiAssignmentExpression) element;
         PsiExpression rhs = expression.getRExpression();
         PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) PsiUtil.deparenthesizeExpression(rhs);

@@ -30,10 +30,8 @@ import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import consulo.util.collection.ContainerUtil;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
-import jakarta.annotation.Nonnull;
 
 public abstract class MakeMethodStaticTest extends LightRefactoringTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

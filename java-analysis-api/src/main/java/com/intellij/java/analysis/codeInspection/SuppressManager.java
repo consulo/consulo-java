@@ -33,7 +33,6 @@ import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import jakarta.annotation.Nonnull;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class SuppressManager {
@@ -46,13 +45,11 @@ public abstract class SuppressManager {
     return annotation != null && BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName());
   }
 
-  @Nonnull
-  public SuppressQuickFix[] createBatchSuppressActions(@Nonnull HighlightDisplayKey key) {
+  public SuppressQuickFix[] createBatchSuppressActions(HighlightDisplayKey key) {
     return BatchSuppressManager.getInstance().createBatchSuppressActions(key);
   }
 
-  @Nonnull
-  public abstract SuppressIntentionAction[] createSuppressActions(@Nonnull HighlightDisplayKey key);
+  public abstract SuppressIntentionAction[] createSuppressActions(HighlightDisplayKey key);
 
-  public abstract boolean isSuppressedFor(@Nonnull PsiElement element, String toolId);
+  public abstract boolean isSuppressedFor(PsiElement element, String toolId);
 }

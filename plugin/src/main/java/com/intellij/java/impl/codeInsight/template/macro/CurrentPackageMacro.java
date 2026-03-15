@@ -28,7 +28,6 @@ import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -50,14 +49,14 @@ public class CurrentPackageMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     Project project = context.getProject();
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
     return file instanceof PsiJavaFile javaFile ? new TextResult(javaFile.getPackageName()) : new TextResult("");
   }
 
   @Override
-  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);
   }
 

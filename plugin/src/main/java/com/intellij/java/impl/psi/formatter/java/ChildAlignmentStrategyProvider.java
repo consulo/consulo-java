@@ -15,23 +15,22 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.language.codeStyle.AlignmentStrategy;
 import consulo.language.ast.ASTNode;
 import consulo.util.lang.StringUtil;
 import consulo.language.ast.TokenType;
-import jakarta.annotation.Nonnull;
 
 public abstract class ChildAlignmentStrategyProvider
 {
 
-	public abstract AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child);
+	public abstract AlignmentStrategy getNextChildStrategy(ASTNode child);
 
 	public static ChildAlignmentStrategyProvider NULL_STRATEGY_PROVIDER = new ChildAlignmentStrategyProvider()
 	{
 		@Override
-		public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
+		public AlignmentStrategy getNextChildStrategy(ASTNode child)
 		{
 			return AlignmentStrategy.getNullStrategy();
 		}

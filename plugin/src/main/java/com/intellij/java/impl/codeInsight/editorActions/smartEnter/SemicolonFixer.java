@@ -15,7 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.ASTNode;
@@ -29,7 +29,6 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -43,7 +42,7 @@ public class SemicolonFixer implements Fixer
 		@SuppressWarnings("unused") boolean b = fixReturn(editor, psiElement) || fixForUpdate(editor, psiElement) || fixAfterLastValidElement(editor, psiElement);
 	}
 
-	private static boolean fixReturn(@Nonnull Editor editor, @Nullable PsiElement psiElement)
+	private static boolean fixReturn(Editor editor, @Nullable PsiElement psiElement)
 	{
 		if(psiElement instanceof PsiReturnStatement)
 		{
@@ -62,7 +61,7 @@ public class SemicolonFixer implements Fixer
 		return false;
 	}
 
-	private static boolean fixForUpdate(@Nonnull Editor editor, @Nullable PsiElement psiElement)
+	private static boolean fixForUpdate(Editor editor, @Nullable PsiElement psiElement)
 	{
 		if(!(psiElement instanceof PsiForStatement))
 		{
@@ -96,7 +95,7 @@ public class SemicolonFixer implements Fixer
 		return true;
 	}
 
-	private static boolean fixAfterLastValidElement(@Nonnull Editor editor, @Nullable PsiElement psiElement)
+	private static boolean fixAfterLastValidElement(Editor editor, @Nullable PsiElement psiElement)
 	{
 		if(psiElement instanceof PsiExpressionStatement  ||
 				psiElement instanceof PsiDeclarationStatement ||

@@ -42,8 +42,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -524,7 +523,6 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
         return null;
     }
 
-    @Nonnull
     public String getIdLabel() {
         return StringUtil.notNullize(myIdLabel);
     }
@@ -537,7 +535,6 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
         return getValueText();
     }
 
-    @Nonnull
     public String getValueText() {
         return StringUtil.notNullize(myValueText);
     }
@@ -592,7 +589,6 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
         return myProject;
     }
 
-    @Nonnull
     public String getDeclaredTypeLabel() {
         ClassRenderer classRenderer = NodeRendererSettings.getInstance().getClassRenderer();
         if (classRenderer.SHOW_DECLARED_TYPE) {

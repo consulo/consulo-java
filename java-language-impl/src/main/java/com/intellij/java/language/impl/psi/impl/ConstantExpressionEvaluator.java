@@ -26,8 +26,7 @@ import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Serega.Vasiliev
@@ -37,7 +36,7 @@ public interface ConstantExpressionEvaluator extends LanguageExtension {
   ExtensionPointCacheKey<ConstantExpressionEvaluator, ByLanguageValue<ConstantExpressionEvaluator>> KEY = ExtensionPointCacheKey.create("ConstantExpressionEvaluator", LanguageOneToOne.build());
 
   @Nullable
-  static ConstantExpressionEvaluator forLanguage(@Nonnull Language language) {
+  static ConstantExpressionEvaluator forLanguage(Language language) {
     return Application.get().getExtensionPoint(ConstantExpressionEvaluator.class).getOrBuildCache(KEY).get(language);
   }
 
@@ -45,5 +44,5 @@ public interface ConstantExpressionEvaluator extends LanguageExtension {
 
   Object computeExpression(PsiElement expression,
                            boolean throwExceptionOnOverflow,
-                           @Nullable PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator);
+                           PsiConstantEvaluationHelper.@Nullable AuxEvaluator auxEvaluator);
 }

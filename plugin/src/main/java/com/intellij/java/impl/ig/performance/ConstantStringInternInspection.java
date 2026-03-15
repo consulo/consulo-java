@@ -27,20 +27,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ConstantStringInternInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.constantStringInternDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.constantStringInternProblemDescriptor().get();
   }
@@ -57,7 +53,6 @@ public class ConstantStringInternInspection extends BaseInspection {
 
   private static class ConstantStringInternFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.constantStringInternQuickfix();
     }
@@ -85,11 +80,11 @@ public class ConstantStringInternInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!"intern".equals(methodName)) {
         return;

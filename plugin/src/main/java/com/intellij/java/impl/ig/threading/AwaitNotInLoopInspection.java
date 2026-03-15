@@ -24,17 +24,14 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AwaitNotInLoopInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.awaitNotInLoopDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.awaitNotInLoopProblemDescriptor().get();
   }
@@ -47,7 +44,7 @@ public class AwaitNotInLoopInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallToMethod(expression,
                                           "java.util.concurrent.locks.Condition", PsiType.VOID,

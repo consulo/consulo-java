@@ -27,7 +27,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.NegateComparisonIntention", fileExtensions = "java", categories = {
@@ -35,7 +34,6 @@ import jakarta.annotation.Nonnull;
     "Boolean"
 })
 public class NegateComparisonIntention extends MutablyNamedIntention {
-    @Nonnull
     @Override
     public LocalizeValue getTextForElement(PsiElement element) {
         String operatorText = "";
@@ -55,14 +53,12 @@ public class NegateComparisonIntention extends MutablyNamedIntention {
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.negateComparisonIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ComparisonPredicate();
     }

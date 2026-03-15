@@ -31,7 +31,6 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.dataholder.KeyWithDefaultValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
@@ -39,7 +38,6 @@ public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
 
     public static final KeyWithDefaultValue<Boolean> KEY = KeyWithDefaultValue.create("java-shorted-fq-names", true);
 
-    @Nonnull
     @Override
     public KeyWithDefaultValue<Boolean> getKey() {
         return KEY;
@@ -64,7 +62,6 @@ public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getOptionText() {
         return CodeInsightLocalize.dialogEditTemplateCheckboxShortenFqNames();

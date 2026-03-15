@@ -22,7 +22,6 @@ package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
@@ -35,7 +34,6 @@ import consulo.internal.com.sun.jdi.ReferenceType;
 public class AnyExceptionBreakpoint extends ExceptionBreakpoint
 {
 	public static final
-	@NonNls
 	Key<AnyExceptionBreakpoint> ANY_EXCEPTION_BREAKPOINT = BreakpointCategory.lookup("breakpoint_any");
 
 	protected AnyExceptionBreakpoint(Project project, XBreakpoint xBreakpoint)

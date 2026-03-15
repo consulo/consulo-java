@@ -11,7 +11,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
 
 public class ReplaceTypeInCastFix implements LocalQuickFix {
     private final String myExistingTypeText;
@@ -24,14 +23,13 @@ public class ReplaceTypeInCastFix implements LocalQuickFix {
         myWantedTypeCanonicalText = wantedType.getCanonicalText();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix1(myExistingTypeText, myWantedTypeText);
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiTypeElement typeElement = ObjectUtil.tryCast(descriptor.getStartElement(), PsiTypeElement.class);
         if (typeElement == null) {
             return;

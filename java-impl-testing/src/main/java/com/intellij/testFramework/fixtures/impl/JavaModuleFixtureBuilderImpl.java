@@ -25,7 +25,6 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import consulo.virtualFileSystem.LocalFileSystem;
-import org.jetbrains.annotations.NonNls;
 import consulo.module.Module;
 import com.intellij.java.language.projectRoots.JavaSdk;
 import consulo.content.bundle.Sdk;
@@ -77,7 +76,6 @@ abstract class JavaModuleFixtureBuilderImpl<T extends ModuleFixture> extends Mod
     }
   }
 
-  @NonNls
   public static final String TESTS_EXTERNAL_COMPILER_HOME_PROPERTY_NAME = "tests.external.compiler.home";
   private final List<Lib> myLibraries = new ArrayList<Lib>();
   private String myJdk;
@@ -108,7 +106,7 @@ abstract class JavaModuleFixtureBuilderImpl<T extends ModuleFixture> extends Mod
   }
 
   @Override
-  public JavaModuleFixtureBuilder addLibrary(@NonNls final String libraryName, final Map<OrderRootType, String[]> roots) {
+  public JavaModuleFixtureBuilder addLibrary(final String libraryName, final Map<OrderRootType, String[]> roots) {
     myLibraries.add(new Lib(libraryName, roots));
     return this;
   }

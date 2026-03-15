@@ -26,21 +26,17 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ExceptionNameDoesntEndWithExceptionInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "ExceptionClassNameDoesntEndWithException";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.exceptionNameDoesntEndWithExceptionDisplayName();
   }
@@ -51,7 +47,6 @@ public class ExceptionNameDoesntEndWithExceptionInspection
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.exceptionNameDoesntEndWithExceptionProblemDescriptor().get();
   }
@@ -70,7 +65,7 @@ public class ExceptionNameDoesntEndWithExceptionInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
       if (aClass instanceof PsiTypeParameter) {
         return;
@@ -79,7 +74,7 @@ public class ExceptionNameDoesntEndWithExceptionInspection
       if (className == null) {
         return;
       }
-      @NonNls String exception = "Exception";
+      String exception = "Exception";
       if (className.endsWith(exception)) {
         return;
       }

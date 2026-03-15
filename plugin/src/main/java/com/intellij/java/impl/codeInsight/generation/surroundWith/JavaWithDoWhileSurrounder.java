@@ -28,7 +28,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
 class JavaWithDoWhileSurrounder extends JavaStatementsSurrounder{
   @Override
@@ -49,7 +48,7 @@ class JavaWithDoWhileSurrounder extends JavaStatementsSurrounder{
       return null;
     }
 
-    @NonNls String text = "do{\n}while(true);";
+    String text = "do{\n}while(true);";
     PsiDoWhileStatement doWhileStatement = (PsiDoWhileStatement)factory.createStatementFromText(text, null);
     doWhileStatement = (PsiDoWhileStatement)codeStyleManager.reformat(doWhileStatement);
 

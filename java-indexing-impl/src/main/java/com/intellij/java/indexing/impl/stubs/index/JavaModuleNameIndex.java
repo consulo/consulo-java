@@ -15,8 +15,7 @@ import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.util.collection.ContainerUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,14 +39,13 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
     return 3;
   }
 
-  @Nonnull
   @Override
   public StubIndexKey<String, PsiJavaModule> getKey() {
     return JavaStubIndexKeys.MODULE_NAMES;
   }
 
   @Override
-  public Collection<PsiJavaModule> get(@Nonnull String name, @Nonnull Project project, @Nonnull ProjectAwareSearchScope scope) {
+  public Collection<PsiJavaModule> get(String name, Project project, ProjectAwareSearchScope scope) {
     Collection<PsiJavaModule> modules = StubIndex.getElements(getKey(), name, project, new JavaSourceFilterScope((GlobalSearchScope) scope, true), PsiJavaModule.class);
     if (modules.size() > 1) {
       modules = filterVersions(project, modules);
@@ -86,7 +84,7 @@ public class JavaModuleNameIndex extends StringStubIndexExtension<PsiJavaModule>
   }
 
   @Nullable
-  public static VirtualFile descriptorFile(@Nonnull VirtualFile root) {
+  public static VirtualFile descriptorFile(VirtualFile root) {
     VirtualFile result = root.findChild(PsiJavaModule.MODULE_INFO_CLS_FILE);
     if (result == null) {
       result = ContainerUtil.getFirstItem(descriptorFiles(root, true, true));

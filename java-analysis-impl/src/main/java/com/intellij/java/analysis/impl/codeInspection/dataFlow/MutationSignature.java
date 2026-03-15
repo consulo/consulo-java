@@ -9,8 +9,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
@@ -170,7 +169,7 @@ public final class MutationSignature {
      * @return a parsed mutation signature
      * @throws IllegalArgumentException if signature is invalid
      */
-    public static MutationSignature parse(@Nonnull String signature) {
+    public static MutationSignature parse(String signature) {
         if (signature.trim().isEmpty()) {
             return UNKNOWN;
         }
@@ -213,8 +212,7 @@ public final class MutationSignature {
      * @param method    a method to apply the signature
      * @return error message or null if signature is valid
      */
-    @Nonnull
-    public static LocalizeValue checkSignature(@Nonnull String signature, @Nonnull PsiMethod method) {
+    public static LocalizeValue checkSignature(String signature, PsiMethod method) {
         try {
             MutationSignature ms = parse(signature);
             if (ms.myThis && method.isStatic()) {
@@ -239,7 +237,6 @@ public final class MutationSignature {
         return LocalizeValue.empty();
     }
 
-    @Nonnull
     public static MutationSignature fromMethod(@Nullable PsiMethod method) {
         if (method == null) {
             return UNKNOWN;
@@ -247,7 +244,6 @@ public final class MutationSignature {
         return JavaMethodContractUtil.getContractInfo(method).getMutationSignature();
     }
 
-    @Nonnull
     @RequiredReadAction
     public static MutationSignature fromCall(@Nullable PsiCall call) {
         if (call == null) {
@@ -304,7 +300,6 @@ public final class MutationSignature {
     /**
      * @return a signature of the pure method, which doesn't mutate anything
      */
-    @Nonnull
     public static MutationSignature pure() {
         return PURE;
     }
@@ -312,7 +307,6 @@ public final class MutationSignature {
     /**
      * @return a signature of the unknown method, which may mutate anything
      */
-    @Nonnull
     public static MutationSignature unknown() {
         return UNKNOWN;
     }

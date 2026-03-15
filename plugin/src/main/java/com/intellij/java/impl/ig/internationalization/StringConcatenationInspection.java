@@ -35,9 +35,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -66,20 +64,17 @@ public class StringConcatenationInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreInToString = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringConcatenationDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringConcatenationProblemDescriptor().get();
     }
 
     @Override
-    @Nonnull
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         PsiPolyadicExpression polyadicExpression = (PsiPolyadicExpression) infos[0];
         Collection<InspectionGadgetsFix> result = new ArrayList();
@@ -163,7 +158,7 @@ public class StringConcatenationInspection extends BaseInspection {
     private class StringConcatenationVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
+        public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
             IElementType tokenType = expression.getOperationTokenType();
             if (!JavaTokenType.PLUS.equals(tokenType)) {
@@ -197,7 +192,7 @@ public class StringConcatenationInspection extends BaseInspection {
                     PsiTreeUtil.getParentOfType(expression, PsiMethodCallExpression.class, true, PsiCodeBlock.class, PsiClass.class);
                 if (methodCallExpression != null) {
                     PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-                    @NonNls String canonicalText = methodExpression.getCanonicalText();
+                    String canonicalText = methodExpression.getCanonicalText();
                     if (ignoreSystemOuts && "System.out.println".equals(canonicalText) || "System.out.print".equals(canonicalText)) {
                         return;
                     }

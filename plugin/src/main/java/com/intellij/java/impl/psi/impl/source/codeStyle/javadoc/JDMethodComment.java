@@ -17,8 +17,7 @@ package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 
@@ -32,13 +31,13 @@ public class JDMethodComment extends JDParamListOwnerComment
 	private String myReturnTag;
 	private List<TagDescription> myThrowsList;
 
-	public JDMethodComment(@Nonnull CommentFormatter formatter)
+	public JDMethodComment(CommentFormatter formatter)
 	{
 		super(formatter);
 	}
 
 	@Override
-	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(String prefix, StringBuilder sb)
 	{
 		super.generateSpecial(prefix, sb);
 
@@ -70,12 +69,12 @@ public class JDMethodComment extends JDParamListOwnerComment
 		}
 	}
 
-	public void setReturnTag(@Nonnull String returnTag)
+	public void setReturnTag(String returnTag)
 	{
 		this.myReturnTag = returnTag;
 	}
 
-	public void addThrow(@Nonnull String className, @Nullable String description)
+	public void addThrow(String className, @Nullable String description)
 	{
 		if(myThrowsList == null)
 		{

@@ -32,7 +32,6 @@ import consulo.language.editor.template.PsiElementResult;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public class ComponentTypeOfMacro extends Macro {
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     if (params.length != 1) {
       return null;
     }
@@ -75,7 +74,7 @@ public class ComponentTypeOfMacro extends Macro {
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     if (params.length != 1) {
       return null;
     }

@@ -24,7 +24,6 @@
  */
 package org.osmorc.manifest.lang.headerparser.impl;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.annotation.AnnotationHolder;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
@@ -38,7 +37,7 @@ import org.osmorc.manifest.lang.valueparser.impl.valueobject.Version;
 public class BundleVersionParser extends AbstractHeaderParserImpl {
   private static final ValueParser<Version> VERSION_PARSER = new VersionParser();
 
-  public void annotate(@Nonnull HeaderValuePart headerValue, @Nonnull AnnotationHolder holder) {
+  public void annotate(HeaderValuePart headerValue, AnnotationHolder holder) {
     getVersionParser().parseValue(headerValue, holder);
   }
 
@@ -46,7 +45,7 @@ public class BundleVersionParser extends AbstractHeaderParserImpl {
     return VERSION_PARSER;
   }
 
-  public Object getValue(@Nonnull HeaderValuePart headerValuePart) {
+  public Object getValue(HeaderValuePart headerValuePart) {
     return getVersionParser().parseValue(headerValuePart, null);
   }
 }

@@ -23,7 +23,6 @@ import static org.junit.Assert.fail;
 import java.util.Arrays;
 import java.util.TreeSet;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.LanguageLevel;
@@ -337,7 +336,6 @@ public abstract class PullUpTest extends LightRefactoringTestCase
 		checkResultByFile(BASE_PATH + getTestName(false) + "_after.java");
 	}
 
-	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{

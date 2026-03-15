@@ -15,7 +15,6 @@
  */
 package consulo.java.impl.intelliLang.util;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.document.util.TextRange;
 import consulo.language.psi.ElementManipulators;
@@ -23,7 +22,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Base class for references in String literals.
@@ -43,7 +42,6 @@ public abstract class StringLiteralReference implements PsiReference {
     return ElementManipulators.getValueTextRange(myValue);
   }
 
-  @Nonnull
   public String getCanonicalText() {
     return myValue.getText();
   }
@@ -52,7 +50,7 @@ public abstract class StringLiteralReference implements PsiReference {
     return myValue;
   }
 
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     return myValue;
   }
 

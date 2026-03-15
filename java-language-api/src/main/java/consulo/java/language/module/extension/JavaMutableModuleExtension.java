@@ -20,8 +20,7 @@ import com.intellij.java.language.LanguageLevel;
 import consulo.module.extension.MutableModuleExtensionWithSdk;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -31,12 +30,11 @@ import java.util.List;
  */
 public interface JavaMutableModuleExtension<T extends JavaModuleExtension<T>> extends MutableModuleExtensionWithSdk<T>, JavaModuleExtension<T>
 {
-	@Nonnull
 	MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel();
 
-	void setSpecialDirLocation(@Nonnull SpecialDirLocation location);
+	void setSpecialDirLocation(SpecialDirLocation location);
 
 	void setBytecodeVersion(@Nullable String version);
 
-	void setCompilerArguments(@Nonnull List<String> arguments);
+	void setCompilerArguments(List<String> arguments);
 }

@@ -25,7 +25,6 @@ import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
@@ -64,7 +63,6 @@ public class NullSmartCompletionContributor extends CompletionContributor {
     });
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

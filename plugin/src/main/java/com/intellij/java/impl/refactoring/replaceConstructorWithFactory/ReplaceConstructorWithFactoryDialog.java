@@ -32,7 +32,6 @@ import consulo.application.HelpManager;
 import consulo.configurable.ConfigurationException;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.localize.LocalizeValue;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.project.Project;
@@ -119,7 +118,7 @@ public class ReplaceConstructorWithFactoryDialog extends RefactoringDialog {
 
     gbc.gridx++;
     gbc.weightx = 1.0;
-    @NonNls String[] nameSuggestions = new String[]{
+    String[] nameSuggestions = new String[]{
       "create" + myContainingClass.getName(),
       "new" + myContainingClass.getName(),
       "getInstance",

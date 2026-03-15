@@ -20,7 +20,6 @@
  */
 package com.intellij.java.compiler.impl.classParsing;
 
-import org.jetbrains.annotations.NonNls;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -67,7 +66,7 @@ public class MemberReferenceInfo extends ReferenceInfo {
     return super.hashCode() + myMemberInfo.hashCode();
   }
 
-  public @NonNls String toString() { // for debug purposes
+  public String toString() { // for debug purposes
     return "Member reference: [class name=" + getClassName() + ", member name = " + myMemberInfo.getName() + ", member descriptor=" + myMemberInfo.getDescriptor() + ", member signature=" + myMemberInfo.getGenericSignature() + "]";
   }
 }

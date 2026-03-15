@@ -23,20 +23,17 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @ExtensionImpl
 public class AbstractClassWithoutAbstractMethodsInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.abstractClassWithoutAbstractMethodsDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.abstractClassWithoutAbstractMethodsProblemDescriptor().get();
     }
@@ -49,7 +46,7 @@ public class AbstractClassWithoutAbstractMethodsInspection extends BaseInspectio
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so that it doesn't drill down to inner classes
             if (aClass.isInterface() || aClass.isAnnotationType()) {
                 return;

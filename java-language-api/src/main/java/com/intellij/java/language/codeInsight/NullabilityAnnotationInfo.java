@@ -3,8 +3,7 @@ package com.intellij.java.language.codeInsight;
 
 import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -12,17 +11,17 @@ import java.util.Objects;
  * Represents a particular nullability annotation instance
  */
 public class NullabilityAnnotationInfo {
-    private final @Nonnull PsiAnnotation myAnnotation;
-    private final @Nonnull Nullability myNullability;
+    private final PsiAnnotation myAnnotation;
+    private final Nullability myNullability;
     private final @Nullable PsiModifierListOwner myInheritedFrom;
     private final boolean myContainer;
 
-    public NullabilityAnnotationInfo(@Nonnull PsiAnnotation annotation, @Nonnull Nullability nullability, boolean container) {
+    public NullabilityAnnotationInfo(PsiAnnotation annotation, Nullability nullability, boolean container) {
         this(annotation, nullability, null, container);
     }
 
-    NullabilityAnnotationInfo(@Nonnull PsiAnnotation annotation,
-                              @Nonnull Nullability nullability,
+    NullabilityAnnotationInfo(PsiAnnotation annotation,
+                              Nullability nullability,
                               @Nullable PsiModifierListOwner inheritedFrom,
                               boolean container) {
         myAnnotation = annotation;
@@ -34,14 +33,14 @@ public class NullabilityAnnotationInfo {
     /**
      * @return annotation object (might be synthetic)
      */
-    public @Nonnull PsiAnnotation getAnnotation() {
+    public PsiAnnotation getAnnotation() {
         return myAnnotation;
     }
 
     /**
      * @return nullability this annotation represents
      */
-    public @Nonnull Nullability getNullability() {
+    public Nullability getNullability() {
         return myNullability;
     }
 
@@ -73,7 +72,6 @@ public class NullabilityAnnotationInfo {
         return myInheritedFrom;
     }
 
-    @Nonnull
     NullabilityAnnotationInfo withInheritedFrom(@Nullable PsiModifierListOwner owner) {
         return new NullabilityAnnotationInfo(myAnnotation, myNullability, owner, myContainer);
     }
@@ -81,7 +79,7 @@ public class NullabilityAnnotationInfo {
     /**
      * Converts this object to {@link TypeNullability}. Inheritance information is lost, as it's not applicable to type nullability.
      */
-    public @Nonnull TypeNullability toTypeNullability() {
+    public TypeNullability toTypeNullability() {
         NullabilitySource source;
         if (myContainer) {
             source = new NullabilitySource.ContainerAnnotation(myAnnotation);

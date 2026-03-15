@@ -28,7 +28,7 @@ import consulo.ui.ex.awt.table.JBTable;
 import consulo.util.dataholder.UserDataHolderBase;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import kava.beans.PropertyChangeListener;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import org.osmorc.manifest.lang.psi.Clause;
@@ -36,7 +36,6 @@ import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.psi.ManifestFile;
 
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -275,7 +274,6 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
     }
   }
 
-  @Nonnull
   @Override
   public JComponent getComponent() {
     return myRoot;
@@ -287,20 +285,18 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
     return myRoot;
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return "UI Editor";
   }
 
-  @Nonnull
   @Override
-  public FileEditorState getState(@Nonnull FileEditorStateLevel level) {
+  public FileEditorState getState(FileEditorStateLevel level) {
     return FileEditorState.INSTANCE;
   }
 
   @Override
-  public void setState(@Nonnull FileEditorState state) {
+  public void setState(FileEditorState state) {
   }
 
   @Override
@@ -322,11 +318,11 @@ public class ManifestEditor extends UserDataHolderBase implements FileEditor {
   }
 
   @Override
-  public void addPropertyChangeListener(@Nonnull PropertyChangeListener listener) {
+  public void addPropertyChangeListener(PropertyChangeListener listener) {
   }
 
   @Override
-  public void removePropertyChangeListener(@Nonnull PropertyChangeListener listener) {
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
   }
 
   @Nullable

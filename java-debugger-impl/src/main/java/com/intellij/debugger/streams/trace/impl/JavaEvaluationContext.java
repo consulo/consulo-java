@@ -19,21 +19,18 @@ package com.intellij.debugger.streams.trace.impl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import consulo.execution.debug.stream.trace.GenericEvaluationContext;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class JavaEvaluationContext implements GenericEvaluationContext {
     private final EvaluationContextImpl context;
 
-    JavaEvaluationContext(@Nonnull EvaluationContextImpl context) {
+    JavaEvaluationContext(EvaluationContextImpl context) {
         this.context = context;
     }
 
-    @Nonnull
     public EvaluationContextImpl getContext() {
         return context;
     }
 
-    @Nonnull
     @Override
     public Project getProject() {
         return context.getProject();

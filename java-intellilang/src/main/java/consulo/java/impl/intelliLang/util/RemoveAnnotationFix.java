@@ -24,7 +24,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.language.util.IncorrectOperationException;
 import consulo.java.impl.intelliLang.validation.InjectionNotApplicable;
-import jakarta.annotation.Nonnull;
 
 public class RemoveAnnotationFix implements LocalQuickFix {
   private final LocalInspectionTool myTool;
@@ -33,12 +32,11 @@ public class RemoveAnnotationFix implements LocalQuickFix {
     myTool = tool;
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("Remove Annotation");
   }
 
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     if (FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) {
       try {
         descriptor.getPsiElement().delete();

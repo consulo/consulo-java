@@ -35,9 +35,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBIterable;
 import consulo.util.collection.SmartList;
 import consulo.util.collection.Stack;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public class JavaSharedImplUtil {
@@ -48,11 +47,11 @@ public class JavaSharedImplUtil {
   private JavaSharedImplUtil() {
   }
 
-  public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor) {
+  public static PsiType getType(PsiTypeElement typeElement, PsiElement anchor) {
     return getType(typeElement, anchor, null);
   }
 
-  public static PsiType getType(@Nonnull PsiTypeElement typeElement, @Nonnull PsiElement anchor, @Nullable PsiAnnotation stopAt) {
+  public static PsiType getType(PsiTypeElement typeElement, PsiElement anchor, @Nullable PsiAnnotation stopAt) {
     PsiType type = typeElement.getType();
 
     List<PsiAnnotation[]> allAnnotations = collectAnnotations(anchor, stopAt);
@@ -103,8 +102,7 @@ public class JavaSharedImplUtil {
     return !found || stop ? null : annotations;
   }
 
-  @Nonnull
-  public static PsiType applyAnnotations(@Nonnull PsiType type, @Nullable PsiModifierList modifierList) {
+  public static PsiType applyAnnotations(PsiType type, @Nullable PsiModifierList modifierList) {
     if (modifierList != null) {
       PsiAnnotation[] annotations = modifierList.getAnnotations();
       if (annotations.length > 0) {
@@ -136,7 +134,7 @@ public class JavaSharedImplUtil {
     return type;
   }
 
-  public static void normalizeBrackets(@Nonnull PsiVariable variable) {
+  public static void normalizeBrackets(PsiVariable variable) {
     CompositeElement variableElement = (CompositeElement) variable.getNode();
 
     PsiTypeElement typeElement = variable.getTypeElement();
@@ -217,8 +215,7 @@ public class JavaSharedImplUtil {
     variable.addAfter(initializer, eq.getPsi());
   }
 
-  @Nonnull
-  public static PsiType createTypeFromStub(@Nonnull PsiModifierListOwner owner, @Nonnull TypeInfo typeInfo) {
+  public static PsiType createTypeFromStub(PsiModifierListOwner owner, TypeInfo typeInfo) {
     String typeText = TypeInfo.createTypeText(typeInfo);
     assert typeText != null : owner;
     PsiType type = JavaPsiFacade.getInstance(owner.getProject()).getParserFacade().createTypeFromText(typeText, owner);
@@ -226,8 +223,7 @@ public class JavaSharedImplUtil {
     return typeInfo.getTypeAnnotations().applyTo(type, owner);
   }
 
-  @Nonnull
-  public static PsiElement getPatternVariableDeclarationScope(@Nonnull PsiPatternVariable variable) {
+  public static PsiElement getPatternVariableDeclarationScope(PsiPatternVariable variable) {
     PsiElement parent = variable.getPattern().getParent();
     if (!(parent instanceof PsiInstanceOfExpression) && !(parent instanceof PsiCaseLabelElementList) && !(parent instanceof PsiPattern)
       && !(parent instanceof PsiDeconstructionList)) {
@@ -237,11 +233,11 @@ public class JavaSharedImplUtil {
   }
 
   @Nullable
-  public static PsiElement getPatternVariableDeclarationScope(@Nonnull PsiInstanceOfExpression instanceOfExpression) {
+  public static PsiElement getPatternVariableDeclarationScope(PsiInstanceOfExpression instanceOfExpression) {
     return getInstanceOfPartDeclarationScope(instanceOfExpression);
   }
 
-  private static PsiElement getInstanceOfPartDeclarationScope(@Nonnull PsiElement parent) {
+  private static PsiElement getInstanceOfPartDeclarationScope(PsiElement parent) {
     boolean negated = false;
     for (PsiElement nextParent = parent.getParent(); ; parent = nextParent, nextParent = parent.getParent()) {
       if (nextParent instanceof PsiParenthesizedExpression) continue;
@@ -296,7 +292,6 @@ public class JavaSharedImplUtil {
       myOriginalProvider = originalProvider;
     }
 
-    @Nonnull
     @Override
     public PsiAnnotation[] getAnnotations() {
       PsiAnnotation[] result = myCache;

@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers

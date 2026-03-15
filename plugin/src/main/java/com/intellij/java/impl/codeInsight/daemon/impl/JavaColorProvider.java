@@ -29,8 +29,7 @@ import consulo.ui.color.ColorValue;
 import consulo.ui.color.RGBColor;
 import consulo.ui.ex.awt.util.ColorUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 
@@ -46,7 +45,7 @@ public class JavaColorProvider implements ElementColorProvider {
 
   @RequiredReadAction
   @Override
-  public ColorValue getColorFrom(@Nonnull PsiElement element) {
+  public ColorValue getColorFrom(PsiElement element) {
     return getJavaColorFromExpression(element);
   }
 
@@ -156,7 +155,7 @@ public class JavaColorProvider implements ElementColorProvider {
 
   @RequiredWriteAction
   @Override
-  public void setColorTo(@Nonnull PsiElement element, @Nonnull ColorValue colorValue) {
+  public void setColorTo(PsiElement element, ColorValue colorValue) {
     PsiExpressionList argumentList = ((PsiNewExpression) element).getArgumentList();
     assert argumentList != null;
 

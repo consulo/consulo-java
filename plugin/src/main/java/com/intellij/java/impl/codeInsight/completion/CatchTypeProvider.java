@@ -28,7 +28,6 @@ import consulo.language.pattern.ElementPattern;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -43,7 +42,7 @@ class CatchTypeProvider implements CompletionProvider
 	static final ElementPattern<PsiElement> CATCH_CLAUSE_TYPE = psiElement().insideStarting(psiElement(PsiTypeElement.class).withParent(psiElement(PsiCatchSection.class)));
 
 	@Override
-	public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result)
+	public void addCompletions(CompletionParameters parameters, ProcessingContext context, CompletionResultSet result)
 	{
 		PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiTryStatement.class);
 		PsiCodeBlock tryBlock = tryStatement == null ? null : tryStatement.getTryBlock();
@@ -82,7 +81,6 @@ class CatchTypeProvider implements CompletionProvider
 		});
 	}
 
-	@Nonnull
 	private static LookupElement createCatchTypeVariant(PsiCodeBlock tryBlock, PsiClassType type)
 	{
 		return TailTypeDecorator.withTail(PsiTypeLookupItem.createLookupItem(type, tryBlock), TailType.HUMBLE_SPACE_BEFORE_WORD);

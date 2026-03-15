@@ -26,7 +26,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.undoRedo.UndoConfirmationPolicy;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ import static com.intellij.java.language.impl.psi.util.ImportsUtil.replaceAllAnd
 @ExtensionImpl
 public class InlineStaticImportHandler extends JavaInlineActionHandler {
     @Override
-    public boolean canInlineElement(@Nonnull PsiElement element) {
+    public boolean canInlineElement(PsiElement element) {
         if (element.getContainingFile() == null) {
             return false;
         }

@@ -36,8 +36,7 @@ import consulo.util.lang.ObjectUtil;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -96,7 +95,7 @@ public class CFGBuilder {
    * @param expression expression to evaluate
    * @return this builder
    */
-  public CFGBuilder pushExpression(@Nonnull PsiExpression expression) {
+  public CFGBuilder pushExpression(PsiExpression expression) {
     expression.accept(myAnalyzer);
     return this;
   }
@@ -114,7 +113,7 @@ public class CFGBuilder {
    *                   Passing {@code null} means no custom problem to register (just like {@link #pushExpression(PsiExpression)}).
    * @return this builder
    */
-  public CFGBuilder pushExpression(@Nonnull PsiExpression expression, @Nullable NullabilityProblemKind<? super PsiExpression> kind) {
+  public CFGBuilder pushExpression(PsiExpression expression, @Nullable NullabilityProblemKind<? super PsiExpression> kind) {
     if (kind == null) {
       return pushExpression(expression);
     }
@@ -134,7 +133,7 @@ public class CFGBuilder {
    * @param descriptor a {@link SpecialField} which describes a field to get
    * @return this builder
    */
-  public CFGBuilder unwrap(@Nonnull SpecialField descriptor) {
+  public CFGBuilder unwrap(SpecialField descriptor) {
     return add(new UnwrapSpecialFieldInstruction(descriptor));
   }
 
@@ -314,7 +313,7 @@ public class CFGBuilder {
    * @param castType cast type (pushed before)
    * @return this builder
    */
-  public CFGBuilder isInstance(PsiExpression anchor, @Nullable PsiExpression operand, @Nonnull PsiType castType) {
+  public CFGBuilder isInstance(PsiExpression anchor, @Nullable PsiExpression operand, PsiType castType) {
     return add(new InstanceofInstruction(anchor, operand, castType));
   }
 
@@ -449,7 +448,7 @@ public class CFGBuilder {
    * @param expectedType an expected type
    * @return this builder
    */
-  public CFGBuilder boxUnbox(@Nonnull PsiExpression expression, PsiType expectedType) {
+  public CFGBuilder boxUnbox(PsiExpression expression, PsiType expectedType) {
     myAnalyzer.generateBoxingUnboxingInstructionFor(expression, expectedType);
     return this;
   }
@@ -556,7 +555,7 @@ public class CFGBuilder {
    * @param anchor PSI anchor to handle nested traps
    * @return this builder
    */
-  public CFGBuilder doTry(@Nonnull PsiElement anchor) {
+  public CFGBuilder doTry(PsiElement anchor) {
     ControlFlow.DeferredOffset offset = new ControlFlow.DeferredOffset();
     myAnalyzer.pushTrap(new Trap.TryCatchAll(anchor, offset));
     myBranches.add(() -> offset.setOffset(myAnalyzer.getInstructionCount()));
@@ -582,7 +581,7 @@ public class CFGBuilder {
    * @param exceptionType exception type to throw
    * @return this builder
    */
-  public CFGBuilder doThrow(@Nonnull PsiType exceptionType) {
+  public CFGBuilder doThrow(PsiType exceptionType) {
     myAnalyzer.throwException(exceptionType, null);
     return this;
   }
@@ -898,7 +897,6 @@ public class CFGBuilder {
    * @param type a type of variable to create
    * @return newly created variable
    */
-  @Nonnull
   public DfaVariableValue createTempVariable(@Nullable PsiType type) {
     return myAnalyzer.createTempVariable(type);
   }

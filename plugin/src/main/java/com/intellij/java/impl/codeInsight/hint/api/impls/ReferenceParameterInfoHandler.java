@@ -23,8 +23,6 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.parameterInfo.*;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 
@@ -70,7 +68,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  public void showParameterInfo(@Nonnull PsiReferenceParameterList element, CreateParameterInfoContext context) {
+  public void showParameterInfo(PsiReferenceParameterList element, CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset() + 1, this);
   }
 
@@ -80,7 +78,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  public void updateParameterInfo(@Nonnull PsiReferenceParameterList o, UpdateParameterInfoContext context) {
+  public void updateParameterInfo(PsiReferenceParameterList o, UpdateParameterInfoContext context) {
     int index = ParameterInfoUtils.getCurrentParameterIndex(o.getNode(), context.getOffset(), JavaTokenType.COMMA);
     context.setCurrentParameter(index);
     Object[] objectsToView = context.getObjectsToView();
@@ -88,7 +86,6 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   @Override
-  @Nonnull
   public String getParameterCloseChars() {
     return ",>";
   }
@@ -104,7 +101,7 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
   }
 
   private static void updateTypeParameter(PsiTypeParameter typeParameter, ParameterInfoUIContext context) {
-    @NonNls StringBuffer buffer = new StringBuffer();
+    StringBuffer buffer = new StringBuffer();
     buffer.append(typeParameter.getName());
     int highlightEndOffset = buffer.length();
     buffer.append(" extends ");
@@ -116,7 +113,6 @@ public class ReferenceParameterInfoHandler implements ParameterInfoHandler<PsiRe
         context.getDefaultParameterColor());
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

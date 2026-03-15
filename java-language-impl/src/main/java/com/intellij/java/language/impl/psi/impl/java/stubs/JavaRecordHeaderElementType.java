@@ -12,7 +12,6 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -23,7 +22,6 @@ public class JavaRecordHeaderElementType extends JavaStubElementType<PsiRecordHe
 		super("RECORD_HEADER");
 	}
 
-	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -31,39 +29,37 @@ public class JavaRecordHeaderElementType extends JavaStubElementType<PsiRecordHe
 	}
 
 	@Override
-	public void serialize(@Nonnull PsiRecordHeaderStub stub, @Nonnull StubOutputStream dataStream) throws IOException
+	public void serialize(PsiRecordHeaderStub stub, StubOutputStream dataStream) throws IOException
 	{
 	}
 
-	@Nonnull
 	@Override
-	public PsiRecordHeaderStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiRecordHeaderStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		return new PsiRecordHeaderStubImpl(parentStub);
 	}
 
 	@Override
-	public void indexStub(@Nonnull PsiRecordHeaderStub stub, @Nonnull IndexSink sink)
+	public void indexStub(PsiRecordHeaderStub stub, IndexSink sink)
 	{
 
 	}
 
 	@Override
-	public PsiRecordHeader createPsi(@Nonnull PsiRecordHeaderStub stub)
+	public PsiRecordHeader createPsi(PsiRecordHeaderStub stub)
 	{
 		return getPsiFactory(stub).createRecordHeader(stub);
 	}
 
 
 	@Override
-	public PsiRecordHeader createPsi(@Nonnull ASTNode node)
+	public PsiRecordHeader createPsi(ASTNode node)
 	{
 		return new PsiRecordHeaderImpl(node);
 	}
 
-	@Nonnull
 	@Override
-	public PsiRecordHeaderStub createStub(@Nonnull LighterAST tree, @Nonnull LighterASTNode node, @Nonnull StubElement parentStub)
+	public PsiRecordHeaderStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub)
 	{
 		return new PsiRecordHeaderStubImpl(parentStub);
 	}

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.generate.config;
 
-import jakarta.annotation.Nonnull;
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -45,7 +44,7 @@ public class ReplacePolicy implements ConflictResolutionPolicy
 	}
 
 	@Override
-	public PsiMethod applyMethod(PsiClass clazz, PsiMethod existingMethod, @Nonnull PsiMethod newMethod, Editor editor) throws IncorrectOperationException
+	public PsiMethod applyMethod(PsiClass clazz, PsiMethod existingMethod, PsiMethod newMethod, Editor editor) throws IncorrectOperationException
 	{
 		if(existingMethod != null)
 		{

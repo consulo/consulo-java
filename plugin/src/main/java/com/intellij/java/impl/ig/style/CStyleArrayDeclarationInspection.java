@@ -28,17 +28,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CStyleArrayDeclarationInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.cStyleArrayDeclarationDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.cStyleArrayDeclarationProblemDescriptor().get();
   }
@@ -50,7 +47,6 @@ public class CStyleArrayDeclarationInspection extends BaseInspection {
   private static class CStyleArrayDeclarationFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.cStyleArrayDeclarationReplaceQuickfix();
     }
@@ -72,7 +68,7 @@ public class CStyleArrayDeclarationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable var) {
+    public void visitVariable(PsiVariable var) {
       super.visitVariable(var);
       PsiType declaredType = var.getType();
       if (declaredType.getArrayDimensions() == 0) {

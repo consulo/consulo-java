@@ -25,7 +25,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -39,14 +38,13 @@ public class ReplaceWithConstantValueFix implements LocalQuickFix {
         myReplacementText = replacementText;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return LocalizeValue.localizeTODO("Replace with '" + myPresentableName + "'");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement problemElement = descriptor.getPsiElement();
         if (problemElement == null) {
             return;

@@ -22,7 +22,6 @@ import consulo.content.scope.SearchScope;
 import consulo.application.util.query.ExtensibleQueryFactory;
 import consulo.application.util.query.Query;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -52,11 +51,11 @@ public class AnnotatedPackagesSearch extends ExtensibleQueryFactory<PsiJavaPacka
     super(AnnotatedPackagesSearchExecutor.class);
   }
 
-  public static Query<PsiJavaPackage> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
+  public static Query<PsiJavaPackage> search(PsiClass annotationClass, SearchScope scope) {
     return INSTANCE.createQuery(new Parameters(annotationClass, scope));
   }
 
-  public static Query<PsiJavaPackage> search(@Nonnull PsiClass annotationClass) {
+  public static Query<PsiJavaPackage> search(PsiClass annotationClass) {
     return search(annotationClass, GlobalSearchScope.allScope(annotationClass.getProject()));
   }
 }

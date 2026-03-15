@@ -21,12 +21,11 @@ import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class DefaultHighlightUtil {
   @Nullable
-  public static HighlightInfo checkBadCharacter(@Nonnull PsiElement element) {
+  public static HighlightInfo checkBadCharacter(PsiElement element) {
     ASTNode node = element.getNode();
     if (node != null && node.getElementType() == TokenType.BAD_CHARACTER) {
       char c = element.textToCharArray()[0];

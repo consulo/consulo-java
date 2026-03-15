@@ -31,7 +31,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiReference;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiContinueStatementImpl extends CompositePsiElement implements PsiContinueStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiContinueStatementImpl.class);
@@ -111,7 +110,7 @@ public class PsiContinueStatementImpl extends CompositePsiElement implements Psi
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitContinueStatement(this);
     }
@@ -133,7 +132,6 @@ public class PsiContinueStatementImpl extends CompositePsiElement implements Psi
   }
 
   @Override
-  @Nonnull
   public PsiReference[] getReferences() {
     if (getLabelIdentifier() == null)
       return PsiReference.EMPTY_ARRAY;

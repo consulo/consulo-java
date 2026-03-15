@@ -32,7 +32,6 @@ import consulo.module.content.layer.ModulesProvider;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -50,31 +49,28 @@ public class JarArtifactType extends ArtifactType {
         return Application.get().getExtensionPoint(ArtifactType.class).findExtension(JarArtifactType.class);
     }
 
-    @Nonnull
     @Override
     public Image getIcon() {
         return PlatformIconGroup.nodesArtifact();
     }
 
     @Override
-    public String getDefaultPathFor(@Nonnull PackagingElementOutputKind kind) {
+    public String getDefaultPathFor(PackagingElementOutputKind kind) {
         return "/";
     }
 
     @Override
-    public boolean isAvailableForAdd(@Nonnull ModulesProvider modulesProvider) {
+    public boolean isAvailableForAdd(ModulesProvider modulesProvider) {
         return ModuleUtilCore.hasModuleExtension(modulesProvider, JavaModuleExtension.class);
     }
 
-    @Nonnull
     @Override
-    public CompositePackagingElement<?> createRootElement(@Nonnull PackagingElementFactory factory, @Nonnull String artifactName) {
+    public CompositePackagingElement<?> createRootElement(PackagingElementFactory factory, String artifactName) {
         return new JarArchivePackagingElement(ArtifactUtil.suggestArtifactFileName(artifactName) + ".jar");
     }
 
-    @Nonnull
     @Override
-    public List<? extends ArtifactTemplate> getNewArtifactTemplates(@Nonnull PackagingElementResolvingContext context) {
+    public List<? extends ArtifactTemplate> getNewArtifactTemplates(PackagingElementResolvingContext context) {
         return Collections.singletonList(new JarFromModulesTemplate(context));
     }
 }

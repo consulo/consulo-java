@@ -18,7 +18,7 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.application.ApplicationPropertiesComponent;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 

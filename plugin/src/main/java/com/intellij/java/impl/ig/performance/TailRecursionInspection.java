@@ -30,21 +30,17 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class TailRecursionInspection extends BaseInspection {
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.tailRecursionDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.tailRecursionProblemDescriptor().get();
   }
@@ -72,7 +68,6 @@ public class TailRecursionInspection extends BaseInspection {
 
   private static class RemoveTailRecursionFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.tailRecursionReplaceQuickfix();
     }
@@ -88,7 +83,7 @@ public class TailRecursionInspection extends BaseInspection {
       if (body == null) {
         return;
       }
-      @NonNls StringBuilder builder = new StringBuilder();
+      StringBuilder builder = new StringBuilder();
       builder.append('{');
       PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
@@ -126,7 +121,7 @@ public class TailRecursionInspection extends BaseInspection {
       CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
       replaceTailCalls(body, method, thisVariableName, tailCallIsContainedInLoop, builder);
       builder.append('}');
-      @NonNls String replacementText = builder.toString();
+      String replacementText = builder.toString();
       JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
       PsiElementFactory elementFactory = psiFacade.getElementFactory();
       PsiCodeBlock block = elementFactory.createCodeBlockFromText(replacementText, method);
@@ -207,7 +202,7 @@ public class TailRecursionInspection extends BaseInspection {
       PsiMethod method,
       @Nullable String thisVariableName,
       boolean tailCallIsContainedInLoop,
-      @NonNls StringBuilder out
+      StringBuilder out
     ) {
       String text = element.getText();
       if (isImplicitCallOnThis(element, method)) {
@@ -344,7 +339,7 @@ public class TailRecursionInspection extends BaseInspection {
 
   private static class TailRecursionVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+    public void visitReturnStatement(PsiReturnStatement statement) {
       super.visitReturnStatement(statement);
       PsiExpression returnValue = statement.getReturnValue();
       if (!(returnValue instanceof PsiMethodCallExpression)) {

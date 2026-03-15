@@ -20,7 +20,7 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;

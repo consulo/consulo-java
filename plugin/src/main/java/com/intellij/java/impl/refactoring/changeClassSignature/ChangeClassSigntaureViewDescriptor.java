@@ -20,7 +20,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import consulo.usage.UsageViewUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -33,7 +32,6 @@ public class ChangeClassSigntaureViewDescriptor extends UsageViewDescriptorAdapt
     myClass = aClass;
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[]{myClass};
   }

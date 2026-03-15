@@ -52,8 +52,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -80,7 +79,7 @@ public class ManifestFileUtil {
 
     @Nullable
     public static VirtualFile findManifestFile(
-        @Nonnull CompositePackagingElement<?> root,
+        CompositePackagingElement<?> root,
         PackagingElementResolvingContext context,
         ArtifactType artifactType
     ) {
@@ -89,7 +88,7 @@ public class ManifestFileUtil {
 
     @Nullable
     public static VirtualFile suggestManifestFileDirectory(
-        @Nonnull CompositePackagingElement<?> root,
+        CompositePackagingElement<?> root,
         PackagingElementResolvingContext context,
         ArtifactType artifactType
     ) {
@@ -107,7 +106,7 @@ public class ManifestFileUtil {
             PackagingElementPath.EMPTY,
             new PackagingElementProcessor<>() {
                 @Override
-                public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path) {
+                public boolean process(PackagingElement<?> element, PackagingElementPath path) {
                     if (element instanceof FileCopyPackagingElement fileCopyPackagingElement) {
                         VirtualFile file = fileCopyPackagingElement.findFile();
                         if (file != null) {
@@ -136,7 +135,7 @@ public class ManifestFileUtil {
     }
 
     @Nullable
-    public static VirtualFile suggestManifestFileDirectory(@Nonnull Project project, @Nullable Module module) {
+    public static VirtualFile suggestManifestFileDirectory(Project project, @Nullable Module module) {
         OrderEnumerator enumerator = module != null ? OrderEnumerator.orderEntries(module) : OrderEnumerator.orderEntries(project);
         VirtualFile[] files = enumerator.withoutDepModules().withoutLibraries().withoutSdk().productionOnly().sources().getRoots();
         if (files.length > 0) {
@@ -147,7 +146,7 @@ public class ManifestFileUtil {
 
 
     @Nullable
-    private static VirtualFile suggestBaseDir(@Nonnull Project project, @Nullable VirtualFile file) {
+    private static VirtualFile suggestBaseDir(Project project, @Nullable VirtualFile file) {
         VirtualFile[] contentRoots = ProjectRootManager.getInstance(project).getContentRoots();
         if (file == null && contentRoots.length > 0) {
             return contentRoots[0];
@@ -164,7 +163,7 @@ public class ManifestFileUtil {
         return project.getBaseDir();
     }
 
-    public static Manifest readManifest(@Nonnull VirtualFile manifestFile) {
+    public static Manifest readManifest(VirtualFile manifestFile) {
         try (InputStream inputStream = manifestFile.getInputStream()) {
             return new Manifest(inputStream);
         }
@@ -174,7 +173,7 @@ public class ManifestFileUtil {
     }
 
     public static void updateManifest(
-        @Nonnull VirtualFile file,
+        VirtualFile file,
         @Nullable String mainClass,
         @Nullable List<String> classpath,
         boolean replaceValues
@@ -222,8 +221,7 @@ public class ManifestFileUtil {
         }
     }
 
-    @Nonnull
-    public static ManifestFileConfiguration createManifestFileConfiguration(@Nonnull VirtualFile manifestFile) {
+    public static ManifestFileConfiguration createManifestFileConfiguration(VirtualFile manifestFile) {
         String path = manifestFile.getPath();
         Manifest manifest = readManifest(manifestFile);
         String mainClass = manifest.getMainAttributes().getValue(Attributes.Name.MAIN_CLASS);
@@ -243,7 +241,7 @@ public class ManifestFileUtil {
         List<String> classpath = new ArrayList<>();
         PackagingElementProcessor<PackagingElement<?>> processor = new PackagingElementProcessor<>() {
             @Override
-            public boolean process(@Nonnull PackagingElement<?> element, @Nonnull PackagingElementPath path) {
+            public boolean process(PackagingElement<?> element, PackagingElementPath path) {
                 if (element instanceof FileCopyPackagingElement fileCopyPackagingElement) {
                     String fileName = fileCopyPackagingElement.getOutputFileName();
                     classpath.add(ArtifactUtil.appendToPath(path.getPathString(), fileName));
@@ -279,7 +277,7 @@ public class ManifestFileUtil {
 
     @Nullable
     @RequiredUIAccess
-    public static VirtualFile createManifestFile(@Nonnull VirtualFile directory, final @Nonnull Project project) {
+    public static VirtualFile createManifestFile(VirtualFile directory, final Project project) {
         UIAccess.assertIsUIThread();
         final SimpleReference<IOException> exc = SimpleReference.create(null);
         final VirtualFile file = WriteAction.compute(() -> {
@@ -318,9 +316,9 @@ public class ManifestFileUtil {
     }
 
     public static void addManifestFileToLayout(
-        @Nonnull String path,
-        @Nonnull ArtifactEditorContext context,
-        @Nonnull CompositePackagingElement<?> element
+        String path,
+        ArtifactEditorContext context,
+        CompositePackagingElement<?> element
     ) {
         context.editLayout(
             context.getArtifact(),

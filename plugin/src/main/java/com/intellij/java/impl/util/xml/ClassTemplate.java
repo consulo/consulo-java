@@ -18,7 +18,6 @@ package com.intellij.java.impl.util.xml;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.psi.util.ClassKind;
 
 /**
@@ -30,7 +29,7 @@ import com.intellij.java.language.psi.util.ClassKind;
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ClassTemplate {
-  @NonNls String value() default "";
+  String value() default "";
 
   /**
    * @return affects the quick fix presentable text, 'Create class ...' or 'Create interface ...', etc.

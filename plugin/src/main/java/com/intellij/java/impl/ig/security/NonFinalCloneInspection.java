@@ -25,17 +25,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonFinalCloneInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonFinalCloneDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonFinalCloneProblemDescriptor().get();
     }
@@ -46,7 +43,7 @@ public class NonFinalCloneInspection extends BaseInspection {
 
     private static class NonFinalCloneVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             String name = method.getName();
             if (!HardcodedMethodConstants.CLONE.equals(name)) {

@@ -20,7 +20,6 @@ import com.intellij.java.execution.filters.ExceptionFilterFactory;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.ui.console.Filter;
 import consulo.language.psi.scope.GlobalSearchScope;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Irina.Chernushina
@@ -28,9 +27,8 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class ExceptionBaseFilterFactory implements ExceptionFilterFactory {
-  @Nonnull
   @Override
-  public Filter create(@Nonnull GlobalSearchScope searchScope) {
+  public Filter create(GlobalSearchScope searchScope) {
     return new ExceptionFilter(searchScope);
   }
 }

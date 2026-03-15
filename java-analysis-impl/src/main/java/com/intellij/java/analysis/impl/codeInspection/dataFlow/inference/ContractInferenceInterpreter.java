@@ -9,8 +9,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.ast.*;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -37,13 +36,11 @@ class ContractInferenceInterpreter {
     myBody = body;
   }
 
-  @Nonnull
   List<LighterASTNode> getParameters() {
     LighterASTNode paramList = firstChildOfType(myTree, myMethod, PARAMETER_LIST);
     return paramList != null ? getChildrenOfType(myTree, paramList, PARAMETER) : emptyList();
   }
 
-  @Nonnull
   List<PreContract> inferContracts(List<LighterASTNode> statements) {
     if (statements.isEmpty()) {
       return emptyList();
@@ -86,7 +83,6 @@ class ContractInferenceInterpreter {
     return firstChildOfType(myTree, parent, CODE_BLOCK);
   }
 
-  @Nonnull
   static List<LighterASTNode> getStatements(@Nullable LighterASTNode codeBlock, LighterAST tree) {
     return codeBlock == null ? emptyList() : getChildrenOfType(tree, codeBlock, ElementType.JAVA_STATEMENT_BIT_SET);
   }
@@ -126,7 +122,7 @@ class ContractInferenceInterpreter {
       }
 
       @Override
-      public void visitNode(@Nonnull LighterASTNode element) {
+      public void visitNode(LighterASTNode element) {
         IElementType type = element.getTokenType();
         if (type == CLASS || type == LAMBDA_EXPRESSION) {
           return;
@@ -160,7 +156,6 @@ class ContractInferenceInterpreter {
         super.visitNode(element);
       }
 
-      @Nonnull
       private ContractReturnValue expressionToReturnValue(LighterASTNode expression) {
         expression = skipParenthesesDown(myTree, expression);
         if (expression == null) {
@@ -189,7 +184,6 @@ class ContractInferenceInterpreter {
     return visitor.returnValue;
   }
 
-  @Nonnull
   private List<PreContract> visitExpression(final List<ValueConstraint[]> states, @Nullable LighterASTNode expr) {
     if (expr == null) {
       return emptyList();
@@ -274,8 +268,7 @@ class ContractInferenceInterpreter {
     return emptyList();
   }
 
-  @Nonnull
-  private List<PreContract> visitPolyadic(List<ValueConstraint[]> states, @Nonnull LighterASTNode expr) {
+  private List<PreContract> visitPolyadic(List<ValueConstraint[]> states, LighterASTNode expr) {
     if (firstChildOfType(myTree, expr, JavaTokenType.PLUS) != null) {
       return asPreContracts(ContainerUtil.map(states, s -> new StandardMethodContract(s, returnNotNull())));
     }
@@ -294,7 +287,6 @@ class ContractInferenceInterpreter {
     return emptyList();
   }
 
-  @Nonnull
   private static List<PreContract> asPreContracts(List<StandardMethodContract> contracts) {
     return ContainerUtil.map(contracts, KnownContract::new);
   }
@@ -383,7 +375,7 @@ class ContractInferenceInterpreter {
       }
     }
 
-    void registerDeclaration(@Nonnull LighterASTNode declStatement, @Nonnull LighterAST tree, int scopeStart) {
+    void registerDeclaration(LighterASTNode declStatement, LighterAST tree, int scopeStart) {
       for (LighterASTNode var : getChildrenOfType(tree, declStatement, LOCAL_VARIABLE)) {
         LighterASTNode initializer = findExpressionChild(tree, var);
         if (initializer != null) {
@@ -393,7 +385,6 @@ class ContractInferenceInterpreter {
     }
   }
 
-  @Nonnull
   private List<PreContract> visitStatements(List<ValueConstraint[]> states, List<LighterASTNode> statements) {
     CodeBlockContracts result = new CodeBlockContracts();
     for (LighterASTNode statement : statements) {
@@ -445,8 +436,7 @@ class ContractInferenceInterpreter {
     return null;
   }
 
-  @Nonnull
-  static ValueConstraint getLiteralConstraint(@Nonnull IElementType literalTokenType) {
+  static ValueConstraint getLiteralConstraint(IElementType literalTokenType) {
     if (literalTokenType.equals(JavaTokenType.TRUE_KEYWORD)) {
       return TRUE_VALUE;
     }

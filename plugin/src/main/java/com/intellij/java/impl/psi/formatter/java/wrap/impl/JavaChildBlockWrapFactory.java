@@ -27,7 +27,7 @@ import com.intellij.java.impl.psi.formatter.java.wrap.ReservedWrapsProvider;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.ast.IElementType;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Encapsulates algorithm of construction {@link Wrap wraps} for sub-blocks of particular {@link ASTBlock block} taking into

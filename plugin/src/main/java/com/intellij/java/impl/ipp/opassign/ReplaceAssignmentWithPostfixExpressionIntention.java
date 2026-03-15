@@ -28,26 +28,22 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceAssignmentWithPostfixExpressionIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ReplaceAssignmentWithPostfixExpressionIntention
     extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ReplaceAssignmentWithPostfixExpressionPredicate();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.replaceAssignmentWithPostfixExpressionIntentionFamilyName();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         PsiAssignmentExpression assignmentExpression =
@@ -74,7 +70,7 @@ public class ReplaceAssignmentWithPostfixExpressionIntention
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiAssignmentExpression assignmentExpression =
             (PsiAssignmentExpression) element;

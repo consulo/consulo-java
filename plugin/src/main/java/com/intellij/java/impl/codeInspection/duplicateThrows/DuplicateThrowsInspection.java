@@ -26,8 +26,7 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -37,7 +36,6 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
     public boolean ignoreSubclassing = false;
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionDuplicateThrowsDisplayName();
     }
@@ -48,13 +46,11 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "DuplicateThrows";
     }
@@ -70,9 +66,8 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -80,7 +75,7 @@ public class DuplicateThrowsInspection extends BaseLocalInspectionTool {
         return new JavaElementVisitor() {
 
             @Override
-            public void visitMethod(@Nonnull PsiMethod method) {
+            public void visitMethod(PsiMethod method) {
                 PsiReferenceList throwsList = method.getThrowsList();
                 PsiJavaCodeReferenceElement[] refs = throwsList.getReferenceElements();
                 PsiClassType[] types = throwsList.getReferencedTypes();

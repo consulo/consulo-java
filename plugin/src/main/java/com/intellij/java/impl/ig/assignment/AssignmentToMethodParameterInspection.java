@@ -27,8 +27,7 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -37,13 +36,11 @@ public class AssignmentToMethodParameterInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean ignoreTransformationOfOriginalParameter = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentToMethodParameterDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.assignmentToMethodParameterProblemDescriptor().get();
@@ -71,7 +68,7 @@ public class AssignmentToMethodParameterInspection extends BaseInspection {
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression expression
+            PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
             PsiExpression lhs = expression.getLExpression();
@@ -105,7 +102,7 @@ public class AssignmentToMethodParameterInspection extends BaseInspection {
 
         @Override
         public void visitPrefixExpression(
-            @Nonnull PsiPrefixExpression expression
+            PsiPrefixExpression expression
         ) {
             if (ignoreTransformationOfOriginalParameter) {
                 return;
@@ -129,7 +126,7 @@ public class AssignmentToMethodParameterInspection extends BaseInspection {
 
         @Override
         public void visitPostfixExpression(
-            @Nonnull PsiPostfixExpression expression
+            PsiPostfixExpression expression
         ) {
             if (ignoreTransformationOfOriginalParameter) {
                 return;

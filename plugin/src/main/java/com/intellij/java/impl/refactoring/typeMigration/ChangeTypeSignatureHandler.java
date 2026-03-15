@@ -17,8 +17,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +30,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	public static final String REFACTORING_NAME = "Type Migration";
 
 	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
 		int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
@@ -61,7 +60,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 	}
 
 	@Override
-	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
+	public void invoke(Project project, PsiElement[] elements, DataContext dataContext)
 	{
 		LOG.assertTrue(elements.length == 1);
 		PsiElement element = elements[0];
@@ -95,7 +94,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 		return false;
 	}
 
-	private static void invoke(@Nonnull Project project, @Nonnull PsiElement[] roots, @Nullable Editor editor)
+	private static void invoke(Project project, PsiElement[] roots, @Nullable Editor editor)
 	{
 		if(Util.canBeMigrated(roots))
 		{
@@ -113,8 +112,7 @@ public class ChangeTypeSignatureHandler implements RefactoringActionHandler
 		);
 	}
 
-	@Nonnull
-	private static PsiElement[] extractReferencedVariables(@Nonnull PsiTypeElement typeElement)
+	private static PsiElement[] extractReferencedVariables(PsiTypeElement typeElement)
 	{
 		PsiElement parent = typeElement.getParent();
 		if(parent instanceof PsiVariable)

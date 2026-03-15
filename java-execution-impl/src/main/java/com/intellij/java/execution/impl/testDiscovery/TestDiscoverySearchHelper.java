@@ -39,8 +39,7 @@ import consulo.versionControlSystem.change.ChangeListManager;
 import consulo.versionControlSystem.change.ContentRevision;
 import consulo.versionControlSystem.change.LocalChangeList;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
@@ -140,7 +139,6 @@ public class TestDiscoverySearchHelper {
     }
   }
 
-  @Nonnull
   private static List<VirtualFile> getAffectedFiles(String changeListName, Project project) {
     final ChangeListManager changeListManager = ChangeListManager.getInstance(project);
     if ("All".equals(changeListName)) {

@@ -32,7 +32,6 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -50,24 +49,23 @@ public class SubtypesMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "A";
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     if (params.length == 0) return null;
     return params[0].calculateQuickResult(context);
   }
 
   @Override
-  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     if (params.length == 0) return LookupElement.EMPTY_ARRAY;
     Result paramResult = params[0].calculateQuickResult(context);
     if (paramResult instanceof PsiTypeResult) {

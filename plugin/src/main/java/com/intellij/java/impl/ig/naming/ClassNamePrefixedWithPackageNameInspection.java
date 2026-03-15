@@ -24,7 +24,6 @@ import com.siyeh.ig.psiutils.ClassUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.StringTokenizer;
 
@@ -32,7 +31,6 @@ import java.util.StringTokenizer;
 public class ClassNamePrefixedWithPackageNameInspection
   extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.classNamePrefixedWithPackageNameDisplayName();
   }
@@ -41,7 +39,6 @@ public class ClassNamePrefixedWithPackageNameInspection
     return new RenameFix();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.classNamePrefixedWithPackageNameProblemDescriptor().get();
   }
@@ -58,7 +55,7 @@ public class ClassNamePrefixedWithPackageNameInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
       String className = aClass.getName();
       if (className == null) {

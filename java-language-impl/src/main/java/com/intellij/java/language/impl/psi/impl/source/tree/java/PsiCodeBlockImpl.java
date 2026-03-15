@@ -39,8 +39,7 @@ import consulo.logging.Logger;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.Ref;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -62,7 +61,6 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
   }
 
   @Override
-  @Nonnull
   public PsiStatement[] getStatements() {
     return PsiImplUtil.getChildStatements(this);
   }
@@ -199,7 +197,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitCodeBlock(this);
     } else {
@@ -213,7 +211,7 @@ public class PsiCodeBlockImpl extends LazyParseablePsiElement implements PsiCode
 
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     if (lastParent == null) {
       // Parent element should not see our vars

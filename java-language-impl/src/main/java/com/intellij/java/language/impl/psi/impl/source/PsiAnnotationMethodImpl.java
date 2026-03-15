@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiFileFactory;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -43,7 +42,7 @@ public class PsiAnnotationMethodImpl extends PsiMethodImpl implements PsiAnnotat
     }
 
     @Override
-    public boolean hasModifierProperty(@Nonnull String name) {
+    public boolean hasModifierProperty(String name) {
         return PsiModifier.ABSTRACT.equals(name) || PsiModifier.PUBLIC.equals(name) || super.hasModifierProperty(name);
     }
 
@@ -93,7 +92,7 @@ public class PsiAnnotationMethodImpl extends PsiMethodImpl implements PsiAnnotat
     }
 
     @Override
-    public final void accept(@Nonnull PsiElementVisitor visitor) {
+    public final void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor elemVisitor) {
             elemVisitor.visitAnnotationMethod(this);
         }

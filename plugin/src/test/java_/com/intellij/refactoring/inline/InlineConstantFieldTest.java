@@ -2,10 +2,8 @@ package com.intellij.refactoring.inline;
 
 import static org.junit.Assert.assertTrue;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.refactoring.inline.InlineConstantFieldProcessor;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
@@ -19,7 +17,6 @@ import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class InlineConstantFieldTest extends LightRefactoringTestCase
 {
-	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{
@@ -59,7 +56,7 @@ public abstract class InlineConstantFieldTest extends LightRefactoringTestCase
 	private void doTest() throws Exception
 	{
 		String name = getTestName(false);
-		@NonNls String fileName = "/refactoring/inlineConstantField/" + name + ".java";
+		String fileName = "/refactoring/inlineConstantField/" + name + ".java";
 		configureByFile(fileName);
 		performAction();
 		checkResultByFile(fileName + ".after");

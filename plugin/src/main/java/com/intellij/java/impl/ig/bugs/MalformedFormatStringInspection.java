@@ -25,18 +25,15 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MalformedFormatStringInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.malformedFormatStringDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Object value = infos[0];
         if (value instanceof Exception) {
@@ -66,7 +63,7 @@ public class MalformedFormatStringInspection extends BaseInspection {
     private static class MalformedFormatStringVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             if (!FormatUtils.isFormatCall(expression)) {
                 return;

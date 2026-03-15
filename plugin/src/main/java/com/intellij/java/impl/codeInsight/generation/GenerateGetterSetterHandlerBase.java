@@ -36,8 +36,7 @@ import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -47,12 +46,12 @@ import java.util.List;
 public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHandlerBase {
     private static final Logger LOG = Logger.getInstance(GenerateGetterSetterHandlerBase.class);
 
-    public GenerateGetterSetterHandlerBase(@Nonnull LocalizeValue chooserTitle) {
+    public GenerateGetterSetterHandlerBase(LocalizeValue chooserTitle) {
         super(chooserTitle);
     }
 
     @Override
-    protected boolean hasMembers(@Nonnull PsiClass aClass) {
+    protected boolean hasMembers(PsiClass aClass) {
         return !GenerateAccessorProviderRegistrar.getEncapsulatableClassMembers(aClass).isEmpty();
     }
 
@@ -101,7 +100,6 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
                         return false;
                     }
 
-                    @Nonnull
                     @Override
                     public LocalizeValue getDisplayName() {
                         return LocalizeValue.localizeTODO(StringUtil.capitalizeWords(

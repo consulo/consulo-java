@@ -17,8 +17,7 @@ import consulo.navigation.ItemPresentationProvider;
 import consulo.util.collection.JBIterable;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -32,38 +31,33 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
     myReference = new ClsJavaModuleReferenceElementImpl(this, stub.getName());
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiRequiresStatement> getRequires() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.REQUIRES_STATEMENT, PsiRequiresStatement.EMPTY_ARRAY));
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiPackageAccessibilityStatement> getExports() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.EXPORTS_STATEMENT, PsiPackageAccessibilityStatement.EMPTY_ARRAY));
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiPackageAccessibilityStatement> getOpens() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.OPENS_STATEMENT, PsiPackageAccessibilityStatement.EMPTY_ARRAY));
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiUsesStatement> getUses() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.USES_STATEMENT, PsiUsesStatement.EMPTY_ARRAY));
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiProvidesStatement> getProvides() {
     return JBIterable.of(getStub().getChildrenByType(JavaElementType.PROVIDES_STATEMENT, PsiProvidesStatement.EMPTY_ARRAY));
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     appendText(getModifierList(), indentLevel, buffer);
     buffer.append("module ").append(getName()).append(" {\n");
 
@@ -91,7 +85,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.MODULE);
 
     PsiJavaModule mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -110,20 +104,18 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
     setMirrors(newArrayList(stubs), newArrayList(mirrors));
   }
 
-  @Nonnull
   @Override
   public PsiJavaModuleReferenceElement getNameIdentifier() {
     return myReference;
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return myReference.getReferenceText();
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
@@ -134,7 +126,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     PsiModifierList modifierList = getModifierList();
     return modifierList != null && modifierList.hasModifierProperty(name);
   }
@@ -150,7 +142,6 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
     return ItemPresentationProvider.getItemPresentation(this);
   }
 
-  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     PsiElement parent = getParent();
@@ -168,7 +159,7 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitModule(this);
     } else {

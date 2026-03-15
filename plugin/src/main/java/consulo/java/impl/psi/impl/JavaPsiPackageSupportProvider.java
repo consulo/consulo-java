@@ -26,7 +26,6 @@ import consulo.language.psi.PsiPackageManager;
 import consulo.language.psi.PsiPackageSupportProvider;
 import consulo.module.Module;
 import consulo.module.extension.ModuleExtension;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -35,22 +34,21 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaPsiPackageSupportProvider implements PsiPackageSupportProvider {
     @Override
-    public boolean isSupported(@Nonnull ModuleExtension moduleExtension) {
+    public boolean isSupported(ModuleExtension moduleExtension) {
         return moduleExtension instanceof JavaModuleExtension;
     }
 
     @Override
-    public boolean isValidPackageName(@Nonnull Module module, @Nonnull String packageName) {
+    public boolean isValidPackageName(Module module, String packageName) {
         return PsiNameHelper.getInstance(module.getProject()).isQualifiedName(packageName);
     }
 
-    @Nonnull
     @Override
     public PsiPackage createPackage(
-        @Nonnull PsiManager psiManager,
-        @Nonnull PsiPackageManager packageManager,
-        @Nonnull Class<? extends ModuleExtension> extensionClass,
-        @Nonnull String packageName) {
+        PsiManager psiManager,
+        PsiPackageManager packageManager,
+        Class<? extends ModuleExtension> extensionClass,
+        String packageName) {
         return new PsiPackageImpl(psiManager, packageManager, JavaPsiFacade.getInstance(psiManager.getProject()), extensionClass, packageName);
     }
 }

@@ -25,7 +25,6 @@ import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.ui.ex.tree.PresentationData;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.*;
 
@@ -46,7 +45,6 @@ public class MigrationRootNode extends AbstractTreeNode<TypeMigrationLabeler> im
   }
 
   @Override
-  @Nonnull
   public Collection<? extends AbstractTreeNode> getChildren() {
     if (myCachedChildren == null) {
       myCachedChildren = new ArrayList<>();

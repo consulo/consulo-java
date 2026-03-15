@@ -29,8 +29,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +40,10 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project,
-                             @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
+  public boolean isAvailable(Project project,
+                             PsiFile file,
+                             PsiElement startElement,
+                             PsiElement endElement) {
     if (startElement instanceof PsiNewExpression) {
       PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
       String startElementText = startElement.getText();
@@ -68,11 +67,11 @@ public class ImplementAbstractClassMethodsFix extends ImplementMethodsFix {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project,
-                     @Nonnull PsiFile file,
+  public void invoke(final Project project,
+                     PsiFile file,
                      @Nullable final Editor editor,
-                     @Nonnull final PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
+                     final PsiElement startElement,
+                     PsiElement endElement) {
     PsiFile containingFile = startElement.getContainingFile();
     if (editor == null || !FileModificationService.getInstance().prepareFileForWrite(containingFile)) return;
     PsiJavaCodeReferenceElement classReference = ((PsiNewExpression) startElement).getClassReference();

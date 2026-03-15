@@ -6,7 +6,6 @@ import com.intellij.java.analysis.impl.codeInspection.SwitchUtils;
 import com.intellij.java.language.psi.*;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
 
 import java.util.List;
@@ -16,18 +15,16 @@ import java.util.function.Function;
 public class CreateMissingSwitchBranchesFix extends BaseSwitchFix {
     private final Set<String> myNames;
 
-    public CreateMissingSwitchBranchesFix(@Nonnull PsiSwitchBlock block, Set<String> names) {
+    public CreateMissingSwitchBranchesFix(PsiSwitchBlock block, Set<String> names) {
         super(block);
         myNames = names;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return getName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return CreateSwitchBranchesUtil.getActionName(myNames);

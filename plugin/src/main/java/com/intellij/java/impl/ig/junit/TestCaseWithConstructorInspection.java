@@ -22,24 +22,20 @@ import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class TestCaseWithConstructorInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "JUnitTestCaseWithNonTrivialConstructors";
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.testCaseWithConstructorDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return Boolean.TRUE.equals(infos[0])
       ? InspectionGadgetsLocalize.testCaseWithConstructorProblemDescriptorInitializer().get()
@@ -52,7 +48,7 @@ public class TestCaseWithConstructorInspection extends BaseInspection {
 
   private static class TestCaseWithConstructorVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       if (!method.isConstructor()) {
         return;
       }

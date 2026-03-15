@@ -15,11 +15,10 @@ import consulo.language.impl.psi.LeafPsiElement;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -44,9 +43,8 @@ public final class CommentTracker {
      * @param element element to return the text
      * @return a text to be inserted into refactored code
      */
-    @Nonnull
     @RequiredReadAction
-    public String text(@Nonnull PsiElement element) {
+    public String text(PsiElement element) {
         checkState();
         addIgnored(element);
         return element.getText();
@@ -62,8 +60,7 @@ public final class CommentTracker {
      * @return a text to be inserted into refactored code
      * @see ParenthesesUtils#getText(PsiExpression, int)
      */
-    @Nonnull
-    public String text(@Nonnull PsiExpression element, int precedence) {
+    public String text(PsiExpression element, int precedence) {
         checkState();
         addIgnored(element);
         return ParenthesesUtils.getText(element, precedence + 1);
@@ -77,9 +74,8 @@ public final class CommentTracker {
      * @param expression an expression to use as lambda body
      * @return a string representation of lambda
      */
-    @Nonnull
     @RequiredReadAction
-    public String lambdaText(@Nonnull PsiVariable variable, @Nonnull PsiExpression expression) {
+    public String lambdaText(PsiVariable variable, PsiExpression expression) {
         return variable.getName() + " -> " + text(expression);
     }
 
@@ -110,7 +106,7 @@ public final class CommentTracker {
      * @throws IllegalArgumentException if firstElement and lastElements are not siblings or firstElement goes after last element
      */
     @RequiredReadAction
-    public String rangeText(@Nonnull PsiElement firstElement, @Nonnull PsiElement lastElement) {
+    public String rangeText(PsiElement firstElement, PsiElement lastElement) {
         checkState();
         PsiElement e;
         StringBuilder result = new StringBuilder();
@@ -135,7 +131,7 @@ public final class CommentTracker {
      * @throws IllegalArgumentException if firstElement and lastElements are not siblings or firstElement goes after last element
      */
     @RequiredReadAction
-    public void markRangeUnchanged(@Nonnull PsiElement firstElement, @Nonnull PsiElement lastElement) {
+    public void markRangeUnchanged(PsiElement firstElement, PsiElement lastElement) {
         checkState();
         PsiElement e;
         for (e = firstElement; e != null && e != lastElement; e = e.getNextSibling()) {
@@ -158,7 +154,7 @@ public final class CommentTracker {
      * @return the string containing the element text and possibly some comments.
      */
     @RequiredReadAction
-    public String commentsBefore(@Nonnull PsiElement element) {
+    public String commentsBefore(PsiElement element) {
         List<PsiElement> comments = grabCommentsBefore(element);
         if (comments.isEmpty()) {
             return "";
@@ -180,7 +176,7 @@ public final class CommentTracker {
     }
 
     @RequiredReadAction
-    private List<PsiElement> grabCommentsBefore(@Nonnull PsiElement element) {
+    private List<PsiElement> grabCommentsBefore(PsiElement element) {
         if (lastTextWithCommentsElement == null) {
             lastTextWithCommentsElement = element;
             return Collections.emptyList();
@@ -222,7 +218,7 @@ public final class CommentTracker {
      * @return the string containing the element text and possibly some comments.
      */
     @RequiredReadAction
-    public String textWithComments(@Nonnull PsiElement element) {
+    public String textWithComments(PsiElement element) {
         return commentsBefore(element) + element.getText();
     }
 
@@ -242,7 +238,7 @@ public final class CommentTracker {
      * @return the string containing the element text and possibly some comments.
      */
     @RequiredReadAction
-    public String textWithComments(@Nonnull PsiExpression expression, int precedence) {
+    public String textWithComments(PsiExpression expression, int precedence) {
         return commentsBefore(expression) + ParenthesesUtils.getText(expression, precedence + 1);
     }
 
@@ -252,7 +248,7 @@ public final class CommentTracker {
      * @param element element to delete
      */
     @RequiredWriteAction
-    public void delete(@Nonnull PsiElement element) {
+    public void delete(PsiElement element) {
         grabCommentsOnDelete(element);
         element.delete();
     }
@@ -263,7 +259,7 @@ public final class CommentTracker {
      * @param elements elements to delete (all not null)
      */
     @RequiredWriteAction
-    public void delete(@Nonnull PsiElement... elements) {
+    public void delete(PsiElement... elements) {
         for (PsiElement element : elements) {
             delete(element);
         }
@@ -278,7 +274,7 @@ public final class CommentTracker {
      * @param element element to delete
      */
     @RequiredWriteAction
-    public void deleteAndRestoreComments(@Nonnull PsiElement element) {
+    public void deleteAndRestoreComments(PsiElement element) {
         grabCommentsOnDelete(element);
         PsiElement anchor = element;
         while (anchor.getParent() != null && !(anchor.getParent() instanceof PsiFile) && anchor.getParent().getFirstChild() == anchor) {
@@ -295,9 +291,8 @@ public final class CommentTracker {
      * @param replacement replacement element. It's also marked as unchanged (see {@link #markUnchanged(PsiElement)})
      * @return the element which was actually inserted in the tree (either {@code replacement} or its copy)
      */
-    @Nonnull
     @RequiredWriteAction
-    public PsiElement replace(@Nonnull PsiElement element, @Nonnull PsiElement replacement) {
+    public PsiElement replace(PsiElement element, PsiElement replacement) {
         markUnchanged(replacement);
         grabComments(element);
         return element.replace(replacement);
@@ -317,9 +312,8 @@ public final class CommentTracker {
      * @param text    replacement text
      * @return the element which was actually inserted in the tree
      */
-    @Nonnull
     @RequiredWriteAction
-    public PsiElement replace(@Nonnull PsiElement element, @Nonnull String text) {
+    public PsiElement replace(PsiElement element, String text) {
         PsiElement replacement = createElement(element, text);
         return replace(element, replacement);
     }
@@ -334,9 +328,8 @@ public final class CommentTracker {
      * @param replacement replacement element. It's also marked as unchanged (see {@link #markUnchanged(PsiElement)})
      * @return the element which was actually inserted in the tree (either {@code replacement} or its copy)
      */
-    @Nonnull
     @RequiredWriteAction
-    public PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @Nonnull PsiElement replacement) {
+    public PsiElement replaceAndRestoreComments(PsiElement element, PsiElement replacement) {
         List<PsiElement> suffix = grabSuffixComments(element);
         PsiElement result = replace(element, replacement);
         PsiElement anchor = PsiTreeUtil
@@ -366,17 +359,15 @@ public final class CommentTracker {
      * @param replacementText text of the replacement expression
      * @return the element which was inserted in the tree
      */
-    @Nonnull
     @RequiredWriteAction
-    public PsiElement replaceExpressionAndRestoreComments(@Nonnull PsiExpression expression, @Nonnull String replacementText) {
+    public PsiElement replaceExpressionAndRestoreComments(PsiExpression expression, String replacementText) {
         return replaceExpressionAndRestoreComments(expression, replacementText, Collections.emptyList());
     }
 
-    @Nonnull
     @RequiredWriteAction
     public PsiElement replaceExpressionAndRestoreComments(
-        @Nonnull PsiExpression expression,
-        @Nonnull String replacementText,
+        PsiExpression expression,
+        String replacementText,
         List<? extends PsiElement> toDelete
     ) {
         List<PsiElement> trailingComments = new SmartList<>();
@@ -412,9 +403,8 @@ public final class CommentTracker {
         return replacement;
     }
 
-    @Nonnull
     @RequiredReadAction
-    private List<PsiElement> grabSuffixComments(@Nonnull PsiElement element) {
+    private List<PsiElement> grabSuffixComments(PsiElement element) {
         if (!(element instanceof PsiStatement)) {
             return Collections.emptyList();
         }
@@ -464,15 +454,13 @@ public final class CommentTracker {
      * @param text    replacement text
      * @return the element which was actually inserted in the tree
      */
-    @Nonnull
     @RequiredWriteAction
-    public PsiElement replaceAndRestoreComments(@Nonnull PsiElement element, @Nonnull String text) {
+    public PsiElement replaceAndRestoreComments(PsiElement element, String text) {
         PsiElement replacement = createElement(element, text);
         return replaceAndRestoreComments(element, replacement);
     }
 
-    @Nonnull
-    private static PsiElement createElement(@Nonnull PsiElement element, @Nonnull String text) {
+    private static PsiElement createElement(PsiElement element, String text) {
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
         if (element instanceof PsiExpression) {
             return factory.createExpressionFromText(text, element);
@@ -502,7 +490,7 @@ public final class CommentTracker {
      * @param anchor element to insert comments before
      */
     @RequiredWriteAction
-    public void insertCommentsBefore(@Nonnull PsiElement anchor) {
+    public void insertCommentsBefore(PsiElement anchor) {
         checkState();
         if (!comments.isEmpty()) {
             PsiElement parent = anchor.getParent();
@@ -525,7 +513,6 @@ public final class CommentTracker {
         comments = null;
     }
 
-    @Nonnull
     @RequiredReadAction
     private static ASTNode normalizeWhiteSpace(PsiWhiteSpace whiteSpace, PsiElement nextElement) {
         String text = whiteSpace.getText();
@@ -636,9 +623,8 @@ public final class CommentTracker {
      *              (though possibly on another hierarchy level)
      * @return a string containing all the comments between start and end.
      */
-    @Nonnull
     @RequiredReadAction
-    public static String commentsBetween(@Nonnull PsiElement start, @Nonnull PsiElement end) {
+    public static String commentsBetween(PsiElement start, PsiElement end) {
         CommentTracker ct = new CommentTracker();
         ct.lastTextWithCommentsElement = start;
         return ct.commentsBefore(end);

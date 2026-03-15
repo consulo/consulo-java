@@ -20,7 +20,6 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -29,7 +28,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
     private final PsiAnnotation myParent;
     private final ClsNameValuePairImpl[] myAttributes;
 
-    public ClsAnnotationParameterListImpl(@Nonnull PsiAnnotation parent, @Nonnull PsiNameValuePair[] psiAttributes) {
+    public ClsAnnotationParameterListImpl(PsiAnnotation parent, PsiNameValuePair[] psiAttributes) {
         myParent = parent;
         myAttributes = new ClsNameValuePairImpl[psiAttributes.length];
         for (int i = 0; i < myAttributes.length; i++) {
@@ -48,7 +47,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
     }
 
     @Override
-    public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+    public void appendMirrorText(int indentLevel, StringBuilder buffer) {
         if (myAttributes.length != 0) {
             buffer.append("(");
             for (int i = 0; i < myAttributes.length; i++) {
@@ -62,13 +61,12 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
     }
 
     @Override
-    public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    public void setMirror(TreeElement element) throws InvalidMirrorException {
         setMirrorCheckingType(element, null);
         setMirrors(myAttributes, SourceTreeToPsiMap.<PsiAnnotationParameterList>treeToPsiNotNull(element).getAttributes());
     }
 
     @Override
-    @Nonnull
     public PsiElement[] getChildren() {
         return myAttributes;
     }
@@ -79,7 +77,7 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor) {
             ((JavaElementVisitor) visitor).visitAnnotationParameterList(this);
         }
@@ -89,7 +87,6 @@ public class ClsAnnotationParameterListImpl extends ClsElementImpl implements Ps
     }
 
     @Override
-    @Nonnull
     public PsiNameValuePair[] getAttributes() {
         return myAttributes;
     }

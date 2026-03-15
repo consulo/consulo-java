@@ -20,22 +20,21 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
 public abstract class JavaClassElementType extends JavaStubElementType<PsiClassStub<?>, PsiClass> {
-  public JavaClassElementType(@Nonnull String id) {
+  public JavaClassElementType(String id) {
     super(id);
   }
 
   @Override
-  public PsiClass createPsi(@Nonnull final PsiClassStub stub) {
+  public PsiClass createPsi(final PsiClassStub stub) {
     return getPsiFactory(stub).createClass(stub);
   }
 
   @Override
-  public PsiClass createPsi(@Nonnull final ASTNode node) {
+  public PsiClass createPsi(final ASTNode node) {
     if (node instanceof EnumConstantInitializerElement) {
       return new PsiEnumConstantInitializerImpl(node);
     }
@@ -46,11 +45,10 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
     return new PsiClassImpl(node);
   }
 
-  @Nonnull
   @Override
-  public PsiClassStub createStub(@Nonnull final LighterAST tree,
-                                 @Nonnull final LighterASTNode node,
-                                 @Nonnull final StubElement parentStub) {
+  public PsiClassStub createStub(final LighterAST tree,
+                                 final LighterASTNode node,
+                                 final StubElement parentStub) {
     boolean isDeprecatedByComment = false;
     boolean isInterface = false;
     boolean isEnum = false;
@@ -150,7 +148,6 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
     return new PsiClassStubImpl<>(type, parentStub, qualifiedName, name, baseRef, flags);
   }
 
-  @Nonnull
   private static JavaClassElementType typeForClass(final boolean anonymous, final boolean enumConst, final boolean implicitClass) {
     return enumConst
       ? JavaStubElementTypes.ENUM_CONSTANT_INITIALIZER
@@ -159,7 +156,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
   }
 
   @Override
-  public void serialize(@Nonnull PsiClassStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiClassStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeShort(((PsiClassStubImpl<?>)stub).getFlags());
     if (!stub.isAnonymous()) {
       String name = stub.getName();
@@ -173,9 +170,8 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
     }
   }
 
-  @Nonnull
   @Override
-  public PsiClassStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiClassStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     short flags = dataStream.readShort();
     boolean isAnonymous = PsiClassStubImpl.isAnonymous(flags);
     boolean isEnumConst = PsiClassStubImpl.isEnumConstInitializer(flags);
@@ -200,7 +196,7 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
   }
 
   @Override
-  public void indexStub(@Nonnull PsiClassStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiClassStub stub, IndexSink sink) {
     boolean isAnonymous = stub.isAnonymous();
     if (isAnonymous) {
       String baseRef = stub.getBaseClassReferenceText();

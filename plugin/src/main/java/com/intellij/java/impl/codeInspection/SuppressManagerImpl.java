@@ -30,71 +30,69 @@ import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 @Singleton
 @ServiceImpl
 public class SuppressManagerImpl extends SuppressManager {
   @Override
-  @Nonnull
-  public SuppressIntentionAction[] createSuppressActions(@Nonnull HighlightDisplayKey displayKey) {
+  public SuppressIntentionAction[] createSuppressActions(HighlightDisplayKey displayKey) {
     SuppressQuickFix[] batchSuppressActions = createBatchSuppressActions(displayKey);
     return SuppressIntentionActionFromFix.convertBatchToSuppressIntentionActions(batchSuppressActions);
   }
 
 //  @Override
-//  public SuppressQuickFix[] getSuppressActions(@Nonnull PsiElement element, String toolShortName) {
+//  public SuppressQuickFix[] getSuppressActions(PsiElement element, String toolShortName) {
 //    return createBatchSuppressActions(HighlightDisplayKey.find(toolShortName));
 //  }
 //
   @Override
-  public boolean isSuppressedFor(@Nonnull PsiElement element, String toolId) {
+  public boolean isSuppressedFor(PsiElement element, String toolId) {
     return JavaSuppressionUtil.getElementToolSuppressedIn(element, toolId) != null;
   }
 //
 //  @Override
 //  @Nullable
-//  public PsiElement getElementMemberSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID) {
+//  public PsiElement getElementMemberSuppressedIn(final PsiDocCommentOwner owner, final String inspectionToolID) {
 //    return JavaSuppressionUtil.getElementMemberSuppressedIn(owner, inspectionToolID);
 //  }
 //
 //  @Override
 //  @Nullable
-//  public PsiElement getAnnotationMemberSuppressedIn(@Nonnull final PsiModifierListOwner owner, final String inspectionToolID) {
+//  public PsiElement getAnnotationMemberSuppressedIn(final PsiModifierListOwner owner, final String inspectionToolID) {
 //    return JavaSuppressionUtil.getAnnotationMemberSuppressedIn(owner, inspectionToolID);
 //  }
 //
 //  @Override
 //  @Nullable
-//  public PsiElement getDocCommentToolSuppressedIn(@Nonnull final PsiDocCommentOwner owner, final String inspectionToolID) {
+//  public PsiElement getDocCommentToolSuppressedIn(final PsiDocCommentOwner owner, final String inspectionToolID) {
 //    return JavaSuppressionUtil.getDocCommentToolSuppressedIn(owner, inspectionToolID);
 //  }
 //
 //  @Override
-//  @Nonnull
-//  public Collection<String> getInspectionIdsSuppressedInAnnotation(@Nonnull final PsiModifierListOwner owner) {
+//  
+//  public Collection<String> getInspectionIdsSuppressedInAnnotation(final PsiModifierListOwner owner) {
 //    return JavaSuppressionUtil.getInspectionIdsSuppressedInAnnotation(owner);
 //  }
 //
 //  @Override
 //  @Nullable
-//  public String getSuppressedInspectionIdsIn(@Nonnull PsiElement element) {
+//  public String getSuppressedInspectionIdsIn(PsiElement element) {
 //    return JavaSuppressionUtil.getSuppressedInspectionIdsIn(element);
 //  }
 //
 //  @Override
 //  @Nullable
-//  public PsiElement getElementToolSuppressedIn(@Nonnull final PsiElement place, final String toolId) {
+//  public PsiElement getElementToolSuppressedIn(final PsiElement place, final String toolId) {
 //    return JavaSuppressionUtil.getElementToolSuppressedIn(place, toolId);
 //  }
 //
 //  @Override
-//  public boolean canHave15Suppressions(@Nonnull final PsiElement file) {
+//  public boolean canHave15Suppressions(final PsiElement file) {
 //    return JavaSuppressionUtil.canHave15Suppressions(file);
 //  }
 //
 //  @Override
-//  public boolean alreadyHas14Suppressions(@Nonnull final PsiDocCommentOwner commentOwner) {
+//  public boolean alreadyHas14Suppressions(final PsiDocCommentOwner commentOwner) {
 //    return JavaSuppressionUtil.alreadyHas14Suppressions(commentOwner);
 //  }
 }

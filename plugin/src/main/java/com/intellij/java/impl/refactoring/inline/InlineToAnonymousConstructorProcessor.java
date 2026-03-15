@@ -34,8 +34,7 @@ import consulo.project.content.scope.ProjectScopes;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,7 +95,7 @@ class InlineToAnonymousConstructorProcessor {
       substitutedParameters[i] = classResolveSubstitutor.substitute(typeParams[i]);
     }
 
-    @NonNls StringBuilder builder = new StringBuilder("new ");
+    StringBuilder builder = new StringBuilder("new ");
     builder.append(substType.getCanonicalText());
     builder.append("() {}");
 
@@ -293,7 +292,7 @@ class InlineToAnonymousConstructorProcessor {
       if (parameter.isVarArgs()) {
         PsiEllipsisType ellipsisType = (PsiEllipsisType) parameter.getType();
         PsiType baseType = ellipsisType.getComponentType();
-        @NonNls StringBuilder exprBuilder = new StringBuilder("new ");
+        StringBuilder exprBuilder = new StringBuilder("new ");
         exprBuilder.append(baseType.getCanonicalText());
         exprBuilder.append("[] { }");
         try {

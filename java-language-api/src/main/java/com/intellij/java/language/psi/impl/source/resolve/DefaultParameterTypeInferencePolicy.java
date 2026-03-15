@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiManager;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole

@@ -21,17 +21,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TextLabelInSwitchStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.textLabelInSwitchStatementDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.textLabelInSwitchStatementProblemDescriptor().get();
     }
@@ -43,7 +40,7 @@ public class TextLabelInSwitchStatementInspection extends BaseInspection {
     private static class TextLabelInSwitchStatementVisitor extends BaseInspectionVisitor {
         @Override
         public void visitSwitchStatement(
-            @Nonnull PsiSwitchStatement statement
+            PsiSwitchStatement statement
         ) {
             super.visitSwitchStatement(statement);
             PsiCodeBlock body = statement.getBody();

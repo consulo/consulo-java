@@ -29,8 +29,7 @@ import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.frame.XValuePlace;
 import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author egor
@@ -45,7 +44,6 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider {
     return null;
   }
 
-  @Nonnull
   LocalizeValue getLinkText();
 
   default boolean isOnDemand(EvaluationContext evaluationContext, ValueDescriptor valueDescriptor) {
@@ -56,10 +54,10 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider {
     return !isOnDemand(evaluationContext, valueDescriptor) || isCalculated(valueDescriptor);
   }
 
-  static XFullValueEvaluator createFullValueEvaluator(@Nonnull LocalizeValue text) {
+  static XFullValueEvaluator createFullValueEvaluator(LocalizeValue text) {
     return new XFullValueEvaluator(text) {
       @Override
-      public void startEvaluation(@Nonnull XFullValueEvaluationCallback callback) {
+      public void startEvaluation(XFullValueEvaluationCallback callback) {
         if (callback instanceof HeadlessValueEvaluationCallback) {
           XValueNode node = ((HeadlessValueEvaluationCallback) callback).getNode();
           node.clearFullValueEvaluator();

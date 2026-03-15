@@ -3,8 +3,7 @@ package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 import java.util.Collection;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.impl.javadoc.JavadocHelper;
 import consulo.codeEditor.CaretModel;
 import consulo.document.Document;
@@ -34,7 +33,7 @@ public class JavadocFixer
 	 * @param psiFile PSI file for the document exposed via the given editor
 	 * @return <code>true</code> if smart completion was performed; <code>false</code> otherwise
 	 */
-	public boolean process(@Nonnull Editor editor, @Nonnull PsiFile psiFile)
+	public boolean process(Editor editor, PsiFile psiFile)
 	{
 		// Check parameter description completion.
 		CaretModel caretModel = editor.getCaretModel();
@@ -95,7 +94,7 @@ public class JavadocFixer
 		return true;
 	}
 
-	private static void moveCaretToTheLineEndIfPossible(@Nonnull Editor editor, int line)
+	private static void moveCaretToTheLineEndIfPossible(Editor editor, int line)
 	{
 		Document document = editor.getDocument();
 		CaretModel caretModel = editor.getCaretModel();
@@ -111,8 +110,7 @@ public class JavadocFixer
 		caretModel.moveToOffset(offset);
 	}
 
-	@Nullable
-	private static JavadocHelper.JavadocParameterInfo findNext(@Nonnull Collection<JavadocHelper.JavadocParameterInfo> data, @Nonnull JavadocHelper.JavadocParameterInfo anchor)
+	private static JavadocHelper.@Nullable JavadocParameterInfo findNext(Collection<JavadocHelper.JavadocParameterInfo> data, JavadocHelper.JavadocParameterInfo anchor)
 	{
 		boolean returnNow = false;
 		for(JavadocHelper.JavadocParameterInfo info : data)

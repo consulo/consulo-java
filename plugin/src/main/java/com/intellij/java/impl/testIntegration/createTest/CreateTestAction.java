@@ -46,8 +46,7 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -58,13 +57,12 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
 
   private static final String CREATE_TEST_IN_THE_SAME_ROOT = "create.test.in.the.same.root";
 
-  @Nonnull
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionCreateTest();
   }
 
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!isAvailableForElement(element)) return false;
 
     PsiClass psiClass = getContainingClass(element);
@@ -105,7 +103,7 @@ public class CreateTestAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
   @RequiredUIAccess
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     Module srcModule = ModuleUtilCore.findModuleForPsiElement(element);
     PsiClass srcClass = getContainingClass(element);

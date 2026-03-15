@@ -23,7 +23,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -33,19 +32,16 @@ public class SocketResourceInspection extends ResourceInspection {
     public boolean insideTryAllowed = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "SocketOpenedButNotSafelyClosed";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.socketOpenedNotClosedDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiExpression expression = (PsiExpression) infos[0];
         PsiType type = expression.getType();
@@ -67,7 +63,7 @@ public class SocketResourceInspection extends ResourceInspection {
 
     private class SocketResourceVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             if (!isSocketFactoryMethod(expression)) {
                 return;
@@ -87,7 +83,7 @@ public class SocketResourceInspection extends ResourceInspection {
         }
 
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             if (!isSocketResource(expression)) {
                 return;

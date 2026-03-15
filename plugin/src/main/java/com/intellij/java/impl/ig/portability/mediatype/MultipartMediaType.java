@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.portability.mediatype;
 
-import org.jetbrains.annotations.NonNls;
 
 public enum MultipartMediaType {
   ALTERNATIVE("multipart/alternative"),
@@ -35,7 +34,7 @@ public enum MultipartMediaType {
 
   private final String contentType;
 
-  MultipartMediaType(@NonNls String contentType) {
+  MultipartMediaType(String contentType) {
     this.contentType = contentType;
   }
 

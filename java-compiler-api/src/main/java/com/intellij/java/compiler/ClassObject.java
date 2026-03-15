@@ -15,7 +15,7 @@
  */
 package com.intellij.java.compiler;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * TODO [VISTALL] just a stub for future work

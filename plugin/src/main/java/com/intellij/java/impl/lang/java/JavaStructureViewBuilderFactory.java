@@ -30,9 +30,8 @@ import consulo.fileEditor.structureView.TreeBasedStructureViewBuilder;
 import consulo.language.Language;
 import consulo.language.editor.structureView.PsiStructureViewFactory;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class JavaStructureViewBuilderFactory implements PsiStructureViewFactory {
@@ -45,7 +44,6 @@ public class JavaStructureViewBuilderFactory implements PsiStructureViewFactory 
 
     return new TreeBasedStructureViewBuilder() {
       @Override
-      @Nonnull
       public StructureViewModel createStructureViewModel(@Nullable Editor editor) {
         return new JavaFileTreeModel((PsiJavaFile)psiFile, editor);
       }
@@ -57,7 +55,6 @@ public class JavaStructureViewBuilderFactory implements PsiStructureViewFactory 
     };
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -1,7 +1,6 @@
-import jakarta.annotation.Nonnull;
 
 public class Test {
-  private static void foo(@Nonnull String smth) {
+  private static void foo(String smth) {
   }
 
   public static void main(String[] args) {

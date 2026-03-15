@@ -27,8 +27,7 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -40,23 +39,19 @@ import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
 
 public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
-  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
   }
 
-  @Nonnull
   @Override
   public abstract LocalizeValue getDisplayName();
 
   @Override
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return GroupDisplayNameUtil.getGroupDisplayName(getClass());
   }
 
-  @Nonnull
   protected abstract String buildErrorString(Object... infos);
 
   protected boolean buildQuickFixesOnlyForOnTheFlyErrors() {
@@ -68,7 +63,6 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
     return null;
   }
 
-  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     return InspectionGadgetsFix.EMPTY_ARRAY;
   }
@@ -76,8 +70,7 @@ public abstract class BaseInspection extends BaseJavaBatchLocalInspectionTool {
   public abstract BaseInspectionVisitor buildVisitor();
 
   @Override
-  @Nonnull
-  public final PsiElementVisitor buildVisitorImpl(@Nonnull ProblemsHolder holder,
+  public final PsiElementVisitor buildVisitorImpl(ProblemsHolder holder,
                                                   boolean isOnTheFly,
                                                   LocalInspectionToolSession session,
                                                   Object state) {

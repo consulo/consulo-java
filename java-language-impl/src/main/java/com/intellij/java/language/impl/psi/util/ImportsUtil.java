@@ -19,9 +19,8 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -72,7 +71,7 @@ public class ImportsUtil {
     staticImport.delete();
   }
 
-  public static void expand(@Nonnull PsiJavaCodeReferenceElement refExpr, PsiImportStaticStatement staticImport) {
+  public static void expand(PsiJavaCodeReferenceElement refExpr, PsiImportStaticStatement staticImport) {
     final PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(refExpr.getProject());
     final PsiReferenceExpression referenceExpression = elementFactory.createReferenceExpression(staticImport
         .resolveTargetClass());

@@ -26,7 +26,6 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class EncapsulateVariableFix extends InspectionGadgetsFix {
 
@@ -37,7 +36,6 @@ public class EncapsulateVariableFix extends InspectionGadgetsFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.encapsulateVariableQuickfix(fieldName);
   }

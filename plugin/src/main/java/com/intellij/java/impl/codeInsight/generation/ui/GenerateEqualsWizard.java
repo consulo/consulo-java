@@ -41,7 +41,6 @@ import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import consulo.ui.ex.awt.VerticalFlowLayout;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 
 import javax.swing.*;
@@ -312,7 +311,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
         }
 
         @Override
-        public int checkForProblems(@Nonnull MemberInfo member) {
+        public int checkForProblems(MemberInfo member) {
             if (!(member.getMember() instanceof PsiField)) {
                 return ERROR;
             }

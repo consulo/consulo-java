@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentFactory;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;

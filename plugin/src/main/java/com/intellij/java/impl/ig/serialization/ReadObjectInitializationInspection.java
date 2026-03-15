@@ -24,22 +24,18 @@ import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ReadObjectInitializationInspection extends BaseInspection {
-    @Nonnull
     public String getID() {
         return "InstanceVariableMayNotBeInitializedByReadObject";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.readobjectInitializationDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.readobjectInitializationProblemDescriptor().get();
     }
@@ -50,7 +46,7 @@ public class ReadObjectInitializationInspection extends BaseInspection {
 
     private static class ReadObjectInitializationVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             // no call to super, so it doesn't drill down
             PsiClass aClass = method.getContainingClass();
             if (aClass == null) {
@@ -84,7 +80,7 @@ public class ReadObjectInitializationInspection extends BaseInspection {
             }
         }
 
-        public static boolean isFieldInitialized(@Nonnull PsiField field, @Nonnull PsiMethod method) {
+        public static boolean isFieldInitialized(PsiField field, PsiMethod method) {
             if (field.hasModifierProperty(PsiModifier.STATIC)) {
                 return true;
             }

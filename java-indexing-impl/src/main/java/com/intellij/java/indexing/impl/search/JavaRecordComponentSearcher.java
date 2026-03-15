@@ -14,8 +14,7 @@ import consulo.language.psi.search.ReferencesSearchQueryExecutor;
 import consulo.language.psi.search.SearchRequestCollector;
 import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -25,8 +24,8 @@ public final class JavaRecordComponentSearcher extends QueryExecutorBase<PsiRefe
     implements ReferencesSearchQueryExecutor {
     @Override
     public void processQuery(
-        @Nonnull ReferencesSearch.SearchParameters queryParameters,
-        @Nonnull Predicate<? super PsiReference> consumer
+        ReferencesSearch.SearchParameters queryParameters,
+        Predicate<? super PsiReference> consumer
     ) {
         PsiElement element = queryParameters.getElementToSearch();
         if (element instanceof PsiRecordComponent recordComponent) {
@@ -89,20 +88,17 @@ public final class JavaRecordComponentSearcher extends QueryExecutorBase<PsiRefe
     }
 
     private static final class RecordNavigationInfo {
-        @Nonnull
         final PsiMethod myLightMethod;
-        @Nonnull
         final PsiField myLightField;
         @Nullable
         final PsiParameter myLightCompactConstructorParameter;
-        @Nonnull
         final String myName;
 
         private RecordNavigationInfo(
-            @Nonnull PsiMethod lightMethod,
-            @Nonnull PsiField lightField,
+            PsiMethod lightMethod,
+            PsiField lightField,
             @Nullable PsiParameter parameter,
-            @Nonnull String name
+            String name
         ) {
             myLightMethod = lightMethod;
             myLightField = lightField;

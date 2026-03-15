@@ -33,8 +33,7 @@ import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -49,7 +48,7 @@ public class RefactoringHierarchyUtil {
   }
 
   public static boolean willBeInTargetClass(PsiElement place,
-                                            @Nonnull Set<PsiMember> membersToMove,
+                                            Set<PsiMember> membersToMove,
                                             @Nullable PsiClass targetClass,
                                             boolean includeSubclasses) {
     PsiElement parent = place;
@@ -215,7 +214,7 @@ public class RefactoringHierarchyUtil {
     LOG.assertTrue(anInterface.isInterface());
     visited.add(anInterface);
     ClassInheritorsSearch.search(anInterface, false).forEach(new PsiElementProcessorAdapter<PsiClass>(new PsiElementProcessor<PsiClass>() {
-      public boolean execute(@Nonnull PsiClass aClass) {
+      public boolean execute(PsiClass aClass) {
         if (!aClass.isInterface()) {
           result.add(aClass);
         } else if (!visited.contains(aClass)) {

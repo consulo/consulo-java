@@ -23,7 +23,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TypeParameterNamingConventionInspection extends ConventionInspection {
@@ -32,7 +31,6 @@ public class TypeParameterNamingConventionInspection extends ConventionInspectio
     private static final int DEFAULT_MAX_LENGTH = 1;
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.typeParameterNamingConventionDisplayName();
     }
@@ -48,7 +46,6 @@ public class TypeParameterNamingConventionInspection extends ConventionInspectio
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         String parameterName = (String) infos[0];
         if (parameterName.length() < getMinLength()) {

@@ -29,7 +29,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -39,19 +38,16 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
     public boolean m_ignoreUnlessAssigned = true;
 
     @Override
-    @Nonnull
     public String getID() {
         return "StringContatenationInLoop";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringConcatenationInLoopsDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringConcatenationInLoopsProblemDescriptor().get();
     }
@@ -104,7 +100,7 @@ public class StringConcatenationInLoopsInspection extends BaseInspection {
         }
 
         @Override
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+        public void visitAssignmentExpression(PsiAssignmentExpression expression) {
             super.visitAssignmentExpression(expression);
             if (expression.getRExpression() == null) {
                 return;

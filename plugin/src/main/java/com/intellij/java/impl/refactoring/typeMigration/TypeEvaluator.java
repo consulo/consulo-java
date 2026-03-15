@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.language.psi.*;
 import consulo.logging.Logger;
@@ -27,7 +27,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.impl.refactoring.typeMigration.usageInfo.TypeMigrationUsageInfo;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author db
@@ -63,7 +62,7 @@ public class TypeEvaluator
 		myProjectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
 	}
 
-	public boolean setType(TypeMigrationUsageInfo usageInfo, @Nonnull PsiType type)
+	public boolean setType(TypeMigrationUsageInfo usageInfo, PsiType type)
 	{
 		LinkedList<PsiType> t = myTypeMap.get(usageInfo);
 

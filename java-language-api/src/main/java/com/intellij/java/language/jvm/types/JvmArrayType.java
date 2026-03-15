@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @see Class#isArray
@@ -31,6 +30,5 @@ public interface JvmArrayType extends JvmType
 	 * </ul>
 	 * @see Class#getComponentType
 	 */
-	@Nonnull
 	JvmType getComponentType();
 }

@@ -5,8 +5,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -18,20 +17,19 @@ public interface ContextNullabilityInfo {
     /**
      * An empty context nullability info that returns {@code null} for all contexts
      */
-    @Nonnull
     ContextNullabilityInfo EMPTY = new ContextNullabilityInfo() {
         @Override
-        public @Nullable NullabilityAnnotationInfo forContext(@Nonnull PsiElement context) {
+        public @Nullable NullabilityAnnotationInfo forContext(PsiElement context) {
             return null;
         }
 
         @Override
-        public @Nonnull ContextNullabilityInfo orElse(@Nonnull ContextNullabilityInfo other) {
+        public ContextNullabilityInfo orElse(ContextNullabilityInfo other) {
             return other;
         }
 
         @Override
-        public @Nonnull ContextNullabilityInfo filtering(@Nonnull Predicate<PsiElement> contextFilter) {
+        public ContextNullabilityInfo filtering(Predicate<PsiElement> contextFilter) {
             return this;
         }
     };
@@ -41,24 +39,24 @@ public interface ContextNullabilityInfo {
      * @return nullability info for a given context element
      */
     @Nullable
-    NullabilityAnnotationInfo forContext(@Nonnull PsiElement context);
+    NullabilityAnnotationInfo forContext(PsiElement context);
 
     /**
      * @param info constant nullability info to return for all contexts
      * @return a function that returns given nullability info for all contexts
      */
-    static @Nonnull ContextNullabilityInfo constant(@Nullable NullabilityAnnotationInfo info) {
+    static ContextNullabilityInfo constant(@Nullable NullabilityAnnotationInfo info) {
         if (info == null) {
             return EMPTY;
         }
         return new ContextNullabilityInfo() {
             @Override
-            public @Nonnull NullabilityAnnotationInfo forContext(@Nonnull PsiElement context) {
+            public NullabilityAnnotationInfo forContext(PsiElement context) {
                 return info;
             }
 
             @Override
-            public @Nonnull ContextNullabilityInfo orElse(@Nonnull ContextNullabilityInfo other) {
+            public ContextNullabilityInfo orElse(ContextNullabilityInfo other) {
                 return this;
             }
         };
@@ -68,14 +66,14 @@ public interface ContextNullabilityInfo {
      * @param contextFilter a predicate that determines whether nullability info is applicable to a given context
      * @return a new {@code ContextNullabilityInfo} that returns null for contexts that do not match the given predicate
      */
-    default @Nonnull ContextNullabilityInfo filtering(@Nonnull Predicate<PsiElement> contextFilter) {
+    default ContextNullabilityInfo filtering(Predicate<PsiElement> contextFilter) {
         return context -> contextFilter.test(context) ? forContext(context) : null;
     }
 
     /**
      * @return a new {@code ContextNullabilityInfo} that filters out the cast contexts.
      */
-    default @Nonnull ContextNullabilityInfo disableInCast() {
+    default ContextNullabilityInfo disableInCast() {
         return filtering(context -> {
             PsiExpression parentExpression = PsiTreeUtil.getParentOfType(context, PsiExpression.class);
             return !(parentExpression instanceof PsiTypeCastExpression) ||
@@ -87,7 +85,7 @@ public interface ContextNullabilityInfo {
      * @param other a fallback context nullability info to use if this one is not applicable
      * @return a new {@code ContextNullabilityInfo} that returns the result of this one if it is applicable, or the result of the other one otherwise
      */
-    default @Nonnull ContextNullabilityInfo orElse(@Nonnull ContextNullabilityInfo other) {
+    default ContextNullabilityInfo orElse(ContextNullabilityInfo other) {
         if (other == EMPTY) {
             return this;
         }

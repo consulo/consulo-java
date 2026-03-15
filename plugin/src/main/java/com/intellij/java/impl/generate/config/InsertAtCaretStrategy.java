@@ -22,7 +22,6 @@ import com.intellij.java.impl.codeInsight.generation.PsiGenerationInfo;
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import jakarta.annotation.Nonnull;
 
 /**
  * Inserts the method at the caret position.
@@ -42,7 +41,7 @@ public class InsertAtCaretStrategy implements InsertNewMethodStrategy
 	}
 
 	@Override
-	public PsiMethod insertNewMethod(PsiClass clazz, @Nonnull PsiMethod newMethod, Editor editor)
+	public PsiMethod insertNewMethod(PsiClass clazz, PsiMethod newMethod, Editor editor)
 	{
 		int offset = (editor != null) ? editor.getCaretModel().getOffset() : (clazz.getTextRange().getEndOffset() - 1);
 		PsiGenerationInfo<PsiMethod> generationInfo = new PsiGenerationInfo<PsiMethod>(newMethod, false);

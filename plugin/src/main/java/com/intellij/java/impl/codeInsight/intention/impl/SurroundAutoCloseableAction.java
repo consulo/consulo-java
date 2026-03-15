@@ -38,7 +38,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -47,7 +46,7 @@ import java.util.List;
 public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) return false;
     if (!PsiUtil.getLanguageLevel(element).isAtLeast(LanguageLevel.JDK_1_7)) return false;
 
@@ -73,7 +72,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element)
+  public void invoke(Project project, Editor editor, PsiElement element)
     throws IncorrectOperationException {
     PsiLocalVariable variable = PsiTreeUtil.getParentOfType(element, PsiLocalVariable.class);
     if (variable == null) return;
@@ -125,7 +124,7 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
   }
 
   @RequiredReadAction
-  private static List<PsiElement> moveStatements(@Nonnull PsiElement first, PsiElement last, PsiTryStatement statement) {
+  private static List<PsiElement> moveStatements(PsiElement first, PsiElement last, PsiTryStatement statement) {
     PsiCodeBlock tryBlock = statement.getTryBlock();
     assert tryBlock != null : statement.getText();
     PsiElement parent = statement.getParent();
@@ -171,7 +170,6 @@ public class SurroundAutoCloseableAction extends PsiElementBaseIntentionAction {
     return toFormat;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionSurroundResourceWithArmBlock();

@@ -28,24 +28,20 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
     @Override
-    @Nonnull
     public String getID() {
         return "SerialVersionUIDWithWrongSignature";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongProblemDescriptor().get();
     }
@@ -59,7 +55,6 @@ public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
     }
 
     private static class SerialVersionUIDNotStaticFinalFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.serialversionuidPrivateStaticFinalLongQuickfix();
@@ -91,7 +86,7 @@ public class SerialVersionUIDNotStaticFinalInspection extends BaseInspection {
 
     private static class SerialVersionUIDNotStaticFinalVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so it doesn't drill down
             if (aClass.isInterface() || aClass.isAnnotationType()) {
                 return;

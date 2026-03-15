@@ -26,8 +26,7 @@ import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
@@ -38,9 +37,9 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix {
     private final String myQualifiedClassName;
 
     public AddLibraryToDependenciesFix(
-        @Nonnull Module currentModule,
-        @Nonnull Library library,
-        @Nonnull PsiReference reference,
+        Module currentModule,
+        Library library,
+        PsiReference reference,
         @Nullable String qualifiedClassName
     ) {
         super(reference);
@@ -49,19 +48,18 @@ class AddLibraryToDependenciesFix extends AddOrderEntryFix {
         myQualifiedClassName = qualifiedClassName;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.orderentryFixAddLibraryToClasspath(LibraryUtil.getPresentableName(myLibrary));
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return !project.isDisposed() && !myCurrentModule.isDisposed() && !((Library) myLibrary).isDisposed();
     }
 
     @Override
-    public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file) {
+    public void invoke(Project project, @Nullable Editor editor, PsiFile file) {
         DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
         JavaProjectModelModificationService.getInstance(project).addDependency(myCurrentModule, myLibrary, scope);
         if (myQualifiedClassName != null && editor != null) {

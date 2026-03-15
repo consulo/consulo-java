@@ -39,7 +39,6 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.ExceptionUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 import java.io.File;
@@ -67,7 +66,6 @@ public class JavaCompiler implements TranslatingCompiler {
   }
 
   @Override
-  @Nonnull
   public String getDescription() {
     return CompilerLocalize.javaCompilerDescription().get();
   }
@@ -118,7 +116,6 @@ public class JavaCompiler implements TranslatingCompiler {
     }
   }
 
-  @Nonnull
   private static List<VirtualFile> filterResourceFiles(CompileContext compileContext, VirtualFile[] virtualFiles) {
     ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(compileContext.getProject());
 
@@ -133,13 +130,11 @@ public class JavaCompiler implements TranslatingCompiler {
     return list;
   }
 
-  @Nonnull
   @Override
   public FileType[] getInputFileTypes() {
     return new FileType[]{JavaFileType.INSTANCE};
   }
 
-  @Nonnull
   @Override
   public FileType[] getOutputFileTypes() {
     return new FileType[]{JavaClassFileType.INSTANCE};
@@ -151,7 +146,7 @@ public class JavaCompiler implements TranslatingCompiler {
   }
 
   @Override
-  public void registerCompilableFileTypes(@Nonnull Consumer<FileType> fileTypeConsumer) {
+  public void registerCompilableFileTypes(Consumer<FileType> fileTypeConsumer) {
     fileTypeConsumer.accept(JavaFileType.INSTANCE);
   }
 

@@ -28,7 +28,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,25 +36,21 @@ import java.util.List;
 public class StringCompareToInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "CallToStringCompareTo";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.stringComparetoCallDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.stringComparetoCallProblemDescriptor().get();
   }
 
   @Override
-  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     PsiMethodCallExpression methodCallExpression =
       (PsiMethodCallExpression)infos[0];
@@ -92,7 +87,7 @@ public class StringCompareToInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isStringCompareTo(expression)) {
         return;

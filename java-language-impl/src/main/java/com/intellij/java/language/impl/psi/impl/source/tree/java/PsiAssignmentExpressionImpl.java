@@ -26,7 +26,6 @@ import consulo.language.ast.TokenSet;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements PsiAssignmentExpression {
   private static final Logger LOG = Logger.getInstance(PsiAssignmentExpressionImpl.class);
@@ -36,7 +35,6 @@ public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  @Nonnull
   public PsiExpression getLExpression() {
     return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.LOPERAND);
   }
@@ -47,13 +45,11 @@ public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  @Nonnull
   public PsiJavaToken getOperationSign() {
     return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
-  @Nonnull
   public IElementType getOperationTokenType() {
     return getOperationSign().getTokenType();
   }
@@ -101,7 +97,7 @@ public class PsiAssignmentExpressionImpl extends ExpressionPsiElement implements
       JavaTokenType.ANDEQ, JavaTokenType.OREQ, JavaTokenType.XOREQ);
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitAssignmentExpression(this);
     } else {

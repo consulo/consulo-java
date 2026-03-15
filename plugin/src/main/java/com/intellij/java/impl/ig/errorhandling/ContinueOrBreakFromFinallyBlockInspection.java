@@ -24,11 +24,9 @@ import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ContinueOrBreakFromFinallyBlockInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.continueOrBreakFromFinallyBlockDisplayName();
@@ -38,7 +36,6 @@ public class ContinueOrBreakFromFinallyBlockInspection extends BaseInspection {
         return true;
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.continueOrBreakFromFinallyBlockProblemDescriptor().get();
     }
@@ -52,7 +49,7 @@ public class ContinueOrBreakFromFinallyBlockInspection extends BaseInspection {
 
         @Override
         public void visitContinueStatement(
-            @Nonnull PsiContinueStatement statement
+            PsiContinueStatement statement
         ) {
             super.visitContinueStatement(statement);
             if (!ControlFlowUtils.isInFinallyBlock(statement)) {
@@ -70,7 +67,7 @@ public class ContinueOrBreakFromFinallyBlockInspection extends BaseInspection {
         }
 
         @Override
-        public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+        public void visitBreakStatement(PsiBreakStatement statement) {
             super.visitBreakStatement(statement);
             if (!ControlFlowUtils.isInFinallyBlock(statement)) {
                 return;

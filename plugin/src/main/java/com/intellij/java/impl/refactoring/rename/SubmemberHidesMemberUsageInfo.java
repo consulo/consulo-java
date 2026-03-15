@@ -23,7 +23,6 @@ import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.usage.UsageViewUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -34,7 +33,6 @@ public class SubmemberHidesMemberUsageInfo extends UnresolvableCollisionUsageInf
         super(element, referencedElement);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public LocalizeValue getDescription() {

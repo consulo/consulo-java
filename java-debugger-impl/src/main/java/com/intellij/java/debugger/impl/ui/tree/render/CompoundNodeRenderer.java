@@ -18,7 +18,6 @@ package com.intellij.java.debugger.impl.ui.tree.render;
 import java.util.List;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
@@ -35,7 +34,6 @@ import consulo.internal.com.sun.jdi.Value;
 public class CompoundNodeRenderer extends NodeRendererImpl
 {
 	public static final
-	@NonNls
 	String UNIQUE_ID = "CompoundNodeRenderer";
 
 	private ValueLabelRenderer myLabelRenderer;

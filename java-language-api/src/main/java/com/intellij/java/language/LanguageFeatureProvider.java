@@ -5,7 +5,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.language.psi.PsiFile;
 import consulo.util.lang.ThreeState;
-import jakarta.annotation.Nonnull;
 
 /**
  * This can be used to modify Java language features availability depending on context (e.g. due to specific runtime implementation).
@@ -18,6 +17,5 @@ public interface LanguageFeatureProvider {
    * @return {@link ThreeState#YES} or {@link ThreeState#NO} to alternate default ({@link LanguageLevel}-based) availability,
    * or {@link ThreeState#UNSURE} otherwise.
    */
-  @Nonnull
-  ThreeState isFeatureSupported(@Nonnull JavaFeature feature, @Nonnull PsiFile file);
+  ThreeState isFeatureSupported(JavaFeature feature, PsiFile file);
 }

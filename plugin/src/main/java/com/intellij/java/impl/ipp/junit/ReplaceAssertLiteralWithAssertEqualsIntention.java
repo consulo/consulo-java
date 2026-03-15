@@ -27,8 +27,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceAssertLiteralWithAssertEqualsIntention", fileExtensions = "java", categories = {"Java", "JUnit"})
@@ -61,27 +59,25 @@ public class ReplaceAssertLiteralWithAssertEqualsIntention extends MutablyNamedI
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.replaceAssertLiteralWithAssertEqualsIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new AssertLiteralPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) {
+    public void processIntention(PsiElement element) {
         PsiMethodCallExpression call = (PsiMethodCallExpression) element;
         PsiReferenceExpression methodExpression = call.getMethodExpression();
-        @NonNls String methodName = methodExpression.getReferenceName();
+        String methodName = methodExpression.getReferenceName();
         if (methodName == null) {
             return;
         }
-        @NonNls StringBuilder newExpression = new StringBuilder();
+        StringBuilder newExpression = new StringBuilder();
         PsiElement qualifier = methodExpression.getQualifier();
         if (qualifier == null) {
             PsiMethod containingMethod = PsiTreeUtil.getParentOfType(call, PsiMethod.class);

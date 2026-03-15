@@ -22,7 +22,6 @@ import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizable;
 import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class ExternalizableStringSet extends OrderedSet<String> implements JDOME
    * note: declare ExternalizableStringSet fields as <b>final</b>!<br>
    * note: reference to defaultValues is retained by this set!
    */
-  public ExternalizableStringSet(@NonNls String... defaultValues) {
+  public ExternalizableStringSet(String... defaultValues) {
     this.defaultValues = defaultValues.length == 0 ? ArrayUtil.EMPTY_STRING_ARRAY : defaultValues;
     for (String defaultValue : defaultValues) {
       add(defaultValue);

@@ -32,8 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ClassElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance(ClassElement.class);
@@ -198,7 +197,7 @@ public class ClassElement extends CompositeElement implements Constants {
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (isEnum() && child.getElementType() == ENUM_CONSTANT) {
       JavaSourceUtil.deleteSeparatingComma(this, child);
     }
@@ -339,7 +338,7 @@ public class ClassElement extends CompositeElement implements Constants {
   }
 
   @Override
-  public int getChildRole(@Nonnull ASTNode child) {
+  public int getChildRole(ASTNode child) {
     assert child.getTreeParent() == this;
 
     IElementType i = child.getElementType();

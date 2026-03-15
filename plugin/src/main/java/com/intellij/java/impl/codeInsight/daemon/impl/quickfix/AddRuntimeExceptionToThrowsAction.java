@@ -29,7 +29,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
@@ -46,13 +45,12 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.addRuntimeExceptionToThrowsText();
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -77,7 +75,7 @@ public class AddRuntimeExceptionToThrowsAction implements IntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (!(file instanceof PsiJavaFile)) {
             return false;
         }

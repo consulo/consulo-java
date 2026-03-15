@@ -34,9 +34,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -48,7 +46,6 @@ public class UnnecessaryUnboxingInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean onlyReportSuperfluouslyUnboxed = false;
 
-    @NonNls
     static final Map<String, String> s_unboxingMethods = new HashMap<>(8);
 
     static {
@@ -63,13 +60,11 @@ public class UnnecessaryUnboxingInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryUnboxingDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryUnboxingProblemDescriptor().get();
     }
@@ -93,7 +88,6 @@ public class UnnecessaryUnboxingInspection extends BaseInspection {
 
     private static class UnnecessaryUnboxingFix extends InspectionGadgetsFix {
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryUnboxingRemoveQuickfix();
         }
@@ -118,7 +112,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection {
                     }
                     String classname = containingClass.getQualifiedName();
                     if (CommonClassNames.JAVA_LANG_BOOLEAN.equals(classname)) {
-                        @NonNls String name = field.getName();
+                        String name = field.getName();
                         if ("TRUE".equals(name)) {
                             PsiReplacementUtil.replaceExpression(methodCall, "true");
                             return;
@@ -148,7 +142,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection {
     private class UnnecessaryUnboxingVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             if (!isUnboxingExpression(expression)) {
                 return;
@@ -161,7 +155,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection {
             registerError(expression);
         }
 
-        private boolean canRemainBoxed(@Nonnull PsiExpression expression, @Nonnull PsiExpression unboxedExpression) {
+        private boolean canRemainBoxed(PsiExpression expression, PsiExpression unboxedExpression) {
             PsiElement parent = expression.getParent();
             while (parent instanceof PsiParenthesizedExpression) {
                 expression = (PsiExpression) parent;
@@ -265,7 +259,7 @@ public class UnnecessaryUnboxingInspection extends BaseInspection {
             return unboxingMethod.equals(methodName);
         }
 
-        private boolean isSameMethodCalledWithoutUnboxing(@Nonnull PsiCallExpression callExpression, @Nonnull PsiExpression unboxingExpression, @Nonnull PsiExpression unboxedExpression) {
+        private boolean isSameMethodCalledWithoutUnboxing(PsiCallExpression callExpression, PsiExpression unboxingExpression, PsiExpression unboxedExpression) {
             PsiMethod originalMethod = callExpression.resolveMethod();
             if (originalMethod == null) {
                 return false;

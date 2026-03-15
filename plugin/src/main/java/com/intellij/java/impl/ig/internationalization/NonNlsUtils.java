@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import consulo.util.dataholder.Key;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class NonNlsUtils {
 

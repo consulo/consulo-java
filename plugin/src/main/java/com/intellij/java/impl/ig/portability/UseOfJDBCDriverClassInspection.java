@@ -22,19 +22,16 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UseOfJDBCDriverClassInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.useOfConcreteJdbcDriverClassDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.useOfConcreteJdbcDriverClassProblemDescriptor().get();
   }
@@ -48,7 +45,7 @@ public class UseOfJDBCDriverClassInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(PsiVariable variable) {
       super.visitVariable(variable);
       PsiType type = variable.getType();
       if (!(type instanceof PsiClassType)) {
@@ -82,7 +79,7 @@ public class UseOfJDBCDriverClassInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression newExpression) {
+      PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       PsiType type = newExpression.getType();
       if (type == null) {

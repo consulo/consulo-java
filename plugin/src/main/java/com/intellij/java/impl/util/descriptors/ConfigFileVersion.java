@@ -16,16 +16,15 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author nik
  */
 public class ConfigFileVersion {
   private final String myName;
-  private @NonNls final String myTemplateName;
+  private final String myTemplateName;
 
-  public ConfigFileVersion(String name, @NonNls String templateName) {
+  public ConfigFileVersion(String name, String templateName) {
     myName = name;
     myTemplateName = templateName;
   }

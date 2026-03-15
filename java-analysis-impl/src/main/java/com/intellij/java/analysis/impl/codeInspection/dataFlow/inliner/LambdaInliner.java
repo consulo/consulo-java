@@ -19,7 +19,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.CFGBuilder;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.EntryStream;
 
 /**
@@ -29,7 +28,7 @@ import one.util.streamex.EntryStream;
 public class LambdaInliner implements CallInliner
 {
 	@Override
-	public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
+	public boolean tryInlineCall(CFGBuilder builder, PsiMethodCallExpression call)
 	{
 		PsiExpression qualifier = PsiUtil.skipParenthesizedExprDown(call.getMethodExpression().getQualifierExpression());
 		if(qualifier == null)

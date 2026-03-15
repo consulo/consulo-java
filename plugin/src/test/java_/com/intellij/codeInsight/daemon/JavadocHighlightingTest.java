@@ -5,19 +5,16 @@ import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocReferenceInspection;
 import com.intellij.java.language.LanguageLevel;
-import jakarta.annotation.Nonnull;
 
 
 public abstract class JavadocHighlightingTest extends LightDaemonAnalyzerTestCase {
   private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/javaDoc";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

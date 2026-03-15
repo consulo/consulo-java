@@ -36,7 +36,6 @@ import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -53,21 +52,18 @@ public class TooBroadCatchInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreThrown = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "OverlyBroadCatchBlock";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.tooBroadCatchDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         List<PsiClass> typesMasked = (List<PsiClass>) infos[0];
         String typesMaskedString = typesMasked.get(0).getName();
@@ -86,7 +82,6 @@ public class TooBroadCatchInspection extends BaseInspection {
         }
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         List<PsiClass> maskedTypes = (List<PsiClass>) infos[0];
@@ -116,7 +111,6 @@ public class TooBroadCatchInspection extends BaseInspection {
             myText = thrown.getName();
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.tooBroadCatchQuickfix(myText);
@@ -198,7 +192,7 @@ public class TooBroadCatchInspection extends BaseInspection {
     private class TooBroadCatchVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             super.visitTryStatement(statement);
             PsiCodeBlock tryBlock = statement.getTryBlock();
             if (tryBlock == null) {

@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: lex
@@ -32,10 +31,9 @@ import jakarta.annotation.Nonnull;
  * Time: 5:08:07 PM
  */
 public class ThrownExceptionValueDescriptorImpl extends ValueDescriptorImpl{
-  @Nonnull
   private final ObjectReference myExceptionObj;
 
-  public ThrownExceptionValueDescriptorImpl(Project project, @Nonnull ObjectReference exceptionObj) {
+  public ThrownExceptionValueDescriptorImpl(Project project, ObjectReference exceptionObj) {
     super(project);
     myExceptionObj = exceptionObj;
     // deliberately force default renderer as it does not invoke methods for rendering
@@ -51,7 +49,6 @@ public class ThrownExceptionValueDescriptorImpl extends ValueDescriptorImpl{
     return "Exception";
   }
 
-  @Nonnull
   @Override
   public Type getType() {
     return myExceptionObj.referenceType();

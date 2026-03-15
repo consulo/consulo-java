@@ -3,8 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet;
 
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Supported binary operations over long ranges.
@@ -39,8 +38,7 @@ public enum LongRangeBinOp
 	 * @return the resulting LongRangeSet which covers possible results of the operation (probably including some more elements).
 	 */
 	public
-	@Nonnull
-	LongRangeSet eval(@Nonnull LongRangeSet left, @Nonnull LongRangeSet right, boolean isLong)
+	LongRangeSet eval(LongRangeSet left, LongRangeSet right, boolean isLong)
 	{
 		switch(this)
 		{
@@ -81,8 +79,7 @@ public enum LongRangeBinOp
 	 * @return the resulting LongRangeSet which covers possible results of the operation (probably including some more elements).
 	 */
 	public
-	@Nonnull
-	LongRangeSet evalWide(@Nonnull LongRangeSet left, @Nonnull LongRangeSet right, boolean isLong)
+	LongRangeSet evalWide(LongRangeSet left, LongRangeSet right, boolean isLong)
 	{
 		switch(this)
 		{

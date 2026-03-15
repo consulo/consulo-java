@@ -31,7 +31,6 @@ import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +41,7 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
   private final PsiClass[] myTargetClasses;
   private final DocCommentPanel myDocPanel;
 
-  protected InlineSuperClassRefactoringDialog(@Nonnull Project project, PsiClass superClass, PsiClass currentInheritor, PsiClass... targetClasses) {
+  protected InlineSuperClassRefactoringDialog(Project project, PsiClass superClass, PsiClass currentInheritor, PsiClass... targetClasses) {
     super(project, false, superClass);
     mySuperClass = superClass;
     myCurrentInheritor = currentInheritor;
@@ -89,25 +88,21 @@ public class InlineSuperClassRefactoringDialog extends InlineOptionsDialog {
     return panel;
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getNameLabelText() {
     return LocalizeValue.join(LocalizeValue.localizeTODO("Class "), LocalizeValue.of(mySuperClass.getQualifiedName()));
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getBorderTitle() {
       return RefactoringLocalize.inlineMethodBorderTitle();
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getInlineAllText() {
     return RefactoringLocalize.allReferencesAndRemoveSuperClass();
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getInlineThisText() {
     return RefactoringLocalize.thisReferenceOnlyAndKeepSuperClass();

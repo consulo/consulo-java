@@ -32,19 +32,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SimplifiableJUnitAssertionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.simplifiableJunitAssertionDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.simplifiableJunitAssertionProblemDescriptor(infos[0]).get();
     }
@@ -55,7 +51,6 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
     }
 
     private static class SimplifyJUnitAssertFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.simplifyJunitAssertionSimplifyQuickfix();
@@ -100,7 +95,7 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
             else {
                 message = null;
             }
-            @NonNls StringBuilder newExpression = new StringBuilder();
+            StringBuilder newExpression = new StringBuilder();
             if (!ImportUtils.addStaticImport("org.junit.Assert", "fail", callExpression)) {
                 newExpression.append("org.junit.Assert.");
             }
@@ -157,7 +152,7 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
             if (lhs == null || rhs == null) {
                 return;
             }
-            @NonNls StringBuilder newExpression = new StringBuilder();
+            StringBuilder newExpression = new StringBuilder();
             if (!ImportUtils.addStaticImport("org.junit.Assert", "assertEquals", callExpression)) {
                 newExpression.append("org.junit.Assert.");
             }
@@ -204,10 +199,10 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
             if (!(lhs instanceof PsiLiteralExpression) && rhs instanceof PsiLiteralExpression) {
                 rhs = lhs;
             }
-            @NonNls StringBuilder newExpression = new StringBuilder();
+            StringBuilder newExpression = new StringBuilder();
             PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
-            @NonNls String memberName;
+            String methodName = methodExpression.getReferenceName();
+            String memberName;
             if ("assertFalse".equals(methodName) ^ tokenType.equals(JavaTokenType.NE)) {
                 memberName = "assertNotNull";
             }
@@ -258,10 +253,10 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
             if (rhs == null) {
                 return;
             }
-            @NonNls StringBuilder newExpression = new StringBuilder();
+            StringBuilder newExpression = new StringBuilder();
             PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
-            @NonNls String memberName;
+            String methodName = methodExpression.getReferenceName();
+            String memberName;
             if ("assertFalse".equals(methodName) ^ tokenType.equals(JavaTokenType.NE)) {
                 memberName = "assertNotSame";
             }
@@ -319,8 +314,8 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
                 compareValue = firstTestArgument.getText();
             }
             String uppercaseLiteralValue = Character.toUpperCase(literalValue.charAt(0)) + literalValue.substring(1);
-            @NonNls StringBuilder newExpression = new StringBuilder();
-            @NonNls String methodName = "assert" + uppercaseLiteralValue;
+            StringBuilder newExpression = new StringBuilder();
+            String methodName = "assert" + uppercaseLiteralValue;
             if (!ImportUtils.addStaticImport("org.junit.Assert", methodName, callExpression)) {
                 newExpression.append("org.junit.Assert.");
             }
@@ -341,7 +336,7 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
     private static class SimplifiableJUnitAssertionVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             if (isAssertThatCouldBeAssertNull(expression)) {
                 if (hasEqEqExpressionArgument(expression)) {
@@ -370,7 +365,6 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
             }
         }
 
-        @NonNls
         private static String getReplacementMethodName(PsiMethodCallExpression expression) {
             PsiExpressionList argumentList = expression.getArgumentList();
             PsiExpression[] arguments = argumentList.getExpressions();
@@ -668,24 +662,24 @@ public class SimplifiableJUnitAssertionInspection extends BaseInspection {
         return PsiKeyword.NULL.equals(lhs.getText()) || PsiKeyword.NULL.equals(rhs.getText());
     }
 
-    private static boolean isAssertTrue(@Nonnull PsiMethodCallExpression expression) {
+    private static boolean isAssertTrue(PsiMethodCallExpression expression) {
         return isAssertMethodCall(expression, "assertTrue");
     }
 
-    private static boolean isAssertFalse(@Nonnull PsiMethodCallExpression expression) {
+    private static boolean isAssertFalse(PsiMethodCallExpression expression) {
         return isAssertMethodCall(expression, "assertFalse");
     }
 
-    private static boolean isAssertEquals(@Nonnull PsiMethodCallExpression expression) {
+    private static boolean isAssertEquals(PsiMethodCallExpression expression) {
         return isAssertMethodCall(expression, "assertEquals");
     }
 
     private static boolean isAssertMethodCall(
-        @Nonnull PsiMethodCallExpression expression,
-        @NonNls @Nonnull String assertMethodName
+        PsiMethodCallExpression expression,
+        String assertMethodName
     ) {
         PsiReferenceExpression methodExpression = expression.getMethodExpression();
-        @NonNls String methodName = methodExpression.getReferenceName();
+        String methodName = methodExpression.getReferenceName();
         if (!assertMethodName.equals(methodName)) {
             return false;
         }

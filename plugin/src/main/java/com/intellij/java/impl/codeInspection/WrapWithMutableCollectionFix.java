@@ -16,8 +16,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 public class WrapWithMutableCollectionFix implements LocalQuickFix {
@@ -31,14 +30,13 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
         myOnTheFly = onTheFly;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return LocalizeValue.localizeTODO("Wrap '" + myVariableName + "' with '" + StringUtil.getShortName(myCollectionName) + "'");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiLocalVariable variable = getVariable(descriptor.getStartElement());
         if (variable == null) {
             return;
@@ -76,7 +74,7 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
 
     @Nullable
     @RequiredReadAction
-    public static WrapWithMutableCollectionFix createFix(@Nonnull PsiElement anchor, boolean onTheFly) {
+    public static WrapWithMutableCollectionFix createFix(PsiElement anchor, boolean onTheFly) {
         PsiLocalVariable variable = getVariable(anchor);
         if (variable == null) {
             return null;
@@ -101,7 +99,7 @@ public class WrapWithMutableCollectionFix implements LocalQuickFix {
 
     @Nullable
     @RequiredReadAction
-    private static PsiLocalVariable getVariable(@Nonnull PsiElement anchor) {
+    private static PsiLocalVariable getVariable(PsiElement anchor) {
         if (anchor.getParent() instanceof PsiReferenceExpression refExpr && refExpr.getParent() instanceof PsiCallExpression) {
             anchor = refExpr.getQualifierExpression();
         }

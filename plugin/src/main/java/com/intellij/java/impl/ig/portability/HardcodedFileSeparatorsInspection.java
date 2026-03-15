@@ -29,8 +29,6 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -49,21 +47,18 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
    * be date formats. <code>Pattern</font></b> instances are immutable, so
    * caching the pattern like this is still thread-safe.
    */
-  @NonNls
   private static final Pattern DATE_FORMAT_PATTERN =
       Pattern.compile("\\b[dDmM]+/[dDmM]+(/[yY]+)?");
   /**
    * A regular expression that matches strings which represent example MIME
    * media types.
    */
-  @NonNls
   private static final String EXAMPLE_MIME_MEDIA_TYPE_PATTERN =
       "example/\\p{Alnum}+(?:[\\.\\-\\\\+]\\p{Alnum}+)*";
   /**
    * A regular expression pattern that matches strings which start with a URL
    * protocol, as they're likely to actually be URLs.
    */
-  @NonNls
   private static final Pattern URL_PATTERN =
       Pattern.compile("^[a-z][a-z0-9+\\-:]+://.*$");
 
@@ -116,17 +111,14 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
    */
   public boolean m_recognizeExampleMediaType = false;
 
-  @Nonnull
   public String getID() {
     return "HardcodedFileSeparator";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.hardcodedFileSeparatorDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.hardcodedFileSeparatorProblemDescriptor().get();
   }
@@ -145,7 +137,7 @@ public class HardcodedFileSeparatorsInspection extends BaseInspection {
 
     @Override
     public void visitLiteralExpression(
-        @Nonnull PsiLiteralExpression expression) {
+        PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       PsiType type = expression.getType();
       if (TypeUtils.isJavaLangString(type)) {

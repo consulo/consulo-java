@@ -16,8 +16,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.util.Collections;
@@ -32,9 +31,8 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMe
  */
 public abstract class ContractInspection extends AbstractBaseJavaLocalInspectionTool {
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -42,7 +40,7 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitMethod(@Nonnull PsiMethod method) {
+            public void visitMethod(PsiMethod method) {
                 PsiAnnotation annotation = JavaMethodContractUtil.findContractAnnotation(method);
                 if (annotation == null || (!method.getApplication().isInternal() && AnnotationUtil.isInferredAnnotation(annotation))) {
                     return;
@@ -60,7 +58,7 @@ public abstract class ContractInspection extends AbstractBaseJavaLocalInspection
 
             @Override
             @RequiredReadAction
-            public void visitAnnotation(@Nonnull PsiAnnotation annotation) {
+            public void visitAnnotation(PsiAnnotation annotation) {
                 if (!JavaMethodContractUtil.ORG_JETBRAINS_ANNOTATIONS_CONTRACT.equals(annotation.getQualifiedName())) {
                     return;
                 }

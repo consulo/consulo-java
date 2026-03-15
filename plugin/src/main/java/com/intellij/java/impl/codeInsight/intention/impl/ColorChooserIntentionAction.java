@@ -41,7 +41,6 @@ import consulo.project.Project;
 import consulo.ui.ex.JBColor;
 import consulo.ui.ex.awt.ColorChooser;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +61,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     return super.isAvailable(project, editor, element) || isInsideDecodeOrGetColorMethod(element);
   }
 
@@ -77,7 +76,7 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) {
       return;
     }

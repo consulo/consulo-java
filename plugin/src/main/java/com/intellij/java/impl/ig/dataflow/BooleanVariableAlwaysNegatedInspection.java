@@ -30,20 +30,15 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
 
-  @Nls
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.booleanVariableAlwaysInvertedDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     PsiVariable variable = (PsiVariable)infos[0];
@@ -67,7 +62,6 @@ public class BooleanVariableAlwaysNegatedInspection extends BaseInspection {
       this.name = name;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.booleanVariableAlwaysInvertedQuickfix(name);

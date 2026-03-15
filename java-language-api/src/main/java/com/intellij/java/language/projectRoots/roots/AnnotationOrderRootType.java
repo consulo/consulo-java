@@ -24,7 +24,6 @@ import consulo.util.collection.ArrayUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +34,6 @@ import java.util.List;
  */
 @ExtensionImpl
 public class AnnotationOrderRootType extends OrderRootType {
-    @Nonnull
     public static OrderRootType getInstance() {
         return getOrderRootType(AnnotationOrderRootType.class);
     }
@@ -44,8 +42,7 @@ public class AnnotationOrderRootType extends OrderRootType {
         super("javaExternalAnnotations");
     }
 
-    @Nonnull
-    public static VirtualFile[] getFiles(@Nonnull OrderEntry entry) {
+    public static VirtualFile[] getFiles(OrderEntry entry) {
         List<VirtualFile> result = new ArrayList<>();
         RootPolicy<List<VirtualFile>> policy = new RootPolicy<>() {
             @Override
@@ -60,8 +57,7 @@ public class AnnotationOrderRootType extends OrderRootType {
         return VirtualFileUtil.toVirtualFileArray(result);
     }
 
-    @Nonnull
-    public static String[] getUrls(@Nonnull OrderEntry entry) {
+    public static String[] getUrls(OrderEntry entry) {
         List<String> result = new ArrayList<>();
         RootPolicy<List<String>> policy = new RootPolicy<>() {
             @Override

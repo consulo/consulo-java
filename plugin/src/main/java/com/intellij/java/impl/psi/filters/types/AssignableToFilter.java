@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.filter.ElementFilter;
 import com.intellij.java.impl.psi.filters.FilterUtil;
 import com.intellij.java.language.psi.infos.CandidateInfo;
-import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,7 +33,7 @@ public class AssignableToFilter implements ElementFilter
 {
 	private final PsiType myType;
 
-	public AssignableToFilter(@Nonnull PsiType type)
+	public AssignableToFilter(PsiType type)
 	{
 		myType = type;
 	}

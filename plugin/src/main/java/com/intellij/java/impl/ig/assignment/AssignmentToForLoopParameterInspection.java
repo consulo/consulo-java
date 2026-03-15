@@ -28,8 +28,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -40,13 +39,11 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
      */
     public boolean m_checkForeachParameters = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentToForLoopParameterDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.assignmentToForLoopParameterProblemDescriptor().get();
@@ -78,7 +75,7 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression expression
+            PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
             if (!WellFormednessUtils.isWellFormed(expression)) {
@@ -91,7 +88,7 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
 
         @Override
         public void visitPrefixExpression(
-            @Nonnull PsiPrefixExpression expression
+            PsiPrefixExpression expression
         ) {
             super.visitPrefixExpression(expression);
             IElementType tokenType = expression.getOperationTokenType();
@@ -109,7 +106,7 @@ public class AssignmentToForLoopParameterInspection extends BaseInspection {
 
         @Override
         public void visitPostfixExpression(
-            @Nonnull PsiPostfixExpression expression
+            PsiPostfixExpression expression
         ) {
             super.visitPostfixExpression(expression);
             IElementType tokenType = expression.getOperationTokenType();

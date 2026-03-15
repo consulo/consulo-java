@@ -27,7 +27,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -47,10 +46,10 @@ public class ReplaceConstructorWithBuilderAction extends BaseRefactoringAction {
     @Override
     @RequiredReadAction
     protected boolean isAvailableOnElementInEditorAndFile(
-        @Nonnull PsiElement element,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull DataContext context
+        PsiElement element,
+        Editor editor,
+        PsiFile file,
+        DataContext context
     ) {
         int offset = editor.getCaretModel().getOffset();
         PsiElement elementAt = file.findElementAt(offset);
@@ -59,12 +58,12 @@ public class ReplaceConstructorWithBuilderAction extends BaseRefactoringAction {
     }
 
     @Override
-    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    protected boolean isEnabledOnElements(PsiElement[] elements) {
         return false;
     }
 
     @Override
-    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+    protected RefactoringActionHandler getHandler(DataContext dataContext) {
         return new ReplaceConstructorWithBuilderHandler();
     }
 }

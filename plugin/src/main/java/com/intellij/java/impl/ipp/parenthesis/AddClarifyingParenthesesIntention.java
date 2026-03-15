@@ -27,27 +27,24 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddClarifyingParenthesesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class AddClarifyingParenthesesIntention extends Intention {
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.addClarifyingParenthesesIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new AddClarifyingParenthesesPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiExpression expression = getTopLevelExpression(element);
         if (expression == null) {

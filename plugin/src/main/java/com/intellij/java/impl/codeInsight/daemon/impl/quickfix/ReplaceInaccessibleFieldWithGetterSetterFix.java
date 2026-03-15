@@ -25,14 +25,13 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     private final String myMethodName;
     private final boolean myIsSetter;
 
-    public ReplaceInaccessibleFieldWithGetterSetterFix(@Nonnull PsiElement element, @Nonnull PsiMethod getter, boolean isSetter) {
+    public ReplaceInaccessibleFieldWithGetterSetterFix(PsiElement element, PsiMethod getter, boolean isSetter) {
         super(element);
         myMethodName = getter.getName();
         myIsSetter = isSetter;
@@ -40,11 +39,11 @@ public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAn
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiReferenceExpression place = (PsiReferenceExpression) startElement;
         if (!FileModificationService.getInstance().preparePsiElementForWrite(place)) {
@@ -75,7 +74,6 @@ public class ReplaceInaccessibleFieldWithGetterSetterFix extends LocalQuickFixAn
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return LocalizeValue.localizeTODO(myIsSetter ? "Replace with setter" : "Replace with getter");

@@ -15,11 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.lambda;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 
 public abstract class Diamond8HighlightingTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/diamond";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/diamond";
 
   public void testIDEA97294() throws Exception {
     doTest();

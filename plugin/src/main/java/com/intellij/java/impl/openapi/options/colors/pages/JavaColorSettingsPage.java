@@ -30,8 +30,6 @@ import consulo.language.editor.colorScheme.setting.ColorSettingsPage;
 import consulo.language.editor.highlight.SyntaxHighlighter;
 import consulo.language.editor.rawHighlight.RainbowHighlighter;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 
@@ -89,7 +87,6 @@ public class JavaColorSettingsPage implements ColorSettingsPage {
       new AttributesDescriptor(OptionsBundle.message("options.java.attribute.descriptor.annotation.attribute.name"), JavaHighlightingColors.ANNOTATION_ATTRIBUTE_NAME_ATTRIBUTES)
   };
 
-  @NonNls
   private static final Map<String, TextAttributesKey> ourTags = RainbowHighlighter.createRainbowHLM();
 
   static {
@@ -131,25 +128,21 @@ public class JavaColorSettingsPage implements ColorSettingsPage {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return JavaLanguageLocalize.javaLanguageDisplayName();
   }
 
   @Override
-  @Nonnull
   public AttributesDescriptor[] getAttributeDescriptors() {
     return ourDescriptors;
   }
 
   @Override
-  @Nonnull
   public SyntaxHighlighter getHighlighter() {
     return new JavaFileHighlighter(LanguageLevel.HIGHEST.toLangVersion());
   }
 
   @Override
-  @Nonnull
   public String getDemoText() {
     return "/* Block comment */\n" +
         "import <package>java.util.</package><class>Date</class>;\n" +

@@ -20,7 +20,7 @@ import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 
 @SuppressWarnings({"AbstractClassExtendsConcreteClass"})

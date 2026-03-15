@@ -21,7 +21,6 @@ import consulo.language.psi.PsiNamedElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -33,7 +32,6 @@ public class InvertBooleanUsageViewDescriptor implements UsageViewDescriptor {
     myElement = element;
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myElement};
   }

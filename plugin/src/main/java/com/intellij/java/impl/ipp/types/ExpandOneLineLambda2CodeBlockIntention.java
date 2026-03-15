@@ -28,26 +28,23 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ExpandOneLineLambda2CodeBlockIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ExpandOneLineLambda2CodeBlockIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(ExpandOneLineLambda2CodeBlockIntention.class);
-  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new LambdaExpressionPredicate();
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Expand lambda expression body to {...}");
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(PsiElement element) throws IncorrectOperationException {
     PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     LOG.assertTrue(lambdaExpression != null);
     PsiElement body = lambdaExpression.getBody();

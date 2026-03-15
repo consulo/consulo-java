@@ -22,7 +22,7 @@ import consulo.ide.ServiceManager;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class ProcessProxyFactory {

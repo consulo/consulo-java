@@ -25,27 +25,24 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.psi.PsiAnnotation.TargetType;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SplitMultiCatchIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class SplitMultiCatchIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.splitMultiCatchIntentionName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new MulticatchPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiElement parent = element.getParent();
         if (!(parent instanceof PsiCatchSection)) {
             return;

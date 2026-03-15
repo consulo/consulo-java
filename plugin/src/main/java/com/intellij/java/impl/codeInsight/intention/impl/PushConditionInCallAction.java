@@ -30,7 +30,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.PushConditionInCallAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
@@ -40,7 +39,7 @@ public class PushConditionInCallAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
 
     if (element instanceof PsiCompiledElement) return false;
     if (!element.getManager().isInProject(element)) return false;
@@ -88,7 +87,7 @@ public class PushConditionInCallAction extends PsiElementBaseIntentionAction {
 
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
 
     PsiConditionalExpression conditionalExpression = PsiTreeUtil.getParentOfType(element, PsiConditionalExpression.class);

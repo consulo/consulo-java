@@ -21,15 +21,13 @@ import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.ASTCompositeFactory;
 import consulo.language.impl.ast.CompositeElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author VISTALL
  * @since 2:32/02.04.13
  */
 public class CoreJavaASTCompositeFactory implements ASTCompositeFactory, Constants {
-  @Nonnull
   @Override
   public CompositeElement createComposite(IElementType type) {
     return new CorePsiDocTagValueImpl();

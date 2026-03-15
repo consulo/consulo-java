@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.codeInsight.editorActions.smartEnter;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.codeEditor.Editor;
@@ -102,7 +101,7 @@ public class ForStatementFixer implements Fixer
 	 * @param lastValidForPart last valid element of the target 'for' loop
 	 * @param forStatement     PSI element for the target 'for' loop
 	 */
-	private static void registerErrorOffset(@Nonnull Editor editor, @Nonnull JavaSmartEnterProcessor processor, @Nonnull PsiElement lastValidForPart, @Nonnull PsiForStatement forStatement)
+	private static void registerErrorOffset(Editor editor, JavaSmartEnterProcessor processor, PsiElement lastValidForPart, PsiForStatement forStatement)
 	{
 		Project project = editor.getProject();
 		int offset = lastValidForPart.getTextRange().getEndOffset();

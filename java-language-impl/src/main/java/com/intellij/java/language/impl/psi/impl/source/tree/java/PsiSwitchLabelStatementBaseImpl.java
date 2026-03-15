@@ -12,8 +12,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class PsiSwitchLabelStatementBaseImpl extends CompositePsiElement implements PsiSwitchLabelStatementBase {
   protected PsiSwitchLabelStatementBaseImpl(IElementType type) {
@@ -54,10 +53,10 @@ public abstract class PsiSwitchLabelStatementBaseImpl extends CompositePsiElemen
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     if (lastParent instanceof PsiCaseLabelElementList) {
       PsiSwitchBlock switchStatement = getEnclosingSwitchBlock();
       if (switchStatement != null) {
@@ -86,7 +85,7 @@ public abstract class PsiSwitchLabelStatementBaseImpl extends CompositePsiElemen
     return PsiTreeUtil.getChildOfType(this, PsiCaseLabelElementList.class);
   }
 
-  protected boolean processPatternVariables(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, @Nonnull PsiElement place) {
+  protected boolean processPatternVariables(PsiScopeProcessor processor, ResolveState state, PsiElement place) {
     final PsiCaseLabelElementList patternsInCaseLabel = getCaseLabelElementList();
     if (patternsInCaseLabel == null) return true;
     if (!patternsInCaseLabel.processDeclarations(processor, state, null, place)) return false;

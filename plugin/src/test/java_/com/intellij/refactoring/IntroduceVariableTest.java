@@ -29,9 +29,7 @@ import consulo.language.editor.refactoring.introduce.inplace.OccurrencesChooser;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 import junit.framework.Assert;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 
@@ -40,7 +38,6 @@ import java.util.Collection;
  */
 public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();
@@ -421,7 +418,7 @@ public abstract class IntroduceVariableTest extends LightCodeInsightTestCase {
   }
 
   private void doTest(IntroduceVariableBase testMe) throws Exception {
-    @NonNls String baseName = "/refactoring/introduceVariable/" + getTestName(false);
+    String baseName = "/refactoring/introduceVariable/" + getTestName(false);
     configureByFile(baseName + ".java");
     testMe.invoke(getProject(), getEditor(), getFile(), null);
     checkResultByFile(baseName + ".after.java");

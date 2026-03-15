@@ -25,7 +25,6 @@
 
 package org.osmorc.manifest.lang.psi;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import org.osmorc.manifest.lang.ManifestTokenType;
@@ -36,5 +35,5 @@ import org.osmorc.manifest.lang.ManifestTokenType;
 public interface ManifestToken extends PsiElement {
   ManifestTokenType getTokenType();
 
-  ManifestToken replaceToken(@Nonnull String text);
+  ManifestToken replaceToken(String text);
 }

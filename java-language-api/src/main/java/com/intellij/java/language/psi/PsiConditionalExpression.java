@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java conditional expression (for example, <code>a ? 1 : 2</code>.
@@ -27,7 +26,6 @@ public interface PsiConditionalExpression extends PsiExpression {
    *
    * @return the condition expression.
    */
-  @Nonnull
   PsiExpression getCondition();
 
   /**

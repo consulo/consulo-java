@@ -7,7 +7,6 @@ import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.AlignmentStrategy;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -28,11 +27,10 @@ public final class SubsequentVariablesAlignerConfigurations {
 
   private static class SubsequentVariableAligner implements CompositeAligner.AlignerConfiguration {
     @Override
-    public boolean shouldAlign(@Nonnull ASTNode child) {
+    public boolean shouldAlign(ASTNode child) {
       return child.getElementType() == JavaElementType.DECLARATION_STATEMENT && StringUtil.countNewLines(child.getChars()) == 0;
     }
 
-    @Nonnull
     @Override
     public AlignmentStrategy createStrategy() {
       return AlignmentStrategy.createAlignmentPerTypeStrategy(LOCAL_VAR_TYPES_TO_ALIGN, JavaElementType.LOCAL_VARIABLE, true);
@@ -41,7 +39,7 @@ public final class SubsequentVariablesAlignerConfigurations {
 
   private static class SubsequentAssignmentAligner implements CompositeAligner.AlignerConfiguration {
     @Override
-    public boolean shouldAlign(@Nonnull ASTNode child) {
+    public boolean shouldAlign(ASTNode child) {
       IElementType childType = child.getElementType();
       if (childType == JavaElementType.EXPRESSION_STATEMENT) {
         ASTNode expressionNode = child.getFirstChildNode();
@@ -52,7 +50,6 @@ public final class SubsequentVariablesAlignerConfigurations {
       return false;
     }
 
-    @Nonnull
     @Override
     public AlignmentStrategy createStrategy() {
       return AlignmentStrategy.createAlignmentPerTypeStrategy(ASSIGN_TYPES_TO_ALIGN, JavaElementType.ASSIGNMENT_EXPRESSION, true);

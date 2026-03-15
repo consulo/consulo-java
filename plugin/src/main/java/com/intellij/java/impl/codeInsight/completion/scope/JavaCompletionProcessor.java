@@ -35,8 +35,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -70,10 +69,10 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 
     @RequiredReadAction
     public JavaCompletionProcessor(
-        @Nonnull PsiElement element,
+        PsiElement element,
         ElementFilter filter,
         Options options,
-        @Nonnull Predicate<String> nameCondition
+        Predicate<String> nameCondition
     ) {
         myOptions = options;
         myElement = element;
@@ -122,7 +121,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     }
 
     @Override
-    public void handleEvent(@Nonnull Event event, Object associated) {
+    public void handleEvent(Event event, Object associated) {
         if (event == JavaScopeProcessorEvent.START_STATIC) {
             myStatic = true;
         }
@@ -138,7 +137,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
 
     @Override
     @RequiredReadAction
-    public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
+    public boolean execute(PsiElement element, ResolveState state) {
         if (element instanceof PsiPackage psiPackage && !isQualifiedContext()) {
             if (myScope instanceof PsiClass) {
                 return true;
@@ -194,9 +193,8 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
         return true;
     }
 
-    @Nonnull
     @RequiredReadAction
-    private String getCallQualifierText(@Nonnull PsiElement element) {
+    private String getCallQualifierText(PsiElement element) {
         if (element instanceof PsiMethod method) {
             if (myFinishedScopesMethodNames.contains(method.getName())) {
                 String className = myDeclarationHolder instanceof PsiClass psiClass ? psiClass.getName() : null;
@@ -232,7 +230,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
         return StaticProblem.none;
     }
 
-    public boolean satisfies(@Nonnull PsiElement element, @Nonnull ResolveState state) {
+    public boolean satisfies(PsiElement element, ResolveState state) {
         String name = PsiUtilCore.getName(element);
         return name != null
             && StringUtil.isNotEmpty(name)
@@ -270,7 +268,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
         return !myOptions.checkAccess && !(element instanceof PsiCompiledElement);
     }
 
-    public void setCompletionElements(@Nonnull Object[] elements) {
+    public void setCompletionElements(Object[] elements) {
         for (Object element : elements) {
             CompletionElement completion = new CompletionElement(element, PsiSubstitutor.EMPTY);
             myResults.put(completion, completion);
@@ -315,7 +313,7 @@ public class JavaCompletionProcessor extends BaseScopeProcessor implements Eleme
     }
 
     @Override
-    public <T> T getHint(@Nonnull Key<T> hintKey) {
+    public <T> T getHint(Key<T> hintKey) {
         if (hintKey == ElementClassHint.KEY) {
             //noinspection unchecked
             return (T)this;

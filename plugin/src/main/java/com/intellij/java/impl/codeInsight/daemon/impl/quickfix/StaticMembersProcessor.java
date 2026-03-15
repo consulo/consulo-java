@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.util.collection.LinkedMultiMap;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -47,7 +46,6 @@ abstract class StaticMembersProcessor<T extends PsiMember & PsiDocCommentOwner> 
 
     protected abstract boolean isApplicable(T member, PsiElement place);
 
-    @Nonnull
     public List<T> getMembersToImport(boolean applicableOnly) {
         List<T> list = new ArrayList<>();
         List<T> applicableList = new ArrayList<>();

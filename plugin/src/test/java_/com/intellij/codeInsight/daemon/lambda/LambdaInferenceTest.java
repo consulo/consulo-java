@@ -15,11 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.lambda;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 
 public abstract class LambdaInferenceTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/inference";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/inference";
 
   public void testFunctionalInterfaceShouldHaveExactlyOneMethod() throws Exception {
     doTest();

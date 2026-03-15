@@ -30,7 +30,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -50,14 +49,12 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
      */
     public boolean m_ignoreStaticAccessFromStaticContext = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessarilyQualifiedStaticUsageDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiJavaCodeReferenceElement element = (PsiJavaCodeReferenceElement) infos[0];
         PsiElement parent = element.getParent();
@@ -90,7 +87,6 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
     }
 
     private static class UnnecessarilyQualifiedStaticUsageFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryQualifierForThisRemoveQuickfix();
@@ -134,7 +130,7 @@ public abstract class UnnecessarilyQualifiedStaticUsageInspection extends BaseIn
     }
 
     public static boolean isUnnecessarilyQualifiedAccess(
-        @Nonnull PsiJavaCodeReferenceElement referenceElement,
+        PsiJavaCodeReferenceElement referenceElement,
         boolean ignoreStaticAccessFromStaticContext,
         boolean ignoreStaticFieldAccesses,
         boolean ignoreStaticMethodCalls

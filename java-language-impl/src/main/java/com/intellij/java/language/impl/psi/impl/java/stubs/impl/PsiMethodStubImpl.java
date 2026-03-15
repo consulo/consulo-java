@@ -10,8 +10,7 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.PsiParameterStub;
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.BitUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class PsiMethodStubImpl extends StubBase<PsiMethod> implements PsiMethodS
 	private static final int DEPRECATED_ANNOTATION = 0x10;
 	private static final int HAS_DOC_COMMENT = 0x20;
 
-	public PsiMethodStubImpl(StubElement parent, String name, @Nonnull TypeInfo returnType, byte flags, @Nullable String defaultValueText)
+	public PsiMethodStubImpl(StubElement parent, String name, TypeInfo returnType, byte flags, @Nullable String defaultValueText)
 	{
 		super(parent, isAnnotationMethod(flags) ? JavaStubElementTypes.ANNOTATION_METHOD : JavaStubElementTypes.METHOD);
 		myReturnType = returnType;
@@ -68,7 +67,6 @@ public class PsiMethodStubImpl extends StubBase<PsiMethod> implements PsiMethodS
 	}
 
 	@Override
-	@Nonnull
 	public TypeInfo getReturnTypeText()
 	{
 		return myReturnType;

@@ -29,8 +29,7 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -39,7 +38,6 @@ import java.util.Set;
 
 public abstract class DisjointPackageInspection extends BaseGlobalInspection {
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.disjointPackageDisplayName();

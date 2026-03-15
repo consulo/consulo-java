@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.portability.mediatype;
 
-import org.jetbrains.annotations.NonNls;
 
 public enum ImageMediaType {
   CGM("image/cgm"),
@@ -59,7 +58,7 @@ public enum ImageMediaType {
 
   private final String contentType;
 
-  ImageMediaType(@NonNls String contentType) {
+  ImageMediaType(String contentType) {
     this.contentType = contentType;
   }
 

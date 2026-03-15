@@ -22,7 +22,7 @@ import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.*;
 import consulo.internal.org.objectweb.asm.tree.analysis.Interpreter;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 

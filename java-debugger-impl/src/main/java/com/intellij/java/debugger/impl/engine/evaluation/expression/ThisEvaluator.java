@@ -28,7 +28,7 @@ import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 

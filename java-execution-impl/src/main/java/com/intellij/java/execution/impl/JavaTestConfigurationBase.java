@@ -19,15 +19,14 @@ import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
 import org.jdom.Element;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters, ConfigurationWithCommandLineShortener,
     RefactoringListenerProvider, SMRunnerConsolePropertiesProvider {
   private ShortenCommandLine myShortenCommandLine = null;
 
-  public JavaTestConfigurationBase(String name, @Nonnull JavaRunConfigurationModule configurationModule, @Nonnull ConfigurationFactory factory) {
+  public JavaTestConfigurationBase(String name, JavaRunConfigurationModule configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
   }
 
@@ -35,7 +34,6 @@ public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration
     super(configurationModule, factory);
   }
 
-  @Nonnull
   public abstract String getFrameworkPrefix();
 
   public abstract void bePatternConfiguration(List<PsiClass> classes, PsiMethod method);
@@ -64,13 +62,13 @@ public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration
   }
 
   @Override
-  public void readExternal(@Nonnull Element element) throws InvalidDataException {
+  public void readExternal(Element element) throws InvalidDataException {
     super.readExternal(element);
     setShortenCommandLine(ShortenCommandLine.readShortenClasspathMethod(element));
   }
 
   @Override
-  public void writeExternal(@Nonnull Element element) throws WriteExternalException {
+  public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
     ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);
   }

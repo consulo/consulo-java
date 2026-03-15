@@ -23,8 +23,6 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
 
@@ -41,12 +39,10 @@ import java.util.Set;
 @ExtensionImpl
 public class FieldNotUsedInToStringInspection extends AbstractToStringInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Field not used in 'toString()' method");
   }
 
-  @Nonnull
   public String getShortName() {
     return "FieldNotUsedInToString";
   }
@@ -56,9 +52,8 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
     return true;
   }
 
-  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(final ProblemsHolder holder, boolean isOnTheFly) {
     return new FieldNotUsedInToStringVisitor(holder);
   }
 
@@ -78,7 +73,7 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
     @Override
     public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
-      @NonNls final String methodName = method.getName();
+      final String methodName = method.getName();
       if (!"toString".equals(methodName)) {
         return;
       }
@@ -152,12 +147,12 @@ public class FieldNotUsedInToStringInspection extends AbstractToStringInspection
     }
 
     private boolean usesReflection(PsiMethod method) {
-      @NonNls final String name = method.getName();
+      final String name = method.getName();
       final PsiClass containingClass = method.getContainingClass();
       if (containingClass == null) {
         return false;
       }
-      @NonNls final String qualifiedName = containingClass.getQualifiedName();
+      final String qualifiedName = containingClass.getQualifiedName();
       if ("getDeclaredFields".equals(name)) {
         return CommonClassNames.JAVA_LANG_CLASS.equals(qualifiedName);
       } else if ("toString".equals(name)) {

@@ -33,8 +33,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -352,7 +351,7 @@ public class LambdaRefactoringUtil {
     return null;
   }
 
-  public static void simplifyToExpressionLambda(@Nonnull PsiLambdaExpression lambdaExpression) {
+  public static void simplifyToExpressionLambda(PsiLambdaExpression lambdaExpression) {
     PsiElement body = lambdaExpression.getBody();
     PsiExpression singleExpression = RedundantLambdaCodeBlockInspection.isCodeBlockRedundant(body);
     if (singleExpression != null) {

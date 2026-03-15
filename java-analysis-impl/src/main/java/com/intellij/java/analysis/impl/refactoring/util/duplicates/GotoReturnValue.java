@@ -20,8 +20,7 @@
  */
 package com.intellij.java.analysis.impl.refactoring.util.duplicates;
 
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
@@ -46,6 +45,5 @@ public abstract class GotoReturnValue implements ReturnValue {
     return (PsiStatement)CodeStyleManager.getInstance(statement.getManager().getProject()).reformat(statement);
   }
 
-  @NonNls
   public abstract String getGotoStatement();
 }

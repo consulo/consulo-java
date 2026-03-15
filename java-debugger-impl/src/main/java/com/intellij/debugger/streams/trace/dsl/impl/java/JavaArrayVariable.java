@@ -7,7 +7,6 @@ import consulo.execution.debug.stream.trace.dsl.VariableDeclaration;
 import consulo.execution.debug.stream.trace.dsl.impl.TextExpression;
 import consulo.execution.debug.stream.trace.dsl.impl.VariableImpl;
 import consulo.execution.debug.stream.trace.impl.handler.type.ArrayType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -15,32 +14,28 @@ import jakarta.annotation.Nonnull;
 public class JavaArrayVariable extends VariableImpl implements ArrayVariable {
     private final ArrayType arrayType;
 
-    public JavaArrayVariable(@Nonnull ArrayType type, @Nonnull String name) {
+    public JavaArrayVariable(ArrayType type, String name) {
         super(type, name);
         this.arrayType = type;
     }
 
-    @Nonnull
     @Override
     public ArrayType getType() {
         return arrayType;
     }
 
-    @Nonnull
     @Override
-    public Expression get(@Nonnull Expression index) {
+    public Expression get(Expression index) {
         return new TextExpression(getName() + "[" + index.toCode() + "]");
     }
 
-    @Nonnull
     @Override
-    public Expression set(@Nonnull Expression index, @Nonnull Expression value) {
+    public Expression set(Expression index, Expression value) {
         return new TextExpression(getName() + "[" + index.toCode() + "] = " + value.toCode());
     }
 
-    @Nonnull
     @Override
-    public VariableDeclaration defaultDeclaration(@Nonnull Expression size) {
+    public VariableDeclaration defaultDeclaration(Expression size) {
         return new JavaVariableDeclaration(this, false, arrayType.sizedDeclaration(size.toCode()));
     }
 }

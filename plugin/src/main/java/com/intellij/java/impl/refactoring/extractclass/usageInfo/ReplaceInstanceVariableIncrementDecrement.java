@@ -21,7 +21,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ReplaceInstanceVariableIncrementDecrement extends FixableUsageInfo {
   private final PsiExpression reference;

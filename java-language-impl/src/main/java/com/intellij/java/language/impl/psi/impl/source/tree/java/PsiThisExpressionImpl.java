@@ -26,7 +26,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 public class PsiThisExpressionImpl extends ExpressionPsiElement implements PsiThisExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiThisExpressionImpl.class);
@@ -101,7 +100,7 @@ public class PsiThisExpressionImpl extends ExpressionPsiElement implements PsiTh
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitThisExpression(this);
     } else {

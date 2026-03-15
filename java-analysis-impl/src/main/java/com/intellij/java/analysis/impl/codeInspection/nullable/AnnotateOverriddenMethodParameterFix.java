@@ -34,7 +34,6 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,14 +52,13 @@ public class AnnotateOverriddenMethodParameterFix implements LocalQuickFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionLocalize.annotateOverriddenMethodsParameters(ClassUtil.extractClassName(myAnnotation));
   }
 
   @Override
   @RequiredWriteAction
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     final PsiElement psiElement = descriptor.getPsiElement();
 
     PsiParameter parameter = PsiTreeUtil.getParentOfType(psiElement, PsiParameter.class, false);

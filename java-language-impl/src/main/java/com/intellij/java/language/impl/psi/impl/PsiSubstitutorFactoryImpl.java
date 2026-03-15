@@ -5,27 +5,23 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 import java.util.Map;
 
 @Singleton
 @ServiceImpl
 public class PsiSubstitutorFactoryImpl extends PsiSubstitutorFactory {
-  @Nonnull
   @Override
-  protected PsiSubstitutor createSubstitutor(@Nonnull PsiTypeParameter typeParameter, PsiType mapping) {
+  protected PsiSubstitutor createSubstitutor(PsiTypeParameter typeParameter, PsiType mapping) {
     return new PsiSubstitutorImpl(typeParameter, mapping);
   }
 
-  @Nonnull
   @Override
-  protected PsiSubstitutor createSubstitutor(@Nonnull PsiClass aClass, PsiType[] mappings) {
+  protected PsiSubstitutor createSubstitutor(PsiClass aClass, PsiType[] mappings) {
     return new PsiSubstitutorImpl(aClass, mappings);
   }
 
-  @Nonnull
   @Override
-  protected PsiSubstitutor createSubstitutor(@Nonnull Map<? extends PsiTypeParameter, ? extends PsiType> map) {
+  protected PsiSubstitutor createSubstitutor(Map<? extends PsiTypeParameter, ? extends PsiType> map) {
     return new PsiSubstitutorImpl(map);
   }
 }

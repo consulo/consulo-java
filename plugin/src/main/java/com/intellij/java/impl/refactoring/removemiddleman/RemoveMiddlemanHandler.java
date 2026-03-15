@@ -32,7 +32,6 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -50,7 +49,7 @@ public class RemoveMiddlemanHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
         PsiElement element = dataContext.getData(PsiElement.KEY);
@@ -72,7 +71,7 @@ public class RemoveMiddlemanHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length != 1) {
             return;
         }

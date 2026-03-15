@@ -24,16 +24,14 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiReferenceProvider;
 import consulo.language.util.ProcessingContext;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Konstantin Bulenkov
  */
 abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider {
-  @Nonnull
   @Override
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+  public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
     if (element instanceof PsiLiteralExpression) {
       PsiLiteralExpression literal = (PsiLiteralExpression) element;
       if (literal.getValue() instanceof String) {
@@ -54,5 +52,5 @@ abstract class JavaReflectionReferenceProvider extends PsiReferenceProvider {
   }
 
   @Nullable
-  protected abstract PsiReference[] getReferencesByMethod(@Nonnull PsiLiteralExpression literalArgument, @Nonnull PsiReferenceExpression methodReference, @Nonnull ProcessingContext context);
+  protected abstract PsiReference[] getReferencesByMethod(PsiLiteralExpression literalArgument, PsiReferenceExpression methodReference, ProcessingContext context);
 }

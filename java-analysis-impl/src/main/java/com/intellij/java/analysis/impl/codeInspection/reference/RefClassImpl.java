@@ -45,8 +45,7 @@ import consulo.language.psi.PsiUtilCore;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public class RefClassImpl extends RefJavaElementImpl implements RefClass {
@@ -291,7 +290,6 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @Nonnull
   public Set<RefClass> getBaseClasses() {
     if (myBases == null) {
       return EMPTY_CLASS_SET;
@@ -312,7 +310,6 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @Nonnull
   public Set<RefClass> getSubClasses() {
     if (mySubClasses == null) {
       return EMPTY_CLASS_SET;
@@ -320,7 +317,7 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
     return mySubClasses;
   }
 
-  private void addSubClass(@Nonnull RefClass refClass) {
+  private void addSubClass(RefClass refClass) {
     if (mySubClasses == null) {
       mySubClasses = Collections.singleton(refClass);
       return;
@@ -344,7 +341,6 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @Nonnull
   public List<RefMethod> getConstructors() {
     if (myConstructors == null) {
       return EMPTY_METHOD_LIST;
@@ -353,7 +349,6 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @Nonnull
   public Set<RefElement> getInTypeReferences() {
     if (myInTypeReferences == null) {
       return EMPTY_SET;
@@ -373,7 +368,6 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @Nonnull
   public Set<RefElement> getInstanceReferences() {
     if (myInstanceReferences == null) {
       return EMPTY_SET;
@@ -408,7 +402,6 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @Nonnull
   public List<RefMethod> getLibraryMethods() {
     if (myOverridingMethods == null) {
       return EMPTY_METHOD_LIST;
@@ -590,7 +583,6 @@ public class RefClassImpl extends RefJavaElementImpl implements RefClass {
   }
 
   @Override
-  @Nonnull
   public RefElement getContainingEntry() {
     RefElement defaultConstructor = getDefaultConstructor();
     if (defaultConstructor != null) {

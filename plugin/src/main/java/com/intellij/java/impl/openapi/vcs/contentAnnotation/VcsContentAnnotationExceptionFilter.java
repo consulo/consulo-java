@@ -46,8 +46,7 @@ import consulo.versionControlSystem.contentAnnotation.VcsContentAnnotationSettin
 import consulo.versionControlSystem.history.VcsRevisionNumber;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.status.FileStatus;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -66,7 +65,7 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
   private final Map<VirtualFile, VcsRevisionNumber> myRevNumbersCache;
   private final ExceptionInfoCache myCache;
 
-  public VcsContentAnnotationExceptionFilter(@Nonnull GlobalSearchScope scope) {
+  public VcsContentAnnotationExceptionFilter(GlobalSearchScope scope) {
     myProject = scope.getProject();
     mySettings = VcsContentAnnotationSettings.getInstance(myProject);
     myRevNumbersCache = new HashMap<>();
@@ -78,7 +77,6 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
       super(start, end);
     }
 
-    @Nonnull
     @Override
     public TextAttributes getTextAttributes(@Nullable TextAttributes source) {
       EditorColorsScheme globalScheme = EditorColorsManager.getInstance().getGlobalScheme();
@@ -101,10 +99,10 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
 
   @Override
   public void applyHeavyFilter(
-    @Nonnull Document copiedFragment,
+    Document copiedFragment,
     int startOffset,
     int startLineNumber,
-    @Nonnull Consumer<? super AdditionalHighlight> consumer
+    Consumer<? super AdditionalHighlight> consumer
   ) {
     VcsContentAnnotation vcsContentAnnotation = myProject.getInstance(VcsContentAnnotation.class);
     LocalChangesCorrector localChangesCorrector = new LocalChangesCorrector(myProject);
@@ -179,7 +177,6 @@ public class VcsContentAnnotationExceptionFilter implements Filter, FilterMixin 
     }
   }
 
-  @Nonnull
   @Override
   public String getUpdateMessage() {
     return "Checking recent changes...";

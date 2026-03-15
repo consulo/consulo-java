@@ -27,14 +27,13 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.ChangeLocalityDetector;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class JavaChangeLocalityDetector implements ChangeLocalityDetector {
   @Override
   @Nullable
-  public PsiElement getChangeHighlightingDirtyScopeFor(@Nonnull PsiElement element) {
+  public PsiElement getChangeHighlightingDirtyScopeFor(PsiElement element) {
     // optimization
     PsiElement parent = element.getParent();
     PsiElement grand;

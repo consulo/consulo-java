@@ -23,24 +23,20 @@ import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TestMethodInProductCodeInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.testMethodInProductCodeDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "JUnitTestMethodInProductSource";
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.testMethodInProductCodeProblemDescriptor().get();
     }

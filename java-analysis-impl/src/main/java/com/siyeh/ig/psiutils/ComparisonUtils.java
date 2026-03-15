@@ -20,8 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiExpression;
@@ -83,7 +82,7 @@ public class ComparisonUtils {
     return s_swappedComparisons.get(tokenType);
   }
 
-  public static boolean isEqualityComparison(@Nonnull PsiExpression expression) {
+  public static boolean isEqualityComparison(PsiExpression expression) {
     if (!(expression instanceof PsiPolyadicExpression)) {
       return false;
     }

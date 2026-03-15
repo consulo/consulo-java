@@ -24,7 +24,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -34,20 +33,18 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MergeNestedTryStatementsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class MergeNestedTryStatementsIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.mergeNestedTryStatementsIntentionName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new NestedTryStatementsPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiTryStatement tryStatement1 = (PsiTryStatement) element.getParent();
         StringBuilder newTryStatement = new StringBuilder("try ");
         PsiResourceList list1 = tryStatement1.getResourceList();

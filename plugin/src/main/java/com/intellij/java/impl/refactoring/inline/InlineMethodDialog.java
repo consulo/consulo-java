@@ -29,7 +29,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 public class InlineMethodDialog extends InlineOptionsWithSearchSettingsDialog {
     private final PsiJavaCodeReferenceElement myReferenceElement;
@@ -60,7 +59,6 @@ public class InlineMethodDialog extends InlineOptionsWithSearchSettingsDialog {
         init();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getNameLabelText() {
         String methodText = PsiFormatUtil.formatMethod(
@@ -72,19 +70,16 @@ public class InlineMethodDialog extends InlineOptionsWithSearchSettingsDialog {
         return RefactoringLocalize.inlineMethodMethodLabel(methodText);
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getBorderTitle() {
         return RefactoringLocalize.inlineMethodBorderTitle();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getInlineThisText() {
         return RefactoringLocalize.thisInvocationOnlyAndKeepTheMethod();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getInlineAllText() {
         String occurrencesString =

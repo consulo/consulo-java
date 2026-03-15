@@ -25,18 +25,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class CompareToUsesNonFinalVariableInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonFinalFieldComparetoDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonFinalFieldComparetoProblemDescriptor().get();
     }
@@ -55,7 +52,7 @@ public class CompareToUsesNonFinalVariableInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             boolean isCompareTo = MethodUtils.isCompareTo(method);
             if (isCompareTo) {
                 method.accept(new JavaRecursiveElementVisitor() {
@@ -67,7 +64,7 @@ public class CompareToUsesNonFinalVariableInspection extends BaseInspection {
 
                     @Override
                     public void visitReferenceExpression(
-                        @Nonnull PsiReferenceExpression expression
+                        PsiReferenceExpression expression
                     ) {
                         super.visitReferenceExpression(expression);
                         PsiElement element = expression.resolve();

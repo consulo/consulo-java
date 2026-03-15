@@ -10,26 +10,22 @@ import consulo.execution.debug.stream.trace.CollectionTreeBuilder;
 import consulo.execution.debug.stream.trace.DebuggerCommandLauncher;
 import consulo.execution.debug.stream.trace.XValueInterpreter;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public abstract class JvmLibrarySupportProvider implements LibrarySupportProvider {
     private static final XValueInterpreter INTERPRETER = new JavaValueInterpreter();
 
-    @Nonnull
     @Override
-    public XValueInterpreter getXValueInterpreter(@Nonnull Project project) {
+    public XValueInterpreter getXValueInterpreter(Project project) {
         return INTERPRETER;
     }
 
-    @Nonnull
     @Override
-    public CollectionTreeBuilder getCollectionTreeBuilder(@Nonnull Project project) {
+    public CollectionTreeBuilder getCollectionTreeBuilder(Project project) {
         return new JavaCollectionTreeBuilder(project);
     }
 
-    @Nonnull
     @Override
-    public DebuggerCommandLauncher getDebuggerCommandLauncher(@Nonnull XDebugSession session) {
+    public DebuggerCommandLauncher getDebuggerCommandLauncher(XDebugSession session) {
         return new JavaDebuggerCommandLauncher(session);
     }
 }

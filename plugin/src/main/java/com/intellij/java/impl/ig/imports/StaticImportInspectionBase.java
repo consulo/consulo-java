@@ -34,7 +34,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -53,13 +52,11 @@ public class StaticImportInspectionBase extends BaseInspection {
   public Set<String> allowedClasses = new LinkedHashSet<>();
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.staticImportDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.staticImportProblemDescriptor().get();
   }
@@ -82,7 +79,6 @@ public class StaticImportInspectionBase extends BaseInspection {
   private static class StaticImportFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.staticImportReplaceQuickfix();
     }
@@ -149,7 +145,7 @@ public class StaticImportInspectionBase extends BaseInspection {
       private final boolean onDemand;
       private final List<PsiJavaCodeReferenceElement> references = new ArrayList<>();
 
-      StaticImportReferenceCollector(@Nonnull JavaResolveResult[] importTargets, boolean onDemand) {
+      StaticImportReferenceCollector(JavaResolveResult[] importTargets, boolean onDemand) {
         this.importTargets = importTargets;
         this.onDemand = onDemand;
       }
@@ -244,7 +240,7 @@ public class StaticImportInspectionBase extends BaseInspection {
   private class StaticImportVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       PsiElement parent = aClass.getParent();
       if (!(parent instanceof PsiJavaFile)) {
         return;

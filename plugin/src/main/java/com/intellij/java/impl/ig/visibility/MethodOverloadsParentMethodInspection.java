@@ -25,8 +25,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -39,13 +38,11 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
   public boolean reportIncompatibleParameters = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "MethodOverloadsMethodOfSuperclass";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.methodOverloadsDisplayName();
   }
@@ -61,7 +58,6 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.methodOverloadsProblemDescriptor().get();
   }
@@ -80,7 +76,7 @@ public class MethodOverloadsParentMethodInspection extends BaseInspection {
 
   private class MethodOverloadsParentMethodVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       if (method.hasModifierProperty(PsiModifier.PRIVATE) || method.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

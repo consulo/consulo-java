@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a receiver parameter of a Java method (Java 8).
@@ -24,6 +23,5 @@ import jakarta.annotation.Nonnull;
  */
 public interface PsiReceiverParameter extends PsiVariable
 {
-	@Nonnull
 	PsiThisExpression getIdentifier();
 }

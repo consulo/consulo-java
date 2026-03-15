@@ -31,7 +31,6 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Singleton;
 
 import java.io.File;
@@ -52,8 +51,7 @@ import java.util.stream.Collectors;
 public class HotSwapManager {
   private static final Logger LOG = Logger.getInstance(HotSwapManager.class);
 
-  @Nonnull
-  public static HotSwapManager getInstance(@Nonnull Project project) {
+  public static HotSwapManager getInstance(Project project) {
     return project.getInstance(HotSwapManager.class);
   }
 

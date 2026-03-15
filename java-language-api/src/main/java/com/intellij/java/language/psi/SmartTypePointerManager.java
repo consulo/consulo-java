@@ -24,7 +24,6 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class SmartTypePointerManager {
@@ -32,6 +31,5 @@ public abstract class SmartTypePointerManager {
     return ServiceManager.getService(project, SmartTypePointerManager.class);
   }
 
-  @Nonnull
-  public abstract SmartTypePointer createSmartTypePointer(@Nonnull PsiType type);
+  public abstract SmartTypePointer createSmartTypePointer(PsiType type);
 }

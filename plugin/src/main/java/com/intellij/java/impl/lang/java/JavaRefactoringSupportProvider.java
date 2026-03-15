@@ -42,8 +42,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -137,7 +136,7 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
     return true;
   }
 
-  public static boolean mayRenameInplace(@Nonnull PsiElement elementToRename, PsiElement nameSuggestionContext) {
+  public static boolean mayRenameInplace(PsiElement elementToRename, PsiElement nameSuggestionContext) {
     if (isDisableRefactoringForLightElement(elementToRename)) {
       return false;
     }
@@ -195,7 +194,6 @@ public class JavaRefactoringSupportProvider extends RefactoringSupportProvider {
         scopeElements[1] instanceof PsiCodeBlock;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -21,7 +21,6 @@ import com.intellij.java.debugger.impl.ui.JavaDebuggerSupport;
 import consulo.configurable.IdeaConfigurableUi;
 import consulo.disposer.Disposable;
 import consulo.ui.ex.awt.JBUI;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +34,7 @@ class DebuggerSteppingConfigurable implements IdeaConfigurableUi<DebuggerSetting
     private JCheckBox myCbSkipSimpleGetters;
 
     @Override
-    public void reset(@Nonnull DebuggerSettings settings) {
+    public void reset(DebuggerSettings settings) {
         myCbSkipSimpleGetters.setSelected(settings.SKIP_GETTERS);
         myCbSkipSyntheticMethods.setSelected(settings.SKIP_SYNTHETIC_METHODS);
         myCbSkipConstructors.setSelected(settings.SKIP_CONSTRUCTORS);
@@ -48,7 +47,7 @@ class DebuggerSteppingConfigurable implements IdeaConfigurableUi<DebuggerSetting
     }
 
     @Override
-    public void apply(@Nonnull DebuggerSettings settings) {
+    public void apply(DebuggerSettings settings) {
         getSettingsTo(settings);
     }
 
@@ -64,15 +63,14 @@ class DebuggerSteppingConfigurable implements IdeaConfigurableUi<DebuggerSetting
     }
 
     @Override
-    public boolean isModified(@Nonnull DebuggerSettings currentSettings) {
+    public boolean isModified(DebuggerSettings currentSettings) {
         DebuggerSettings debuggerSettings = currentSettings.clone();
         getSettingsTo(debuggerSettings);
         return !debuggerSettings.equals(currentSettings);
     }
 
     @Override
-    @Nonnull
-    public JComponent getComponent(@Nonnull Disposable parentDisposable) {
+    public JComponent getComponent(Disposable parentDisposable) {
         final JPanel panel = new JPanel(new GridBagLayout());
         myCbSkipSyntheticMethods = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.synthetic.methods"));
         myCbSkipConstructors = new JCheckBox(DebuggerBundle.message("label.debugger.general.configurable.skip.constructors"));

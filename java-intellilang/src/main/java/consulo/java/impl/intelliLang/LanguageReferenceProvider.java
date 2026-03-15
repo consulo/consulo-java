@@ -26,7 +26,6 @@ import consulo.language.pattern.StandardPatterns;
 import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpression;
 
@@ -41,24 +40,22 @@ public class LanguageReferenceProvider extends PsiReferenceContributor {
     registrar.registerReferenceProvider(
       literalExpression().annotationParam(StandardPatterns.string().with(new PatternCondition<String>("isLanguageAnnotation") {
         @Override
-        public boolean accepts(@Nonnull final String s, final ProcessingContext context) {
+        public boolean accepts(final String s, final ProcessingContext context) {
           return Comparing.equal(configuration.getAdvancedConfiguration().getLanguageAnnotationClass(), s);
         }
       }), "value").and(literalExpression().with(new PatternCondition<PsiLiteralExpression>("isStringLiteral") {
         @Override
-        public boolean accepts(@Nonnull final PsiLiteralExpression expression, final ProcessingContext context) {
+        public boolean accepts(final PsiLiteralExpression expression, final ProcessingContext context) {
           return PsiUtilEx.isStringOrCharacterLiteral(expression);
         }
       })), new PsiReferenceProvider() {
-        @Nonnull
         @Override
-        public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull final ProcessingContext context) {
+        public PsiReference[] getReferencesByElement(final PsiElement element, final ProcessingContext context) {
           return new PsiReference[]{new LanguageReference((PsiLiteralExpression)element)};
         }
       });
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

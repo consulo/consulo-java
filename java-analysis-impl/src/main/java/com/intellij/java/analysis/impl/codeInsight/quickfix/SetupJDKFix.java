@@ -27,7 +27,6 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author mike
@@ -44,19 +43,18 @@ public class SetupJDKFix implements IntentionAction, HighPriorityAction, Synthet
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.setupJdkLocationText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return false;
     //return JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_OBJECT, file.getResolveScope()) == null;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, final PsiFile file) {
+  public void invoke(Project project, Editor editor, final PsiFile file) {
     Sdk projectJdk = null;
     if (projectJdk == null) return;
     ApplicationManager.getApplication().runWriteAction(new Runnable() {

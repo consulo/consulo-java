@@ -35,8 +35,7 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,7 +45,6 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
         super(aClass);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.implementMethodsFix();
@@ -54,10 +52,10 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiElement myPsiElement = startElement;
         return myPsiElement.isValid() && myPsiElement.getManager().isInProject(myPsiElement);
@@ -65,11 +63,11 @@ public class ImplementMethodsFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable final Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         final PsiElement myPsiElement = startElement;
 

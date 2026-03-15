@@ -27,7 +27,6 @@ package org.osmorc.manifest.lang.psi.impl;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.stub.IStubElementType;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Section;
 import org.osmorc.manifest.lang.psi.stub.SectionStub;
 
@@ -35,7 +34,7 @@ import org.osmorc.manifest.lang.psi.stub.SectionStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class SectionImpl extends ManifestElementBase<SectionStub> implements Section {
-  public SectionImpl(SectionStub stub, @Nonnull IStubElementType nodeType) {
+  public SectionImpl(SectionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 

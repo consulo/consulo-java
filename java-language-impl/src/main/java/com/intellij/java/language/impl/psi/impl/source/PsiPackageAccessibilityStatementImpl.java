@@ -22,8 +22,7 @@ import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +30,14 @@ import java.util.List;
 import static consulo.language.psi.SyntaxTraverser.psiTraverser;
 
 public class PsiPackageAccessibilityStatementImpl extends JavaStubPsiElement<PsiPackageAccessibilityStatementStub> implements PsiPackageAccessibilityStatement {
-  public PsiPackageAccessibilityStatementImpl(@Nonnull PsiPackageAccessibilityStatementStub stub) {
+  public PsiPackageAccessibilityStatementImpl(PsiPackageAccessibilityStatementStub stub) {
     super(stub, stub.getStubType());
   }
 
-  public PsiPackageAccessibilityStatementImpl(@Nonnull ASTNode node) {
+  public PsiPackageAccessibilityStatementImpl(ASTNode node) {
     super(node);
   }
 
-  @Nonnull
   @Override
   public Role getRole() {
     return JavaPackageAccessibilityStatementElementType.typeToRole(getElementType());
@@ -63,13 +61,11 @@ public class PsiPackageAccessibilityStatementImpl extends JavaStubPsiElement<Psi
     }
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiJavaModuleReferenceElement> getModuleReferences() {
     return psiTraverser().children(this).filter(PsiJavaModuleReferenceElement.class);
   }
 
-  @Nonnull
   @Override
   public List<String> getModuleNames() {
     PsiPackageAccessibilityStatementStub stub = getGreenStub();
@@ -85,7 +81,7 @@ public class PsiPackageAccessibilityStatementImpl extends JavaStubPsiElement<Psi
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitPackageAccessibilityStatement(this);
     } else {

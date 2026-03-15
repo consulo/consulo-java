@@ -39,32 +39,30 @@ import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl(id = "defaultJavaDebugRunner")
 public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDebuggerRunnerSettings> {
     @Override
-    public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {
+    public boolean canRun(String executorId, RunProfile profile) {
         return executorId.equals(DefaultDebugExecutor.EXECUTOR_ID) && profile instanceof GenericDebugRunnerConfiguration;
     }
 
     @Override
-    @Nonnull
     public String getRunnerId() {
         return DebuggingRunnerData.DEBUGGER_RUNNER_ID;
     }
 
     @Override
-    protected RunContentDescriptor doExecute(@Nonnull RunProfileState state, @Nonnull ExecutionEnvironment env) throws ExecutionException {
+    protected RunContentDescriptor doExecute(RunProfileState state, ExecutionEnvironment env) throws ExecutionException {
         FileDocumentManager.getInstance().saveAllDocuments();
         return createContentDescriptor(state, env);
     }
 
     @Nullable
     protected RunContentDescriptor createContentDescriptor(
-        @Nonnull RunProfileState state,
-        @Nonnull ExecutionEnvironment environment
+        RunProfileState state,
+        ExecutionEnvironment environment
     ) throws ExecutionException {
         if (state instanceof JavaCommandLine commandLine) {
             OwnJavaParameters parameters = commandLine.getJavaParameters();
@@ -93,7 +91,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
     @Nullable
     protected RunContentDescriptor attachVirtualMachine(
         RunProfileState state,
-        @Nonnull ExecutionEnvironment env,
+        ExecutionEnvironment env,
         RemoteConnection connection,
         boolean pollConnection
     ) throws ExecutionException {

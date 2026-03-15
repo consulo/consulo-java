@@ -1,8 +1,7 @@
 // Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * <a href="https://openjdk.org/jeps/405">JEP</a>
@@ -18,13 +17,11 @@ public interface PsiDeconstructionPattern extends PsiPrimaryPattern {
   /**
    * @return element representing code inside '(...)' inclusive parenthesis
    */
-  @Nonnull
   PsiDeconstructionList getDeconstructionList();
 
   /**
    * @return type of the pattern, for example in {@code Point(int x, int y) p } it is {@code Point }
    */
-  @Nonnull
   PsiTypeElement getTypeElement();
 
   /**

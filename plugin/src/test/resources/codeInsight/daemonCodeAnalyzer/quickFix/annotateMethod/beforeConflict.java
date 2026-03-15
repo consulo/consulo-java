@@ -1,6 +1,6 @@
 // "Remove annotation" "true"
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class Foo {
   <caret>@jakarta.annotation.Nonnull @Nullable

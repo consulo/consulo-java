@@ -4,12 +4,11 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
 class DfIntRangeType implements DfIntType {
-  static final @Nonnull
+  static final 
   LongRangeSet FULL_RANGE = Objects.requireNonNull(LongRangeSet.fromType(PsiType.INT));
   private final LongRangeSet myRange;
 
@@ -20,14 +19,13 @@ class DfIntRangeType implements DfIntType {
     myRange = FULL_RANGE.equals(range) ? FULL_RANGE : range;
   }
 
-  @Nonnull
   @Override
   public LongRangeSet getRange() {
     return myRange;
   }
 
   @Override
-  public boolean isSuperType(@Nonnull DfType other) {
+  public boolean isSuperType(DfType other) {
     if (other == DfTypes.BOTTOM) return true;
     if (!(other instanceof DfIntType)) return false;
     return myRange.contains(((DfIntType)other).getRange());

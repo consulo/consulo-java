@@ -20,8 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
@@ -32,24 +31,22 @@ public interface PsiInferenceHelper {
    * null         iff the type inferred is raw
    * inferred type otherwise
    */
-  PsiType inferTypeForMethodTypeParameter(@Nonnull PsiTypeParameter typeParameter,
-                                          @Nonnull PsiParameter[] parameters,
-                                          @Nonnull PsiExpression[] arguments,
-                                          @Nonnull PsiSubstitutor partialSubstitutor,
+  PsiType inferTypeForMethodTypeParameter(PsiTypeParameter typeParameter,
+                                          PsiParameter[] parameters,
+                                          PsiExpression[] arguments,
+                                          PsiSubstitutor partialSubstitutor,
                                           @Nullable PsiElement parent,
-                                          @Nonnull ParameterTypeInferencePolicy policy);
+                                          ParameterTypeInferencePolicy policy);
 
-  @Nonnull
-  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters,
-                                    @Nonnull PsiParameter[] parameters,
-                                    @Nonnull PsiExpression[] arguments,
-                                    @Nonnull PsiSubstitutor partialSubstitutor,
-                                    @Nonnull PsiElement parent,
-                                    @Nonnull ParameterTypeInferencePolicy policy,
-                                    @Nonnull LanguageLevel languageLevel);
+  PsiSubstitutor inferTypeArguments(PsiTypeParameter[] typeParameters,
+                                    PsiParameter[] parameters,
+                                    PsiExpression[] arguments,
+                                    PsiSubstitutor partialSubstitutor,
+                                    PsiElement parent,
+                                    ParameterTypeInferencePolicy policy,
+                                    LanguageLevel languageLevel);
 
-  @Nonnull
-  PsiSubstitutor inferTypeArguments(@Nonnull PsiTypeParameter[] typeParameters, @Nonnull PsiType[] leftTypes, @Nonnull PsiType[] rightTypes, @Nonnull LanguageLevel languageLevel);
+  PsiSubstitutor inferTypeArguments(PsiTypeParameter[] typeParameters, PsiType[] leftTypes, PsiType[] rightTypes, LanguageLevel languageLevel);
 
   PsiType getSubstitutionForTypeParameter(PsiTypeParameter typeParam, PsiType param, PsiType arg, boolean isContraVariantPosition, LanguageLevel languageLevel);
 }

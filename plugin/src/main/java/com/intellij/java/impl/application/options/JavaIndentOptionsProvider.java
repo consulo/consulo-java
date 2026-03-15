@@ -24,7 +24,6 @@ import consulo.virtualFileSystem.fileType.FileType;
 import consulo.language.psi.PsiFile;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.language.codeStyle.setting.FileTypeIndentOptionsProvider;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author yole
@@ -43,7 +42,6 @@ public class JavaIndentOptionsProvider implements FileTypeIndentOptionsProvider 
         return new JavaIndentOptionsEditor();
     }
 
-    @NonNls
     public String getPreviewText() {
         return "public class Foo {\n" +
             "  public int[] X = new int[] { 1, 3, 5,\n" +

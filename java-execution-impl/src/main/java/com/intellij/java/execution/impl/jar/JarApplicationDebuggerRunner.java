@@ -20,7 +20,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.configuration.RunProfile;
 import consulo.execution.debug.DefaultDebugExecutor;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
@@ -28,11 +27,10 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JarApplicationDebuggerRunner extends GenericDebuggerRunner {
   @Override
-  public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {
+  public boolean canRun(String executorId, RunProfile profile) {
     return DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && profile instanceof JarApplicationConfiguration;
   }
 
-  @Nonnull
   @Override
   public String getRunnerId() {
     return "JarDebug";

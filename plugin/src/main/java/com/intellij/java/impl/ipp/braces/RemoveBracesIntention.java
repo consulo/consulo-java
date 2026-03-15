@@ -28,14 +28,12 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.RemoveBracesIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class RemoveBracesIntention extends BaseBracesIntention {
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return element -> {
             PsiStatement statement = getSurroundingStatement(element);
@@ -55,20 +53,18 @@ public class RemoveBracesIntention extends BaseBracesIntention {
         };
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getMessageKey(String keyword) {
         return IntentionPowerPackLocalize.removeBracesIntentionName(keyword);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.removeBracesIntentionFamilyName();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiStatement body = getSurroundingStatement(element);
         if (body == null || !(body instanceof PsiBlockStatement)) {

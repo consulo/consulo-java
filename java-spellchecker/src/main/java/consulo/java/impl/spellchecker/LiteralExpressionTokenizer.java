@@ -15,7 +15,6 @@ import consulo.language.spellcheker.tokenizer.TokenConsumer;
 import consulo.language.spellcheker.tokenizer.splitter.PlainTextTokenSplitter;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 
 /**
@@ -24,7 +23,7 @@ import java.util.Arrays;
 public class LiteralExpressionTokenizer extends EscapeSequenceTokenizer<PsiLiteralExpression>
 {
 	@Override
-	public void tokenize(@Nonnull PsiLiteralExpression expression, TokenConsumer consumer)
+	public void tokenize(PsiLiteralExpression expression, TokenConsumer consumer)
 	{
 		String text;
 		if(!ExpressionUtils.hasStringType(expression))

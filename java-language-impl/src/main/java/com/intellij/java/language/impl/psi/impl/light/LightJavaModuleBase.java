@@ -13,8 +13,7 @@ import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.lazy.LazyValue;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -23,12 +22,11 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   private final LightJavaModuleReferenceElement myRefElement;
   private final Supplier<List<PsiPackageAccessibilityStatement>> myExports = LazyValue.atomicNotNull(this::findExports);
 
-  public LightJavaModuleBase(@Nonnull PsiManager manager, @Nonnull String name) {
+  public LightJavaModuleBase(PsiManager manager, String name) {
     super(manager, JavaLanguage.INSTANCE);
     myRefElement = new LightJavaModuleReferenceElement(manager, name);
   }
 
-  @Nonnull
   public abstract VirtualFile getRootVirtualFile();
 
   @Override
@@ -38,13 +36,11 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   }
 
   @Override
-  @Nonnull
   public final Iterable<PsiRequiresStatement> getRequires() {
     return Collections.emptyList();
   }
 
   @Override
-  @Nonnull
   public final Iterable<PsiPackageAccessibilityStatement> getExports() {
     return myExports.get();
   }
@@ -54,37 +50,32 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   }
 
   @Override
-  @Nonnull
   public final Iterable<PsiPackageAccessibilityStatement> getOpens() {
     return Collections.emptyList();
   }
 
   @Override
-  @Nonnull
   public final Iterable<PsiUsesStatement> getUses() {
     return Collections.emptyList();
   }
 
   @Override
-  @Nonnull
   public final Iterable<PsiProvidesStatement> getProvides() {
     return Collections.emptyList();
   }
 
   @Override
-  @Nonnull
   public final PsiJavaModuleReferenceElement getNameIdentifier() {
     return myRefElement;
   }
 
   @Override
-  @Nonnull
   public final String getName() {
     return myRefElement.getReferenceText();
   }
 
   @Override
-  public final PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public final PsiElement setName(String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Cannot modify an automatic module '" + getName() + "'");
   }
 
@@ -94,7 +85,7 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   }
 
   @Override
-  public final boolean hasModifierProperty(@Nonnull String name) {
+  public final boolean hasModifierProperty(String name) {
     return false;
   }
 
@@ -116,13 +107,12 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   public static final class LightJavaModuleReferenceElement extends LightElement implements PsiJavaModuleReferenceElement {
     private final String myText;
 
-    public LightJavaModuleReferenceElement(@Nonnull PsiManager manager, @Nonnull String text) {
+    public LightJavaModuleReferenceElement(PsiManager manager, String text) {
       super(manager, JavaLanguage.INSTANCE);
       myText = text;
     }
 
     @Override
-    @Nonnull
     public String getReferenceText() {
       return myText;
     }
@@ -141,14 +131,13 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   public static class LightPackageAccessibilityStatement extends LightElement implements PsiPackageAccessibilityStatement {
     private final String myPackageName;
 
-    public LightPackageAccessibilityStatement(@Nonnull PsiManager manager, @Nonnull String packageName) {
+    public LightPackageAccessibilityStatement(PsiManager manager, String packageName) {
       super(manager, JavaLanguage.INSTANCE);
       myPackageName = packageName;
     }
 
     @Override
     public
-    @Nonnull
     Role getRole() {
       return Role.EXPORTS;
     }
@@ -169,14 +158,12 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
 
     @Override
     public
-    @Nonnull
     Iterable<PsiJavaModuleReferenceElement> getModuleReferences() {
       return Collections.emptyList();
     }
 
     @Override
     public
-    @Nonnull
     List<String> getModuleNames() {
       return Collections.emptyList();
     }

@@ -29,27 +29,23 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceForEachLoopWithIteratorForLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceForEachLoopWithIteratorForLoopIntention extends Intention {
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new IterableForEachLoopPredicate();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceForEachLoopWithIndexedForLoopIntentionName();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiForeachStatement statement = (PsiForeachStatement) element.getParent();
         if (statement == null) {
             return;
@@ -62,7 +58,7 @@ public class ReplaceForEachLoopWithIteratorForLoopIntention extends Intention {
         if (!(iteratedValueType instanceof PsiClassType)) {
             return;
         }
-        @NonNls StringBuilder methodCall = new StringBuilder();
+        StringBuilder methodCall = new StringBuilder();
         if (ParenthesesUtils.getPrecedence(iteratedValue) > ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
             methodCall.append('(').append(iteratedValue.getText()).append(')');
         }
@@ -77,7 +73,7 @@ public class ReplaceForEachLoopWithIteratorForLoopIntention extends Intention {
         if (variableType == null) {
             return;
         }
-        @NonNls StringBuilder newStatement = new StringBuilder();
+        StringBuilder newStatement = new StringBuilder();
         newStatement.append("for(").append(variableType.getCanonicalText()).append(' ');
         JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
         String iterator = codeStyleManager.suggestUniqueVariableName("iterator", statement, true);

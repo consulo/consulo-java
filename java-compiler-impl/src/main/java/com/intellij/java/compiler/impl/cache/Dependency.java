@@ -23,7 +23,6 @@ package com.intellij.java.compiler.impl.cache;
 import consulo.compiler.CacheCorruptedException;
 import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -146,7 +145,7 @@ public class Dependency {
     return ArrayUtil.toStringArray(list);
   }
 
-  private static String parseFieldType(@NonNls String signature) {
+  private static String parseFieldType(String signature) {
     if (signature.isEmpty()) {
       return null;
     }

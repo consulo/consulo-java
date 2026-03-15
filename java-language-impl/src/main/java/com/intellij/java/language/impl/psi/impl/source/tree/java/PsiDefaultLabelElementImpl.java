@@ -6,7 +6,6 @@ import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiDefaultCaseLabelElement;
 import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
 
 public class PsiDefaultLabelElementImpl extends CompositePsiElement implements PsiDefaultCaseLabelElement, Constants {
   public PsiDefaultLabelElementImpl() {
@@ -14,7 +13,7 @@ public class PsiDefaultLabelElementImpl extends CompositePsiElement implements P
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDefaultCaseLabelElement(this);
     }

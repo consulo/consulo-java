@@ -20,7 +20,7 @@ import com.intellij.java.impl.codeInsight.javadoc.JavaDocInfoGenerator;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.documentation.UnrestrictedDocumentationProvider;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author spleaner

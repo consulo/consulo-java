@@ -12,8 +12,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiManager;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +28,9 @@ public final class PatternInference {
    * @param type          context type; type of the expression, which is matched against the pattern
    * @return updated {@link CandidateInfo} that contains a substitutor with inferred type arguments
    */
-  @Nonnull
-  public static CandidateInfo inferPatternGenerics(@Nonnull CandidateInfo resolveResult,
-                                                   @Nonnull PsiDeconstructionPattern pattern,
-                                                   @Nonnull PsiClass recordClass,
+  public static CandidateInfo inferPatternGenerics(CandidateInfo resolveResult,
+                                                   PsiDeconstructionPattern pattern,
+                                                   PsiClass recordClass,
                                                    @Nullable PsiType type) {
     // JLS 18.5.5
     if (type == null) return resolveResult;
@@ -52,8 +50,8 @@ public final class PatternInference {
     return new PatternCandidateInfo(resolveResult, substitutor, ContainerUtil.getFirstItem(session.getIncompatibleErrorMessages()));
   }
 
-  private static boolean addConstraints(@Nonnull PsiClass recordClass,
-                                        @Nonnull PsiType type,
+  private static boolean addConstraints(PsiClass recordClass,
+                                        PsiType type,
                                         PsiElementFactory factory,
                                         InferenceSession session) {
     if (type instanceof PsiClassType) {

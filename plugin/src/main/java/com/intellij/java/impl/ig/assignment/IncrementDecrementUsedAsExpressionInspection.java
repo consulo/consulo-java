@@ -33,26 +33,22 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class IncrementDecrementUsedAsExpressionInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern("[a-zA-Z_0-9.]+")
     public String getID() {
         return "ValueOfIncrementOrDecrementUsed";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.incrementDecrementDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         Object info = infos[0];
@@ -86,7 +82,6 @@ public class IncrementDecrementUsedAsExpressionInspection extends BaseInspection
             this.elementText = elementText;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.incrementDecrementUsedAsExpressionQuickfix(elementText);
@@ -260,7 +255,7 @@ public class IncrementDecrementUsedAsExpressionInspection extends BaseInspection
 
     private static class IncrementDecrementUsedAsExpressionVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression) {
+        public void visitPostfixExpression(PsiPostfixExpression expression) {
             super.visitPostfixExpression(expression);
             PsiElement parent = expression.getParent();
             if (parent instanceof PsiExpressionStatement
@@ -275,7 +270,7 @@ public class IncrementDecrementUsedAsExpressionInspection extends BaseInspection
         }
 
         @Override
-        public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+        public void visitPrefixExpression(PsiPrefixExpression expression) {
             super.visitPrefixExpression(expression);
             PsiElement parent = expression.getParent();
             if (parent instanceof PsiExpressionStatement

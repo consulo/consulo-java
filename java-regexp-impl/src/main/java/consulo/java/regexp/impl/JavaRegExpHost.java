@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.regexp.AsciiUtil;
 import org.intellij.lang.regexp.DefaultRegExpPropertiesProvider;
 import org.intellij.lang.regexp.RegExpLanguageHost;
@@ -303,7 +302,6 @@ public class JavaRegExpHost implements RegExpLanguageHost {
         }
     }
 
-    @Nonnull
     @Override
     public Class getHostClass() {
         return PsiLiteralExpression.class;
@@ -345,7 +343,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     }
 
     @Override
-    public boolean isValidGroupName(String name, @Nonnull PsiElement context) {
+    public boolean isValidGroupName(String name, PsiElement context) {
         for (int i = 0, length = name.length(); i < length; i++) {
             final char c = name.charAt(i);
             if (!AsciiUtil.isLetterOrDigit(c)) {
@@ -410,7 +408,6 @@ public class JavaRegExpHost implements RegExpLanguageHost {
         return getJavaVersion(element).isAtLeast(version);
     }
 
-    @Nonnull
     @RequiredReadAction
     private static JavaSdkVersion getJavaVersion(PsiElement element) {
         final Module module = element.getModule();
@@ -427,7 +424,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
     }
 
     @Override
-    public boolean isValidCategory(@Nonnull String category) {
+    public boolean isValidCategory(String category) {
         if (category.startsWith("In")) {
             return isValidUnicodeBlock(category);
         }
@@ -472,7 +469,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
         return isValidProperty(category);
     }
 
-    private boolean isValidProperty(@Nonnull String category) {
+    private boolean isValidProperty(String category) {
         for (String[] name : myPropertyNames) {
             if (name[0].equals(category)) {
                 return true;
@@ -481,7 +478,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
         return false;
     }
 
-    private boolean isValidUnicodeBlock(@Nonnull String category) {
+    private boolean isValidUnicodeBlock(String category) {
         try {
             return Character.UnicodeBlock.forName(category.substring(2)) != null;
         }
@@ -490,7 +487,7 @@ public class JavaRegExpHost implements RegExpLanguageHost {
         }
     }
 
-    private boolean isValidUnicodeScript(@Nonnull String category) {
+    private boolean isValidUnicodeScript(String category) {
         try {
             return Character.UnicodeScript.forName(category) != null;
         }
@@ -504,7 +501,6 @@ public class JavaRegExpHost implements RegExpLanguageHost {
         return UnicodeCharacterRegistry.listCharacters().stream().filter(it -> Objects.equals(it.getName(), namedCharacter.getName())).findFirst().isPresent();
     }
 
-    @Nonnull
     @Override
     public String[][] getAllKnownProperties() {
         return myPropertyNames;
@@ -524,14 +520,13 @@ public class JavaRegExpHost implements RegExpLanguageHost {
         return null;
     }
 
-    @Nonnull
     @Override
     public String[][] getKnownCharacterClasses() {
         return myPropertiesProvider.getKnownCharacterClasses();
     }
 
     @Override
-    public Integer getQuantifierValue(@Nonnull RegExpNumber number) {
+    public Integer getQuantifierValue(RegExpNumber number) {
         try {
             return Integer.valueOf(number.getUnescapedText());
         }

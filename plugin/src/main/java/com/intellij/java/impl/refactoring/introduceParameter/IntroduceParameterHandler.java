@@ -65,8 +65,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,7 +87,7 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(final Project project, final Editor editor, PsiFile file, DataContext dataContext) {
         PsiDocumentManager.getInstance(project).commitAllDocuments();
         editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         ElementToWorkOn.processElementToWorkOn(
@@ -122,20 +121,20 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
 
     @Override
     @RequiredUIAccess
-    protected boolean invokeImpl(@Nonnull Project project, PsiExpression tempExpr, Editor editor) {
+    protected boolean invokeImpl(Project project, PsiExpression tempExpr, Editor editor) {
         return invoke(editor, project, tempExpr, null, false);
     }
 
     @Override
     @RequiredUIAccess
-    protected boolean invokeImpl(@Nonnull Project project, PsiLocalVariable localVariable, Editor editor) {
+    protected boolean invokeImpl(Project project, PsiLocalVariable localVariable, Editor editor) {
         return invoke(editor, project, null, localVariable, true);
     }
 
     @RequiredUIAccess
     private boolean invoke(
         Editor editor,
-        @Nonnull Project project,
+        Project project,
         PsiExpression expr,
         PsiLocalVariable localVar,
         boolean invokedOnDeclaration
@@ -220,8 +219,8 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
     @RequiredUIAccess
     private void chooseMethodToIntroduceParameter(
         Editor editor,
-        @Nonnull List<PsiMethod> validEnclosingMethods,
-        @Nonnull Introducer introducer
+        List<PsiMethod> validEnclosingMethods,
+        Introducer introducer
     ) {
         AbstractInplaceIntroducer inplaceIntroducer = AbstractInplaceIntroducer.getActiveIntroducer(editor);
         if (inplaceIntroducer instanceof InplaceIntroduceParameterPopup) {
@@ -342,12 +341,12 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
     }
 
     @RequiredUIAccess
-    private static void showErrorMessage(Project project, @Nonnull LocalizeValue message, Editor editor) {
+    private static void showErrorMessage(Project project, LocalizeValue message, Editor editor) {
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INTRODUCE_PARAMETER);
     }
 
     @Override
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         // Never called
         /* do nothing */
     }
@@ -384,7 +383,7 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
 
     @Nullable
     @RequiredUIAccess
-    public static PsiMethod chooseEnclosingMethod(@Nonnull PsiMethod method) {
+    public static PsiMethod chooseEnclosingMethod(PsiMethod method) {
         List<PsiMethod> validEnclosingMethods = getEnclosingMethods(method);
         if (validEnclosingMethods.size() > 1 && !method.getApplication().isUnitTestMode()) {
             EnclosingMethodSelectionDialog dialog = new EnclosingMethodSelectionDialog(method.getProject(), validEnclosingMethods);
@@ -405,7 +404,6 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
     }
 
     private class Introducer {
-        @Nonnull
         private final Project myProject;
 
         private PsiExpression myExpr;
@@ -413,7 +411,7 @@ public class IntroduceParameterHandler extends IntroduceHandlerBase {
         private final Editor myEditor;
 
         public Introducer(
-            @Nonnull Project project,
+            Project project,
             PsiExpression expr,
             PsiLocalVariable localVar,
             Editor editor

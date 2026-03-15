@@ -18,7 +18,6 @@ package com.intellij.java.debugger.impl.settings;
 import com.intellij.java.debugger.DebuggerBundle;
 import consulo.configurable.IdeaConfigurableUi;
 import consulo.disposer.Disposable;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -33,7 +32,7 @@ class JavaHotSwapConfigurableUi implements IdeaConfigurableUi<DebuggerSettings> 
     private JRadioButton myRbAsk;
 
     @Override
-    public void reset(@Nonnull DebuggerSettings settings) {
+    public void reset(DebuggerSettings settings) {
         myHotswapInBackground.setSelected(settings.HOTSWAP_IN_BACKGROUND);
         myCbCompileBeforeHotswap.setSelected(settings.COMPILE_BEFORE_HOTSWAP);
         myCbHangWarningEnabled.setSelected(settings.HOTSWAP_HANG_WARNING_ENABLED);
@@ -50,7 +49,7 @@ class JavaHotSwapConfigurableUi implements IdeaConfigurableUi<DebuggerSettings> 
     }
 
     @Override
-    public void apply(@Nonnull DebuggerSettings settings) {
+    public void apply(DebuggerSettings settings) {
         getSettingsTo(settings);
     }
 
@@ -71,15 +70,14 @@ class JavaHotSwapConfigurableUi implements IdeaConfigurableUi<DebuggerSettings> 
     }
 
     @Override
-    public boolean isModified(@Nonnull DebuggerSettings currentSettings) {
+    public boolean isModified(DebuggerSettings currentSettings) {
         final DebuggerSettings debuggerSettings = currentSettings.clone();
         getSettingsTo(debuggerSettings);
         return !debuggerSettings.equals(currentSettings);
     }
 
-    @Nonnull
     @Override
-    public JComponent getComponent(@Nonnull Disposable parentDisposable) {
+    public JComponent getComponent(Disposable parentDisposable) {
         final JPanel panel = new JPanel(new GridBagLayout());
 
         myCbCompileBeforeHotswap = new JCheckBox(DebuggerBundle.message("label.debugger.hotswap.configurable.compile.before.hotswap"));

@@ -30,17 +30,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessarilyQualifiedStaticallyImportedElementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessarilyQualifiedStaticallyImportedElementDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         PsiMember member = (PsiMember) infos[0];
@@ -53,7 +50,6 @@ public class UnnecessarilyQualifiedStaticallyImportedElementInspection extends B
     }
 
     private static class UnnecessarilyQualifiedStaticallyImportedElementFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessarilyQualifiedStaticallyImportedElementQuickfix();

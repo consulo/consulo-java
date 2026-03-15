@@ -23,7 +23,7 @@ import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.ui.ex.tree.AlphaComparator;
 import consulo.ui.ex.tree.NodeDescriptor;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 

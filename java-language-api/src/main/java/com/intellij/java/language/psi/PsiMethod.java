@@ -26,8 +26,7 @@ import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.PsiTarget;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -67,7 +66,6 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @return the parameter list instance.
    */
   @Override
-  @Nonnull
   PsiParameterList getParameterList();
 
   /**
@@ -75,7 +73,6 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *
    * @return the list of thrown exceptions instance.
    */
-  @Nonnull
   PsiReferenceList getThrowsList();
 
   /**
@@ -108,8 +105,7 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @param substitutor the substitutor.
    * @return the method signature instance.
    */
-  @Nonnull
-  MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor);
+  MethodSignature getSignature(PsiSubstitutor substitutor);
 
   /**
    * Returns the name identifier for the method.
@@ -129,7 +125,6 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *
    * @return the array of super methods, or an empty array if no methods are found.
    */
-  @Nonnull
   PsiMethod[] findSuperMethods();
 
   /**
@@ -144,7 +139,6 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *                    is private. If true, an empty result list is returned for private methods.
    * @return the array of super methods, or an empty array if no methods are found.
    */
-  @Nonnull
   PsiMethod[] findSuperMethods(boolean checkAccess);
 
   /**
@@ -156,7 +150,6 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    * @param parentClass the class to search for super methods.
    * @return the array of super methods, or an empty array if no methods are found.
    */
-  @Nonnull
   PsiMethod[] findSuperMethods(PsiClass parentClass);
 
   /**
@@ -170,7 +163,6 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
    *                    is private. If true, an empty result list is returned for private methods.
    * @return the array of matching method signatures, or an empty array if no methods are found.
    */
-  @Nonnull
   List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess);
 
   /**
@@ -184,21 +176,17 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
   @Nullable
   PsiMethod findDeepestSuperMethod();
 
-  @Nonnull
   PsiMethod[] findDeepestSuperMethods();
 
   @Override
-  @Nonnull
   PsiModifierList getModifierList();
 
   @Override
-  @Nonnull
   String getName();
 
   @Override
-  PsiElement setName(@Nonnull String name) throws IncorrectOperationException;
+  PsiElement setName(String name) throws IncorrectOperationException;
 
-  @Nonnull
   HierarchicalMethodSignature getHierarchicalMethodSignature();
 
   @Override
@@ -206,13 +194,11 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
     return !getParameterList().isEmpty();
   }
 
-  @Nonnull
   @Override
   default JvmParameter[] getParameters() {
     return getParameterList().getParameters();
   }
 
-  @Nonnull
   @Override
   default JvmReferenceType[] getThrowsTypes() {
     return getThrowsList().getReferencedTypes();

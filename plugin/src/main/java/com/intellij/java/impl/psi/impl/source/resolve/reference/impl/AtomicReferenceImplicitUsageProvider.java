@@ -20,9 +20,7 @@ import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -37,17 +35,17 @@ public final class AtomicReferenceImplicitUsageProvider implements ImplicitUsage
     "incrementAndGet", "decrementAndGet", "addAndGet", "getAndUpdate", "updateAndGet", "getAndAccumulate", "accumulateAndGet");
 
   @Override
-  public boolean isImplicitUsage(@Nonnull PsiElement element) {
+  public boolean isImplicitUsage(PsiElement element) {
     return false;
   }
 
   @Override
-  public boolean isImplicitRead(@Nonnull PsiElement element) {
+  public boolean isImplicitRead(PsiElement element) {
     return false;
   }
 
   @Override
-  public boolean isImplicitWrite(@Nonnull PsiElement element) {
+  public boolean isImplicitWrite(PsiElement element) {
     if (element instanceof PsiField field && field.hasModifierProperty(PsiModifier.VOLATILE)) {
       return LanguageCachedValueUtil.getCachedValue(field, () ->
         new CachedValueProvider.Result<>(isAtomicWrite(field), PsiModificationTracker.MODIFICATION_COUNT));
@@ -55,7 +53,7 @@ public final class AtomicReferenceImplicitUsageProvider implements ImplicitUsage
     return false;
   }
 
-  private static boolean isAtomicWrite(@Nonnull PsiField field) {
+  private static boolean isAtomicWrite(PsiField field) {
     PsiType type = field.getType();
     if (PsiTypes.intType().equals(type)) {
       return isAtomicWrite(field, JavaReflectionReferenceUtil.ATOMIC_INTEGER_FIELD_UPDATER);
@@ -69,7 +67,7 @@ public final class AtomicReferenceImplicitUsageProvider implements ImplicitUsage
     return false;
   }
 
-  private static boolean isAtomicWrite(@Nonnull PsiField field, @NonNls String updaterName) {
+  private static boolean isAtomicWrite(PsiField field, String updaterName) {
     SearchScope scope = getCheapSearchScope(field);
     if (scope == null) {
       return false;
@@ -78,7 +76,7 @@ public final class AtomicReferenceImplicitUsageProvider implements ImplicitUsage
     return !fieldQuery.forEach((PsiReference reference) -> findAtomicUpdaters(reference, updaterName));
   }
 
-  private static boolean findAtomicUpdaters(@Nonnull PsiReference reference, @Nonnull String updaterName) {
+  private static boolean findAtomicUpdaters(PsiReference reference, String updaterName) {
     if (!(reference instanceof JavaLangClassMemberReference)) { // optimization
       return true;
     }
@@ -108,7 +106,7 @@ public final class AtomicReferenceImplicitUsageProvider implements ImplicitUsage
     return true;
   }
 
-  private static boolean findWrites(@Nonnull PsiReference reference) {
+  private static boolean findWrites(PsiReference reference) {
     PsiElement element = reference.getElement();
     PsiReferenceExpression methodExpression =
       ObjectUtil.tryCast(skipParenthesizedExprUp(element.getParent()), PsiReferenceExpression.class);
@@ -124,7 +122,7 @@ public final class AtomicReferenceImplicitUsageProvider implements ImplicitUsage
   }
 
   @Nullable
-  private static SearchScope getCheapSearchScope(@Nonnull PsiField field) {
+  private static SearchScope getCheapSearchScope(PsiField field) {
     SearchScope scope = field.getUseScope();
     if (scope instanceof LocalSearchScope) {
       return scope;

@@ -29,8 +29,7 @@ import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.List;
@@ -40,7 +39,6 @@ public abstract class ModuleWithTooFewClassesInspection extends BaseGlobalInspec
     @SuppressWarnings({"PublicField"})
     public int limit = 10;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.moduleWithTooFewClassesDisplayName();

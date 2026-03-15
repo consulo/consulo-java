@@ -22,20 +22,17 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CallToNativeMethodWhileLockedInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.callToNativeMethodWhileLockedDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.callToNativeMethodWhileLockedProblemDescriptor().get();
   }
@@ -50,7 +47,7 @@ public class CallToNativeMethodWhileLockedInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       PsiMethod method = expression.resolveMethod();
       if (method == null) {
         return;

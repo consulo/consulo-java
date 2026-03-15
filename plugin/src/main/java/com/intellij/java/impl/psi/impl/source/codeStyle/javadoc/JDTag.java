@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.util.lang.StringUtil;
 
@@ -37,21 +36,18 @@ public enum JDTag
 	SINCE("since"),
 	DEPRECATED("deprecated");
 
-	@Nonnull
 	private final String myTag;
 
-	JDTag(@Nonnull String tag)
+	JDTag(String tag)
 	{
 		this.myTag = tag;
 	}
 
-	@Nonnull
-	public String getDescriptionPrefix(@Nonnull String prefix)
+	public String getDescriptionPrefix(String prefix)
 	{
 		return prefix + StringUtil.repeatSymbol(' ', getWithEndWhitespace().length());
 	}
 
-	@Nonnull
 	public String getWithEndWhitespace()
 	{
 		return "@" + myTag + " ";

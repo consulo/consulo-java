@@ -17,7 +17,7 @@ package com.intellij.java.execution;
 
 import com.intellij.java.execution.configurations.ConfigurationWithAlternativeJre;
 import consulo.execution.CommonProgramRunConfigurationParameters;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface CommonJavaRunConfigurationParameters extends CommonProgramRunConfigurationParameters, ConfigurationWithAlternativeJre {
   void setVMParameters(String value);

@@ -15,7 +15,6 @@ import consulo.language.editor.inlay.chain.AbstractDeclarativeCallChainProvider;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -23,37 +22,31 @@ import java.util.List;
 public class JavaMethodChainsDeclarativeInlayProvider extends AbstractDeclarativeCallChainProvider<PsiMethodCallExpression, PsiType, Void> {
     public static final String PROVIDER_ID = "java.method.chains";
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public  String getId() {
         return PROVIDER_ID;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return JavaLocalize.javaMethodChainsInlayProviderName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDescription() {
         return JavaLocalize.inlayMethodchainsinlayproviderDescription();
     }
 
-    @Nonnull
     @Override
     public InlayGroup getGroup() {
         return InlayGroup.METHOD_CHAINS_GROUP;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getPreviewFileText() {
         return JavaLocalize.inlayprovidersJavaMethodChains();

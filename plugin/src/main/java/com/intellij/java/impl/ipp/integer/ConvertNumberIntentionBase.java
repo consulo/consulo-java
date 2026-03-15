@@ -22,12 +22,11 @@ import com.siyeh.ig.PsiReplacementUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class ConvertNumberIntentionBase extends Intention {
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiExpression expression = (PsiExpression) element;
         Number value = (Number) ExpressionUtils.computeConstantExpression(expression);
         if (value == null) {

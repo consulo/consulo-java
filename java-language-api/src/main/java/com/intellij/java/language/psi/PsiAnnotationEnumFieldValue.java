@@ -3,13 +3,12 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmEnumField;
 import com.intellij.java.language.jvm.annotation.JvmAnnotationEnumFieldValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class PsiAnnotationEnumFieldValue extends PsiAnnotationAttributeValue<PsiReferenceExpression> implements JvmAnnotationEnumFieldValue {
     private final JvmEnumField myEnumField;
 
-    PsiAnnotationEnumFieldValue(@Nonnull PsiReferenceExpression value, @Nonnull JvmEnumField field) {
+    PsiAnnotationEnumFieldValue(PsiReferenceExpression value, JvmEnumField field) {
         super(value);
         myEnumField = field;
     }

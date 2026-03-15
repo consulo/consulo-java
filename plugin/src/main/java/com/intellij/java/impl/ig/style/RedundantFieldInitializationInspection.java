@@ -28,8 +28,7 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -38,14 +37,12 @@ public class RedundantFieldInitializationInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean onlyWarnOnNull = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.redundantFieldInitializationDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.redundantFieldInitializationProblemDescriptor().get();
     }
@@ -62,7 +59,6 @@ public class RedundantFieldInitializationInspection extends BaseInspection {
     }
 
     private static class RedundantFieldInitializationFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.redundantFieldInitializationRemoveQuickfix();
@@ -81,7 +77,7 @@ public class RedundantFieldInitializationInspection extends BaseInspection {
 
     private class RedundantFieldInitializationVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             super.visitField(field);
             if (!field.hasInitializer() || field.hasModifierProperty(PsiModifier.FINAL)) {
                 return;

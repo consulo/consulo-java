@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.util.lang.StringUtil;
 import consulo.ide.impl.idea.ide.actions.SaveFileAsTemplateHandler;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole

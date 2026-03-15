@@ -3,8 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet;
 
 import consulo.util.lang.ThreeState;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Helper methods for LongRangeSet implementation
@@ -127,7 +126,6 @@ class LongRangeUtil {
      * @param other a BitString to join
      * @return resulting BitString
      */
-    @Nonnull
     BitString unite(BitString other) {
       long diff = myBits ^ other.myBits;
       return new BitString(myBits, myMask & other.myMask & ~diff);
@@ -153,7 +151,6 @@ class LongRangeUtil {
      * @param bit a bit number (0 = LSB)
      * @return YES for set bit, NO for clear bit, UNSURE for unknown bit
      */
-    @Nonnull
     ThreeState get(int bit) {
       return isSet(myMask, bit) ? ThreeState.fromBoolean(isSet(myBits, bit)) : ThreeState.UNSURE;
     }
@@ -164,7 +161,6 @@ class LongRangeUtil {
      * @param other other operand
      * @return result of bitwise-and
      */
-    @Nonnull
     BitString and(BitString other) {
       long andBits = myBits & other.myBits;
       // 0 & ? = ? & 0 = 0; 1 & 1 = 1; ? & 1 = 1 & ? = ? & ? = ?
@@ -178,7 +174,6 @@ class LongRangeUtil {
      * @param other other operand
      * @return result of bitwise-or
      */
-    @Nonnull
     BitString or(BitString other) {
       long orBits = myBits | other.myBits;
       // 1 | ? = ? | 1 = 1; 0 | 0 = 0; ? | 0 = 0 | ? = ? | ? = ?
@@ -192,7 +187,6 @@ class LongRangeUtil {
      * @param other other operand
      * @return result of bitwise-xor
      */
-    @Nonnull
     BitString xor(BitString other) {
       long xorBits = myBits ^ other.myBits;
       // if bit is unknown in either operand, it's unknown in the result; otherwise we may xor normally
@@ -221,7 +215,6 @@ class LongRangeUtil {
      * @return a BitString which covers at least all the values between from and to (may also cover some more values)
      */
     static
-    @Nonnull
     BitString fromRange(long from, long to) {
       if (from == to) {
         return new BitString(from, -1L);

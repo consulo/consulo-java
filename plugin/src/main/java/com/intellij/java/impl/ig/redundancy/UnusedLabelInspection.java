@@ -26,13 +26,11 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnusedLabelInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unusedLabelDisplayName();
   }
@@ -48,7 +46,6 @@ public class UnusedLabelInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.unusedLabelProblemDescriptor().get();
   }
@@ -61,7 +58,6 @@ public class UnusedLabelInspection extends BaseInspection {
   private static class UnusedLabelFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.unusedLabelRemoveQuickfix();
     }
@@ -114,7 +110,7 @@ public class UnusedLabelInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
       if (found) {
         return;
       }
@@ -123,7 +119,7 @@ public class UnusedLabelInspection extends BaseInspection {
 
     @Override
     public void visitContinueStatement(
-      @Nonnull PsiContinueStatement continueStatement) {
+      PsiContinueStatement continueStatement) {
       if (found) {
         return;
       }
@@ -137,7 +133,7 @@ public class UnusedLabelInspection extends BaseInspection {
 
     @Override
     public void visitBreakStatement(
-      @Nonnull PsiBreakStatement breakStatement) {
+      PsiBreakStatement breakStatement) {
       if (found) {
         return;
       }

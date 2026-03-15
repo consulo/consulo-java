@@ -24,18 +24,15 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.instantiatingSimpledateformatWithoutLocaleDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.instantiatingSimpledateformatWithoutLocaleProblemDescriptor().get();
     }
@@ -48,7 +45,7 @@ public class SimpleDateFormatWithoutLocaleInspection extends BaseInspection {
     private static class SimpleDateFormatWithoutLocaleVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             if (!ExpressionUtils.hasType(expression, "java.text.SimpleDateFormat")) {
                 return;

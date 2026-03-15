@@ -21,12 +21,11 @@ import consulo.language.editor.rawHighlight.HighlightInfoFilter;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiFile;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DebuggerHighlightFilter implements HighlightInfoFilter {
   @Override
-  public boolean accept(@Nonnull HighlightInfo highlightInfo, PsiFile file) {
+  public boolean accept(HighlightInfo highlightInfo, PsiFile file) {
     return highlightInfo.getType() != HighlightInfoType.UNHANDLED_EXCEPTION ||
         file == null ||
         !DefaultCodeFragmentFactory.isDebuggerFile(file);

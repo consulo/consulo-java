@@ -39,8 +39,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 
@@ -60,16 +59,14 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
     public boolean IGNORE_UNCHECKED_CAST;
     public boolean IGNORE_UNCHECKED_OVERRIDING;
 
-    @Nonnull
-    static JCheckBox createSetting(@Nonnull String cbText, boolean option, @Nonnull Consumer<JCheckBox> pass) {
+    static JCheckBox createSetting(String cbText, boolean option, Consumer<JCheckBox> pass) {
         JCheckBox uncheckedCb = new JCheckBox(cbText, option);
         uncheckedCb.addActionListener(e -> pass.accept(uncheckedCb));
         return uncheckedCb;
     }
 
-    @Nonnull
     private static LocalQuickFix[] getChangeVariableTypeFixes(
-        @Nonnull PsiVariable parameter,
+        PsiVariable parameter,
         @Nullable PsiType itemType,
         LocalQuickFix[] generifyFixes
     ) {
@@ -95,24 +92,20 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return LocalizeValue.empty();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.uncheckedWarning();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return SHORT_NAME;
     }
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
@@ -125,20 +118,19 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
     }
 
     @Override
-    public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+    public void writeSettings(Element node) throws WriteExternalException {
         if (IGNORE_UNCHECKED_ASSIGNMENT || IGNORE_UNCHECKED_CALL || IGNORE_UNCHECKED_CAST
             || IGNORE_UNCHECKED_OVERRIDING || IGNORE_UNCHECKED_GENERICS_ARRAY_CREATION) {
             super.writeSettings(node);
         }
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
-        @Nonnull LocalInspectionToolSession session,
+        LocalInspectionToolSession session,
         Object state
     ) {
         LanguageLevel languageLevel = PsiUtil.getLanguageLevel(session.getFile());
@@ -150,10 +142,10 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
             @Override
             @RequiredReadAction
             protected void registerProblem(
-                @Nonnull LocalizeValue message,
+                LocalizeValue message,
                 @Nullable PsiElement callExpression,
-                @Nonnull PsiElement psiElement,
-                @Nonnull LocalQuickFix[] quickFixes
+                PsiElement psiElement,
+                LocalQuickFix[] quickFixes
             ) {
                 String rawExpression = isMethodCalledOnRawType(callExpression);
                 if (rawExpression != null) {
@@ -170,7 +162,6 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         };
     }
 
-    @Nonnull
     protected LocalQuickFix[] createFixes() {
         return LocalQuickFix.EMPTY_ARRAY;
     }
@@ -189,25 +180,24 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
     private abstract class UncheckedWarningsVisitor extends JavaElementVisitor {
         private final boolean myOnTheFly;
-        @Nonnull
         private final LanguageLevel myLanguageLevel;
         private final LocalQuickFix[] myGenerifyFixes;
 
-        UncheckedWarningsVisitor(boolean onTheFly, @Nonnull LanguageLevel level) {
+        UncheckedWarningsVisitor(boolean onTheFly, LanguageLevel level) {
             myOnTheFly = onTheFly;
             myLanguageLevel = level;
             myGenerifyFixes = onTheFly ? createFixes() : LocalQuickFix.EMPTY_ARRAY;
         }
 
         protected abstract void registerProblem(
-            @Nonnull LocalizeValue message,
+            LocalizeValue message,
             PsiElement callExpression,
-            @Nonnull PsiElement psiElement,
-            @Nonnull LocalQuickFix[] quickFixes
+            PsiElement psiElement,
+            LocalQuickFix[] quickFixes
         );
 
         @Override
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             if (IGNORE_UNCHECKED_GENERICS_ARRAY_CREATION) {
                 return;
             }
@@ -223,7 +213,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             if (IGNORE_UNCHECKED_GENERICS_ARRAY_CREATION) {
                 return;
@@ -244,7 +234,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         @Override
-        public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
+        public void visitTypeCastExpression(PsiTypeCastExpression expression) {
             super.visitTypeCastExpression(expression);
             if (IGNORE_UNCHECKED_CAST) {
                 return;
@@ -274,7 +264,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
         @Override
         @RequiredReadAction
-        public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
+        public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
             super.visitMethodReferenceExpression(expression);
             if (IGNORE_UNCHECKED_CALL) {
                 return;
@@ -289,7 +279,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
         @Override
         @RequiredReadAction
-        public void visitCallExpression(@Nonnull PsiCallExpression callExpression) {
+        public void visitCallExpression(PsiCallExpression callExpression) {
             super.visitCallExpression(callExpression);
             JavaResolveResult result = callExpression.resolveMethodGenerics();
             LocalizeValue description = getUncheckedCallDescription(callExpression, result);
@@ -336,7 +326,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             super.visitVariable(variable);
             if (IGNORE_UNCHECKED_ASSIGNMENT) {
                 return;
@@ -359,7 +349,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         @Override
-        public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+        public void visitForeachStatement(PsiForeachStatement statement) {
             super.visitForeachStatement(statement);
             if (IGNORE_UNCHECKED_ASSIGNMENT) {
                 return;
@@ -379,7 +369,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
 
         @Override
         @RequiredReadAction
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+        public void visitAssignmentExpression(PsiAssignmentExpression expression) {
             super.visitAssignmentExpression(expression);
             if (IGNORE_UNCHECKED_ASSIGNMENT) {
                 return;
@@ -412,7 +402,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         @Override
-        public void visitArrayInitializerExpression(@Nonnull PsiArrayInitializerExpression arrayInitializer) {
+        public void visitArrayInitializerExpression(PsiArrayInitializerExpression arrayInitializer) {
             super.visitArrayInitializerExpression(arrayInitializer);
             if (IGNORE_UNCHECKED_ASSIGNMENT) {
                 return;
@@ -455,12 +445,12 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         private void checkRawToGenericsAssignment(
-            @Nonnull PsiElement parameter,
+            PsiElement parameter,
             PsiExpression expression,
             PsiType parameterType,
             PsiType itemType,
             boolean checkAssignability,
-            @Nonnull LocalQuickFix[] quickFixes
+            LocalQuickFix[] quickFixes
         ) {
             if (parameterType == null || itemType == null) {
                 return;
@@ -478,7 +468,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (IGNORE_UNCHECKED_OVERRIDING) {
                 return;
@@ -517,7 +507,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         @Override
-        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+        public void visitReturnStatement(PsiReturnStatement statement) {
             super.visitReturnStatement(statement);
             if (IGNORE_UNCHECKED_ASSIGNMENT) {
                 return;
@@ -539,7 +529,7 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
         }
 
         @Override
-        public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+        public void visitLambdaExpression(PsiLambdaExpression expression) {
             super.visitLambdaExpression(expression);
 
             if (IGNORE_UNCHECKED_ASSIGNMENT) {
@@ -564,7 +554,6 @@ public abstract class UncheckedWarningLocalInspectionBase extends BaseJavaBatchL
             }
         }
 
-        @Nonnull
         @RequiredReadAction
         private LocalizeValue getUncheckedCallDescription(PsiElement place, JavaResolveResult resolveResult) {
             PsiElement element = resolveResult.getElement();

@@ -22,21 +22,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class ClassComplexityInspection extends ClassMetricInspection {
     private static final int DEFAULT_COMPLEXITY_LIMIT = 80;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "OverlyComplexClass";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overlyComplexClassDisplayName();
@@ -50,7 +47,6 @@ public class ClassComplexityInspection extends ClassMetricInspection {
         return InspectionGadgetsLocalize.cyclomaticComplexityLimitOption().get();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer totalComplexity = (Integer) infos[0];
         return InspectionGadgetsLocalize.overlyComplexClassProblemDescriptor(totalComplexity).get();
@@ -63,7 +59,7 @@ public class ClassComplexityInspection extends ClassMetricInspection {
     private class ClassComplexityVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // note: no call to super
             int totalComplexity = calculateTotalComplexity(aClass);
             if (totalComplexity <= getLimit()) {

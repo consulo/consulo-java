@@ -62,7 +62,6 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.*;
@@ -96,13 +95,11 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
         myElementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new ExtractMethodObjectViewDescriptor(getMethod());
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -122,7 +119,7 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
             final Set<PsiMethod> usedMethods = new LinkedHashSet<>();
             getMethod().accept(new JavaRecursiveElementWalkingVisitor() {
                 @Override
-                public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+                public void visitMethodCallExpression(PsiMethodCallExpression expression) {
                     super.visitMethodCallExpression(expression);
                     PsiMethod method = expression.resolveMethod();
                     if (method != null) {
@@ -152,7 +149,7 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    public void performRefactoring(@Nonnull UsageInfo[] usages) {
+    public void performRefactoring(UsageInfo[] usages) {
         try {
             if (isCreateInnerClass()) {
                 myInnerClass = (PsiClass) getMethod().getContainingClass().add(myElementFactory.createClass(getInnerClassName()));
@@ -283,16 +280,16 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
         final List<PsiReturnStatement> returnStatements = new ArrayList<>();
         body.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+            public void visitReturnStatement(PsiReturnStatement statement) {
                 returnStatements.add(statement);
             }
 
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
             }
 
             @Override
-            public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+            public void visitLambdaExpression(PsiLambdaExpression expression) {
             }
         });
         if (myExtractProcessor.generatesConditionalExit()) {
@@ -321,7 +318,7 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
         }
         body.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+            public void visitReturnStatement(PsiReturnStatement statement) {
                 super.visitReturnStatement(statement);
                 try {
                     replacementMap.put(statement, myElementFactory.createStatementFromText("return this;", statement));
@@ -332,15 +329,15 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
             }
 
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
             }
 
             @Override
-            public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+            public void visitLambdaExpression(PsiLambdaExpression expression) {
             }
 
             @Override
-            public void visitDeclarationStatement(@Nonnull PsiDeclarationStatement statement) {
+            public void visitDeclarationStatement(PsiDeclarationStatement statement) {
                 super.visitDeclarationStatement(statement);
                 PsiElement[] declaredElements = statement.getDeclaredElements();//todo
                 for (PsiElement declaredElement : declaredElements) {
@@ -504,7 +501,6 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
         ));
     }
 
-    @Nonnull
     @RequiredReadAction
     private String inferTypeArguments(PsiMethodCallExpression methodCallExpression) {
         PsiReferenceParameterList list = methodCallExpression.getMethodExpression().getParameterList();
@@ -529,7 +525,6 @@ public class ExtractMethodObjectProcessor extends BaseRefactoringProcessor {
         return "";
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return REFACTORING_NAME;

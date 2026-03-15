@@ -8,7 +8,7 @@ import com.intellij.java.impl.codeInspection.inheritance.SuperClassHasFrequently
 import consulo.util.lang.Pair;
 import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 

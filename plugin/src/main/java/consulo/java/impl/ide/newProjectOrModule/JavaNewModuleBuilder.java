@@ -28,7 +28,6 @@ import consulo.module.content.layer.ContentEntry;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.ui.ex.wizard.WizardStep;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**
@@ -38,45 +37,43 @@ import java.util.function.Consumer;
 @ExtensionImpl
 public class JavaNewModuleBuilder implements NewModuleBuilder {
   @Override
-  public void setupContext(@Nonnull NewModuleContext context) {
+  public void setupContext(NewModuleContext context) {
     NewModuleContextGroup jvmGroup = context.addGroup("jvm", LocalizeValue.localizeTODO("Java Platform"));
 
     NewModuleContextGroup javaGroup = jvmGroup.addGroup("jvm.java", LocalizeValue.localizeTODO("Java"));
 
     javaGroup.add(LocalizeValue.localizeTODO("Empty"), AllIcons.FileTypes.Any_type, new NewModuleBuilderProcessor<JavaNewModuleWizardContext>() {
-      @Nonnull
       @Override
       public JavaNewModuleWizardContext createContext(boolean isNewProject) {
         return new JavaNewModuleWizardContext(isNewProject);
       }
 
       @Override
-      public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context) {
+      public void buildSteps(Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, JavaNewModuleWizardContext context) {
         consumer.accept(new JavaSdkSelectStep(context));
       }
 
       @RequiredReadAction
       @Override
-      public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
+      public void process(JavaNewModuleWizardContext context, ContentEntry contentEntry, ModifiableRootModel modifiableRootModel) {
         setupModule(context, contentEntry, modifiableRootModel);
       }
     });
 
     javaGroup.add(LocalizeValue.localizeTODO("Console Application"), AllIcons.RunConfigurations.Application, new UnzipNewModuleBuilderProcessor<JavaNewModuleWizardContext>("/moduleTemplates/#JavaHelloWorld.zip") {
-      @Nonnull
       @Override
       public JavaNewModuleWizardContext createContext(boolean isNewProject) {
         return new JavaNewModuleWizardContext(isNewProject);
       }
 
       @Override
-      public void buildSteps(@Nonnull Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, @Nonnull JavaNewModuleWizardContext context) {
+      public void buildSteps(Consumer<WizardStep<JavaNewModuleWizardContext>> consumer, JavaNewModuleWizardContext context) {
         consumer.accept(new JavaSdkSelectStep(context));
       }
 
       @RequiredReadAction
       @Override
-      public void process(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
+      public void process(JavaNewModuleWizardContext context, ContentEntry contentEntry, ModifiableRootModel modifiableRootModel) {
         unzip(modifiableRootModel);
 
         setupModule(context, contentEntry, modifiableRootModel);
@@ -85,7 +82,7 @@ public class JavaNewModuleBuilder implements NewModuleBuilder {
   }
 
   @RequiredReadAction
-  private static void setupModule(@Nonnull JavaNewModuleWizardContext context, @Nonnull ContentEntry contentEntry, @Nonnull ModifiableRootModel modifiableRootModel) {
+  private static void setupModule(JavaNewModuleWizardContext context, ContentEntry contentEntry, ModifiableRootModel modifiableRootModel) {
     // need get by id - due, extension can be from original Java impl, or from other plugin, like IKVM.NET
     JavaMutableModuleExtension<?> javaMutableModuleExtension = modifiableRootModel.getExtensionWithoutCheck("java");
     assert javaMutableModuleExtension != null;

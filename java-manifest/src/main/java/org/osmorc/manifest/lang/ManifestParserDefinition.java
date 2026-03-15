@@ -34,7 +34,6 @@ import consulo.language.file.FileViewProvider;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.version.LanguageVersionableParserDefinition;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.ManifestStubElementTypes;
 import org.osmorc.manifest.lang.psi.elementtype.AbstractManifestStubElementType;
@@ -46,20 +45,17 @@ import org.osmorc.manifest.lang.psi.impl.ManifestFileImpl;
 @ExtensionImpl
 public class ManifestParserDefinition extends LanguageVersionableParserDefinition
 {
-  @Nonnull
   @Override
   public Language getLanguage() {
     return ManifestLanguage.INSTANCE;
   }
 
-  @Nonnull
   @Override
   public IFileElementType getFileNodeType() {
     return ManifestStubElementTypes.FILE;
   }
 
   @Override
-  @Nonnull
   public PsiElement createElement(ASTNode node) {
     final IElementType type = node.getElementType();
     if (type instanceof AbstractManifestStubElementType) {

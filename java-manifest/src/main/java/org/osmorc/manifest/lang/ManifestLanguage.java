@@ -29,7 +29,6 @@ import consulo.java.manifest.lang.ManifestLanguageVersion;
 import consulo.language.Language;
 import consulo.language.version.LanguageVersion;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -41,13 +40,11 @@ public class ManifestLanguage extends Language {
         super("MANIFEST");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.manifestLanguageDisplayName();
     }
 
-    @Nonnull
     @Override
     protected LanguageVersion[] findVersions() {
         return ManifestLanguageVersion.VALUES;

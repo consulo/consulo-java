@@ -25,10 +25,8 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class RemoveAssignmentFix extends RemoveInitializerFix {
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return JavaInspectionsLocalize.inspectionUnusedAssignmentRemoveAssignmentQuickfix();
@@ -36,7 +34,7 @@ public class RemoveAssignmentFix extends RemoveInitializerFix {
 
   @Override
   @RequiredWriteAction
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     PsiElement parent;
     parent = element instanceof PsiReferenceExpression ? element.getParent() : element;

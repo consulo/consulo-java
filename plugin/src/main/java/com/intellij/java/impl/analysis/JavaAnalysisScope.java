@@ -35,7 +35,6 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -55,8 +54,7 @@ public class JavaAnalysisScope extends AnalysisScope {
     }
 
     @Override
-    @Nonnull
-    public AnalysisScope getNarrowedComplementaryScope(@Nonnull Project defaultProject) {
+    public AnalysisScope getNarrowedComplementaryScope(Project defaultProject) {
         ProjectFileIndex fileIndex = ProjectRootManager.getInstance(defaultProject).getFileIndex();
         HashSet<Module> modules = new HashSet<>();
         if (myType == FILE) {
@@ -87,7 +85,6 @@ public class JavaAnalysisScope extends AnalysisScope {
     }
 
 
-    @Nonnull
     @Override
     public String getShortenName() {
         return myType == PACKAGE
@@ -95,7 +92,6 @@ public class JavaAnalysisScope extends AnalysisScope {
             : super.getShortenName();
     }
 
-    @Nonnull
     @Override
     public String getDisplayName() {
         return myType == PACKAGE
@@ -114,7 +110,7 @@ public class JavaAnalysisScope extends AnalysisScope {
     }
 
     @Override
-    public boolean accept(@Nonnull Processor<VirtualFile> processor) {
+    public boolean accept(Processor<VirtualFile> processor) {
         if (myElement instanceof PsiJavaPackage pack) {
             Set<PsiDirectory> dirs = new HashSet<>();
             pack.getApplication().runReadAction(() -> {
@@ -130,7 +126,6 @@ public class JavaAnalysisScope extends AnalysisScope {
         return super.accept(processor);
     }
 
-    @Nonnull
     @Override
     public SearchScope toSearchScope() {
         if (myType == PACKAGE) {

@@ -22,21 +22,20 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import consulo.virtualFileSystem.LocalFileSystem;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import consulo.util.lang.StringUtil;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiReference;
 
 public abstract class ResolveTestCase extends PsiTestCase {
-  @NonNls protected static final String MARKER = "<ref>";
+  protected static final String MARKER = "<ref>";
 
-  protected PsiReference configureByFile(@NonNls String filePath) throws Exception{
+  protected PsiReference configureByFile(String filePath) throws Exception{
     return configureByFile(filePath, null);
   }
   
-  protected PsiReference configureByFile(@TestDataFile @NonNls String filePath, @Nullable VirtualFile parentDir) throws Exception{
+  protected PsiReference configureByFile(@TestDataFile String filePath, @Nullable VirtualFile parentDir) throws Exception{
     String fullPath = getTestDataPath() + filePath;
     VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(fullPath.replace(File.separatorChar, '/'));
     assertNotNull("file " + filePath + " not found", vFile);

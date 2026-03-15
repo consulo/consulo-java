@@ -11,16 +11,14 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ClsRecordHeaderImpl extends ClsRepositoryPsiElement<PsiRecordHeaderStub> implements PsiRecordHeader {
-  public ClsRecordHeaderImpl(@Nonnull PsiRecordHeaderStub stub) {
+  public ClsRecordHeaderImpl(PsiRecordHeaderStub stub) {
     super(stub);
   }
 
   @Override
-  @Nonnull
   public PsiRecordComponent[] getRecordComponents() {
     return getStub().getChildrenByType(JavaStubElementTypes.RECORD_COMPONENT, PsiRecordComponent.ARRAY_FACTORY);
   }
@@ -32,7 +30,7 @@ public class ClsRecordHeaderImpl extends ClsRepositoryPsiElement<PsiRecordHeader
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append('(');
     PsiRecordComponent[] parameters = getRecordComponents();
     for (int i = 0; i < parameters.length; i++) {
@@ -52,13 +50,13 @@ public class ClsRecordHeaderImpl extends ClsRepositoryPsiElement<PsiRecordHeader
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(getRecordComponents(), SourceTreeToPsiMap.<PsiRecordHeader>treeToPsiNotNull(element).getRecordComponents());
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitRecordHeader(this);
     } else {

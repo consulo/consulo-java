@@ -27,7 +27,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -38,19 +37,16 @@ public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
     public boolean ignoreIfMethodIsOverride = true;
 
     @Override
-    @Nonnull
     public String getID() {
         return "MethodNamesDifferingOnlyByCase";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.methodNamesDifferOnlyByCaseDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.methodNamesDifferOnlyByCaseProblemDescriptor(infos[0]).get();
     }
@@ -79,7 +75,7 @@ public class MethodNamesDifferOnlyByCaseInspection extends BaseInspection {
     private class MethodNamesDifferOnlyByCaseVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (method.isConstructor()) {
                 return;
             }

@@ -28,7 +28,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
 class JavaWithIfElseSurrounder extends JavaStatementsSurrounder{
   @Override
@@ -48,7 +47,7 @@ class JavaWithIfElseSurrounder extends JavaStatementsSurrounder{
       return null;
     }
 
-    @NonNls String text = "if(a){\n}else{\n}";
+    String text = "if(a){\n}else{\n}";
     PsiIfStatement ifStatement = (PsiIfStatement)factory.createStatementFromText(text, null);
     ifStatement = (PsiIfStatement)codeStyleManager.reformat(ifStatement);
 

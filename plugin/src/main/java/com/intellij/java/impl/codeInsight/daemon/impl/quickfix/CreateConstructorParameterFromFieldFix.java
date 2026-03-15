@@ -47,8 +47,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -58,7 +57,7 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
   private final SmartPsiElementPointer<PsiField> myField;
   private final PsiClass myClass;
 
-  public CreateConstructorParameterFromFieldFix(@Nonnull PsiField field) {
+  public CreateConstructorParameterFromFieldFix(PsiField field) {
     myClass = field.getContainingClass();
     myField = SmartPointerManager.getInstance(field.getProject()).createSmartPsiElementPointer(field);
     if (myClass != null) {
@@ -67,7 +66,6 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     if (getFieldsToFix().size() > 1 && myClass.getConstructors().length <= 1) {
       return LocalizeValue.localizeTODO("Add constructor parameters");
@@ -76,7 +74,7 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return isAvailable(getField());
   }
 
@@ -91,7 +89,7 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }
@@ -194,7 +192,6 @@ public class CreateConstructorParameterFromFieldFix implements SyntheticIntentio
     }
   }
 
-  @Nonnull
   private Collection<SmartPsiElementPointer<PsiField>> getFieldsToFix() {
     Map<SmartPsiElementPointer<PsiField>, Boolean> fields = myClass.getUserData(FIELDS);
     if (fields == null) {

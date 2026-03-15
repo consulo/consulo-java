@@ -29,7 +29,7 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @SuppressWarnings("ExtensionImplIsNotAnnotatedInspection")
 public class DefaultResourceBundleManager extends ResourceBundleManager {

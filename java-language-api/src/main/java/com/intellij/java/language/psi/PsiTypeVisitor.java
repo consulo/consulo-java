@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Visitor which can be used to visit Java types.

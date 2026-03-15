@@ -25,7 +25,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ParameterNamingConventionInspection extends ConventionInspection {
@@ -33,12 +32,10 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
   private static final int DEFAULT_MIN_LENGTH = 1;
   private static final int DEFAULT_MAX_LENGTH = 20;
 
-  @Nonnull
   public String getID() {
     return "MethodParameterNamingConvention";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.parameterNamingConventionDisplayName();
   }
@@ -51,7 +48,6 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
     return true;
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     String parametername = (String)infos[0];
     if (parametername.length() < getMinLength()) {
@@ -84,7 +80,7 @@ public class ParameterNamingConventionInspection extends ConventionInspection {
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitParameter(@Nonnull PsiParameter variable) {
+    public void visitParameter(PsiParameter variable) {
       PsiElement scope = variable.getDeclarationScope();
       if (scope instanceof PsiCatchSection ||
           scope instanceof PsiForeachStatement) {

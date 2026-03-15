@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java anonymous class.
@@ -29,7 +28,6 @@ public interface PsiAnonymousClass extends PsiClass {
    *
    * @return the reference element for the base class.
    */
-  @Nonnull
   PsiJavaCodeReferenceElement getBaseClassReference();
 
   /**
@@ -37,7 +35,6 @@ public interface PsiAnonymousClass extends PsiClass {
    *
    * @return the type for the base class.
    */
-  @Nonnull
   PsiClassType getBaseClassType();
 
   /**

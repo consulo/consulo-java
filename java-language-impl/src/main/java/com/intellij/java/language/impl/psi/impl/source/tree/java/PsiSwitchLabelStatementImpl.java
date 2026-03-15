@@ -13,7 +13,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiSwitchLabelStatementImpl extends PsiSwitchLabelStatementBaseImpl implements PsiSwitchLabelStatement {
   private static final Logger LOG = Logger.getInstance(PsiSwitchLabelStatementImpl.class);
@@ -40,7 +39,7 @@ public class PsiSwitchLabelStatementImpl extends PsiSwitchLabelStatementBaseImpl
   }
 
   @Override
-  public int getChildRole(@Nonnull ASTNode child) {
+  public int getChildRole(ASTNode child) {
     LOG.assertTrue(child.getTreeParent() == this);
     IElementType i = child.getElementType();
     if (i == JavaTokenType.CASE_KEYWORD)
@@ -55,7 +54,7 @@ public class PsiSwitchLabelStatementImpl extends PsiSwitchLabelStatementBaseImpl
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitSwitchLabelStatement(this);
     }

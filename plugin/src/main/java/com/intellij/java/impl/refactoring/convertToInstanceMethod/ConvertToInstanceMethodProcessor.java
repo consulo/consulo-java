@@ -50,8 +50,7 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -86,9 +85,8 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
         return myTargetClass;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new MoveInstanceMethodViewDescriptor(myMethod, myTargetParameter, myTargetClass);
     }
 
@@ -100,7 +98,6 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
         myTargetClass = (PsiClass)elements[2];
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -141,7 +138,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         Set<PsiMember> methods = Collections.singleton((PsiMember)myMethod);
@@ -185,7 +182,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, myTargetClass)) {
             return;
         }
@@ -315,7 +312,7 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
         newMethod.accept(new JavaRecursiveElementVisitor() {
             @Override
             @RequiredWriteAction
-            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+            public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
                 PsiTypeParameter typeParameterToBind = reference.getCopyableUserData(BIND_TO_TYPE_PARAMETER);
                 if (typeParameterToBind != null) {
                     reference.putCopyableUserData(BIND_TO_TYPE_PARAMETER, null);
@@ -380,7 +377,6 @@ public class ConvertToInstanceMethodProcessor extends BaseRefactoringProcessor {
         arguments[parameterIndex].delete();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return ConvertToInstanceMethodHandler.REFACTORING_NAME;

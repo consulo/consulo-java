@@ -29,7 +29,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,27 +36,24 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AdapterToListenerIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class AdapterToListenerIntention extends MutablyNamedIntention {
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new AdapterToListenerPredicate();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         String text = element.getText();
         return IntentionPowerPackLocalize.adapterToListenerIntentionName(text);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.adapterToListenerIntentionFamilyName();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiElement parent = element.getParent();
         PsiElement grandParent = parent.getParent();
@@ -135,8 +131,8 @@ public class AdapterToListenerIntention extends MutablyNamedIntention {
     }
 
     private static void removeCallsToSuperMethodFromMethod(
-        @Nonnull PsiMethod overridingMethod,
-        @Nonnull PsiClass superClass) {
+        PsiMethod overridingMethod,
+        PsiClass superClass) {
         PsiCodeBlock body = overridingMethod.getBody();
         if (body == null) {
             return;
@@ -176,8 +172,8 @@ public class AdapterToListenerIntention extends MutablyNamedIntention {
         }
     }
 
-    private static void implementMethodInClass(@Nonnull PsiMethod method,
-                                               @Nonnull PsiClass aClass) {
+    private static void implementMethodInClass(PsiMethod method,
+                                               PsiClass aClass) {
         PsiMethod newMethod = (PsiMethod) aClass.add(method);
         PsiDocComment comment = newMethod.getDocComment();
         if (comment != null) {

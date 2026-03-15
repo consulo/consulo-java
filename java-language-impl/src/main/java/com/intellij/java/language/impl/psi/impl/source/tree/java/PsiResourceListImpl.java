@@ -18,7 +18,6 @@ package com.intellij.java.language.impl.psi.impl.source.tree.java;
 import java.util.Iterator;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -62,7 +61,6 @@ public class PsiResourceListImpl extends CompositePsiElement implements PsiResou
 		return PsiTreeUtil.getChildrenOfTypeAsList(this, PsiResourceVariable.class);
 	}
 
-	@Nonnull
 	@Override
 	public Iterator<PsiResourceListElement> iterator()
 	{
@@ -70,7 +68,7 @@ public class PsiResourceListImpl extends CompositePsiElement implements PsiResou
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{
@@ -83,16 +81,16 @@ public class PsiResourceListImpl extends CompositePsiElement implements PsiResou
 	}
 
 	@Override
-	public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-			@Nonnull ResolveState state,
+	public boolean processDeclarations(PsiScopeProcessor processor,
+			ResolveState state,
 			PsiElement lastParent,
-			@Nonnull PsiElement place)
+			PsiElement place)
 	{
 		return PsiImplUtil.processDeclarationsInResourceList(this, processor, state, lastParent);
 	}
 
 	@Override
-	public void deleteChildInternal(@Nonnull ASTNode child)
+	public void deleteChildInternal(ASTNode child)
 	{
 		if(child.getPsi() instanceof PsiResourceListElement && getResourceVariablesCount() == 1)
 		{

@@ -27,7 +27,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -40,14 +39,13 @@ public class DeleteRepeatedInterfaceFix implements SyntheticIntentionAction {
     myConjList = conjList;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Delete repeated '" + myConjunct.getText() + "'");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     for (PsiTypeElement element : myConjList) {
       if (!element.isValid()) {
         return false;
@@ -57,7 +55,7 @@ public class DeleteRepeatedInterfaceFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }

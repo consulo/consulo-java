@@ -28,7 +28,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,14 +37,13 @@ import java.util.Set;
 class PackageLocalsUsageCollector extends JavaRecursiveElementWalkingVisitor {
     private final Map<PsiElement, Set<PsiElement>> myReported = new HashMap<>();
     private final PsiElement[] myElementsToMove;
-    @Nonnull
     private final MultiMap<PsiElement, LocalizeValue> myConflicts;
     private final PackageWrapper myTargetPackage;
 
     public PackageLocalsUsageCollector(
         PsiElement[] elementsToMove,
         PackageWrapper targetPackage,
-        @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         myElementsToMove = elementsToMove;
         myConflicts = conflicts;
@@ -54,14 +52,14 @@ class PackageLocalsUsageCollector extends JavaRecursiveElementWalkingVisitor {
 
     @Override
     @RequiredReadAction
-    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(PsiReferenceExpression expression) {
         super.visitReferenceExpression(expression);
         visitReferenceElement(expression);
     }
 
     @Override
     @RequiredReadAction
-    public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+    public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
         super.visitReferenceElement(reference);
         PsiElement resolved = reference.resolve();
         visitResolvedReference(resolved, reference);

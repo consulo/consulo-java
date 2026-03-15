@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import jakarta.annotation.Nonnull;
 
 public enum EnumConstructorSecondParam {
     Value("1", "2");
 
-    EnumConstructorSecondParam(String s1, @Nonnull String s2) {
+    EnumConstructorSecondParam(String s1, String s2) {
     }
 }

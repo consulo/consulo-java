@@ -11,8 +11,6 @@ import consulo.language.editor.TargetElementUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import static org.junit.Assert.assertTrue;
 
@@ -20,9 +18,8 @@ import static org.junit.Assert.assertTrue;
  * @author dsl
  */
 public abstract class ChangeClassSignatureTest extends LightRefactoringTestCase {
-  @NonNls private static final String DATA_PATH = "/refactoring/changeClassSignature/";
+  private static final String DATA_PATH = "/refactoring/changeClassSignature/";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();
@@ -134,12 +131,12 @@ public abstract class ChangeClassSignatureTest extends LightRefactoringTestCase 
   }
 
   private void doTest(GenParams gen) throws Exception {
-    @NonNls String filePathBefore = getTestName(false) + ".java";
-    @NonNls String filePathAfter = getTestName(false) + ".java.after";
+    String filePathBefore = getTestName(false) + ".java";
+    String filePathAfter = getTestName(false) + ".java.after";
     doTest(gen, filePathBefore, filePathAfter);
   }
 
-  private void doTest(GenParams gen, @NonNls String filePathBefore, @NonNls String filePathAfter) throws Exception {
+  private void doTest(GenParams gen, String filePathBefore, String filePathAfter) throws Exception {
     String filePath = DATA_PATH + filePathBefore;
     configureByFile(filePath);
     PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));

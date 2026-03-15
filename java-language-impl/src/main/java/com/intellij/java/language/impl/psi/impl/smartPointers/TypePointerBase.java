@@ -20,8 +20,7 @@ import java.lang.ref.Reference;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.SmartTypePointer;
 import consulo.util.lang.ref.SoftReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by Max Medvedev on 10/25/13
@@ -30,7 +29,7 @@ public abstract class TypePointerBase<T extends PsiType> implements SmartTypePoi
 {
 	private Reference<T> myTypeRef;
 
-	public TypePointerBase(@Nonnull T type)
+	public TypePointerBase(T type)
 	{
 		myTypeRef = new SoftReference<T>(type);
 	}

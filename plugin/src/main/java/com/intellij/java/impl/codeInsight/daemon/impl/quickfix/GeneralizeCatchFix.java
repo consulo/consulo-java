@@ -29,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 public class GeneralizeCatchFix implements SyntheticIntentionAction {
   private final PsiElement myElement;
@@ -37,19 +36,18 @@ public class GeneralizeCatchFix implements SyntheticIntentionAction {
   private PsiTryStatement myTryStatement;
   private PsiParameter myCatchParameter;
 
-  public GeneralizeCatchFix(@Nonnull PsiElement element, @Nonnull PsiClassType unhandledException) {
+  public GeneralizeCatchFix(PsiElement element, PsiClassType unhandledException) {
     myElement = element;
     myUnhandledException = unhandledException;
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.generalizeCatchText(JavaHighlightUtil.formatType(myCatchParameter == null ? null : myCatchParameter.getType()), JavaHighlightUtil.formatType(myUnhandledException));
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!(myElement.isValid()
           && myUnhandledException.isValid()
           && myElement.getManager().isInProject(myElement))) return false;
@@ -77,7 +75,7 @@ public class GeneralizeCatchFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(myElement.getContainingFile())) return;
     PsiElementFactory factory = JavaPsiFacade.getInstance(myElement.getProject()).getElementFactory();
     PsiTypeElement type = factory.createTypeElement(myUnhandledException);

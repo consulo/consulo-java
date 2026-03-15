@@ -26,8 +26,7 @@ import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -35,7 +34,6 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMethodBreakpointProperties> implements JavaBreakpointType {
-    @Nonnull
     public static JavaMethodBreakpointType getInstance() {
         return EXTENSION_POINT_NAME.findExtension(JavaMethodBreakpointType.class);
     }
@@ -44,13 +42,11 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
         super("java-method", DebuggerBundle.message("method.breakpoints.tab.title"));
     }
 
-    @Nonnull
     @Override
     public Image getEnabledIcon() {
         return ExecutionDebugIconGroup.breakpointBreakpointmethod();
     }
 
-    @Nonnull
     @Override
     public Image getDisabledIcon() {
         return ExecutionDebugIconGroup.breakpointBreakpointmethoddisabled();
@@ -94,7 +90,7 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 
     @Nullable
     @Override
-    public XBreakpointCustomPropertiesPanel createCustomPropertiesPanel(@Nonnull Project project) {
+    public XBreakpointCustomPropertiesPanel createCustomPropertiesPanel(Project project) {
         return new MethodBreakpointPropertiesPanel();
     }
 
@@ -106,11 +102,10 @@ public class JavaMethodBreakpointType extends JavaLineBreakpointTypeBase<JavaMet
 
     @Nullable
     @Override
-    public JavaMethodBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
+    public JavaMethodBreakpointProperties createBreakpointProperties(VirtualFile file, int line) {
         return new JavaMethodBreakpointProperties();
     }
 
-    @Nonnull
     @Override
     public Breakpoint createJavaBreakpoint(Project project, XBreakpoint breakpoint) {
         return new MethodBreakpoint(project, breakpoint);

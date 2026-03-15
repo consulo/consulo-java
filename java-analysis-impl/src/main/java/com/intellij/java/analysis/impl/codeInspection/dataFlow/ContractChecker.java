@@ -17,7 +17,6 @@ import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -43,10 +42,10 @@ public final class ContractChecker {
 
         @Override
         protected void checkReturnValue(
-            @Nonnull DfaValue value,
-            @Nonnull PsiExpression expression,
-            @Nonnull PsiParameterListOwner context,
-            @Nonnull DfaMemoryState state
+            DfaValue value,
+            PsiExpression expression,
+            PsiParameterListOwner context,
+            DfaMemoryState state
         ) {
             if (context != myMethod || state.isEphemeral()) {
                 return;
@@ -83,11 +82,10 @@ public final class ContractChecker {
         }
 
         @Override
-        @Nonnull
         public DfaInstructionState[] visitControlTransfer(
-            @Nonnull ControlTransferInstruction instruction,
-            @Nonnull DataFlowRunner runner,
-            @Nonnull DfaMemoryState state
+            ControlTransferInstruction instruction,
+            DataFlowRunner runner,
+            DfaMemoryState state
         ) {
             if (instruction instanceof ReturnInstruction returnInsn && returnInsn.isViaException()) {
                 ContainerUtil.addIfNotNull(myFailures, returnInsn.getAnchor());

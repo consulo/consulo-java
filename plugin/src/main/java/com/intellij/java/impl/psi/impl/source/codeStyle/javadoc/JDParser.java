@@ -17,8 +17,7 @@ import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -47,12 +46,12 @@ public class JDParser {
   private final static Pattern HTML_TAG_PATTERN = Pattern.compile(HTML_TAG_REGEXP);
   private final static Pattern PRE_TAG_START_PATTERN = Pattern.compile(PRE_TAG_START_REGEXP);
 
-  public JDParser(@Nonnull CodeStyleSettings settings) {
+  public JDParser(CodeStyleSettings settings) {
     mySettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
     myCommonSettings = settings.getCommonSettings(JavaLanguage.INSTANCE);
   }
 
-  public void formatCommentText(@Nonnull PsiElement element, @Nonnull CommentFormatter formatter) {
+  public void formatCommentText(PsiElement element, CommentFormatter formatter) {
     CommentInfo info = getElementsCommentInfo(element);
     if (info == null || !isJavadoc(info)) {
       return;
@@ -94,7 +93,7 @@ public class JDParser {
     return null;
   }
 
-  private static CommentInfo getCommentInfo(@Nonnull PsiDocComment docComment, @Nonnull PsiElement owner) {
+  private static CommentInfo getCommentInfo(PsiDocComment docComment, PsiElement owner) {
     String commentHeader = null;
     String commentFooter = null;
 
@@ -135,7 +134,7 @@ public class JDParser {
     return new CommentInfo(docComment, owner, commentHeader, sb.toString(), commentFooter);
   }
 
-  private JDComment parse(@Nonnull CommentInfo info, @Nonnull CommentFormatter formatter) {
+  private JDComment parse(CommentInfo info, CommentFormatter formatter) {
     JDComment comment = createComment(info.commentOwner, formatter);
     parse(info.comment, comment);
     if (info.commentHeader != null) {
@@ -147,7 +146,7 @@ public class JDParser {
     return comment;
   }
 
-  private static JDComment createComment(@Nonnull PsiElement commentOwner, @Nonnull CommentFormatter formatter) {
+  private static JDComment createComment(PsiElement commentOwner, CommentFormatter formatter) {
     if (commentOwner instanceof PsiClass) {
       return new JDClassComment(formatter);
     } else if (commentOwner instanceof PsiMethod) {
@@ -157,7 +156,7 @@ public class JDParser {
     }
   }
 
-  private void parse(@Nullable String text, @Nonnull JDComment comment) {
+  private void parse(@Nullable String text, JDComment comment) {
     if (text == null) {
       return;
     }
@@ -347,8 +346,7 @@ public class JDParser {
     return false;
   }
 
-  @Nonnull
-  private static String removeWhiteSpacesFrom(@Nonnull String token) {
+  private static String removeWhiteSpacesFrom(String token) {
     StringBuilder result = new StringBuilder();
     for (char c : token.toCharArray()) {
       if (c != ' ') {
@@ -468,18 +466,18 @@ public class JDParser {
     return result;
   }
 
-  private boolean isKeepLineFeedsIn(@Nonnull String line) {
+  private boolean isKeepLineFeedsIn(String line) {
     return mySettings.JD_PRESERVE_LINE_FEEDS || startsWithTag(line);
   }
 
-  private static boolean startsWithTag(@Nonnull String line) {
+  private static boolean startsWithTag(String line) {
     if (line.trim().startsWith("<")) {
       return HTML_TAG_PATTERN.matcher(line).matches();
     }
     return false;
   }
 
-  private static void endParagraph(@Nonnull List<Pair<String, Boolean>> result, @Nonnull StringBuilder sb) {
+  private static void endParagraph(List<Pair<String, Boolean>> result, StringBuilder sb) {
     if (sb.length() > 0) {
       result.add(new Pair<>(sb.toString(), false));
       sb.setLength(0);
@@ -592,16 +590,16 @@ public class JDParser {
       }
   };
 
-  private static boolean lineHasUnclosedPreTag(@Nonnull String line) {
+  private static boolean lineHasUnclosedPreTag(String line) {
     return getOccurenceCount(line, PRE_TAG_START_PATTERN) > StringUtil.getOccurrenceCount(line, PRE_TAG_END);
   }
 
-  private static boolean lineHasClosingPreTag(@Nonnull String line) {
+  private static boolean lineHasClosingPreTag(String line) {
     return StringUtil.getOccurrenceCount(line, PRE_TAG_END) > getOccurenceCount(line, PRE_TAG_START_PATTERN);
   }
 
   @SuppressWarnings("SameParameterValue")
-  private static int getOccurenceCount(@Nonnull String line, @Nonnull Pattern pattern) {
+  private static int getOccurenceCount(String line, Pattern pattern) {
     Matcher matcher = pattern.matcher(line);
     int count = 0;
     while (matcher.find()) {
@@ -610,8 +608,7 @@ public class JDParser {
     return count;
   }
 
-  @Nonnull
-  protected StringBuilder formatJDTagDescription(@Nullable String str, @Nonnull CharSequence prefix) {
+  protected StringBuilder formatJDTagDescription(@Nullable String str, CharSequence prefix) {
     return formatJDTagDescription(str, prefix, prefix);
   }
 
@@ -626,10 +623,9 @@ public class JDParser {
    * @param continuationPrefix prefix to be added to lines after the first
    * @return formatted JavaDoc tag description
    */
-  @Nonnull
   protected StringBuilder formatJDTagDescription(@Nullable String str,
-                                                 @Nonnull CharSequence firstLinePrefix,
-                                                 @Nonnull CharSequence continuationPrefix) {
+                                                 CharSequence firstLinePrefix,
+                                                 CharSequence continuationPrefix) {
     int rightMargin = myCommonSettings.getRootSettings().getRightMargin(JavaLanguage.INSTANCE);
     int maxCommentLength = rightMargin - continuationPrefix.length();
     int firstLinePrefixLength = firstLinePrefix.length();

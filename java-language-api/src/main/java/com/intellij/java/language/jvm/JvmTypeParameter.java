@@ -15,9 +15,8 @@
  */
 package com.intellij.java.language.jvm;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
-import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.TypeVariable;
 
@@ -34,7 +33,6 @@ public interface JvmTypeParameter extends JvmTypeDeclaration
 	 * @see TypeVariable#getBounds
 	 * @see TypeVariable#getAnnotatedBounds
 	 */
-	@Nonnull
 	JvmReferenceType[] getBounds();
 
 	/**

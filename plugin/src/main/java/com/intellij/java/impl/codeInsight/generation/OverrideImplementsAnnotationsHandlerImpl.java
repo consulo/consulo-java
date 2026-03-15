@@ -26,7 +26,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,8 +42,7 @@ public class OverrideImplementsAnnotationsHandlerImpl implements OverrideImpleme
   }
 
   @Override
-  @Nonnull
-  public String[] annotationsToRemove(Project project, @Nonnull String fqName) {
+  public String[] annotationsToRemove(Project project, String fqName) {
     NullableNotNullManager manager = NullableNotNullManager.getInstance(project);
     if (manager.getNotNulls().contains(fqName)) {
       return ArrayUtil.toStringArray(manager.getNullables());

@@ -18,7 +18,6 @@ package com.intellij.java.impl.generate.config;
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
-import jakarta.annotation.Nonnull;
 
 /**
  * This policy is to create a duplicate <code>toString</code> method.
@@ -45,7 +44,7 @@ public class DuplicatePolicy implements ConflictResolutionPolicy
 	}
 
 	@Override
-	public PsiMethod applyMethod(PsiClass clazz, PsiMethod existingMethod, @Nonnull PsiMethod newMethod, Editor editor)
+	public PsiMethod applyMethod(PsiClass clazz, PsiMethod existingMethod, PsiMethod newMethod, Editor editor)
 	{
 		return newMethodStrategy.insertNewMethod(clazz, newMethod, editor);
 	}

@@ -3,12 +3,10 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiRecordComponent;
 import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
-import jakarta.annotation.Nonnull;
 
 public interface PsiRecordComponentStub extends PsiMemberStub<PsiRecordComponent>
 {
 	@Override
-	@Nonnull
 	String getName();
 
 	TypeInfo getType();

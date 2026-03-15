@@ -27,8 +27,7 @@ import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,13 +39,11 @@ import java.util.Set;
 public class LambdaHighlightingUtil {
     private static final Logger LOG = Logger.getInstance(LambdaHighlightingUtil.class);
 
-    @Nonnull
-    public static LocalizeValue checkInterfaceFunctional(@Nonnull PsiClass psiClass) {
+    public static LocalizeValue checkInterfaceFunctional(PsiClass psiClass) {
         return checkInterfaceFunctional(psiClass, JavaCompilationErrorLocalize.lambdaTargetNotInterface());
     }
 
-    @Nonnull
-    public static LocalizeValue checkInterfaceFunctional(@Nonnull PsiClass psiClass, @Nonnull LocalizeValue interfaceNonFunctionalMessage) {
+    public static LocalizeValue checkInterfaceFunctional(PsiClass psiClass, LocalizeValue interfaceNonFunctionalMessage) {
         if (psiClass instanceof PsiTypeParameter) {
             return LocalizeValue.empty(); //should be logged as cyclic inference
         }
@@ -103,7 +100,6 @@ public class LambdaHighlightingUtil {
         return parent instanceof PsiExpressionList || parent instanceof PsiExpression;
     }
 
-    @Nonnull
     public static LocalizeValue checkInterfaceFunctional(PsiType functionalInterfaceType) {
         if (functionalInterfaceType instanceof PsiIntersectionType) {
             Set<MethodSignature> signatures = new HashSet<>();

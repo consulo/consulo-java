@@ -32,12 +32,10 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 public class ReplaceReferenceUsageInfo extends FixableUsageInfo {
     public static final Logger LOG = Logger.getInstance(ReplaceReferenceUsageInfo.class);
     private final PsiClass myTargetClass;
-    @Nonnull
     private final LocalizeValue myConflict;
 
     @RequiredReadAction

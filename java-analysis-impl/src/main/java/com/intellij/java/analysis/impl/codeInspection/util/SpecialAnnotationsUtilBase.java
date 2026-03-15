@@ -29,33 +29,30 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.application.util.function.Processor;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
 public class SpecialAnnotationsUtilBase {
-  public static LocalQuickFix createAddToSpecialAnnotationsListQuickFix(@Nonnull final LocalizeValue text,
-                                                                        @Nonnull final LocalizeValue family,
-                                                                        @Nonnull final List<String> targetList,
-                                                                        @Nonnull final String qualifiedName,
+  public static LocalQuickFix createAddToSpecialAnnotationsListQuickFix(final LocalizeValue text,
+                                                                        final LocalizeValue family,
+                                                                        final List<String> targetList,
+                                                                        final String qualifiedName,
                                                                         final PsiElement context) {
     return new LocalQuickFix() {
       @Override
-      @Nonnull
       public LocalizeValue getName() {
         return text;
       }
 
       @Override
-      public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+      public void applyFix(final Project project, final ProblemDescriptor descriptor) {
         doQuickFixInternal(project, targetList, qualifiedName);
       }
     };
   }
 
-  public static void doQuickFixInternal(@Nonnull Project project, @Nonnull List<String> targetList, @Nonnull String qualifiedName) {
+  public static void doQuickFixInternal(Project project, List<String> targetList, String qualifiedName) {
     targetList.add(qualifiedName);
     Collections.sort(targetList);
     final InspectionProfile inspectionProfile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
@@ -74,12 +71,12 @@ public class SpecialAnnotationsUtilBase {
     */
   }
 
-  public static void createAddToSpecialAnnotationFixes(@Nonnull PsiModifierListOwner owner, @Nonnull Processor<String> processor) {
+  public static void createAddToSpecialAnnotationFixes(PsiModifierListOwner owner, Processor<String> processor) {
     final PsiModifierList modifierList = owner.getModifierList();
     if (modifierList != null) {
       final PsiAnnotation[] psiAnnotations = modifierList.getAnnotations();
       for (PsiAnnotation psiAnnotation : psiAnnotations) {
-        @NonNls final String name = psiAnnotation.getQualifiedName();
+        final String name = psiAnnotation.getQualifiedName();
         if (name == null) continue;
         if (name.startsWith("java.") || name.startsWith("javax.") ||
             name.startsWith("org.jetbrains.") && AnnotationUtil.isJetbrainsAnnotation(StringUtil.getShortName(name)))

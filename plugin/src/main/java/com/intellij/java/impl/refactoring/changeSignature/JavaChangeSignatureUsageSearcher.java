@@ -43,7 +43,6 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.xml.psi.xml.XmlElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -336,7 +335,6 @@ class JavaChangeSignatureUsageSearcher {
             myMethod = method;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getDescription() {
             return RefactoringLocalize.thereIsAlreadyA0InThe1ItWillConflictWithTheRenamedParameter(

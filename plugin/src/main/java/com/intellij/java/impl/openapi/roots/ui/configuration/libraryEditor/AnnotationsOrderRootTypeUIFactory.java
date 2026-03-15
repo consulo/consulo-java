@@ -30,29 +30,24 @@ import consulo.ide.ui.OrderRootTypeUIFactory;
 import consulo.ide.ui.SdkPathEditor;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
-  @Nonnull
   @Override
   public Image getIcon() {
     return AllIcons.Modules.Annotation;
   }
 
-  @Nonnull
   @Override
   public String getNodeText() {
     return JavaCoreBundle.message("sdk.configure.external.annotations.tab");
   }
 
-  @Nonnull
   @Override
   public String getOrderRootTypeId() {
     return "javaExternalAnnotations";
   }
 
-  @Nonnull
   @Override
   public SdkPathEditor createPathEditor(Sdk sdk) {
     return new SdkPathEditor(JavaCoreBundle.message("sdk.configure.external.annotations.tab"), AnnotationOrderRootType.getInstance(), new FileChooserDescriptor(false, true, true, false, true, false), sdk);

@@ -31,7 +31,6 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -40,19 +39,18 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
     super("MODULE");
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new CompositeElement(this);
   }
 
   @Override
-  public PsiJavaModule createPsi(@Nonnull PsiJavaModuleStub stub) {
+  public PsiJavaModule createPsi(PsiJavaModuleStub stub) {
     return getPsiFactory(stub).createModule(stub);
   }
 
   @Override
-  public PsiJavaModule createPsi(@Nonnull ASTNode node) {
+  public PsiJavaModule createPsi(ASTNode node) {
     return new PsiJavaModuleImpl(node);
   }
 
@@ -63,19 +61,18 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
   }
 
   @Override
-  public void serialize(@Nonnull PsiJavaModuleStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiJavaModuleStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
   }
 
-  @Nonnull
   @Override
-  public PsiJavaModuleStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiJavaModuleStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     String name = StringRef.toString(dataStream.readName());
     return new PsiJavaModuleStubImpl(parentStub, name);
   }
 
   @Override
-  public void indexStub(@Nonnull PsiJavaModuleStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiJavaModuleStub stub, IndexSink sink) {
     sink.occurrence(JavaStubIndexKeys.MODULE_NAMES, stub.getName());
   }
 }

@@ -20,7 +20,6 @@ import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.impl.ui.ReferenceEditorComboWithBrowseButton;
-import jakarta.annotation.Nonnull;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,7 +28,7 @@ import java.awt.event.ActionListener;
  * @author yole
  */
 public class PackageNameReferenceEditorCombo extends ReferenceEditorComboWithBrowseButton {
-  public PackageNameReferenceEditorCombo(String text, @Nonnull final Project project,
+  public PackageNameReferenceEditorCombo(String text, final Project project,
                                          String recentsKey, final String chooserTitle) {
     super(null, text, project, false, recentsKey);
     setButtonIcon(PlatformIconGroup.nodesPackage());

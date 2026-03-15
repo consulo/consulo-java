@@ -26,9 +26,7 @@ import consulo.codeInsight.TargetElementUtilEx;
 import consulo.language.editor.TargetElementUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 
@@ -431,7 +429,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 
 	private void doTest(@PsiModifier.ModifierConstant @Nullable String newVisibility,
 			@Nullable String newName,
-			@Nullable @NonNls String newReturnType,
+			@Nullable String newReturnType,
 			GenParams gen,
 			boolean generateDelegate) throws Exception
 	{
@@ -446,7 +444,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 			boolean generateDelegate) throws Exception
 	{
 		String basePath = "/refactoring/changeSignature/" + getTestName(false);
-		@NonNls String filePath = basePath + ".java";
+		String filePath = basePath + ".java";
 		configureByFile(filePath);
 		PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
 		assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
@@ -455,14 +453,14 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 		PsiType newType = newReturnType != null ? factory.createTypeFromText(newReturnType, method) : method.getReturnType();
 		new ChangeSignatureProcessor(getProject(), method, generateDelegate, newVisibility, newName != null ? newName : method.getName(), newType, genParams.genParams(method), genExceptions
 				.genExceptions(method)).run();
-		@NonNls String after = basePath + "_after.java";
+		String after = basePath + "_after.java";
 		checkResultByFile(after);
 	}
 
 	public void testPropagateParameter() throws Exception
 	{
 		String basePath = "/refactoring/changeSignature/" + getTestName(false);
-		@NonNls String filePath = basePath + ".java";
+		String filePath = basePath + ".java";
 		configureByFile(filePath);
 		PsiElement targetElement = TargetElementUtil.findTargetElement(getEditor(), ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED));
 		assertTrue("<caret> is not on method name", targetElement instanceof PsiMethod);
@@ -479,7 +477,7 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 				new ParameterInfoImpl(0, parameters[0].getName(), parameters[0].getType()),
 				new ParameterInfoImpl(-1, "b", PsiType.BOOLEAN, "true")
 		}, null, propagateParametersMethods, null).run();
-		@NonNls String after = basePath + "_after.java";
+		String after = basePath + "_after.java";
 		checkResultByFile(after);
 	}
 
@@ -550,7 +548,6 @@ public abstract class ChangeSignatureTest extends LightRefactoringTestCase
 		}
 	}
 
-	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{

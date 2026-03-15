@@ -30,8 +30,7 @@ import consulo.execution.ui.console.Filter;
 import consulo.execution.ui.console.HyperlinkInfo;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import java.util.Collections;
@@ -56,7 +55,7 @@ class StackTraceElementObjectRenderer extends ToStringBasedRenderer implements F
                                                    final ValueDescriptorImpl valueDescriptor) {
     return new JavaValue.JavaFullValueEvaluator(JavaDebuggerLocalize.messageNodeNavigate(), evaluationContext) {
       @Override
-      public void evaluate(@Nonnull XFullValueEvaluationCallback callback) {
+      public void evaluate(XFullValueEvaluationCallback callback) {
         Value value = valueDescriptor.getValue();
         ClassType type = ((ClassType)value.type());
         Method toString = type.concreteMethodByName("toString", "()Ljava/lang/String;");

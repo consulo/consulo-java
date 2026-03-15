@@ -25,18 +25,15 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MagicCharacterInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.magicCharacterDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.magicCharacterProblemDescriptor().get();
     }
@@ -58,7 +55,7 @@ public class MagicCharacterInspection extends BaseInspection {
 
     private static class CharacterLiteralsShouldBeExplicitlyDeclaredVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+        public void visitLiteralExpression(PsiLiteralExpression expression) {
             super.visitLiteralExpression(expression);
             PsiType type = expression.getType();
             if (type == null) {

@@ -49,8 +49,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.DialogWrapper;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
 import org.jetbrains.java.generate.GenerateToStringActionHandler;
 import org.jetbrains.java.generate.GenerateToStringContext;
@@ -80,7 +79,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         PsiClass clazz = getSubjectClass(editor, file);
         assert clazz != null;
 
@@ -93,7 +92,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
         doExecuteAction(project, clazz, null);
     }
 
-    private static void doExecuteAction(@Nonnull Project project, @Nonnull PsiClass clazz, Editor editor) {
+    private static void doExecuteAction(Project project, PsiClass clazz, Editor editor) {
         logger.debug("+++ doExecuteAction - START +++");
 
         if (logger.isDebugEnabled()) {
@@ -225,7 +224,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
             comboBox.setRenderer(new ColoredListCellRenderer<>() {
                 @Override
                 protected void customizeCellRenderer(
-                    @Nonnull JList<? extends TemplateResource> jList,
+                    JList<? extends TemplateResource> jList,
                     TemplateResource templateResource,
                     int i,
                     boolean b,
@@ -249,7 +248,6 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
                             return res;
                         }
 
-                        @Nonnull
                         @Override
                         public LocalizeValue getDisplayName() {
                             return LocalizeValue.localizeTODO("toString() Generation Settings");

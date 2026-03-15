@@ -21,12 +21,11 @@ import consulo.fileTemplate.FileTemplate;
 import consulo.language.psi.PsiDirectory;
 import consulo.util.collection.ArrayUtil;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaInternalTemplatesHandler extends JavaCreateFromTemplateHandler {
   @Override
-  public boolean handlesTemplate(@Nonnull FileTemplate template) {
+  public boolean handlesTemplate(FileTemplate template) {
     return ArrayUtil.contains(template.getName(), JavaTemplateUtil.INTERNAL_CLASS_TEMPLATES);
   }
 

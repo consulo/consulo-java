@@ -27,8 +27,7 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -41,12 +40,10 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
   @SuppressWarnings("PublicField")
   public boolean m_ignoreStaticMethods = true;
 
-  @Nonnull
   public String getID() {
     return "LocalVariableHidesMemberVariable";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.localVariableHidesMemberVariableDisplayName();
   }
@@ -59,7 +56,6 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
     return true;
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsLocalize.localVariableHidesMemberVariableProblemDescriptor(aClass.getName()).get();
@@ -79,7 +75,7 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
   private class LocalVariableHidingMemberVariableVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+    public void visitLocalVariable(PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       if (m_ignoreStaticMethods) {
         PsiMember member = PsiTreeUtil.getParentOfType(variable, PsiMethod.class, PsiClassInitializer.class);
@@ -95,7 +91,7 @@ public class LocalVariableHidingMemberVariableInspection extends BaseInspection 
     }
 
     @Override
-    public void visitParameter(@Nonnull PsiParameter variable) {
+    public void visitParameter(PsiParameter variable) {
       super.visitParameter(variable);
       PsiElement declarationScope = variable.getDeclarationScope();
       if (!(declarationScope instanceof PsiCatchSection) && !(declarationScope instanceof PsiForeachStatement)) {

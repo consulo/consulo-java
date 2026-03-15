@@ -28,25 +28,21 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class RandomDoubleForRandomIntegerInspection extends BaseInspection {
     @Override
-    @Nonnull
     public String getID() {
         return "UsingRandomNextDoubleForRandomInteger";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.randomDoubleForRandomIntegerDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.randomDoubleForRandomIntegerProblemDescriptor().get();
     }
@@ -57,7 +53,6 @@ public class RandomDoubleForRandomIntegerInspection extends BaseInspection {
     }
 
     private static class RandomDoubleForRandomIntegerFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.randomDoubleForRandomIntegerReplaceQuickfix();
         }
@@ -106,7 +101,7 @@ public class RandomDoubleForRandomIntegerInspection extends BaseInspection {
 
     private static class RandomDoubleForRandomIntegerVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             PsiReferenceExpression methodExpression = call.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

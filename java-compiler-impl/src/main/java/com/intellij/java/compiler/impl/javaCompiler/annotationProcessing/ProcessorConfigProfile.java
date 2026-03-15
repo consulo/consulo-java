@@ -15,8 +15,7 @@
  */
 package com.intellij.java.compiler.impl.javaCompiler.annotationProcessing;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Set;
@@ -42,7 +41,6 @@ public interface ProcessorConfigProfile extends AnnotationProcessingConfiguratio
 
   void setGeneratedSourcesDirectoryName(@Nullable String generatedSourcesDirectoryName, boolean forTests);
 
-  @Nonnull
   Set<String> getModuleNames();
 
   boolean addModuleName(String name);

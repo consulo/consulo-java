@@ -28,8 +28,7 @@ import consulo.language.sem.SemRegistrar;
 import consulo.language.sem.SemService;
 import consulo.util.lang.function.PairConsumer;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -93,13 +92,13 @@ public class JamMemberMeta<Psi extends PsiModifierListOwner, Jam extends JamElem
   }
 
   @Override
-  public JamMemberMeta<Psi, Jam> addPomTargetProducer(@Nonnull PairConsumer<Jam, Consumer<PomTarget>> producer) {
+  public JamMemberMeta<Psi, Jam> addPomTargetProducer(PairConsumer<Jam, Consumer<PomTarget>> producer) {
     super.addPomTargetProducer(producer);
     return this;
   }
 
   @Nullable
-  public final Jam getJamElement(@Nonnull Psi member) {
+  public final Jam getJamElement(Psi member) {
     return SemService.getSemService(member.getProject()).getSemElement(myJamKey, member);
   }
 

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import jakarta.annotation.Nonnull;
 import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiJavaFile;
@@ -28,7 +27,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class JavaFileElement extends FileElement
 {
@@ -40,7 +39,7 @@ public class JavaFileElement extends FileElement
 	}
 
 	@Override
-	public void deleteChildInternal(@Nonnull ASTNode child)
+	public void deleteChildInternal(ASTNode child)
 	{
 		if(child.getElementType() == JavaElementType.CLASS)
 		{
@@ -73,7 +72,7 @@ public class JavaFileElement extends FileElement
 	}
 
 	@Override
-	public int getChildRole(@Nonnull ASTNode child)
+	public int getChildRole(ASTNode child)
 	{
 		LOG.assertTrue(child.getTreeParent() == this);
 		IElementType i = child.getElementType();
@@ -96,7 +95,7 @@ public class JavaFileElement extends FileElement
 	}
 
 	@Override
-	public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement)
+	public void replaceChildInternal(ASTNode child, TreeElement newElement)
 	{
 		if(newElement.getElementType() == JavaElementType.IMPORT_LIST)
 		{

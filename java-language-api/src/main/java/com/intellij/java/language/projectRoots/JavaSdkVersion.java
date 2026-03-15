@@ -3,8 +3,7 @@ package com.intellij.java.language.projectRoots;
 
 import com.intellij.java.language.LanguageLevel;
 import consulo.application.util.JavaVersion;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -47,27 +46,24 @@ public enum JavaSdkVersion {
 
     private final LanguageLevel myMaxLanguageLevel;
 
-    JavaSdkVersion(@Nonnull LanguageLevel maxLanguageLevel) {
+    JavaSdkVersion(LanguageLevel maxLanguageLevel) {
         myMaxLanguageLevel = maxLanguageLevel;
     }
 
-    @Nonnull
     public LanguageLevel getMaxLanguageLevel() {
         return myMaxLanguageLevel;
     }
 
-    @Nonnull
     public String getDescription() {
         int feature = ordinal();
         return feature < 5 ? "1." + feature : String.valueOf(feature);
     }
 
-    public boolean isAtLeast(@Nonnull JavaSdkVersion version) {
+    public boolean isAtLeast(JavaSdkVersion version) {
         return compareTo(version) >= 0;
     }
 
-    @Nonnull
-    public static JavaSdkVersion fromLanguageLevel(@Nonnull LanguageLevel languageLevel) throws IllegalArgumentException {
+    public static JavaSdkVersion fromLanguageLevel(LanguageLevel languageLevel) throws IllegalArgumentException {
         if (languageLevel == LanguageLevel.JDK_1_3) {
             return JDK_1_3;
         }
@@ -87,13 +83,13 @@ public enum JavaSdkVersion {
      * See {@link JavaVersion#parse(String)} for supported formats.
      */
     @Nullable
-    public static JavaSdkVersion fromVersionString(@Nonnull String versionString) {
+    public static JavaSdkVersion fromVersionString(String versionString) {
         JavaVersion version = JavaVersion.tryParse(versionString);
         return version != null ? fromJavaVersion(version) : null;
     }
 
     @Nullable
-    public static JavaSdkVersion fromJavaVersion(@Nonnull JavaVersion version) {
+    public static JavaSdkVersion fromJavaVersion(JavaVersion version) {
         JavaSdkVersion[] values = values();
         return version.feature < values.length ? values[version.feature] : null;
     }

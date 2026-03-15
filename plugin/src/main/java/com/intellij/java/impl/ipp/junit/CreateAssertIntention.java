@@ -28,19 +28,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.CreateAssertIntention", fileExtensions = "java", categories = {"Java", "JUnit"})
 public class CreateAssertIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.createAssertIntentionName();
     }
 
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new CreateAssertPredicate();
     }
@@ -63,7 +59,7 @@ public class CreateAssertIntention extends Intention {
             specifierString = "";
         }
         if (BoolUtils.isNegation(expression)) {
-            @NonNls String newExpression =
+            String newExpression =
                 specifierString + "assertFalse(" +
                     BoolUtils.getNegatedExpressionText(expression) + ");";
             replaceStatementAndShorten(newExpression,
@@ -82,7 +78,7 @@ public class CreateAssertIntention extends Intention {
                 comparedExpression = lhs;
             }
             assert comparedExpression != null;
-            @NonNls String newExpression = specifierString +
+            String newExpression = specifierString +
                 "assertNull(" + comparedExpression.getText() + ");";
             replaceStatementAndShorten(newExpression,
                 statement);
@@ -104,7 +100,7 @@ public class CreateAssertIntention extends Intention {
             }
             assert comparingExpression != null;
             PsiType type = lhs.getType();
-            @NonNls String newExpression;
+            String newExpression;
             if (PsiType.DOUBLE.equals(type) || PsiType.FLOAT.equals(type)) {
                 newExpression = specifierString + "assertEquals(" +
                     comparedExpression.getText() + ", " +
@@ -134,7 +130,7 @@ public class CreateAssertIntention extends Intention {
             PsiExpressionList argList = call.getArgumentList();
             PsiExpression comparingExpression =
                 argList.getExpressions()[0];
-            @NonNls String newExpression;
+            String newExpression;
             if (comparingExpression instanceof PsiLiteralExpression) {
                 newExpression = specifierString + "assertEquals(" +
                     comparingExpression.getText() + ", " +
@@ -149,7 +145,7 @@ public class CreateAssertIntention extends Intention {
                 statement);
         }
         else {
-            @NonNls String newExpression =
+            String newExpression =
                 specifierString + "assertTrue(" + expression.getText() + ");";
             replaceStatementAndShorten(newExpression,
                 statement);
@@ -164,7 +160,7 @@ public class CreateAssertIntention extends Intention {
             (PsiMethodCallExpression) expression;
         PsiReferenceExpression methodExpression =
             call.getMethodExpression();
-        @NonNls String methodName = methodExpression.getReferenceName();
+        String methodName = methodExpression.getReferenceName();
         if (!"equals".equals(methodName)) {
             return false;
         }
@@ -210,7 +206,7 @@ public class CreateAssertIntention extends Intention {
         if (!(expression instanceof PsiLiteralExpression)) {
             return false;
         }
-        @NonNls String text = expression.getText();
+        String text = expression.getText();
         return PsiKeyword.NULL.equals(text);
     }
 }

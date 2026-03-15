@@ -25,7 +25,6 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -33,7 +32,6 @@ import jakarta.annotation.Nonnull;
 public class RedundantInstanceofFix implements LocalQuickFix
 {
 	@Override
-	@Nonnull
 	public LocalizeValue getName()
 	{
 		return InspectionLocalize.inspectionDataFlowRedundantInstanceofQuickfix();
@@ -41,7 +39,7 @@ public class RedundantInstanceofFix implements LocalQuickFix
 
 	@Override
 	@RequiredWriteAction
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(Project project, ProblemDescriptor descriptor)
 	{
 		final PsiElement psiElement = descriptor.getPsiElement();
 		if (psiElement instanceof PsiInstanceOfExpression instanceOfExpression)

@@ -21,8 +21,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import com.intellij.java.impl.refactoring.inline.InlineMethodProcessor;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.PsiElement;
@@ -38,7 +36,6 @@ import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
 
 public abstract class InlineMethodTest extends LightRefactoringTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();
@@ -267,7 +264,7 @@ public abstract class InlineMethodTest extends LightRefactoringTestCase {
   }
 
   private void doTestInlineThisOnly() {
-    @NonNls String fileName = "/refactoring/inlineMethod/" + getTestName(false) + ".java";
+    String fileName = "/refactoring/inlineMethod/" + getTestName(false) + ".java";
     configureByFile(fileName);
     performAction(new MockInlineMethodOptions(){
       @Override
@@ -284,7 +281,7 @@ public abstract class InlineMethodTest extends LightRefactoringTestCase {
 
   private void doTest(boolean nonCode) throws Exception {
     String name = getTestName(false);
-    @NonNls String fileName = "/refactoring/inlineMethod/" + name + ".java";
+    String fileName = "/refactoring/inlineMethod/" + name + ".java";
     configureByFile(fileName);
     performAction(nonCode);
     checkResultByFile(fileName + ".after");

@@ -17,8 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java <code>import</code> or <code>import static</code> statement.
@@ -32,7 +31,6 @@ public interface PsiImportStatementBase extends PsiElement {
   PsiImportStatementBase[] EMPTY_ARRAY = new PsiImportStatementBase[0];
 
   ArrayFactory<PsiImportStatementBase> ARRAY_FACTORY = new ArrayFactory<PsiImportStatementBase>() {
-    @Nonnull
     @Override
     public PsiImportStatementBase[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiImportStatementBase[count];

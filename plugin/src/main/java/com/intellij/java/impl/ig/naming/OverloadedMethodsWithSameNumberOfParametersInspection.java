@@ -23,7 +23,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -33,13 +32,11 @@ public class OverloadedMethodsWithSameNumberOfParametersInspection extends BaseI
     public boolean ignoreInconvertibleTypes = true;
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overloadedMethodsWithSameNumberParametersDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.overloadedMethodsWithSameNumberParametersProblemDescriptor().get();
     }
@@ -58,7 +55,7 @@ public class OverloadedMethodsWithSameNumberOfParametersInspection extends BaseI
     private class OverloadedMethodsWithSameNumberOfParametersVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (method.isConstructor()) {
                 return;
             }

@@ -40,9 +40,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.undoRedo.CommandProcessor;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +90,7 @@ public abstract class LocalToFieldHandler {
       final boolean isStatic = tempIsStatic;
       JBPopup popup = PopupNavigationUtil.getPsiElementPopup(classes.toArray(new PsiClass[classes.size()]), new PsiClassListCellRenderer(), "Choose class to introduce " + (myIsConstant ? "constant" : "field"), new PsiElementProcessor<PsiClass>() {
         @Override
-        public boolean execute(@Nonnull PsiClass aClass) {
+        public boolean execute(PsiClass aClass) {
           convertLocalToField(local, aClass, editor, isStatic);
           return false;
         }
@@ -136,7 +134,7 @@ public abstract class LocalToFieldHandler {
   }
 
   private static PsiField createField(PsiLocalVariable local, PsiType forcedType, String fieldName, boolean includeInitializer) {
-    @NonNls StringBuilder pattern = new StringBuilder();
+    StringBuilder pattern = new StringBuilder();
     pattern.append("private int ");
     pattern.append(fieldName);
     if (local.getInitializer() == null) {
@@ -217,7 +215,7 @@ public abstract class LocalToFieldHandler {
         if (first instanceof PsiExpressionStatement) {
           PsiExpression expression = ((PsiExpressionStatement) first).getExpression();
           if (expression instanceof PsiMethodCallExpression) {
-            @NonNls String text = ((PsiMethodCallExpression) expression).getMethodExpression().getText();
+            String text = ((PsiMethodCallExpression) expression).getMethodExpression().getText();
             if ("this".equals(text)) {
               continue;
             }

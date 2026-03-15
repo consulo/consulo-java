@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import consulo.util.collection.ArrayFactory;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java statement.
@@ -29,7 +28,6 @@ public interface PsiStatement extends PsiElement {
   PsiStatement[] EMPTY_ARRAY = new PsiStatement[0];
 
   ArrayFactory<PsiStatement> ARRAY_FACTORY = new ArrayFactory<PsiStatement>() {
-    @Nonnull
     @Override
     public PsiStatement[] create(final int count) {
       return count == 0 ? PsiStatement.EMPTY_ARRAY : new PsiStatement[count];

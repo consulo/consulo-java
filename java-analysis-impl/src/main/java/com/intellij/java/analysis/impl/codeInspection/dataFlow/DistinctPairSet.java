@@ -8,9 +8,8 @@ import consulo.util.collection.primitive.longs.LongList;
 import consulo.util.collection.primitive.longs.LongLists;
 import consulo.util.collection.primitive.longs.LongSet;
 import consulo.util.collection.primitive.longs.LongSets;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.List;
@@ -307,7 +306,6 @@ final class DistinctPairSet extends AbstractSet<DistinctPairSet.DistinctPair>
 		}
 
 		public
-		@Nonnull
 		EqClass getFirst()
 		{
 			return myList.get(myFirst);
@@ -319,7 +317,6 @@ final class DistinctPairSet extends AbstractSet<DistinctPairSet.DistinctPair>
 		}
 
 		public
-		@Nonnull
 		EqClass getSecond()
 		{
 			return myList.get(mySecond);

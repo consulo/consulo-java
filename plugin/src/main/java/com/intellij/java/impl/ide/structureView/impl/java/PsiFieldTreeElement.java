@@ -9,7 +9,6 @@ import consulo.fileEditor.structureView.StructureViewTreeElement;
 import consulo.fileEditor.structureView.tree.SortableTreeElement;
 import consulo.project.DumbService;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +21,6 @@ public class PsiFieldTreeElement extends JavaVariableBaseTreeElement<PsiField> i
   }
 
   @Override
-  @Nonnull
   public Collection<StructureViewTreeElement> getChildrenBase() {
     PsiField field = getField();
     if (field instanceof PsiEnumConstant) {

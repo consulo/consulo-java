@@ -32,8 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 import consulo.util.lang.Range;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -43,20 +42,18 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 {
 	private static final Logger LOG = Logger.getInstance(BasicStepMethodFilter.class);
 
-	@Nonnull
 	protected final JVMName myDeclaringClassName;
-	@Nonnull
 	private final String myTargetMethodName;
 	@Nullable
 	protected final JVMName myTargetMethodSignature;
 	private final Range<Integer> myCallingExpressionLines;
 
-	public BasicStepMethodFilter(@Nonnull PsiMethod psiMethod, Range<Integer> callingExpressionLines)
+	public BasicStepMethodFilter(PsiMethod psiMethod, Range<Integer> callingExpressionLines)
 	{
 		this(JVMNameUtil.getJVMQualifiedName(psiMethod.getContainingClass()), JVMNameUtil.getJVMMethodName(psiMethod), JVMNameUtil.getJVMSignature(psiMethod), callingExpressionLines);
 	}
 
-	protected BasicStepMethodFilter(@Nonnull JVMName declaringClassName, @Nonnull String targetMethodName, @Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
+	protected BasicStepMethodFilter(JVMName declaringClassName, String targetMethodName, @Nullable JVMName targetMethodSignature, Range<Integer> callingExpressionLines)
 	{
 		myDeclaringClassName = declaringClassName;
 		myTargetMethodName = targetMethodName;
@@ -65,7 +62,6 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 	}
 
 	@Override
-	@Nonnull
 	public String getMethodName()
 	{
 		return myTargetMethodName;
@@ -77,7 +73,7 @@ public class BasicStepMethodFilter implements NamedMethodFilter
 		return locationMatches(process, location, () -> null);
 	}
 
-	public boolean locationMatches(DebugProcessImpl process, Location location, @Nonnull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
+	public boolean locationMatches(DebugProcessImpl process, Location location, EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
 	{
 		Method method = location.method();
 		String name = method.name();

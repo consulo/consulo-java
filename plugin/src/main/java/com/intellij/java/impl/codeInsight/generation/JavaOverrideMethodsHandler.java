@@ -26,7 +26,6 @@ import consulo.language.editor.hint.HintManager;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -44,7 +43,7 @@ public class JavaOverrideMethodsHandler implements OverrideMethodHandler {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     PsiClass aClass = OverrideImplementUtil.getContextClass(project, editor, file, true);
     if (aClass == null) return;
 
@@ -60,7 +59,6 @@ public class JavaOverrideMethodsHandler implements OverrideMethodHandler {
     return false;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

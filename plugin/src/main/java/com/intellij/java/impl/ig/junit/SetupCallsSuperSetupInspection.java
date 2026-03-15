@@ -28,33 +28,27 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SetupCallsSuperSetupInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "SetUpDoesntCallSuperSetUp";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.setupCallsSuperSetupDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.setupCallsSuperSetupProblemDescriptor().get();
   }
 
   private static class AddSuperSetUpCall extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.setupCallsSuperSetupAddQuickfix();
     }
@@ -95,9 +89,9 @@ public class SetupCallsSuperSetupInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       //note: no call to super;
-      @NonNls String methodName = method.getName();
+      String methodName = method.getName();
       if (!"setUp".equals(methodName)) {
         return;
       }

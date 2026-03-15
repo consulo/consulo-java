@@ -52,8 +52,7 @@ import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -70,49 +69,45 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
     private static final String BR = "<br>";
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         final boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
     ) {
         return new JavaElementVisitor() {
             @Override
-            public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+            public void visitReferenceExpression(PsiReferenceExpression expression) {
                 visitExpression(expression);
             }
 
             @Override
             @RequiredReadAction
-            public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+            public void visitLiteralExpression(PsiLiteralExpression expression) {
                 checkStringLiteralExpression(expression, holder, isOnTheFly);
             }
         };
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionDuplicatesDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesInternationalizationIssues();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "DuplicateStringLiteralInspection";
     }
 
     @RequiredReadAction
     private void checkStringLiteralExpression(
-        @Nonnull PsiLiteralExpression originalExpression,
-        @Nonnull ProblemsHolder holder,
+        PsiLiteralExpression originalExpression,
+        ProblemsHolder holder,
         boolean isOnTheFly
     ) {
         if (!(originalExpression.getValue() instanceof String stringToFind)) {
@@ -246,7 +241,7 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
             .create();
     }
 
-    private boolean shouldCheck(@Nonnull Project project, @Nonnull PsiLiteralExpression expression) {
+    private boolean shouldCheck(Project project, PsiLiteralExpression expression) {
         return !(IGNORE_PROPERTY_KEYS && JavaI18nUtil.mustBePropertyKey(project, expression, new HashMap<>()))
             && !SuppressManager.isSuppressedInspectionName(expression);
     }
@@ -353,13 +348,12 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.introduceConstantAcrossTheProject();
         }
 
         @Override
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             SwingUtilities.invokeLater(() -> {
                 if (project.isDisposed()) {
                     return;
@@ -409,7 +403,6 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
             myConst = SmartPointerManager.getInstance(constant.getProject()).createSmartPsiElementPointer(constant);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getText() {
             return myText;
@@ -418,11 +411,11 @@ public class DuplicateStringLiteralInspection extends BaseLocalInspectionTool {
         @Override
         @RequiredWriteAction
         public void invoke(
-            @Nonnull Project project,
-            @Nonnull PsiFile file,
+            Project project,
+            PsiFile file,
             @Nullable Editor editor,
-            @Nonnull PsiElement startElement,
-            @Nonnull PsiElement endElement
+            PsiElement startElement,
+            PsiElement endElement
         ) {
             PsiLiteralExpression myOriginalExpression = (PsiLiteralExpression) startElement;
             PsiField myConstant = myConst.getElement();

@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +38,7 @@ public class UpdateJavaFileCopyright extends UpdatePsiFileCopyright<CopyrightFil
   public static final int LOCATION_BEFORE_IMPORT = 2;
   public static final int LOCATION_BEFORE_CLASS = 3;
 
-  public UpdateJavaFileCopyright(@Nonnull PsiFile psiFile, @Nonnull CopyrightProfile copyrightProfile) {
+  public UpdateJavaFileCopyright(PsiFile psiFile, CopyrightProfile copyrightProfile) {
     super(psiFile, copyrightProfile);
   }
 

@@ -29,7 +29,7 @@ import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.HashMap;

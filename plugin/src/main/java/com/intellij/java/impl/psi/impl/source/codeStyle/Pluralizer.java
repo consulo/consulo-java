@@ -29,8 +29,7 @@ import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Maps;
 import consulo.util.collection.Sets;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -135,8 +134,7 @@ public final class Pluralizer {
   /**
    * Pluralize or singularize a word based on the passed in count.
    */
-  @Nonnull
-  public String pluralize(@Nonnull String word, int count, boolean inclusive) {
+  public String pluralize(String word, int count, boolean inclusive) {
     String pluralized = count == 1 ? singular(word) : plural(word);
 
     return (inclusive ? count + " " : "") + StringUtil.notNullize(pluralized, word);

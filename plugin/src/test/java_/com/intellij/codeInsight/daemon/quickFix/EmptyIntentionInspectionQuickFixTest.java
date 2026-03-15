@@ -9,9 +9,6 @@ import consulo.language.editor.intention.IntentionAction;
 import consulo.language.editor.internal.intention.EmptyIntentionAction;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
@@ -20,39 +17,30 @@ import java.util.List;
  */
 public abstract class EmptyIntentionInspectionQuickFixTest extends LightQuickFixTestCase{
   @Override
-  @NonNls
   protected String getBasePath() {
     return "/codeInsight/daemonCodeAnalyzer/quickFix/emptyIntention";
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new DefUseInspection(), new LocalInspectionTool() {
       @Override
-      @Nls
-      @Nonnull
       public String getGroupDisplayName() {
         return "MyGroup";
       }
 
       @Override
-      @Nls
-      @Nonnull
       public LocalizeValue getDisplayName() {
         return LocalizeValue.of("My");
       }
 
       @Override
-      @NonNls
-      @Nonnull
       public String getShortName() {
         return "My";
       }
 
       @Override
-      @Nonnull
-      public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+      public PsiElementVisitor buildVisitor(final ProblemsHolder holder, boolean isOnTheFly) {
         return new JavaElementVisitor() {
           @Override public void visitLiteralExpression(PsiLiteralExpression expression) {
             String s = (String)expression.getValue();

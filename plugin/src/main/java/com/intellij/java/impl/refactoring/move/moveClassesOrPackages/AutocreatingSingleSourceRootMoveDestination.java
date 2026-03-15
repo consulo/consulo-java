@@ -33,8 +33,7 @@ import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -44,7 +43,7 @@ import java.util.Collection;
 public class AutocreatingSingleSourceRootMoveDestination extends AutocreatingMoveDestination {
     private final VirtualFile mySourceRoot;
 
-    public AutocreatingSingleSourceRootMoveDestination(PackageWrapper targetPackage, @Nonnull VirtualFile sourceRoot) {
+    public AutocreatingSingleSourceRootMoveDestination(PackageWrapper targetPackage, VirtualFile sourceRoot) {
         super(targetPackage);
         mySourceRoot = sourceRoot;
     }

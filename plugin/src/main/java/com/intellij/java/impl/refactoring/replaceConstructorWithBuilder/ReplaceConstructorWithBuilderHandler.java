@@ -35,13 +35,12 @@ import com.intellij.java.impl.refactoring.HelpID;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ReplaceConstructorWithBuilderHandler implements RefactoringActionHandler {
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         int offset = editor.getCaretModel().getOffset();
         PsiElement element = file.findElementAt(offset);
         PsiClass psiClass = getParentNamedClass(element);
@@ -86,12 +85,12 @@ public class ReplaceConstructorWithBuilderHandler implements RefactoringActionHa
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         throw new UnsupportedOperationException();
     }
 
     @RequiredUIAccess
-    private static void showErrorMessage(@Nonnull LocalizeValue message, Project project, Editor editor) {
+    private static void showErrorMessage(LocalizeValue message, Project project, Editor editor) {
         CommonRefactoringUtil.showErrorHint(
             project,
             editor,

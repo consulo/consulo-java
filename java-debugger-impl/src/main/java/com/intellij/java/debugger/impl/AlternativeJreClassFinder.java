@@ -28,8 +28,7 @@ import consulo.execution.configuration.RunProfile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import java.util.*;
@@ -86,18 +85,15 @@ public class AlternativeJreClassFinder extends NonClasspathClassFinder {
         return null;
     }
 
-    @Nonnull
-    private static Collection<VirtualFile> getClassRoots(@Nonnull Sdk jre) {
+    private static Collection<VirtualFile> getClassRoots(Sdk jre) {
         return Arrays.asList(jre.getRootProvider().getFiles(BinariesOrderRootType.getInstance()));
     }
 
-    @Nonnull
-    public static Collection<VirtualFile> getSourceRoots(@Nonnull Sdk jre) {
+    public static Collection<VirtualFile> getSourceRoots(Sdk jre) {
         return Arrays.asList(jre.getRootProvider().getFiles(SourcesOrderRootType.getInstance()));
     }
 
-    @Nonnull
-    public static GlobalSearchScope getSearchScope(@Nonnull Sdk jre) {
+    public static GlobalSearchScope getSearchScope(Sdk jre) {
         return new NonClasspathDirectoriesScope(getClassRoots(jre));
     }
 }

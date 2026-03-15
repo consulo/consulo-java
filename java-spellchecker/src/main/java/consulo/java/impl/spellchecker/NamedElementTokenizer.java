@@ -22,7 +22,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.spellcheker.tokenizer.TokenConsumer;
 import consulo.language.spellcheker.tokenizer.Tokenizer;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -34,7 +33,7 @@ public class NamedElementTokenizer<T extends PsiNamedElement> extends Tokenizer<
   private final PsiTypeTokenizer myTypeTokenizer = new PsiTypeTokenizer();
 
   @Override
-   public void tokenize(@Nonnull T element, TokenConsumer consumer) {
+   public void tokenize(T element, TokenConsumer consumer) {
     final PsiIdentifier psiIdentifier = PsiTreeUtil.getChildOfType(element, PsiIdentifier.class);
     final PsiTypeElement psiType = PsiTreeUtil.getChildOfType(element, PsiTypeElement.class);
 

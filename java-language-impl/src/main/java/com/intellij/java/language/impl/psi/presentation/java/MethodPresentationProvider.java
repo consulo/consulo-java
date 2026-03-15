@@ -20,14 +20,12 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class MethodPresentationProvider implements ItemPresentationProvider<PsiMethod> {
-  @Nonnull
   @Override
   public Class<PsiMethod> getItemClass() {
     return PsiMethod.class;

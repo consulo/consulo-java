@@ -22,8 +22,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class TypeAnnotationModifier {
@@ -41,5 +40,5 @@ public abstract class TypeAnnotationModifier {
      * @return provider based on modified annotations or null if no applicable annotations found
      */
     @Nullable
-    public abstract TypeAnnotationProvider modifyAnnotations(@Nonnull PsiType inferenceVariableType, @Nonnull PsiClassType boundType);
+    public abstract TypeAnnotationProvider modifyAnnotations(PsiType inferenceVariableType, PsiClassType boundType);
 }

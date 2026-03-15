@@ -21,9 +21,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.ref.AnnotationAttributeChildLink;
 import consulo.language.psi.PsiElementRef;
 import consulo.util.collection.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +37,7 @@ public abstract class JamAttributeMeta<JamType> {
 
   private final AnnotationAttributeChildLink myAttributeLink;
 
-  protected JamAttributeMeta(@NonNls String attrName) {
+  protected JamAttributeMeta(String attrName) {
     myAttributeLink = new AnnotationAttributeChildLink(attrName);
   }
 
@@ -64,7 +62,6 @@ public abstract class JamAttributeMeta<JamType> {
     return myAttributeLink.hashCode();
   }
 
-  @Nonnull
   protected <T> List<T> getCollectionJam(PsiElementRef<PsiAnnotation> annoRef, Function<PsiAnnotationMemberValue, T> producer) {
     final PsiAnnotationMemberValue attr = getAttributeLink().findLinkedChild(annoRef.getPsiElement());
     if (attr == null) {
@@ -83,22 +80,21 @@ public abstract class JamAttributeMeta<JamType> {
   }
 
 
-  @Nonnull
   public abstract JamType getJam(PsiElementRef<PsiAnnotation> anno);
 
-  public static JamStringAttributeMeta.Single<String> singleString(@Nonnull @NonNls String attrName) {
+  public static JamStringAttributeMeta.Single<String> singleString(String attrName) {
     return singleString(attrName, JamConverter.DUMMY_CONVERTER);
   }
 
-  public static <T> JamStringAttributeMeta.Single<T> singleString(@Nonnull @NonNls String attrName, JamConverter<T> converter) {
+  public static <T> JamStringAttributeMeta.Single<T> singleString(String attrName, JamConverter<T> converter) {
     return new JamStringAttributeMeta.Single<T>(attrName, converter);
   }
 
-  public static <T extends Enum<T>> JamEnumAttributeMeta.Single<T> singleEnum(@Nonnull @NonNls String attrName, Class<T> modelEnum) {
+  public static <T extends Enum<T>> JamEnumAttributeMeta.Single<T> singleEnum(String attrName, Class<T> modelEnum) {
     return new JamEnumAttributeMeta.Single<T>(attrName, modelEnum);
   }
 
-  public static JamStringAttributeMeta.Collection<String> collectionString(@Nonnull @NonNls String attrName) {
+  public static JamStringAttributeMeta.Collection<String> collectionString(String attrName) {
     return collectionString(attrName, JamConverter.DUMMY_CONVERTER);
   }
 
@@ -106,12 +102,12 @@ public abstract class JamAttributeMeta<JamType> {
     return new JamStringAttributeMeta.Collection<T>(attrName, converter);
   }
 
-  public static <T extends JamElement> JamAnnotationAttributeMeta.Single<T> singleAnno(@Nonnull @NonNls String attrName, JamAnnotationMeta annoMeta, Class<T> jamClass) {
+  public static <T extends JamElement> JamAnnotationAttributeMeta.Single<T> singleAnno(String attrName, JamAnnotationMeta annoMeta, Class<T> jamClass) {
     final JamInstantiator<PsiAnnotation, T> instantiator = JamInstantiator.proxied(jamClass);
     return new JamAnnotationAttributeMeta.Single<T>(attrName, annoMeta, instantiator);
   }
 
-  public static <T extends JamElement> JamAnnotationAttributeMeta.Collection<T> annoCollection(@Nonnull @NonNls String attrName, @Nonnull JamAnnotationMeta annoMeta, Class<T> jamClass) {
+  public static <T extends JamElement> JamAnnotationAttributeMeta.Collection<T> annoCollection(String attrName, JamAnnotationMeta annoMeta, Class<T> jamClass) {
     final JamInstantiator<PsiAnnotation, T> instantiator = JamInstantiator.proxied(jamClass);
     return new JamAnnotationAttributeMeta.Collection<T>(attrName, annoMeta, instantiator);
   }

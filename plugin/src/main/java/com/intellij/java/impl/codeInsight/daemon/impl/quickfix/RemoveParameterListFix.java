@@ -16,7 +16,6 @@
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
 import consulo.codeEditor.Editor;
@@ -36,18 +35,17 @@ public class RemoveParameterListFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Remove parameter list");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myMethod != null && myMethod.isValid();
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiMethod emptyMethod = JavaPsiFacade.getElementFactory(project).createMethodFromText("void foo(){}", myMethod);
     myMethod.getParameterList().replace(emptyMethod.getParameterList());

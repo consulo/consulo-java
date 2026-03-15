@@ -36,8 +36,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public class ParametersFolder {
@@ -56,7 +55,7 @@ public class ParametersFolder {
     myDeleted.clear();
   }
 
-  public boolean isParameterSafeToDelete(@Nonnull VariableData data, @Nonnull LocalSearchScope scope) {
+  public boolean isParameterSafeToDelete(VariableData data, LocalSearchScope scope) {
     Next:
     for (PsiReference reference : ReferencesSearch.search(data.variable, scope)) {
       PsiElement expression = reference.getElement();
@@ -84,7 +83,7 @@ public class ParametersFolder {
     return false;
   }
 
-  public void foldParameterUsagesInBody(@Nonnull VariableData data, PsiElement[] elements, SearchScope scope) {
+  public void foldParameterUsagesInBody(VariableData data, PsiElement[] elements, SearchScope scope) {
     if (myDeleted.contains(data.variable)) return;
     final PsiExpression psiExpression = myExpressions.get(data.variable);
     if (psiExpression == null) return;
@@ -110,9 +109,9 @@ public class ParametersFolder {
     }
   }
 
-  public boolean isParameterFoldable(@Nonnull VariableData data,
-                                     @Nonnull LocalSearchScope scope,
-                                     @Nonnull final List<? extends PsiVariable> inputVariables) {
+  public boolean isParameterFoldable(VariableData data,
+                                     LocalSearchScope scope,
+                                     final List<? extends PsiVariable> inputVariables) {
     final List<PsiExpression> mentionedInExpressions = getMentionedExpressions(data.variable, scope, inputVariables);
     if (mentionedInExpressions == null) return false;
 
@@ -276,12 +275,11 @@ public class ParametersFolder {
     return localVarsUsed[0];
   }
 
-  @Nonnull
-  public String getGeneratedCallArgument(@Nonnull VariableData data) {
+  public String getGeneratedCallArgument(VariableData data) {
     return myExpressions.containsKey(data.variable) ? myExpressions.get(data.variable).getText() : data.variable.getName();
   }
 
-  public boolean annotateWithParameter(@Nonnull VariableData data, @Nonnull PsiElement element) {
+  public boolean annotateWithParameter(VariableData data, PsiElement element) {
     final PsiExpression psiExpression = myExpressions.get(data.variable);
     if (psiExpression != null) {
       final PsiExpression expression = findEquivalent(psiExpression, element);

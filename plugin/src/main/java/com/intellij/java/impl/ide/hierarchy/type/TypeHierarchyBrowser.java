@@ -30,8 +30,7 @@ import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.ui.ex.action.IdeActions;
 import consulo.ui.ex.tree.NodeDescriptor;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.text.MessageFormat;
@@ -51,7 +50,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     }
 
     @Override
-    protected void createTrees(@Nonnull Map<String, JTree> trees) {
+    protected void createTrees(Map<String, JTree> trees) {
         createTreeAndSetupCommonActions(trees, IdeActions.GROUP_TYPE_HIERARCHY_POPUP);
     }
 
@@ -68,12 +67,12 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
 
     @Override
     @RequiredReadAction
-    protected String getContentDisplayName(@Nonnull String typeName, @Nonnull PsiElement element) {
+    protected String getContentDisplayName(String typeName, PsiElement element) {
         return MessageFormat.format(typeName, ClassPresentationUtil.getNameForClass((PsiClass)element, false));
     }
 
     @Override
-    protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
+    protected PsiElement getElementFromDescriptor(HierarchyNodeDescriptor descriptor) {
         if (descriptor instanceof TypeHierarchyNodeDescriptor nodeDescriptor) {
             return nodeDescriptor.getPsiClass();
         }
@@ -87,7 +86,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     }
 
     @Override
-    protected boolean isApplicableElement(@Nonnull PsiElement element) {
+    protected boolean isApplicableElement(PsiElement element) {
         return element instanceof PsiClass;
     }
 
@@ -97,7 +96,7 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
     }
 
     @Override
-    protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull String typeName, @Nonnull PsiElement psiElement) {
+    protected HierarchyTreeStructure createHierarchyTreeStructure(String typeName, PsiElement psiElement) {
         if (SUPERTYPES_HIERARCHY_TYPE.equals(typeName)) {
             return new SupertypesHierarchyTreeStructure(myProject, (PsiClass)psiElement);
         }
@@ -126,7 +125,6 @@ public class TypeHierarchyBrowser extends TypeHierarchyBrowserBase {
         return "";
     }
 
-    @Nonnull
     @Override
     protected BaseOnThisTypeAction createBaseOnThisAction() {
         return new JavaBaseOnThisTypeAction();

@@ -49,9 +49,7 @@ import consulo.ui.ex.awt.MultiLineLabel;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,17 +74,14 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
   private final boolean myShowJavaCodeInfo;
   private final boolean myShowPreview;
 
-  @NonNls
   public static final String PROPERTY_KEY_OPTION_KEY = "PROPERTY_KEY";
-  @NonNls
   private static final String RESOURCE_BUNDLE_OPTION_KEY = "RESOURCE_BUNDLE";
-  @NonNls
   public static final String PROPERTY_VALUE_ATTR = "PROPERTY_VALUE";
 
   @RequiredUIAccess
   public JavaI18nizeQuickFixDialog(
-    @Nonnull Project project,
-    @Nonnull final PsiFile context,
+    Project project,
+    final PsiFile context,
     @Nullable final PsiLiteralExpression literalExpression,
     String defaultPropertyValue,
     DialogCustomization customization,
@@ -125,7 +120,7 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
     if (myShowJavaCodeInfo) {
       LOG.assertTrue(resourceBundle != null);
       myResourceBundleType = factory.createType(resourceBundle);
-      @NonNls String defaultVarName = "resourceBundle";
+      String defaultVarName = "resourceBundle";
       final JavaCodeFragmentFactory codeFragmentFactory = JavaCodeFragmentFactory.getInstance(project);
       PsiExpressionCodeFragment expressionCodeFragment =
           codeFragmentFactory.createExpressionCodeFragment(defaultVarName, myLiteralExpression, myResourceBundleType, true);

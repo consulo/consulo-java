@@ -4,36 +4,30 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.rangeSet.LongRangeSet;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface DfLongType extends DfIntegralType {
   @Override
-  @Nonnull
   LongRangeSet getRange();
 
-  @Nonnull
   @Override
-  default DfType join(@Nonnull DfType other) {
+  default DfType join(DfType other) {
     if (!(other instanceof DfLongType)) return DfTypes.TOP;
     return DfTypes.longRange(((DfLongType)other).getRange().unite(getRange()));
   }
 
-  @Nonnull
   @Override
-  default DfType meet(@Nonnull DfType other) {
+  default DfType meet(DfType other) {
     if (other == DfTypes.TOP) return this;
     if (!(other instanceof DfLongType)) return DfTypes.BOTTOM;
     return DfTypes.longRange(((DfLongType)other).getRange().intersect(getRange()));
   }
 
-  @Nonnull
   @Override
-  default DfType meetRange(@Nonnull LongRangeSet range) {
+  default DfType meetRange(LongRangeSet range) {
     return meet(DfTypes.longRange(range));
   }
 
-  @Nonnull
   @Override
   default PsiPrimitiveType getPsiType() {
     return PsiType.LONG;
@@ -47,8 +41,7 @@ public interface DfLongType extends DfIntegralType {
     return res.intersects(range) ? null : DfTypes.longRange(res);
   }
 
-  @Nonnull
-  static LongRangeSet extractRange(@Nonnull DfType type) {
+  static LongRangeSet extractRange(DfType type) {
     return type instanceof DfIntegralType ? ((DfIntegralType)type).getRange() : LongRangeSet.all();
   }
 }

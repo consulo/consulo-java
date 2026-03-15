@@ -36,9 +36,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -48,7 +46,7 @@ import java.util.Collections;
  */
 @ExtensionImpl
 public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
-  public boolean canProcessElement(@Nonnull PsiElement element) {
+  public boolean canProcessElement(PsiElement element) {
     return element instanceof PsiDirectory;
   }
 
@@ -96,7 +94,6 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
     return newName;
   }
 
-  @Nonnull
   @Override
   public Collection<PsiReference> findReferences(PsiElement element) {
     if (!RefactoringSettings.getInstance().RENAME_SEARCH_FOR_REFERENCES_FOR_DIRECTORY) {
@@ -114,7 +111,6 @@ public class RenamePsiDirectoryProcessor extends RenamePsiElementProcessor {
   }
 
   @Nullable
-  @NonNls
   public String getHelpID(PsiElement element) {
     return HelpID.RENAME_DIRECTORY;
   }

@@ -25,23 +25,19 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SystemOutErrInspection extends BaseInspection {
 
-    @Nonnull
     public String getID() {
         return "UseOfSystemOutOrSystemErr";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.useSystemOutErrDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.useSystemOutErrProblemDescriptor().get();
     }
@@ -54,7 +50,7 @@ public class SystemOutErrInspection extends BaseInspection {
 
         @Override
         public void visitReferenceExpression(
-            @Nonnull PsiReferenceExpression expression
+            PsiReferenceExpression expression
         ) {
             super.visitReferenceExpression(expression);
             String name = expression.getReferenceName();

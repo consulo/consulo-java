@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration.usageInfo;
 
-import jakarta.annotation.Nonnull;
 import consulo.language.psi.PsiElement;
 
 /**
@@ -25,7 +24,7 @@ public class OverriddenUsageInfo extends TypeMigrationUsageInfo
 {
 	private volatile String myMigrateMethodName;
 
-	public OverriddenUsageInfo(@Nonnull PsiElement element)
+	public OverriddenUsageInfo(PsiElement element)
 	{
 		super(element);
 	}

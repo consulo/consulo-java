@@ -28,18 +28,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.assertequalsCalledOnArraysDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.assertequalsCalledOnArraysProblemDescriptor().get();
@@ -53,7 +49,6 @@ public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
   private static class AssertEqualsCalledOnArrayFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.assertequalsCalledOnArraysQuickfix();
     }
@@ -87,7 +82,7 @@ public class AssertEqualsCalledOnArrayInspection extends BaseInspection {
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!"assertEquals".equals(methodName)) {
         return;
       }

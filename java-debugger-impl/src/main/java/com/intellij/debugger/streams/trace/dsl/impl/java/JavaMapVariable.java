@@ -4,49 +4,42 @@ package com.intellij.debugger.streams.trace.dsl.impl.java;
 import consulo.execution.debug.stream.trace.dsl.*;
 import consulo.execution.debug.stream.trace.dsl.impl.common.MapVariableBase;
 import consulo.execution.debug.stream.trace.impl.handler.type.MapType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
  */
 public class JavaMapVariable extends MapVariableBase {
-    public JavaMapVariable(@Nonnull MapType type, @Nonnull String name) {
+    public JavaMapVariable(MapType type, String name) {
         super(type, name);
     }
 
-    @Nonnull
     @Override
-    public Expression get(@Nonnull Expression key) {
+    public Expression get(Expression key) {
         return call("get", key);
     }
 
-    @Nonnull
     @Override
-    public Expression set(@Nonnull Expression key, @Nonnull Expression newValue) {
+    public Expression set(Expression key, Expression newValue) {
         return call("put", key, newValue);
     }
 
-    @Nonnull
     @Override
-    public Expression contains(@Nonnull Expression key) {
+    public Expression contains(Expression key) {
         return call("containsKey", key);
     }
 
-    @Nonnull
     @Override
     public Expression keys() {
         return call("keySet");
     }
 
-    @Nonnull
     @Override
     public Expression size() {
         return call("size");
     }
 
-    @Nonnull
     @Override
-    public CodeBlock computeIfAbsent(@Nonnull Dsl dsl, @Nonnull Expression key, @Nonnull Expression valueIfAbsent, @Nonnull Variable target) {
+    public CodeBlock computeIfAbsent(Dsl dsl, Expression key, Expression valueIfAbsent, Variable target) {
         return dsl.block(block -> {
             block.assign(target, call("computeIfAbsent", key, dsl.lambda("compIfAbsentKey", lambdaBody -> {
                 lambdaBody.doReturn(valueIfAbsent);
@@ -54,13 +47,11 @@ public class JavaMapVariable extends MapVariableBase {
         });
     }
 
-    @Nonnull
     @Override
     public VariableDeclaration defaultDeclaration(boolean isMutable) {
         return new JavaVariableDeclaration(this, false, getType().getDefaultValue());
     }
 
-    @Nonnull
     @Override
     public Expression entries() {
         return call("entrySet");

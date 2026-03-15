@@ -34,9 +34,7 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,7 +56,6 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   /**
    * @noinspection PublicField
    */
-  @NonNls
   public String questionString = "is,can,has,should,could,will,shall,check,contains,equals,add,put,remove,startsWith,endsWith";
 
   List<String> questionList = new ArrayList(32);
@@ -68,25 +65,23 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.booleanMethodNameMustStartWithQuestionDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.booleanMethodNameMustStartWithQuestionProblemDescriptor().get();
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(questionString, questionList);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(Element element) throws WriteExternalException {
     questionString = formatString(questionList);
     super.writeSettings(element);
   }
@@ -144,7 +139,7 @@ public class BooleanMethodNameMustStartWithQuestionInspection extends BaseInspec
   private class BooleanMethodNameMustStartWithQuestionVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       PsiType returnType = method.getReturnType();
       if (returnType == null) {
         return;

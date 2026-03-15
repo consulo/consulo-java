@@ -31,8 +31,7 @@ import consulo.module.ModuleManager;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,14 +42,13 @@ import java.util.List;
  */
 @ExtensionImpl
 public class JavaProjectDataService implements ProjectDataService<JavaProjectData, Project> {
-  @Nonnull
   @Override
   public Key<JavaProjectData> getTargetDataKey() {
     return JavaProjectData.KEY;
   }
 
   @Override
-  public void importData(@Nonnull Collection<DataNode<JavaProjectData>> toImport, @Nonnull final Project project, boolean synchronous) {
+  public void importData(Collection<DataNode<JavaProjectData>> toImport, final Project project, boolean synchronous) {
     if (toImport.size() != 1) {
       throw new IllegalArgumentException(String.format("Expected to get a single project but got %d: %s", toImport.size(), toImport));
     }
@@ -88,7 +86,7 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
   }
 
   @Nullable
-  private static Sdk findJdk(@Nonnull JavaSdkVersion version) {
+  private static Sdk findJdk(JavaSdkVersion version) {
     List<Sdk> javaSdks = JavaSdkTypeUtil.getAllJavaSdks();
     Sdk candidate = null;
     for (Sdk sdk : javaSdks) {
@@ -103,6 +101,6 @@ public class JavaProjectDataService implements ProjectDataService<JavaProjectDat
   }
 
   @Override
-  public void removeData(@Nonnull Collection<? extends Project> toRemove, @Nonnull Project project, boolean synchronous) {
+  public void removeData(Collection<? extends Project> toRemove, Project project, boolean synchronous) {
   }
 }

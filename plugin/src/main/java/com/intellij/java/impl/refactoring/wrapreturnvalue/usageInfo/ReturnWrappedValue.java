@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiReturnStatement;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 
 public class ReturnWrappedValue extends FixableUsageInfo {
     private final PsiReturnStatement statement;
@@ -38,7 +37,7 @@ public class ReturnWrappedValue extends FixableUsageInfo {
         PsiExpression qualifier =
                 returnValue.getMethodExpression().getQualifierExpression();
         assert qualifier != null;
-        @NonNls String newExpression = qualifier.getText();
+        String newExpression = qualifier.getText();
         MutationUtils.replaceExpression(newExpression, returnValue);
     }
 }

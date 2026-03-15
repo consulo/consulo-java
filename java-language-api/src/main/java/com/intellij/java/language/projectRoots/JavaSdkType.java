@@ -24,7 +24,6 @@ import consulo.content.bundle.SdkType;
 import consulo.localize.LocalizeValue;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 
@@ -32,16 +31,15 @@ public abstract class JavaSdkType extends SdkType {
     /**
      * Return default impl JavaSdkType implementation
      */
-    @Nonnull
     public static JavaSdkType getDefaultJavaSdkType() {
         return Application.get().getExtensionPoint(SdkType.class).findExtensionOrFail(DefaultJavaSdkType.class);
     }
 
-    protected JavaSdkType(@Nonnull String id, @Nonnull LocalizeValue displayName, @Nonnull Image icon) {
+    protected JavaSdkType(String id, LocalizeValue displayName, Image icon) {
         super(id, displayName, icon);
     }
 
-    public final Sdk createJdk(String jdkName, @Nonnull String home) {
+    public final Sdk createJdk(String jdkName, String home) {
         Sdk jdk = SdkTable.getInstance().createSdk(jdkName, this);
         SdkModificator sdkModificator = jdk.getSdkModificator();
 
@@ -59,5 +57,5 @@ public abstract class JavaSdkType extends SdkType {
 
     public abstract String getToolsPath(Sdk sdk);
 
-    public abstract void setupCommandLine(@Nonnull GeneralCommandLine generalCommandLine, @Nonnull Sdk sdk);
+    public abstract void setupCommandLine(GeneralCommandLine generalCommandLine, Sdk sdk);
 }

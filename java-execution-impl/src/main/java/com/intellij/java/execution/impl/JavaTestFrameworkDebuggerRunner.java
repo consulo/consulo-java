@@ -29,8 +29,7 @@ import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.RunContentDescriptor;
 import consulo.process.ExecutionException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.DataInputStream;
@@ -40,23 +39,21 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public abstract class JavaTestFrameworkDebuggerRunner extends GenericDebuggerRunner {
-  @Nonnull
   @Override
   public abstract String getRunnerId();
 
-  protected abstract boolean validForProfile(@Nonnull RunProfile profile);
+  protected abstract boolean validForProfile(RunProfile profile);
 
-  @Nonnull
   protected abstract String getThreadName();
 
   @Override
-  public boolean canRun(@Nonnull String executorId, @Nonnull RunProfile profile) {
+  public boolean canRun(String executorId, RunProfile profile) {
     return DefaultDebugExecutor.EXECUTOR_ID.equals(executorId) && validForProfile(profile);
   }
 
   @Nullable
   @Override
-  protected RunContentDescriptor createContentDescriptor(@Nonnull final RunProfileState state, @Nonnull final ExecutionEnvironment environment) throws ExecutionException {
+  protected RunContentDescriptor createContentDescriptor(final RunProfileState state, final ExecutionEnvironment environment) throws ExecutionException {
     final RunContentDescriptor res = super.createContentDescriptor(state, environment);
     final ServerSocket socket = ((JavaTestFrameworkRunnableState) state).getForkSocket();
     if (socket != null) {

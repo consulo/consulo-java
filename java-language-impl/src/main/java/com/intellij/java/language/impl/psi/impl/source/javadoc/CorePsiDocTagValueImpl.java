@@ -23,7 +23,6 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import consulo.language.impl.psi.CompositePsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -34,7 +33,7 @@ public class CorePsiDocTagValueImpl extends CompositePsiElement implements PsiDo
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDocTagValue(this);
     }

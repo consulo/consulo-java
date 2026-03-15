@@ -13,8 +13,7 @@ import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.ComboBox;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -27,7 +26,7 @@ public class ShortenCommandLineModeCombo extends ComboBox<ShortenCommandLine> {
     initModel(null, pathEditor, component.getSelectedModule());
     setRenderer(new ColoredListCellRenderer<ShortenCommandLine>() {
       @Override
-      protected void customizeCellRenderer(@Nonnull JList<? extends ShortenCommandLine> list, ShortenCommandLine value, int index, boolean selected, boolean hasFocus) {
+      protected void customizeCellRenderer(JList<? extends ShortenCommandLine> list, ShortenCommandLine value, int index, boolean selected, boolean hasFocus) {
         if (value == null) {
           ShortenCommandLine defaultMode = ShortenCommandLine.getDefaultMethod(myProject, getJdkRoot(pathEditor, component.getSelectedModule()));
           append("user-local default: " + defaultMode.getPresentableName());

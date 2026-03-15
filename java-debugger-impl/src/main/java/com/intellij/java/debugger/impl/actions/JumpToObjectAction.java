@@ -22,8 +22,7 @@ import consulo.annotation.component.ActionImpl;
 import consulo.application.Application;
 import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;
@@ -78,7 +77,7 @@ public class JumpToObjectAction extends DebuggerAction {
 
     @Override
     @RequiredUIAccess
-    public void update(@Nonnull AnActionEvent e) {
+    public void update(AnActionEvent e) {
         if (!isFirstStart(e)) {
             return;
         }

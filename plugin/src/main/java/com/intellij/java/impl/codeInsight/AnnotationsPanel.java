@@ -15,7 +15,6 @@ import consulo.ui.ex.awt.table.BooleanTableCellEditor;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
@@ -113,7 +112,7 @@ public class AnnotationsPanel {
     AnActionButton selectButton =
         new AnActionButton("Select annotation used for code generation", AllIcons.Actions.Checked) {
           @Override
-          public void actionPerformed(@Nonnull AnActionEvent e) {
+          public void actionPerformed(AnActionEvent e) {
             String selectedValue = getSelectedAnnotation();
             if (selectedValue == null) {
               return;
@@ -125,7 +124,7 @@ public class AnnotationsPanel {
           }
 
           @Override
-          public void updateButton(@Nonnull AnActionEvent e) {
+          public void updateButton(AnActionEvent e) {
             String selectedValue = getSelectedAnnotation();
             e.getPresentation().setEnabled(selectedValue != null && !selectedValue.equals(myDefaultAnnotation));
           }

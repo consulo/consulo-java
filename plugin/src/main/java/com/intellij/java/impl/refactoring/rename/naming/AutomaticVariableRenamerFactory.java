@@ -25,7 +25,6 @@ import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -38,7 +37,6 @@ public class AutomaticVariableRenamerFactory implements AutomaticRenamerFactory 
     return element instanceof PsiClass && !(element instanceof PsiAnonymousClass);
   }
 
-  @Nonnull
   public LocalizeValue getOptionName() {
     return RefactoringLocalize.renameVariables();
   }

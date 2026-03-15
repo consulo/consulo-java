@@ -26,8 +26,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AssertToIfIntention", fileExtensions = "java", categories = {
@@ -35,20 +33,18 @@ import org.jetbrains.annotations.NonNls;
     "Other"
 })
 public class AssertToIfIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.assertToIfIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new AssertStatementPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiAssertStatement assertStatement = (PsiAssertStatement) element;
         PsiExpression condition = assertStatement.getAssertCondition();
@@ -56,7 +52,7 @@ public class AssertToIfIntention extends Intention {
             assertStatement.getAssertDescription();
         String negatedConditionString =
             BoolUtils.getNegatedExpressionText(condition);
-        @NonNls String newStatement;
+        String newStatement;
         if (description == null) {
             newStatement = "if(" + negatedConditionString +
                 "){ throw new java.lang.AssertionError();}";

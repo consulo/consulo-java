@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
@@ -48,7 +47,6 @@ public class ClsJavaTokenImpl extends ClsElementImpl implements PsiJavaToken {
     return myTokenText;
   }
 
-  @Nonnull
   @Override
   public PsiElement[] getChildren() {
     return PsiElement.EMPTY_ARRAY;
@@ -60,17 +58,17 @@ public class ClsJavaTokenImpl extends ClsElementImpl implements PsiJavaToken {
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append(getText());
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, myTokenType);
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitJavaToken(this);
     }

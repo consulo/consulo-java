@@ -25,7 +25,6 @@
 package org.osmorc.manifest.lang.headerparser.impl;
 
 import consulo.language.psi.PsiReference;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.psi.PackageReference;
@@ -36,7 +35,7 @@ import org.osmorc.manifest.lang.psi.PackageReferenceSet;
  */
 public class ExportPackageParser extends AbstractHeaderParserImpl {
 
-  public PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart) {
+  public PsiReference[] getReferences(HeaderValuePart headerValuePart) {
     if (headerValuePart.getParent() instanceof Clause) {
       PackageReferenceSet referenceSet = new PackageReferenceSet(headerValuePart.getUnwrappedText(), headerValuePart, 0);
       return referenceSet.getReferences().toArray(new PackageReference[referenceSet.getReferences().size()]);

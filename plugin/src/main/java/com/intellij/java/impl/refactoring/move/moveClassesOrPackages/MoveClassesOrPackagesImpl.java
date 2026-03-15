@@ -62,7 +62,7 @@ import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -8,7 +8,6 @@ import consulo.codeEditor.Editor;
 import consulo.language.editor.refactoring.RefactoringSupportProvider;
 import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateWithExpressionSelector;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset;
@@ -19,7 +18,7 @@ public class IntroduceFieldPostfixTemplate extends PostfixTemplateWithExpression
   }
 
   @Override
-  protected void expandForChooseExpression(@Nonnull PsiElement expression, @Nonnull Editor editor) {
+  protected void expandForChooseExpression(PsiElement expression, Editor editor) {
     RefactoringSupportProvider supportProvider = RefactoringSupportProvider.forLanguage(JavaLanguage.INSTANCE);
     JavaIntroduceFieldHandlerBase handler = (JavaIntroduceFieldHandlerBase)supportProvider.getIntroduceFieldHandler();
     assert handler != null;
@@ -27,7 +26,7 @@ public class IntroduceFieldPostfixTemplate extends PostfixTemplateWithExpression
   }
 
   @Override
-  protected void prepareAndExpandForChooseExpression(@Nonnull PsiElement expression, @Nonnull Editor editor) {
+  protected void prepareAndExpandForChooseExpression(PsiElement expression, Editor editor) {
     //no write action
     expandForChooseExpression(expression, editor);
   }

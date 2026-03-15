@@ -45,7 +45,6 @@ import consulo.ui.ex.toolWindow.ContentManagerWatcher;
 import consulo.ui.ex.toolWindow.ToolWindow;
 import consulo.ui.ex.toolWindow.ToolWindowAnchor;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -69,46 +68,45 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     public AnalysisUIOptions analysisUIOptions = new AnalysisUIOptions();
   }
 
-  public static SliceManager getInstance(@Nonnull Project project) {
+  public static SliceManager getInstance(Project project) {
     return ServiceManager.getService(project, SliceManager.class);
   }
 
   @Inject
-  public SliceManager(@Nonnull Project project) {
+  public SliceManager(Project project) {
     myProject = project;
   }
 
-  @Nonnull
-  private Disposable addPsiListener(@Nonnull final ProgressIndicator indicator) {
+  private Disposable addPsiListener(final ProgressIndicator indicator) {
     Disposable disposable = Disposable.newDisposable();
     PsiManager.getInstance(myProject).addPsiTreeChangeListener(new PsiTreeChangeAdapter() {
       @Override
-      public void beforeChildAddition(@Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildAddition(PsiTreeChangeEvent event) {
         indicator.cancel();
       }
 
       @Override
-      public void beforeChildRemoval(@Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildRemoval(PsiTreeChangeEvent event) {
         indicator.cancel();
       }
 
       @Override
-      public void beforeChildReplacement(@Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildReplacement(PsiTreeChangeEvent event) {
         indicator.cancel();
       }
 
       @Override
-      public void beforeChildMovement(@Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildMovement(PsiTreeChangeEvent event) {
         indicator.cancel();
       }
 
       @Override
-      public void beforeChildrenChange(@Nonnull PsiTreeChangeEvent event) {
+      public void beforeChildrenChange(PsiTreeChangeEvent event) {
         indicator.cancel();
       }
 
       @Override
-      public void beforePropertyChange(@Nonnull PsiTreeChangeEvent event) {
+      public void beforePropertyChange(PsiTreeChangeEvent event) {
         indicator.cancel();
       }
     }, disposable);
@@ -135,7 +133,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     return myForthContentManager;
   }
 
-  public void slice(@Nonnull PsiElement element, boolean dataFlowToThis, @Nonnull SliceHandler handler) {
+  public void slice(PsiElement element, boolean dataFlowToThis, SliceHandler handler) {
     String dialogTitle = getElementDescription((dataFlowToThis ? BACK_TOOLWINDOW_ID : FORTH_TOOLWINDOW_ID) + " ", element, null);
 
     dialogTitle = Pattern.compile("(<style>.*</style>)|<[^<>]*>").matcher(dialogTitle).replaceAll("");
@@ -150,9 +148,9 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
   }
 
   public void createToolWindow(boolean dataFlowToThis,
-                               @Nonnull SliceRootNode rootNode,
+                               SliceRootNode rootNode,
                                boolean splitByLeafExpressions,
-                               @Nonnull String displayName) {
+                               String displayName) {
     final SliceToolwindowSettings sliceToolwindowSettings = SliceToolwindowSettings.getInstance(myProject);
     final ContentManager contentManager = getContentManager(dataFlowToThis);
     final Content[] myContent = new Content[1];
@@ -215,9 +213,9 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     return f.deriveFont(f.getStyle(), Math.max(11, f.getSize() - 2));
   }
 
-  public void runInterruptibly(@Nonnull ProgressIndicator progress,
-                               @Nonnull Runnable onCancel,
-                               @Nonnull Runnable runnable) throws ProcessCanceledException {
+  public void runInterruptibly(ProgressIndicator progress,
+                               Runnable onCancel,
+                               Runnable runnable) throws ProcessCanceledException {
     Disposable disposable = addPsiListener(progress);
     try {
       progress.checkCanceled();

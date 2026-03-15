@@ -42,8 +42,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -88,14 +87,12 @@ public class HighlightControlFlowUtil {
         return null;
     }
 
-    @Nonnull
-    public static ControlFlow getControlFlowNoConstantEvaluate(@Nonnull PsiElement body) throws AnalysisCanceledException {
+    public static ControlFlow getControlFlowNoConstantEvaluate(PsiElement body) throws AnalysisCanceledException {
         LocalsOrMyInstanceFieldsControlFlowPolicy policy = LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance();
         return ControlFlowFactory.getControlFlow(body, policy, ControlFlowOptions.NO_CONST_EVALUATE);
     }
 
-    @Nonnull
-    private static ControlFlow getControlFlow(@Nonnull PsiElement context) throws AnalysisCanceledException {
+    private static ControlFlow getControlFlow(PsiElement context) throws AnalysisCanceledException {
         LocalsOrMyInstanceFieldsControlFlowPolicy policy = LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance();
         return ControlFlowFactory.getInstance(context.getProject()).getControlFlow(context, policy);
     }
@@ -134,7 +131,7 @@ public class HighlightControlFlowUtil {
         return null;
     }
 
-    public static boolean isFieldInitializedAfterObjectConstruction(@Nonnull PsiField field) {
+    public static boolean isFieldInitializedAfterObjectConstruction(PsiField field) {
         if (field.hasInitializer()) {
             return true;
         }
@@ -189,10 +186,10 @@ public class HighlightControlFlowUtil {
     }
 
     private static boolean isFieldInitializedInOtherFieldInitializer(
-        @Nonnull PsiClass aClass,
-        @Nonnull PsiField field,
+        PsiClass aClass,
+        PsiField field,
         boolean fieldStatic,
-        @Nonnull Predicate<? super PsiField> condition
+        Predicate<? super PsiField> condition
     ) {
         PsiField[] fields = aClass.getFields();
         for (PsiField psiField : fields) {
@@ -206,7 +203,7 @@ public class HighlightControlFlowUtil {
         return false;
     }
 
-    public static boolean isRecursivelyCalledConstructor(@Nonnull PsiMethod constructor) {
+    public static boolean isRecursivelyCalledConstructor(PsiMethod constructor) {
         JavaHighlightUtil.ConstructorVisitorInfo info = new JavaHighlightUtil.ConstructorVisitorInfo();
         JavaHighlightUtil.visitConstructorChain(constructor, info);
         if (info.recursivelyCalledConstructor == null) {
@@ -216,7 +213,7 @@ public class HighlightControlFlowUtil {
         return info.visitedConstructors.indexOf(info.recursivelyCalledConstructor) <= info.visitedConstructors.indexOf(constructor);
     }
 
-    public static boolean isAssigned(@Nonnull PsiParameter parameter) {
+    public static boolean isAssigned(PsiParameter parameter) {
         ParamWriteProcessor processor = new ParamWriteProcessor();
         ReferencesSearch.search(parameter, new LocalSearchScope(parameter.getDeclarationScope()), true).forEach(processor);
         return processor.isWriteRefFound();
@@ -245,7 +242,7 @@ public class HighlightControlFlowUtil {
      *
      * @return true if variable assigned (maybe more than once)
      */
-    private static boolean variableDefinitelyAssignedIn(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
+    private static boolean variableDefinitelyAssignedIn(PsiVariable variable, PsiElement context) {
         try {
             ControlFlow controlFlow = getControlFlow(context);
             return ControlFlowUtil.isVariableDefinitelyAssigned(variable, controlFlow);
@@ -255,7 +252,7 @@ public class HighlightControlFlowUtil {
         }
     }
 
-    private static boolean variableDefinitelyNotAssignedIn(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
+    private static boolean variableDefinitelyNotAssignedIn(PsiVariable variable, PsiElement context) {
         try {
             ControlFlow controlFlow = getControlFlow(context);
             return ControlFlowUtil.isVariableDefinitelyNotAssigned(variable, controlFlow);
@@ -267,7 +264,7 @@ public class HighlightControlFlowUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkFinalFieldInitialized(@Nonnull PsiField field) {
+    public static HighlightInfo checkFinalFieldInitialized(PsiField field) {
         if (!field.isFinal()) {
             return null;
         }
@@ -293,20 +290,20 @@ public class HighlightControlFlowUtil {
 
     @RequiredReadAction
     public static HighlightInfo checkVariableInitializedBeforeUsage(
-        @Nonnull PsiReferenceExpression expression,
-        @Nonnull PsiVariable variable,
-        @Nonnull Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems,
-        @Nonnull PsiFile containingFile
+        PsiReferenceExpression expression,
+        PsiVariable variable,
+        Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems,
+        PsiFile containingFile
     ) {
         return checkVariableInitializedBeforeUsage(expression, variable, uninitializedVarProblems, containingFile, false);
     }
 
     @RequiredReadAction
     public static HighlightInfo checkVariableInitializedBeforeUsage(
-        @Nonnull PsiReferenceExpression expression,
-        @Nonnull PsiVariable variable,
-        @Nonnull Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems,
-        @Nonnull PsiFile containingFile,
+        PsiReferenceExpression expression,
+        PsiVariable variable,
+        Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems,
+        PsiFile containingFile,
         boolean ignoreFinality
     ) {
         if (variable instanceof ImplicitVariable) {
@@ -509,9 +506,9 @@ public class HighlightControlFlowUtil {
     }
 
     private static boolean isFieldInitializedInClassInitializer(
-        @Nonnull PsiField field,
+        PsiField field,
         boolean isFieldStatic,
-        @Nonnull PsiClassInitializer[] initializers
+        PsiClassInitializer[] initializers
     ) {
         return ContainerUtil.find(
             initializers,
@@ -519,7 +516,7 @@ public class HighlightControlFlowUtil {
         ) != null;
     }
 
-    private static boolean inInnerClass(@Nonnull PsiElement psiElement, @Nullable PsiClass containingClass) {
+    private static boolean inInnerClass(PsiElement psiElement, @Nullable PsiClass containingClass) {
         for (PsiElement element = psiElement; element != null; element = element.getParent()) {
             if (element instanceof PsiClass psiClass) {
                 boolean innerClass = !psiElement.getManager().areElementsEquivalent(element, containingClass);
@@ -553,8 +550,8 @@ public class HighlightControlFlowUtil {
     }
 
     public static boolean isReassigned(
-        @Nonnull PsiVariable variable,
-        @Nonnull Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems
+        PsiVariable variable,
+        Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems
     ) {
         if (variable instanceof PsiLocalVariable) {
             PsiElement parent = variable.getParent();
@@ -576,9 +573,9 @@ public class HighlightControlFlowUtil {
     @Nullable
     @RequiredReadAction
     public static HighlightInfo checkFinalVariableMightAlreadyHaveBeenAssignedTo(
-        @Nonnull PsiVariable variable,
-        @Nonnull PsiReferenceExpression expression,
-        @Nonnull Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems
+        PsiVariable variable,
+        PsiReferenceExpression expression,
+        Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems
     ) {
         if (!PsiUtil.isAccessedForWriting(expression)) {
             return null;
@@ -681,10 +678,9 @@ public class HighlightControlFlowUtil {
         return null;
     }
 
-    @Nonnull
     private static Collection<ControlFlowUtil.VariableInfo> getFinalVariableProblemsInBlock(
-        @Nonnull Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems,
-        @Nonnull PsiElement codeBlock
+        Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems,
+        PsiElement codeBlock
     ) {
         Collection<ControlFlowUtil.VariableInfo> codeBlockProblems = finalVarProblems.get(codeBlock);
         if (codeBlockProblems == null) {
@@ -704,8 +700,8 @@ public class HighlightControlFlowUtil {
     @Nullable
     @RequiredReadAction
     public static HighlightInfo checkFinalVariableInitializedInLoop(
-        @Nonnull PsiReferenceExpression expression,
-        @Nonnull PsiElement resolved
+        PsiReferenceExpression expression,
+        PsiElement resolved
     ) {
         if (ControlFlowUtil.isVariableAssignedInLoop(expression, resolved)) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
@@ -722,7 +718,7 @@ public class HighlightControlFlowUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkCannotWriteToFinal(@Nonnull PsiExpression expression, @Nonnull PsiFile containingFile) {
+    public static HighlightInfo checkCannotWriteToFinal(PsiExpression expression, PsiFile containingFile) {
         PsiReferenceExpression reference = null;
         boolean readBeforeWrite = false;
         if (expression instanceof PsiAssignmentExpression assignment) {
@@ -776,10 +772,10 @@ public class HighlightControlFlowUtil {
     }
 
     private static boolean canWriteToFinal(
-        @Nonnull PsiVariable variable,
-        @Nonnull PsiExpression expression,
-        @Nonnull PsiReferenceExpression reference,
-        @Nonnull PsiFile containingFile
+        PsiVariable variable,
+        PsiExpression expression,
+        PsiReferenceExpression reference,
+        PsiFile containingFile
     ) {
         if (variable.hasInitializer()) {
             return false;
@@ -810,10 +806,10 @@ public class HighlightControlFlowUtil {
     }
 
     private static boolean isSameField(
-        @Nonnull PsiMember enclosingCtrOrInitializer,
-        @Nonnull PsiField field,
-        @Nonnull PsiReferenceExpression reference,
-        @Nonnull PsiFile containingFile
+        PsiMember enclosingCtrOrInitializer,
+        PsiField field,
+        PsiReferenceExpression reference,
+        PsiFile containingFile
     ) {
         PsiManager manager = containingFile.getManager();
         if (!manager.areElementsEquivalent(enclosingCtrOrInitializer.getContainingClass(), field.getContainingClass())) {
@@ -822,12 +818,11 @@ public class HighlightControlFlowUtil {
         return LocalsOrMyInstanceFieldsControlFlowPolicy.isLocalOrMyInstanceReference(reference);
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkVariableMustBeFinal(
-        @Nonnull PsiVariable variable,
-        @Nonnull PsiJavaCodeReferenceElement context,
-        @Nonnull LanguageLevel languageLevel
+    public static HighlightInfo.@Nullable Builder checkVariableMustBeFinal(
+        PsiVariable variable,
+        PsiJavaCodeReferenceElement context,
+        LanguageLevel languageLevel
     ) {
         if (variable.hasModifierProperty(PsiModifier.FINAL)) {
             return null;
@@ -857,11 +852,10 @@ public class HighlightControlFlowUtil {
         return checkWriteToFinalInsideLambda(variable, context);
     }
 
-    @Nullable
     @RequiredReadAction
-    private static HighlightInfo.Builder checkWriteToFinalInsideLambda(
-        @Nonnull PsiVariable variable,
-        @Nonnull PsiJavaCodeReferenceElement context
+    private static HighlightInfo.@Nullable Builder checkWriteToFinalInsideLambda(
+        PsiVariable variable,
+        PsiJavaCodeReferenceElement context
     ) {
         PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(context, PsiLambdaExpression.class);
         if (lambdaExpression != null && !PsiTreeUtil.isAncestor(lambdaExpression, variable, true)) {
@@ -881,8 +875,8 @@ public class HighlightControlFlowUtil {
 
     @RequiredReadAction
     public static boolean isEffectivelyFinal(
-        @Nonnull PsiVariable variable,
-        @Nonnull PsiElement scope,
+        PsiVariable variable,
+        PsiElement scope,
         @Nullable PsiJavaCodeReferenceElement context
     ) {
         boolean effectivelyFinal;
@@ -919,7 +913,7 @@ public class HighlightControlFlowUtil {
     }
 
     @RequiredReadAction
-    private static boolean notAccessedForWriting(@Nonnull PsiVariable variable, @Nonnull LocalSearchScope searchScope) {
+    private static boolean notAccessedForWriting(PsiVariable variable, LocalSearchScope searchScope) {
         for (PsiReference reference : ReferencesSearch.search(variable, searchScope)) {
             if (reference.getElement() instanceof PsiExpression expr && PsiUtil.isAccessedForWriting(expr)) {
                 return false;
@@ -929,7 +923,7 @@ public class HighlightControlFlowUtil {
     }
 
     @Nullable
-    public static PsiElement getInnerClassVariableReferencedFrom(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
+    public static PsiElement getInnerClassVariableReferencedFrom(PsiVariable variable, PsiElement context) {
         PsiElement[] scope;
         if (variable instanceof PsiResourceVariable resourceVar) {
             scope = resourceVar.getDeclarationScope();
@@ -971,7 +965,7 @@ public class HighlightControlFlowUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkInitializerCompleteNormally(@Nonnull PsiClassInitializer initializer) {
+    public static HighlightInfo checkInitializerCompleteNormally(PsiClassInitializer initializer) {
         PsiCodeBlock body = initializer.getBody();
         // unhandled exceptions already reported
         try {

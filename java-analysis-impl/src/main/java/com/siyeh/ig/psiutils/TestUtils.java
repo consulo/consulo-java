@@ -30,10 +30,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.content.ProjectRootManager;
 import consulo.util.lang.ObjectUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -57,12 +55,12 @@ public class TestUtils {
     return virtualFile != null && ProjectRootManager.getInstance(file.getProject()).getFileIndex().isInTestSourceContent(virtualFile);
   }
 
-  public static boolean isPartOfJUnitTestMethod(@Nonnull PsiElement element) {
+  public static boolean isPartOfJUnitTestMethod(PsiElement element) {
     final PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
     return method != null && isJUnitTestMethod(method);
   }
 
-  public static boolean isJUnit4BeforeOrAfterMethod(@Nonnull PsiMethod method) {
+  public static boolean isJUnit4BeforeOrAfterMethod(PsiMethod method) {
     return AnnotationUtil.isAnnotated(method, "org.junit.Before", CHECK_HIERARCHY) || AnnotationUtil.isAnnotated(method, "org.junit.After", CHECK_HIERARCHY);
   }
 
@@ -98,7 +96,7 @@ public class TestUtils {
       return false;
     }
     final String methodName = method.getName();
-    @NonNls final String test = "test";
+    final String test = "test";
     if (!methodName.startsWith(test) || !method.hasModifierProperty(PsiModifier.PUBLIC) && method.getParameterList().getParametersCount() > 0) {
       return false;
     }
@@ -163,11 +161,11 @@ public class TestUtils {
   /**
    * @return true if class is annotated with {@code @TestInstance(TestInstance.Lifecycle.PER_CLASS)}
    */
-  public static boolean testInstancePerClass(@Nonnull PsiClass containingClass) {
+  public static boolean testInstancePerClass(PsiClass containingClass) {
     return testInstancePerClass(containingClass, new HashSet<>());
   }
 
-  private static boolean testInstancePerClass(@Nonnull PsiClass containingClass, HashSet<PsiClass> classes) {
+  private static boolean testInstancePerClass(PsiClass containingClass, HashSet<PsiClass> classes) {
     PsiAnnotation annotation = MetaAnnotationUtil.findMetaAnnotations(containingClass, Collections.singletonList(JUnitCommonClassNames.ORG_JUNIT_JUPITER_API_TEST_INSTANCE)).findFirst().orElse
         (null);
     if (annotation != null) {
@@ -231,7 +229,7 @@ public class TestUtils {
     final PsiAnnotationParameterList parameterList = testAnnotation.getParameterList();
     final PsiNameValuePair[] nameValuePairs = parameterList.getAttributes();
     for (PsiNameValuePair nameValuePair : nameValuePairs) {
-      @NonNls final String parameterName = nameValuePair.getName();
+      final String parameterName = nameValuePair.getName();
       if (expectedParameterName.equals(parameterName)) {
         return true;
       }

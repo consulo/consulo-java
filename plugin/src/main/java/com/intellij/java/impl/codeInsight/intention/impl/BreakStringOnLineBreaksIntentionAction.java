@@ -31,7 +31,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Danila Ponomarenko
@@ -41,7 +40,7 @@ import jakarta.annotation.Nonnull;
 public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!(element instanceof PsiJavaToken)) {
       return false;
     }
@@ -67,7 +66,7 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiJavaToken)) {
       return;
     }
@@ -89,8 +88,7 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
   }
 
 
-  @Nonnull
-  private static String breakOnLineBreaks(@Nonnull String string) {
+  private static String breakOnLineBreaks(String string) {
     String result = StringUtil.replace(
       string,
       new String[]{"\\n\\r", "\\n"},
@@ -102,7 +100,6 @@ public class BreakStringOnLineBreaksIntentionAction extends PsiElementBaseIntent
     return result.endsWith(redundantSuffix) ? result.substring(0, result.length() - redundantSuffix.length()) : result;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionBreakStringOnLineBreaksText();

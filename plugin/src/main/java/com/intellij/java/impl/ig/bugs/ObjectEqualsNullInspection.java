@@ -25,17 +25,14 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ObjectEqualsNullInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.objectEqualsNullDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.objectEqualsNullProblemDescriptor().get();
     }
@@ -52,7 +49,7 @@ public class ObjectEqualsNullInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression call
+            PsiMethodCallExpression call
         ) {
             super.visitMethodCallExpression(call);
             if (!MethodCallUtils.isEqualsCall(call)) {

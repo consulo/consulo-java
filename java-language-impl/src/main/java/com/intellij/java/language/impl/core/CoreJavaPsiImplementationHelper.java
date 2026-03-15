@@ -22,7 +22,6 @@ import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -54,7 +53,7 @@ public class CoreJavaPsiImplementationHelper extends JavaPsiImplementationHelper
 	}
 
 	@Override
-	public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass psiClass, @Nonnull PsiMember firstPsi)
+	public PsiElement getDefaultMemberAnchor(PsiClass psiClass, PsiMember firstPsi)
 	{
 		throw new UnsupportedOperationException("TODO");
 	}

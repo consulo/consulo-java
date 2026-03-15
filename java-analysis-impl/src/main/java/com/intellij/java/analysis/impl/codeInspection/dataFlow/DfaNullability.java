@@ -7,8 +7,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.codeInsight.Nullability;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a value nullability within DFA. Unlike {@link Nullability} may have more fine-grained
@@ -30,31 +29,25 @@ public enum DfaNullability {
      */
     FLUSHED("Flushed", LocalizeValue.empty(), Nullability.UNKNOWN);
 
-    @Nonnull
     private final String myInternalName;
-    @Nonnull
     private final LocalizeValue myPresentationalName;
-    @Nonnull
     private final Nullability myNullability;
 
-    DfaNullability(@Nonnull String internalName, @Nonnull LocalizeValue presentationalName, @Nonnull Nullability nullability) {
+    DfaNullability(String internalName, LocalizeValue presentationalName, Nullability nullability) {
         myInternalName = internalName;
         myPresentationalName = presentationalName;
         myNullability = nullability;
     }
 
-    @Nonnull
     public String getInternalName() {
         return myInternalName;
     }
 
-    @Nonnull
     public LocalizeValue getPresentationName() {
         return myPresentationalName;
     }
 
-    @Nonnull
-    public DfaNullability unite(@Nonnull DfaNullability other) {
+    public DfaNullability unite(DfaNullability other) {
         if (this == other) {
             return this;
         }
@@ -69,7 +62,7 @@ public enum DfaNullability {
     }
 
     @Nullable
-    public DfaNullability intersect(@Nonnull DfaNullability right) {
+    public DfaNullability intersect(DfaNullability right) {
         if (this == NOT_NULL) {
             return right == NULL ? null : NOT_NULL;
         }
@@ -89,13 +82,11 @@ public enum DfaNullability {
         return equals(right) ? this : null;
     }
 
-    @Nonnull
     public static Nullability toNullability(@Nullable DfaNullability dfaNullability) {
         return dfaNullability == null ? Nullability.UNKNOWN : dfaNullability.myNullability;
     }
 
-    @Nonnull
-    public static DfaNullability fromNullability(@Nonnull Nullability nullability) {
+    public static DfaNullability fromNullability(Nullability nullability) {
         return switch (nullability) {
             case NOT_NULL -> NOT_NULL;
             case NULLABLE -> NULLABLE;
@@ -104,7 +95,6 @@ public enum DfaNullability {
         };
     }
 
-    @Nonnull
     public DfReferenceType asDfType() {
         return switch (this) {
             case NULL -> DfTypes.NULL;
@@ -114,8 +104,7 @@ public enum DfaNullability {
         };
     }
 
-    @Nonnull
-    public static DfaNullability fromDfType(@Nonnull DfType type) {
+    public static DfaNullability fromDfType(DfType type) {
         return type instanceof DfReferenceType refType ? refType.getNullability() : UNKNOWN;
     }
 }

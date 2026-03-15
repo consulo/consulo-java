@@ -27,19 +27,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class UnnecessaryUnaryMinusInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryUnaryMinusDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryUnaryMinusProblemDescriptor().get();
     }
@@ -50,7 +46,6 @@ public class UnnecessaryUnaryMinusInspection extends BaseInspection {
     }
 
     private static class UnnecessaryUnaryMinusFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryUnaryMinusQuickfix();
         }
@@ -59,7 +54,7 @@ public class UnnecessaryUnaryMinusInspection extends BaseInspection {
             PsiElement element = descriptor.getPsiElement();
             PsiPrefixExpression prefixExpression = (PsiPrefixExpression) element.getParent();
             PsiExpression parentExpression = (PsiExpression) prefixExpression.getParent();
-            @NonNls StringBuilder newExpression = new StringBuilder();
+            StringBuilder newExpression = new StringBuilder();
             if (parentExpression instanceof PsiAssignmentExpression) {
                 PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) parentExpression;
                 PsiExpression lhs = assignmentExpression.getLExpression();

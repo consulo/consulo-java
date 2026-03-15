@@ -21,7 +21,6 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.module.Module;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -31,5 +30,5 @@ import jakarta.annotation.Nonnull;
 public interface JavaTestPatcher {
     ExtensionPointName<JavaTestPatcher> EP_NAME = ExtensionPointName.create(JavaTestPatcher.class);
 
-    void patchJavaParameters(@Nonnull Module module, @Nonnull OwnJavaParameters javaParameters);
+    void patchJavaParameters(Module module, OwnJavaParameters javaParameters);
 }

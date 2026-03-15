@@ -10,17 +10,16 @@ import consulo.project.Project;
 import consulo.util.lang.Pair;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2InjectorAdapter implements MultiHostInjector {
   @Inject
-  public JavaConcatenationToInjectorAdapter(@Nonnull Project project) {
+  public JavaConcatenationToInjectorAdapter(Project project) {
     super(project);
   }
 
   @Override
-  public Pair<PsiElement, PsiElement[]> computeAnchorAndOperands(@Nonnull PsiElement context) {
+  public Pair<PsiElement, PsiElement[]> computeAnchorAndOperands(PsiElement context) {
     PsiElement element = context;
     PsiElement parent = context.getParent();
     while (parent instanceof PsiPolyadicExpression && ((PsiPolyadicExpression)parent).getOperationTokenType() == JavaTokenType.PLUS
@@ -51,7 +50,6 @@ public class JavaConcatenationToInjectorAdapter extends BaseConcatenation2Inject
     return Pair.create(anchor, operands);
   }
 
-  @Nonnull
   @Override
   public Class<? extends PsiElement> getElementClass() {
     return PsiLiteralExpression.class;

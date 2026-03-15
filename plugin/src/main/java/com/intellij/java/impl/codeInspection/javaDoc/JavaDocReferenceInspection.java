@@ -54,8 +54,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBList;
 import consulo.util.concurrent.AsyncResult;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.*;
@@ -68,8 +67,8 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     @Nullable
     @RequiredReadAction
     public ProblemDescriptor[] checkMethod(
-        @Nonnull PsiMethod psiMethod,
-        @Nonnull InspectionManager manager,
+        PsiMethod psiMethod,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -79,14 +78,14 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
     @Override
     @Nullable
     @RequiredReadAction
-    public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkField(PsiField field, InspectionManager manager, boolean isOnTheFly, Object state) {
         return checkMember(field, manager, isOnTheFly);
     }
 
     @Override
     @Nullable
     @RequiredReadAction
-    public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkClass(PsiClass aClass, InspectionManager manager, boolean isOnTheFly, Object state) {
         return checkMember(aClass, manager, isOnTheFly);
     }
 
@@ -132,12 +131,12 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+            public void visitReferenceExpression(PsiReferenceExpression expression) {
                 visitElement(expression);
             }
 
             @Override
-            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+            public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
                 super.visitReferenceElement(reference);
                 JavaResolveResult result = reference.advancedResolve(false);
                 if (result.getElement() == null && !result.isPackagePrefixPackageReference()) {
@@ -147,7 +146,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
             @Override
             @RequiredReadAction
-            public void visitDocTag(@Nonnull PsiDocTag tag) {
+            public void visitDocTag(PsiDocTag tag) {
                 super.visitDocTag(tag);
                 JavadocManager javadocManager = JavadocManager.SERVICE.getInstance(tag.getProject());
                 JavadocTagInfo info = javadocManager.getTagInfo(tag.getName());
@@ -158,7 +157,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
             @Override
             @RequiredReadAction
-            public void visitInlineDocTag(@Nonnull PsiInlineDocTag tag) {
+            public void visitInlineDocTag(PsiInlineDocTag tag) {
                 super.visitInlineDocTag(tag);
                 JavadocManager javadocManager = JavadocManager.SERVICE.getInstance(tag.getProject());
                 visitRefInDocTag(tag, javadocManager, context, problems, manager, onTheFly);
@@ -253,25 +252,21 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
         );
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionJavadocRefDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesJavadocIssues();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return SHORT_NAME;
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;
@@ -284,7 +279,6 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
             this.originalClasses = originalClasses;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return JavaQuickFixLocalize.addQualifier();
@@ -292,7 +286,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull final Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(final Project project, ProblemDescriptor descriptor) {
             PsiElement element = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiJavaCodeReferenceElement.class);
             if (element instanceof PsiJavaCodeReferenceElement refElem) {
                 Collections.sort(originalClasses, new PsiProximityComparator(refElem.getElement()));
@@ -338,14 +332,13 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
             myUnboundParams = unboundParams;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Change to ...");
         }
 
         @Override
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             AsyncResult<DataContext> asyncResult = DataManager.getInstance().getDataContextFromFocus();
             asyncResult.doWhenDone(dataContext -> {
                 Editor editor = dataContext.getData(Editor.KEY);
@@ -376,7 +369,6 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
             myParamName = paramName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Remove @" + myTagName + " " + myParamName);
@@ -384,7 +376,7 @@ public class JavaDocReferenceInspection extends BaseLocalInspectionTool {
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiDocTag myTag = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiDocTag.class);
             if (myTag == null) {
                 return;

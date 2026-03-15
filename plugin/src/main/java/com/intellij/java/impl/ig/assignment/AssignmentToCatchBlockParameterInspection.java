@@ -25,18 +25,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentToCatchBlockParameterDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.assignmentToCatchBlockParameterProblemDescriptor().get();
     }
@@ -56,7 +53,7 @@ public class AssignmentToCatchBlockParameterInspection extends BaseInspection {
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression expression
+            PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
             if (!WellFormednessUtils.isWellFormed(expression)) {

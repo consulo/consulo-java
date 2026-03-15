@@ -29,7 +29,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -40,13 +39,11 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
   public boolean m_ignoreForObjectSubclasses = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.implicitCallToSuperDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.implicitCallToSuperProblemDescriptor().get();
   }
@@ -64,7 +61,6 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
 
   private static class AddExplicitSuperCall extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.implicitCallToSuperMakeExplicitQuickfix();
     }
@@ -101,7 +97,7 @@ public class ImplicitCallToSuperInspection extends BaseInspection {
   private class ImplicitCallToSuperVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       if (!method.isConstructor()) {
         return;

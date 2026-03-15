@@ -27,7 +27,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
-import jakarta.annotation.Nonnull;
 
 @ActionImpl(
     id = "IntroduceParameterObject",
@@ -48,12 +47,12 @@ public class IntroduceParameterObjectAction extends BaseRefactoringAction {
     }
 
     @Override
-    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    protected boolean isEnabledOnElements(PsiElement[] elements) {
         return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiMethod.class, false) != null;
     }
 
     @Override
-    protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
+    protected RefactoringActionHandler getHandler(DataContext context) {
         return new IntroduceParameterObjectHandler();
     }
 }

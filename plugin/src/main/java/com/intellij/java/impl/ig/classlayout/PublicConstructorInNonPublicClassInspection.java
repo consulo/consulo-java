@@ -28,20 +28,17 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ExtensionImpl
 public class PublicConstructorInNonPublicClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.publicConstructorInNonPublicClassDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiMethod method = (PsiMethod) infos[0];
         return InspectionGadgetsLocalize.publicConstructorInNonPublicClassProblemDescriptor(method.getName()).get();
@@ -51,7 +48,6 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
         return new PublicConstructorInNonPublicClassVisitor();
     }
 
-    @Nonnull
     public InspectionGadgetsFix[] buildFixes(Object... infos) {
         List<InspectionGadgetsFix> fixes = new ArrayList<>();
         PsiMethod constructor = (PsiMethod) infos[0];
@@ -71,7 +67,6 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
             this.modifier = modifier;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.publicConstructorInNonPublicClassQuickfix(modifier);
@@ -88,7 +83,7 @@ public class PublicConstructorInNonPublicClassInspection extends BaseInspection 
     private static class PublicConstructorInNonPublicClassVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //no call to super, so we don't drill into anonymous classes
             if (!method.isConstructor()) {
                 return;

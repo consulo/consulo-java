@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -51,7 +50,7 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor elemVisitor) {
             elemVisitor.visitTypeElement(this);
         }
@@ -66,7 +65,6 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
     }
 
     @Override
-    @Nonnull
     public PsiType getType() {
         return myType;
     }
@@ -82,24 +80,21 @@ public class LightTypeElement extends LightElement implements PsiTypeElement {
     }
 
     @Override
-    @Nonnull
     public PsiAnnotation[] getAnnotations() {
         return myType.getAnnotations();
     }
 
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
+    public PsiAnnotation findAnnotation(String qualifiedName) {
         return myType.findAnnotation(qualifiedName);
     }
 
     @Override
-    @Nonnull
-    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
+    public PsiAnnotation addAnnotation(String qualifiedName) {
         throw new IncorrectOperationException();
     }
 
     @Override
-    @Nonnull
     public PsiAnnotation[] getApplicableAnnotations() {
         return getAnnotations();
     }

@@ -19,7 +19,6 @@ import com.intellij.java.debugger.impl.ui.impl.watch.ArrayElementDescriptorImpl;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.internal.com.sun.jdi.ArrayReference;
-import jakarta.annotation.Nonnull;
 
 public final class ArrayItemData extends DescriptorData<ArrayElementDescriptorImpl>{
   private static final Logger LOG = Logger.getInstance(ArrayItemData.class);
@@ -27,7 +26,7 @@ public final class ArrayItemData extends DescriptorData<ArrayElementDescriptorIm
   private final ArrayReference myArray;
   private final int myIndex;
 
-  public ArrayItemData(@Nonnull ArrayReference arrRef, int idx) {
+  public ArrayItemData(ArrayReference arrRef, int idx) {
     LOG.assertTrue(0 <= idx);
     if(LOG.isDebugEnabled()) {
       LOG.assertTrue(idx <= arrRef.length());

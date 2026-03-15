@@ -18,7 +18,6 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
 import consulo.language.codeStyle.FormattingMode;
@@ -41,7 +40,7 @@ public class ExtendsListBlock extends AbstractJavaBlock
 							Alignment alignment,
 							CommonCodeStyleSettings settings,
 							JavaCodeStyleSettings javaSettings,
-							@Nonnull FormattingMode formattingMode)
+							FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, Indent.getNoneIndent(), settings, javaSettings, formattingMode);
 	}
@@ -51,7 +50,7 @@ public class ExtendsListBlock extends AbstractJavaBlock
 							AlignmentStrategy alignmentStrategy,
 							CommonCodeStyleSettings settings,
 							JavaCodeStyleSettings javaSettings,
-							@Nonnull FormattingMode formattingMode)
+							FormattingMode formattingMode)
 	{
 		super(node, wrap, alignmentStrategy, Indent.getNoneIndent(), settings, javaSettings, formattingMode);
 	}

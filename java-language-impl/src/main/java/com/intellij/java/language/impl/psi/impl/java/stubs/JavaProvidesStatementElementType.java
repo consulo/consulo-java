@@ -17,7 +17,6 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.LighterAST;
@@ -42,7 +41,6 @@ public class JavaProvidesStatementElementType extends JavaStubElementType<PsiPro
 		super("PROVIDES_STATEMENT");
 	}
 
-	@Nonnull
 	@Override
 	public ASTNode createCompositeNode()
 	{
@@ -50,13 +48,13 @@ public class JavaProvidesStatementElementType extends JavaStubElementType<PsiPro
 	}
 
 	@Override
-	public PsiProvidesStatement createPsi(@Nonnull PsiProvidesStatementStub stub)
+	public PsiProvidesStatement createPsi(PsiProvidesStatementStub stub)
 	{
 		return getPsiFactory(stub).createProvidesStatement(stub);
 	}
 
 	@Override
-	public PsiProvidesStatement createPsi(@Nonnull ASTNode node)
+	public PsiProvidesStatement createPsi(ASTNode node)
 	{
 		return new PsiProvidesStatementImpl(node);
 	}
@@ -70,20 +68,19 @@ public class JavaProvidesStatementElementType extends JavaStubElementType<PsiPro
 	}
 
 	@Override
-	public void serialize(@Nonnull PsiProvidesStatementStub stub, @Nonnull StubOutputStream dataStream) throws IOException
+	public void serialize(PsiProvidesStatementStub stub, StubOutputStream dataStream) throws IOException
 	{
 		dataStream.writeName(stub.getInterface());
 	}
 
-	@Nonnull
 	@Override
-	public PsiProvidesStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException
+	public PsiProvidesStatementStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException
 	{
 		return new PsiProvidesStatementStubImpl(parentStub, StringRef.toString(dataStream.readName()));
 	}
 
 	@Override
-	public void indexStub(@Nonnull PsiProvidesStatementStub stub, @Nonnull IndexSink sink)
+	public void indexStub(PsiProvidesStatementStub stub, IndexSink sink)
 	{
 	}
 }

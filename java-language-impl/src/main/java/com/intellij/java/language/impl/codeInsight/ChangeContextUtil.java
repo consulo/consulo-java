@@ -27,8 +27,7 @@ import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.dataholder.Key;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ChangeContextUtil {
   private static final Logger LOG = Logger.getInstance(ChangeContextUtil.class);
@@ -116,7 +115,7 @@ public class ChangeContextUtil {
     }
   }
 
-  public static PsiElement decodeContextInfo(@Nonnull PsiElement scope,
+  public static PsiElement decodeContextInfo(PsiElement scope,
                                              @Nullable PsiClass thisClass,
                                              @Nullable PsiExpression thisAccessExpr) throws IncorrectOperationException {
     if (scope.getCopyableUserData(ENCODED_KEY) != null) {
@@ -190,7 +189,7 @@ public class ChangeContextUtil {
     return thisExpr;
   }
 
-  private static PsiReferenceExpression decodeReferenceExpression(@Nonnull PsiReferenceExpression refExpr,
+  private static PsiReferenceExpression decodeReferenceExpression(PsiReferenceExpression refExpr,
                                                                   PsiExpression thisAccessExpr,
                                                                   PsiClass thisClass) throws IncorrectOperationException {
     PsiManager manager = refExpr.getManager();

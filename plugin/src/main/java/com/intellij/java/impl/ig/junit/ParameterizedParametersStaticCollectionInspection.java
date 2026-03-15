@@ -33,7 +33,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +47,6 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
     private static final String PARAMETERS_FQN = "org.junit.runners.Parameterized.Parameters";
     private static final String PARAMETERIZED_FQN = "org.junit.runners.Parameterized";
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return infos.length > 0
             ? (String) infos[1]
@@ -164,7 +162,6 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
                 }
             }
 
-            @Nonnull
             @Override
             public LocalizeValue getName() {
                 return LocalizeValue.localizeTODO(infos.length > 0 ? (String) infos[0] : "Create @Parameterized.Parameters data provider");
@@ -172,7 +169,6 @@ public class ParameterizedParametersStaticCollectionInspection extends BaseInspe
         };
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("@RunWith(Parameterized.class) without data provider");

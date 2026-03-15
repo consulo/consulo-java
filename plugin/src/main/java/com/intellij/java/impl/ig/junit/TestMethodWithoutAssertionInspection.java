@@ -30,9 +30,7 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -48,7 +46,6 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
     /**
      * @noinspection PublicField
      */
-    @NonNls
     public String assertionMethods =
         "org.junit.Assert,assert.*|fail.*," +
             "junit.framework.Assert,assert.*|fail.*," +
@@ -67,19 +64,16 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "JUnitTestMethodWithNoAssertions";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.testMethodWithoutAssertionDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.testMethodWithoutAssertionProblemDescriptor().get();
     }
@@ -101,13 +95,13 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
     }
 
     @Override
-    public void readSettings(@Nonnull Element element) throws InvalidDataException {
+    public void readSettings(Element element) throws InvalidDataException {
         super.readSettings(element);
         parseString(assertionMethods, classNames, methodNamePatterns);
     }
 
     @Override
-    public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+    public void writeSettings(Element element) throws WriteExternalException {
         assertionMethods = formatString(classNames, methodNamePatterns);
         super.writeSettings(element);
     }
@@ -121,7 +115,7 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (!TestUtils.isJUnitTestMethod(method)) {
                 return;
@@ -184,7 +178,7 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
             PsiAnnotationParameterList parameterList = testAnnotation.getParameterList();
             PsiNameValuePair[] nameValuePairs = parameterList.getAttributes();
             for (PsiNameValuePair nameValuePair : nameValuePairs) {
-                @NonNls String parameterName = nameValuePair.getName();
+                String parameterName = nameValuePair.getName();
                 if ("expected".equals(parameterName)) {
                     return true;
                 }
@@ -198,20 +192,20 @@ public class TestMethodWithoutAssertionInspection extends BaseInspection {
         private boolean containsAssertion = false;
 
         @Override
-        public void visitElement(@Nonnull PsiElement element) {
+        public void visitElement(PsiElement element) {
             if (!containsAssertion) {
                 super.visitElement(element);
             }
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             if (containsAssertion) {
                 return;
             }
             super.visitMethodCallExpression(call);
             PsiReferenceExpression methodExpression = call.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (methodName == null) {
                 return;
             }

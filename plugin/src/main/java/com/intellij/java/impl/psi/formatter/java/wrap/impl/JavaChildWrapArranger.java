@@ -38,8 +38,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.DumbService;
 import consulo.util.collection.ArrayUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.impl.psi.formatter.java.JavaFormatterUtil.getWrapType;
 import static com.intellij.java.language.impl.psi.impl.PsiImplUtil.isTypeAnnotation;
@@ -353,7 +352,7 @@ public class JavaChildWrapArranger
 		return suggestedWrap;
 	}
 
-	private static boolean isTypeAnnotationOrFalseIfDumb(@Nonnull ASTNode child)
+	private static boolean isTypeAnnotationOrFalseIfDumb(ASTNode child)
 	{
 		PsiElement node = child.getPsi();
 		PsiElement next = PsiTreeUtil.skipSiblingsForward(node, PsiWhiteSpace.class, PsiAnnotation.class);
@@ -364,7 +363,7 @@ public class JavaChildWrapArranger
 		return !DumbService.isDumb(node.getProject()) && isTypeAnnotation(node);
 	}
 
-	private static void putPreferredWrapInParentBlock(@Nonnull AbstractJavaBlock block, @Nonnull Wrap preferredWrap)
+	private static void putPreferredWrapInParentBlock(AbstractJavaBlock block, Wrap preferredWrap)
 	{
 		AbstractJavaBlock parentBlock = block.getParentBlock();
 		if(parentBlock != null)
@@ -373,7 +372,7 @@ public class JavaChildWrapArranger
 		}
 	}
 
-	private static boolean isFieldModifierListWithSingleAnnotation(@Nonnull ASTNode elem)
+	private static boolean isFieldModifierListWithSingleAnnotation(ASTNode elem)
 	{
 		ASTNode parent = elem.getTreeParent();
 		if(parent != null && parent.getElementType() == JavaElementType.FIELD)
@@ -383,7 +382,7 @@ public class JavaChildWrapArranger
 		return false;
 	}
 
-	private static boolean isModifierListWithSingleAnnotation(@Nonnull ASTNode elem)
+	private static boolean isModifierListWithSingleAnnotation(ASTNode elem)
 	{
 		if(elem.getPsi() instanceof PsiModifierList)
 		{

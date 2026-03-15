@@ -23,7 +23,6 @@ import consulo.project.ProjectManager;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
 import consulo.ide.impl.idea.profile.codeInspection.ui.SingleInspectionProfilePanel;
 import com.intellij.testFramework.LightIdeaTestCase;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Dmitry Avdeev
@@ -122,7 +121,6 @@ public abstract class SingleInspectionProfilePanelTest extends LightIdeaTestCase
 
   private final JavaDocLocalInspection myInspection = new JavaDocLocalInspection();
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[] {myInspection};

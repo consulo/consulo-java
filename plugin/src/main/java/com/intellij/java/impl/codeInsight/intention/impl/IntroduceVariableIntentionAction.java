@@ -31,7 +31,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Danila Ponomarenko
@@ -39,14 +38,13 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.IntroduceVariableIntentionAction", categories = {"Java", "Refactorings"}, fileExtensions = "java")
 public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAction {
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionIntroduceVariableText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (element instanceof SyntheticElement) {
       return false;
     }
@@ -62,7 +60,7 @@ public class IntroduceVariableIntentionAction extends BaseRefactoringIntentionAc
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     PsiExpressionStatement statement = PsiTreeUtil.getParentOfType(element,PsiExpressionStatement.class);
     if (statement == null){
       return;

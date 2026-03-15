@@ -21,8 +21,7 @@ import consulo.language.codeStyle.arrangement.*;
 import consulo.language.codeStyle.arrangement.std.ArrangementSettingsToken;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Set;
 
 /**
@@ -35,18 +34,15 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
   implements TypeAwareArrangementEntry, NameAwareArrangementEntry,ModifierAwareArrangementEntry
 {
 
-  @Nonnull
   private final Set<ArrangementSettingsToken> myModifiers = ContainerUtilRt.newHashSet();
-  @Nonnull
   private final Set<ArrangementSettingsToken> myTypes     = ContainerUtilRt.newHashSet();
 
-  @Nonnull
   private final  ArrangementSettingsToken myType;
   @Nullable private final String                   myName;
 
   public JavaElementArrangementEntry(@Nullable ArrangementEntry parent,
-                                     @Nonnull TextRange range,
-                                     @Nonnull ArrangementSettingsToken type,
+                                     TextRange range,
+                                     ArrangementSettingsToken type,
                                      @Nullable String name,
                                      boolean canBeMatched)
   {
@@ -56,7 +52,7 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
   public JavaElementArrangementEntry(@Nullable ArrangementEntry parent,
                                      int startOffset,
                                      int endOffset,
-                                     @Nonnull ArrangementSettingsToken type,
+                                     ArrangementSettingsToken type,
                                      @Nullable String name,
                                      boolean canBeArranged)
   {
@@ -66,13 +62,12 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
     myName = name;
   }
 
-  @Nonnull
   @Override
   public Set<ArrangementSettingsToken> getModifiers() {
     return myModifiers;
   }
 
-  public void addModifier(@Nonnull ArrangementSettingsToken modifier) {
+  public void addModifier(ArrangementSettingsToken modifier) {
     myModifiers.add(modifier);
   }
 
@@ -82,13 +77,11 @@ public class JavaElementArrangementEntry extends DefaultArrangementEntry
     return myName;
   }
 
-  @Nonnull
   @Override
   public Set<ArrangementSettingsToken> getTypes() {
     return myTypes;
   }
 
-  @Nonnull
   public ArrangementSettingsToken getType() {
     return myType;
   }

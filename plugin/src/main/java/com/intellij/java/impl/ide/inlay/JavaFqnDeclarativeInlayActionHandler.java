@@ -11,13 +11,11 @@ import consulo.language.editor.inlay.InlayActionHandler;
 import consulo.language.editor.inlay.InlayActionPayload;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaFqnDeclarativeInlayActionHandler implements InlayActionHandler {
     public static final String HANDLER_NAME = "java.fqn.class";
 
-    @Nonnull
     @Override
     public String getHandlerId() {
         return HANDLER_NAME;

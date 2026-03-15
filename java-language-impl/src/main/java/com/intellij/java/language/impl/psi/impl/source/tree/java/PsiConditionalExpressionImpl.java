@@ -34,7 +34,6 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiConditionalExpressionImpl extends ExpressionPsiElement implements PsiConditionalExpression {
   private static final Logger LOG = Logger.getInstance(PsiConditionalExpressionImpl.class);
@@ -44,7 +43,6 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
   }
 
   @Override
-  @Nonnull
   public PsiExpression getCondition() {
     return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.CONDITION);
   }
@@ -220,7 +218,7 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitConditionalExpression(this);
     } else {
@@ -229,10 +227,10 @@ public class PsiConditionalExpressionImpl extends ExpressionPsiElement implement
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     if (lastParent == null) {
       return true;
     }

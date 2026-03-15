@@ -30,8 +30,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Condition;
 import consulo.util.lang.function.PairConsumer;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -141,8 +140,7 @@ public abstract class StaticMemberProcessor {
     return myResolveHelper.isAccessible(member, myPosition, null);
   }
 
-  @Nonnull
-  protected abstract LookupElement createLookupElement(@Nonnull PsiMember member, @Nonnull PsiClass containingClass, boolean shouldImport);
+  protected abstract LookupElement createLookupElement(PsiMember member, PsiClass containingClass, boolean shouldImport);
 
-  protected abstract LookupElement createLookupElement(@Nonnull List<PsiMethod> overloads, @Nonnull PsiClass containingClass, boolean shouldImport);
+  protected abstract LookupElement createLookupElement(List<PsiMethod> overloads, PsiClass containingClass, boolean shouldImport);
 }

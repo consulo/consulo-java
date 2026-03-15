@@ -22,10 +22,9 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.*;
@@ -76,8 +75,7 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
     }
   };
 
-  @Nonnull
-  public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(@Nonnull Collection<CandidateInfo> candidateInfos) {
+  public static PsiMethodWithOverridingPercentMember[] calculateOverridingPercents(Collection<CandidateInfo> candidateInfos) {
     List<PsiMethodWithOverridingPercentMember> result = new ArrayList<PsiMethodWithOverridingPercentMember>(candidateInfos.size());
     Map<String, Collection<PsiClass>> classShortNames2Inheritors = new HashMap<String, Collection<PsiClass>>();
     for (CandidateInfo candidateInfo : candidateInfos) {
@@ -128,7 +126,7 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
     return counter;
   }
 
-  private static boolean maybeSuper(@Nonnull PsiMethod superMethod, @Nonnull PsiMethod method) {
+  private static boolean maybeSuper(PsiMethod superMethod, PsiMethod method) {
     if (!superMethod.getName().equals(method.getName())) {
       return false;
     }
@@ -148,7 +146,7 @@ public class PsiMethodWithOverridingPercentMember extends PsiMethodMember {
   }
 
   @Nullable
-  private static String getTypeShortName(@Nonnull PsiType type) {
+  private static String getTypeShortName(PsiType type) {
     if (type instanceof PsiPrimitiveType) {
       return ((PsiPrimitiveType) type).getBoxedTypeName();
     }

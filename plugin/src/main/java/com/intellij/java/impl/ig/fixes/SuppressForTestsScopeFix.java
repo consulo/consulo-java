@@ -33,8 +33,7 @@ import consulo.project.Project;
 import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -54,7 +53,6 @@ public class SuppressForTestsScopeFix extends InspectionGadgetsFix {
         return new SuppressForTestsScopeFix(inspection);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return InspectionGadgetsLocalize.suppressForTestsScopeQuickfix();

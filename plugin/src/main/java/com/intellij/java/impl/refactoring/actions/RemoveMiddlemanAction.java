@@ -27,7 +27,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-import jakarta.annotation.Nonnull;
 
 @ActionImpl(id = "RemoveMiddleman")
 public class RemoveMiddlemanAction extends BaseRefactoringAction {
@@ -36,16 +35,16 @@ public class RemoveMiddlemanAction extends BaseRefactoringAction {
     }
 
     @Override
-    protected RefactoringActionHandler getHandler(@Nonnull DataContext context) {
+    protected RefactoringActionHandler getHandler(DataContext context) {
         return new RemoveMiddlemanHandler();
     }
 
     @Override
     protected boolean isAvailableOnElementInEditorAndFile(
-        @Nonnull PsiElement element,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull DataContext context
+        PsiElement element,
+        Editor editor,
+        PsiFile file,
+        DataContext context
     ) {
         return element instanceof PsiField;
     }
@@ -56,7 +55,7 @@ public class RemoveMiddlemanAction extends BaseRefactoringAction {
     }
 
     @Override
-    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    public boolean isEnabledOnElements(PsiElement[] elements) {
         return elements.length == 1 && PsiTreeUtil.getParentOfType(elements[0], PsiField.class, false) != null;
     }
 }

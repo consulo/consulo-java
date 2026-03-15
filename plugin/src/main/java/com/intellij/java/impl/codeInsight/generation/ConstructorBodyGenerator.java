@@ -26,8 +26,7 @@ import consulo.language.extension.ByLanguageValue;
 import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Max Medvedev
@@ -37,15 +36,15 @@ public interface ConstructorBodyGenerator extends LanguageExtension {
   ExtensionPointCacheKey<ConstructorBodyGenerator, ByLanguageValue<ConstructorBodyGenerator>> KEY = ExtensionPointCacheKey.create("ConstructorBodyGenerator", LanguageOneToOne.build());
 
   @Nullable
-  static ConstructorBodyGenerator forLanguage(@Nonnull Language language) {
+  static ConstructorBodyGenerator forLanguage(Language language) {
     return Application.get().getExtensionPoint(ConstructorBodyGenerator.class).getOrBuildCache(KEY).get(language);
   }
 
-  void generateFieldInitialization(@Nonnull StringBuilder buffer, @Nonnull PsiField[] fields, @Nonnull PsiParameter[] parameters);
+  void generateFieldInitialization(StringBuilder buffer, PsiField[] fields, PsiParameter[] parameters);
 
-  void generateSuperCallIfNeeded(@Nonnull StringBuilder buffer, @Nonnull PsiParameter[] parameters);
+  void generateSuperCallIfNeeded(StringBuilder buffer, PsiParameter[] parameters);
 
-  StringBuilder start(StringBuilder buffer, @Nonnull String name, @Nonnull PsiParameter[] parameters);
+  StringBuilder start(StringBuilder buffer, String name, PsiParameter[] parameters);
 
   void finish(StringBuilder builder);
 }

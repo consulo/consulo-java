@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class ConstantSubexpressionPredicate implements PsiElementPredicate {
 

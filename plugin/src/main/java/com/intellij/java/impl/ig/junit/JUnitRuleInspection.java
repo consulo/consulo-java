@@ -31,9 +31,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -48,8 +46,6 @@ public class JUnitRuleInspection extends BaseInspection {
   public boolean REPORT_RULE_PROBLEMS = true;
   public boolean REPORT_CLASS_RULE_PROBLEMS = true;
 
-  @Nls
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.junitRuleDisplayName();
@@ -64,7 +60,6 @@ public class JUnitRuleInspection extends BaseInspection {
     return panel;
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return (String)infos[0];
@@ -151,7 +146,6 @@ public class JUnitRuleInspection extends BaseInspection {
       }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return myName;

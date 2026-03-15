@@ -24,8 +24,7 @@ import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
@@ -60,7 +59,6 @@ public class SuppressForClassFix extends SuppressFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return InspectionLocalize.suppressInspectionClass();
   }

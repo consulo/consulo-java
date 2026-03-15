@@ -1,10 +1,9 @@
-import jakarta.annotation.Nonnull;
 
 class Test {
-  void foo(@Nonnull String s) {
+  void foo(String s) {
   }
 
-  void bar(@Nonnull String str) {
+  void bar(String str) {
     foo(str);
   }
 }

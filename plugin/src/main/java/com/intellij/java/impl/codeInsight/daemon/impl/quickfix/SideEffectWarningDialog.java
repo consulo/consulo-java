@@ -26,7 +26,6 @@ import consulo.ui.ex.awt.DialogWrapper;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.ui.ex.awt.UIUtil;
 
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -58,7 +57,6 @@ public class SideEffectWarningDialog extends DialogWrapper {
     init();
   }
 
-  @Nonnull
   @Override
   protected Action[] createActions() {
     List<AbstractAction> actions = new ArrayList<>();
@@ -90,13 +88,11 @@ public class SideEffectWarningDialog extends DialogWrapper {
     return actions.toArray(new Action[actions.size()]);
   }
 
-  @Nonnull
   @Override
   protected LocalizeAction getCancelAction() {
     return myCancelAllAction;
   }
 
-  @Nonnull
   @Override
   protected LocalizeAction getOKAction() {
     return myRemoveAllAction;

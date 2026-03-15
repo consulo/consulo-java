@@ -24,10 +24,8 @@ import consulo.index.io.data.DataExternalizer;
 import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.io.FileUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.File;
@@ -41,7 +39,7 @@ import java.util.*;
  */
 public class Cache {
   private static class MyMapIndexStorage extends MapIndexStorage<Integer, ClassInfo> {
-    protected MyMapIndexStorage(@Nonnull File storageFile, @Nonnull KeyDescriptor<Integer> keyDescriptor, int cacheSize) throws IOException {
+    protected MyMapIndexStorage(File storageFile, KeyDescriptor<Integer> keyDescriptor, int cacheSize) throws IOException {
       super(storageFile, keyDescriptor, MyDataExternalizer.INSTANCE, cacheSize, true);
     }
 
@@ -76,7 +74,7 @@ public class Cache {
   private final PersistentHashMap<Integer, Boolean> myRemoteQNames;
   private final String myStorePath;
 
-  public Cache(@NonNls final String storePath, final int cacheSize) throws IOException {
+  public Cache(final String storePath, final int cacheSize) throws IOException {
     myStorePath = storePath;
     new File(storePath).mkdirs();
 

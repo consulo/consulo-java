@@ -24,7 +24,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.usage.Usage;
 import consulo.usage.rule.PsiElementUsage;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Eugene Zhuravlev
@@ -32,7 +31,7 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class ImportFilteringRule implements consulo.usage.rule.ImportFilteringRule {
-  public boolean isVisible(@Nonnull Usage usage) {
+  public boolean isVisible(Usage usage) {
     if (usage instanceof PsiElementUsage) {
       PsiElement psiElement = ((PsiElementUsage)usage).getElement();
       PsiFile containingFile = psiElement.getContainingFile();

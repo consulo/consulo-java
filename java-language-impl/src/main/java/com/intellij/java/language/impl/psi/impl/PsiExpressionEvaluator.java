@@ -22,8 +22,7 @@ import consulo.language.Language;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class PsiExpressionEvaluator implements ConstantExpressionEvaluator {
@@ -34,11 +33,10 @@ public class PsiExpressionEvaluator implements ConstantExpressionEvaluator {
   }
 
   @Override
-  public Object computeExpression(PsiElement expression, boolean throwExceptionOnOverflow, @Nullable PsiConstantEvaluationHelper.AuxEvaluator auxEvaluator) {
+  public Object computeExpression(PsiElement expression, boolean throwExceptionOnOverflow, PsiConstantEvaluationHelper.@Nullable AuxEvaluator auxEvaluator) {
     return expression instanceof PsiExpression ? JavaConstantExpressionEvaluator.computeConstantExpression((PsiExpression)expression, null, throwExceptionOnOverflow, auxEvaluator) : null;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -15,14 +15,12 @@
  */
 package com.siyeh;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.impl.codeInsight.daemon.impl.analysis.HighlightUtilBase;
 
 /**
  * User: anna
  * Date: 30-Aug-2005
  */
-@NonNls
 public class HardcodedMethodConstants {
   public static final String CLONE = "clone";
   public static final String CLOSE = "close";

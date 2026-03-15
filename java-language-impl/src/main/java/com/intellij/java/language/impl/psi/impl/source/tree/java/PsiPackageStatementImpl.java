@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import jakarta.annotation.Nonnull;
 import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -111,7 +110,7 @@ public class PsiPackageStatementImpl extends CompositePsiElement implements PsiP
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

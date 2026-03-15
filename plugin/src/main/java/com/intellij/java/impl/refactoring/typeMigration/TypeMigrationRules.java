@@ -13,8 +13,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LibraryScopeCache;import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Couple;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +29,7 @@ public class TypeMigrationRules {
     private final Project myProject;
     private SearchScope mySearchScope;
 
-    public TypeMigrationRules(@Nonnull Project project) {
+    public TypeMigrationRules(Project project) {
         myProject = project;
         TypeConversionRule[] extensions = TypeConversionRule.EP_NAME.getExtensions();
         myConversionRules = new ArrayList<>(extensions.length + 2);
@@ -102,7 +101,7 @@ public class TypeMigrationRules {
         return myConversionRules.stream().anyMatch(rule -> rule.shouldConvertNullInitializer(from, to, context));
     }
 
-    public void setBoundScope(@Nonnull SearchScope searchScope) {
+    public void setBoundScope(SearchScope searchScope) {
         mySearchScope =
             searchScope.intersectWith(GlobalSearchScope.notScope(LibraryScopeCache.getInstance(myProject).getLibrariesOnlyScope()));
     }

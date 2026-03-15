@@ -25,19 +25,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspection {
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.assertequalsBetweenInconvertibleTypesDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiType comparedType = (PsiType)infos[0];
     PsiType comparisonType = (PsiType)infos[1];
@@ -62,10 +58,10 @@ public class AssertEqualsBetweenInconvertibleTypesInspection extends BaseInspect
   private static class AssertEqualsBetweenInconvertibleTypesVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!"assertEquals".equals(methodName)) {
         return;
       }

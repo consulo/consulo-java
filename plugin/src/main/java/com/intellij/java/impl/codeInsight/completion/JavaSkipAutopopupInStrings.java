@@ -5,7 +5,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.completion.SkipAutopopupInStrings;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -13,7 +12,6 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl(id = "javaSkipAutopopupInStrings")
 public class JavaSkipAutopopupInStrings extends SkipAutopopupInStrings {
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

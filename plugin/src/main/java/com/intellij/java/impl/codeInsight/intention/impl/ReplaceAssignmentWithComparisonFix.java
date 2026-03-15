@@ -27,8 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     public ReplaceAssignmentWithComparisonFix(PsiAssignmentExpression expr) {
@@ -37,11 +36,11 @@ public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentio
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiBinaryExpression comparisonExpr =
             (PsiBinaryExpression) JavaPsiFacade.getElementFactory(project).createExpressionFromText("a==b", startElement);
@@ -55,7 +54,6 @@ public class ReplaceAssignmentWithComparisonFix extends LocalQuickFixAndIntentio
         CodeStyleManager.getInstance(project).reformat(assignmentExpression.replace(comparisonExpr));
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return InspectionGadgetsLocalize.assignmentUsedAsConditionReplaceQuickfix();

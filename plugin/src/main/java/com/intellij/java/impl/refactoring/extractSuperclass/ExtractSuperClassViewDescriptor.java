@@ -22,7 +22,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +52,6 @@ public class ExtractSuperClassViewDescriptor extends UsageViewDescriptorAdapter 
     }
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     return myElements;
   }

@@ -2,7 +2,6 @@ package com.intellij.java.language.impl.ui;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -10,6 +9,5 @@ import jakarta.annotation.Nonnull;
  */
 @ServiceAPI(ComponentScope.PROJECT)
 public interface PackageChooserFactory {
-  @Nonnull
   PackageChooser create();
 }

@@ -27,10 +27,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.function.Condition;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,9 +37,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class PsiTypesUtil {
-  @NonNls
   private static final Map<String, String> ourUnboxedTypes = new HashMap<>();
-  @NonNls
   private static final Map<String, String> ourBoxedTypes = new HashMap<>();
 
   static {
@@ -64,7 +60,6 @@ public class PsiTypesUtil {
     ourBoxedTypes.put("char", CommonClassNames.JAVA_LANG_CHARACTER);
   }
 
-  @NonNls
   private static final String GET_CLASS_METHOD = "getClass";
 
   private PsiTypesUtil() {
@@ -96,12 +91,10 @@ public class PsiTypesUtil {
     }
   }
 
-  @Nonnull
   public static String getDefaultValueOfType(PsiType type) {
     return getDefaultValueOfType(type, false);
   }
 
-  @Nonnull
   public static String getDefaultValueOfType(PsiType type, boolean customDefaultValues) {
     if (type instanceof PsiArrayType) {
       int count = type.getArrayDimensions() - 1;
@@ -174,12 +167,12 @@ public class PsiTypesUtil {
     return psiType instanceof PsiClassType ? ((PsiClassType) psiType).resolve() : null;
   }
 
-  public static PsiClassType getClassType(@Nonnull PsiClass psiClass) {
+  public static PsiClassType getClassType(PsiClass psiClass) {
     return JavaPsiFacade.getElementFactory(psiClass.getProject()).createType(psiClass);
   }
 
   @Nullable
-  public static PsiClassType getLowestUpperBoundClassType(@Nonnull final PsiDisjunctionType type) {
+  public static PsiClassType getLowestUpperBoundClassType(final PsiDisjunctionType type) {
     final PsiType lub = type.getLeastUpperBound();
     if (lub instanceof PsiClassType) {
       return (PsiClassType) lub;
@@ -196,7 +189,7 @@ public class PsiTypesUtil {
     return null;
   }
 
-  public static PsiType patchMethodGetClassReturnType(@Nonnull PsiMethodReferenceExpression methodExpression, @Nonnull PsiMethod method) {
+  public static PsiType patchMethodGetClassReturnType(PsiMethodReferenceExpression methodExpression, PsiMethod method) {
     if (isGetClass(method)) {
       final PsiType qualifierType = PsiMethodReferenceUtil.getQualifierType(methodExpression);
       return qualifierType != null ? createJavaLangClassType(methodExpression, qualifierType, true) : null;
@@ -204,11 +197,11 @@ public class PsiTypesUtil {
     return null;
   }
 
-  public static PsiType patchMethodGetClassReturnType(@Nonnull PsiExpression call,
-                                                      @Nonnull PsiReferenceExpression methodExpression,
-                                                      @Nonnull PsiMethod method,
+  public static PsiType patchMethodGetClassReturnType(PsiExpression call,
+                                                      PsiReferenceExpression methodExpression,
+                                                      PsiMethod method,
                                                       @Nullable Condition<IElementType> condition,
-                                                      @Nonnull LanguageLevel languageLevel) {
+                                                      LanguageLevel languageLevel) {
     //JLS3 15.8.2
     if (languageLevel.isAtLeast(LanguageLevel.JDK_1_5) && isGetClass(method)) {
       PsiExpression qualifier = methodExpression.getQualifierExpression();
@@ -239,7 +232,7 @@ public class PsiTypesUtil {
   }
 
   @Nullable
-  public static PsiType createJavaLangClassType(@Nonnull PsiElement context, @Nullable PsiType qualifierType, boolean captureTopLevelWildcards) {
+  public static PsiType createJavaLangClassType(PsiElement context, @Nullable PsiType qualifierType, boolean captureTopLevelWildcards) {
     if (qualifierType != null) {
       PsiUtil.ensureValidType(qualifierType);
       JavaPsiFacade facade = JavaPsiFacade.getInstance(context.getProject());
@@ -258,7 +251,7 @@ public class PsiTypesUtil {
    * Return type explicitly declared in parent
    */
   @Nullable
-  public static PsiType getExpectedTypeByParent(@Nonnull PsiElement element) {
+  public static PsiType getExpectedTypeByParent(PsiElement element) {
     final PsiElement parent = PsiUtil.skipParenthesizedExprUp(element.getParent());
     if (parent instanceof PsiVariable) {
       if (PsiUtil.checkSameExpression(element, ((PsiVariable) parent).getInitializer())) {
@@ -338,7 +331,7 @@ public class PsiTypesUtil {
    * @param context in which type should be checked
    * @return false if type is null or has no explicit canonical type representation (e. g. intersection type)
    */
-  public static boolean isDenotableType(@Nullable PsiType type, @Nonnull PsiElement context) {
+  public static boolean isDenotableType(@Nullable PsiType type, PsiElement context) {
     if (type == null || type instanceof PsiWildcardType)
       return false;
     PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(context.getProject());
@@ -350,7 +343,7 @@ public class PsiTypesUtil {
     }
   }
 
-  public static boolean hasUnresolvedComponents(@Nonnull PsiType type) {
+  public static boolean hasUnresolvedComponents(PsiType type) {
     return type.accept(new PsiTypeVisitor<Boolean>() {
       @Nullable
       @Override
@@ -376,7 +369,6 @@ public class PsiTypesUtil {
         return arrayType.getComponentType().accept(this);
       }
 
-      @Nonnull
       @Override
       public Boolean visitWildcardType(PsiWildcardType wildcardType) {
         final PsiType bound = wildcardType.getBound();
@@ -402,8 +394,7 @@ public class PsiTypesUtil {
     return parameterType;
   }
 
-  @Nonnull
-  public static PsiTypeParameter[] filterUnusedTypeParameters(@Nonnull PsiTypeParameter[] typeParameters, final PsiType... types) {
+  public static PsiTypeParameter[] filterUnusedTypeParameters(PsiTypeParameter[] typeParameters, final PsiType... types) {
     if (typeParameters.length == 0) {
       return PsiTypeParameter.EMPTY_ARRAY;
     }
@@ -415,8 +406,7 @@ public class PsiTypesUtil {
     return searcher.getTypeParameters().toArray(PsiTypeParameter.EMPTY_ARRAY);
   }
 
-  @Nonnull
-  public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, @Nonnull PsiTypeParameter[] typeParameters) {
+  public static PsiTypeParameter[] filterUnusedTypeParameters(final PsiType superReturnTypeInBaseClassType, PsiTypeParameter[] typeParameters) {
     return filterUnusedTypeParameters(typeParameters, superReturnTypeInBaseClassType);
   }
 
@@ -438,8 +428,7 @@ public class PsiTypesUtil {
     return parameters.stream().allMatch(parameter -> isAccessibleAt(parameter, context));
   }
 
-  @Nonnull
-  public static PsiType createArrayType(@Nonnull PsiType newType, int arrayDim) {
+  public static PsiType createArrayType(PsiType newType, int arrayDim) {
     for (int i = 0; i < arrayDim; i++) {
       newType = newType.createArrayType();
     }
@@ -466,11 +455,11 @@ public class PsiTypesUtil {
    * Checks if {@code type} mentions type parameters from the passed {@code Set}
    * Implicit type arguments of types based on inner classes of generic outer classes are explicitly checked
    */
-  public static boolean mentionsTypeParameters(@Nullable PsiType type, @Nonnull Set<? extends PsiTypeParameter> typeParameters) {
+  public static boolean mentionsTypeParameters(@Nullable PsiType type, Set<? extends PsiTypeParameter> typeParameters) {
     return mentionsTypeParametersOrUnboundedWildcard(type, typeParameters::contains);
   }
 
-  public static boolean mentionsTypeParameters(@Nullable PsiType type, @Nonnull Predicate<? super PsiTypeParameter> wantedTypeParameter) {
+  public static boolean mentionsTypeParameters(@Nullable PsiType type, Predicate<? super PsiTypeParameter> wantedTypeParameter) {
     return mentionsTypeParametersOrUnboundedWildcard(type, wantedTypeParameter);
   }
 
@@ -479,19 +468,19 @@ public class PsiTypesUtil {
     if (type == null) return false;
     return type.accept(new PsiTypeVisitor<Boolean>() {
       @Override
-      public Boolean visitType(@Nonnull PsiType type) {
+      public Boolean visitType(PsiType type) {
         return false;
       }
 
       @Override
-      public Boolean visitWildcardType(@Nonnull PsiWildcardType wildcardType) {
+      public Boolean visitWildcardType(PsiWildcardType wildcardType) {
         final PsiType bound = wildcardType.getBound();
         return bound != null ? bound.accept(this)
           : Boolean.valueOf(false);
       }
 
       @Override
-      public Boolean visitClassType(@Nonnull PsiClassType classType) {
+      public Boolean visitClassType(PsiClassType classType) {
         PsiClassType.ClassResolveResult result = classType.resolveGenerics();
         final PsiClass psiClass = result.getElement();
         if (psiClass != null) {
@@ -505,7 +494,7 @@ public class PsiTypesUtil {
       }
 
       @Override
-      public Boolean visitIntersectionType(@Nonnull PsiIntersectionType intersectionType) {
+      public Boolean visitIntersectionType(PsiIntersectionType intersectionType) {
         for (PsiType conjunct : intersectionType.getConjuncts()) {
           if (conjunct.accept(this)) return true;
         }
@@ -513,17 +502,17 @@ public class PsiTypesUtil {
       }
 
       @Override
-      public Boolean visitMethodReferenceType(@Nonnull PsiMethodReferenceType methodReferenceType) {
+      public Boolean visitMethodReferenceType(PsiMethodReferenceType methodReferenceType) {
         return false;
       }
 
       @Override
-      public Boolean visitLambdaExpressionType(@Nonnull PsiLambdaExpressionType lambdaExpressionType) {
+      public Boolean visitLambdaExpressionType(PsiLambdaExpressionType lambdaExpressionType) {
         return false;
       }
 
       @Override
-      public Boolean visitArrayType(@Nonnull PsiArrayType arrayType) {
+      public Boolean visitArrayType(PsiArrayType arrayType) {
         return arrayType.getComponentType().accept(this);
       }
     });

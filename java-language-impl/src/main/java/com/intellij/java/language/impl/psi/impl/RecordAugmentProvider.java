@@ -16,8 +16,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,9 +26,8 @@ import java.util.List;
 public class RecordAugmentProvider extends PsiAugmentProvider {
   @Override
   protected
-  @Nonnull
-  <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element,
-                                                 @Nonnull Class<Psi> type,
+  <Psi extends PsiElement> List<Psi> getAugments(PsiElement element,
+                                                 Class<Psi> type,
                                                  @Nullable String nameHint) {
     if (element instanceof PsiExtensibleClass) {
       PsiExtensibleClass aClass = (PsiExtensibleClass)element;
@@ -47,7 +45,6 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     return Collections.emptyList();
   }
 
-  @Nonnull
   private static <Psi extends PsiElement> List<Psi> getAccessorsAugments(PsiExtensibleClass aClass) {
     PsiRecordHeader header = aClass.getRecordHeader();
     if (header == null) {
@@ -80,7 +77,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
   @Nullable
   private static PsiMethod getCanonicalConstructor(PsiExtensibleClass aClass,
                                                    List<PsiMethod> ownMethods,
-                                                   @Nonnull PsiRecordHeader recordHeader) {
+                                                   PsiRecordHeader recordHeader) {
     String className = aClass.getName();
     if (className == null) {
       return null;
@@ -115,7 +112,6 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     return true;
   }
 
-  @Nonnull
   public static <Psi extends PsiElement> List<Psi> getFieldAugments(PsiClass aClass) {
     PsiRecordComponent[] components = aClass.getRecordComponents();
     PsiElementFactory factory = JavaPsiFacade.getInstance(aClass.getProject()).getElementFactory();
@@ -133,7 +129,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
   }
 
   @Nullable
-  private static PsiField createRecordField(@Nonnull PsiRecordComponent component, @Nonnull PsiElementFactory factory) {
+  private static PsiField createRecordField(PsiRecordComponent component, PsiElementFactory factory) {
     String name = component.getName();
     if (hasForbiddenType(component)) {
       return null;
@@ -152,7 +148,7 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
   }
 
   @Nullable
-  private static PsiMethod createRecordMethod(@Nonnull PsiRecordComponent component, @Nonnull PsiElementFactory factory) {
+  private static PsiMethod createRecordMethod(PsiRecordComponent component, PsiElementFactory factory) {
     String name = component.getName();
     if (name == null) {
       return null;
@@ -173,13 +169,13 @@ public class RecordAugmentProvider extends PsiAugmentProvider {
     }
   }
 
-  private static boolean hasForbiddenType(@Nonnull PsiRecordComponent component) {
+  private static boolean hasForbiddenType(PsiRecordComponent component) {
     PsiTypeElement typeElement = component.getTypeElement();
     return typeElement == null || typeElement.getText().equals(PsiKeyword.RECORD);
   }
 
   @Nullable
-  private static String getTypeText(@Nonnull PsiRecordComponent component) {
+  private static String getTypeText(PsiRecordComponent component) {
     PsiTypeElement typeElement = component.getTypeElement();
     if (typeElement == null) {
       return null;

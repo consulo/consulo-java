@@ -27,7 +27,6 @@ import consulo.find.ui.CommonFindUsagesDialog;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.ex.StateRestoringCheckBoxWrapper;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,9 +34,9 @@ public abstract class JavaFindUsagesDialog<T extends JavaFindUsagesOptions> exte
   private StateRestoringCheckBoxWrapper myCbIncludeOverloadedMethods;
   private boolean myIncludeOverloadedMethodsAvailable;
 
-  protected JavaFindUsagesDialog(@Nonnull PsiElement element,
-                                 @Nonnull Project project,
-                                 @Nonnull FindUsagesOptions findUsagesOptions,
+  protected JavaFindUsagesDialog(PsiElement element,
+                                 Project project,
+                                 FindUsagesOptions findUsagesOptions,
                                  boolean toShowInNewTab,
                                  boolean mustOpenInNewTab,
                                  boolean isSingleFile,

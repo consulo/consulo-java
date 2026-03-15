@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * A type which represents a function denoted by a lambda expression.
@@ -25,18 +24,16 @@ import jakarta.annotation.Nonnull;
 public class PsiLambdaExpressionType extends PsiType {
   private final PsiLambdaExpression myExpression;
 
-  public PsiLambdaExpressionType(@Nonnull PsiLambdaExpression expression) {
+  public PsiLambdaExpressionType(PsiLambdaExpression expression) {
     super(TypeAnnotationProvider.EMPTY);
     myExpression = expression;
   }
 
-  @Nonnull
   @Override
   public String getPresentableText() {
     return getCanonicalText();
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText() {
     return "<lambda expression>";
@@ -48,12 +45,12 @@ public class PsiLambdaExpressionType extends PsiType {
   }
 
   @Override
-  public boolean equalsToText(@Nonnull String text) {
+  public boolean equalsToText(String text) {
     return false;
   }
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(PsiTypeVisitor<A> visitor) {
     return visitor.visitLambdaExpressionType(this);
   }
 
@@ -62,7 +59,6 @@ public class PsiLambdaExpressionType extends PsiType {
     return null;
   }
 
-  @Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     return PsiType.EMPTY_ARRAY;

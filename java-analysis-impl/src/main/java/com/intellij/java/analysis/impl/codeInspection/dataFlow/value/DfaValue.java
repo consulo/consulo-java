@@ -19,22 +19,19 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class DfaValue
 {
 	private final int myID;
-	@Nonnull
 	protected final DfaValueFactory myFactory;
 
-	protected DfaValue(@Nonnull final DfaValueFactory factory)
+	protected DfaValue(final DfaValueFactory factory)
 	{
 		myFactory = factory;
 		myID = factory.registerValue(this);
 	}
 
-	@Nonnull
 	public DfaValueFactory getFactory()
 	{
 		return myFactory;
@@ -57,7 +54,6 @@ public abstract class DfaValue
 	/**
 	 * @return a DfType this value belongs under any possible memory state
 	 */
-	@Nonnull
 	public DfType getDfType()
 	{
 		return DfTypes.TOP;
@@ -98,8 +94,7 @@ public abstract class DfaValue
 	 * @param other        other condition operand
 	 * @return resulting condition between this value and other operand
 	 */
-	@Nonnull
-	public final DfaCondition cond(@Nonnull RelationType relationType, @Nonnull DfaValue other)
+	public final DfaCondition cond(RelationType relationType, DfaValue other)
 	{
 		return DfaCondition.createCondition(this, relationType, other);
 	}

@@ -30,25 +30,24 @@ import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class BaseGenerateAction extends CodeInsightAction implements GenerateActionPopupTemplateInjector {
     private final CodeInsightActionHandler myHandler;
 
-    public BaseGenerateAction(CodeInsightActionHandler handler, @Nonnull LocalizeValue text) {
+    public BaseGenerateAction(CodeInsightActionHandler handler, LocalizeValue text) {
         myHandler = handler;
         getTemplatePresentation().setTextValue(text);
     }
 
     @Override
     protected void update(
-        @Nonnull Presentation presentation,
-        @Nonnull Project project,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull DataContext dataContext,
+        Presentation presentation,
+        Project project,
+        Editor editor,
+        PsiFile file,
+        DataContext dataContext,
         @Nullable String actionPlace
     ) {
         super.update(presentation, project, editor, file, dataContext, actionPlace);
@@ -63,7 +62,6 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
         return null;
     }
 
-    @Nonnull
     @Override
     protected final CodeInsightActionHandler getHandler() {
         return myHandler;
@@ -83,7 +81,7 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
 
     @Override
     @RequiredReadAction
-    protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+    protected boolean isValidForFile(Project project, Editor editor, PsiFile file) {
         if (!(file instanceof PsiJavaFile)) {
             return false;
         }

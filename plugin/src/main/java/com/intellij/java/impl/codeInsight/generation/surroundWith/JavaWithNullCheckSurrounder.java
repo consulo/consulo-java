@@ -28,7 +28,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
 class JavaWithNullCheckSurrounder extends JavaExpressionSurrounder{
   @Override
@@ -50,7 +49,7 @@ class JavaWithNullCheckSurrounder extends JavaExpressionSurrounder{
     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
     CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(project);
 
-    @NonNls String text = "if(a != null){\nst;\n}";
+    String text = "if(a != null){\nst;\n}";
     PsiIfStatement ifStatement = (PsiIfStatement)factory.createStatementFromText(text, null);
     ifStatement = (PsiIfStatement)codeStyleManager.reformat(ifStatement);
 

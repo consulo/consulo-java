@@ -22,8 +22,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.LongStreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -115,7 +114,7 @@ public class DfaExpressionFactory {
     }
 
     @RequiredReadAction
-    private DfaValue createReferenceValue(@Nonnull PsiReferenceExpression refExpr) {
+    private DfaValue createReferenceValue(PsiReferenceExpression refExpr) {
         PsiElement target = refExpr.resolve();
         if (target instanceof PsiVariable variable && !PsiUtil.isAccessedForWriting(refExpr)) {
             DfaValue constValue = myFactory.getConstantFromVariable(variable);
@@ -185,7 +184,7 @@ public class DfaExpressionFactory {
 
     private static boolean maybeUninitializedConstant(
         DfaValue constValue,
-        @Nonnull PsiReferenceExpression refExpr,
+        PsiReferenceExpression refExpr,
         PsiModifierListOwner var
     ) {
         // If static final field is referred from the same or inner/nested class,
@@ -239,7 +238,6 @@ public class DfaExpressionFactory {
         return contracts.isEmpty();
     }
 
-    @Nonnull
     @RequiredReadAction
     private DfaValue getAdvancedExpressionDfaValue(@Nullable PsiExpression expression, @Nullable PsiType targetType) {
         if (expression == null) {
@@ -271,7 +269,6 @@ public class DfaExpressionFactory {
         return DfaUtil.boxUnbox(myFactory.fromDfType(dfType), targetType);
     }
 
-    @Nonnull
     public DfaValue getArrayElementValue(DfaValue array, LongRangeSet indexSet) {
         if (!(array instanceof DfaVariableValue arrayDfaVar)) {
             return myFactory.getUnknown();
@@ -334,7 +331,6 @@ public class DfaExpressionFactory {
         return null;
     }
 
-    @Nonnull
     private static PsiSubstitutor getSubstitutor(PsiElement member, @Nullable DfaVariableValue qualifier) {
         if (member instanceof PsiMember psiMember && qualifier != null) {
             PsiClass fieldClass = psiMember.getContainingClass();
@@ -361,7 +357,6 @@ public class DfaExpressionFactory {
             return true;
         }
 
-        @Nonnull
         @Override
         public PsiType getType(@Nullable DfaVariableValue qualifier) {
             return PsiType.BOOLEAN;
@@ -375,14 +370,12 @@ public class DfaExpressionFactory {
 
     static final class PlainDescriptor implements VariableDescriptor {
         private final
-        @Nonnull
         PsiVariable myVariable;
 
-        PlainDescriptor(@Nonnull PsiVariable variable) {
+        PlainDescriptor(PsiVariable variable) {
             myVariable = variable;
         }
 
-        @Nonnull
         @Override
         @RequiredReadAction
         public String toString() {
@@ -408,9 +401,8 @@ public class DfaExpressionFactory {
             return PsiUtil.isJvmLocalVariable(myVariable) || myVariable.hasModifierProperty(PsiModifier.FINAL);
         }
 
-        @Nonnull
         @Override
-        public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
+        public DfaValue createValue(DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
             if (myVariable.hasModifierProperty(PsiModifier.VOLATILE)) {
                 PsiType type = getType(ObjectUtil.tryCast(qualifier, DfaVariableValue.class));
                 return factory.getObjectType(type, DfaPsiUtil.getElementNullability(type, myVariable));
@@ -459,11 +451,10 @@ public class DfaExpressionFactory {
             )
         );
         private final
-        @Nonnull
         PsiMethod myGetter;
         private final boolean myStable;
 
-        public GetterDescriptor(@Nonnull PsiMethod getter) {
+        public GetterDescriptor(PsiMethod getter) {
             myGetter = getter;
             if (STABLE_METHODS.methodMatches(getter) || getter instanceof LightRecordMethod) {
                 myStable = true;
@@ -474,7 +465,6 @@ public class DfaExpressionFactory {
             }
         }
 
-        @Nonnull
         @Override
         public String toString() {
             return myGetter.getName();
@@ -486,7 +476,6 @@ public class DfaExpressionFactory {
             return getSubstitutor(myGetter, qualifier).substitute(myGetter.getReturnType());
         }
 
-        @Nonnull
         @Override
         public PsiMethod getPsiElement() {
             return myGetter;
@@ -502,9 +491,8 @@ public class DfaExpressionFactory {
             return true;
         }
 
-        @Nonnull
         @Override
-        public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
+        public DfaValue createValue(DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
             if (myGetter.isStatic()) {
                 return factory.getVarFactory().createVariableValue(this);
             }
@@ -542,7 +530,6 @@ public class DfaExpressionFactory {
             return qualifier.getType() instanceof PsiArrayType arrayType ? arrayType.getComponentType() : null;
         }
 
-        @Nonnull
         @Override
         public String toString() {
             return "[" + myIndex + "]";
@@ -555,21 +542,18 @@ public class DfaExpressionFactory {
     }
 
     public static final class ThisDescriptor implements VariableDescriptor {
-        @Nonnull
         private final PsiClass myQualifier;
 
-        ThisDescriptor(@Nonnull PsiClass qualifier) {
+        ThisDescriptor(PsiClass qualifier) {
             myQualifier = qualifier;
         }
 
-        @Nonnull
         @Override
         @RequiredReadAction
         public String toString() {
             return myQualifier.getName() + ".this";
         }
 
-        @Nonnull
         @Override
         public PsiType getType(@Nullable DfaVariableValue qualifier) {
             return new PsiImmediateClassType(myQualifier, PsiSubstitutor.EMPTY);

@@ -39,8 +39,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.impl.psi.impl.source.tree.StdTokenSets;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class CodeBlockBlock extends AbstractJavaBlock
 {
@@ -56,7 +55,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 						  Indent indent,
 						  CommonCodeStyleSettings settings,
 						  JavaCodeStyleSettings javaSettings,
-						  @Nonnull FormattingMode formattingMode)
+						  FormattingMode formattingMode)
 	{
 		super(node, wrap, getAlignmentStrategy(alignment, node, settings), indent, settings, javaSettings, formattingMode);
 		if(isSwitchCodeBlock() && !settings.INDENT_CASE_FROM_SWITCH)
@@ -77,7 +76,7 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	 * @param baseNode  base AST node
 	 * @return alignment strategy to use for the given node
 	 */
-	private static AlignmentStrategy getAlignmentStrategy(Alignment alignment, ASTNode baseNode, @Nonnull CommonCodeStyleSettings settings)
+	private static AlignmentStrategy getAlignmentStrategy(Alignment alignment, ASTNode baseNode, CommonCodeStyleSettings settings)
 	{
 		if(baseNode.getElementType() != JavaElementType.CLASS || !settings.ALIGN_MULTILINE_EXTENDS_LIST)
 		{
@@ -226,7 +225,6 @@ public class CodeBlockBlock extends AbstractJavaBlock
 		SyntheticCodeBlock result = new SyntheticCodeBlock(localResult, childAlignment, getSettings(), myJavaSettings, indent, childWrap)
 		{
 			@Override
-			@Nonnull
 			public ChildAttributes getChildAttributes(int newChildIndex)
 			{
 				IElementType prevElementType = null;
@@ -334,7 +332,6 @@ public class CodeBlockBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	@Nonnull
 	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		if(isAfter(newChildIndex, new IElementType[]{

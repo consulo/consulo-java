@@ -32,16 +32,13 @@ import com.intellij.java.impl.refactoring.introduceVariable.IntroduceVariableBas
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
 public abstract class ExtractMethodTest extends LightCodeInsightTestCase {
-  @NonNls private static final String BASE_PATH = "/refactoring/extractMethod/";
+  private static final String BASE_PATH = "/refactoring/extractMethod/";
   private boolean myCatchOnNewLine = true;
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

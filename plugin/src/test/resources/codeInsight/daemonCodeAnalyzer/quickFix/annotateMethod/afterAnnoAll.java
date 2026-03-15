@@ -1,5 +1,4 @@
 // "Annotate method as '@NotNull'" "true"
-import jakarta.annotation.Nonnull;
 
 class X {
     @jakarta.annotation.Nonnull
@@ -14,7 +13,6 @@ class Y extends X{
     }
 }
 class Z extends Y {
-    @Nonnull
     String annotateBase<caret>() { // trigger quick fix for inspection here
         return "Z";
     }

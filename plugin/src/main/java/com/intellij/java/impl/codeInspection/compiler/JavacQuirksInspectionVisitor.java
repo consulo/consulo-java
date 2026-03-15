@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
@@ -42,7 +41,7 @@ public class JavacQuirksInspectionVisitor extends JavaElementVisitor {
 
     @Override
     @RequiredReadAction
-    public void visitAnnotationArrayInitializer(@Nonnull PsiArrayInitializerMemberValue initializer) {
+    public void visitAnnotationArrayInitializer(PsiArrayInitializerMemberValue initializer) {
         if (PsiUtil.isLanguageLevel7OrHigher(initializer)) {
             return;
         }
@@ -55,7 +54,7 @@ public class JavacQuirksInspectionVisitor extends JavaElementVisitor {
     }
 
     @Override
-    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
+    public void visitTypeCastExpression(PsiTypeCastExpression expression) {
         if (PsiUtil.isLanguageLevel7OrHigher(expression)) {
             return;
         }

@@ -27,11 +27,9 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantConditionalExpressionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.constantConditionalExpressionDisplayName();
@@ -43,7 +41,6 @@ public class ConstantConditionalExpressionInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
         return InspectionGadgetsLocalize.constantConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression)).get();
@@ -71,7 +68,6 @@ public class ConstantConditionalExpressionInspection extends BaseInspection {
     }
 
     private static class ConstantConditionalFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();

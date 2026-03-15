@@ -10,9 +10,7 @@ import com.intellij.java.impl.refactoring.util.CanonicalTypes;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +41,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	 * @see #withName(String)
 	 * @see #withType(PsiType)
 	 */
-	public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType)
+	public ParameterInfoImpl(int oldParameterIndex, String name, PsiType aType)
 	{
 		setName(name);
 		this.oldParameterIndex = oldParameterIndex;
@@ -57,7 +55,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	 * @see #withType(PsiType)
 	 * @see #withDefaultValue(String)
 	 */
-	public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType, @NonNls String defaultValue)
+	public ParameterInfoImpl(int oldParameterIndex, String name, PsiType aType, String defaultValue)
 	{
 		this(oldParameterIndex, name, aType, defaultValue, false);
 	}
@@ -70,7 +68,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	 * @see #withDefaultValue(String)
 	 * @see #useAnySingleVariable()
 	 */
-	public ParameterInfoImpl(int oldParameterIndex, @NonNls String name, PsiType aType, @NonNls String defaultValue, boolean useAnyVariable)
+	public ParameterInfoImpl(int oldParameterIndex, String name, PsiType aType, String defaultValue, boolean useAnyVariable)
 	{
 		this(oldParameterIndex, name, aType);
 		this.defaultValue = defaultValue;
@@ -231,8 +229,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	 * @param method method to create an array from
 	 * @return an array of ParameterInfoImpl entries
 	 */
-	@Nonnull
-	public static ParameterInfoImpl[] fromMethod(@Nonnull PsiMethod method)
+	public static ParameterInfoImpl[] fromMethod(PsiMethod method)
 	{
 		List<ParameterInfoImpl> result = new ArrayList<>();
 		PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -251,7 +248,7 @@ public class ParameterInfoImpl implements JavaParameterInfo
 	 * @param parameterToRemove parameter to remove from method signature
 	 * @return an array of ParameterInfoImpl entries
 	 */
-	public static ParameterInfoImpl[] fromMethodExceptParameter(@Nonnull PsiMethod method, @Nonnull PsiParameter parameterToRemove)
+	public static ParameterInfoImpl[] fromMethodExceptParameter(PsiMethod method, PsiParameter parameterToRemove)
 	{
 		List<ParameterInfoImpl> result = new ArrayList<>();
 		PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -266,29 +263,25 @@ public class ParameterInfoImpl implements JavaParameterInfo
 		return result.toArray(new ParameterInfoImpl[0]);
 	}
 
-	@Nonnull
 	@Contract(value = "-> new", pure = true)
 	public static ParameterInfoImpl createNew()
 	{
 		return create(-1);
 	}
 
-	@Nonnull
 	@Contract(value = "_ -> new", pure = true)
 	public static ParameterInfoImpl create(int oldParameterIndex)
 	{
 		return new ParameterInfoImpl(oldParameterIndex);
 	}
 
-	@Nonnull
 	@Contract(value = "_ -> this")
-	public ParameterInfoImpl withName(@NonNls String name)
+	public ParameterInfoImpl withName(String name)
 	{
 		setName(name);
 		return this;
 	}
 
-	@Nonnull
 	@Contract(value = "_ -> this")
 	public ParameterInfoImpl withType(PsiType aType)
 	{
@@ -296,7 +289,6 @@ public class ParameterInfoImpl implements JavaParameterInfo
 		return this;
 	}
 
-	@Nonnull
 	@Contract(value = "_ -> this")
 	public ParameterInfoImpl withType(CanonicalTypes.Type typeWrapper)
 	{
@@ -304,15 +296,13 @@ public class ParameterInfoImpl implements JavaParameterInfo
 		return this;
 	}
 
-	@Nonnull
 	@Contract(value = "_ -> this")
-	public ParameterInfoImpl withDefaultValue(@NonNls String defaultValue)
+	public ParameterInfoImpl withDefaultValue(String defaultValue)
 	{
 		this.defaultValue = defaultValue;
 		return this;
 	}
 
-	@Nonnull
 	@Contract(value = "-> this")
 	public ParameterInfoImpl useAnySingleVariable()
 	{

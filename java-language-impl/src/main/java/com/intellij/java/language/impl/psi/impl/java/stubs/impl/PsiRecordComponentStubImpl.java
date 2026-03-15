@@ -8,8 +8,7 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.PsiRecordComponentStu
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.BitUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 
 public class PsiRecordComponentStubImpl extends StubBase<PsiRecordComponent> implements PsiRecordComponentStub
@@ -22,7 +21,7 @@ public class PsiRecordComponentStubImpl extends StubBase<PsiRecordComponent> imp
 	private final byte myFlags;
 
 
-	public PsiRecordComponentStubImpl(StubElement parent, @Nullable String name, @Nonnull TypeInfo type, byte flags)
+	public PsiRecordComponentStubImpl(StubElement parent, @Nullable String name, TypeInfo type, byte flags)
 	{
 		super(parent, JavaStubElementTypes.RECORD_COMPONENT);
 		myName = name;
@@ -40,14 +39,12 @@ public class PsiRecordComponentStubImpl extends StubBase<PsiRecordComponent> imp
 	}
 
 	@Override
-	@Nonnull
 	public TypeInfo getType()
 	{
 		return myType;
 	}
 
 
-	@Nonnull
 	@Override
 	public String getName()
 	{

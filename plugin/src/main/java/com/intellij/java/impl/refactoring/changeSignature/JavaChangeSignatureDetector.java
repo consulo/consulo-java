@@ -32,7 +32,6 @@ import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -40,19 +39,18 @@ import java.util.List;
 public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetector<DetectedJavaChangeInfo> {
   private static final Logger LOG = Logger.getInstance(JavaChangeSignatureDetector.class);
 
-  @Nonnull
   @Override
-  public DetectedJavaChangeInfo createInitialChangeInfo(@Nonnull PsiElement element) {
+  public DetectedJavaChangeInfo createInitialChangeInfo(PsiElement element) {
     return DetectedJavaChangeInfo.createFromMethod(PsiTreeUtil.getParentOfType(element, PsiMethod.class), false);
   }
 
   @Override
-  public void performChange(DetectedJavaChangeInfo changeInfo, Editor editor, @Nonnull String oldText) {
+  public void performChange(DetectedJavaChangeInfo changeInfo, Editor editor, String oldText) {
     changeInfo.perform(oldText, editor, true);
   }
 
   @Override
-  public boolean isChangeSignatureAvailableOnElement(@Nonnull PsiElement element, DetectedJavaChangeInfo currentInfo) {
+  public boolean isChangeSignatureAvailableOnElement(PsiElement element, DetectedJavaChangeInfo currentInfo) {
     PsiMethod method = currentInfo.getMethod();
     TextRange range = method.getTextRange();
     PsiCodeBlock body = method.getBody();
@@ -71,7 +69,7 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
   }
 
   @Override
-  public TextRange getHighlightingRange(@Nonnull DetectedJavaChangeInfo changeInfo) {
+  public TextRange getHighlightingRange(DetectedJavaChangeInfo changeInfo) {
     PsiElement method = changeInfo.getMethod();
     return method != null ? getSignatureRange((PsiMethod) method) : null;
   }
@@ -144,7 +142,7 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
   }
 
   @Override
-  public DetectedJavaChangeInfo createNextChangeInfo(String signature, @Nonnull DetectedJavaChangeInfo currentInfo, boolean delegate) {
+  public DetectedJavaChangeInfo createNextChangeInfo(String signature, DetectedJavaChangeInfo currentInfo, boolean delegate) {
     PsiElement currentInfoMethod = currentInfo.getMethod();
     if (currentInfoMethod == null) {
       return null;
@@ -167,7 +165,6 @@ public class JavaChangeSignatureDetector implements LanguageChangeSignatureDetec
     return new TextRange(startOffset, endOffset);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

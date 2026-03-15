@@ -56,8 +56,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -546,7 +545,7 @@ public class RefactoringUtil {
         }
     }
 
-    public static PsiElement getAnchorElementForMultipleExpressions(@Nonnull PsiExpression[] occurrences, PsiElement scope) {
+    public static PsiElement getAnchorElementForMultipleExpressions(PsiExpression[] occurrences, PsiElement scope) {
         PsiElement anchor = null;
         for (PsiExpression occurrence : occurrences) {
             if (scope != null && !PsiTreeUtil.isAncestor(scope, occurrence, false)) {
@@ -790,7 +789,7 @@ public class RefactoringUtil {
         return result;
     }
 
-    public static void makeMethodAbstract(@Nonnull PsiClass targetClass, @Nonnull PsiMethod method) throws IncorrectOperationException {
+    public static void makeMethodAbstract(PsiClass targetClass, PsiMethod method) throws IncorrectOperationException {
         if (!method.hasModifierProperty(PsiModifier.DEFAULT)) {
             PsiCodeBlock body = method.getBody();
             if (body != null) {
@@ -808,7 +807,7 @@ public class RefactoringUtil {
 
     }
 
-    public static void makeMethodDefault(@Nonnull PsiMethod method) throws IncorrectOperationException {
+    public static void makeMethodDefault(PsiMethod method) throws IncorrectOperationException {
         PsiUtil.setModifierProperty(method, PsiModifier.DEFAULT, true);
         PsiUtil.setModifierProperty(method, PsiModifier.ABSTRACT, false);
 
@@ -1340,20 +1339,20 @@ public class RefactoringUtil {
     }
 
     @Nullable
-    public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nonnull PsiElement... elements) {
+    public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(PsiElement... elements) {
         return createTypeParameterListWithUsedTypeParameters(null, elements);
     }
 
     @Nullable
     public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable PsiTypeParameterList fromList,
-                                                                                     @Nonnull PsiElement... elements) {
+                                                                                     PsiElement... elements) {
         return createTypeParameterListWithUsedTypeParameters(fromList, Condition.TRUE, elements);
     }
 
     @Nullable
     public static PsiTypeParameterList createTypeParameterListWithUsedTypeParameters(@Nullable PsiTypeParameterList fromList,
                                                                                      Condition<PsiTypeParameter> filter,
-                                                                                     @Nonnull PsiElement... elements) {
+                                                                                     PsiElement... elements) {
         if (elements.length == 0) {
             return null;
         }
@@ -1466,7 +1465,7 @@ public class RefactoringUtil {
         });
     }
 
-    public static PsiCodeBlock expandExpressionLambdaToCodeBlock(@Nonnull PsiLambdaExpression lambdaExpression) {
+    public static PsiCodeBlock expandExpressionLambdaToCodeBlock(PsiLambdaExpression lambdaExpression) {
         PsiElement body = lambdaExpression.getBody();
         if (!(body instanceof PsiExpression)) {
             return (PsiCodeBlock) body;

@@ -26,9 +26,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -36,14 +34,11 @@ import org.jetbrains.annotations.Nls;
 @ExtensionImpl
 public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection {
 
-  @Nls
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.arraysAsListWithZeroOrOneArgumentDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     Boolean isEmpty = (Boolean)infos[0];
@@ -67,7 +62,6 @@ public class ArraysAsListWithZeroOrOneArgumentInspection extends BaseInspection 
       myEmpty = isEmpty;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return myEmpty

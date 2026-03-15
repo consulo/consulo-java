@@ -44,27 +44,22 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class WhileCanBeForeachInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "WhileLoopReplaceableByForEach";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.whileCanBeForeachDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.whileCanBeForeachProblemDescriptor().get();
   }
@@ -81,7 +76,6 @@ public class WhileCanBeForeachInspection extends BaseInspection {
 
   private static class WhileCanBeForeachFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.foreachReplaceQuickfix();
     }
@@ -93,7 +87,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       replaceWhileWithForEach(whileStatement);
     }
 
-    private static void replaceWhileWithForEach(@Nonnull PsiWhileStatement whileStatement) {
+    private static void replaceWhileWithForEach(PsiWhileStatement whileStatement) {
       PsiStatement body = whileStatement.getBody();
       if (body == null) {
         return;
@@ -125,7 +119,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       PsiStatement firstStatement = getFirstStatement(body);
       boolean isDeclaration = isIteratorNextDeclaration(firstStatement, iterator, contentType);
       PsiStatement statementToSkip;
-      @NonNls String contentVariableName;
+      String contentVariableName;
       if (isDeclaration) {
         PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)firstStatement;
         if (declarationStatement == null) {
@@ -148,7 +142,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
         statementToSkip = null;
       }
       JavaCodeStyleSettings codeStyleSettings = CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
-      @NonNls StringBuilder out = new StringBuilder();
+      StringBuilder out = new StringBuilder();
       out.append("for(");
       if (codeStyleSettings.GENERATE_FINAL_PARAMETERS) {
         out.append("final ");
@@ -219,7 +213,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return TypeUtils.getObjectType(context);
     }
 
-    private static void replaceIteratorNext(@Nonnull PsiElement element, String contentVariableName, PsiVariable iterator,
+    private static void replaceIteratorNext(PsiElement element, String contentVariableName, PsiVariable iterator,
                                             PsiType contentType, PsiElement childToSkip, StringBuilder out) {
       if (isIteratorNext(element, iterator, contentType)) {
         out.append(contentVariableName);
@@ -300,7 +294,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
         return false;
       }
       PsiReferenceExpression reference = callExpression.getMethodExpression();
-      @NonNls String referenceName = reference.getReferenceName();
+      String referenceName = reference.getReferenceName();
       if (!HardcodedMethodConstants.NEXT.equals(referenceName)) {
         return false;
       }
@@ -313,10 +307,10 @@ public class WhileCanBeForeachInspection extends BaseInspection {
       return iterator.equals(target);
     }
 
-    private static String createNewVariableName(@Nonnull PsiWhileStatement scope, PsiType type, String containerName) {
+    private static String createNewVariableName(PsiWhileStatement scope, PsiType type, String containerName) {
       Project project = scope.getProject();
       JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(project);
-      @NonNls String baseName;
+      String baseName;
       if (containerName != null) {
         baseName = StringUtils.createSingularFromName(containerName);
       }
@@ -337,7 +331,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Nullable
-    private static PsiStatement getFirstStatement(@Nonnull PsiStatement body) {
+    private static PsiStatement getFirstStatement(PsiStatement body) {
       if (body instanceof PsiBlockStatement) {
         PsiBlockStatement block = (PsiBlockStatement)body;
         PsiCodeBlock codeBlock = block.getCodeBlock();
@@ -357,7 +351,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
   private static class WhileCanBeForeachVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitWhileStatement(@Nonnull PsiWhileStatement whileStatement) {
+    public void visitWhileStatement(PsiWhileStatement whileStatement) {
       super.visitWhileStatement(whileStatement);
       if (!PsiUtil.isLanguageLevel5OrHigher(whileStatement)) {
         return;
@@ -400,7 +394,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
         return false;
       }
       PsiReferenceExpression initialMethodExpression = initialCall.getMethodExpression();
-      @NonNls String initialCallName = initialMethodExpression.getReferenceName();
+      String initialCallName = initialMethodExpression.getReferenceName();
       if (!"iterator".equals(initialCallName) && !"listIterator".equals(initialCallName)) {
         return false;
       }
@@ -465,7 +459,7 @@ public class WhileCanBeForeachInspection extends BaseInspection {
         return false;
       }
       PsiReferenceExpression methodExpression = call.getMethodExpression();
-      @NonNls String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.HAS_NEXT.equals(methodName)) {
         return false;
       }
@@ -519,10 +513,10 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression callExpression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression callExpression) {
       super.visitMethodCallExpression(callExpression);
       PsiReferenceExpression methodExpression = callExpression.getMethodExpression();
-      @NonNls String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.NEXT.equals(methodName)) {
         return;
       }
@@ -553,14 +547,14 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
       if (!methodCalled) {
         super.visitElement(element);
       }
     }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       if (methodCalled) {
         return;
       }
@@ -596,17 +590,17 @@ public class WhileCanBeForeachInspection extends BaseInspection {
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
       if (!hasNextCalled) {
         super.visitElement(element);
       }
     }
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls String name = methodExpression.getReferenceName();
+      String name = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.HAS_NEXT.equals(name)) {
         return;
       }

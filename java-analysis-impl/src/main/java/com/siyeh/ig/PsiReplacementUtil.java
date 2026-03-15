@@ -11,17 +11,15 @@ import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiReplacementUtil {
 
   /**
    * Consider to use {@link #replaceExpression(PsiExpression, String, CommentTracker)} to preserve comments
    */
-  public static void replaceExpression(@Nonnull PsiExpression expression, @Nonnull @NonNls String newExpressionText) {
+  public static void replaceExpression(PsiExpression expression, String newExpressionText) {
     final Project project = expression.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -34,13 +32,13 @@ public class PsiReplacementUtil {
   /**
    * @param tracker ensure to {@link CommentTracker#markUnchanged(PsiElement)} expressions used as getText in newExpressionText
    */
-  public static void replaceExpression(@Nonnull PsiExpression expression, @Nonnull @NonNls String newExpressionText, CommentTracker tracker) {
+  public static void replaceExpression(PsiExpression expression, String newExpressionText, CommentTracker tracker) {
     final Project project = expression.getProject();
     final PsiElement replacementExpression = tracker.replaceAndRestoreComments(expression, newExpressionText);
     CodeStyleManager.getInstance(project).reformat(replacementExpression);
   }
 
-  public static PsiElement replaceExpressionAndShorten(@Nonnull PsiExpression expression, @Nonnull @NonNls String newExpressionText) {
+  public static PsiElement replaceExpressionAndShorten(PsiExpression expression, String newExpressionText) {
     final Project project = expression.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -52,7 +50,7 @@ public class PsiReplacementUtil {
     return styleManager.reformat(replacementExp);
   }
 
-  public static PsiElement replaceExpressionAndShorten(@Nonnull PsiExpression expression, @Nonnull @NonNls String newExpressionText, CommentTracker tracker) {
+  public static PsiElement replaceExpressionAndShorten(PsiExpression expression, String newExpressionText, CommentTracker tracker) {
     final Project project = expression.getProject();
     final PsiElement replacementExp = tracker.replaceAndRestoreComments(expression, newExpressionText);
     final JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
@@ -64,7 +62,7 @@ public class PsiReplacementUtil {
   /**
    * Consider to use {@link #replaceStatement(PsiStatement, String, CommentTracker)} to preserve comments
    */
-  public static PsiElement replaceStatement(@Nonnull PsiStatement statement, @Nonnull @NonNls String newStatementText) {
+  public static PsiElement replaceStatement(PsiStatement statement, String newStatementText) {
     final Project project = statement.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -77,7 +75,7 @@ public class PsiReplacementUtil {
   /**
    * @param commentTracker ensure to {@link CommentTracker#markUnchanged(PsiElement)} expressions used as getText in newStatementText
    */
-  public static PsiElement replaceStatement(@Nonnull PsiStatement statement, @Nonnull @NonNls String newStatementText, CommentTracker commentTracker) {
+  public static PsiElement replaceStatement(PsiStatement statement, String newStatementText, CommentTracker commentTracker) {
     final Project project = statement.getProject();
     final PsiElement replacementExp = commentTracker.replaceAndRestoreComments(statement, newStatementText);
     final CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
@@ -87,15 +85,15 @@ public class PsiReplacementUtil {
   /**
    * Consider to use {@link #replaceStatementAndShortenClassNames(PsiStatement, String, CommentTracker)} to preserve comments
    */
-  public static void replaceStatementAndShortenClassNames(@Nonnull PsiStatement statement, @Nonnull @NonNls String newStatementText) {
+  public static void replaceStatementAndShortenClassNames(PsiStatement statement, String newStatementText) {
     replaceStatementAndShortenClassNames(statement, newStatementText, null);
   }
 
   /**
    * @param tracker ensure to {@link CommentTracker#markUnchanged(PsiElement)} expressions used as getText in newStatementText
    */
-  public static PsiElement replaceStatementAndShortenClassNames(@Nonnull PsiStatement statement,
-                                                                @Nonnull @NonNls String newStatementText,
+  public static PsiElement replaceStatementAndShortenClassNames(PsiStatement statement,
+                                                                String newStatementText,
                                                                 @Nullable CommentTracker tracker) {
     final Project project = statement.getProject();
     final CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
@@ -111,7 +109,7 @@ public class PsiReplacementUtil {
     return styleManager.reformat(javaStyleManager.shortenClassReferences(newStatement));
   }
 
-  public static void replaceExpressionWithReferenceTo(@Nonnull PsiExpression expression, @Nonnull PsiMember target) {
+  public static void replaceExpressionWithReferenceTo(PsiExpression expression, PsiMember target) {
     final Project project = expression.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -123,15 +121,14 @@ public class PsiReplacementUtil {
     styleManager.shortenClassReferences(element);
   }
 
-  @Nonnull
-  public static String getElementText(@Nonnull PsiElement element, @Nullable PsiElement elementToReplace, @Nullable String replacement) {
+  public static String getElementText(PsiElement element, @Nullable PsiElement elementToReplace, @Nullable String replacement) {
     final StringBuilder out = new StringBuilder();
     getElementText(element, elementToReplace, replacement, out);
     return out.toString();
   }
 
-  private static void getElementText(@Nonnull PsiElement element, @Nullable PsiElement elementToReplace,
-                                     @Nullable String replacement, @Nonnull StringBuilder out) {
+  private static void getElementText(PsiElement element, @Nullable PsiElement elementToReplace,
+                                     @Nullable String replacement, StringBuilder out) {
     if (element.equals(elementToReplace)) {
       out.append(replacement);
       return;
@@ -146,7 +143,7 @@ public class PsiReplacementUtil {
     }
   }
 
-  public static void replaceOperatorAssignmentWithAssignmentExpression(@Nonnull PsiAssignmentExpression assignmentExpression) {
+  public static void replaceOperatorAssignmentWithAssignmentExpression(PsiAssignmentExpression assignmentExpression) {
     CommentTracker tracker = new CommentTracker();
     final PsiJavaToken sign = assignmentExpression.getOperationSign();
     final PsiExpression lhs = assignmentExpression.getLExpression();

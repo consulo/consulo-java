@@ -31,7 +31,6 @@ import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public class ControlFlowWrapper {
@@ -149,12 +148,10 @@ public class ControlFlowWrapper {
   }
 
 
-  @Nonnull
   public PsiVariable[] getOutputVariables() {
     return getOutputVariables(myGenerateConditionalExit);
   }
 
-  @Nonnull
   public PsiVariable[] getOutputVariables(boolean collectVariablesAtExitPoints) {
     PsiVariable[] myOutputVariables = ControlFlowUtil.getOutputVariables(myControlFlow, myFlowStart, myFlowEnd, myExitPoints.toArray());
     if (collectVariablesAtExitPoints) {

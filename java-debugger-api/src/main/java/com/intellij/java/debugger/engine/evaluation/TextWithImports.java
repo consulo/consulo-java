@@ -16,15 +16,13 @@
 package com.intellij.java.debugger.engine.evaluation;
 
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface TextWithImports {
   String getText();
 
   void setText(String newText);
 
-  @Nonnull
   String getImports();
 
   CodeFragmentKind getKind();

@@ -23,11 +23,10 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiMethodReferenceHighlightingUtil {
     @RequiredReadAction
-    public static HighlightInfo.Builder checkRawConstructorReference(@Nonnull PsiMethodReferenceExpression expression) {
+    public static HighlightInfo.Builder checkRawConstructorReference(PsiMethodReferenceExpression expression) {
         if (expression.isConstructor()) {
             PsiType[] typeParameters = expression.getTypeParameters();
             if (typeParameters.length > 0

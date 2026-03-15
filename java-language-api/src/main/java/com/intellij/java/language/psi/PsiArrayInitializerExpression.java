@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents an array initializer expression.
@@ -28,6 +27,5 @@ public interface PsiArrayInitializerExpression extends PsiExpression {
    *
    * @return the array of member initializer expressions.
    */
-  @Nonnull
   PsiExpression[] getInitializers();
 }

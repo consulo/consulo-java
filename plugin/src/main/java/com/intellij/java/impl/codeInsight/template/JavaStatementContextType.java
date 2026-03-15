@@ -7,7 +7,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaStatementContextType extends JavaCodeContextType implements JavaLikeStatementContextType {
@@ -16,7 +15,7 @@ public class JavaStatementContextType extends JavaCodeContextType implements Jav
   }
 
   @Override
-  protected boolean isInContext(@Nonnull PsiElement element) {
+  protected boolean isInContext(PsiElement element) {
     return isStatementContext(element);
   }
 

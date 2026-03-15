@@ -30,7 +30,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -46,13 +45,11 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
         mySettings = settings;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new TypeCookViewDescriptor(myElements);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -99,7 +96,7 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    protected void refreshElements(@Nonnull PsiElement[] elements) {
+    protected void refreshElements(PsiElement[] elements) {
         myElements = elements;
     }
 
@@ -120,7 +117,6 @@ public class TypeCookProcessor extends BaseRefactoringProcessor {
         return true;
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.typeCookCommand();

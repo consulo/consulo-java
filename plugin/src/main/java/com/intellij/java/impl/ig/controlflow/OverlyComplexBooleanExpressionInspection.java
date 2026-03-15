@@ -26,7 +26,6 @@ import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -56,14 +55,12 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
      */
     public boolean m_ignorePureConjunctionsDisjunctions = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overlyComplexBooleanExpressionDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         Integer termCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.overlyComplexBooleanExpressionProblemDescriptor(termCount).get();
@@ -119,19 +116,19 @@ public class OverlyComplexBooleanExpressionInspection extends BaseInspection {
     private class OverlyComplexBooleanExpressionVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
+        public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
             checkExpression(expression);
         }
 
         @Override
-        public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+        public void visitPrefixExpression(PsiPrefixExpression expression) {
             super.visitPrefixExpression(expression);
             checkExpression(expression);
         }
 
         @Override
-        public void visitParenthesizedExpression(@Nonnull PsiParenthesizedExpression expression) {
+        public void visitParenthesizedExpression(PsiParenthesizedExpression expression) {
             super.visitParenthesizedExpression(expression);
             checkExpression(expression);
         }

@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.ProcessingContext;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.completion.CompletionProvider;
-import jakarta.annotation.Nonnull;
 
 import static consulo.language.pattern.StandardPatterns.or;
 
@@ -41,7 +40,7 @@ class ExpectedAnnotationsProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
+  public void addCompletions(CompletionParameters parameters, ProcessingContext context, CompletionResultSet result) {
     PsiElement element = parameters.getPosition();
 
     for (PsiType type : ExpectedTypesGetter.getExpectedTypes(element, false)) {

@@ -25,11 +25,9 @@ import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.localize.LocalizeValue;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool implements ProblemHighlightTypeInspectionRuler {
     public static final String SHORT_NAME = "unused";
@@ -128,27 +126,22 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionDeadCodeDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }
 
     @Override
     @Pattern(VALID_ID_PATTERN)
-    @Nonnull
-    @NonNls
     public String getID() {
         return UNUSED_ID;
     }
@@ -163,14 +156,13 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
         return true;
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
     }
 
     @Override
-    public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+    public void writeSettings(Element node) throws WriteExternalException {
         writeVisibility(node, myClassVisibility, "klass");
         writeVisibility(node, myInnerClassVisibility, "inner_class");
         writeVisibility(node, myFieldVisibility, "field");
@@ -200,7 +192,7 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
     }
 
     @Override
-    public void readSettings(@Nonnull Element node) throws InvalidDataException {
+    public void readSettings(Element node) throws InvalidDataException {
         super.readSettings(node);
         myClassVisibility = readVisibility(node, "klass");
         myInnerClassVisibility = readVisibility(node, "inner_class");
@@ -213,11 +205,11 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
         INNER_CLASS = innerClassEnabled == null || Boolean.parseBoolean(innerClassEnabled);
     }
 
-    private static String readVisibility(@Nonnull Element node, final String type) {
+    private static String readVisibility(Element node, final String type) {
         return readVisibility(node, type, PsiModifier.PUBLIC);
     }
 
-    private static String readVisibility(@Nonnull Element node, final String type, final String defaultVisibility) {
+    private static String readVisibility(Element node, final String type, final String defaultVisibility) {
         final String visibility = node.getAttributeValue(type);
         if (visibility == null) {
             return defaultVisibility;
@@ -225,7 +217,6 @@ public class UnusedSymbolLocalInspectionBase extends BaseJavaLocalInspectionTool
         return visibility;
     }
 
-    @Nonnull
     @Override
     public ProblemHighlightType getControllableHighlightType() {
         return ProblemHighlightType.LIKE_UNUSED_SYMBOL;

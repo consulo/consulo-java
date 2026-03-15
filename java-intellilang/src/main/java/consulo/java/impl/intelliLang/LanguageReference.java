@@ -24,8 +24,7 @@ import consulo.language.inject.advanced.InjectedLanguage;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -48,7 +47,6 @@ final class LanguageReference extends StringLiteralReference {
     return false;
   }
 
-  @Nonnull
   public Object[] getVariants() {
     final String[] ids = InjectedLanguage.getAvailableLanguageIDs();
     return ContainerUtil.map2Array(ids, LookupElement.class, new Function<String, LookupElement>() {

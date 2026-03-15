@@ -23,7 +23,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.util.lang.ThreeState;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Konstantin Bulenkov
@@ -31,9 +30,8 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl(id = "javaReflection")
 public class JavaReflectionCompletionConfidence extends CompletionConfidence {
 
-  @Nonnull
   @Override
-  public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
+  public ThreeState shouldSkipAutopopup(PsiElement contextElement, PsiFile psiFile, int offset) {
     PsiElement literal = contextElement.getParent();
     if (literal != null && (JavaReflectionReferenceContributor.PATTERN.accepts(literal) || JavaReflectionReferenceContributor.CLASS_PATTERN.accepts(literal))) {
       return ThreeState.NO;
@@ -41,7 +39,6 @@ public class JavaReflectionCompletionConfidence extends CompletionConfidence {
     return super.shouldSkipAutopopup(contextElement, psiFile, offset);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

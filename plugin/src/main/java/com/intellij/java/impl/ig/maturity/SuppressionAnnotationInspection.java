@@ -27,18 +27,14 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.SuppressionUtil;
 import consulo.language.psi.PsiComment;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SuppressionAnnotationInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.inspectionSuppressionAnnotationDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.inspectionSuppressionAnnotationProblemDescriptor().get();
@@ -59,7 +55,7 @@ public class SuppressionAnnotationInspection extends BaseInspection {
                 && !tokenType.equals(JavaTokenType.C_STYLE_COMMENT)) {
                 return;
             }
-            @NonNls String strippedComment = commentText.substring(2).trim();
+            String strippedComment = commentText.substring(2).trim();
             if (strippedComment.startsWith(SuppressionUtil.SUPPRESS_INSPECTIONS_TAG_NAME)) {
                 registerError(comment);
             }
@@ -73,7 +69,7 @@ public class SuppressionAnnotationInspection extends BaseInspection {
             if (reference == null) {
                 return;
             }
-            @NonNls String text = reference.getText();
+            String text = reference.getText();
             if ("SuppressWarnings".equals(text) ||
                 BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(text)) {
                 registerError(annotation);

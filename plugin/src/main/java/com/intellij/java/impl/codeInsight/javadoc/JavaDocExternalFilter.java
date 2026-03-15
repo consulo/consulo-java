@@ -28,10 +28,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.io.URLUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
@@ -52,30 +50,21 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
       Pattern.CASE_INSENSITIVE), true, false);
 
   protected static
-  @NonNls
   final Pattern ourHTMLsuffix = Pattern.compile("[.][hH][tT][mM][lL]?");
   protected static
-  @NonNls
   final Pattern ourParentFolderprefix = Pattern.compile("^[.][.]/");
   protected static
-  @NonNls
   final Pattern ourAnchorsuffix = Pattern.compile("#(.*)$");
   protected static
-  @NonNls
   final Pattern ourHTMLFilesuffix = Pattern.compile("/([^/]*[.][hH][tT][mM][lL]?)$");
   private static
-  @NonNls
   final Pattern ourHREFselector = Pattern.compile("<A.*?HREF=\"([^>\"]*)\"", Pattern.CASE_INSENSITIVE | Pattern
       .DOTALL);
   private static
-  @NonNls
   final Pattern ourMethodHeading = Pattern.compile("<H[34]>(.+?)</H[34]>", Pattern.CASE_INSENSITIVE | Pattern
       .DOTALL);
-  @NonNls
   protected static final String H2 = "</H2>";
-  @NonNls
   protected static final String HTML_CLOSE = "</HTML>";
-  @NonNls
   protected static final String HTML = "<HTML>";
 
   private final RefConvertor[] myReferenceConvertors = new RefConvertor[]{
@@ -153,9 +142,8 @@ public class JavaDocExternalFilter extends AbstractExternalFilter {
     return externalDoc;
   }
 
-  @Nonnull
   @Override
-  protected ParseSettings getParseSettings(@Nonnull String url) {
+  protected ParseSettings getParseSettings(String url) {
     return url.endsWith(JavaDocumentationProvider.PACKAGE_SUMMARY_FILE) ? ourPackageInfoSettings : super
         .getParseSettings(url);
   }

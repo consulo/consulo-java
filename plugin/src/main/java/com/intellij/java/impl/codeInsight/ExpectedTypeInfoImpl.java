@@ -21,21 +21,16 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.editor.completion.lookup.TailType;
 import consulo.util.lang.lazy.LazyValue;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Supplier;
 
 public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
   public static final Supplier<String> NULL = () -> null;
-  @Nonnull
   private final PsiType type;
-  @Nonnull
   private final PsiType defaultType;
   private final int kind;
-  @Nonnull
   private final TailType myTailType;
   private final PsiMethod myCalledMethod;
-  @Nonnull
   private final Supplier<String> expectedNameLazyValue;
 
   @Override
@@ -43,18 +38,17 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
     return kind;
   }
 
-  @Nonnull
   @Override
   public TailType getTailType() {
     return myTailType;
   }
 
-  public ExpectedTypeInfoImpl(@Nonnull PsiType type,
+  public ExpectedTypeInfoImpl(PsiType type,
                               @Type int kind,
-                              @Nonnull PsiType defaultType,
-                              @Nonnull TailType myTailType,
+                              PsiType defaultType,
+                              TailType myTailType,
                               PsiMethod calledMethod,
-                              @Nonnull Supplier<String> expectedName) {
+                              Supplier<String> expectedName) {
     this.type = type;
     this.kind = kind;
 
@@ -78,13 +72,11 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
   }
 
   @Override
-  @Nonnull
   public PsiType getType() {
     return type;
   }
 
   @Override
-  @Nonnull
   public PsiType getDefaultType() {
     return defaultType;
   }
@@ -127,9 +119,8 @@ public class ExpectedTypeInfoImpl implements ExpectedTypeInfo {
     return "ExpectedTypeInfo[type='" + type + "' kind='" + kind + "']";
   }
 
-  @Nonnull
   @Override
-  public ExpectedTypeInfo[] intersect(@Nonnull ExpectedTypeInfo info) {
+  public ExpectedTypeInfo[] intersect(ExpectedTypeInfo info) {
     ExpectedTypeInfoImpl info1 = (ExpectedTypeInfoImpl) info;
 
     if (kind == TYPE_STRICTLY) {

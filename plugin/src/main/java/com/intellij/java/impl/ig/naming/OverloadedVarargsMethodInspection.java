@@ -22,17 +22,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OverloadedVarargsMethodInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overloadedVarargMethodDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiMethod element = (PsiMethod) infos[0];
         return element.isConstructor()
@@ -46,7 +43,7 @@ public class OverloadedVarargsMethodInspection extends BaseInspection {
 
     private static class OverloadedVarargMethodVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (!method.isVarArgs()) {
                 return;
             }

@@ -17,14 +17,13 @@ package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.PsiAssignmentExpression;
 import com.intellij.java.language.psi.PsiExpression;
-import jakarta.annotation.Nonnull;
 
 public class WellFormednessUtils {
   private WellFormednessUtils() {
     super();
   }
 
-  public static boolean isWellFormed(@Nonnull PsiAssignmentExpression expression) {
+  public static boolean isWellFormed(PsiAssignmentExpression expression) {
 
     PsiExpression rhs = expression.getRExpression();
     return rhs != null;

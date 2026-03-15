@@ -12,8 +12,7 @@ import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.VerticalFlowLayout;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import javax.swing.*;
@@ -32,7 +31,6 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
         myCompilerConfiguration = javaCompilerConfiguration;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return "project.propCompiler.java";
@@ -44,7 +42,6 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
         return "project.propCompiler";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.javaLanguageDisplayName();
@@ -59,7 +56,7 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
         myComboBox = new JComboBox<>();
         myComboBox.setRenderer(new ColoredListCellRenderer<>() {
             @Override
-            protected void customizeCellRenderer(@Nonnull JList jList, BackendCompiler o, int i, boolean b, boolean b1) {
+            protected void customizeCellRenderer(JList jList, BackendCompiler o, int i, boolean b, boolean b1) {
                 if (o != null) {
                     append(o.getPresentableName());
                 }

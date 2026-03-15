@@ -15,11 +15,9 @@
  */
 package com.intellij.java.execution.configurations;
 
-import org.jetbrains.annotations.NonNls;
 
 public interface DebuggingRunnerData
 {
-	@NonNls
 	String DEBUGGER_RUNNER_ID = "Debug";
 
 	/**

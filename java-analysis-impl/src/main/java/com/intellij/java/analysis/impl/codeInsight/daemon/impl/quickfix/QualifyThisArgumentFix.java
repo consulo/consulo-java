@@ -40,7 +40,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -49,14 +48,14 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
     private final PsiThisExpression myExpression;
     private final PsiClass myPsiClass;
 
-    public QualifyThisArgumentFix(@Nonnull PsiThisExpression expression, @Nonnull PsiClass psiClass) {
+    public QualifyThisArgumentFix(PsiThisExpression expression, PsiClass psiClass) {
         myExpression = expression;
         myPsiClass = psiClass;
     }
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+    public boolean isAvailable(Project project, Editor editor, PsiElement element) {
         if (!myExpression.isValid()) {
             return false;
         }
@@ -69,7 +68,7 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
 
     @Override
     @RequiredWriteAction
-    public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
         myExpression.replace(RefactoringChangeUtil.createThisExpression(PsiManager.getInstance(project), myPsiClass));
     }
 
@@ -77,7 +76,7 @@ public class QualifyThisArgumentFix extends PsiElementBaseIntentionAction {
         CandidateInfo[] candidates,
         PsiCall call,
         HighlightInfo.Builder highlightInfo,
-        @Nonnull TextRange fixRange
+        TextRange fixRange
     ) {
         if (candidates.length == 0) {
             return;

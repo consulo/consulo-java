@@ -20,14 +20,13 @@ import com.intellij.java.debugger.impl.EvaluatingComputable;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.util.lang.Range;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface MethodFilter
 {
 	boolean locationMatches(DebugProcessImpl process, Location location) throws EvaluateException;
 
-	default boolean locationMatches(DebugProcessImpl process, Location location, @Nonnull EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
+	default boolean locationMatches(DebugProcessImpl process, Location location, EvaluatingComputable<ObjectReference> thisProvider) throws EvaluateException
 	{
 		return locationMatches(process, location);
 	}

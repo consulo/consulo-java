@@ -24,10 +24,9 @@ import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SearchableConfigurable;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +49,6 @@ public class AnnotationProcessorsConfigurable implements ProjectConfigurable, Se
     myCompilerConfiguration = javaCompilerConfiguration;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Annotation Processors");
@@ -62,7 +60,6 @@ public class AnnotationProcessorsConfigurable implements ProjectConfigurable, Se
   }
 
   @Override
-  @Nonnull
   public String getId() {
     return "project.propCompiler.java.annotation.processors";
   }

@@ -1,7 +1,6 @@
 package com.siyeh.igtest.style;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Hashtable;
 
@@ -39,7 +38,6 @@ final public class MissortedModifiersInspection
     public
     @Nullable
     // commment
-    @Nonnull
     int //@Temporal(TemporalType.DATE)
     x() {return -1;}
 }

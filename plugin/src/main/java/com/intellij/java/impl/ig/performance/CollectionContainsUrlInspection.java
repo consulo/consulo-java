@@ -23,9 +23,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,13 +32,11 @@ import java.util.Set;
 public class CollectionContainsUrlInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.collectionContainsUrlDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     ClassType type = (ClassType)infos[0];
     return InspectionGadgetsLocalize.collectionContainsUrlProblemDecriptor(type).get();
@@ -120,7 +116,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
       if (!visitedClasses.add(aClass)) {
         return ClassType.OTHER;
       }
-      @NonNls String className = aClass.getQualifiedName();
+      String className = aClass.getQualifiedName();
       if (CommonClassNames.JAVA_UTIL_SET.equals(className)) {
         return ClassType.SET;
       }
@@ -168,7 +164,7 @@ public class CollectionContainsUrlInspection extends BaseInspection {
       }
       PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)qualifierExpression;
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (collectionType == ClassType.SET &&
           !"add".equals(methodName)) {

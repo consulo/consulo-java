@@ -30,25 +30,23 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertToStringLiteralAction", categories = {"Java", "Strings"}, fileExtensions = "java")
 public class ConvertToStringLiteralAction implements IntentionAction {
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.convertToStringText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     return PsiUtil.isJavaToken(element, JavaTokenType.CHARACTER_LITERAL);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     if (element != null && PsiUtil.isJavaToken(element, JavaTokenType.CHARACTER_LITERAL)) {
       String text = StringUtil.unescapeStringCharacters(element.getText());

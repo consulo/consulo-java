@@ -27,7 +27,6 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.internal.laf.MultiLineLabelUI;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -98,7 +97,6 @@ public class RunHotswapDialog extends OptionsDialog {
     return true;
   }
 
-  @Nonnull
   protected Action[] createActions(){
     setOKButtonText(CommonLocalize.buttonYes().get());
     setCancelButtonText(CommonLocalize.buttonNo().get());

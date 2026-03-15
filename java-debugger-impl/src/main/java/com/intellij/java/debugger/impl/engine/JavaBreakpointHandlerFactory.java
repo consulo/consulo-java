@@ -18,7 +18,6 @@ package com.intellij.java.debugger.impl.engine;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author egor
@@ -27,6 +26,5 @@ import jakarta.annotation.Nonnull;
 public interface JavaBreakpointHandlerFactory {
     ExtensionPointName<JavaBreakpointHandlerFactory> EP_NAME = ExtensionPointName.create(JavaBreakpointHandlerFactory.class);
 
-    @Nonnull
     JavaBreakpointHandler createHandler(DebugProcessImpl process);
 }

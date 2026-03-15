@@ -42,8 +42,7 @@ import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -147,7 +146,6 @@ class IntroduceFieldDialog extends DialogWrapper {
     }
 
 
-    @Nonnull
     protected Action[] createActions() {
         return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
     }

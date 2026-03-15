@@ -15,11 +15,10 @@
  */
 package com.intellij.codeInsight.daemon.lambda;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 
 public abstract class Interface8MethodsHighlightingTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/interfaceMethods";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/interfaceMethods";
 
   public void testStaticMethod() { doTest(); }
   public void testNotInheritFromUnrelatedDefault() { doTest(true, false); }

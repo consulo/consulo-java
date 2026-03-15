@@ -16,8 +16,7 @@ import consulo.ui.TextBoxWithExpandAction;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
 import consulo.ui.util.LabeledBuilder;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 
@@ -40,22 +39,19 @@ public class JavacConfigurable extends SimpleConfigurableByProperties implements
     return "project.propCompiler.java";
   }
 
-  @Nonnull
   @Override
   public String getId() {
     return "project.propCompiler.java.java";
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return JavaCompilerLocalize.compilerJavacName();
   }
 
   @RequiredUIAccess
-  @Nonnull
   @Override
-  protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable disposable) {
+  protected Component createLayout(PropertyBuilder propertyBuilder, Disposable disposable) {
     JavacCompilerConfiguration configuration = myJavacCompilerConfigurationProvider.get();
 
     JpsJavaCompilerOptions state = configuration.getState();

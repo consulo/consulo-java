@@ -37,8 +37,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.ReparseRangeUtil;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -57,20 +56,19 @@ public class ExpectedTypeMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "A";
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     PsiType[] types = getExpectedTypes(params, context);
     if (types == null || types.length == 0) return null;
     return new PsiTypeResult(types[0], context.getProject());
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     PsiType[] types = getExpectedTypes(params, context);
     if (types == null || types.length < 2) return null;
     Set<LookupElement> set = new LinkedHashSet<>();

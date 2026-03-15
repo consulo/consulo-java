@@ -8,37 +8,35 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.language.Language;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class LightParameter extends LightVariableBuilder<LightVariableBuilder<?>> implements PsiParameter {
   private final PsiElement myDeclarationScope;
   private final boolean myVarArgs;
 
-  public LightParameter(@NonNls @Nonnull String name, @Nonnull PsiType type, @Nonnull PsiElement declarationScope) {
+  public LightParameter(String name, PsiType type, PsiElement declarationScope) {
     this(name, type, declarationScope, declarationScope.getLanguage());
   }
 
-  public LightParameter(@NonNls @Nonnull String name,
-                        @Nonnull PsiType type,
-                        @Nonnull PsiElement declarationScope,
-                        @Nonnull Language language) {
+  public LightParameter(String name,
+                        PsiType type,
+                        PsiElement declarationScope,
+                        Language language) {
     this(name, type, declarationScope, language, type instanceof PsiEllipsisType);
   }
 
-  public LightParameter(@NonNls @Nonnull String name,
-                        @Nonnull PsiType type,
-                        @Nonnull PsiElement declarationScope,
-                        @Nonnull Language language,
+  public LightParameter(String name,
+                        PsiType type,
+                        PsiElement declarationScope,
+                        Language language,
                         boolean isVarArgs) {
     this(name, type, declarationScope, language, new LightModifierList(declarationScope.getManager()), isVarArgs);
   }
 
-  public LightParameter(@NonNls @Nonnull String name,
-                        @Nonnull PsiType type,
-                        @Nonnull PsiElement declarationScope,
-                        @Nonnull Language language,
-                        @Nonnull LightModifierList modifierList,
+  public LightParameter(String name,
+                        PsiType type,
+                        PsiElement declarationScope,
+                        Language language,
+                        LightModifierList modifierList,
                         boolean isVarArgs) {
     super(declarationScope.getManager(), name, type, language, modifierList);
     myDeclarationScope = declarationScope;
@@ -46,12 +44,12 @@ public class LightParameter extends LightVariableBuilder<LightVariableBuilder<?>
   }
 
   @Override
-  public @Nonnull PsiElement getDeclarationScope() {
+  public PsiElement getDeclarationScope() {
     return myDeclarationScope;
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitParameter(this);
     }

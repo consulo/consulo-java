@@ -39,10 +39,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -58,14 +56,12 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
      */
     public boolean m_onlyLookAtBlocks = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "TooBroadScope";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.tooBroadScopeDisplayName();
@@ -81,7 +77,6 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.tooBroadScopeProblemDescriptor().get();
     }
@@ -99,14 +94,13 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
             this.variableName = variableName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.tooBroadScopeNarrowQuickfix(variableName);
         }
 
         @Override
-        protected void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
             PsiElement variableIdentifier = descriptor.getPsiElement();
             if (!(variableIdentifier instanceof PsiIdentifier)) {
                 return;
@@ -159,7 +153,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
             }
         }
 
-        private void removeOldVariable(@Nonnull PsiVariable variable) throws IncorrectOperationException {
+        private void removeOldVariable(PsiVariable variable) throws IncorrectOperationException {
             PsiDeclarationStatement declaration = (PsiDeclarationStatement) variable.getParent();
             if (declaration == null) {
                 return;
@@ -173,7 +167,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
             }
         }
 
-        private PsiDeclarationStatement createNewDeclaration(@Nonnull PsiVariable variable, @Nullable PsiExpression initializer)
+        private PsiDeclarationStatement createNewDeclaration(PsiVariable variable, @Nullable PsiExpression initializer)
             throws IncorrectOperationException {
             Project project = variable.getProject();
             JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -184,7 +178,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
             }
             String comment = getCommentText(variable);
             PsiType type = variable.getType();
-            @NonNls String statementText;
+            String statementText;
             String typeText = type.getCanonicalText();
             if (initializer == null) {
                 statementText = typeText + ' ' + name + ';' + comment;
@@ -226,7 +220,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
             return lastChild.getText();
         }
 
-        private PsiDeclarationStatement moveDeclarationToLocation(@Nonnull PsiVariable variable, @Nonnull PsiElement location)
+        private PsiDeclarationStatement moveDeclarationToLocation(PsiVariable variable, PsiElement location)
             throws IncorrectOperationException {
             PsiStatement statement = PsiTreeUtil.getParentOfType(location, PsiStatement.class, false);
             assert statement != null;
@@ -336,7 +330,7 @@ public abstract class TooBroadScopeInspection extends BaseInspection {
     private class TooBroadScopeVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             super.visitVariable(variable);
             if (!(variable instanceof PsiLocalVariable)) {
                 return;

@@ -19,7 +19,6 @@ package com.intellij.java.language.psi;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -28,7 +27,6 @@ public interface PsiClassOwner extends PsiFile {
   /**
    * @return classes owned by this element.
    */
-  @Nonnull
   PsiClass[] getClasses();
 
   /**

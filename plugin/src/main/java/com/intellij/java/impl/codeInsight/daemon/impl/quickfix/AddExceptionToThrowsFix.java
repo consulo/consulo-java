@@ -34,8 +34,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -45,7 +44,7 @@ import java.util.*;
 public class AddExceptionToThrowsFix extends BaseIntentionAction implements SyntheticIntentionAction {
   private final PsiElement myWrongElement;
 
-  public AddExceptionToThrowsFix(@Nonnull PsiElement wrongElement) {
+  public AddExceptionToThrowsFix(PsiElement wrongElement) {
     myWrongElement = wrongElement;
   }
 
@@ -55,7 +54,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) {
+  public void invoke(final Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }
@@ -73,9 +72,9 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     addExceptionsToThrowsList(project, targetMethod, unhandledExceptions);
   }
 
-  static void addExceptionsToThrowsList(@Nonnull final Project project,
-                                        @Nonnull final PsiMethod targetMethod,
-                                        @Nonnull final Set<PsiClassType> unhandledExceptions) {
+  static void addExceptionsToThrowsList(final Project project,
+                                        final PsiMethod targetMethod,
+                                        final Set<PsiClassType> unhandledExceptions) {
     final PsiMethod[] superMethods = getSuperMethods(targetMethod);
 
     boolean hasSuperMethodsWithoutExceptions = hasSuperMethodsWithoutExceptions(superMethods, unhandledExceptions);
@@ -121,14 +120,13 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     });
   }
 
-  @Nonnull
-  private static PsiMethod[] getSuperMethods(@Nonnull PsiMethod targetMethod) {
+  private static PsiMethod[] getSuperMethods(PsiMethod targetMethod) {
     List<PsiMethod> result = new ArrayList<>();
     collectSuperMethods(targetMethod, result);
     return result.toArray(new PsiMethod[result.size()]);
   }
 
-  private static void collectSuperMethods(@Nonnull PsiMethod method, @Nonnull List<PsiMethod> result) {
+  private static void collectSuperMethods(PsiMethod method, List<PsiMethod> result) {
     PsiMethod[] superMethods = method.findSuperMethods();
     for (PsiMethod superMethod : superMethods) {
       result.add(superMethod);
@@ -136,8 +134,8 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     }
   }
 
-  private static boolean hasSuperMethodsWithoutExceptions(@Nonnull PsiMethod[] superMethods,
-                                                          @Nonnull Set<PsiClassType> unhandledExceptions) {
+  private static boolean hasSuperMethodsWithoutExceptions(PsiMethod[] superMethods,
+                                                          Set<PsiClassType> unhandledExceptions) {
     for (PsiMethod superMethod : superMethods) {
       PsiClassType[] referencedTypes = superMethod.getThrowsList().getReferencedTypes();
 
@@ -158,9 +156,9 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     return false;
   }
 
-  private static void processMethod(@Nonnull Project project,
-                                    @Nonnull PsiMethod targetMethod,
-                                    @Nonnull Set<PsiClassType> unhandledExceptions) throws IncorrectOperationException {
+  private static void processMethod(Project project,
+                                    PsiMethod targetMethod,
+                                    Set<PsiClassType> unhandledExceptions) throws IncorrectOperationException {
     for (PsiClassType unhandledException : unhandledExceptions) {
       PsiClass exceptionClass = unhandledException.resolve();
       if (exceptionClass != null) {
@@ -172,7 +170,7 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }
@@ -231,9 +229,8 @@ public class AddExceptionToThrowsFix extends BaseIntentionAction implements Synt
     return getUnhandledExceptions(element.getParent(), topElement, targetMethod);
   }
 
-  @Nonnull
   private static Set<PsiClassType> filterInProjectExceptions(@Nullable PsiMethod targetMethod,
-                                                             @Nonnull List<PsiClassType> unhandledExceptions) {
+                                                             List<PsiClassType> unhandledExceptions) {
     if (targetMethod == null) {
       return Collections.emptySet();
     }

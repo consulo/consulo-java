@@ -16,7 +16,6 @@
 package com.intellij.java.analysis.impl.codeInsight.intention.impl;
 
 import consulo.annotation.access.RequiredReadAction;
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
@@ -36,9 +35,9 @@ import com.intellij.java.language.psi.PsiType;
 public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix {
     @RequiredReadAction
     public AddNullableNotNullAnnotationFix(
-        @Nonnull String fqn,
-        @Nonnull PsiModifierListOwner owner,
-        @Nonnull String... annotationToRemove
+        String fqn,
+        PsiModifierListOwner owner,
+        String... annotationToRemove
     ) {
         super(fqn, owner, PsiNameValuePair.EMPTY_ARRAY, annotationToRemove);
     }
@@ -46,10 +45,10 @@ public class AddNullableNotNullAnnotationFix extends AddAnnotationPsiFix {
     @Override
     @RequiredReadAction
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         if (!super.isAvailable(project, file, startElement, endElement)) {
             return false;

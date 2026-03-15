@@ -3,7 +3,6 @@
  */
 package com.intellij.psi;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.document.Document;
 import consulo.language.impl.DebugUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
@@ -11,7 +10,7 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 public abstract class TreeIsCorrectAfterDiffReparseTest extends LightCodeInsightTestCase {
 
   public void testIDEADEV41862() throws Exception {
-    @NonNls String part1 = "package com.test;\n" +
+    String part1 = "package com.test;\n" +
                    "\n" +
                    "\n" +
                    "//------------------------------------------------------------------\n" +
@@ -953,7 +952,7 @@ public abstract class TreeIsCorrectAfterDiffReparseTest extends LightCodeInsight
                    "\n" +
                    "  ";
 
-    @NonNls String part2 = "\n" +
+    String part2 = "\n" +
                    "  private TransactionStatus getHighestPriorityError(TransactionStatus existingStatus, Message newError) {\n" +
                    "    if(existingStatus == null) {\n" +
                    "      return newError;\n" +

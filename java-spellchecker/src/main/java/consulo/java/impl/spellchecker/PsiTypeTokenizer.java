@@ -30,7 +30,6 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -42,7 +41,7 @@ public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement>
 {
 	@Override
 	@RequiredReadAction
-	public void tokenize(@Nonnull PsiTypeElement element, TokenConsumer consumer)
+	public void tokenize(PsiTypeElement element, TokenConsumer consumer)
 	{
 		final PsiType type = element.getType();
 		if(type instanceof PsiDisjunctionType)
@@ -89,8 +88,7 @@ public class PsiTypeTokenizer extends Tokenizer<PsiTypeElement>
 		}
 	}
 
-	@Nonnull
-	private static TextRange getRangeToCheck(@Nonnull String text, @Nonnull String name)
+	private static TextRange getRangeToCheck(String text, String name)
 	{
 		final int i = text.indexOf(name);
 		return new TextRange(i, i + name.length());

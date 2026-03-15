@@ -25,7 +25,6 @@
 
 package org.osmorc.manifest.lang.psi.impl;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.stub.IStubElementType;
@@ -36,11 +35,11 @@ import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class AttributeImpl extends AbstractAssignmentExpression implements Attribute {
-  public AttributeImpl(AssignmentExpressionStub stub, @Nonnull IStubElementType nodeType) {
+  public AttributeImpl(AssignmentExpressionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public AttributeImpl(@Nonnull ASTNode node) {
+  public AttributeImpl(ASTNode node) {
     super(node);
   }
 }

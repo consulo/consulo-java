@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.intellij.java.impl.ig.psiutils.SerializationUtils;
-import jakarta.annotation.Nonnull;
 
 class SerializableInnerClassWithNonSerializableOuterClassVisitor
   extends BaseInspectionVisitor {
@@ -33,7 +32,7 @@ class SerializableInnerClassWithNonSerializableOuterClassVisitor
   }
 
   @Override
-  public void visitClass(@Nonnull PsiClass aClass) {
+  public void visitClass(PsiClass aClass) {
     if (aClass.isInterface() || aClass.isAnnotationType() ||
         aClass.isEnum()) {
       return;

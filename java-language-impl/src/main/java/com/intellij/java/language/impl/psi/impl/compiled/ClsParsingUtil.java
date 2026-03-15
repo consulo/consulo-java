@@ -35,8 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -59,7 +58,7 @@ public class ClsParsingUtil {
     return minor == 0xFFFF;
   }
 
-  public static PsiExpression createExpressionFromText(@Nonnull String exprText, @Nonnull PsiManager manager, @Nonnull ClsElementImpl parent) {
+  public static PsiExpression createExpressionFromText(String exprText, PsiManager manager, ClsElementImpl parent) {
     PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(manager.getProject()).getParserFacade();
     try {
       PsiExpression expr = parserFacade.createExpressionFromText(exprText, null);
@@ -70,7 +69,7 @@ public class ClsParsingUtil {
     }
   }
 
-  public static PsiAnnotationMemberValue createMemberValueFromText(@Nonnull String text, @Nonnull PsiManager manager, @Nonnull ClsElementImpl parent) {
+  public static PsiAnnotationMemberValue createMemberValueFromText(String text, PsiManager manager, ClsElementImpl parent) {
     LanguageLevel level = PsiUtil.getLanguageLevel(parent);
     DummyHolder holder = DummyHolderFactory.createHolder(manager, new JavaDummyElement(text, ANNOTATION_VALUE, level), null);
     PsiElement element = SourceTreeToPsiMap.treeElementToPsi(holder.getTreeElement().getFirstChildNode());
@@ -81,7 +80,7 @@ public class ClsParsingUtil {
     return getMemberValue(element, parent);
   }
 
-  public static PsiAnnotationMemberValue getMemberValue(@Nonnull PsiElement element, @Nonnull ClsElementImpl parent) {
+  public static PsiAnnotationMemberValue getMemberValue(PsiElement element, ClsElementImpl parent) {
     if (element instanceof PsiExpression) {
       return psiToClsExpression((PsiExpression) element, parent);
     } else if (element instanceof PsiArrayInitializerMemberValue) {
@@ -120,7 +119,7 @@ public class ClsParsingUtil {
     }
   }
 
-  static PsiExpression psiToClsExpression(@Nonnull PsiExpression expr, @Nonnull ClsElementImpl parent) {
+  static PsiExpression psiToClsExpression(PsiExpression expr, ClsElementImpl parent) {
     if (expr instanceof PsiLiteralExpression) {
       boolean forDecompiling = ((ClsFileImpl) parent.getContainingFile()).isForDecompiling();
       PsiType type = forDecompiling ? PsiType.NULL : expr.getType();
@@ -175,7 +174,7 @@ public class ClsParsingUtil {
     return null;
   }
 
-  public static boolean isJavaIdentifier(@Nonnull String identifier, @Nonnull LanguageLevel level) {
+  public static boolean isJavaIdentifier(String identifier, LanguageLevel level) {
     return StringUtil.isJavaIdentifier(identifier) && !JavaLexer.isKeyword(identifier, level);
   }
 

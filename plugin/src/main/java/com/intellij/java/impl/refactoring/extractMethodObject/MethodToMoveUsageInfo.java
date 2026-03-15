@@ -22,12 +22,11 @@ package com.intellij.java.impl.refactoring.extractMethodObject;
 
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
 public class MethodToMoveUsageInfo extends UsageInfo {
   private boolean myMove = true;
 
-  public MethodToMoveUsageInfo(@Nonnull PsiMethod element) {
+  public MethodToMoveUsageInfo(PsiMethod element) {
     super(element);
   }
 

@@ -45,8 +45,7 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.DataInput;
 import java.io.FileOutputStream;
@@ -64,7 +63,6 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
   public AnnotationBasedInstrumentingCompiler() {
   }
 
-  @Nonnull
   public ProcessingItem[] getProcessingItems(final CompileContext context) {
     if (!isEnabled()) {
       return ProcessingItem.EMPTY_ARRAY;

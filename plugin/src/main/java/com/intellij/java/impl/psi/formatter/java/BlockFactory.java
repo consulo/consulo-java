@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import jakarta.annotation.Nonnull;
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
 import consulo.language.codeStyle.FormattingMode;
@@ -28,7 +27,7 @@ import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 public interface BlockFactory
 {
 
-	Block createBlock(ASTNode node, Indent indent, Alignment alignment, Wrap wrap, @Nonnull FormattingMode formattingMode);
+	Block createBlock(ASTNode node, Indent indent, Alignment alignment, Wrap wrap, FormattingMode formattingMode);
 
 	CommonCodeStyleSettings getSettings();
 

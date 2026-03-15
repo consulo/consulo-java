@@ -27,7 +27,6 @@ import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.ui.ex.tree.PresentationData;
 import consulo.usage.UsageViewBundle;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -46,12 +45,11 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
   protected boolean changed;
   private int index; // my index in parent's mycachedchildren
 
-  protected SliceNode(@Nonnull Project project, SliceUsage sliceUsage, @Nonnull DuplicateMap targetEqualUsages) {
+  protected SliceNode(Project project, SliceUsage sliceUsage, DuplicateMap targetEqualUsages) {
     super(project, sliceUsage);
     this.targetEqualUsages = targetEqualUsages;
   }
 
-  @Nonnull
   SliceNode copy() {
     SliceUsage newUsage = getValue().copy();
     SliceNode newNode = new SliceNode(getProject(), newUsage, targetEqualUsages);
@@ -61,7 +59,6 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
   }
 
   @Override
-  @Nonnull
   public Collection<? extends AbstractTreeNode<?>> getChildren() {
     ProgressIndicator current = ProgressManager.getInstance().getProgressIndicator();
     ProgressIndicator indicator = current == null ? new EmptyProgressIndicator() : current;
@@ -89,8 +86,7 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
     return index == 0 ? null : (SliceNode)parentChildren.get(index - 1);
   }
 
-  @Nonnull
-  protected List<? extends AbstractTreeNode> getChildrenUnderProgress(@Nonnull final ProgressIndicator progress) {
+  protected List<? extends AbstractTreeNode> getChildrenUnderProgress(final ProgressIndicator progress) {
     if (isUpToDate()) {
       return myCachedChildren == null ? Collections.<AbstractTreeNode>emptyList() : myCachedChildren;
     }
@@ -144,11 +140,9 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
     return false;
   }
 
-  @Nonnull
   @Override
   protected PresentationData createPresentation() {
     return new PresentationData() {
-      @Nonnull
       @Override
       public Object[] getEqualityObjects() {
         return ArrayUtil.append(super.getEqualityObjects(), changed);
@@ -209,8 +203,8 @@ public class SliceNode extends AbstractTreeNode<SliceUsage> implements Duplicate
   }
 
   @Override
-  public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
-                                    @Nonnull JTree tree,
+  public void customizeCellRenderer(SliceUsageCellRenderer renderer,
+                                    JTree tree,
                                     Object value,
                                     boolean selected,
                                     boolean expanded,

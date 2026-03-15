@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;

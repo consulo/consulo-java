@@ -25,8 +25,7 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Pavel.Dolgov
@@ -39,20 +38,19 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
     myRequiredName = requiredName;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.moduleInfoAddRequiresName(myRequiredName);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public boolean isAvailable(Project project, PsiFile file, PsiElement startElement, PsiElement endElement) {
     return PsiUtil.isLanguageLevel9OrHigher(file) && startElement instanceof PsiJavaModule && startElement.getManager().isInProject(startElement) && getLBrace((PsiJavaModule) startElement) !=
         null;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public void invoke(Project project, PsiFile file, @Nullable Editor editor, PsiElement startElement, PsiElement endElement) {
     PsiJavaModule module = (PsiJavaModule) startElement;
 
     PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(project).getParserFacade();
@@ -72,13 +70,13 @@ public class AddRequiredModuleFix extends LocalQuickFixAndIntentionActionOnPsiEl
   }
 
   @Nullable
-  private static PsiElement findAddingPlace(@Nonnull PsiJavaModule module) {
+  private static PsiElement findAddingPlace(PsiJavaModule module) {
     PsiElement addingPlace = ContainerUtil.iterateAndGetLastItem(module.getRequires());
     return addingPlace != null ? addingPlace : getLBrace(module);
   }
 
   @Nullable
-  private static PsiElement getLBrace(@Nonnull PsiJavaModule module) {
+  private static PsiElement getLBrace(PsiJavaModule module) {
     PsiJavaModuleReferenceElement nameElement = module.getNameIdentifier();
     for (PsiElement element = nameElement.getNextSibling(); element != null; element = element.getNextSibling()) {
       if (PsiUtil.isJavaToken(element, JavaTokenType.LBRACE)) {

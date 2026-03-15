@@ -23,8 +23,7 @@ import java.io.File;
 import java.security.SecureRandom;
 
 import com.intellij.java.language.psi.PsiJavaFile;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 import consulo.language.ast.FileASTNode;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.language.impl.DebugUtil;
@@ -502,7 +501,7 @@ public abstract class JavaStubBuilderTest extends LightIdeaTestCase {
     }).cpuBound().assertTiming();
   }
 
-  private static void doTest(@NonNls String source, @NonNls @Nullable String tree) {
+  private static void doTest(String source, @Nullable String tree) {
     PsiJavaFile file = (PsiJavaFile)createLightFile("test.java", source);
     FileASTNode fileNode = file.getNode();
     assertNotNull(fileNode);

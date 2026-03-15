@@ -22,7 +22,6 @@ import consulo.fileTemplate.FileTemplate;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiPackage;
 
-import jakarta.annotation.Nonnull;
 import java.util.Properties;
 
 import static consulo.util.lang.ObjectUtil.notNull;
@@ -66,19 +65,18 @@ public class JavaTemplateUtil {
   private JavaTemplateUtil() {
   }
 
-  public static void setClassAndMethodNameProperties(@Nonnull Properties properties, @Nonnull PsiClass aClass, @Nonnull PsiMethod method) {
+  public static void setClassAndMethodNameProperties(Properties properties, PsiClass aClass, PsiMethod method) {
     properties.setProperty(FileTemplate.ATTRIBUTE_CLASS_NAME, notNull(aClass.getQualifiedName(), ""));
     properties.setProperty(FileTemplate.ATTRIBUTE_SIMPLE_CLASS_NAME, notNull(aClass.getName(), ""));
     properties.setProperty(FileTemplate.ATTRIBUTE_METHOD_NAME, method.getName());
   }
 
-  @Nonnull
-  public static String getPackageName(@Nonnull PsiDirectory directory) {
+  public static String getPackageName(PsiDirectory directory) {
     PsiPackage aPackage = JavaDirectoryService.getInstance().getPackage(directory);
     return aPackage != null ? aPackage.getQualifiedName() : "";
   }
 
-  public static void setPackageNameAttribute(@Nonnull Properties properties, @Nonnull PsiDirectory directory) {
+  public static void setPackageNameAttribute(Properties properties, PsiDirectory directory) {
     properties.setProperty(FileTemplate.ATTRIBUTE_PACKAGE_NAME, getPackageName(directory));
   }
 }

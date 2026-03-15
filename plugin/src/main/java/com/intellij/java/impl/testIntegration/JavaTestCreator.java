@@ -27,7 +27,6 @@ import consulo.language.editor.testIntegration.TestCreator;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaTestCreator implements TestCreator {
@@ -53,7 +52,6 @@ public class JavaTestCreator implements TestCreator {
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -4,12 +4,11 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.CommonClassNames;
 import consulo.application.dumb.DumbAware;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
 public class FormatPostfixTemplate extends JavaEditablePostfixTemplate implements DumbAware {
-    public FormatPostfixTemplate(@Nonnull JavaPostfixTemplateProvider provider) {
+    public FormatPostfixTemplate(JavaPostfixTemplateProvider provider) {
         super(
             "format",
             "String.format($EXPR$, $END$)",

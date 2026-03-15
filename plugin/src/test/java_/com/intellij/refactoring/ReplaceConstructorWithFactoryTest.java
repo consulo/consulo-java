@@ -6,14 +6,11 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.replaceConstructorWithFactory.ReplaceConstructorWithFactoryProcessor;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author dsl
  */
 public abstract class ReplaceConstructorWithFactoryTest extends LightRefactoringTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();
@@ -36,7 +33,7 @@ public abstract class ReplaceConstructorWithFactoryTest extends LightRefactoring
 
   public void testConstructorTypeParameters() throws Exception { runTest("08", null); }
 
-  private void runTest(String testIndex, @NonNls String targetClassName) throws Exception {
+  private void runTest(String testIndex, String targetClassName) throws Exception {
     configureByFile("/refactoring/replaceConstructorWithFactory/before" + testIndex + ".java");
     perform(targetClassName);
     checkResultByFile("/refactoring/replaceConstructorWithFactory/after" + testIndex + ".java");

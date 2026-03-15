@@ -30,8 +30,6 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -55,7 +53,6 @@ public class MethodInfo extends MemberInfo
 	private final boolean myIsConstructor;
 	private final AnnotationConstantValue[][] myRuntimeVisibleParameterAnnotations;
 	private final AnnotationConstantValue[][] myRuntimeInvisibleParameterAnnotations;
-	@Nonnull
 	private final ConstantValue myAnnotationDefault;
 
 	public MethodInfo(int name, int descriptor, boolean isConstructor)
@@ -226,8 +223,7 @@ public class MethodInfo extends MemberInfo
 	}
 
 	private
-	@NonNls
-	String parseFieldType(@NonNls String signature)
+	String parseFieldType(String signature)
 	{
 		if(signature.length() == 0)
 		{
@@ -316,7 +312,6 @@ public class MethodInfo extends MemberInfo
 		}
 	}
 
-	@Nonnull
 	public ConstantValue getAnnotationDefault()
 	{
 		return myAnnotationDefault;

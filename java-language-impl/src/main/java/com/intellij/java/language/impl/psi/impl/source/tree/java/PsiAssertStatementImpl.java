@@ -27,7 +27,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.ast.ChildRoleBase;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiAssertStatementImpl extends CompositePsiElement implements PsiAssertStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiAssertStatementImpl.class);
@@ -102,7 +101,7 @@ public class PsiAssertStatementImpl extends CompositePsiElement implements PsiAs
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitAssertStatement(this);
     }

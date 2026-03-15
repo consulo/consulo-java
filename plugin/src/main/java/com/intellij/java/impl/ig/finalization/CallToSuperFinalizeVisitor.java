@@ -19,14 +19,13 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.psiutils.ExpressionUtils;
-import jakarta.annotation.Nonnull;
 
 class CallToSuperFinalizeVisitor extends JavaRecursiveElementVisitor {
 
   private boolean callToSuperFinalizeFound = false;
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (!callToSuperFinalizeFound) {
       super.visitElement(element);
     }
@@ -45,7 +44,7 @@ class CallToSuperFinalizeVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     if (callToSuperFinalizeFound) {
       return;
     }

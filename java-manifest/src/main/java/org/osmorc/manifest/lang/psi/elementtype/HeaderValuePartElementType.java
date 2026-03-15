@@ -30,7 +30,6 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
 import org.osmorc.manifest.lang.psi.impl.HeaderValuePartImpl;
 import org.osmorc.manifest.lang.psi.stub.HeaderValuePartStub;
@@ -47,7 +46,7 @@ public class HeaderValuePartElementType extends AbstractManifestStubElementType<
   }
 
   @Override
-  public HeaderValuePart createPsi(@Nonnull HeaderValuePartStub stub) {
+  public HeaderValuePart createPsi(HeaderValuePartStub stub) {
     return new HeaderValuePartImpl(stub, this);
   }
 
@@ -57,19 +56,18 @@ public class HeaderValuePartElementType extends AbstractManifestStubElementType<
   }
 
   @Override
-  public HeaderValuePartStub createStub(@Nonnull HeaderValuePart psi, StubElement parentStub) {
+  public HeaderValuePartStub createStub(HeaderValuePart psi, StubElement parentStub) {
     return new HeaderValuePartStubImpl(parentStub, psi.getUnwrappedText());
   }
 
-  public void serialize(@Nonnull HeaderValuePartStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(HeaderValuePartStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeUTFFast(stub.getUnwrappedText());
   }
 
-  @Nonnull
-  public HeaderValuePartStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public HeaderValuePartStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new HeaderValuePartStubImpl(parentStub, dataStream.readUTFFast());
   }
 
-  public void indexStub(@Nonnull HeaderValuePartStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(HeaderValuePartStub stub, IndexSink sink) {
   }
 }

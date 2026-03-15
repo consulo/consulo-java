@@ -34,9 +34,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -68,7 +66,6 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   public boolean ignoreConstantConversions = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.implicitNumericConversionDisplayName();
   }
@@ -91,7 +88,6 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiType type = (PsiType)infos[1];
     PsiType expectedType = (PsiType)infos[2];
@@ -121,7 +117,6 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
         : InspectionGadgetsLocalize.implicitNumericConversionMakeExplicitQuickfix();
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return m_name;
     }
@@ -153,7 +148,6 @@ public class ImplicitNumericConversionInspection extends BaseInspection {
     }
 
     @Nullable
-    @NonNls
     private static String convertExpression(PsiExpression expression, PsiType expectedType) {
       PsiType expressionType = expression.getType();
       if (expressionType == null) {

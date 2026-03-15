@@ -13,11 +13,9 @@ import consulo.project.Project;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JarApplicationConfigurationType extends ConfigurationTypeBase implements ConfigurationType {
-  @Nonnull
   public static JarApplicationConfigurationType getInstance() {
     return ConfigurationTypeUtil.findConfigurationType(JarApplicationConfigurationType.class);
   }
@@ -26,7 +24,7 @@ public class JarApplicationConfigurationType extends ConfigurationTypeBase imple
     super("JarApplication", JavaExecutionLocalize.jarApplicationConfigurationName(), JavaExecutionLocalize.jarApplicationConfigurationDescription(), AllIcons.FileTypes.Archive);
     addFactory(new ConfigurationFactory(this) {
       @Override
-      public void onNewConfigurationCreated(@Nonnull RunConfiguration configuration) {
+      public void onNewConfigurationCreated(RunConfiguration configuration) {
         JarApplicationConfiguration jarApplicationConfiguration = (JarApplicationConfiguration) configuration;
         if (StringUtil.isEmpty(jarApplicationConfiguration.getWorkingDirectory())) {
           String baseDir = FileUtil.toSystemIndependentName(StringUtil.notNullize(configuration.getProject().getBasePath()));
@@ -34,7 +32,6 @@ public class JarApplicationConfigurationType extends ConfigurationTypeBase imple
         }
       }
 
-      @Nonnull
       @Override
       public String getId() {
         // not localized string - do not change if not want break old configurations 
@@ -42,13 +39,12 @@ public class JarApplicationConfigurationType extends ConfigurationTypeBase imple
       }
 
       @Override
-      @Nonnull
       public RunConfiguration createTemplateConfiguration(Project project) {
         return new JarApplicationConfiguration(project, this, "");
       }
 
       @Override
-      public boolean isApplicable(@Nonnull Project project) {
+      public boolean isApplicable(Project project) {
         return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
       }
     });

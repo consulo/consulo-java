@@ -24,18 +24,15 @@ import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnonymousClassVariableHidesContainingMethodVariableInspection
   extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.anonymousClassVariableHidesContainingMethodVariableDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     Object info = infos[0];
     if (info instanceof PsiParameter) {

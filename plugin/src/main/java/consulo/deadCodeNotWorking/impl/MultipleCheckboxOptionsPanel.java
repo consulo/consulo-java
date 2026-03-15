@@ -16,7 +16,6 @@
 package consulo.deadCodeNotWorking.impl;
 
 import consulo.language.editor.inspection.InspectionTool;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -35,7 +34,7 @@ public class MultipleCheckboxOptionsPanel extends JPanel
 		this.owner = owner;
 	}
 
-	public void addCheckbox(String label, @NonNls String property)
+	public void addCheckbox(String label, String property)
 	{
 		boolean selected = getPropertyValue(owner, property);
 		JCheckBox checkBox = new JCheckBox(label, selected);

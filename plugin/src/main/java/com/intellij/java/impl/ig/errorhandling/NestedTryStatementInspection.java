@@ -24,17 +24,14 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestedTryStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nestedTryStatementDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nestedTryStatementProblemDescriptor().get();
     }
@@ -47,7 +44,7 @@ public class NestedTryStatementInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             super.visitTryStatement(statement);
             PsiTryStatement parentTry =
                 PsiTreeUtil.getParentOfType(

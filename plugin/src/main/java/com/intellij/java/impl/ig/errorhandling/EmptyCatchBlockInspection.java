@@ -30,9 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -51,14 +49,12 @@ public class EmptyCatchBlockInspection extends BaseInspection {
      */
     public boolean m_ignoreIgnoreParameter = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.emptyCatchBlockDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.emptyCatchBlockProblemDescriptor().get();
     }
@@ -84,7 +80,6 @@ public class EmptyCatchBlockInspection extends BaseInspection {
     }
 
     private static class EmptyCatchBlockFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.renameCatchParameterToIgnored();
@@ -120,7 +115,7 @@ public class EmptyCatchBlockInspection extends BaseInspection {
 
     private class EmptyCatchBlockVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             super.visitTryStatement(statement);
             /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
                 return;
@@ -147,7 +142,7 @@ public class EmptyCatchBlockInspection extends BaseInspection {
             if (identifier == null) {
                 return;
             }
-            @NonNls String parameterName = parameter.getName();
+            String parameterName = parameter.getName();
             if (m_ignoreIgnoreParameter && PsiUtil.isIgnoredName(parameterName)) {
                 return;
             }

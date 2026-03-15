@@ -15,7 +15,6 @@
  */
 package com.intellij.java.analysis.impl.refactoring.util;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiVariable;
@@ -27,12 +26,12 @@ public class VariableData {
   public String name;
   public boolean passAsParameter;
 
-  public VariableData(@Nonnull PsiVariable var) {
+  public VariableData(PsiVariable var) {
     variable = var;
     type = var.getType();
   }
 
-  public VariableData(@Nonnull PsiVariable var, @Nonnull PsiType type) {
+  public VariableData(PsiVariable var, PsiType type) {
     variable = var;
     this.type = SmartTypePointerManager.getInstance(var.getProject()).createSmartTypePointer(type).getType();
   }

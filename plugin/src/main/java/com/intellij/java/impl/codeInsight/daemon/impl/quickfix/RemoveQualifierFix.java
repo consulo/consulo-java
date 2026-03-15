@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.FileModificationService;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
@@ -45,13 +44,12 @@ public class RemoveQualifierFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.removeQualifierActionText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return
       myQualifier != null
       && myQualifier.isValid()
@@ -64,7 +62,7 @@ public class RemoveQualifierFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     myQualifier.delete();
     myExpression.bindToElement(myResolved);

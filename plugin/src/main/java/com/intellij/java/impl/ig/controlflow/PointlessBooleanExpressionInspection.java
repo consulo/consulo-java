@@ -33,8 +33,7 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -65,7 +64,6 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
         return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreExpressionsContainingConstants");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.pointlessBooleanExpressionDisplayName();
@@ -77,7 +75,6 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiExpression expression = (PsiExpression) infos[0];
         return InspectionGadgetsLocalize.booleanExpressionCanBeSimplifiedProblemDescriptor(
@@ -277,7 +274,6 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
     }
 
     private class PointlessBooleanExpressionFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();

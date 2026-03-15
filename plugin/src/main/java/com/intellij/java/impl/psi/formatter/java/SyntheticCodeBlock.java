@@ -23,8 +23,7 @@ import consulo.language.codeStyle.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,13 +63,11 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
   }
 
   @Override
-  @Nonnull
   public TextRange getTextRange() {
     return myTextRange;
   }
 
   @Override
-  @Nonnull
   public List<Block> getSubBlocks() {
     return mySubBlocks;
   }
@@ -91,7 +88,7 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
   }
 
   @Override
-  public Spacing getSpacing(Block child1, @Nonnull Block child2) {
+  public Spacing getSpacing(Block child1, Block child2) {
     return JavaSpacePropertyProcessor.getSpacing(child2, mySettings, myJavaSettings);
   }
 
@@ -134,7 +131,6 @@ public class SyntheticCodeBlock implements Block, JavaBlock {
   }
 
   @Override
-  @Nonnull
   public ChildAttributes getChildAttributes(int newChildIndex) {
     if (myChildAttributes != null) {
       return myChildAttributes;

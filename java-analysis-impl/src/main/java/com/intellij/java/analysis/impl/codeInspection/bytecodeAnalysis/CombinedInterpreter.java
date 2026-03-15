@@ -24,7 +24,6 @@ import consulo.internal.org.objectweb.asm.tree.*;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicInterpreter;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
 
 import java.util.ArrayList;
@@ -285,7 +284,6 @@ final class CombinedInterpreter extends BasicInterpreter
 		return track(origin, super.naryOperation(insn, values));
 	}
 
-	@Nonnull
 	private CombinedData.TrackableCallValue methodCall(int opCode, int origin, Member method, List<? extends BasicValue> values)
 	{
 		Type retType = Type.getReturnType(method.methodDesc);

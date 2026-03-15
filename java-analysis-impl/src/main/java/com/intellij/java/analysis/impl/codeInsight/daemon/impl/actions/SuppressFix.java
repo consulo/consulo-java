@@ -35,23 +35,21 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
  */
 public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
 
-  public SuppressFix(@Nonnull HighlightDisplayKey key) {
+  public SuppressFix(HighlightDisplayKey key) {
     this(key.getID());
   }
 
-  public SuppressFix(@Nonnull String ID) {
+  public SuppressFix(String ID) {
     super(ID, false);
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return super.getText().orIfEmpty(LocalizeValue.localizeTODO("Suppress for member"));
@@ -84,7 +82,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull final Project project, @Nonnull final PsiElement context) {
+  public boolean isAvailable(final Project project, final PsiElement context) {
     PsiDocCommentOwner container = getContainer(context);
     boolean isValid = container != null && !(container instanceof PsiMethod && container instanceof SyntheticElement);
     if (!isValid) {
@@ -102,7 +100,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull final Project project, @Nonnull final PsiElement element) throws IncorrectOperationException {
+  public void invoke(final Project project, final PsiElement element) throws IncorrectOperationException {
     if (doSuppress(project, getContainer(element))) {
       return;
     }
@@ -112,7 +110,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
   }
 
   @RequiredReadAction
-  private boolean doSuppress(@Nonnull Project project, PsiDocCommentOwner container) {
+  private boolean doSuppress(Project project, PsiDocCommentOwner container) {
     assert container != null;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(container)) {
       return true;
@@ -144,7 +142,7 @@ public class SuppressFix extends AbstractBatchSuppressByNoInspectionCommentFix {
     return false;
   }
 
-  protected boolean use15Suppressions(@Nonnull PsiDocCommentOwner container) {
+  protected boolean use15Suppressions(PsiDocCommentOwner container) {
     return JavaSuppressionUtil.canHave15Suppressions(container) && !JavaSuppressionUtil.alreadyHas14Suppressions(container);
   }
 }

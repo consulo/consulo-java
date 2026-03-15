@@ -14,7 +14,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
@@ -25,14 +24,13 @@ public class ReplaceComputeWithComputeIfPresentFix implements LocalQuickFix, Hig
             .parameterTypes("K", CommonClassNames.JAVA_UTIL_FUNCTION_BI_FUNCTION);
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
         return JavaInspectionsLocalize.inspectionDataFlowUseComputeifpresentQuickfix();
     }
 
     @Override
     @RequiredReadAction
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiLambdaExpression lambda = PsiTreeUtil.getParentOfType(descriptor.getStartElement(), PsiLambdaExpression.class);
         if (lambda == null) {
             return;

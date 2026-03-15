@@ -38,8 +38,6 @@ import consulo.language.editor.inspection.HTMLComposerBase;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.tree.TreeNode;
 import java.util.HashSet;
@@ -49,7 +47,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
   private final InspectionToolPresentation myToolPresentation;
   private final HTMLJavaHTMLComposer myComposer;
 
-  public DeadHTMLComposer(@Nonnull InspectionToolPresentation presentation) {
+  public DeadHTMLComposer(InspectionToolPresentation presentation) {
     myToolPresentation = presentation;
     myComposer = getExtension(HTMLJavaHTMLComposer.COMPOSER);
   }
@@ -73,7 +71,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
         refElement.accept(new RefJavaVisitor() {
           @Override
           @RequiredReadAction
-          public void visitClass(@Nonnull RefClass aClass) {
+          public void visitClass(RefClass aClass) {
             appendClassInstantiations(buf, aClass);
             myComposer.appendDerivedClasses(buf, aClass);
             myComposer.appendClassExtendsImplements(buf, aClass);
@@ -83,7 +81,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
 
           @Override
           @RequiredReadAction
-          public void visitMethod(@Nonnull RefMethod method) {
+          public void visitMethod(RefMethod method) {
             appendElementInReferences(buf, method);
             appendElementOutReferences(buf, method);
             myComposer.appendDerivedMethods(buf, method);
@@ -92,7 +90,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
 
           @Override
           @RequiredReadAction
-          public void visitField(@Nonnull RefField field) {
+          public void visitField(RefField field) {
             appendElementInReferences(buf, field);
             appendElementOutReferences(buf, field);
           }
@@ -106,7 +104,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
 
   public static void appendProblemSynopsis(RefElement refElement, final StringBuffer buf) {
     refElement.accept(new RefJavaVisitor() {
-      @Override public void visitField(@Nonnull RefField field) {
+      @Override public void visitField(RefField field) {
         if (field.isUsedForReading() && !field.isUsedForWriting()) {
           buf.append(InspectionLocalize.inspectionDeadCodeProblemSynopsis().get());
           return;
@@ -132,7 +130,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
         }
       }
 
-      @Override public void visitClass(@Nonnull RefClass refClass) {
+      @Override public void visitClass(RefClass refClass) {
         if (refClass.isAnonymous()) {
           buf.append(InspectionLocalize.inspectionDeadCodeProblemSynopsis10());
         } else if (refClass.isInterface() || refClass.isAbstract()) {
@@ -169,7 +167,7 @@ public class DeadHTMLComposer extends HTMLComposerBase {
         }
       }
 
-      @Override public void visitMethod(@Nonnull RefMethod method) {
+      @Override public void visitMethod(RefMethod method) {
         RefClass refClass = method.getOwnerClass();
         if (method.isExternalOverride()) {
           String classOrInterface = HTMLJavaHTMLComposer.getClassOrInterface(refClass, false);
@@ -349,20 +347,20 @@ public class DeadHTMLComposer extends HTMLComposerBase {
       if (appendCallees) {
         appendHeading(buf, InspectionLocalize.inspectionExportResultsCallees());
       }
-      @NonNls String ul = "<ul>";
+      String ul = "<ul>";
       buf.append(ul);
       for (RefElement refElement : possibleChildren) {
         if (!mentionedElements.contains(refElement)) {
           mentionedElements.add(refElement);
-          @NonNls String li = "<li>";
+          String li = "<li>";
           buf.append(li);
           appendElementReference(buf, refElement, true);
-          @NonNls String closeLi = "</li>";
+          String closeLi = "</li>";
           buf.append(closeLi);
           appendCallesList(refElement, buf, mentionedElements, false);
         }
       }
-      @NonNls String closeUl = "</ul>";
+      String closeUl = "</ul>";
       buf.append(closeUl);
     }
   }

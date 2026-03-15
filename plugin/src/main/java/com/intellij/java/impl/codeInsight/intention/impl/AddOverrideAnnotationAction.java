@@ -33,7 +33,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -42,14 +41,13 @@ import jakarta.annotation.Nonnull;
 @IntentionMetaData(ignoreId = "java.AddOverrideAnnotationAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class AddOverrideAnnotationAction implements IntentionAction {
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionAddOverrideAnnotation();
   }
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!PsiUtil.isLanguageLevel5OrHigher(file)) return false;
     if (!file.getManager().isInProject(file)) return false;
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
@@ -68,7 +66,7 @@ public class AddOverrideAnnotationAction implements IntentionAction {
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
     if (method != null) {
       new AddAnnotationFix(CommonClassNames.JAVA_LANG_OVERRIDE, method).invoke(project, editor, file);

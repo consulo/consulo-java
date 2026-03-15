@@ -31,7 +31,6 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
 import consulo.index.io.StringRef;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.List;
@@ -47,11 +46,10 @@ public class JavaNameValuePairType extends JavaStubElementType<PsiNameValuePairS
   }
 
   @Override
-  public PsiNameValuePair createPsi(@Nonnull ASTNode node) {
+  public PsiNameValuePair createPsi(ASTNode node) {
     return new PsiNameValuePairImpl(node);
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new NameValuePairElement();
@@ -75,24 +73,23 @@ public class JavaNameValuePairType extends JavaStubElementType<PsiNameValuePairS
   }
 
   @Override
-  public PsiNameValuePair createPsi(@Nonnull PsiNameValuePairStub stub) {
+  public PsiNameValuePair createPsi(PsiNameValuePairStub stub) {
     return getPsiFactory(stub).createNameValuePair(stub);
   }
 
   @Override
-  public void serialize(@Nonnull PsiNameValuePairStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiNameValuePairStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     dataStream.writeName(stub.getValue());
   }
 
-  @Nonnull
   @Override
-  public PsiNameValuePairStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiNameValuePairStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     StringRef name = dataStream.readName();
     return new PsiNameValuePairStubImpl(parentStub, name, dataStream.readName());
   }
 
   @Override
-  public void indexStub(@Nonnull PsiNameValuePairStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiNameValuePairStub stub, IndexSink sink) {
   }
 }

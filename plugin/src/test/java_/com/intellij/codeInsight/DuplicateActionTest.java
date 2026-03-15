@@ -1,6 +1,5 @@
 package com.intellij.codeInsight;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.ui.ex.action.IdeActions;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 
@@ -16,7 +15,7 @@ public abstract class DuplicateActionTest extends LightCodeInsightFixtureTestCas
 		doTest("<caret>", "txt", "<caret>");
 	}
 
-	private void doTest(String before, @NonNls String ext, String after)
+	private void doTest(String before, String ext, String after)
 	{
 		myFixture.configureByText("a." + ext, before);
 		myFixture.performEditorAction(IdeActions.ACTION_EDITOR_DUPLICATE);

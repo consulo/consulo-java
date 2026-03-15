@@ -28,7 +28,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipConjunctionIntention", fileExtensions = "java", categories = {
@@ -46,20 +45,18 @@ public class FlipConjunctionIntention extends MutablyNamedIntention {
         return IntentionPowerPackLocalize.flipSmthIntentionName(sign.getText());
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.flipConjunctionIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ConjunctionPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiExpression exp = (PsiExpression) element;
         PsiPolyadicExpression binaryExpression = (PsiPolyadicExpression) exp;

@@ -36,8 +36,7 @@ import consulo.module.extension.ModuleExtensionHelper;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
@@ -62,36 +61,33 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
     }
   }
 
-  @Nonnull
   @Override
   public String getId() {
     return "GSON";
   }
 
-  @Nonnull
   @Override
   public String getPsiElementName() {
     return "Class";
   }
 
   @RequiredReadAction
-  @Nonnull
   @Override
-  public String getIdFromPsiElement(@Nonnull PsiClass psiClass) {
+  public String getIdFromPsiElement(PsiClass psiClass) {
     return psiClass.getQualifiedName();
   }
 
   @RequiredReadAction
   @Nullable
   @Override
-  public PsiClass getPsiElementById(@Nonnull String s, @Nonnull Project project) {
+  public PsiClass getPsiElementById(String s, Project project) {
     return JavaPsiFacade.getInstance(project).findClass(s, GlobalSearchScope.allScope(project));
   }
 
   @RequiredUIAccess
   @Nullable
   @Override
-  public PsiClass chooseElement(@Nonnull Project project) {
+  public PsiClass chooseElement(Project project) {
     TreeClassChooser classChooser = TreeClassChooserFactory.getInstance(project).createAllProjectScopeChooser("Choose class");
     classChooser.showDialog();
     return classChooser.getSelected();
@@ -99,12 +95,12 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
 
   @RequiredReadAction
   @Override
-  public boolean isAvailable(@Nonnull Project project) {
+  public boolean isAvailable(Project project) {
     return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class) && getPsiElementById("com.google.gson.Gson", project) != null;
   }
 
   @Override
-  public void fillRootObject(@Nonnull PsiClass psiClass, @Nonnull JsonObjectDescriptor jsonObjectDescriptor) {
+  public void fillRootObject(PsiClass psiClass, JsonObjectDescriptor jsonObjectDescriptor) {
     PropertyType type = toType(psiClass.getProject(), null, new PsiImmediateClassType(psiClass, PsiSubstitutor.EMPTY));
 
     if (type != null && type.myValue instanceof JsonObjectDescriptor) {
@@ -115,7 +111,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
   }
 
   @Nullable
-  private static PropertyType toType(@Nonnull Project project, @Nullable PsiField field, @Nonnull PsiType type) {
+  private static PropertyType toType(Project project, @Nullable PsiField field, PsiType type) {
     if (PsiType.BYTE.equals(type)) {
       return new PropertyType(false, Number.class);
     } else if (PsiType.SHORT.equals(type)) {
@@ -221,7 +217,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
     return null;
   }
 
-  private static void addIfNotNull(@Nonnull JsonObjectDescriptor objectDescriptor, @Nullable PropertyType propertyType, @Nullable PsiField navElement) {
+  private static void addIfNotNull(JsonObjectDescriptor objectDescriptor, @Nullable PropertyType propertyType, @Nullable PsiField navElement) {
     if (propertyType == null) {
       return;
     }
@@ -249,8 +245,7 @@ public class GsonDescriptionByAnotherPsiElementProvider implements DescriptionBy
     }
   }
 
-  @Nonnull
-  private static String getPropertyNameFromField(@Nonnull PsiField field) {
+  private static String getPropertyNameFromField(PsiField field) {
     PsiAnnotation annotation = AnnotationUtil.findAnnotation(field, "com.google.gson.annotations.SerializedName");
     if (annotation != null) {
       String value = AnnotationUtil.getStringAttributeValue(annotation, PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME);

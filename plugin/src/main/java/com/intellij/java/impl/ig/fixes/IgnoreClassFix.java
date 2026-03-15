@@ -10,7 +10,6 @@ import consulo.project.Project;
 import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -22,13 +21,12 @@ public class IgnoreClassFix extends InspectionGadgetsFix {
   final String myQualifiedName;
   private final LocalizeValue myFixName;
 
-  public IgnoreClassFix(String qualifiedName, Set<String> ignoredClasses, @Nonnull LocalizeValue fixName) {
+  public IgnoreClassFix(String qualifiedName, Set<String> ignoredClasses, LocalizeValue fixName) {
     myIgnoredClasses = ignoredClasses;
     myQualifiedName = qualifiedName;
     myFixName = fixName;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return myFixName;

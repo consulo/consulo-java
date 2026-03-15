@@ -25,7 +25,6 @@ import consulo.ide.ServiceManager;
 import consulo.logging.Logger;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -54,13 +53,11 @@ public class JavaRunConfigurationExtensionManager extends RunConfigurationExtens
     }
   }
 
-  @Nonnull
   @Override
   protected String getIdAttrName() {
     return "name";
   }
 
-  @Nonnull
   @Override
   protected String getExtensionRootAttr() {
     return "extension";

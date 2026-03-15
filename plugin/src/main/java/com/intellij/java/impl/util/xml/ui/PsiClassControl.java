@@ -37,7 +37,6 @@ import consulo.xml.util.xml.GenericDomValue;
 import consulo.xml.util.xml.ui.DomWrapper;
 import consulo.xml.util.xml.ui.EditorTextFieldControl;
 import consulo.xml.util.xml.ui.PsiClassPanel;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -54,7 +53,7 @@ public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
     super(domWrapper, commitOnEveryChange);
   }
 
-  protected EditorTextField getEditorTextField(@Nonnull PsiClassPanel component) {
+  protected EditorTextField getEditorTextField(PsiClassPanel component) {
     return ((ReferenceEditorWithBrowseButton) component.getComponent(0)).getEditorTextField();
   }
 

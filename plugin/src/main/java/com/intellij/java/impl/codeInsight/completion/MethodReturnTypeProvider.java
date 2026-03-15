@@ -30,8 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -47,11 +46,11 @@ class MethodReturnTypeProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
+  public void addCompletions(CompletionParameters parameters, ProcessingContext context, CompletionResultSet result) {
     addProbableReturnTypes(parameters, result);
   }
 
-  static void addProbableReturnTypes(@Nonnull CompletionParameters parameters, final Consumer<LookupElement> consumer) {
+  static void addProbableReturnTypes(CompletionParameters parameters, final Consumer<LookupElement> consumer) {
     final PsiElement position = parameters.getPosition();
     PsiMethod method = PsiTreeUtil.getParentOfType(position, PsiMethod.class);
     assert method != null;
@@ -75,7 +74,7 @@ class MethodReturnTypeProvider implements CompletionProvider {
     }
   }
 
-  private static PsiType[] getReturnTypeCandidates(@Nonnull PsiMethod method) {
+  private static PsiType[] getReturnTypeCandidates(PsiMethod method) {
     PsiType lub = null;
     boolean hasVoid = false;
     for (PsiReturnStatement statement : PsiUtil.findReturnStatements(method)) {

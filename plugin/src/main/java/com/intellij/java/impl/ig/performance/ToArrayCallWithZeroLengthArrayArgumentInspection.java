@@ -27,9 +27,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCallWithZeroLengthArrayArgumentInspectionBase {
@@ -43,7 +41,6 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
   private static class ToArrayCallWithZeroLengthArrayArgumentFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.toArrayCallWithZeroLengthArrayArgumentQuickfix();
     }
@@ -77,7 +74,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspection extends ToArrayCal
       PsiType componentType = type.getDeepComponentType();
       String typeText = componentType.getCanonicalText();
       if (!(qualifier instanceof PsiMethodCallExpression)) {
-        @NonNls String replacementText = "new " + typeText + '[' + collectionText + ".size()]";
+        String replacementText = "new " + typeText + '[' + collectionText + ".size()]";
         String newExpressionText = PsiReplacementUtil.getElementText(methodCallExpression, argument, replacementText);
         PsiReplacementUtil.replaceExpression(methodCallExpression, newExpressionText);
         return;

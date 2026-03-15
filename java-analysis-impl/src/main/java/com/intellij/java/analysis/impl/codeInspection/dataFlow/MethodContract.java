@@ -17,7 +17,6 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -73,7 +72,6 @@ public abstract class MethodContract {
     };
   }
 
-  @Nonnull
   public static MethodContract singleConditionContract(ContractValue left,
                                                        RelationType relationType,
                                                        ContractValue right,
@@ -81,7 +79,6 @@ public abstract class MethodContract {
     return singleConditionContract(ContractValue.condition(left, relationType, right), returnValue);
   }
 
-  @Nonnull
   private static MethodContract singleConditionContract(ContractValue condition, ContractReturnValue returnValue) {
     return new MethodContract(returnValue) {
       @Override

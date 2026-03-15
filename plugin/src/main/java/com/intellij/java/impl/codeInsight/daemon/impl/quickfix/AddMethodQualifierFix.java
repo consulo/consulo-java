@@ -37,7 +37,6 @@ import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListPopup;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.TestOnly;
 
 import java.util.ArrayList;
@@ -54,7 +53,6 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
     myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
   }
 
-  @Nonnull
   @Override
   @RequiredReadAction
   public LocalizeValue getText() {
@@ -71,7 +69,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiMethodCallExpression element = myMethodCall.getElement();
     if (element == null || !element.isValid()) {
       return false;
@@ -122,7 +120,7 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredWriteAction
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementsForWrite(file)) {
       return;
     }
@@ -151,7 +149,6 @@ public class AddMethodQualifierFix implements SyntheticIntentionAction {
           return FINAL_CHOICE;
         }
 
-        @Nonnull
         @Override
         public String getTextFor(PsiVariable value) {
           return value.getName();

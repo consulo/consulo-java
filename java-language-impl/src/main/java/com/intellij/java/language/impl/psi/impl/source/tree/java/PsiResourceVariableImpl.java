@@ -27,14 +27,12 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements PsiResourceVariable {
   public PsiResourceVariableImpl() {
     super(JavaElementType.RESOURCE_VARIABLE);
   }
 
-  @Nonnull
   @Override
   public PsiElement[] getDeclarationScope() {
     final PsiResourceList resourceList = (PsiResourceList) getParent();
@@ -46,7 +44,6 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
     } : new PsiElement[]{resourceList};
   }
 
-  @Nonnull
   @Override
   public PsiTypeElement getTypeElement() {
     return PsiTreeUtil.getRequiredChildOfType(this, PsiTypeElement.class);
@@ -75,7 +72,7 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
   }
 
   @Override
-  public void accept(@Nonnull final PsiElementVisitor visitor) {
+  public void accept(final PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitResourceVariable(this);
     } else {
@@ -83,7 +80,6 @@ public class PsiResourceVariableImpl extends PsiLocalVariableImpl implements Psi
     }
   }
 
-  @Nonnull
   @Override
   public SearchScope getUseScope() {
     return new LocalSearchScope(getDeclarationScope());

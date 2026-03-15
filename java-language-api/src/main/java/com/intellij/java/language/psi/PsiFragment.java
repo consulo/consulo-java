@@ -2,7 +2,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a fragment of a template of a Java 21 Preview template expression.

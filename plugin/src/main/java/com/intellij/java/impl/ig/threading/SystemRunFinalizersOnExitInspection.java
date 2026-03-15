@@ -24,23 +24,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SystemRunFinalizersOnExitInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "CallToSystemRunFinalizersOnExit";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.systemRunFinalizersOnExitDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.systemRunFinalizersOnExitProblemDescriptor().get();
   }
@@ -52,7 +47,7 @@ public class SystemRunFinalizersOnExitInspection extends BaseInspection {
   private static class SystemRunFinalizersOnExitVisitor extends BaseInspectionVisitor {
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isRunFinalizersOnExit(expression)) {
         return;
@@ -65,7 +60,7 @@ public class SystemRunFinalizersOnExitInspection extends BaseInspection {
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
       String methodName = methodExpression.getReferenceName();
-      @NonNls String runFinalizers = "runFinalizersOnExit";
+      String runFinalizers = "runFinalizersOnExit";
       if (!runFinalizers.equals(methodName)) {
         return false;
       }

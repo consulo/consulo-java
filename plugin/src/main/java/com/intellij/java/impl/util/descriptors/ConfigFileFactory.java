@@ -22,7 +22,7 @@ import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik

@@ -29,8 +29,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +40,7 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
 
   private final SmartPsiElementPointer myMethodReferenceExpression;
 
-  public CreateMethodFromMethodReferenceFix(@Nonnull PsiMethodReferenceExpression methodRef) {
+  public CreateMethodFromMethodReferenceFix(PsiMethodReferenceExpression methodRef) {
     myMethodReferenceExpression = SmartPointerManager.getInstance(methodRef.getProject())
         .createSmartPsiElementPointer(methodRef);
 
@@ -82,7 +81,6 @@ public class CreateMethodFromMethodReferenceFix extends CreateFromUsageBaseFix {
   }
 
   @Override
-  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     List<PsiClass> targets = super.getTargetClasses(element);
     PsiMethodReferenceExpression call = getMethodReference();

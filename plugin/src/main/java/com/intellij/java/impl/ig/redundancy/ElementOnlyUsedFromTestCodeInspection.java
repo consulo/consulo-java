@@ -37,13 +37,11 @@ import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalInspection {
     private static final Key<Boolean> ONLY_USED_FROM_TEST_CODE = Key.create("ONLY_USED_FROM_TEST_CODE");
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.elementOnlyUsedFromTestCodeDisplayName();
@@ -51,7 +49,7 @@ public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalIn
 
     @Override
     @Nullable
-    public RefGraphAnnotator getAnnotator(@Nonnull RefManager refManager) {
+    public RefGraphAnnotator getAnnotator(RefManager refManager) {
         return new ElementOnlyUsedFromTestCodeAnnotator();
     }
 
@@ -59,12 +57,12 @@ public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalIn
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor processor,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
+        Object state
     ) {
         if (!isOnlyUsedFromTestCode(refEntity)) {
             return null;
@@ -108,7 +106,7 @@ public abstract class ElementOnlyUsedFromTestCodeInspection extends BaseGlobalIn
         return null;
     }
 
-    private static boolean isInsideTestClass(@Nonnull PsiElement e) {
+    private static boolean isInsideTestClass(PsiElement e) {
         PsiClass aClass = getTopLevelParentClass(e);
         return aClass != null && TestFrameworks.getInstance().isTestClass(aClass);
     }

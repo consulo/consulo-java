@@ -24,8 +24,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -38,19 +36,19 @@ public class GutterIconTooltipHelper
 	{
 	}
 
-	public static String composeText(@Nonnull PsiElement[] elements, @Nonnull String start, @Nonnull String pattern)
+	public static String composeText(PsiElement[] elements, String start, String pattern)
 	{
 		return composeText(Arrays.asList(elements), start, pattern);
 	}
 
-	public static String composeText(@Nonnull Iterable<? extends PsiElement> elements, @Nonnull String start, @Nonnull String pattern)
+	public static String composeText(Iterable<? extends PsiElement> elements, String start, String pattern)
 	{
 		return composeText(elements, start, pattern, "");
 	}
 
-	public static String composeText(@Nonnull Iterable<? extends PsiElement> elements, @Nonnull String start, @Nonnull String pattern, @Nonnull String postfix)
+	public static String composeText(Iterable<? extends PsiElement> elements, String start, String pattern, String postfix)
 	{
-		@NonNls StringBuilder result = new StringBuilder();
+		StringBuilder result = new StringBuilder();
 		result.append("<html><body>");
 		result.append(start);
 		Set<String> names = new LinkedHashSet<String>();
@@ -76,7 +74,7 @@ public class GutterIconTooltipHelper
 			names.add(descr);
 		}
 
-		@NonNls String sep = "";
+		String sep = "";
 		for(String name : names)
 		{
 			result.append(sep);

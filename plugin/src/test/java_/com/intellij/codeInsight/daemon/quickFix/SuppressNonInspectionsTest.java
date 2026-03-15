@@ -9,7 +9,6 @@ import com.intellij.java.impl.codeInspection.sillyAssignment.SillyAssignmentInsp
 import com.intellij.java.impl.codeInspection.uncheckedWarnings.UncheckedWarningLocalInspection;
 import com.intellij.java.impl.codeInspection.unneededThrows.RedundantThrowsDeclaration;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
-import jakarta.annotation.Nonnull;
 
 
 public abstract class SuppressNonInspectionsTest extends LightQuickFixTestCase {
@@ -20,7 +19,6 @@ public abstract class SuppressNonInspectionsTest extends LightQuickFixTestCase {
     //LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_3);
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

@@ -22,18 +22,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class NakedNotifyInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.nakedNotifyDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.nakedNotifyProblemDescriptor().get();
   }
@@ -45,7 +41,7 @@ public class NakedNotifyInspection extends BaseInspection {
   private static class NakedNotifyVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       if (!method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         return;
@@ -58,7 +54,7 @@ public class NakedNotifyInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @Nonnull PsiSynchronizedStatement statement) {
+      PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       PsiCodeBlock body = statement.getBody();
       if (body != null) {
@@ -84,7 +80,7 @@ public class NakedNotifyInspection extends BaseInspection {
         (PsiMethodCallExpression)firstExpression;
       PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.NOTIFY.equals(methodName) &&
           !HardcodedMethodConstants.NOTIFY_ALL.equals(methodName)) {

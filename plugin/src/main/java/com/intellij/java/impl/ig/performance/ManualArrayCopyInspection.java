@@ -31,15 +31,12 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ManualArrayCopyInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.manualArrayCopyDisplayName();
   }
@@ -50,7 +47,6 @@ public class ManualArrayCopyInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.manualArrayCopyProblemDescriptor().get();
   }
@@ -75,7 +71,6 @@ public class ManualArrayCopyInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.manualArrayCopyReplaceQuickfix();
     }
@@ -164,7 +159,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
       PsiExpression strippedLhsIndexExpression = ParenthesesUtils.stripParentheses(lhsIndexExpression);
       String toOffsetText = buildOffsetText(strippedLhsIndexExpression, variable,
                         limitExpression, decrement && (JavaTokenType.LT.equals(tokenType) || JavaTokenType.GT.equals(tokenType)));
-      @NonNls StringBuilder buffer = new StringBuilder(60);
+      StringBuilder buffer = new StringBuilder(60);
       buffer.append("System.arraycopy(");
       buffer.append(fromArrayText);
       buffer.append(", ");
@@ -277,7 +272,6 @@ public class ManualArrayCopyInspection extends BaseInspection {
       return (PsiArrayAccessExpression)unparenthesizedExpression;
     }
 
-    @NonNls
     @Nullable
     private static String buildLengthText(PsiExpression max, PsiExpression min, boolean plusOne) {
       max = ParenthesesUtils.stripParentheses(max);
@@ -373,7 +367,6 @@ public class ManualArrayCopyInspection extends BaseInspection {
       return result;
     }
 
-    @NonNls
     @Nullable
     private static String buildOffsetText(PsiExpression expression,
                                           PsiLocalVariable variable,
@@ -424,7 +417,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
       return collapseConstant(expression.getText(), variable);
     }
 
-    private static String collapseConstant(@NonNls String expressionText,
+    private static String collapseConstant(String expressionText,
                                            PsiElement context)
       throws IncorrectOperationException {
       Project project = context.getProject();
@@ -448,7 +441,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
 
     @Override
     public void visitForStatement(
-      @Nonnull PsiForStatement statement) {
+      PsiForStatement statement) {
       super.visitForStatement(statement);
       PsiStatement initialization = statement.getInitialization();
       if (!(initialization instanceof PsiDeclarationStatement)) {
@@ -552,7 +545,7 @@ public class ManualArrayCopyInspection extends BaseInspection {
 
     private static boolean expressionIsArrayCopy(
       @Nullable PsiExpression expression,
-      @Nonnull PsiVariable variable,
+      PsiVariable variable,
       @Nullable PsiVariable variable2) {
       PsiExpression strippedExpression =
         ParenthesesUtils.stripParentheses(expression);

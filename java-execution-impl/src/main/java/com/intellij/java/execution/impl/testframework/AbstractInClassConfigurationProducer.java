@@ -38,7 +38,6 @@ import consulo.module.Module;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -52,9 +51,9 @@ public abstract class AbstractInClassConfigurationProducer<T extends JavaTestCon
     @Override
     @RequiredUIAccess
     public void onFirstRun(
-        @Nonnull ConfigurationFromContext configuration,
-        @Nonnull ConfigurationContext fromContext,
-        @Nonnull Runnable performRunnable
+        ConfigurationFromContext configuration,
+        ConfigurationContext fromContext,
+        Runnable performRunnable
     ) {
         PsiElement psiElement = configuration.getSourceElement();
         if (psiElement instanceof PsiMethod || psiElement instanceof PsiClass) {

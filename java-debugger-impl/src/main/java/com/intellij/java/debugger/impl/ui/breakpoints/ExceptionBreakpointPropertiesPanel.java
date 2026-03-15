@@ -35,7 +35,6 @@ import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.util.DialogUtil;
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
-import jakarta.annotation.Nonnull;
 
 public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropertiesPanel<XBreakpoint<JavaExceptionBreakpointProperties>>
 {
@@ -51,7 +50,6 @@ public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropert
 	//  return null;
 	//}
 
-	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{
@@ -111,14 +109,14 @@ public class ExceptionBreakpointPropertiesPanel extends XBreakpointCustomPropert
 	//}
 
 	@Override
-	public void loadFrom(@Nonnull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
+	public void loadFrom(XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
 	{
 		myNotifyCaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_CAUGHT);
 		myNotifyUncaughtCheckBox.setSelected(breakpoint.getProperties().NOTIFY_UNCAUGHT);
 	}
 
 	@Override
-	public void saveTo(@Nonnull XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
+	public void saveTo(XBreakpoint<JavaExceptionBreakpointProperties> breakpoint)
 	{
 		breakpoint.getProperties().NOTIFY_CAUGHT = myNotifyCaughtCheckBox.isSelected();
 		breakpoint.getProperties().NOTIFY_UNCAUGHT = myNotifyUncaughtCheckBox.isSelected();

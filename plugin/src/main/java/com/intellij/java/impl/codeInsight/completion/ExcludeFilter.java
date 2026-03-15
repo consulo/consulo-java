@@ -18,8 +18,7 @@ package com.intellij.java.impl.codeInsight.completion;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -28,7 +27,7 @@ class ExcludeFilter implements ElementFilter
 {
 	private final PsiElement myExcluded;
 
-	public ExcludeFilter(@Nonnull PsiVariable excluded)
+	public ExcludeFilter(PsiVariable excluded)
 	{
 		myExcluded = excluded;
 	}

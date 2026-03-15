@@ -18,7 +18,6 @@ package com.intellij.psi.formatter.java;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.application.ApplicationManager;
 import consulo.undoRedo.CommandProcessor;
@@ -272,7 +271,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 	{
 		CommonCodeStyleSettings settings = getSettings();
 
-		@NonNls String text = "class Foo {\n" + "    void foo () {\n" + "        xxx = aaa + bbb \n" + "        + ccc + eee + ddd;\n" + "    }\n" + "}";
+		String text = "class Foo {\n" + "    void foo () {\n" + "        xxx = aaa + bbb \n" + "        + ccc + eee + ddd;\n" + "    }\n" + "}";
 
 
 		settings.ALIGN_MULTILINE_BINARY_OPERATION = true;
@@ -354,7 +353,7 @@ public abstract class JavaFormatterTest extends AbstractJavaFormatterTest
 	{
 		CommonCodeStyleSettings settings = getSettings();
 
-		@NonNls String text = "class Foo {\n" + "void foo () {\n" + "if (a) {\n" + "int i = 0;\n" + "}\n" + "}\n" + "}";
+		String text = "class Foo {\n" + "void foo () {\n" + "if (a) {\n" + "int i = 0;\n" + "}\n" + "}\n" + "}";
 
 		settings.BRACE_STYLE = CommonCodeStyleSettings.END_OF_LINE;
 		settings.METHOD_BRACE_STYLE = CommonCodeStyleSettings.END_OF_LINE;

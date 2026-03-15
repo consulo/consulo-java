@@ -30,8 +30,7 @@ import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -159,7 +158,6 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
     }
 
     @Override
-    @Nonnull
     public JComponent createComponent() {
         return myMainPanel;
     }

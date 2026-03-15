@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiKeyword;
 import consulo.language.impl.ast.CharTableImpl;
 import consulo.language.impl.psi.LeafPsiElement;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.Field;
 
@@ -37,7 +36,7 @@ public class PsiKeywordImpl extends LeafPsiElement implements PsiKeyword, PsiJav
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor){
+  public void accept(PsiElementVisitor visitor){
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitKeyword(this);
     }

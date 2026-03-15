@@ -38,8 +38,7 @@ import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.request.ClassPrepareRequest;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public class CompoundPositionManager extends PositionManagerEx implements MultiRequestPositionManager
@@ -148,7 +147,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 		}).executeSynchronously();
 	}
 
-	private static boolean checkCacheEntry(@Nullable SourcePosition position, @Nonnull Location location)
+	private static boolean checkCacheEntry(@Nullable SourcePosition position, Location location)
 	{
 		if(position == null)
 		{
@@ -169,15 +168,13 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	@Nonnull
-	public List<ReferenceType> getAllClasses(@Nonnull final SourcePosition classPosition)
+	public List<ReferenceType> getAllClasses(final SourcePosition classPosition)
 	{
 		return iterate(positionManager -> positionManager.getAllClasses(classPosition), Collections.emptyList(), classPosition);
 	}
 
 	@Override
-	@Nonnull
-	public List<Location> locationsOfLine(@Nonnull final ReferenceType type, @Nonnull SourcePosition position)
+	public List<Location> locationsOfLine(final ReferenceType type, SourcePosition position)
 	{
 		VirtualFile file = position.getFile().getVirtualFile();
 		if(file != null)
@@ -198,14 +195,13 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	public ClassPrepareRequest createPrepareRequest(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position)
+	public ClassPrepareRequest createPrepareRequest(final ClassPrepareRequestor requestor, final SourcePosition position)
 	{
 		return iterate(positionManager -> positionManager.createPrepareRequest(requestor, position), null, position);
 	}
 
-	@Nonnull
 	@Override
-	public List<ClassPrepareRequest> createPrepareRequests(@Nonnull final ClassPrepareRequestor requestor, @Nonnull final SourcePosition position)
+	public List<ClassPrepareRequest> createPrepareRequests(final ClassPrepareRequestor requestor, final SourcePosition position)
 	{
 		return iterate(positionManager ->
 		{
@@ -227,7 +223,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 
 	@Nullable
 	@Override
-	public XStackFrame createStackFrame(@Nonnull StackFrameProxyImpl frame, @Nonnull DebugProcessImpl debugProcess, @Nonnull Location location)
+	public XStackFrame createStackFrame(StackFrameProxyImpl frame, DebugProcessImpl debugProcess, Location location)
 	{
 		for(PositionManager positionManager : myPositionManagers)
 		{
@@ -255,7 +251,7 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 	}
 
 	@Override
-	public ThreeState evaluateCondition(@Nonnull EvaluationContext context, @Nonnull StackFrameProxyImpl frame, @Nonnull Location location, @Nonnull String expression)
+	public ThreeState evaluateCondition(EvaluationContext context, StackFrameProxyImpl frame, Location location, String expression)
 	{
 		for(PositionManager positionManager : myPositionManagers)
 		{

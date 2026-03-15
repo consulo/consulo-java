@@ -27,7 +27,6 @@ import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.popup.*;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -50,13 +49,11 @@ class PsiMethodListPopupStep implements ListPopupStep<SmartStepTarget> {
         myStepRunnable = stepRunnable;
     }
 
-    @Nonnull
     public ScopeHighlighter getScopeHighlighter() {
         return myScopeHighlighter;
     }
 
     @Override
-    @Nonnull
     public List<SmartStepTarget> getValues() {
         return myTargets;
     }
@@ -78,7 +75,6 @@ class PsiMethodListPopupStep implements ListPopupStep<SmartStepTarget> {
         return null;
     }
 
-    @Nonnull
     @Override
     public String getTextFor(SmartStepTarget value) {
         String label = value.getLabel();

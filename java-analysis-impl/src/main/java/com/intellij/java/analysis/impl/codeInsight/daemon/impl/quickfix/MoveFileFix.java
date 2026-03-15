@@ -22,7 +22,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -31,25 +30,24 @@ public class MoveFileFix implements SyntheticIntentionAction {
   private final VirtualFile myTarget;
   private final LocalizeValue myMessage;
 
-  public MoveFileFix(@Nonnull VirtualFile file, @Nonnull VirtualFile target, @Nonnull LocalizeValue message) {
+  public MoveFileFix(VirtualFile file, VirtualFile target, LocalizeValue message) {
     myFile = file;
     myTarget = target;
     myMessage = message;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return myMessage;
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return true;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (myFile.isValid() && myTarget.isValid()) {
       try {
         myFile.move(this, myTarget);

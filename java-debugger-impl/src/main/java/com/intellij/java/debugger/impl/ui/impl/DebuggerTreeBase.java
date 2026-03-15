@@ -37,9 +37,8 @@ import consulo.ui.ex.awt.util.ScreenUtil;
 import consulo.util.jdom.JDOMUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.text.StringTokenizer;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.tree.TreeModel;
@@ -100,7 +99,7 @@ public class DebuggerTreeBase extends DnDAwareTree implements Disposable
       rootSize.width -= (borderInsets.left + borderInsets.right) * 2;
       rootSize.height -= (borderInsets.top + borderInsets.bottom) * 2;
 
-      @NonNls StringBuilder tipBuilder = new StringBuilder();
+      StringBuilder tipBuilder = new StringBuilder();
       final String markupText = node.getMarkupTooltipText();
       if (markupText != null) {
         tipBuilder.append(markupText);

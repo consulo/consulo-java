@@ -23,8 +23,7 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
@@ -34,13 +33,12 @@ public class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntenti
     private final String myBoxedTypeName;
     private static final Logger LOG = Logger.getInstance(ReplacePrimitiveWithBoxedTypeAction.class);
 
-    public ReplacePrimitiveWithBoxedTypeAction(@Nonnull PsiTypeElement element, @Nonnull String typeName, @Nonnull String boxedTypeName) {
+    public ReplacePrimitiveWithBoxedTypeAction(PsiTypeElement element, String typeName, String boxedTypeName) {
         super(element);
         myPrimitiveName = typeName;
         myBoxedTypeName = boxedTypeName;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return LocalizeValue.localizeTODO("Convert '" + myPrimitiveName + "' to '" + myBoxedTypeName + "'");
@@ -48,10 +46,10 @@ public class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntenti
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         if (startElement instanceof PsiTypeElement) {
             PsiType type = ((PsiTypeElement) startElement).getType();
@@ -67,11 +65,11 @@ public class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntenti
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiType type = ((PsiTypeElement) startElement).getType();
         PsiType boxedType;

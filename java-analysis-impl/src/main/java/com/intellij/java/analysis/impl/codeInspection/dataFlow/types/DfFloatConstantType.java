@@ -2,7 +2,6 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.language.psi.PsiPrimitiveType;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 
@@ -11,21 +10,18 @@ class DfFloatConstantType extends DfConstantType<Float> implements DfFloatType {
     super(value);
   }
 
-  @Nonnull
   @Override
-  public DfType join(@Nonnull DfType other) {
+  public DfType join(DfType other) {
     if (other.isSuperType(this)) return other;
     if (other instanceof DfFloatType) return DfTypes.FLOAT;
     return DfTypes.TOP;
   }
 
-  @Nonnull
   @Override
   public PsiPrimitiveType getPsiType() {
     return DfFloatType.super.getPsiType();
   }
 
-  @Nonnull
   @Override
   public DfType tryNegate() {
     return new DfFloatNotValueType(Collections.singleton(getValue()));

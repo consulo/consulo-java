@@ -21,7 +21,6 @@ import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.file.LanguageFileType;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 public class JavaFileType extends LanguageFileType {
     public static final String DEFAULT_EXTENSION = "java";
@@ -33,25 +32,21 @@ public class JavaFileType extends LanguageFileType {
     }
 
     @Override
-    @Nonnull
     public String getId() {
         return "JAVA";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.filetypeDescriptionJava();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDescription() {
         return JavaLanguageLocalize.filetypeDescriptionJava();
     }
 
     @Override
-    @Nonnull
     public String getDefaultExtension() {
         return DEFAULT_EXTENSION;
     }

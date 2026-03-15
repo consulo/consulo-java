@@ -27,9 +27,8 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author max
@@ -107,7 +106,6 @@ public class JavaCommenter implements CodeDocumentationAwareCommenterEx {
     return node != null && (node.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA || node.getElementType() == JavaDocTokenType.DOC_TAG_VALUE_TOKEN);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

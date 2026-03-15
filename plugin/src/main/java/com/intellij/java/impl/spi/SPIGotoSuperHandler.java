@@ -25,7 +25,6 @@ import consulo.language.Language;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -44,7 +43,6 @@ public class SPIGotoSuperHandler extends BaseJavaGotoSuperHandler {
     return null;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return SPILanguage.INSTANCE;

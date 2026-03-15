@@ -26,7 +26,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -54,19 +53,16 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
   public boolean ignoreIntegerCharCasts = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "NumericCastThatLosesPrecision";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.castThatLosesPrecisionDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiType operandType = (PsiType)infos[0];
     return InspectionGadgetsLocalize.castThatLosesPrecisionProblemDescriptor(operandType.getPresentableText()).get();
@@ -87,7 +83,7 @@ public class CastThatLosesPrecisionInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
+    public void visitTypeCastExpression(PsiTypeCastExpression expression) {
       PsiType castType = expression.getType();
       if (!ClassUtils.isPrimitiveNumericType(castType)) {
         return;

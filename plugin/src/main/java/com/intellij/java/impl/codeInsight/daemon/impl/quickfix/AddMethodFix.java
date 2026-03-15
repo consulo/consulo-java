@@ -35,8 +35,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,17 +44,16 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     private static final Logger LOG = Logger.getInstance(AddMethodFix.class);
 
     private final PsiMethod myMethodPrototype;
-    @Nonnull
     private LocalizeValue myText = LocalizeValue.empty();
     private final List<String> myExceptions = new ArrayList<String>();
 
-    public AddMethodFix(@Nonnull PsiMethod methodPrototype, @Nonnull PsiClass implClass) {
+    public AddMethodFix(PsiMethod methodPrototype, PsiClass implClass) {
         super(implClass);
         myMethodPrototype = methodPrototype;
         setText(JavaQuickFixLocalize.addMethodText(methodPrototype.getName(), implClass.getName()));
     }
 
-    public AddMethodFix(@Nonnull String methodText, @Nonnull PsiClass implClass, @Nonnull String... exceptions) {
+    public AddMethodFix(String methodText, PsiClass implClass, String... exceptions) {
         this(createMethod(methodText, implClass), implClass);
         ContainerUtil.addAll(myExceptions, exceptions);
     }
@@ -79,11 +77,10 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
         return result;
     }
 
-    protected void setText(@Nonnull LocalizeValue text) {
+    protected void setText(LocalizeValue text) {
         myText = text;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myText;
@@ -91,10 +88,10 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiClass myClass = (PsiClass) startElement;
 
@@ -108,11 +105,11 @@ public class AddMethodFix extends LocalQuickFixAndIntentionActionOnPsiElement {
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiClass myClass = (PsiClass) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) {

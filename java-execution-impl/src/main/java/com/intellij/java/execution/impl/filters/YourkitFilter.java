@@ -39,8 +39,7 @@ import consulo.ui.ex.awt.popup.AWTPopupChooserBuilder;
 import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.regex.Matcher;
@@ -54,7 +53,7 @@ public class YourkitFilter implements Filter {
 
   private static final Pattern PATTERN = Pattern.compile("\\s*(\\w*)\\(\\):(-?\\d*), (\\w*\\.java)\\n");
 
-  public YourkitFilter(@Nonnull final Project project) {
+  public YourkitFilter(final Project project) {
     myProject = project;
   }
 

@@ -20,7 +20,6 @@ import static org.junit.Assert.assertNotNull;
 
 import javax.swing.ListModel;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.project.ui.view.tree.ViewSettings;
 import consulo.ide.impl.idea.ide.projectView.impl.AbstractProjectTreeStructure;
 import com.intellij.java.impl.ide.projectView.impl.ClassesTreeStructureProvider;
@@ -54,11 +53,11 @@ public abstract class BaseProjectViewTestCase extends TestSourceBasedTestCase {
     super.tearDown();
   }
 
-  protected void assertStructureEqual(PsiDirectory packageDirectory, @NonNls String expected) {
+  protected void assertStructureEqual(PsiDirectory packageDirectory, String expected) {
     assertStructureEqual(packageDirectory, expected, 17, myStructure);
   }
 
-  protected void assertStructureEqual(PsiDirectory packageDirectory, @NonNls String expected, int maxRowCount) {
+  protected void assertStructureEqual(PsiDirectory packageDirectory, String expected, int maxRowCount) {
     assertStructureEqual(packageDirectory, expected, maxRowCount, myStructure);
   }
 

@@ -24,7 +24,6 @@ import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -56,7 +55,6 @@ public class PsiMigrationManager {
    *
    * @return the migrate operation object.
    */
-  @Nonnull
   public PsiMigration startMigration() {
     LOG.assertTrue(myCurrentMigration == null);
     myCurrentMigration = new PsiMigrationImpl(this, JavaPsiFacade.getInstance(myProject), PsiManager.getInstance(myProject));

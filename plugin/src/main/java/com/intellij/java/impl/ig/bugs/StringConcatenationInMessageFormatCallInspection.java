@@ -29,20 +29,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class StringConcatenationInMessageFormatCallInspection extends BaseInspection {
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.stringConcatenationInMessageFormatCallDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.stringConcatenationInMessageFormatCallProblemDescriptor().get();
@@ -63,7 +58,6 @@ public class StringConcatenationInMessageFormatCallInspection extends BaseInspec
       this.variableName = variableName;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.stringConcatenationInFormatCallQuickfix();
     }
@@ -192,7 +186,7 @@ public class StringConcatenationInMessageFormatCallInspection extends BaseInspec
 
     private static boolean isMessageFormatCall(PsiMethodCallExpression expression) {
       PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls String referenceName = methodExpression.getReferenceName();
+      String referenceName = methodExpression.getReferenceName();
       if (!"format".equals(referenceName)) {
         return false;
       }

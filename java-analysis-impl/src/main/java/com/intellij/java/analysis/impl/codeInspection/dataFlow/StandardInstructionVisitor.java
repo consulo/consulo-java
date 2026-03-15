@@ -20,8 +20,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.ThreeState;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -102,10 +101,10 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return nextInstruction(instruction, runner, memState);
   }
 
-  private void checkArrayElementAssignability(@Nonnull DfaMemoryState memState,
-                                              @Nonnull DfaValue dfaSource,
-                                              @Nonnull DfaValue dfaDest,
-                                              @Nonnull PsiExpression lValue,
+  private void checkArrayElementAssignability(DfaMemoryState memState,
+                                              DfaValue dfaSource,
+                                              DfaValue dfaDest,
+                                              PsiExpression lValue,
                                               @Nullable PsiExpression rValue) {
     if (rValue == null) {
       return;
@@ -211,9 +210,9 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return nextInstruction(instruction, runner, memState);
   }
 
-  private static boolean applyBoundsCheck(@Nonnull DfaMemoryState memState,
-                                          @Nonnull DfaValue array,
-                                          @Nonnull DfaValue index) {
+  private static boolean applyBoundsCheck(DfaMemoryState memState,
+                                          DfaValue array,
+                                          DfaValue index) {
     DfaValueFactory factory = index.getFactory();
     DfaValue length = SpecialField.ARRAY_LENGTH.createValue(factory, array);
     DfaCondition lengthMoreThanZero = length.cond(RelationType.GT, factory.getInt(0));
@@ -286,7 +285,6 @@ public class StandardInstructionVisitor extends InstructionVisitor {
   }
 
   private static
-  @Nonnull
   DfaCallArguments getMethodReferenceCallArguments(PsiMethodReferenceExpression methodRef,
                                                    DfaValue qualifier,
                                                    DataFlowRunner runner,
@@ -362,9 +360,9 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return result.toArray(DfaInstructionState.EMPTY_ARRAY);
   }
 
-  private static boolean castTopOfStack(@Nonnull DfaValueFactory factory,
-                                        @Nonnull DfaMemoryState state,
-                                        @Nonnull TypeConstraint type) {
+  private static boolean castTopOfStack(DfaValueFactory factory,
+                                        DfaMemoryState state,
+                                        TypeConstraint type) {
     DfaValue value = state.peek();
     DfType dfType = state.getDfType(value);
     DfType result = dfType.meet(type.asDfType());
@@ -383,10 +381,10 @@ public class StandardInstructionVisitor extends InstructionVisitor {
   protected void onTypeCast(PsiTypeCastExpression castExpression, DfaMemoryState state, boolean castPossible) {
   }
 
-  protected void onMethodCall(@Nonnull DfaValue result,
-                              @Nonnull PsiExpression expression,
-                              @Nonnull DfaCallArguments arguments,
-                              @Nonnull DfaMemoryState memState) {
+  protected void onMethodCall(DfaValue result,
+                              PsiExpression expression,
+                              DfaCallArguments arguments,
+                              DfaMemoryState memState) {
 
   }
 
@@ -431,7 +429,6 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return result;
   }
 
-  @Nonnull
   protected DfaCallArguments popCall(MethodCallInstruction instruction, DfaValueFactory factory, DfaMemoryState memState) {
     DfaValue[] argValues = popCallArguments(instruction, factory, memState);
     final DfaValue qualifier = popQualifier(instruction, memState, argValues);
@@ -504,11 +501,11 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return argValues;
   }
 
-  protected void reportMutabilityViolation(boolean receiver, @Nonnull PsiElement anchor) {
+  protected void reportMutabilityViolation(boolean receiver, PsiElement anchor) {
   }
 
-  private DfaValue popQualifier(@Nonnull MethodCallInstruction instruction,
-                                @Nonnull DfaMemoryState memState,
+  private DfaValue popQualifier(MethodCallInstruction instruction,
+                                DfaMemoryState memState,
                                 @Nullable DfaValue[] argValues) {
     DfaValue value = memState.pop();
     if (instruction.getContext() instanceof PsiMethodReferenceExpression) {
@@ -534,8 +531,8 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return value;
   }
 
-  private static boolean mayLeakThis(@Nonnull MethodCallInstruction instruction,
-                                     @Nonnull DfaMemoryState memState, @Nullable DfaValue[] argValues) {
+  private static boolean mayLeakThis(MethodCallInstruction instruction,
+                                     DfaMemoryState memState, @Nullable DfaValue[] argValues) {
     MutationSignature signature = instruction.getMutationSignature();
     if (signature == MutationSignature.unknown()) {
       return true;
@@ -616,7 +613,7 @@ public class StandardInstructionVisitor extends InstructionVisitor {
 
   private <T extends PsiElement> DfaValue dereference(DfaMemoryState memState,
                                                       DfaValue value,
-                                                      @Nullable NullabilityProblemKind.NullabilityProblem<T> problem) {
+                                                      NullabilityProblemKind.@Nullable NullabilityProblem<T> problem) {
     boolean ok = checkNotNullable(memState, value, problem);
     if (value instanceof DfaTypeValue) {
       DfType dfType = value.getDfType().meet(NOT_NULL_OBJECT);
@@ -640,9 +637,8 @@ public class StandardInstructionVisitor extends InstructionVisitor {
   }
 
   private static
-  @Nonnull
   PsiMethod findSpecificMethod(PsiElement context,
-                               @Nonnull PsiMethod method,
+                               PsiMethod method,
                                @Nullable PsiType qualifierType) {
     if (qualifierType == null || !PsiUtil.canBeOverridden(method)) {
       return method;
@@ -660,9 +656,8 @@ public class StandardInstructionVisitor extends InstructionVisitor {
   }
 
   private static
-  @Nonnull
   DfaValue getMethodResultValue(MethodCallInstruction instruction,
-                                @Nonnull DfaCallArguments callArguments,
+                                DfaCallArguments callArguments,
                                 DfaMemoryState state, DfaValueFactory factory) {
     if (callArguments.myArguments != null) {
       PsiMethod method = instruction.getTargetMethod();
@@ -734,9 +729,8 @@ public class StandardInstructionVisitor extends InstructionVisitor {
   }
 
   private static
-  @Nonnull
-  PsiType narrowReturnType(@Nonnull PsiType returnType, @Nullable PsiType qualifierType,
-                           @Nonnull PsiMethod realMethod) {
+  PsiType narrowReturnType(PsiType returnType, @Nullable PsiType qualifierType,
+                           PsiMethod realMethod) {
     PsiClass containingClass = realMethod.getContainingClass();
     PsiType realReturnType = realMethod.getReturnType();
     if (containingClass != null && qualifierType instanceof PsiClassType) {
@@ -779,7 +773,7 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return precalculated;
   }
 
-  protected boolean checkNotNullable(DfaMemoryState state, @Nonnull DfaValue value, @Nullable NullabilityProblemKind.NullabilityProblem<?> problem) {
+  protected boolean checkNotNullable(DfaMemoryState state, DfaValue value, NullabilityProblemKind.@Nullable NullabilityProblem<?> problem) {
     boolean notNullable = state.checkNotNullable(value);
     if (notNullable && problem != null && problem.thrownException() != null) {
       state.applyCondition(value.cond(RelationType.NE, value.getFactory().getNull()));
@@ -879,7 +873,6 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return nextInstruction(instruction, runner, memState);
   }
 
-  @Nonnull
   private DfaInstructionState[] handleAndOrBinop(BinopInstruction instruction,
                                                  DataFlowRunner runner,
                                                  DfaMemoryState memState,
@@ -904,7 +897,6 @@ public class StandardInstructionVisitor extends InstructionVisitor {
   }
 
   private static
-  @Nonnull
   DfaValue concatStrings(DfaValue left,
                          DfaValue right,
                          DfaMemoryState memState,
@@ -924,7 +916,6 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return factory.fromDfType(SpecialField.STRING_LENGTH.asDfType(intRange(resultRange), stringType));
   }
 
-  @Nonnull
   private DfaInstructionState[] handleRelationBinop(BinopInstruction instruction,
                                                     DataFlowRunner runner,
                                                     DfaMemoryState memState,
@@ -976,7 +967,6 @@ public class StandardInstructionVisitor extends InstructionVisitor {
     return states.toArray(DfaInstructionState.EMPTY_ARRAY);
   }
 
-  @Nonnull
   private static RelationType[] splitRelation(RelationType relationType) {
     switch (relationType) {
       case LT:
@@ -1057,7 +1047,7 @@ public class StandardInstructionVisitor extends InstructionVisitor {
   private DfaInstructionState makeBooleanResult(ExpressionPushingInstruction<?> instruction,
                                                 DataFlowRunner runner,
                                                 DfaMemoryState memState,
-                                                @Nonnull ThreeState result) {
+                                                ThreeState result) {
     DfaValue value = result == ThreeState.UNSURE ? runner.getFactory().getUnknown() : runner.getFactory().getBoolean(result.toBoolean());
     pushExpressionResult(value, instruction, memState);
     return new DfaInstructionState(runner.getInstruction(instruction.getIndex() + 1), memState);

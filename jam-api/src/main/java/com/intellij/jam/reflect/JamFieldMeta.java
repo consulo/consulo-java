@@ -18,7 +18,7 @@ package com.intellij.jam.reflect;
 import com.intellij.jam.JamElement;
 import com.intellij.java.language.psi.PsiField;
 import consulo.language.sem.SemKey;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter

@@ -41,8 +41,7 @@ import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Sets;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -64,7 +63,7 @@ public class MagicCompletionContributor extends CompletionContributor {
 
   @RequiredReadAction
   @Override
-  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result) {
+  public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
     //if (parameters.getCompletionType() != CompletionType.SMART) return;
     PsiElement pos = parameters.getPosition();
     if (JavaKeywordCompletion.AFTER_DOT.accepts(pos)) {
@@ -79,8 +78,7 @@ public class MagicCompletionContributor extends CompletionContributor {
     addCompletionVariants(parameters, result, pos, allowedValues);
   }
 
-  @Nullable
-  private static MagicConstantInspection.AllowedValues getAllowedValues(@Nonnull PsiElement pos) {
+  private static MagicConstantInspection.@Nullable AllowedValues getAllowedValues(PsiElement pos) {
     MagicConstantInspection.AllowedValues allowedValues = null;
     for (Pair<PsiModifierListOwner, PsiType> pair : getMembersWithAllowedValues(pos)) {
       MagicConstantInspection.AllowedValues values = MagicConstantInspection.getAllowedValues(pair.first, pair.second, null);
@@ -113,8 +111,7 @@ public class MagicCompletionContributor extends CompletionContributor {
     return null;
   }
 
-  @Nonnull
-  public static List<Pair<PsiModifierListOwner, PsiType>> getMembersWithAllowedValues(@Nonnull PsiElement pos) {
+  public static List<Pair<PsiModifierListOwner, PsiType>> getMembersWithAllowedValues(PsiElement pos) {
     List<Pair<PsiModifierListOwner, PsiType>> result = ContainerUtil.newArrayList();
     if (IN_METHOD_CALL_ARGUMENT.accepts(pos)) {
       PsiCall call = PsiTreeUtil.getParentOfType(pos, PsiCall.class);
@@ -194,8 +191,8 @@ public class MagicCompletionContributor extends CompletionContributor {
     return result;
   }
 
-  private static void addCompletionVariants(@Nonnull final CompletionParameters parameters,
-                                            @Nonnull final CompletionResultSet result,
+  private static void addCompletionVariants(final CompletionParameters parameters,
+                                            final CompletionResultSet result,
                                             PsiElement pos,
                                             MagicConstantInspection.AllowedValues allowedValues) {
     final Set<PsiElement> allowed = Sets.newHashSet(new HashingStrategy<PsiElement>() {
@@ -261,7 +258,6 @@ public class MagicCompletionContributor extends CompletionContributor {
     return element;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -28,8 +28,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
@@ -67,7 +66,6 @@ public class GenericsUtil {
         return getLeastUpperBound(type1, type2, new LinkedHashSet<>(), manager);
     }
 
-    @Nonnull
     private static PsiType getLeastUpperBound(PsiType type1, PsiType type2, Set<Couple<PsiType>> compared, PsiManager manager) {
         if (type1 instanceof PsiCapturedWildcardType) {
             return getLeastUpperBound(((PsiCapturedWildcardType) type1).getUpperBound(), type2, compared, manager);
@@ -211,7 +209,6 @@ public class GenericsUtil {
         return PsiWildcardType.createExtends(manager, getLeastUpperBound(type1, type2, compared, manager));
     }
 
-    @Nonnull
     public static PsiClass[] getLeastUpperClasses(PsiClass aClass, PsiClass bClass) {
         if (InheritanceUtil.isInheritorOrSelf(aClass, bClass, true)) {
             return new PsiClass[]{bClass};
@@ -295,7 +292,7 @@ public class GenericsUtil {
         return null;
     }
 
-    public static boolean isFromExternalTypeLanguage(@Nonnull PsiType type) {
+    public static boolean isFromExternalTypeLanguage(PsiType type) {
         return type.getInternalCanonicalText().equals(type.getCanonicalText());
     }
 
@@ -582,7 +579,6 @@ public class GenericsUtil {
         return false;
     }
 
-    @Nonnull
     public static PsiClassType getExpectedGenericType(PsiElement context,
                                                       PsiClass aClass,
                                                       PsiClassType expectedType) {
@@ -599,7 +595,6 @@ public class GenericsUtil {
      * @param expectedType an expected supertype
      * @return a list of type arguments which correspond to passed type parameters
      */
-    @Nonnull
     public static List<PsiType> getExpectedTypeArguments(PsiElement context,
                                                          PsiClass aClass,
                                                          Iterable<? extends PsiTypeParameter> typeParams,

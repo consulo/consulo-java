@@ -19,12 +19,10 @@ import com.intellij.java.analysis.impl.refactoring.util.VariableData;
 import consulo.util.collection.ContainerUtil;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
-import jakarta.annotation.Nonnull;
 
 public abstract class MakeClassStaticTest extends LightRefactoringTestCase {
   private static final String TEST_ROOT = "/refactoring/makeClassStatic/";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

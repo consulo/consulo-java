@@ -31,18 +31,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringEqualsEmptyStringInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringEqualsEmptyStringDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         boolean useIsEmpty = (Boolean) infos[0];
         return useIsEmpty
@@ -63,7 +60,6 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
             this.useIsEmpty = useIsEmpty;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return useIsEmpty
@@ -170,7 +166,7 @@ public class StringEqualsEmptyStringInspection extends BaseInspection {
 
     private static class StringEqualsEmptyStringVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             PsiReferenceExpression methodExpression = call.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

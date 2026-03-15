@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ipp.varargs;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
@@ -25,7 +24,7 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 class ConvertVarargParameterToArrayPredicate
   implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@Nonnull PsiElement element) {
+  public boolean satisfiedBy(PsiElement element) {
     if (!(element instanceof PsiParameterList)) {
       return false;
     }

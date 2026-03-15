@@ -24,8 +24,7 @@ import consulo.language.sem.SemRegistrar;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.PairConsumer;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -58,7 +57,7 @@ public class JamMemberArchetype<Psi extends PsiModifierListOwner, Jam extends Ja
 
 
   @Nullable
-  public JamAnnotationMeta findAnnotationMeta(@Nonnull PsiAnnotation annotation) {
+  public JamAnnotationMeta findAnnotationMeta(PsiAnnotation annotation) {
     final String qname = annotation.getQualifiedName();
     for (final JamAnnotationMeta anno : myAnnos) {
       if (anno.getAnnoName().equals(qname)) {
@@ -91,12 +90,12 @@ public class JamMemberArchetype<Psi extends PsiModifierListOwner, Jam extends Ja
     return this;
   }
 
-  public JamMemberArchetype<Psi, Jam> addPomTargetProducer(@Nonnull PairConsumer<Jam, Consumer<PomTarget>> producer) {
+  public JamMemberArchetype<Psi, Jam> addPomTargetProducer(PairConsumer<Jam, Consumer<PomTarget>> producer) {
     myPomTargetProducers.add(producer);
     return this;
   }
 
-  public List<PomTarget> getAssociatedTargets(@Nonnull Jam element) {
+  public List<PomTarget> getAssociatedTargets(Jam element) {
     final ArrayList<PomTarget> list = ContainerUtil.newArrayList();
     final Consumer<PomTarget> targetConsumer = new Consumer<PomTarget>() {
       public void accept(PomTarget target) {
@@ -113,7 +112,7 @@ public class JamMemberArchetype<Psi extends PsiModifierListOwner, Jam extends Ja
   }
 
   @Nullable
-  public JamMemberMeta findChildMeta(@Nonnull PsiModifierListOwner member) {
+  public JamMemberMeta findChildMeta(PsiModifierListOwner member) {
     for (final JamChildrenQuery<?> child : myChildren) {
       final JamMemberMeta meta = ((JamChildrenQuery)child).getMeta(member);
       if (meta != null) {

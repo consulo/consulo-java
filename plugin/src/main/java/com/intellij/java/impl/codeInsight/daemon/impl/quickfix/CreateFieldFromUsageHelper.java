@@ -29,8 +29,7 @@ import consulo.language.extension.ByLanguageValue;
 import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Max Medvedev
@@ -40,11 +39,10 @@ public interface CreateFieldFromUsageHelper extends LanguageExtension {
   ExtensionPointCacheKey<CreateFieldFromUsageHelper, ByLanguageValue<CreateFieldFromUsageHelper>> KEY = ExtensionPointCacheKey.create("CreateFieldFromUsageHelper", LanguageOneToOne.build());
 
   @Nullable
-  static CreateFieldFromUsageHelper forLanguage(@Nonnull Language language) {
+  static CreateFieldFromUsageHelper forLanguage(Language language) {
     return Application.get().getExtensionPoint(CreateFieldFromUsageHelper.class).getOrBuildCache(KEY).get(language);
   }
 
-  @Nonnull
   public static Template setupTemplate(
       PsiField field,
       Object expectedTypes,
@@ -60,8 +58,7 @@ public interface CreateFieldFromUsageHelper extends LanguageExtension {
         CreateFromUsageBaseFix.getTargetSubstitutor(context));
   }
 
-  @Nonnull
-  public static PsiField insertField(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place) {
+  public static PsiField insertField(PsiClass targetClass, PsiField field, PsiElement place) {
     CreateFieldFromUsageHelper helper = forLanguage(field.getLanguage());
     if (helper == null) {
       throw new IllegalArgumentException("CreateFieldFromUsageHelper is not found for language: " + field.getLanguage());
@@ -69,7 +66,7 @@ public interface CreateFieldFromUsageHelper extends LanguageExtension {
     return helper.insertFieldImpl(targetClass, field, place);
   }
 
-  public abstract PsiField insertFieldImpl(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place);
+  public abstract PsiField insertFieldImpl(PsiClass targetClass, PsiField field, PsiElement place);
 
   public abstract Template setupTemplateImpl(
       PsiField field,

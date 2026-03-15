@@ -25,8 +25,7 @@ import consulo.language.psi.PsiNamedElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provide {@link BeanPropertyRenameHandler} if necessary.
@@ -36,7 +35,7 @@ public class BeanProperty {
 
   private final PsiMethod myMethod;
 
-  protected BeanProperty(@Nonnull PsiMethod method) {
+  protected BeanProperty(PsiMethod method) {
     myMethod = method;
   }
 
@@ -49,20 +48,17 @@ public class BeanProperty {
     };
   }
 
-  @Nonnull
   public String getName() {
     String name = PropertyUtil.getPropertyName(myMethod);
     return name == null ? "" : name;
   }
 
-  @Nonnull
   public PsiType getPropertyType() {
     PsiType type = PropertyUtil.getPropertyType(myMethod);
     assert type != null;
     return type;
   }
 
-  @Nonnull
   public PsiMethod getMethod() {
     return myMethod;
   }
@@ -102,7 +98,7 @@ public class BeanProperty {
   }
 
   @Nullable
-  public static BeanProperty createBeanProperty(@Nonnull PsiMethod method) {
+  public static BeanProperty createBeanProperty(PsiMethod method) {
     return PropertyUtil.isSimplePropertyAccessor(method) ? new BeanProperty(method) : null;
   }
 }

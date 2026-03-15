@@ -26,27 +26,22 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MismatchedArrayReadWriteInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "MismatchedReadAndWriteOfArray";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.mismatchedReadWriteArrayDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         boolean written = (Boolean) infos[0];
         return written
@@ -73,7 +68,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             super.visitField(field);
             if (!field.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
@@ -93,7 +88,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
         @Override
         public void visitLocalVariable(
-            @Nonnull PsiLocalVariable variable
+            PsiLocalVariable variable
         ) {
             super.visitLocalVariable(variable);
             PsiCodeBlock codeBlock =
@@ -179,14 +174,14 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
             return false;
         }
 
-        public static boolean variableIsWritten(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
+        public static boolean variableIsWritten(PsiVariable variable, PsiElement context) {
             VariableReadWriteVisitor visitor =
                 new VariableReadWriteVisitor(variable, true);
             context.accept(visitor);
             return visitor.isPassed();
         }
 
-        public static boolean variableIsRead(@Nonnull PsiVariable variable, @Nonnull PsiElement context) {
+        public static boolean variableIsRead(PsiVariable variable, PsiElement context) {
             VariableReadWriteVisitor visitor =
                 new VariableReadWriteVisitor(variable, false);
             context.accept(visitor);
@@ -195,18 +190,17 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
         static class VariableReadWriteVisitor extends JavaRecursiveElementVisitor {
 
-            @Nonnull
             private final PsiVariable variable;
             private final boolean write;
             private boolean passed = false;
 
-            VariableReadWriteVisitor(@Nonnull PsiVariable variable, boolean write) {
+            VariableReadWriteVisitor(PsiVariable variable, boolean write) {
                 this.variable = variable;
                 this.write = write;
             }
 
             @Override
-            public void visitElement(@Nonnull PsiElement element) {
+            public void visitElement(PsiElement element) {
                 if (!passed) {
                     super.visitElement(element);
                 }
@@ -238,7 +232,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
             @Override
             public void visitMethodCallExpression(
-                @Nonnull PsiMethodCallExpression call
+                PsiMethodCallExpression call
             ) {
                 if (passed) {
                     return;
@@ -268,7 +262,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
             ) {
                 PsiReferenceExpression methodExpression =
                     call.getMethodExpression();
-                @NonNls String name =
+                String name =
                     methodExpression.getReferenceName();
                 if (!"arraycopy".equals(name)) {
                     return false;
@@ -293,7 +287,7 @@ public class MismatchedArrayReadWriteInspection extends BaseInspection {
 
             @Override
             public void visitNewExpression(
-                @Nonnull PsiNewExpression newExpression
+                PsiNewExpression newExpression
             ) {
                 if (passed) {
                     return;

@@ -16,7 +16,6 @@
 package com.intellij.java.impl.refactoring.ui;
 
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -28,5 +27,5 @@ public interface TypeSelectorManager {
 
   boolean isSuggestedType(String fqName);
 
-  void typeSelected(@Nonnull PsiType type);
+  void typeSelected(PsiType type);
 }

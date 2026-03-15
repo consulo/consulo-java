@@ -20,7 +20,6 @@ import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.action.CodeInsightAction;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -33,7 +32,6 @@ public class SliceForwardAction extends CodeInsightAction {
         super(JavaLocalize.actionSliceForwardText(), JavaLocalize.actionSliceForwardDescription());
     }
 
-    @Nonnull
     @Override
     protected CodeInsightActionHandler getHandler() {
         return myHandler;

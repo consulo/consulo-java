@@ -42,7 +42,6 @@ import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awt.util.TableUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -74,7 +73,7 @@ public class ReplaceConstructorWithBuilderDialog extends RefactoringDialog {
     private Table myTable;
     private static final String RECENT_KEYS = "ReplaceConstructorWithBuilder.RECENT_KEYS";
 
-    protected ReplaceConstructorWithBuilderDialog(@Nonnull Project project, PsiMethod[] constructors) {
+    protected ReplaceConstructorWithBuilderDialog(Project project, PsiMethod[] constructors) {
         super(project, false);
         myConstructors = constructors;
         for (PsiMethod constructor : constructors) {

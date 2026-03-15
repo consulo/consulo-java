@@ -31,7 +31,6 @@ import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.util.lang.Couple;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Supplier;
 
@@ -58,11 +57,10 @@ public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
         }
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -109,7 +107,7 @@ public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
 
         return new JavaElementVisitor() {
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 super.visitClass(aClass);
                 CheckResult checkResult = processClass(aClass, myEquals, myHashCode);
                 if (checkResult.hasInconsistency()) {
@@ -136,19 +134,16 @@ public class EqualsAndHashcode extends BaseJavaBatchLocalInspectionTool {
         return new CheckResult(hasEquals, hasHashCode);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionEqualsHashcodeDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return LocalizeValue.empty();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "EqualsAndHashcode";

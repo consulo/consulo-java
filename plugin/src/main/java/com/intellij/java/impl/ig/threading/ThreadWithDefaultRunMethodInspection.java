@@ -24,22 +24,18 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.threadWithDefaultRunMethodDisplayName();
   }
 
-  @Nonnull
   public String getID() {
     return "InstantiatingAThreadWithDefaultRunMethod";
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.threadWithDefaultRunMethodProblemDescriptor().get();
   }
@@ -52,7 +48,7 @@ public class ThreadWithDefaultRunMethodInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       PsiAnonymousClass anonymousClass =
         expression.getAnonymousClass();

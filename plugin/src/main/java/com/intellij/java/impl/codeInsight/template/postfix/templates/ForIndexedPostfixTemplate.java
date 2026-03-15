@@ -30,16 +30,15 @@ import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
-  protected ForIndexedPostfixTemplate(@Nonnull String key, @Nonnull String example) {
+  protected ForIndexedPostfixTemplate(String key, String example) {
     super(key, example);
   }
 
   @Override
-  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
+  public boolean isApplicable(PsiElement context, Document copyDocument, int newOffset) {
     PsiExpression expr = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     return expr != null && (JavaPostfixTemplatesUtils.isNumber(expr.getType()) ||
         JavaPostfixTemplatesUtils.isArray(expr.getType()) ||
@@ -47,7 +46,7 @@ public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
+  public void expand(PsiElement context, Editor editor) {
     PsiExpression expr = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     if (expr == null) {
       PostfixTemplatesUtils.showErrorHint(context.getProject(), editor);
@@ -85,17 +84,15 @@ public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
     manager.startTemplate(editor, template);
   }
 
-  @Nonnull
-  protected abstract String getComparativeSign(@Nonnull PsiExpression expr);
+  protected abstract String getComparativeSign(PsiExpression expr);
 
   @Nullable
-  protected abstract Pair<String, String> calculateBounds(@Nonnull PsiExpression expression);
+  protected abstract Pair<String, String> calculateBounds(PsiExpression expression);
 
-  @Nonnull
   protected abstract String getOperator();
 
   @Nullable
-  protected static String getExpressionBound(@Nonnull PsiExpression expr) {
+  protected static String getExpressionBound(PsiExpression expr) {
     PsiType type = expr.getType();
     if (JavaPostfixTemplatesUtils.isNumber(type)) {
       return expr.getText();
@@ -107,8 +104,7 @@ public abstract class ForIndexedPostfixTemplate extends PostfixTemplate {
     return null;
   }
 
-  @Nonnull
-  private static String suggestIndexType(@Nonnull PsiExpression expr) {
+  private static String suggestIndexType(PsiExpression expr) {
     PsiType type = expr.getType();
     if (JavaPostfixTemplatesUtils.isNumber(type)) {
       return type.getCanonicalText();

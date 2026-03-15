@@ -25,7 +25,6 @@ import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +72,6 @@ public class PsiLabelReference implements PsiReference {
     }
 
     @Override
-    @Nonnull
     public String getCanonicalText(){
       return getElement().getText();
     }
@@ -85,7 +83,7 @@ public class PsiLabelReference implements PsiReference {
     }
 
     @Override
-    public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException{
+    public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException{
       if(element instanceof PsiLabeledStatement){
         myIdentifier = (PsiIdentifier) PsiImplUtil.setName(myIdentifier, ((PsiLabeledStatement)element).getName());
         return myIdentifier;
@@ -99,7 +97,6 @@ public class PsiLabelReference implements PsiReference {
     }
 
   @Override
-  @Nonnull
   public String[] getVariants() {
     final List<String> result = new ArrayList<String>();
     PsiElement context = myStatement;

@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,19 +34,16 @@ public class InstanceofChainInspection extends BaseInspection {
   public boolean ignoreInstanceofOnLibraryClasses = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "ChainOfInstanceofChecks";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.chainOfInstanceofChecksDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.chainOfInstanceofChecksProblemDescriptor().get();
   }
@@ -68,7 +64,7 @@ public class InstanceofChainInspection extends BaseInspection {
 
     @Override
     public void visitIfStatement(
-      @Nonnull PsiIfStatement statement) {
+      PsiIfStatement statement) {
       super.visitIfStatement(statement);
       PsiElement parent = statement.getParent();
       if (parent instanceof PsiIfStatement) {

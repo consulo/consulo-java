@@ -26,7 +26,6 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.language.psi.util.ClassUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.application.util.function.Processor;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -36,7 +35,6 @@ public class SPIClassProviderReferenceElement extends SPIPackageOrClassReference
     super(node);
   }
 
-  @Nonnull
   @Override
   public Object[] getVariants() {
     String name = getContainingFile().getName();

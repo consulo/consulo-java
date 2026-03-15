@@ -39,8 +39,7 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 
@@ -59,7 +58,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
     private Color myBackgroundColor;
     private SourcePosition mySourcePosition;
 
-    public StackFrameDescriptorImpl(@Nonnull StackFrameProxyImpl frame, @Nonnull MethodsTracker tracker) {
+    public StackFrameDescriptorImpl(StackFrameProxyImpl frame, MethodsTracker tracker) {
         myFrame = frame;
 
         try {
@@ -115,12 +114,10 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
     }
 
     @Override
-    @Nonnull
     public StackFrameProxyImpl getFrameProxy() {
         return myFrame;
     }
 
-    @Nonnull
     @Override
     public DebugProcess getDebugProcess() {
         return myFrame.getVirtualMachine().getDebugProcess();

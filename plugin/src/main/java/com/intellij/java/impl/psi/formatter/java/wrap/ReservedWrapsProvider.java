@@ -18,7 +18,7 @@ package com.intellij.java.impl.psi.formatter.java.wrap;
 import consulo.language.codeStyle.Wrap;
 import com.intellij.java.impl.psi.formatter.java.AbstractJavaBlock;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Defines contract for using predefined reserved wraps.

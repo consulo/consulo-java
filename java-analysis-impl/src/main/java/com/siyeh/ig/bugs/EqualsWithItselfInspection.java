@@ -24,22 +24,17 @@ import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.localize.LocalizeValue;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
  */
 public abstract class EqualsWithItselfInspection extends BaseInspection {
-  @Nls
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.equalsWithItselfDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.equalsWithItselfProblemDescriptor().get();

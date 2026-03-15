@@ -9,9 +9,8 @@ import consulo.language.psi.*;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +87,7 @@ public class DefaultMoveDirectoryWithClassesHelper extends MoveDirectoryWithClas
   private static class MyUsageInfo extends UsageInfo {
     private final PsiFileSystemItem myFile;
 
-    public MyUsageInfo(@Nonnull PsiReference reference, PsiFileSystemItem file) {
+    public MyUsageInfo(PsiReference reference, PsiFileSystemItem file) {
       super(reference);
       myFile = file;
     }

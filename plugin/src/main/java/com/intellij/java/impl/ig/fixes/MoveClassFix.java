@@ -28,15 +28,13 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandlerFactor
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class MoveClassFix extends InspectionGadgetsFix {
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.moveClassQuickfix();
   }
 
-  public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
+  public void doFix(final Project project, ProblemDescriptor descriptor) {
     PsiElement nameElement = descriptor.getPsiElement();
     final PsiClass aClass = (PsiClass)nameElement.getParent();
     Application application = ApplicationManager.getApplication();

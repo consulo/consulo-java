@@ -28,8 +28,7 @@ import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,27 +36,22 @@ import java.util.List;
  * @author peter
  */
 class ClosureFolding {
-  @Nonnull
   private final PsiAnonymousClass myAnonymousClass;
-  @Nonnull
   private final PsiNewExpression myNewExpression;
   @Nullable
   private final PsiClass myBaseClass;
-  @Nonnull
   private final JavaFoldingBuilderBase myBuilder;
-  @Nonnull
   private final PsiMethod myMethod;
-  @Nonnull
   final PsiCodeBlock methodBody;
   private final boolean myQuick;
 
-  private ClosureFolding(@Nonnull PsiAnonymousClass anonymousClass,
-                         @Nonnull PsiNewExpression newExpression,
+  private ClosureFolding(PsiAnonymousClass anonymousClass,
+                         PsiNewExpression newExpression,
                          boolean quick,
                          @Nullable PsiClass baseClass,
-                         @Nonnull JavaFoldingBuilderBase builder,
-                         @Nonnull PsiMethod method,
-                         @Nonnull PsiCodeBlock methodBody) {
+                         JavaFoldingBuilderBase builder,
+                         PsiMethod method,
+                         PsiCodeBlock methodBody) {
     myAnonymousClass = anonymousClass;
     myNewExpression = newExpression;
     myQuick = quick;
@@ -187,7 +181,7 @@ class ClosureFolding {
     return argumentList != null && argumentList.getExpressions().length == 0;
   }
 
-  private static boolean hasOnlyOneLambdaMethod(@Nonnull PsiAnonymousClass anonymousClass, boolean checkResolve) {
+  private static boolean hasOnlyOneLambdaMethod(PsiAnonymousClass anonymousClass, boolean checkResolve) {
     PsiField[] fields = anonymousClass.getFields();
     if (fields.length != 0) {
       if (fields.length == 1 && HighlightUtilBase.SERIAL_VERSION_UID_FIELD_NAME.equals(fields[0].getName()) && fields[0].hasModifierProperty(PsiModifier.STATIC)) {
@@ -216,7 +210,7 @@ class ClosureFolding {
     return true;
   }
 
-  static boolean seemsLikeLambda(@Nullable PsiClass baseClass, @Nonnull PsiElement context) {
+  static boolean seemsLikeLambda(@Nullable PsiClass baseClass, PsiElement context) {
     if (baseClass == null || !PsiUtil.hasDefaultConstructor(baseClass, true)) {
       return false;
     }

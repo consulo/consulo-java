@@ -15,7 +15,6 @@
  */
 package com.siyeh.ig.psiutils;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import com.intellij.java.language.psi.PsiArrayInitializerExpression;
@@ -25,17 +24,16 @@ import com.intellij.java.language.psi.PsiVariable;
 
 class VariableUsedInArrayInitializerVisitor extends JavaRecursiveElementVisitor {
 
-  @Nonnull
   private final PsiVariable variable;
   private boolean passed = false;
 
-  public VariableUsedInArrayInitializerVisitor(@Nonnull PsiVariable variable) {
+  public VariableUsedInArrayInitializerVisitor(PsiVariable variable) {
     super();
     this.variable = variable;
   }
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (!passed) {
       super.visitElement(element);
     }

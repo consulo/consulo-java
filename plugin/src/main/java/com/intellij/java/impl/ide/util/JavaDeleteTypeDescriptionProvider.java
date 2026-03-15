@@ -22,14 +22,13 @@ import consulo.language.editor.refactoring.util.DeleteTypeDescriptionLocation;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class JavaDeleteTypeDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(@Nonnull PsiElement element, @Nonnull ElementDescriptionLocation location) {
+  public String getElementDescription(PsiElement element, ElementDescriptionLocation location) {
     if (location instanceof DeleteTypeDescriptionLocation deleteTypeDescriptionLocation && deleteTypeDescriptionLocation.isPlural()) {
       if (element instanceof PsiMethod) {
         return IdeLocalize.promptDeleteMethod(2).get();

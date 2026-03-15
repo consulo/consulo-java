@@ -4,7 +4,6 @@ import com.intellij.java.language.annoPackages.AnnotationPackageSupport;
 import com.intellij.java.language.codeInsight.Nullability;
 import consulo.application.Application;
 import consulo.component.extension.ExtensionPointCacheKey;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
 
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ class AnnotationPackageSupportCache {
       return new AnnotationPackageSupportCache(packageSupports);
     });
 
-  @Nonnull
   static AnnotationPackageSupportCache get(Application application) {
     return application.getExtensionPoint(AnnotationPackageSupport.class).getOrBuildCache(CACHE_KEY);
   }

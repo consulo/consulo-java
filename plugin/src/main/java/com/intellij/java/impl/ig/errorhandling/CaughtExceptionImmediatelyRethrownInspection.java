@@ -34,22 +34,19 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @ExtensionImpl
 public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.caughtExceptionImmediatelyRethrownDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.caughtExceptionImmediatelyRethrownProblemDescriptor().get();
     }
@@ -75,7 +72,6 @@ public class CaughtExceptionImmediatelyRethrownInspection extends BaseInspection
             this.removeTryCatch = removeTryCatch;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
           return removeTryCatch

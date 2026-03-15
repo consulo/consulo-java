@@ -35,12 +35,11 @@ import consulo.module.content.ProjectRootManager;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class JavaTestFramework implements TestFramework {
   @Override
-  public boolean isLibraryAttached(@Nonnull consulo.module.Module module) {
+  public boolean isLibraryAttached(consulo.module.Module module) {
     GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
     PsiClass c = JavaPsiFacade.getInstance(module.getProject()).findClass(getMarkerClassFQName(), scope);
     return c != null;
@@ -63,12 +62,12 @@ public abstract class JavaTestFramework implements TestFramework {
   protected abstract String getMarkerClassFQName();
 
   @Override
-  public boolean isTestClass(@Nonnull PsiElement clazz) {
+  public boolean isTestClass(PsiElement clazz) {
     return clazz instanceof PsiClass && isTestClass((PsiClass)clazz, false);
   }
 
   @Override
-  public boolean isPotentialTestClass(@Nonnull PsiElement clazz) {
+  public boolean isPotentialTestClass(PsiElement clazz) {
     return clazz instanceof PsiClass && isTestClass((PsiClass)clazz, true);
   }
 
@@ -85,24 +84,24 @@ public abstract class JavaTestFramework implements TestFramework {
 
   @Override
   @Nullable
-  public PsiElement findSetUpMethod(@Nonnull PsiElement clazz) {
+  public PsiElement findSetUpMethod(PsiElement clazz) {
     return clazz instanceof PsiClass ? findSetUpMethod((PsiClass)clazz) : null;
   }
 
   @Nullable
-  protected abstract PsiMethod findSetUpMethod(@Nonnull PsiClass clazz);
+  protected abstract PsiMethod findSetUpMethod(PsiClass clazz);
 
   @Override
   @Nullable
-  public PsiElement findTearDownMethod(@Nonnull PsiElement clazz) {
+  public PsiElement findTearDownMethod(PsiElement clazz) {
     return clazz instanceof PsiClass ? findTearDownMethod((PsiClass)clazz) : null;
   }
 
   @Nullable
-  protected abstract PsiMethod findTearDownMethod(@Nonnull PsiClass clazz);
+  protected abstract PsiMethod findTearDownMethod(PsiClass clazz);
 
   @Override
-  public PsiElement findOrCreateSetUpMethod(@Nonnull PsiElement clazz) throws IncorrectOperationException {
+  public PsiElement findOrCreateSetUpMethod(PsiElement clazz) throws IncorrectOperationException {
     return clazz instanceof PsiClass ? findOrCreateSetUpMethod((PsiClass)clazz) : null;
   }
 
@@ -112,7 +111,6 @@ public abstract class JavaTestFramework implements TestFramework {
   }
 
   @Override
-  @Nonnull
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }

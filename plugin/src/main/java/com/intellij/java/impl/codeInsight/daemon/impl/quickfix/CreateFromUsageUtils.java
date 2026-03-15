@@ -75,9 +75,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -154,7 +152,7 @@ public class CreateFromUsageUtils {
 
     JavaTemplateUtil.setClassAndMethodNameProperties(properties, aClass, method);
 
-    @NonNls String methodText;
+    String methodText;
     CodeStyleManager csManager = CodeStyleManager.getInstance(method.getProject());
     try {
       String bodyText = template.getText(properties);
@@ -259,7 +257,7 @@ public class CreateFromUsageUtils {
       PsiType argType = exp == null ? arg.second : exp.getType();
       SuggestedNameInfo suggestedInfo = JavaCodeStyleManager.getInstance(psiManager.getProject()).suggestVariableName(
         VariableKind.PARAMETER, null, exp, argType);
-      @NonNls String[] names = suggestedInfo.names; //TODO: callback about used name
+      String[] names = suggestedInfo.names; //TODO: callback about used name
 
       if (names.length == 0) {
         names = new String[]{"p" + i};
@@ -532,7 +530,7 @@ public class CreateFromUsageUtils {
     final List<PsiVariable> list = new ArrayList<PsiVariable>();
     VariablesProcessor varproc = new VariablesProcessor("", true, list){
       @Override
-      public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+      public boolean execute(PsiElement element, ResolveState state) {
         if(!(element instanceof PsiField) ||
            JavaPsiFacade.getInstance(element.getProject()).getResolveHelper().isAccessible((PsiField)element, expression, null)) {
           return super.execute(element, state);
@@ -1011,7 +1009,6 @@ public class CreateFromUsageUtils {
     }
 
     @Override
-    @Nonnull
     public LookupElement[] calculateLookupItems(ExpressionContext context) {
       Project project = context.getProject();
       int offset = context.getStartOffset();

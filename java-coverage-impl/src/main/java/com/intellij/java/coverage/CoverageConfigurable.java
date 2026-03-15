@@ -39,8 +39,7 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -183,7 +182,6 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
         configuration.setTrackTestFolders(myTrackTestSourcesCb.isSelected());
     }
 
-    @Nonnull
     @Override
     protected JComponent createEditor() {
         JPanel result = new JPanel(new GridBagLayout());
@@ -309,15 +307,14 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
 
     private static class CoverageRunnerItem {
         private CoverageRunner myRunner;
-        @Nonnull
         private String myRunnerId;
 
-        private CoverageRunnerItem(@Nonnull CoverageRunner runner) {
+        private CoverageRunnerItem(CoverageRunner runner) {
             myRunner = runner;
             myRunnerId = runner.getId();
         }
 
-        private CoverageRunnerItem(@Nonnull String runnerId) {
+        private CoverageRunnerItem(String runnerId) {
             myRunnerId = runnerId;
         }
 
@@ -325,7 +322,6 @@ public class CoverageConfigurable extends SettingsEditor<RunConfigurationBase> {
             return myRunner;
         }
 
-        @Nonnull
         public String getRunnerId() {
             return myRunnerId;
         }

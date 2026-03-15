@@ -21,7 +21,7 @@ import consulo.language.editor.moveUpDown.MethodUpDownUtil;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 

@@ -25,19 +25,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ObjectToStringInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.defaultTostringCallDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.defaultTostringCallProblemDescriptor().get();
     }
@@ -62,7 +58,7 @@ public class ObjectToStringInspection extends BaseInspection {
         }
 
         @Override
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+        public void visitAssignmentExpression(PsiAssignmentExpression expression) {
             super.visitAssignmentExpression(expression);
             IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSEQ)) {
@@ -80,7 +76,7 @@ public class ObjectToStringInspection extends BaseInspection {
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls String name = methodExpression.getReferenceName();
+            String name = methodExpression.getReferenceName();
             if (HardcodedMethodConstants.TO_STRING.equals(name)) {
                 PsiExpressionList argumentList = expression.getArgumentList();
                 PsiExpression[] arguments = argumentList.getExpressions();

@@ -22,7 +22,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import java.util.HashMap;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -59,7 +58,7 @@ class VariableAccessVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitReferenceExpression(@Nonnull PsiReferenceExpression ref) {
+  public void visitReferenceExpression(PsiReferenceExpression ref) {
     super.visitReferenceExpression(ref);
     PsiExpression qualifier = ref.getQualifierExpression();
     if (qualifier != null && !(qualifier instanceof PsiThisExpression)) {
@@ -126,7 +125,7 @@ class VariableAccessVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitMethod(@Nonnull PsiMethod method) {
+  public void visitMethod(PsiMethod method) {
     if (method.hasModifierProperty(PsiModifier.PRIVATE)) {
       if (unusedMethods.contains(method)) {
         return;
@@ -319,14 +318,14 @@ class VariableAccessVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
+  public void visitClassInitializer(PsiClassInitializer initializer) {
     m_inInitializer = true;
     super.visitClassInitializer(initializer);
     m_inInitializer = false;
   }
 
   @Override
-  public void visitField(@Nonnull PsiField field) {
+  public void visitField(PsiField field) {
     m_inInitializer = true;
     super.visitField(field);
     m_inInitializer = false;

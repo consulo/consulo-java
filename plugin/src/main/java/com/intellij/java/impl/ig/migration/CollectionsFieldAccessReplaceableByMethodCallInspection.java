@@ -28,22 +28,16 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection extends BaseInspection {
 
   @Override
-  @Nls
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallProblemDescriptor(infos[1]).get();
   }
@@ -65,12 +59,10 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
       replacementText = getCollectionsMethodCallText(referenceName);
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.collectionsFieldAccessReplaceableByMethodCallQuickfix(replacementText);
     }
 
-    @NonNls
     private static String getCollectionsMethodCallText(
         PsiReferenceExpression referenceExpression) {
       String referenceName = referenceExpression.getReferenceName();
@@ -117,15 +109,13 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
       }
     }
 
-    @NonNls
     private static String getUntypedCollectionsMethodCallText(
         String referenceName) {
       return "Collections." + getCollectionsMethodCallText(referenceName);
     }
 
-    @NonNls
     private static String getCollectionsMethodCallText(
-        @NonNls String referenceName) {
+        String referenceName) {
       if ("EMPTY_LIST".equals(referenceName)) {
         return "emptyList()";
       } else if ("EMPTY_MAP".equals(referenceName)) {
@@ -169,8 +159,8 @@ public abstract class CollectionsFieldAccessReplaceableByMethodCallInspection ex
         return;
       }
       super.visitReferenceExpression(expression);
-      @NonNls String name = expression.getReferenceName();
-      @NonNls String replacement;
+      String name = expression.getReferenceName();
+      String replacement;
       if ("EMPTY_LIST".equals(name)) {
         replacement = "emptyList()";
       } else if ("EMPTY_MAP".equals(name)) {

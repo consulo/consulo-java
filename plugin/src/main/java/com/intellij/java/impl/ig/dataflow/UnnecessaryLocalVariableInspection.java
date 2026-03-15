@@ -29,7 +29,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -44,7 +43,6 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
      */
     public boolean m_ignoreAnnotatedVariables = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.redundantLocalVariableDisplayName();
@@ -70,7 +68,6 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryLocalVariableProblemDescriptor().get();
     }
@@ -94,7 +91,7 @@ public abstract class UnnecessaryLocalVariableInspection extends BaseInspection 
 
         @SuppressWarnings({"IfStatementWithIdenticalBranches"})
         @Override
-        public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+        public void visitLocalVariable(PsiLocalVariable variable) {
             super.visitLocalVariable(variable);
             if (m_ignoreAnnotatedVariables) {
                 PsiModifierList list = variable.getModifierList();

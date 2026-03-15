@@ -26,8 +26,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiSuperExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiSuperExpressionImpl.class);
@@ -136,7 +135,7 @@ public class PsiSuperExpressionImpl extends ExpressionPsiElement implements PsiS
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitSuperExpression(this);
     } else {

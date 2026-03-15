@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.spellcheker.tokenizer.TokenConsumer;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,7 +28,7 @@ import jakarta.annotation.Nonnull;
 public class MethodNameTokenizerJava extends NamedElementTokenizer<PsiMethod> {
 
   @Override
-  public void tokenize(@Nonnull PsiMethod element, TokenConsumer consumer) {
+  public void tokenize(PsiMethod element, TokenConsumer consumer) {
     final PsiMethod[] methods = (element).findDeepestSuperMethods();
     boolean isInSource = true;
     for (PsiMethod psiMethod : methods) {
@@ -40,7 +39,7 @@ public class MethodNameTokenizerJava extends NamedElementTokenizer<PsiMethod> {
     }
   }
 
-  private static boolean isMethodDeclarationInSource(@Nonnull PsiMethod psiMethod) {
+  private static boolean isMethodDeclarationInSource(PsiMethod psiMethod) {
     if (psiMethod.getContainingFile() == null) return false;
     final VirtualFile virtualFile = psiMethod.getContainingFile().getVirtualFile();
     if (virtualFile == null) return false;

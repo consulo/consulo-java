@@ -21,7 +21,6 @@ import consulo.language.psi.stub.IStubElementType;
 import consulo.language.psi.stub.PsiFileStub;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -32,7 +31,6 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
         myStub = stub;
     }
 
-    @Nonnull
     @Override
     public IStubElementType getElementType() {
         return myStub.getStubType();
@@ -43,7 +41,6 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
         return myStub.getParentStub().getPsi();
     }
 
-    @Nonnull
     @Override
     public PsiManager getManager() {
         PsiFile file = getContainingFile();
@@ -72,7 +69,6 @@ public abstract class ClsRepositoryPsiElement<T extends StubElement> extends Cls
         return getContainingFile().isPhysical();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiElement[] getChildren() {

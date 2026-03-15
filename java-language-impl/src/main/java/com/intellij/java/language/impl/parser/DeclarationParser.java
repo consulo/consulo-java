@@ -15,8 +15,7 @@ import consulo.language.parser.PsiBuilder;
 import consulo.language.parser.PsiBuilderUtil;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.PropertyKey;
 
 import static com.intellij.java.language.impl.parser.JavaParserUtil.*;
@@ -49,7 +48,7 @@ public class DeclarationParser {
 
   private final JavaParser myParser;
 
-  public DeclarationParser(@Nonnull final JavaParser javaParser) {
+  public DeclarationParser(final JavaParser javaParser) {
     myParser = javaParser;
   }
 
@@ -66,8 +65,7 @@ public class DeclarationParser {
     expectOrError(builder, JavaTokenType.RBRACE, "expected.rbrace");
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseClassFromKeyword(PsiBuilder builder,
+  private PsiBuilder.@Nullable Marker parseClassFromKeyword(PsiBuilder builder,
                                                   PsiBuilder.Marker declaration,
                                                   boolean isAnnotation,
                                                   Context context) {
@@ -188,8 +186,7 @@ public class DeclarationParser {
     }
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseEnumConstant(final PsiBuilder builder) {
+  public PsiBuilder.@Nullable Marker parseEnumConstant(final PsiBuilder builder) {
     final PsiBuilder.Marker constant = builder.mark();
 
     parseModifierList(builder);
@@ -261,8 +258,7 @@ public class DeclarationParser {
     }
   }
 
-  @Nullable
-  public PsiBuilder.Marker parse(final PsiBuilder builder, final Context context) {
+  public PsiBuilder.@Nullable Marker parse(final PsiBuilder builder, final Context context) {
     IElementType tokenType = builder.getTokenType();
     if (tokenType == null) return null;
 
@@ -446,12 +442,10 @@ public class DeclarationParser {
     return isNonSealed;
   }
 
-  @Nonnull
   public Pair<PsiBuilder.Marker, Boolean> parseModifierList(final PsiBuilder builder) {
     return parseModifierList(builder, ElementType.MODIFIER_BIT_SET);
   }
 
-  @Nonnull
   public Pair<PsiBuilder.Marker, Boolean> parseModifierList(final PsiBuilder builder, final TokenSet modifiers) {
     final PsiBuilder.Marker modList = builder.mark();
     boolean isEmpty = true;
@@ -489,7 +483,6 @@ public class DeclarationParser {
     return Pair.create(modList, isEmpty);
   }
 
-  @Nonnull
   private PsiBuilder.Marker parseMethodBody(PsiBuilder builder, PsiBuilder.Marker declaration, boolean anno) {
     IElementType tokenType = builder.getTokenType();
     if (tokenType != JavaTokenType.SEMICOLON && tokenType != JavaTokenType.LBRACE) {
@@ -669,13 +662,11 @@ public class DeclarationParser {
     done(elementList, type.getNodeType());
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseParameter(PsiBuilder builder, boolean ellipsis, boolean disjunctiveType, boolean varType) {
+  public PsiBuilder.@Nullable Marker parseParameter(PsiBuilder builder, boolean ellipsis, boolean disjunctiveType, boolean varType) {
     return parseParameterOrRecordComponent(builder, ellipsis, disjunctiveType, varType, true);
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseParameterOrRecordComponent(PsiBuilder builder,
+  public PsiBuilder.@Nullable Marker parseParameterOrRecordComponent(PsiBuilder builder,
                                                            boolean ellipsis,
                                                            boolean disjunctiveType,
                                                            boolean varType,
@@ -693,8 +684,7 @@ public class DeclarationParser {
     return parseListElement(builder, true, typeFlags, isParameter ? JavaElementType.PARAMETER : JavaElementType.RECORD_COMPONENT);
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseResource(PsiBuilder builder) {
+  public PsiBuilder.@Nullable Marker parseResource(PsiBuilder builder) {
     PsiBuilder.Marker marker = builder.mark();
 
     PsiBuilder.Marker expr = myParser.getExpressionParser().parse(builder);
@@ -708,8 +698,7 @@ public class DeclarationParser {
     return parseListElement(builder, true, ReferenceParser.VAR_TYPE, JavaElementType.RESOURCE_VARIABLE);
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseLambdaParameter(PsiBuilder builder, boolean typed) {
+  public PsiBuilder.@Nullable Marker parseLambdaParameter(PsiBuilder builder, boolean typed) {
     int flags = ReferenceParser.ELLIPSIS;
     if (getLanguageLevel(builder).isAtLeast(LanguageLevel.JDK_11)) {
       flags |= ReferenceParser.VAR_TYPE;
@@ -717,8 +706,7 @@ public class DeclarationParser {
     return parseListElement(builder, typed, flags, JavaElementType.PARAMETER);
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseListElement(PsiBuilder builder, boolean typed, int typeFlags, IElementType type) {
+  private PsiBuilder.@Nullable Marker parseListElement(PsiBuilder builder, boolean typed, int typeFlags, IElementType type) {
     PsiBuilder.Marker param = builder.mark();
 
     Pair<PsiBuilder.Marker, Boolean> modListInfo = parseModifierList(builder);
@@ -779,8 +767,7 @@ public class DeclarationParser {
     return param;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseFieldOrLocalVariable(PsiBuilder builder,
+  private PsiBuilder.@Nullable Marker parseFieldOrLocalVariable(PsiBuilder builder,
                                                       PsiBuilder.Marker declaration,
                                                       int declarationStart,
                                                       Context context) {
@@ -908,8 +895,7 @@ public class DeclarationParser {
     return paired;
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseAnnotations(final PsiBuilder builder) {
+  public PsiBuilder.@Nullable Marker parseAnnotations(final PsiBuilder builder) {
     PsiBuilder.Marker firstAnno = null;
 
     while (builder.getTokenType() == JavaTokenType.AT) {
@@ -922,7 +908,6 @@ public class DeclarationParser {
     return firstAnno;
   }
 
-  @Nonnull
   public PsiBuilder.Marker parseAnnotation(final PsiBuilder builder) {
     assert builder.getTokenType() == JavaTokenType.AT : builder.getTokenType();
     final PsiBuilder.Marker anno = builder.mark();
@@ -1030,8 +1015,7 @@ public class DeclarationParser {
     }
   }
 
-  @Nullable
-  private PsiBuilder.Marker doParseAnnotationValue(PsiBuilder builder) {
+  private PsiBuilder.@Nullable Marker doParseAnnotationValue(PsiBuilder builder) {
     PsiBuilder.Marker result;
 
     IElementType tokenType = builder.getTokenType();

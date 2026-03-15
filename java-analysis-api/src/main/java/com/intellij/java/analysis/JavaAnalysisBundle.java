@@ -5,8 +5,6 @@ import consulo.annotation.DeprecationInfo;
 import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.component.util.localize.AbstractBundle;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.function.Supplier;
@@ -16,7 +14,6 @@ import java.util.function.Supplier;
 @MigratedExtensionsTo(JavaAnalysisLocalize.class)
 public final class JavaAnalysisBundle extends AbstractBundle
 {
-	@NonNls
 	public static final String BUNDLE = "messages.JavaAnalysisBundle";
 	private static final JavaAnalysisBundle INSTANCE = new JavaAnalysisBundle();
 
@@ -25,14 +22,12 @@ public final class JavaAnalysisBundle extends AbstractBundle
 		super(BUNDLE);
 	}
 
-	@Nonnull
-	public static String message(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, @Nonnull Object  ...params)
+	public static String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object  ...params)
 	{
 		return INSTANCE.getMessage(key, params);
 	}
 
-	@Nonnull
-	public static Supplier<String> messagePointer(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, Object... params)
+	public static Supplier<String> messagePointer(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params)
 	{
 		return () -> INSTANCE.getMessage(key, params);
 	}

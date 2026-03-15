@@ -29,8 +29,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class InspectionGadgetsFix implements LocalQuickFix {
     public static final InspectionGadgetsFix[] EMPTY_ARRAY = {};
@@ -39,7 +38,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
 
     @Override
     @RequiredWriteAction
-    public final void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public final void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement problemElement = descriptor.getPsiElement();
         if (problemElement == null || !problemElement.isValid()) {
             return;
@@ -63,13 +62,13 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
         throws IncorrectOperationException;
 
     @RequiredWriteAction
-    protected static void deleteElement(@Nonnull PsiElement element)
+    protected static void deleteElement(PsiElement element)
         throws IncorrectOperationException {
         element.delete();
     }
 
     @RequiredWriteAction
-    protected static void replaceExpression(@Nonnull PsiExpression expression, @Nonnull String newExpressionText)
+    protected static void replaceExpression(PsiExpression expression, String newExpressionText)
         throws IncorrectOperationException {
         Project project = expression.getProject();
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -81,7 +80,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
     }
 
     @RequiredWriteAction
-    protected static void replaceExpressionWithReferenceTo(@Nonnull PsiExpression expression, @Nonnull PsiMember target)
+    protected static void replaceExpressionWithReferenceTo(PsiExpression expression, PsiMember target)
         throws IncorrectOperationException {
         Project project = expression.getProject();
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -94,7 +93,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
     }
 
     @RequiredWriteAction
-    protected static void replaceExpressionAndShorten(@Nonnull PsiExpression expression, @Nonnull String newExpressionText)
+    protected static void replaceExpressionAndShorten(PsiExpression expression, String newExpressionText)
         throws IncorrectOperationException {
         Project project = expression.getProject();
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -108,7 +107,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
     }
 
     @RequiredWriteAction
-    protected static void replaceStatement(@Nonnull PsiStatement statement, @Nonnull String newStatementText)
+    protected static void replaceStatement(PsiStatement statement, String newStatementText)
         throws IncorrectOperationException {
         Project project = statement.getProject();
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
@@ -120,7 +119,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
     }
 
     @RequiredWriteAction
-    protected static void replaceStatementAndShortenClassNames(@Nonnull PsiStatement statement, @Nonnull String newStatementText)
+    protected static void replaceStatementAndShortenClassNames(PsiStatement statement, String newStatementText)
         throws IncorrectOperationException {
         Project project = statement.getProject();
         CodeStyleManager styleManager = CodeStyleManager.getInstance(project);
@@ -184,7 +183,7 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
 
     @RequiredReadAction
     protected static String getElementText(
-        @Nonnull PsiElement element,
+        PsiElement element,
         @Nullable PsiElement elementToReplace,
         @Nullable String replacement
     ) {
@@ -195,10 +194,10 @@ public abstract class InspectionGadgetsFix implements LocalQuickFix {
 
     @RequiredReadAction
     private static void getElementText(
-        @Nonnull PsiElement element,
+        PsiElement element,
         @Nullable PsiElement elementToReplace,
         @Nullable String replacement,
-        @Nonnull StringBuilder out
+        StringBuilder out
     ) {
         if (element.equals(elementToReplace)) {
             out.append(replacement);

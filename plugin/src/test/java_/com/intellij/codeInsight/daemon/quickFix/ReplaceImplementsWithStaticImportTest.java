@@ -21,10 +21,8 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
 import com.intellij.JavaTestUtil;
-import jakarta.annotation.Nonnull;
 
 public abstract class ReplaceImplementsWithStaticImportTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

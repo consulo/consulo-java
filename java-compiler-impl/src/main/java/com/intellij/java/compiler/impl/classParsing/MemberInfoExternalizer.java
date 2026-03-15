@@ -23,7 +23,6 @@ package com.intellij.java.compiler.impl.classParsing;
 
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -82,7 +81,6 @@ public class MemberInfoExternalizer
 		return null;
 	}
 
-	@Nonnull
 	public static ConstantValue loadConstantValue(DataInput in) throws IOException
 	{
 		final byte tag = in.readByte();
@@ -164,7 +162,7 @@ public class MemberInfoExternalizer
 		info.save(out);
 	}
 
-	public static void saveConstantValue(DataOutput out, @Nonnull ConstantValue value) throws IOException
+	public static void saveConstantValue(DataOutput out, ConstantValue value) throws IOException
 	{
 		if(value instanceof LongConstantValue)
 		{

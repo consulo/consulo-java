@@ -25,7 +25,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Pavel.Dolgov
@@ -34,26 +33,25 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
   private final PsiExpression myCollectionExpression;
   private final String myNewArrayText;
 
-  public ConvertCollectionToArrayFix(@Nonnull PsiExpression collectionExpression, @Nonnull PsiArrayType arrayType) {
+  public ConvertCollectionToArrayFix(PsiExpression collectionExpression, PsiArrayType arrayType) {
     myCollectionExpression = collectionExpression;
 
     PsiType componentType = arrayType.getComponentType();
     myNewArrayText = componentType.equalsToText(CommonClassNames.JAVA_LANG_OBJECT) ? "" : "new " + getArrayTypeText(componentType);
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.collectionToArrayText(myNewArrayText);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myCollectionExpression.isValid() && PsiManager.getInstance(project).isInProject(myCollectionExpression);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
     String replacement =
       ParenthesesUtils.getText(myCollectionExpression, ParenthesesUtils.POSTFIX_PRECEDENCE) + ".toArray(" + myNewArrayText + ")";
@@ -65,7 +63,6 @@ public class ConvertCollectionToArrayFix implements SyntheticIntentionAction {
     return true;
   }
 
-  @Nonnull
   private static String getArrayTypeText(PsiType componentType) {
     if (componentType instanceof PsiArrayType) {
       return getArrayTypeText(((PsiArrayType)componentType).getComponentType()) + "[]";

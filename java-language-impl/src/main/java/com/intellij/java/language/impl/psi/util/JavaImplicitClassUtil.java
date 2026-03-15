@@ -6,11 +6,10 @@ import com.intellij.java.language.psi.PsiImplicitClass;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class JavaImplicitClassUtil {
-  public static boolean isFileWithImplicitClass(@Nonnull PsiElement file) {
+  public static boolean isFileWithImplicitClass(PsiElement file) {
     return getImplicitClassFor(file) != null;
   }
 
@@ -21,7 +20,7 @@ public final class JavaImplicitClassUtil {
    * @return the implicitly declared class if found, null otherwise
    */
   @Nullable
-  public static PsiImplicitClass getImplicitClassFor(@Nonnull PsiElement file) {
+  public static PsiImplicitClass getImplicitClassFor(PsiElement file) {
     if (file instanceof PsiJavaFile) {
       final PsiJavaFile javaFile = (PsiJavaFile)file;
       PsiClass[] classes = javaFile.getClasses();
@@ -36,7 +35,7 @@ public final class JavaImplicitClassUtil {
    * @param name the name of the implicitly declared class (might include the ".java" extension)
    * @return the JVM name of the implicitly declared class
    */
-  public static String getJvmName(@Nonnull String name) {
+  public static String getJvmName(String name) {
     return StringUtil.trimEnd(name, ".java", true);
   }
 }

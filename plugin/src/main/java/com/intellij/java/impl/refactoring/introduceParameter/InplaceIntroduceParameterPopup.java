@@ -42,8 +42,7 @@ import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -183,7 +182,7 @@ public class InplaceIntroduceParameterPopup extends AbstractJavaInplaceIntroduce
 
 
   @Override
-  protected void saveSettings(@Nonnull PsiVariable psiVariable) {
+  protected void saveSettings(PsiVariable psiVariable) {
     myPanel.saveSettings(JavaRefactoringSettings.getInstance());
   }
 

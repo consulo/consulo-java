@@ -4,8 +4,7 @@ package com.intellij.java.language.psi.scope;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.language.psi.resolve.PsiScopeProcessor;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class JavaScopeProcessorEvent implements PsiScopeProcessor.Event {
   private JavaScopeProcessorEvent() {
@@ -24,7 +23,7 @@ public final class JavaScopeProcessorEvent implements PsiScopeProcessor.Event {
   public static final JavaScopeProcessorEvent CHANGE_LEVEL = new JavaScopeProcessorEvent();
   public static final JavaScopeProcessorEvent SET_CURRENT_FILE_CONTEXT = new JavaScopeProcessorEvent();
 
-  public static boolean isEnteringStaticScope(@Nonnull PsiScopeProcessor.Event event, @Nullable Object associated) {
+  public static boolean isEnteringStaticScope(PsiScopeProcessor.Event event, @Nullable Object associated) {
     if (event == START_STATIC) return true;
 
     return event == EXIT_LEVEL &&

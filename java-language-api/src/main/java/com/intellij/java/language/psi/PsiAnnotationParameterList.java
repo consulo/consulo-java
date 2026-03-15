@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents the list of name/value elements for an annotation.
@@ -31,6 +30,5 @@ public interface PsiAnnotationParameterList extends PsiElement {
      *
      * @return the array of name/value pairs.
      */
-    @Nonnull
     PsiNameValuePair[] getAttributes();
 }

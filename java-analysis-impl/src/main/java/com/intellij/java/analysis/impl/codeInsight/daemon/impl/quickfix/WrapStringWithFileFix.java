@@ -26,9 +26,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
     public final static MyMethodArgumentFixerFactory REGISTAR = new MyMethodArgumentFixerFactory();
@@ -36,29 +34,28 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
     @Nullable
     private final PsiType myType;
 
-    public WrapStringWithFileFix(@Nullable PsiType type, @Nonnull PsiExpression expression) {
+    public WrapStringWithFileFix(@Nullable PsiType type, PsiExpression expression) {
         super(expression);
         myType = type;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.wrapWithJavaIoFileText();
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    public boolean isAvailable(Project project, PsiFile file, PsiElement startElement, PsiElement endElement) {
         return myType != null && myType.isValid() && myType.equalsToText(CommonClassNames.JAVA_IO_FILE) && startElement.isValid() && startElement.getManager().isInProject(startElement) &&
             isStringType(startElement);
     }
 
     @Override
-    public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    public void invoke(Project project, PsiFile file, @Nullable Editor editor, PsiElement startElement, PsiElement endElement) {
         startElement.replace(getModifiedExpression(startElement));
     }
 
-    private static boolean isStringType(@Nonnull PsiElement expression) {
+    private static boolean isStringType(PsiElement expression) {
         if (!(expression instanceof PsiExpression)) {
             return false;
         }
@@ -69,18 +66,16 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
         return type.equalsToText(CommonClassNames.JAVA_LANG_STRING);
     }
 
-    private static PsiElement getModifiedExpression(@Nonnull PsiElement expression) {
+    private static PsiElement getModifiedExpression(PsiElement expression) {
         return JavaPsiFacade.getElementFactory(expression.getProject()).createExpressionFromText(PsiKeyword.NEW + " " + CommonClassNames.JAVA_IO_FILE + "(" + expression.getText() + ")", expression);
     }
 
     private static class MyMethodArgumentFix extends MethodArgumentFix implements HighPriorityAction {
 
-        protected MyMethodArgumentFix(@Nonnull PsiExpressionList list, int i, @Nonnull PsiType toType, @Nonnull ArgumentFixerActionFactory fixerActionFactory) {
+        protected MyMethodArgumentFix(PsiExpressionList list, int i, PsiType toType, ArgumentFixerActionFactory fixerActionFactory) {
             super(list, i, toType, fixerActionFactory);
         }
 
-        @Nls
-        @Nonnull
         @Override
         public LocalizeValue getText() {
             if (myArgList.getExpressions().length == 1) {
@@ -92,7 +87,7 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
         }
 
         @Override
-        public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        public boolean isAvailable(Project project, Editor editor, PsiFile file) {
             return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
         }
     }
@@ -105,7 +100,7 @@ public class WrapStringWithFileFix extends LocalQuickFixAndIntentionActionOnPsiE
         }
 
         @Override
-        public boolean areTypesConvertible(@Nonnull final PsiType exprType, @Nonnull final PsiType parameterType, @Nonnull final PsiElement context) {
+        public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, final PsiElement context) {
             return parameterType.isConvertibleFrom(exprType) || (parameterType.equalsToText(CommonClassNames.JAVA_IO_FILE) && exprType.equalsToText(CommonClassNames.JAVA_LANG_STRING));
         }
 

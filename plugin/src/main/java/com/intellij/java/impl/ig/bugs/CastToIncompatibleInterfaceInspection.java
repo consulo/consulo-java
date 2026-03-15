@@ -22,17 +22,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CastToIncompatibleInterfaceInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.castingToIncompatibleInterfaceDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.castingToIncompatibleInterfaceProblemDescriptor().get();
     }
@@ -46,7 +43,7 @@ public class CastToIncompatibleInterfaceInspection extends BaseInspection {
 
         @Override
         public void visitTypeCastExpression(
-            @Nonnull PsiTypeCastExpression expression
+            PsiTypeCastExpression expression
         ) {
             super.visitTypeCastExpression(expression);
             PsiTypeElement castTypeElement = expression.getCastType();

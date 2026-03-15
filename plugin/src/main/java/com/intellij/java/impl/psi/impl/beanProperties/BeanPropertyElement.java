@@ -30,9 +30,7 @@ import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.language.psi.meta.PsiPresentableMetaData;
 import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -51,18 +49,15 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
     return PropertyUtil.getPropertyType(myMethod);
   }
 
-  @Nonnull
   public PsiMethod getMethod() {
     return myMethod;
   }
 
-  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     return myMethod;
   }
 
-  @Nonnull
   @Override
   public PsiManager getManager() {
     return myMethod.getManager();
@@ -74,14 +69,12 @@ public class BeanPropertyElement extends FakePsiElement implements PsiMetaOwner,
   }
 
   @Override
-  @NonNls
   @RequiredReadAction
   public String getName(PsiElement context) {
     return getName();
   }
 
   @Override
-  @Nonnull
   @RequiredReadAction
   public String getName() {
     return myName;

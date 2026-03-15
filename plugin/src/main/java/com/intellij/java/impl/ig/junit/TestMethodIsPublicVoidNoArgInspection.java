@@ -24,25 +24,20 @@ import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.testMethodIsPublicVoidNoArgDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "TestMethodWithIncorrectSignature";
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         boolean isStatic = (Boolean) infos[1];
         if (isStatic) {
@@ -63,9 +58,9 @@ public class TestMethodIsPublicVoidNoArgInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //note: no call to super;
-            @NonNls String methodName = method.getName();
+            String methodName = method.getName();
             if (!methodName.startsWith("test") &&
                 !TestUtils.isJUnit4TestMethod(method)) {
                 return;

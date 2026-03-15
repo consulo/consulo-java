@@ -27,12 +27,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class AddThisQualifierFix extends InspectionGadgetsFix {
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.addThisQualifierQuickfix();
   }
@@ -53,7 +50,7 @@ public class AddThisQualifierFix extends InspectionGadgetsFix {
       return;
     }
     PsiClass containingClass = ClassUtils.getContainingClass(expression);
-    @NonNls String newExpression;
+    String newExpression;
     if (InheritanceUtil.isInheritorOrSelf(containingClass, memberClass, true)) {
       newExpression = "this." + expression.getText();
     }

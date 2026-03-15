@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.meta.PsiMetaData;
 import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -44,7 +43,6 @@ public class LookupItemUtil {
    * @see LookupElementBuilder
    * @deprecated
    */
-  @Nonnull
   public static LookupElement objectToLookupItem(Object object) {
     if (object instanceof LookupElement) {
       return (LookupElement) object;

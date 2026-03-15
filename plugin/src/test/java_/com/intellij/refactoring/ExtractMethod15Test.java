@@ -20,7 +20,6 @@
  */
 package com.intellij.refactoring;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
@@ -28,7 +27,6 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 public abstract class ExtractMethod15Test extends LightCodeInsightTestCase {
   private static final String BASE_PATH = "/refactoring/extractMethod15/";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

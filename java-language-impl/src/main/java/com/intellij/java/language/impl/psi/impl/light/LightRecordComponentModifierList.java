@@ -9,25 +9,23 @@ import com.intellij.java.language.psi.PsiRecordComponent;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
 
 class LightRecordComponentModifierList extends LightModifierList {
   private final PsiModifierListOwner myParent;
-  @Nonnull
   private final PsiAnnotation.TargetType[] myTargets;
   private final PsiRecordComponent myRecordComponent;
 
-  LightRecordComponentModifierList(@Nonnull PsiModifierListOwner parent, @Nonnull PsiModifierListOwner prototype,
-                                   @Nonnull PsiRecordComponent component) {
+  LightRecordComponentModifierList(PsiModifierListOwner parent, PsiModifierListOwner prototype,
+                                   PsiRecordComponent component) {
     super(prototype);
     myParent = parent;
     myRecordComponent = component;
     myTargets = AnnotationTargetUtil.getTargetsForLocation(this);
   }
 
-  LightRecordComponentModifierList(@Nonnull PsiModifierListOwner parent, @Nonnull PsiManager manager,
-                                   @Nonnull PsiRecordComponent component) {
+  LightRecordComponentModifierList(PsiModifierListOwner parent, PsiManager manager,
+                                   PsiRecordComponent component) {
     super(manager);
     myParent = parent;
     myRecordComponent = component;
@@ -40,13 +38,12 @@ class LightRecordComponentModifierList extends LightModifierList {
   }
 
   @Override
-  public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
+  public void setModifierProperty(String name, boolean value) throws IncorrectOperationException {
     if (hasModifierProperty(name) == value) return;
     super.setModifierProperty(name, value);
   }
 
   @Override
-  @Nonnull
   public PsiAnnotation[] getAnnotations() {
     PsiAnnotation[] annotations = myRecordComponent.getAnnotations();
     if (annotations.length == 0) return annotations;
@@ -56,7 +53,7 @@ class LightRecordComponentModifierList extends LightModifierList {
   }
 
   @Override
-  public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
+  public PsiAnnotation findAnnotation(String qualifiedName) {
     PsiModifierList list = myRecordComponent.getModifierList();
     if (list == null) return null;
     PsiAnnotation annotation = list.findAnnotation(qualifiedName);
@@ -67,7 +64,7 @@ class LightRecordComponentModifierList extends LightModifierList {
   }
 
   @Override
-  public boolean hasAnnotation(@Nonnull String qualifiedName) {
+  public boolean hasAnnotation(String qualifiedName) {
     //noinspection SSBasedInspection
     return findAnnotation(qualifiedName) != null;
   }

@@ -28,7 +28,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 class IntroduceParameterViewDescriptor extends UsageViewDescriptorAdapter {
 
@@ -41,7 +40,6 @@ class IntroduceParameterViewDescriptor extends UsageViewDescriptorAdapter {
 
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
 //    if(myMethodToReplaceIn.equals(myMethodToSearchFor)) {
 //      return new PsiElement[] {myMethodToReplaceIn};

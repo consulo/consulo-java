@@ -36,7 +36,6 @@ import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -63,14 +62,13 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    @Nonnull
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new InvertBooleanUsageViewDescriptor(myElement);
     }
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         if (myRenameProcessor.preprocessUsages(refUsages)) {
             prepareSuccessful();
             return true;
@@ -78,7 +76,6 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
         return false;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -98,7 +95,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
             for (PsiMethod method : allMethods) {
                 method.accept(new JavaRecursiveElementWalkingVisitor() {
                     @Override
-                    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+                    public void visitReturnStatement(PsiReturnStatement statement) {
                         PsiExpression returnValue = statement.getReturnValue();
                         if (returnValue != null && PsiType.BOOLEAN.equals(returnValue.getType())) {
                             toInvert.add(mySmartPointerManager.createSmartPsiElementPointer(returnValue));
@@ -106,7 +103,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
                     }
 
                     @Override
-                    public void visitClass(@Nonnull PsiClass aClass) {
+                    public void visitClass(PsiClass aClass) {
                     }
                 });
             }
@@ -225,7 +222,7 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         for (PsiElement element : myRenameProcessor.getElements()) {
             try {
                 RenameUtil.doRename(
@@ -267,7 +264,6 @@ public class InvertBooleanProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return InvertBooleanHandler.REFACTORING_NAME;

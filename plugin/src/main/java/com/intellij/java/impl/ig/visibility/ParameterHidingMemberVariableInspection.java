@@ -27,8 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -50,12 +49,10 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
   @SuppressWarnings("PublicField")
   public boolean m_ignoreForAbstractMethods = false;
 
-  @Nonnull
   public String getID() {
     return "ParameterHidesMemberVariable";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.parameterHidesMemberVariableDisplayName();
   }
@@ -68,7 +65,6 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
     return true;
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsLocalize.parameterHidesMemberVariableProblemDescriptor(aClass.getName()).get();
@@ -105,7 +101,7 @@ public class ParameterHidingMemberVariableInspection extends BaseInspection {
   private class ParameterHidingMemberVariableVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitParameter(@Nonnull PsiParameter variable) {
+    public void visitParameter(PsiParameter variable) {
       super.visitParameter(variable);
       PsiElement declarationScope = variable.getDeclarationScope();
       if (!(declarationScope instanceof PsiMethod)) {

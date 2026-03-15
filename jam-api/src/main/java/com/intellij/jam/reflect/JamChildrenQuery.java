@@ -29,10 +29,8 @@ import consulo.language.psi.PsiModificationTracker;
 import consulo.language.sem.SemRegistrar;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -48,18 +46,18 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
     myCacheKey = Key.create(getClass().getName());
   }
 
-  protected JamChildrenQuery(@NonNls String debugName) {
+  protected JamChildrenQuery(String debugName) {
     myCacheKey = Key.create(debugName);
   }
 
   @Nullable
-  public abstract JamMemberMeta<?, ? extends Jam> getMeta(@Nonnull PsiModifierListOwner member);
+  public abstract JamMemberMeta<?, ? extends Jam> getMeta(PsiModifierListOwner member);
 
-  protected abstract List<Jam> findChildren(@Nonnull PsiMember parent);
+  protected abstract List<Jam> findChildren(PsiMember parent);
 
   
 
-  public final List<Jam> findChildren(@Nonnull PsiElementRef<? extends PsiMember> parentRef) {
+  public final List<Jam> findChildren(PsiElementRef<? extends PsiMember> parentRef) {
     final PsiMember parent = parentRef.getPsiElement();
     if (parent == null) {
       return Collections.emptyList();
@@ -93,7 +91,7 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
     return new AnnotatedMethodsQuery<Jam>(annotationMeta, methodMeta);
   }
 
-  public static <Jam extends JamElement> JamChildrenQuery<Jam> annotatedFields(@NonNls final String annotation, final Class<Jam> jamClass) {
+  public static <Jam extends JamElement> JamChildrenQuery<Jam> annotatedFields(final String annotation, final Class<Jam> jamClass) {
     return annotatedFields(new JamAnnotationMeta(annotation), jamClass);
   }
 
@@ -121,11 +119,11 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
       myMethodMeta = methodMeta;
     }
 
-    public JamMemberMeta<?, ? extends Jam> getMemberMeta(@Nonnull PsiModifierListOwner member) {
+    public JamMemberMeta<?, ? extends Jam> getMemberMeta(PsiModifierListOwner member) {
       return member instanceof PsiMethod ? myMethodMeta : null;
     }
 
-    public PsiModifierListOwner[] getAllChildren(@Nonnull PsiMember parent) {
+    public PsiModifierListOwner[] getAllChildren(PsiMember parent) {
       return ((PsiClass) parent).getMethods();
     }
 
@@ -142,11 +140,11 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
       myFieldMeta = fieldMeta;
     }
 
-    public JamMemberMeta<?, ? extends Jam> getMemberMeta(@Nonnull PsiModifierListOwner member) {
+    public JamMemberMeta<?, ? extends Jam> getMemberMeta(PsiModifierListOwner member) {
       return member instanceof PsiField ? myFieldMeta : null;
     }
 
-    public PsiModifierListOwner[] getAllChildren(@Nonnull PsiMember parent) {
+    public PsiModifierListOwner[] getAllChildren(PsiMember parent) {
       return ((PsiClass) parent).getFields();
     }
 
@@ -163,7 +161,7 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
     }
 
     @Override
-    public JamMemberMeta<?, ? extends Jam> getMeta(@Nonnull PsiModifierListOwner member) {
+    public JamMemberMeta<?, ? extends Jam> getMeta(PsiModifierListOwner member) {
       for (final JamChildrenQuery<? extends Jam> component : myComponents) {
         final JamMemberMeta<?, ? extends Jam> meta = component.getMeta(member);
         if (meta != null) {
@@ -173,7 +171,7 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
       return null;
     }
 
-    public List<Jam> findChildren(@Nonnull final PsiMember parent) {
+    public List<Jam> findChildren(final PsiMember parent) {
       return ContainerUtil.concat(myComponents, new Function<JamChildrenQuery<? extends Jam>, Collection<? extends Jam>>() {
         public Collection<? extends Jam> apply(JamChildrenQuery<? extends Jam> jamChildrenQuery) {
           return jamChildrenQuery.findChildren(parent);
@@ -199,11 +197,11 @@ public abstract class JamChildrenQuery<Jam extends JamElement> {
     }
 
     @Nullable
-    public JamMemberMeta<?, ? extends Jam> getMemberMeta(@Nonnull PsiModifierListOwner member) {
+    public JamMemberMeta<?, ? extends Jam> getMemberMeta(PsiModifierListOwner member) {
       return member instanceof PsiParameter ? myParamMeta : null;
     }
 
-    public PsiModifierListOwner[] getAllChildren(@Nonnull PsiMember parent) {
+    public PsiModifierListOwner[] getAllChildren(PsiMember parent) {
       return ((PsiMethod) parent).getParameterList().getParameters();
     }
 

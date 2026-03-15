@@ -26,8 +26,7 @@
 package org.osmorc.manifest.lang.psi;
 
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -41,7 +40,6 @@ public interface ManifestFile extends PsiFile {
    *
    * @return the headers.
    */
-  @Nonnull
   Header[] getHeaders();
 
   /**
@@ -51,16 +49,15 @@ public interface ManifestFile extends PsiFile {
    * @return the header or null if no such header exists.
    */
   @Nullable
-  Header getHeaderByName(@Nonnull String name);
+  Header getHeaderByName(String name);
 
   @Nullable
-  Object getValueByKey(@Nonnull String key);
+  Object getValueByKey(String key);
 
   @Nullable
-  String getStringValueByKey(@Nonnull String key);
+  String getStringValueByKey(String key);
 
-  @Nonnull
-  List<String> getValuesByKey(@Nonnull String key);
+  List<String> getValuesByKey(String key);
 
-  void setHeaderValue(@Nonnull String key, @Nonnull String value);
+  void setHeaderValue(String key, String value);
 }

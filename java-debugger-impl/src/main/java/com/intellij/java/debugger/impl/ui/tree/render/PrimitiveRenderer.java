@@ -16,7 +16,6 @@
 package com.intellij.java.debugger.impl.ui.tree.render;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
@@ -41,7 +40,6 @@ import consulo.internal.com.sun.jdi.*;
 public class PrimitiveRenderer extends NodeRendererImpl
 {
 	public static final
-	@NonNls
 	String UNIQUE_ID = "PrimitiveRenderer";
 	private static final Logger LOG = Logger.getInstance(PrimitiveRenderer.class);
 

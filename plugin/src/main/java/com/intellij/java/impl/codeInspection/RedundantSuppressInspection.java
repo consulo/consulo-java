@@ -46,8 +46,7 @@ import consulo.project.Project;
 import consulo.util.collection.BidirectionalMap;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.*;
@@ -62,7 +61,6 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
 
     public boolean IGNORE_ALL = false;
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
@@ -79,19 +77,16 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
         return JavaLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionRedundantSuppressionName();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "RedundantSuppression";
@@ -104,16 +99,16 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
 
     @Override
     public void runInspection(
-        @Nonnull AnalysisScope scope,
-        @Nonnull final InspectionManager manager,
-        @Nonnull final GlobalInspectionContext globalContext,
-        @Nonnull final ProblemDescriptionsProcessor problemDescriptionsProcessor,
-        @Nonnull Object state
+        AnalysisScope scope,
+        final InspectionManager manager,
+        final GlobalInspectionContext globalContext,
+        final ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        Object state
     ) {
         globalContext.getRefManager().iterate(new RefJavaVisitor() {
             @RequiredReadAction
             @Override
-            public void visitClass(@Nonnull RefClass refClass) {
+            public void visitClass(RefClass refClass) {
                 if (!globalContext.shouldCheck(refClass, RedundantSuppressInspection.this)) {
                     return;
                 }
@@ -139,9 +134,9 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
     @Nullable
     @RequiredReadAction
     private CommonProblemDescriptor[] checkElement(
-        @Nonnull RefClass refEntity,
-        @Nonnull InspectionManager manager,
-        @Nonnull Project project,
+        RefClass refEntity,
+        InspectionManager manager,
+        Project project,
         Object state
     ) {
         PsiClass psiClass = refEntity.getElement();
@@ -153,15 +148,15 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
 
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull final PsiElement psiElement,
-        @Nonnull final InspectionManager manager,
-        @Nonnull Project project,
+        final PsiElement psiElement,
+        final InspectionManager manager,
+        Project project,
         Object state
     ) {
         final Map<PsiElement, Collection<String>> suppressedScopes = new HashMap<>();
         psiElement.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitModifierList(@Nonnull PsiModifierList list) {
+            public void visitModifierList(PsiModifierList list) {
                 super.visitModifierList(list);
                 if (list.getParent() instanceof PsiModifierListOwner modifierListOwner && !(modifierListOwner instanceof PsiClass)) {
                     checkElement(modifierListOwner);
@@ -174,7 +169,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
             }
 
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 if (aClass == psiElement) {
                     super.visitClass(aClass);
                     checkElement(aClass);
@@ -268,7 +263,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
                     descriptors = new ArrayList<>();
                     globalContext.getRefManager().iterate(new RefVisitor() {
                         @Override
-                        public void visitElement(@Nonnull RefEntity refEntity) {
+                        public void visitElement(RefEntity refEntity) {
                             CommonProblemDescriptor[] descriptors1 = global.getTool().checkElement(
                                 refEntity,
                                 scope,
@@ -277,24 +272,24 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
                                 new ProblemDescriptionsProcessor() {
                                     @Nullable
                                     @Override
-                                    public CommonProblemDescriptor[] getDescriptions(@Nonnull RefEntity refEntity) {
+                                    public CommonProblemDescriptor[] getDescriptions(RefEntity refEntity) {
                                         return new CommonProblemDescriptor[0];
                                     }
 
                                     @Override
-                                    public void ignoreElement(@Nonnull RefEntity refEntity) {
+                                    public void ignoreElement(RefEntity refEntity) {
                                     }
 
                                     @Override
                                     public void addProblemElement(
                                         @Nullable RefEntity refEntity,
-                                        @Nonnull CommonProblemDescriptor... commonProblemDescriptors
+                                        CommonProblemDescriptor... commonProblemDescriptors
                                     ) {
                                         int i = 0;
                                     }
 
                                     @Override
-                                    public RefEntity getElement(@Nonnull CommonProblemDescriptor descriptor) {
+                                    public RefEntity getElement(CommonProblemDescriptor descriptor) {
                                         return null;
                                     }
                                 }
@@ -383,7 +378,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
         return result.toArray(new ProblemDescriptor[result.size()]);
     }
 
-    protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, @Nonnull InspectionManager manager) {
+    protected InspectionToolWrapper[] getInspectionTools(PsiElement psiElement, InspectionManager manager) {
         ModifiableModel model =
             InspectionProjectProfileManager.getInstance(manager.getProject()).getInspectionProfile().getModifiableModel();
         InspectionProfileWrapper profile = new InspectionProfileWrapper((InspectionProfile) model);
@@ -399,7 +394,7 @@ public class RedundantSuppressInspection extends GlobalInspectionTool implements
 
     @Nullable
     @Override
-    public String getHint(@Nonnull QuickFix fix) {
+    public String getHint(QuickFix fix) {
         if (myQuickFixes != null) {
             List<String> list = myQuickFixes.getKeysByValue(fix);
             if (list != null) {

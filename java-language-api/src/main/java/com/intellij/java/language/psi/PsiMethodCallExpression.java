@@ -15,14 +15,12 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a call of a Java method.
  */
 public interface PsiMethodCallExpression extends PsiCallExpression {
     @Override
-    @Nonnull
     PsiExpressionList getArgumentList();
 
     /**
@@ -30,11 +28,9 @@ public interface PsiMethodCallExpression extends PsiCallExpression {
      *
      * @return the reference expression for the method.
      */
-    @Nonnull
     PsiReferenceExpression getMethodExpression();
 
     @Override
-    @Nonnull
     default JavaResolveResult[] multiResolve(boolean incompleteCode) {
         return getMethodExpression().multiResolve(incompleteCode);
     }

@@ -37,8 +37,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -59,19 +58,16 @@ public class DependencyInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return LocalizeValue.empty();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.illegalPackageDependencies();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return DependencyInspection.SHORT_NAME;
     }
@@ -96,8 +92,8 @@ public class DependencyInspection extends BaseLocalInspectionTool {
     @Override
     @RequiredReadAction
     public ProblemDescriptor[] checkFile(
-        @Nonnull PsiFile file,
-        @Nonnull InspectionManager manager,
+        PsiFile file,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -137,7 +133,6 @@ public class DependencyInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;
     }
@@ -150,14 +145,13 @@ public class DependencyInspection extends BaseLocalInspectionTool {
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.editDependencyRulesText(myRule.getDisplayText());
         }
 
         @RequiredUIAccess
         @Override
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             ShowSettingsUtil.getInstance().editConfigurable(project, new DependencyConfigurable(project));
         }
     }

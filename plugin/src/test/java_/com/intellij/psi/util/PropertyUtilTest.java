@@ -4,7 +4,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author mike
@@ -58,15 +57,15 @@ public abstract class PropertyUtilTest extends LightCodeInsightTestCase {
     assertFalse(PropertyUtil.hasGetterName(createMethod("isOk", "int")));
   }
 
-  private static PsiType getType(@NonNls String type) throws IncorrectOperationException {
+  private static PsiType getType(String type) throws IncorrectOperationException {
     return PsiElementFactory.SERVICE.getInstance(ourProject).createTypeFromText(type, null);
   }
 
-  private static PsiField createField(@NonNls String name, @NonNls String type) throws IncorrectOperationException {
+  private static PsiField createField(String name, String type) throws IncorrectOperationException {
     return PsiElementFactory.SERVICE.getInstance(ourProject).createField(name, getType(type));
   }
 
-  private static PsiMethod createMethod(@NonNls String name, String type) throws IncorrectOperationException {
+  private static PsiMethod createMethod(String name, String type) throws IncorrectOperationException {
     return PsiElementFactory.SERVICE.getInstance(ourProject).createMethod(name, getType(type));
   }
 }

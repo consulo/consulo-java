@@ -29,7 +29,6 @@ import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,7 +72,7 @@ public class RemoveMiddlemanDialog extends RefactoringDialog {
         final MemberSelectionTable table = selectionPanel.getTable();
         table.setMemberInfoModel(new DelegatingMemberInfoModel<>(table.getMemberInfoModel()) {
             @Override
-            public int checkForProblems(@Nonnull MemberInfo member) {
+            public int checkForProblems(MemberInfo member) {
                 return hasSuperMethods(member) ? ERROR : OK;
             }
 

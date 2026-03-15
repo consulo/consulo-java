@@ -17,7 +17,6 @@ import consulo.language.psi.PsiElement;
 import consulo.platform.Platform;
 import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.action.Shortcut;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,9 +29,8 @@ public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvid
     public static final String ID = "SHOW_ANONYMOUS";
     public static final String JAVA_ANONYMOUS_PROPERTY_NAME = "java.anonymous.provider";
 
-    @Nonnull
     @Override
-    public Collection<JavaAnonymousClassTreeElement> provideNodes(@Nonnull TreeElement node) {
+    public Collection<JavaAnonymousClassTreeElement> provideNodes(TreeElement node) {
         if (node instanceof PsiMethodTreeElement || node instanceof PsiFieldTreeElement || node instanceof ClassInitializerTreeElement) {
             PsiElement el = ((PsiTreeElementBase) node).getElement();
             if (el != null) {
@@ -57,7 +55,6 @@ public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvid
         return List.of();
     }
 
-    @Nonnull
     @Override
     public String getCheckBoxText() {
         return JavaCodeInsightBundle.message("file.structure.toggle.show.anonymous.classes");
@@ -68,19 +65,16 @@ public class JavaAnonymousClassesNodeProvider implements FileStructureNodeProvid
         return new Shortcut[]{KeyboardShortcut.fromString(Platform.current().os().isMac() ? "meta I" : "control I")};
     }
 
-    @Nonnull
     @Override
     public ActionPresentation getPresentation() {
         return new ActionPresentationData(getCheckBoxText(), null, AllIcons.Nodes.AnonymousClass);
     }
 
-    @Nonnull
     @Override
     public String getName() {
         return ID;
     }
 
-    @Nonnull
     @Override
     public String getSerializePropertyName() {
         return JAVA_ANONYMOUS_PROPERTY_NAME;

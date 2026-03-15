@@ -21,22 +21,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassEscapesItsScopeInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "ClassEscapesDefinedScope";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.classEscapesDefinedScopeDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.classEscapesDefinedScopeProblemDescriptor().get();
   }
@@ -48,7 +44,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
   private static class ClassEscapesItsScopeVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       //no call to super, so we don't drill into anonymous classes
       if (method.isConstructor()) {
         return;
@@ -86,7 +82,7 @@ public class ClassEscapesItsScopeInspection extends BaseInspection {
     }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       //no call to super, so we don't drill into anonymous classes
       if (field.hasModifierProperty(PsiModifier.PRIVATE)) {
         return;

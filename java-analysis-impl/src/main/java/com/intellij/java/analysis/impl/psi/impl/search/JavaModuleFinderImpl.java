@@ -18,8 +18,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author VISTALL
@@ -39,7 +38,7 @@ public class JavaModuleFinderImpl extends PsiElementFinder {
   @Nullable
   @Override
   @RequiredReadAction
-  public PsiJavaModule findModule(@Nonnull VirtualFile file) {
+  public PsiJavaModule findModule(VirtualFile file) {
     return myProjectFileIndex.isInLibrary(file)
       ? findDescriptorInLibrary(myProject, myProjectFileIndex, file)
       : JavaModuleGraphUtil.findDescriptorByModule(myProjectFileIndex.getModuleForFile(file),
@@ -66,13 +65,12 @@ public class JavaModuleFinderImpl extends PsiElementFinder {
 
   @Nullable
   @Override
-  public PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass findClass(String qualifiedName, GlobalSearchScope scope) {
     return null;
   }
 
-  @Nonnull
   @Override
-  public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass[] findClasses(String qualifiedName, GlobalSearchScope scope) {
     return PsiClass.EMPTY_ARRAY;
   }
 }

@@ -18,7 +18,6 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 import com.intellij.java.language.psi.PsiAnnotation;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -29,7 +28,6 @@ public interface PsiAnnotationStub extends StubElement<PsiAnnotation>
 
 	public static ArrayFactory<PsiAnnotationStub> ARRAY_FACTORY = new ArrayFactory<PsiAnnotationStub>()
 	{
-		@Nonnull
 		@Override
 		public PsiAnnotationStub[] create(int count)
 		{

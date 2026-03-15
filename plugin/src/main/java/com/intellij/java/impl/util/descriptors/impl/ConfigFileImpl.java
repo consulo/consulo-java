@@ -13,8 +13,7 @@ import consulo.virtualFileSystem.pointer.VirtualFilePointerManager;
 import consulo.xml.psi.xml.XmlDocument;
 import consulo.xml.psi.xml.XmlFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 
@@ -22,7 +21,6 @@ import java.lang.ref.SoftReference;
  * @author nik
  */
 public class ConfigFileImpl implements ConfigFile {
-  @Nonnull
   private ConfigFileInfo myInfo;
   private final VirtualFilePointer myFilePointer;
   private volatile Reference<PsiFile> myPsiFile;
@@ -30,17 +28,17 @@ public class ConfigFileImpl implements ConfigFile {
   private final Project myProject;
   private long myModificationCount;
 
-  public ConfigFileImpl(@Nonnull ConfigFileContainerImpl container, @Nonnull ConfigFileInfo configuration) {
+  public ConfigFileImpl(ConfigFileContainerImpl container, ConfigFileInfo configuration) {
     myContainer = container;
     myInfo = configuration;
     VirtualFilePointerManager pointerManager = VirtualFilePointerManager.getInstance();
     myFilePointer = pointerManager.create(configuration.getUrl(), this, new VirtualFilePointerListener() {
       @Override
-      public void beforeValidityChanged(@Nonnull VirtualFilePointer[] pointers) {
+      public void beforeValidityChanged(VirtualFilePointer[] pointers) {
       }
 
       @Override
-      public void validityChanged(@Nonnull VirtualFilePointer[] pointers) {
+      public void validityChanged(VirtualFilePointer[] pointers) {
         myPsiFile = null;
         onChange();
       }
@@ -59,7 +57,7 @@ public class ConfigFileImpl implements ConfigFile {
     return myFilePointer.getUrl();
   }
 
-  public void setInfo(@Nonnull ConfigFileInfo info) {
+  public void setInfo(ConfigFileInfo info) {
     myInfo = info;
   }
 
@@ -101,7 +99,6 @@ public class ConfigFileImpl implements ConfigFile {
   }
 
   @Override
-  @Nonnull
   public ConfigFileInfo getInfo() {
     return myInfo;
   }
@@ -121,7 +118,6 @@ public class ConfigFileImpl implements ConfigFile {
 
 
   @Override
-  @Nonnull
   public ConfigFileMetaData getMetaData() {
     return myInfo.getMetaData();
   }

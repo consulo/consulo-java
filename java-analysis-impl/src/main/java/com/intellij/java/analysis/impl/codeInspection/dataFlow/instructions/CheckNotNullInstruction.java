@@ -17,18 +17,16 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class CheckNotNullInstruction extends Instruction {
   private final
-  @Nonnull
   NullabilityProblemKind.NullabilityProblem<?> myProblem;
   private final
   @Nullable
   DfaControlTransferValue myTransferValue;
 
-  public CheckNotNullInstruction(@Nonnull NullabilityProblemKind.NullabilityProblem<?> problem,
+  public CheckNotNullInstruction(NullabilityProblemKind.NullabilityProblem<?> problem,
                                  @Nullable DfaControlTransferValue transferValue) {
     myProblem = problem;
     myTransferValue = transferValue;
@@ -39,7 +37,6 @@ public class CheckNotNullInstruction extends Instruction {
     return myTransferValue;
   }
 
-  @Nonnull
   public NullabilityProblemKind.NullabilityProblem<?> getProblem() {
     return myProblem;
   }

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java expression statement.
@@ -26,6 +25,5 @@ public interface PsiExpressionStatement extends PsiStatement {
    *
    * @return the expression instance.
    */
-  @Nonnull
   PsiExpression getExpression();
 }

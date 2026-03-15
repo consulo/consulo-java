@@ -49,7 +49,6 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -89,14 +88,13 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
         mySearchForTextOccurrences = searchForTextOccurrences;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new InlineViewDescriptor(myField);
     }
 
     @Override
-    protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages) {
+    protected boolean isPreviewUsages(UsageInfo[] usages) {
         if (super.isPreviewUsages(usages)) {
             return true;
         }
@@ -110,12 +108,11 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
 
     private static class UsageFromJavaDoc extends UsageInfo {
         @RequiredReadAction
-        private UsageFromJavaDoc(@Nonnull PsiElement element) {
+        private UsageFromJavaDoc(PsiElement element) {
             super(element, true);
         }
     }
 
-    @Nonnull
     @Override
     @RequiredUIAccess
     protected UsageInfo[] findUsages() {
@@ -138,7 +135,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
         if (mySearchInCommentsAndStrings || mySearchForTextOccurrences) {
             UsageInfoFactory nonCodeUsageFactory = new NonCodeUsageInfoFactory(myField, myField.getName()) {
                 @Override
-                public UsageInfo createUsageInfo(@Nonnull PsiElement usage, int startOffset, int endOffset) {
+                public UsageInfo createUsageInfo(PsiElement usage, int startOffset, int endOffset) {
                     if (PsiTreeUtil.isAncestor(myField, usage, false)) {
                         return null;
                     }
@@ -167,14 +164,14 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    protected void refreshElements(@Nonnull PsiElement[] elements) {
+    protected void refreshElements(PsiElement[] elements) {
         LOG.assertTrue(elements.length == 1 && elements[0] instanceof PsiField);
         myField = (PsiField) elements[0];
     }
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         PsiExpression initializer = myField.getInitializer();
         LOG.assertTrue(initializer != null);
 
@@ -278,7 +275,6 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
         return expression;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {
@@ -287,7 +283,7 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
 
@@ -344,9 +340,8 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
         return PsiUtil.isAccessedForWriting(expr);
     }
 
-    @Nonnull
     @Override
-    protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull UsageViewDescriptor descriptor) {
+    protected Collection<? extends PsiElement> getElementsToWrite(UsageViewDescriptor descriptor) {
         if (myInlineThisOnly) {
             return Collections.singletonList(myRefExpr);
         }

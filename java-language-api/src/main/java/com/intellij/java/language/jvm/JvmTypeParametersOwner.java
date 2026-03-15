@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.jvm;
 
-import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.GenericDeclaration;
 
@@ -30,6 +29,5 @@ public interface JvmTypeParametersOwner extends JvmMember
 	/**
 	 * @see GenericDeclaration#getTypeParameters
 	 */
-	@Nonnull
 	JvmTypeParameter[] getTypeParameters();
 }

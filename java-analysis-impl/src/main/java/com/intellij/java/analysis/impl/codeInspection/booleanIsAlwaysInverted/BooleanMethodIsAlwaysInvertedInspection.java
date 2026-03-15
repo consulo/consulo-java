@@ -26,8 +26,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -40,25 +39,21 @@ import java.util.Collection;
 public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectionTool {
     private static final Key<Boolean> ALWAYS_INVERTED = Key.create("ALWAYS_INVERTED_METHOD");
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.booleanMethodIsAlwaysInvertedDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDataFlowIssues();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "BooleanMethodIsAlwaysInverted";
@@ -66,18 +61,18 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
 
     @Nullable
     @Override
-    public RefGraphAnnotator getAnnotator(@Nonnull RefManager refManager, @Nonnull Object state) {
+    public RefGraphAnnotator getAnnotator(RefManager refManager, Object state) {
         return new BooleanInvertedAnnotator();
     }
 
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        Object state
     ) {
         if (refEntity instanceof RefMethod refMethod) {
             if (!refMethod.isReferenced() || hasNonInvertedCalls(refMethod) || !refMethod.getSuperMethods().isEmpty()) {
@@ -121,7 +116,7 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
         manager.iterate(new RefJavaVisitor() {
             @Override
             @RequiredReadAction
-            public void visitMethod(@Nonnull RefMethod refMethod) {
+            public void visitMethod(RefMethod refMethod) {
                 if (descriptionsProcessor.getDescriptions(refMethod) != null) { //suspicious method -> need to check external usages
                     GlobalJavaInspectionContext.UsagesProcessor usagesProcessor = psiReference -> {
                         PsiElement psiReferenceExpression = psiReference.getElement();
@@ -157,7 +152,7 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
             element.accept(new JavaRecursiveElementVisitor() {
                 @Override
                 @RequiredReadAction
-                public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+                public void visitMethodCallExpression(PsiMethodCallExpression call) {
                     super.visitMethodCallExpression(call);
                     PsiReferenceExpression methodExpression = call.getMethodExpression();
                     if (methodExpression.isReferenceTo(method)) {
@@ -208,14 +203,13 @@ public class BooleanMethodIsAlwaysInvertedInspection extends GlobalJavaInspectio
 
     private static class InvertMethodFix implements LocalQuickFix {
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Invert method");
         }
 
         @Override
         @RequiredReadAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiElement element = descriptor.getPsiElement();
             PsiMethod psiMethod = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
             assert psiMethod != null;

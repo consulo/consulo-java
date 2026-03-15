@@ -29,26 +29,22 @@ import consulo.language.psi.PsiParserFacade;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SplitDeclarationAndInitializationIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class SplitDeclarationAndInitializationIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.splitDeclarationAndInitializationIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new SplitDeclarationAndInitializationPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiField field = (PsiField) element.getParent();
         field.normalizeDeclaration();
@@ -109,7 +105,7 @@ public class SplitDeclarationAndInitializationIntention extends Intention {
             containingClass.addAfter(whitespace, field);
         }
         PsiCodeBlock body = classInitializer.getBody();
-        @NonNls String initializationStatementText =
+        String initializationStatementText =
             field.getName() + " = " + initializerText + ';';
         PsiExpressionStatement statement =
             (PsiExpressionStatement) elementFactory.createStatementFromText(

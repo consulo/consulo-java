@@ -24,32 +24,29 @@ import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 
 public class GoToSymbolFix implements SyntheticIntentionAction {
   private final SmartPsiElementPointer<NavigatablePsiElement> myPointer;
   private final LocalizeValue myMessage;
 
-  public GoToSymbolFix(@Nonnull NavigatablePsiElement symbol, @Nonnull LocalizeValue message) {
+  public GoToSymbolFix(NavigatablePsiElement symbol, LocalizeValue message) {
     myPointer = SmartPointerManager.getInstance(symbol.getProject()).createSmartPsiElementPointer(symbol);
     myMessage = message;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return myMessage;
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myPointer.getElement() != null;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     NavigatablePsiElement e = myPointer.getElement();
     if (e != null && e.isValid()) {
       e.navigate(true);

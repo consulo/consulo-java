@@ -5,9 +5,8 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class ExpressionUtil {
     /**
@@ -35,7 +34,7 @@ public final class ExpressionUtil {
      * @param statement the switch to check
      * @return true if the switch is an enhanced switch, false otherwise
      */
-    public static boolean isEnhancedSwitch(@Nonnull PsiSwitchBlock statement) {
+    public static boolean isEnhancedSwitch(PsiSwitchBlock statement) {
         if (statement instanceof PsiSwitchExpression) {
             return true;
         }
@@ -94,7 +93,7 @@ public final class ExpressionUtil {
      * @return true if this type of switch selector is a type of enhanced switch selector;
      * false if it's a classic (Java 7) switch selector type.
      */
-    private static boolean isEnhancedSelectorType(@Nonnull PsiType type) {
+    private static boolean isEnhancedSelectorType(PsiType type) {
         PsiPrimitiveType unboxedType = PsiPrimitiveType.getOptionallyUnboxedType(type);
         if (unboxedType != null &&
             (unboxedType.equals(PsiTypes.booleanType()) ||

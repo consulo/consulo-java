@@ -13,7 +13,6 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.ExpectedTypeUtils;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
@@ -25,7 +24,7 @@ public class MapUpdateInliner implements CallInliner {
         CallMatcher.instanceCall(CommonClassNames.JAVA_UTIL_MAP, "merge").parameterCount(3);
 
     @Override
-    public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+    public boolean tryInlineCall(CFGBuilder builder, PsiMethodCallExpression call) {
         if (MAP_COMPUTE.test(call)) {
             PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
             if (qualifier == null) {
@@ -94,7 +93,7 @@ public class MapUpdateInliner implements CallInliner {
         builder.swap().unwrap(SpecialField.COLLECTION_SIZE).pushUnknown().assign().pop();
     }
 
-    private static void inlineComputeIfAbsent(@Nonnull CFGBuilder builder, PsiExpression function, PsiType type) {
+    private static void inlineComputeIfAbsent(CFGBuilder builder, PsiExpression function, PsiType type) {
         builder.pushUnknown() // stack: .. qualifier; key; get() result
             .ifNull() // stack: .. qualifier; key
             .invokeFunction(1, function) // stack: .. qualifier; mapping_result
@@ -105,7 +104,7 @@ public class MapUpdateInliner implements CallInliner {
             .end();
     }
 
-    private static void inlineComputeIfPresent(@Nonnull CFGBuilder builder, PsiExpression function, PsiType type) {
+    private static void inlineComputeIfPresent(CFGBuilder builder, PsiExpression function, PsiType type) {
         builder.pushUnknown() // stack: .. qualifier; key; get() result
             .ifNotNull() // stack: .. qualifier; key
             .push(DfTypes.typedObject(type, Nullability.NOT_NULL))
@@ -117,7 +116,7 @@ public class MapUpdateInliner implements CallInliner {
             .end();
     }
 
-    private static void inlineCompute(@Nonnull CFGBuilder builder, PsiExpression function, PsiType type) {
+    private static void inlineCompute(CFGBuilder builder, PsiExpression function, PsiType type) {
         builder.push(DfTypes.typedObject(type, Nullability.NULLABLE))
             .invokeFunction(2, function) // stack: .. qualifier; mapping result
             .chain(MapUpdateInliner::flushSize);

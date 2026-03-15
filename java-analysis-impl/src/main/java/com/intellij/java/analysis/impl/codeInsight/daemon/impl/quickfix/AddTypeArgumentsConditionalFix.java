@@ -31,8 +31,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna
@@ -55,20 +54,19 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
         myMethod = method;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return LocalizeValue.localizeTODO("Add explicit type arguments");
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return mySubstitutor.isValid() && myExpression.isValid() && myMethod.isValid();
     }
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         PsiTypeParameter[] typeParameters = myMethod.getTypeParameters();
         String typeArguments = "<" + StringUtil.join(
             typeParameters,
@@ -108,7 +106,7 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
     }
 
     @RequiredReadAction
-    public static void register(@Nonnull HighlightInfo.Builder hlBuilder, PsiExpression expression, @Nonnull PsiType lType) {
+    public static void register(HighlightInfo.Builder hlBuilder, PsiExpression expression, PsiType lType) {
         if (lType != PsiType.NULL && expression instanceof PsiConditionalExpression condExpr) {
             PsiExpression thenExpression = condExpr.getThenExpression();
             PsiExpression elseExpression = condExpr.getElseExpression();
@@ -130,7 +128,7 @@ public class AddTypeArgumentsConditionalFix implements SyntheticIntentionAction 
     }
 
     @RequiredReadAction
-    private static void inferTypeArgs(@Nonnull HighlightInfo.Builder highlightInfo, PsiType lType, PsiExpression thenExpression) {
+    private static void inferTypeArgs(HighlightInfo.Builder highlightInfo, PsiType lType, PsiExpression thenExpression) {
         PsiMethodCallExpression thenMethodCall = (PsiMethodCallExpression) thenExpression;
         JavaResolveResult result = thenMethodCall.resolveMethodGenerics();
         PsiMethod method = (PsiMethod) result.getElement();

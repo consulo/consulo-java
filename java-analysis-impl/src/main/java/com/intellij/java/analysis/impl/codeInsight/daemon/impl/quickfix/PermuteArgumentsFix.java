@@ -34,7 +34,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +46,7 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
     private final PsiCall myCall;
     private final PsiCall myPermutation;
 
-    private PermuteArgumentsFix(@Nonnull PsiCall call, @Nonnull PsiCall permutation) {
+    private PermuteArgumentsFix(PsiCall call, PsiCall permutation) {
         myCall = call;
         myPermutation = permutation;
     }
@@ -58,19 +57,18 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.permuteArguments();
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return !project.isDisposed() && myCall.isValid() && myCall.getManager().isInProject(myCall);
     }
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -82,7 +80,7 @@ public class PermuteArgumentsFix implements SyntheticIntentionAction {
         HighlightInfo.Builder hlBuilder,
         PsiCall callExpression,
         CandidateInfo[] candidates,
-        @Nonnull TextRange fixRange
+        TextRange fixRange
     ) {
         PsiExpression[] expressions = callExpression.getArgumentList().getExpressions();
         if (hlBuilder == null || expressions.length < 2) {

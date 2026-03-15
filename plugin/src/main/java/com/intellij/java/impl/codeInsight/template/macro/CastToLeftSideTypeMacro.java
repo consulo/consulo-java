@@ -35,7 +35,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CastToLeftSideTypeMacro extends Macro {
@@ -50,14 +49,13 @@ public class CastToLeftSideTypeMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "(A)";
   }
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     int offset = context.getStartOffset();
     Project project = context.getProject();
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());

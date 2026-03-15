@@ -27,18 +27,15 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ArrayEqualsInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.equalsCalledOnArrayDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.equalsCalledOnArrayProblemDescriptor().get();
     }
@@ -64,7 +61,6 @@ public class ArrayEqualsInspection extends BaseInspection {
             this.deepEquals = deepEquals;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return deepEquals
@@ -108,7 +104,7 @@ public class ArrayEqualsInspection extends BaseInspection {
 
     private static class ArrayEqualsVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

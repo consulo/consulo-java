@@ -35,8 +35,7 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,7 +49,7 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl {
   DetectedJavaChangeInfo(@PsiModifier.ModifierConstant String newVisibility,
                          PsiMethod method,
                          CanonicalTypes.Type newType,
-                         @Nonnull ParameterInfoImpl[] newParms,
+                         ParameterInfoImpl[] newParms,
                          ThrownExceptionInfo[] newExceptions,
                          String newName,
                          String oldName,
@@ -178,7 +177,7 @@ class DetectedJavaChangeInfo extends JavaChangeInfoImpl {
       }
     }) {
       @Override
-      protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+      protected void performRefactoring(UsageInfo[] usages) {
         super.performRefactoring(usages);
         PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(method.getProject());
         PsiParameter[] parameters = method.getParameterList().getParameters();

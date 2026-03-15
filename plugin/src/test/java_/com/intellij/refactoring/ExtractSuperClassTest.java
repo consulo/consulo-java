@@ -23,7 +23,6 @@ import java.io.File;
 import java.util.Arrays;
 
 import consulo.virtualFileSystem.LocalFileSystem;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import consulo.document.FileDocumentManager;
 import consulo.virtualFileSystem.VirtualFile;
@@ -135,24 +134,23 @@ public abstract class ExtractSuperClassTest extends RefactoringTestCase {
     //LanguageLevelProjectExtension.getInstance(myJavaFacade.getProject()).setLanguageLevel(LanguageLevel.JDK_1_5);
   }
 
-  @NonNls
   private String getRoot() {
     return JavaTestUtil.getJavaTestDataPath() + "/refactoring/extractSuperClass/" + getTestName(true);
   }
 
-  private void doTest(@NonNls String className, @NonNls String newClassName,
+  private void doTest(String className, String newClassName,
                       RefactoringTestUtil.MemberDescriptor... membersToFind) throws Exception {
     doTest(className, newClassName, null, membersToFind);
   }
 
-  private void doTest(@NonNls String className, @NonNls String newClassName,
+  private void doTest(String className, String newClassName,
                       String[] conflicts,
                       RefactoringTestUtil.MemberDescriptor... membersToFind) throws Exception {
     doTest(className, newClassName, conflicts, null, membersToFind);
   }
 
-  private void doTest(@NonNls String className,
-                      @NonNls String newClassName,
+  private void doTest(String className,
+                      String newClassName,
                       String[] conflicts,
                       String targetPackageName,
                       RefactoringTestUtil.MemberDescriptor... membersToFind) throws Exception {

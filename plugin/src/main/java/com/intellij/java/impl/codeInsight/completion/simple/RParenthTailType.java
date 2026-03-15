@@ -36,7 +36,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author peter
@@ -79,7 +78,6 @@ public abstract class RParenthTailType extends TailType {
     return moveCaret(editor, existingRParenthOffset, 1);
   }
 
-  @NonNls
   public String toString() {
     return "RParenth";
   }

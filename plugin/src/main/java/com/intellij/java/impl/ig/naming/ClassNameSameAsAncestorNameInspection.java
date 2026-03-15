@@ -23,7 +23,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +30,6 @@ import java.util.Set;
 @ExtensionImpl
 public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.classNameSameAsAncestorNameDisplayName();
   }
@@ -40,7 +38,6 @@ public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
     return new RenameFix();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.classNameSameAsAncestorNameProblemDescriptor().get();
   }
@@ -57,7 +54,7 @@ public class ClassNameSameAsAncestorNameInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       // no call to super, so it doesn't drill down into inner classes
       String className = aClass.getName();
       if (className == null) {

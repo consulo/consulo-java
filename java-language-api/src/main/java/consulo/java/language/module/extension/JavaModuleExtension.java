@@ -22,8 +22,7 @@ import consulo.content.bundle.Sdk;
 import consulo.module.extension.ModuleExtensionWithSdk;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
@@ -35,7 +34,6 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
   /**
    * @return user set language version or resolved language version from sdk
    */
-  @Nonnull
   LanguageLevel getLanguageLevel();
 
   /**
@@ -46,21 +44,17 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
     return getLanguageLevel();
   }
 
-  @Nonnull
   SpecialDirLocation getSpecialDirLocation();
 
   @Nullable
   Sdk getSdkForCompilation();
 
-  @Nonnull
-  Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk);
+  Set<VirtualFile> getCompilationClasspath(CompileContext compileContext, ModuleChunk moduleChunk);
 
-  @Nonnull
-  Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, @Nonnull ModuleChunk moduleChunk);
+  Set<VirtualFile> getCompilationBootClasspath(CompileContext compileContext, ModuleChunk moduleChunk);
 
   @Nullable
   String getBytecodeVersion();
 
-  @Nonnull
   List<String> getCompilerArguments();
 }

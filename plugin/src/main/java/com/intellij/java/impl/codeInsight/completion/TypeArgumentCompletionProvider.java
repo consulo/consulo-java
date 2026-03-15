@@ -39,8 +39,7 @@ import consulo.util.collection.JBIterable;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
@@ -64,7 +63,7 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext processingContext, @Nonnull CompletionResultSet resultSet) {
+  public void addCompletions(CompletionParameters parameters, ProcessingContext processingContext, CompletionResultSet resultSet) {
     addTypeArgumentVariants(parameters, resultSet, resultSet.getPrefixMatcher());
   }
 
@@ -102,7 +101,6 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
     return true;
   }
 
-  @Nonnull
   private static List<PsiType> getExpectedTypeArgs(PsiElement context, PsiTypeParameterListOwner paramOwner, JBIterable<PsiTypeParameter> typeParams, PsiClassType expectedType) {
     if (paramOwner instanceof PsiClass) {
       PsiClassType.ClassResolveResult resolve = expectedType.resolveGenerics();
@@ -236,7 +234,6 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
       myLookupString = StringUtil.join(myTypeItems, item -> item.getType().getPresentableText(), ", ");
     }
 
-    @Nonnull
     @Override
     public Object getObject() {
       return myTypeItems.get(0).getObject();
@@ -253,7 +250,6 @@ class TypeArgumentCompletionProvider implements CompletionProvider {
       }
     }
 
-    @Nonnull
     @Override
     public String getLookupString() {
       return myLookupString;

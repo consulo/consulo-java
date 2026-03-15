@@ -28,9 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
@@ -42,13 +40,11 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.misorderedAssertEqualsParametersDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.misorderedAssertEqualsParametersProblemDescriptor().get();
     }
@@ -61,7 +57,6 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
     private static class FlipParametersFix extends InspectionGadgetsFix {
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.misorderedAssertEqualsParametersFlipQuickfix();
         }
@@ -107,10 +102,10 @@ public class MisorderedAssertEqualsParametersInspection extends BaseInspection {
     private static class MisorderedAssertEqualsParametersVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!"assertEquals".equals(methodName) && !"assertArrayEquals".equals(methodName)) {
                 return;
             }

@@ -24,11 +24,10 @@ import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class JavaCreateTemplateInPackageAction<T extends PsiElement> extends CreateTemplateInPackageAction<T> {
-    protected JavaCreateTemplateInPackageAction(@Nonnull LocalizeValue text, @Nonnull LocalizeValue description, @Nullable Image icon, boolean inSourceOnly) {
+    protected JavaCreateTemplateInPackageAction(LocalizeValue text, LocalizeValue description, @Nullable Image icon, boolean inSourceOnly) {
         super(text, description, icon, inSourceOnly);
     }
 

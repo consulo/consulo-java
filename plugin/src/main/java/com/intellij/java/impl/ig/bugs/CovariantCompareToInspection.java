@@ -27,19 +27,16 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CovariantCompareToInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.covariantComparetoDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.covariantComparetoProblemDescriptor().get();
   }
@@ -52,7 +49,7 @@ public class CovariantCompareToInspection extends BaseInspection {
   private static class CovariantCompareToVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       String name = method.getName();
       if (!HardcodedMethodConstants.COMPARE_TO.equals(name)) {
         return;

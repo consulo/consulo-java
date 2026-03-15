@@ -30,7 +30,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 
 import consulo.platform.base.icon.PlatformIconGroup;
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -84,17 +83,15 @@ class CollectConversion {
     private final String myLookupString;
     private final String myTypeText;
     private final String myMethodName;
-    @Nonnull
     private final PsiType myExpectedType;
 
-    MyLookupElement(String methodName, @Nonnull PsiType expectedType) {
+    MyLookupElement(String methodName, PsiType expectedType) {
       myMethodName = methodName;
       myExpectedType = expectedType;
       myLookupString = "collect(Collectors." + myMethodName + "())";
       myTypeText = myExpectedType.getPresentableText();
     }
 
-    @Nonnull
     @Override
     public String getLookupString() {
       return myLookupString;
@@ -132,7 +129,6 @@ class CollectConversion {
       JavaCodeStyleManager.getInstance(context.getProject()).shortenClassReferences(args[0]);
     }
 
-    @Nonnull
     private String getInsertString() {
       return "collect(" + CommonClassNames.JAVA_UTIL_STREAM_COLLECTORS + "." + myMethodName + "())";
     }

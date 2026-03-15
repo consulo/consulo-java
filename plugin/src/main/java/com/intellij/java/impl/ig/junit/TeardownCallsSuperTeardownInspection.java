@@ -28,27 +28,22 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TeardownCallsSuperTeardownInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "TearDownDoesntCallSuperTearDown";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.teardownCallsSuperTeardownDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.teardownCallsSuperTeardownProblemDescriptor().get();
   }
@@ -60,7 +55,6 @@ public class TeardownCallsSuperTeardownInspection extends BaseInspection {
 
   private static class AddSuperTearDownCall extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.teardownCallsSuperTeardownAddQuickfix();
     }
@@ -98,9 +92,9 @@ public class TeardownCallsSuperTeardownInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       //note: no call to super;
-      @NonNls String methodName = method.getName();
+      String methodName = method.getName();
       if (!"tearDown".equals(methodName)) {
         return;
       }

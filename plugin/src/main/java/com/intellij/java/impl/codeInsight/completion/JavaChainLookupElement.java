@@ -37,8 +37,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,7 +56,6 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
     myQualifier = qualifier;
   }
 
-  @Nonnull
   @Override
   public String getLookupString() {
     return maybeAddParentheses(myQualifier.getLookupString()) + "." + getDelegate().getLookupString();
@@ -76,7 +74,6 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
     return result;
   }
 
-  @Nonnull
   @Override
   public String toString() {
     return maybeAddParentheses(myQualifier.toString()) + "." + getDelegate();
@@ -179,7 +176,6 @@ public class JavaChainLookupElement extends LookupElementDecorator<LookupElement
     return true;
   }
 
-  @Nonnull
   private LookupElement getComparableQualifier() {
     CastingLookupElementDecorator casting = myQualifier.as(CastingLookupElementDecorator.CLASS_CONDITION_KEY);
     return casting == null ? myQualifier : casting.getDelegate();

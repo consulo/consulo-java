@@ -32,9 +32,7 @@ import consulo.process.cmd.ParametersList;
 import consulo.util.io.CharsetToolkit;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Set;
@@ -75,7 +73,7 @@ public class JavaCompilerUtil {
   public static void addSourceCommandLineSwitch(
     final Sdk jdk,
     LanguageLevel chunkLanguageLevel,
-    @NonNls final ParametersList parametersList
+    final ParametersList parametersList
   ) {
     final String versionString = jdk.getVersionString();
     if (StringUtil.isEmpty(versionString)) {
@@ -144,8 +142,7 @@ public class JavaCompilerUtil {
     }
   }
 
-  @Nonnull
-  public static LanguageLevel getApplicableLanguageLevel(String versionString, @Nonnull LanguageLevel languageLevel) {
+  public static LanguageLevel getApplicableLanguageLevel(String versionString, LanguageLevel languageLevel) {
     JavaSdkVersion runtimeVersion = JavaSdkVersion.fromVersionString(versionString);
     if (runtimeVersion == null) {
       return languageLevel;
@@ -166,7 +163,7 @@ public class JavaCompilerUtil {
 
 
   @Nullable
-  public static Sdk getSdkForCompilation(@Nonnull final Module module) {
+  public static Sdk getSdkForCompilation(final Module module) {
     JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     if (extension == null) {
       return null;
@@ -179,8 +176,7 @@ public class JavaCompilerUtil {
     return getSdkForCompilation(chunk.getModule());
   }
 
-  @Nonnull
-  public static Set<VirtualFile> getCompilationClasspath(@Nonnull CompileContext compileContext, final ModuleChunk moduleChunk) {
+  public static Set<VirtualFile> getCompilationClasspath(CompileContext compileContext, final ModuleChunk moduleChunk) {
     JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
     if (extension == null) {
       return Collections.emptySet();
@@ -188,8 +184,7 @@ public class JavaCompilerUtil {
     return extension.getCompilationClasspath(compileContext, moduleChunk);
   }
 
-  @Nonnull
-  public static Set<VirtualFile> getCompilationBootClasspath(@Nonnull CompileContext compileContext, final ModuleChunk moduleChunk) {
+  public static Set<VirtualFile> getCompilationBootClasspath(CompileContext compileContext, final ModuleChunk moduleChunk) {
     JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
     if (extension == null) {
       return Collections.emptySet();

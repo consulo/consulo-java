@@ -3,10 +3,9 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.value;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.*;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a condition to be applied to DFA memory state.
@@ -23,7 +22,6 @@ public abstract class DfaCondition
 	/**
 	 * @return a condition which is the opposite to this condition
 	 */
-	@Nonnull
 	@Contract(pure = true)
 	public abstract DfaCondition negate();
 
@@ -57,8 +55,7 @@ public abstract class DfaCondition
 	/**
 	 * @see DfaValue#cond(RelationType, DfaValue)
 	 */
-	@Nonnull
-	static DfaCondition createCondition(@Nonnull DfaValue left, @Nonnull RelationType relationType, @Nonnull DfaValue right)
+	static DfaCondition createCondition(DfaValue left, RelationType relationType, DfaValue right)
 	{
 		Exact value = Exact.tryEvaluate(left, relationType, right);
 		if(value != null)
@@ -88,7 +85,6 @@ public abstract class DfaCondition
 		static final Exact FALSE = new Exact("FALSE");
 		static final Exact UNKNOWN = new Exact("UNKNOWN");
 
-		@Nonnull
 		@Override
 		public DfaCondition negate()
 		{

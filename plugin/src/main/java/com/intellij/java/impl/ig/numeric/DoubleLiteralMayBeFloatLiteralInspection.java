@@ -26,19 +26,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.doubleLiteralMayBeFloatLiteralDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     PsiTypeCastExpression typeCastExpression = (PsiTypeCastExpression)infos[0];
     StringBuilder replacementText = buildReplacementText(typeCastExpression, new StringBuilder());
@@ -94,7 +91,6 @@ public class DoubleLiteralMayBeFloatLiteralInspection extends BaseInspection {
       this.replacementString = replacementString;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.doubleLiteralMayBeFloatLiteralQuickfix(replacementString);
     }

@@ -25,18 +25,16 @@ import consulo.language.extension.ByLanguageValue;
 import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface MoveInnerHandler extends LanguageExtension {
   ExtensionPointCacheKey<MoveInnerHandler, ByLanguageValue<MoveInnerHandler>> KEY = ExtensionPointCacheKey.create("MoveInnerHandler", LanguageOneToOne.build());
 
   @Nullable
-  static MoveInnerHandler forLanguage(@Nonnull Language language) {
+  static MoveInnerHandler forLanguage(Language language) {
     return Application.get().getExtensionPoint(MoveInnerHandler.class).getOrBuildCache(KEY).get(language);
   }
 
-  @Nonnull
-  PsiClass copyClass(@Nonnull MoveInnerOptions options);
+  PsiClass copyClass(MoveInnerOptions options);
 }

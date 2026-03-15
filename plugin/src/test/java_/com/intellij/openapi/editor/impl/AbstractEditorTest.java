@@ -26,8 +26,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.WriteCommandAction;
 import consulo.codeEditor.Caret;
 import consulo.codeEditor.FoldRegion;
@@ -81,12 +79,12 @@ public abstract class AbstractEditorTest extends LightPlatformCodeInsightTestCas
 		}
 	}
 
-	protected void initText(@Nonnull @NonNls String fileText)  throws IOException
+	protected void initText(String fileText)  throws IOException
 	{
 		init(fileText, TestFileType.TEXT);
 	}
 
-	protected void init(@Nonnull @NonNls String fileText, @Nonnull TestFileType type) throws IOException
+	protected void init(String fileText, TestFileType type) throws IOException
 	{
 		configureFromFileText(getFileName(type), fileText);
 	}

@@ -35,8 +35,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -45,14 +44,13 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
      * @return set of the features required for a given inspection. The inspection will not be launched on the files where
      * the corresponding features are not available.
      */
-    @Nonnull
     public Set<JavaFeature> requiredFeatures() {
         return Set.of();
     }
 
     @Override
     @RequiredReadAction
-    public boolean isAvailableForFile(@Nonnull PsiFile file) {
+    public boolean isAvailableForFile(PsiFile file) {
         for (JavaFeature feature : requiredFeatures()) {
             if (!PsiUtil.isAvailable(feature, file)) {
                 return false;
@@ -71,7 +69,7 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
      * @return <code>null</code> if no problems found or not applicable at method level.
      */
     @Nullable
-    public ProblemDescriptor[] checkMethod(@Nonnull PsiMethod method, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+    public ProblemDescriptor[] checkMethod(PsiMethod method, InspectionManager manager, boolean isOnTheFly, State state) {
         return null;
     }
 
@@ -85,7 +83,7 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
      * @return <code>null</code> if no problems found or not applicable at class level.
      */
     @Nullable
-    public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+    public ProblemDescriptor[] checkClass(PsiClass aClass, InspectionManager manager, boolean isOnTheFly, State state) {
         return null;
     }
 
@@ -99,13 +97,13 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
      * @return <code>null</code> if no problems found or not applicable at field level.
      */
     @Nullable
-    public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+    public ProblemDescriptor[] checkField(PsiField field, InspectionManager manager, boolean isOnTheFly, State state) {
         return null;
     }
 
     @Override
     @Nullable
-    public final ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+    public final ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly) {
         return null;
     }
 
@@ -118,38 +116,34 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
      * @return <code>null</code> if no problems found or not applicable at file level.
      */
     @Nullable
-    public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, State state) {
+    public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly, State state) {
         return null;
     }
 
-    @Nonnull
     @Override
     @SuppressWarnings("unchecked")
     public InspectionToolState<? extends State> createStateProvider() {
         return (InspectionToolState<? extends State>) super.createStateProvider();
     }
 
-    @Nonnull
     @Override
-    public final PsiElementVisitor buildVisitor(@Nonnull ProblemsHolder holder, boolean isOnTheFly) {
+    public final PsiElementVisitor buildVisitor(ProblemsHolder holder, boolean isOnTheFly) {
         return super.buildVisitor(holder, isOnTheFly);
     }
 
-    @Nonnull
     @Override
     @SuppressWarnings("unchecked")
     public final PsiElementVisitor buildVisitor(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
-        @Nonnull LocalInspectionToolSession session,
-        @Nonnull Object state
+        LocalInspectionToolSession session,
+        Object state
     ) {
         return buildVisitorImpl(holder, isOnTheFly, session, (State) state);
     }
 
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         final boolean isOnTheFly,
         LocalInspectionToolSession session,
         State state
@@ -157,19 +151,19 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitMethod(@Nonnull PsiMethod method) {
+            public void visitMethod(PsiMethod method) {
                 addDescriptors(checkMethod(method, holder.getManager(), isOnTheFly, state));
             }
 
             @Override
             @RequiredReadAction
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 addDescriptors(checkClass(aClass, holder.getManager(), isOnTheFly, state));
             }
 
             @Override
             @RequiredReadAction
-            public void visitField(@Nonnull PsiField field) {
+            public void visitField(PsiField field) {
                 addDescriptors(checkField(field, holder.getManager(), isOnTheFly, state));
             }
 
@@ -206,13 +200,11 @@ public abstract class AbstractBaseJavaLocalInspectionTool<State> extends LocalIn
         return JavaLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.inspectionGeneralToolsGroupName();
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;

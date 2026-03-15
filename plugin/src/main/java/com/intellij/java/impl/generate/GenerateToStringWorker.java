@@ -36,7 +36,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 

@@ -17,8 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiNameIdentifierOwner;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java statement with an attached label.
@@ -29,7 +28,6 @@ public interface PsiLabeledStatement extends PsiStatement, PsiNameIdentifierOwne
    *
    * @return the label identifier.
    */
-  @Nonnull
   PsiIdentifier getLabelIdentifier();
 
   /**
@@ -41,6 +39,5 @@ public interface PsiLabeledStatement extends PsiStatement, PsiNameIdentifierOwne
   PsiStatement getStatement();
 
   @Override
-  @Nonnull
   String getName();
 }

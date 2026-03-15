@@ -26,7 +26,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.lazy.LazyValue;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -51,7 +50,6 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
     });
   }
 
-  @Nonnull
   @Override
   public Role getRole() {
     return JavaPackageAccessibilityStatementElementType.typeToRole(getStub().getStubType());
@@ -67,20 +65,18 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
     return nullize(getStub().getPackageName());
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiJavaModuleReferenceElement> getModuleReferences() {
     return myModuleReferences.get();
   }
 
-  @Nonnull
   @Override
   public List<String> getModuleNames() {
     return getStub().getTargets();
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     StringUtil.repeatSymbol(buffer, ' ', indentLevel);
     buffer.append(getRole().toString().toLowerCase(Locale.US)).append(' ').append(getPackageName());
     List<String> targets = getStub().getTargets();
@@ -97,7 +93,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, getStub().getStubType());
   }
 

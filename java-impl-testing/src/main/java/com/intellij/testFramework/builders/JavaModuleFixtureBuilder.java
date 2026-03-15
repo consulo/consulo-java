@@ -19,7 +19,6 @@ package com.intellij.testFramework.builders;
 import consulo.content.OrderRootType;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.testFramework.fixtures.ModuleFixture;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Map;
 
@@ -35,13 +34,13 @@ public interface JavaModuleFixtureBuilder<T extends ModuleFixture> extends Modul
 
   JavaModuleFixtureBuilder setLanguageLevel(LanguageLevel languageLevel);
 
-  JavaModuleFixtureBuilder addLibrary(@NonNls String libraryName, @NonNls String... classPath);
+  JavaModuleFixtureBuilder addLibrary(String libraryName, String... classPath);
 
-  JavaModuleFixtureBuilder addLibrary(@NonNls String libraryName, Map<OrderRootType, String[]> roots);
+  JavaModuleFixtureBuilder addLibrary(String libraryName, Map<OrderRootType, String[]> roots);
 
-  JavaModuleFixtureBuilder addLibraryJars(@NonNls String libraryName, @NonNls String basePath, @NonNls String... jarNames);
+  JavaModuleFixtureBuilder addLibraryJars(String libraryName, String basePath, String... jarNames);
 
-  JavaModuleFixtureBuilder addJdk(@NonNls String jdkPath);
+  JavaModuleFixtureBuilder addJdk(String jdkPath);
 
   void setMockJdkLevel(MockJdkLevel level);
 }

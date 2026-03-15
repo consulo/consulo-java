@@ -25,7 +25,6 @@ import consulo.language.ast.TokenSet;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.collection.ArrayFactory;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +34,6 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   private volatile Map<String, PsiImportStatementBase> myNameToSingleImportMap = null;
   private static final PsiImportStatementBase[] EMPTY_ARRAY = new PsiImportStatementBase[0];
   private static final ArrayFactory<PsiImportStatementBase> ARRAY_FACTORY = new ArrayFactory<PsiImportStatementBase>() {
-    @Nonnull
     @Override
     public PsiImportStatementBase[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiImportStatementBase[count];
@@ -71,19 +69,16 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   private static final TokenSet IMPORT_STATIC_STATEMENT_BIT_SET = TokenSet.create(JavaElementType.IMPORT_STATIC_STATEMENT);
 
   @Override
-  @Nonnull
   public PsiImportStatement[] getImportStatements() {
     return getStubOrPsiChildren(IMPORT_STATEMENT_BIT_SET, PsiImportStatementImpl.ARRAY_FACTORY);
   }
 
   @Override
-  @Nonnull
   public PsiImportStaticStatement[] getImportStaticStatements() {
     return getStubOrPsiChildren(IMPORT_STATIC_STATEMENT_BIT_SET, PsiImportStaticStatementImpl.ARRAY_FACTORY);
   }
 
   @Override
-  @Nonnull
   public PsiImportStatementBase[] getAllImportStatements() {
     return getStubOrPsiChildren(ElementType.IMPORT_STATEMENT_BASE_BIT_SET, ARRAY_FACTORY);
   }
@@ -163,7 +158,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitImportList(this);
     } else {

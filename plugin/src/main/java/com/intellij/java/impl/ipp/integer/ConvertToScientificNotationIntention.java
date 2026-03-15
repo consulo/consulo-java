@@ -21,7 +21,6 @@ import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -35,7 +34,6 @@ import java.util.Locale;
 public class ConvertToScientificNotationIntention extends ConvertNumberIntentionBase {
     private static final DecimalFormat FORMAT = new DecimalFormat("0.0#############E00", new DecimalFormatSymbols(Locale.US));
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.convertToScientificNotationIntentionName();
@@ -48,7 +46,6 @@ public class ConvertToScientificNotationIntention extends ConvertNumberIntention
         return PsiType.FLOAT.equals(type) ? text + "f" : text;
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ConvertToScientificNotationPredicate();

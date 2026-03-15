@@ -46,8 +46,7 @@ import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna
@@ -116,7 +115,7 @@ public class ShowByteCodeAction extends AnAction {
             private String myErrorTitle;
 
             @Override
-            public void run(@Nonnull ProgressIndicator indicator) {
+            public void run(ProgressIndicator indicator) {
                 if (ProjectRootManager.getInstance(project).getFileIndex().isInContent(virtualFile)
                     && TranslatingCompilerFilesMonitor.getInstance().isMarkedForCompilation(project, virtualFile)) {
                     myErrorMessage = "Unable to show byte code for '" + psiElementTitle + "'. Class file does not exist or is out-of-date.";

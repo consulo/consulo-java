@@ -37,8 +37,7 @@ import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,7 +51,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
     private final String myName;
     private final String myCanonicalText;
 
-    public MethodReturnTypeFix(@Nonnull PsiMethod method, @Nonnull PsiType returnType, boolean fixWholeHierarchy) {
+    public MethodReturnTypeFix(PsiMethod method, PsiType returnType, boolean fixWholeHierarchy) {
         super(method);
         myReturnTypePointer = SmartTypePointerManager.getInstance(method.getProject()).createSmartTypePointer(returnType);
         myFixWholeHierarchy = fixWholeHierarchy;
@@ -60,7 +59,6 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
         myCanonicalText = returnType.getCanonicalText();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.fixReturnTypeText(myName, myCanonicalText);
@@ -68,10 +66,10 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiMethod myMethod = (PsiMethod) startElement;
 
@@ -88,11 +86,11 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiMethod myMethod = (PsiMethod) startElement;
 
@@ -143,12 +141,10 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
 
     // to clearly separate data
     private static class ReturnStatementAdder {
-        @Nonnull
         private final PsiElementFactory factory;
-        @Nonnull
         private final PsiType myTargetType;
 
-        private ReturnStatementAdder(@Nonnull PsiElementFactory factory, @Nonnull PsiType targetType) {
+        private ReturnStatementAdder(PsiElementFactory factory, PsiType targetType) {
             this.factory = factory;
             myTargetType = targetType;
         }
@@ -191,7 +187,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
         }
     }
 
-    private static Editor getEditorForMethod(PsiMethod myMethod, @Nonnull Project project, Editor editor, PsiFile file) {
+    private static Editor getEditorForMethod(PsiMethod myMethod, Project project, Editor editor, PsiFile file) {
 
         PsiFile containingFile = myMethod.getContainingFile();
         if (containingFile != file) {
@@ -201,8 +197,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
         return editor;
     }
 
-    @Nonnull
-    private PsiMethod[] getChangeRoots(PsiMethod method, @Nonnull PsiType returnType) {
+    private PsiMethod[] getChangeRoots(PsiMethod method, PsiType returnType) {
         if (!myFixWholeHierarchy) {
             return new PsiMethod[]{method};
         }
@@ -221,8 +216,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
         return new PsiMethod[]{method};
     }
 
-    @Nonnull
-    private List<PsiMethod> changeReturnType(PsiMethod method, @Nonnull PsiType returnType) {
+    private List<PsiMethod> changeReturnType(PsiMethod method, PsiType returnType) {
         PsiMethod[] methods = getChangeRoots(method, returnType);
 
         MethodSignatureChangeVisitor methodSignatureChangeVisitor = new MethodSignatureChangeVisitor();
@@ -297,7 +291,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
             @PsiModifier.ModifierConstant String newVisibility,
             String newName,
             PsiType newType,
-            @Nonnull ParameterInfoImpl[] parameterInfo,
+            ParameterInfoImpl[] parameterInfo,
             UsageVisitor usageVisitor
         ) {
             super(project, method, generateDelegate, newVisibility, newName, newType, parameterInfo);
@@ -310,7 +304,7 @@ public class MethodReturnTypeFix extends LocalQuickFixAndIntentionActionOnPsiEle
         }
 
         @Override
-        protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+        protected void performRefactoring(UsageInfo[] usages) {
             super.performRefactoring(usages);
 
             for (UsageInfo usage : usages) {

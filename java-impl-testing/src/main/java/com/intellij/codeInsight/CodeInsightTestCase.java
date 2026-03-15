@@ -31,7 +31,6 @@ import consulo.language.editor.PlatformDataKeys;
 import consulo.logging.Logger;
 import consulo.ui.ex.action.IdeActions;
 import consulo.virtualFileSystem.LocalFileSystem;
-import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import consulo.ide.impl.idea.codeInsight.highlighting.HighlightUsagesHandler;
 import consulo.dataContext.DataManager;
@@ -127,12 +126,10 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	}
 
 	public static final String CARET_MARKER = "<caret>";
-	@NonNls
 	public static final String SELECTION_START_MARKER = "<selection>";
-	@NonNls
 	public static final String SELECTION_END_MARKER = "</selection>";
 
-	protected void configureByFile(@NonNls String filePath) throws Exception
+	protected void configureByFile(String filePath) throws Exception
 	{
 		configureByFile(filePath, null);
 	}
@@ -154,7 +151,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		return configureByFiles(projectFile, vFiles);
 	}
 
-	protected VirtualFile configureByFile(@NonNls String filePath, String projectRoot) throws Exception
+	protected VirtualFile configureByFile(String filePath, String projectRoot) throws Exception
 	{
 		String fullPath = getTestDataPath() + filePath;
 
@@ -166,12 +163,12 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		return configureByFile(vFile, projectFile);
 	}
 
-	protected PsiFile configureByText(final FileType fileType, @NonNls final String text) throws Exception
+	protected PsiFile configureByText(final FileType fileType, final String text) throws Exception
 	{
 		return configureByText(fileType, text, null);
 	}
 
-	protected PsiFile configureByText(final FileType fileType, @NonNls final String text, @Nullable String _extension) throws Exception
+	protected PsiFile configureByText(final FileType fileType, final String text, @Nullable String _extension) throws Exception
 	{
 		final String extension = _extension == null ? fileType.getDefaultExtension() : _extension;
 
@@ -579,12 +576,12 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		myEditor.getSelectionModel().setSelection(selectionStart, selectionEnd);
 	}
 
-	protected void checkResultByFile(@NonNls String filePath) throws Exception
+	protected void checkResultByFile(String filePath) throws Exception
 	{
 		checkResultByFile(filePath, false);
 	}
 
-	protected void checkResultByFile(@NonNls final String filePath, final boolean stripTrailingSpaces) throws Exception
+	protected void checkResultByFile(final String filePath, final boolean stripTrailingSpaces) throws Exception
 	{
 		ApplicationManager.getApplication().runWriteAction(new Runnable()
 		{
@@ -737,7 +734,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		return PlatformDataKeys.EDITOR == dataId ? myEditor : super.getData(dataId);
 	}
 
-	protected VirtualFile getVirtualFile(@NonNls String filePath)
+	protected VirtualFile getVirtualFile(String filePath)
 	{
 		String fullPath = getTestDataPath() + filePath;
 
@@ -795,7 +792,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		action.execute(getEditor(), DataManager.getInstance().getDataContext());
 	}
 
-	protected void type(@NonNls String s)
+	protected void type(String s)
 	{
 		for(char c : s.toCharArray())
 		{
@@ -854,7 +851,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	}
 
 	@Nonnull
-	protected PsiClass findClass(@Nonnull @NonNls final String name)
+	protected PsiClass findClass(@Nonnull final String name)
 	{
 		final PsiClass aClass = myJavaFacade.findClass(name, ProjectScope.getProjectScope(getProject()));
 		assertNotNull("Class " + name + " not found", aClass);
@@ -862,7 +859,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	}
 
 	@Nonnull
-	protected PsiJavaPackage findPackage(@Nonnull @NonNls final String name)
+	protected PsiJavaPackage findPackage(@Nonnull final String name)
 	{
 		final PsiJavaPackage aPackage = myJavaFacade.findPackage(name);
 		assertNotNull("Package " + name + " not found", aPackage);

@@ -31,7 +31,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,27 +54,24 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionRedundantTypeDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "RedundantTypeArguments";
     }
 
     @Override
     public ProblemDescriptor[] checkMethod(
-        @Nonnull PsiMethod psiMethod,
-        @Nonnull InspectionManager manager,
+        PsiMethod psiMethod,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -97,7 +93,7 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
         place.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
             @RequiredReadAction
-            public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            public void visitMethodCallExpression(PsiMethodCallExpression expression) {
                 PsiType[] typeArguments = expression.getTypeArguments();
                 if (typeArguments.length > 0) {
                     checkCallExpression(expression.getMethodExpression(), typeArguments, expression, inspectionManager, problems);
@@ -106,7 +102,7 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
             @Override
             @RequiredReadAction
-            public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            public void visitNewExpression(PsiNewExpression expression) {
                 PsiType[] typeArguments = expression.getTypeArguments();
                 if (typeArguments.length > 0) {
                     PsiJavaCodeReferenceElement classReference = expression.getClassReference();
@@ -188,14 +184,13 @@ public class RedundantTypeArgsInspection extends GenericsInspectionToolBase {
 
     private static class MyQuickFixAction implements LocalQuickFix {
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionRedundantTypeRemoveQuickfix();
         }
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiReferenceParameterList typeArgumentList = (PsiReferenceParameterList) descriptor.getPsiElement();
             try {
                 PsiMethodCallExpression expr = (PsiMethodCallExpression) JavaPsiFacade.getInstance(project).getElementFactory()

@@ -22,17 +22,14 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.forLoopNotUseLoopVariableDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         boolean condition = ((Boolean) infos[0]).booleanValue();
         boolean update = ((Boolean) infos[1]).booleanValue();
@@ -53,7 +50,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitForStatement(@Nonnull PsiForStatement statement) {
+        public void visitForStatement(PsiForStatement statement) {
             super.visitForStatement(statement);
             if (conditionUsesInitializer(statement)) {
                 if (!updateUsesInitializer(statement)) {
@@ -166,7 +163,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
         }
 
         @Override
-        public void visitElement(@Nonnull PsiElement element) {
+        public void visitElement(PsiElement element) {
             if (!used) {
                 super.visitElement(element);
             }
@@ -174,7 +171,7 @@ public class ForLoopThatDoesntUseLoopVariableInspection extends BaseInspection {
 
         @Override
         public void visitReferenceExpression(
-            @Nonnull PsiReferenceExpression ref
+            PsiReferenceExpression ref
         ) {
             if (used) {
                 return;

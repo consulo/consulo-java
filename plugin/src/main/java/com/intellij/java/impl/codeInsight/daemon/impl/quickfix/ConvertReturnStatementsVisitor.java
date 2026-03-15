@@ -22,9 +22,8 @@ import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {
@@ -58,7 +57,7 @@ class ConvertReturnStatementsVisitor implements ReturnStatementsVisitor {
     return myLatestReturn;
   }
 
-  private String generateValue(@Nonnull PsiElement stopElement) {
+  private String generateValue(PsiElement stopElement) {
     PsiVariable variable = mySearcher.getDeclaration(stopElement);
     return variable != null ? variable.getName() : myDefaultValue;
   }

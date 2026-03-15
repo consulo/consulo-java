@@ -27,13 +27,12 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
 
   private final LocalizeValue name;
 
-  public MoveAnonymousToInnerClassFix(@Nonnull LocalizeValue name) {
+  public MoveAnonymousToInnerClassFix(LocalizeValue name) {
     this.name = name;
   }
 
@@ -41,12 +40,11 @@ public class MoveAnonymousToInnerClassFix extends InspectionGadgetsFix {
     name = InspectionGadgetsLocalize.moveAnonymousToInnerQuickfix();
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     return name;
   }
 
-  public void doFix(@Nonnull final Project project, ProblemDescriptor descriptor) {
+  public void doFix(final Project project, ProblemDescriptor descriptor) {
     PsiElement nameElement = descriptor.getPsiElement();
     final PsiAnonymousClass aClass = (PsiAnonymousClass)nameElement.getParent();
     JavaRefactoringActionHandlerFactory factory = JavaRefactoringActionHandlerFactory.getInstance();

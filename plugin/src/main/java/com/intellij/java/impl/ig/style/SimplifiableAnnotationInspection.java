@@ -27,18 +27,14 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SimplifiableAnnotationInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.simplifiableAnnotationDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         String replacement = (String) infos[0];
@@ -59,7 +55,6 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
             this.replacement = replacement;
         }
 
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.simplifiableAnnotationQuickfix();
         }
@@ -118,7 +113,7 @@ public class SimplifiableAnnotationInspection extends BaseInspection {
             }
             else if (attributes.length == 1) {
                 PsiNameValuePair attribute = attributes[0];
-                @NonNls String name = attribute.getName();
+                String name = attribute.getName();
                 PsiAnnotationMemberValue attributeValue = attribute.getValue();
                 if (attributeValue == null) {
                     return;

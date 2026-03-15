@@ -24,8 +24,7 @@ import consulo.index.io.data.IOUtil;
 import consulo.util.collection.primitive.ints.*;
 import consulo.util.io.PathKt;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ final class TestInfoHolder {
 
   private static final int VERSION = 4;
 
-  TestInfoHolder(@Nonnull Path basePath, boolean readOnly, Object lock) {
+  TestInfoHolder(Path basePath, boolean readOnly, Object lock) {
     myLock = lock;
     final Path versionFile = getVersionFile(basePath);
     try {
@@ -191,13 +190,13 @@ final class TestInfoHolder {
     }
   }
 
-  private static void writeVersion(@Nonnull Path versionFile) throws IOException {
+  private static void writeVersion(Path versionFile) throws IOException {
     try (final DataOutputStream versionOut = new DataOutputStream(PathKt.outputStream(versionFile))) {
       DataInputOutputUtil.writeINT(versionOut, VERSION);
     }
   }
 
-  private static int readVersion(@Nonnull Path versionFile) throws IOException {
+  private static int readVersion(Path versionFile) throws IOException {
     InputStream inputStream = PathKt.inputStreamIfExists(versionFile);
     if (inputStream == null) {
       return 0;
@@ -260,7 +259,7 @@ final class TestInfoHolder {
     return myDisposed;
   }
 
-  public static boolean isValidPath(@Nonnull Path path) {
+  public static boolean isValidPath(Path path) {
     try {
       return readVersion(getVersionFile(path)) == VERSION;
     } catch (IOException ex) {
@@ -269,13 +268,13 @@ final class TestInfoHolder {
   }
 
   private static class TestNamesExternalizer implements DataExternalizer<IntList> {
-    public void save(@Nonnull DataOutput dataOutput, IntList testNameIds) throws IOException {
+    public void save(DataOutput dataOutput, IntList testNameIds) throws IOException {
       for (int testNameId : testNameIds.toArray()) {
         DataInputOutputUtil.writeINT(dataOutput, testNameId);
       }
     }
 
-    public IntList read(@Nonnull DataInput dataInput) throws IOException {
+    public IntList read(DataInput dataInput) throws IOException {
       IntSet result = IntSets.newHashSet();
 
       while (((InputStream) dataInput).available() > 0) {
@@ -295,7 +294,7 @@ final class TestInfoHolder {
   }
 
   private static class ClassesAndMethodsMapDataExternalizer implements DataExternalizer<IntObjectMap<IntList>> {
-    public void save(@Nonnull final DataOutput dataOutput, IntObjectMap<IntList> classAndMethodsMap) throws IOException {
+    public void save(final DataOutput dataOutput, IntObjectMap<IntList> classAndMethodsMap) throws IOException {
       DataInputOutputUtil.writeINT(dataOutput, classAndMethodsMap.size());
       final int[] classNameIds = classAndMethodsMap.keys();
       Arrays.sort(classNameIds);
@@ -317,7 +316,7 @@ final class TestInfoHolder {
       }
     }
 
-    public IntObjectMap<IntList> read(@Nonnull DataInput dataInput) throws IOException {
+    public IntObjectMap<IntList> read(DataInput dataInput) throws IOException {
       int numberOfClasses = DataInputOutputUtil.readINT(dataInput);
       IntObjectMap<IntList> result = IntMaps.newIntObjectHashMap();
       int prevClassNameId = 0;
@@ -345,17 +344,16 @@ final class TestInfoHolder {
     public static final MethodQNameSerializer INSTANCE = new MethodQNameSerializer();
 
     @Override
-    public void save(@Nonnull DataOutput out, Long value) throws IOException {
+    public void save(DataOutput out, Long value) throws IOException {
       out.writeLong(value);
     }
 
     @Override
-    public Long read(@Nonnull DataInput in) throws IOException {
+    public Long read(DataInput in) throws IOException {
       return in.readLong();
     }
   }
 
-  @Nonnull
   static Path getVersionFile(Path path) {
     return path.resolve("index.version");
   }

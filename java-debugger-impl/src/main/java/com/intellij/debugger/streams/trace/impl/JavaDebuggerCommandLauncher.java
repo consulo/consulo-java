@@ -6,18 +6,17 @@ import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.stream.trace.DebuggerCommandLauncher;
-import jakarta.annotation.Nonnull;
 
 
 public class JavaDebuggerCommandLauncher implements DebuggerCommandLauncher {
     private final XDebugSession session;
 
-    public JavaDebuggerCommandLauncher(@Nonnull XDebugSession session) {
+    public JavaDebuggerCommandLauncher(XDebugSession session) {
         this.session = session;
     }
 
     @Override
-    public void launchDebuggerCommand(@Nonnull Runnable runnable) {
+    public void launchDebuggerCommand(Runnable runnable) {
         DebuggerContextImpl debuggerContext = ((JavaDebugProcess) session.getDebugProcess())
             .getDebuggerSession()
             .getContextManager()

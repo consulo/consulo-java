@@ -57,15 +57,12 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.UsageViewUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MoveClassesOrPackagesDialog extends RefactoringDialog {
-  @NonNls
   private static final String RECENTS_KEY = "MoveClassesOrPackagesDialog.RECENTS_KEY";
   private final PsiElement[] myElementsToMove;
   private final MoveCallback myMoveCallback;
@@ -466,7 +463,7 @@ public class MoveClassesOrPackagesDialog extends RefactoringDialog {
   }
 
   //for scala plugin
-  protected MoveClassToInnerProcessor createMoveToInnerProcessor(PsiClass destination, @Nonnull PsiClass[] classesToMove, @Nullable MoveCallback callback) {
+  protected MoveClassToInnerProcessor createMoveToInnerProcessor(PsiClass destination, PsiClass[] classesToMove, @Nullable MoveCallback callback) {
     return new MoveClassToInnerProcessor(getProject(), classesToMove, destination, isSearchInComments(), isSearchInNonJavaFiles(), callback);
   }
 

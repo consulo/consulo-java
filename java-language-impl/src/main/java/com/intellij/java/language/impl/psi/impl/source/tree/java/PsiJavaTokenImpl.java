@@ -20,7 +20,6 @@ import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiJavaToken;
 import consulo.language.impl.psi.LeafPsiElement;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
 
 public class PsiJavaTokenImpl extends LeafPsiElement implements PsiJavaToken{
   public PsiJavaTokenImpl(IElementType type, CharSequence text) {
@@ -33,7 +32,7 @@ public class PsiJavaTokenImpl extends LeafPsiElement implements PsiJavaToken{
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitJavaToken(this);
     }

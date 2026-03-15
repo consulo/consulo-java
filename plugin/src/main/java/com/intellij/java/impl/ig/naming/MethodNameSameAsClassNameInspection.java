@@ -29,25 +29,21 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MethodNameSameAsClassNameInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.methodNameSameAsClassNameDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.methodNameSameAsClassNameProblemDescriptor().get();
   }
 
   @Override
-  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     Boolean onTheFly = (Boolean)infos[0];
     if (onTheFly.booleanValue()) {
@@ -69,7 +65,6 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
   private static class MethodNameSameAsClassNameFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.makeMethodCtrQuickfix();
     }
@@ -101,7 +96,7 @@ public class MethodNameSameAsClassNameInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       // no call to super, so it doesn't drill down into inner classes
       if (method.isConstructor()) {
         return;

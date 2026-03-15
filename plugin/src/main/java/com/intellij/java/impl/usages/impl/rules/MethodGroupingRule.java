@@ -43,7 +43,6 @@ import consulo.usage.rule.UsageGroupingRule;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.status.FileStatus;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -53,7 +52,7 @@ public class MethodGroupingRule implements UsageGroupingRule {
 
   @Override
   @RequiredReadAction
-  public UsageGroup groupUsage(@Nonnull Usage usage) {
+  public UsageGroup groupUsage(Usage usage) {
     if (!(usage instanceof PsiElementUsage)) return null;
     PsiElement psiElement = ((PsiElementUsage)usage).getElement();
     PsiFile containingFile = psiElement.getContainingFile();
@@ -133,7 +132,6 @@ public class MethodGroupingRule implements UsageGroupingRule {
     }
 
     @Override
-    @Nonnull
     public String getText(UsageView view) {
       return myName;
     }

@@ -23,10 +23,8 @@ import consulo.util.collection.BidirectionalMap;
 import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.CustomReferenceConverter;
 import consulo.xml.util.xml.GenericDomValue;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -127,7 +125,7 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     return null;
   }
 
-  @NonNls @Nullable
+  @Nullable
   private static String toStringArray(PsiType psiType) {
     if (psiType instanceof PsiArrayType) {
       return '[' + toStringArray(((PsiArrayType)psiType).getComponentType());
@@ -141,7 +139,6 @@ public class JvmPsiTypeConverterImpl extends JvmPsiTypeConverter implements Cust
     return null;
   }
 
-  @Nonnull
   public PsiReference[] createReferences(GenericDomValue<PsiType> value, PsiElement element, ConvertContext context) {
     PsiType psiType = value.getValue();
     String s = value.getStringValue();

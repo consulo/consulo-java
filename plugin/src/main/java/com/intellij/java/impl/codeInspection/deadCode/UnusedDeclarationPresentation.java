@@ -64,10 +64,8 @@ import consulo.project.Project;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.status.FileStatus;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.event.InputEvent;
@@ -90,7 +88,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     DELETE
   };
 
-  public UnusedDeclarationPresentation(@Nonnull InspectionToolWrapper toolWrapper, @Nonnull GlobalInspectionContextImpl context) {
+  public UnusedDeclarationPresentation(InspectionToolWrapper toolWrapper, GlobalInspectionContextImpl context) {
     super(toolWrapper, context);
     myQuickFixActions = createQuickFixes(toolWrapper);
     ((EntryPointsManagerBase)getEntryPointsManager()).setAddNonJavaEntries(getTool().ADD_NONJAVA_TO_ENTRIES);
@@ -104,13 +102,13 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   private static class WeakUnreferencedFilter extends UnreferencedFilter {
-    private WeakUnreferencedFilter(@Nonnull UnusedDeclarationInspectionBase tool,
-                                   @Nonnull GlobalInspectionContext context) {
+    private WeakUnreferencedFilter(UnusedDeclarationInspectionBase tool,
+                                   GlobalInspectionContext context) {
       super(tool, context);
     }
 
     @Override
-    public int getElementProblemCount(@Nonnull RefJavaElement refElement) {
+    public int getElementProblemCount(RefJavaElement refElement) {
       int problemCount = super.getElementProblemCount(refElement);
       if (problemCount > -1) {
         return problemCount;
@@ -122,14 +120,12 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     }
   }
 
-  @Nonnull
   private UnusedDeclarationInspectionBase getTool() {
     return (UnusedDeclarationInspectionBase)getToolWrapper().getTool();
   }
 
 
   @Override
-  @Nonnull
   public HTMLComposerBase getComposer() {
     if (myComposer == null) {
       myComposer = new DeadHTMLComposer(this);
@@ -138,7 +134,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   @Override
-  public void exportResults(@Nonnull Element parentNode, @Nonnull RefEntity refEntity) {
+  public void exportResults(Element parentNode, RefEntity refEntity) {
     if (!(refEntity instanceof RefJavaElement)) {
       return;
     }
@@ -164,10 +160,10 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
       problemClassElement.addContent(InspectionLocalize.inspectionExportResultsDeadCode().get());
       element.addContent(problemClassElement);
 
-      @NonNls Element hintsElement = new Element("hints");
+      Element hintsElement = new Element("hints");
 
       for (String hint : HINTS) {
-        @NonNls Element hintElement = new Element("hint");
+        Element hintElement = new Element("hint");
         hintElement.setAttribute("value", hint);
         hintsElement.addContent(hintElement);
       }
@@ -182,14 +178,13 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   @Override
-  public QuickFixAction[] getQuickFixes(@Nonnull RefEntity[] refElements) {
+  public QuickFixAction[] getQuickFixes(RefEntity[] refElements) {
     return myQuickFixActions;
   }
 
   final QuickFixAction[] myQuickFixActions;
 
-  @Nonnull
-  private QuickFixAction[] createQuickFixes(@Nonnull InspectionToolWrapper toolWrapper) {
+  private QuickFixAction[] createQuickFixes(InspectionToolWrapper toolWrapper) {
     return new QuickFixAction[]{
       new PermanentDeleteAction(toolWrapper),
       new CommentOutBin(toolWrapper),
@@ -198,7 +193,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   class PermanentDeleteAction extends QuickFixAction {
-    PermanentDeleteAction(@Nonnull InspectionToolWrapper toolWrapper) {
+    PermanentDeleteAction(InspectionToolWrapper toolWrapper) {
       super(
         InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix(),
         AllIcons.Actions.Cancel,
@@ -208,7 +203,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     }
 
     @Override
-    protected boolean applyFix(@Nonnull RefEntity[] refElements) {
+    protected boolean applyFix(RefEntity[] refElements) {
       if (!super.applyFix(refElements)) {
         return false;
       }
@@ -247,7 +242,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   class MoveToEntries extends QuickFixAction {
-    MoveToEntries(@Nonnull InspectionToolWrapper toolWrapper) {
+    MoveToEntries(InspectionToolWrapper toolWrapper) {
       super(
         InspectionLocalize.inspectionDeadCodeEntryPointQuickfix(),
         null,
@@ -257,7 +252,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     }
 
     @Override
-    protected boolean applyFix(@Nonnull RefEntity[] refElements) {
+    protected boolean applyFix(RefEntity[] refElements) {
       EntryPointsManager entryPointsManager = getEntryPointsManager();
       for (RefEntity refEntity : refElements) {
         if (refEntity instanceof RefElement refElement) {
@@ -270,7 +265,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   class CommentOutBin extends QuickFixAction {
-    CommentOutBin(@Nonnull InspectionToolWrapper toolWrapper) {
+    CommentOutBin(InspectionToolWrapper toolWrapper) {
       super(
         InspectionLocalize.inspectionDeadCodeCommentQuickfix(),
         null,
@@ -281,7 +276,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
 
     @Override
     @RequiredReadAction
-    protected boolean applyFix(@Nonnull RefEntity[] refElements) {
+    protected boolean applyFix(RefEntity[] refElements) {
       if (!super.applyFix(refElements)) {
         return false;
       }
@@ -315,19 +310,18 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
       return InspectionLocalize.inspectionDeadCodeCommentQuickfix();
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
       return true;
     }
 
     @Override
     @RequiredReadAction
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
       if (myElement != null && myElement.isValid()) {
         commentOutDead(PsiTreeUtil.getParentOfType(myElement, PsiModifierListOwner.class));
       }
@@ -382,13 +376,12 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     }
   }
 
-  @Nonnull
   @Override
   public InspectionNode createToolNode(
-    @Nonnull GlobalInspectionContextImpl context,
-    @Nonnull InspectionNode node,
-    @Nonnull InspectionRVContentProvider provider,
-    @Nonnull InspectionTreeNode parentNode,
+    GlobalInspectionContextImpl context,
+    InspectionNode node,
+    InspectionRVContentProvider provider,
+    InspectionTreeNode parentNode,
     boolean showStructure
   ) {
     EntryPointsNode entryPointsNode = new EntryPointsNode(context);
@@ -407,7 +400,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     myPackageContents.clear();
     context.getRefManager().iterate(new RefJavaVisitor() {
       @Override
-      public void visitElement(@Nonnull RefEntity refEntity) {
+      public void visitElement(RefEntity refEntity) {
         if (!(refEntity instanceof RefJavaElement)) {
           return;//dead code doesn't work with refModule | refPackage
         }
@@ -435,7 +428,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     return !myPackageContents.isEmpty() || isOldProblemsIncluded() && !myOldPackageContents.isEmpty();
   }
 
-  private boolean containsOnlyDiff(@Nonnull Map<String, Set<RefEntity>> packageContents) {
+  private boolean containsOnlyDiff(Map<String, Set<RefEntity>> packageContents) {
     for (String packageName : packageContents.keySet()) {
       Set<RefEntity> refElements = packageContents.get(packageName);
       if (refElements != null) {
@@ -449,7 +442,6 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     return false;
   }
 
-  @Nonnull
   @Override
   public Map<String, Set<RefEntity>> getContent() {
     return myPackageContents;
@@ -504,7 +496,6 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
 
-  @Nonnull
   @Override
   public FileStatus getElementStatus(RefEntity element) {
     GlobalInspectionContextImpl context = (GlobalInspectionContextImpl)getContext();
@@ -520,7 +511,6 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   }
 
   @Override
-  @Nonnull
   public Collection<RefEntity> getIgnoredRefElements() {
     return myIgnoreElements;
   }
@@ -536,7 +526,7 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
   @Override
   @Nullable
   @RequiredReadAction
-  public IntentionAction findQuickFixes(@Nonnull CommonProblemDescriptor descriptor, String hint) {
+  public IntentionAction findQuickFixes(CommonProblemDescriptor descriptor, String hint) {
     if (descriptor instanceof ProblemDescriptor problemDescriptor) {
       if (DELETE.equals(hint)) {
         return new PermanentDeleteFix(problemDescriptor.getPsiElement());
@@ -556,18 +546,17 @@ public class UnusedDeclarationPresentation extends DefaultInspectionToolPresenta
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
       return InspectionLocalize.inspectionDeadCodeSafeDeleteQuickfix();
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
       return true;
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
       if (myElement != null && myElement.isValid()) {
         project.getApplication().invokeLater(() -> SafeDeleteHandler.invoke(
           myElement.getProject(),

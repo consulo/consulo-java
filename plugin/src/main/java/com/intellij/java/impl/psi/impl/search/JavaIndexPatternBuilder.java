@@ -28,7 +28,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.search.IndexPatternBuilder;
 import consulo.xml.psi.xml.XmlElementType;
 import consulo.xml.psi.xml.XmlTokenType;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole

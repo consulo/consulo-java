@@ -24,7 +24,7 @@
  */
 package org.osmorc.manifest.lang.valueparser.impl.valueobject;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Author: Robert F. Beeger (robert@beeger.net)

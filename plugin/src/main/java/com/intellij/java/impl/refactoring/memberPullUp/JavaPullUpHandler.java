@@ -40,7 +40,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +55,7 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         int offset = editor.getCaretModel().getOffset();
         editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         PsiElement element = file.findElementAt(offset);
@@ -84,7 +83,7 @@ public class JavaPullUpHandler implements RefactoringActionHandler, PullUpDialog
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length != 1) {
             return;
         }

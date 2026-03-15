@@ -27,7 +27,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiNamedElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Set;
@@ -41,19 +40,16 @@ public class FieldRepeatedlyAccessedInspection extends BaseInspection {
     public boolean m_ignoreFinalFields = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "FieldRepeatedlyAccessedInMethod";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.fieldRepeatedlyAccessedInMethodDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... arg) {
         String fieldName = ((PsiNamedElement) arg[0]).getName();
         return InspectionGadgetsLocalize.fieldRepeatedlyAccessedInMethodProblemDescriptor(fieldName).get();
@@ -73,7 +69,7 @@ public class FieldRepeatedlyAccessedInspection extends BaseInspection {
     private class FieldRepeatedlyAccessedVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             PsiIdentifier nameIdentifier = method.getNameIdentifier();
             if (nameIdentifier == null) {
                 return;

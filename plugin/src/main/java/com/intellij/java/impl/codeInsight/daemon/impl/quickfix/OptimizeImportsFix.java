@@ -27,24 +27,22 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 public class OptimizeImportsFix implements SyntheticIntentionAction {
     private static final Logger LOG = Logger.getInstance(OptimizeImportsFix.class);
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.optimizeImportsFix();
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return file.getManager().isInProject(file) && file instanceof PsiJavaFile;
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!(file instanceof PsiJavaFile)) {
             return;
         }

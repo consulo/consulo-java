@@ -15,8 +15,7 @@
  */
 package com.intellij.java.impl.refactoring.typeMigration;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
@@ -50,7 +49,7 @@ public class TypeConversionDescriptorBase
 		return null;
 	}
 
-	public PsiExpression replace(PsiExpression expression, @Nonnull TypeEvaluator evaluator) throws IncorrectOperationException
+	public PsiExpression replace(PsiExpression expression, TypeEvaluator evaluator) throws IncorrectOperationException
 	{
 		return expression;
 	}

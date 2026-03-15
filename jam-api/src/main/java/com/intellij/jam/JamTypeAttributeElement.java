@@ -17,14 +17,13 @@ package com.intellij.jam;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElementRef;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class JamTypeAttributeElement extends JamAttributeElement<PsiType> {
 
-  public JamTypeAttributeElement(@Nonnull PsiElementRef<PsiAnnotation> parent, String attributeName) {
+  public JamTypeAttributeElement(PsiElementRef<PsiAnnotation> parent, String attributeName) {
     super(attributeName, parent);
   }
 

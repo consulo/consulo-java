@@ -20,8 +20,7 @@ import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -41,5 +40,5 @@ public abstract class DebuggerManagerEx extends DebuggerManager {
     public abstract DebuggerStateManager getContextManager();
 
     @Nullable
-    public abstract DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException;
+    public abstract DebuggerSession attachVirtualMachine(DebugEnvironment environment) throws ExecutionException;
 }

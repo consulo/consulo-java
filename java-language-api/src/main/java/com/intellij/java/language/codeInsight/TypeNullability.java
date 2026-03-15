@@ -4,8 +4,7 @@ package com.intellij.java.language.codeInsight;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -34,10 +33,10 @@ public final class TypeNullability {
      */
     public static final TypeNullability NULLABLE_MANDATED = new TypeNullability(Nullability.NULLABLE, NullabilitySource.Standard.MANDATED);
 
-    private final @Nonnull Nullability myNullability;
-    private final @Nonnull NullabilitySource mySource;
+    private final Nullability myNullability;
+    private final NullabilitySource mySource;
 
-    public TypeNullability(@Nonnull Nullability nullability, @Nonnull NullabilitySource source) {
+    public TypeNullability(Nullability nullability, NullabilitySource source) {
         myNullability = nullability;
         mySource = source;
         if (nullability != Nullability.UNKNOWN && source == NullabilitySource.Standard.NONE) {
@@ -48,14 +47,14 @@ public final class TypeNullability {
     /**
      * @return the nullability of the type
      */
-    public @Nonnull Nullability nullability() {
+    public Nullability nullability() {
         return myNullability;
     }
 
     /**
      * @return the source of the nullability information
      */
-    public @Nonnull NullabilitySource source() {
+    public NullabilitySource source() {
         return mySource;
     }
 
@@ -63,7 +62,7 @@ public final class TypeNullability {
      * @return the same nullability but marked as inherited from a bound.
      * @see NullabilitySource.ExtendsBound
      */
-    public @Nonnull TypeNullability inherited() {
+    public TypeNullability inherited() {
         NullabilitySource inherited = mySource.inherited();
         return inherited.equals(mySource) ? this : new TypeNullability(myNullability, inherited);
     }
@@ -73,7 +72,7 @@ public final class TypeNullability {
      * @return the nullability of the instantiated type parameter,
      * assuming that this object is the declared nullability of the type parameter.
      */
-    public @Nonnull TypeNullability instantiatedWith(@Nonnull TypeNullability nullability) {
+    public TypeNullability instantiatedWith(TypeNullability nullability) {
         if (this.nullability() == nullability.nullability()) {
             return nullability;
         }
@@ -92,7 +91,7 @@ public final class TypeNullability {
         return this;
     }
 
-    public @Nonnull TypeNullability join(@Nonnull TypeNullability other) {
+    public TypeNullability join(TypeNullability other) {
         if (this.nullability() == other.nullability()) {
             if (this.source().equals(other.source())) return this;
             return new TypeNullability(this.nullability(), NullabilitySource.multiSource(Arrays.asList(this.source(), other.source())));
@@ -106,7 +105,7 @@ public final class TypeNullability {
         return this.nullability() == Nullability.UNKNOWN ? this : other;
     }
 
-    public @Nonnull TypeNullability meet(@Nonnull TypeNullability other) {
+    public TypeNullability meet(TypeNullability other) {
         if (this.nullability() == other.nullability()) {
             if (this.source().equals(other.source())) return this;
             return new TypeNullability(this.nullability(), NullabilitySource.multiSource(Arrays.asList(this.source(), other.source())));
@@ -120,7 +119,7 @@ public final class TypeNullability {
         return this.nullability() == Nullability.NULLABLE ? this : other;
     }
 
-    public static @Nonnull TypeNullability ofTypeParameter(@Nonnull PsiTypeParameter parameter) {
+    public static TypeNullability ofTypeParameter(PsiTypeParameter parameter) {
         TypeNullability nullability = intersect(ContainerUtil.map(parameter.getSuperTypes(), PsiType::getNullability)).inherited();
         if (!nullability.equals(UNKNOWN)) {
             return nullability;
@@ -143,7 +142,7 @@ public final class TypeNullability {
      * @param collection type nullabilities to intersect
      * @return the intersection of the type nullabilities in the collection
      */
-    public static @Nonnull TypeNullability intersect(@Nonnull Collection<TypeNullability> collection) {
+    public static TypeNullability intersect(Collection<TypeNullability> collection) {
         if (collection.isEmpty()) return UNKNOWN;
         if (collection.size() == 1) return collection.iterator().next();
         Map<Nullability, Set<NullabilitySource>> map = collection.stream().collect(Collectors.groupingBy(

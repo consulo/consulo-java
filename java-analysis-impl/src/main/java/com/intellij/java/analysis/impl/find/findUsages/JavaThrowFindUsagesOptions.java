@@ -17,7 +17,6 @@ package com.intellij.java.analysis.impl.find.findUsages;
 
 import com.intellij.java.analysis.impl.psi.impl.search.ThrowSearchUtil;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -26,7 +25,7 @@ public class JavaThrowFindUsagesOptions extends JavaFindUsagesOptions
 {
 	private ThrowSearchUtil.Root root;
 
-	public JavaThrowFindUsagesOptions(@Nonnull Project project)
+	public JavaThrowFindUsagesOptions(Project project)
 	{
 		super(project);
 		isSearchForTextOccurrences = false;

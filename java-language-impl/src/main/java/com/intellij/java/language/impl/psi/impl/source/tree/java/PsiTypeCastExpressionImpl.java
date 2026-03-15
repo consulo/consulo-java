@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.JavaElementVisitor;
@@ -29,7 +29,6 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.util.PsiUtil;
-import jakarta.annotation.Nonnull;
 
 public class PsiTypeCastExpressionImpl extends ExpressionPsiElement implements PsiTypeCastExpression, Constants
 {
@@ -115,7 +114,7 @@ public class PsiTypeCastExpressionImpl extends ExpressionPsiElement implements P
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

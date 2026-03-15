@@ -23,8 +23,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,14 +38,12 @@ public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
         ASSERT_METHODS.add("assertNotNull");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.constantJunitAssertArgumentDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.constantJunitAssertArgumentProblemDescriptor().get();
     }
@@ -62,7 +58,7 @@ public class ConstantJUnitAssertArgumentInspection extends BaseInspection {
         @Override
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!ASSERT_METHODS.contains(methodName)) {
                 return;
             }

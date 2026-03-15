@@ -26,27 +26,25 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 @ServiceAPI(ComponentScope.PROJECT)
 public interface JavaFileManager {
-  static JavaFileManager getInstance(@Nonnull Project project) {
+  static JavaFileManager getInstance(Project project) {
     return project.getInstance(JavaFileManager.class);
   }
 
   @Nullable
-  PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
+  PsiClass findClass(String qName, GlobalSearchScope scope);
 
   @Nullable
-  PsiJavaPackage findPackage(@Nonnull String qualifiedName);
+  PsiJavaPackage findPackage(String qualifiedName);
 
-  PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope);
+  PsiClass[] findClasses(String qName, GlobalSearchScope scope);
 
   Collection<String> getNonTrivialPackagePrefixes();
 
-  @Nonnull
-  Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope);
+  Collection<PsiJavaModule> findModules(String moduleName, GlobalSearchScope scope);
 }

@@ -2,8 +2,7 @@
 package com.intellij.java.language.psi.infos;
 
 import com.intellij.java.language.psi.PsiSubstitutor;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A resolve result that describes deconstruction pattern inference
@@ -11,8 +10,8 @@ import jakarta.annotation.Nullable;
 public class PatternCandidateInfo extends CandidateInfo {
   private final String myInferenceError;
 
-  public PatternCandidateInfo(@Nonnull CandidateInfo candidate,
-                              @Nonnull PsiSubstitutor substitutor,
+  public PatternCandidateInfo(CandidateInfo candidate,
+                              PsiSubstitutor substitutor,
                               @Nullable String inferenceError) {
     super(candidate, substitutor);
     myInferenceError = inferenceError;

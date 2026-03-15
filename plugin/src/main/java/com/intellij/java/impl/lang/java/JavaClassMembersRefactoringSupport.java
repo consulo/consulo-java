@@ -25,7 +25,6 @@ import consulo.language.editor.refactoring.classMember.MemberInfoBase;
 import com.intellij.java.impl.refactoring.util.classMembers.ClassMembersUtil;
 import com.intellij.java.impl.refactoring.util.classMembers.DependentMembersCollector;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Dennis.Ushakov
@@ -42,7 +41,6 @@ public class JavaClassMembersRefactoringSupport implements ClassMembersRefactori
     return ClassMembersUtil.isProperMember(member);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

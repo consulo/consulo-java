@@ -23,7 +23,6 @@ import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
 import consulo.localize.LocalizeValue;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -49,7 +48,6 @@ public class CodeStyleImportsPanelWrapper extends CodeStyleAbstractPanel {
         return null;
     }
 
-    @Nonnull
     @Override
     protected FileType getFileType() {
         return JavaFileType.INSTANCE;
@@ -80,7 +78,6 @@ public class CodeStyleImportsPanelWrapper extends CodeStyleAbstractPanel {
         myImporsPanel.reset(settings);
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getTabTitle() {
         return ApplicationLocalize.titleImports();

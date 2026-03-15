@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeElement;
@@ -24,12 +23,10 @@ import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import consulo.language.util.IncorrectOperationException;
 
 public class ChangeReturnType extends FixableUsageInfo {
-    @Nonnull
     private final PsiMethod method;
-    @Nonnull
     private final String type;
 
-    public ChangeReturnType(@Nonnull PsiMethod method, @Nonnull String type) {
+    public ChangeReturnType(PsiMethod method, String type) {
         super(method);
         this.type = type;
         this.method = method;

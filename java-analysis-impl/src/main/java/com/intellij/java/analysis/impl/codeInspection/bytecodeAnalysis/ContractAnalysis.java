@@ -10,7 +10,6 @@ import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +40,6 @@ abstract class ContractAnalysis extends Analysis<Result>
 		internalResult = Value.Bot;
 	}
 
-	@Nonnull
 	Equation mkEquation(Result res)
 	{
 		return new Equation(aKey, res);
@@ -61,7 +59,6 @@ abstract class ContractAnalysis extends Analysis<Result>
 	}
 
 	@Override
-	@Nonnull
 	protected Equation analyze() throws AnalyzerException
 	{
 		pendingPush(createStartState());

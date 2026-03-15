@@ -34,8 +34,7 @@ import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -77,9 +76,9 @@ public class JavaCreatePropertyFix extends CreatePropertyFix implements Syntheti
   }
 
   @Nullable
-  protected Pair<String, String> invokeAction(@Nonnull final Project project,
-                                              @Nonnull PsiFile file,
-                                              @Nonnull PsiElement psiElement,
+  protected Pair<String, String> invokeAction(final Project project,
+                                              PsiFile file,
+                                              PsiElement psiElement,
                                               @Nullable final String suggestedKey,
                                               @Nullable String suggestedValue,
                                               @Nullable final List<PropertiesFile> propertiesFiles) {

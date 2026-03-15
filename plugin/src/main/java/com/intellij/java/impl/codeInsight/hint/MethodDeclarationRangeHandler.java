@@ -21,19 +21,16 @@ import consulo.document.util.TextRange;
 import consulo.language.editor.hint.DeclarationRangeHandler;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MethodDeclarationRangeHandler implements DeclarationRangeHandler {
-  @Nonnull
   @Override
   public Class getElementClass() {
     return PsiMethod.class;
   }
 
   @Override
-  @Nonnull
-  public TextRange getDeclarationRange(@Nonnull PsiElement container) {
+  public TextRange getDeclarationRange(PsiElement container) {
     PsiMethod method = (PsiMethod) container;
     TextRange textRange = method.getModifierList().getTextRange();
     int startOffset = textRange != null ? textRange.getStartOffset() : method.getTextOffset();

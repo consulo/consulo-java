@@ -19,7 +19,6 @@ package com.intellij.java.impl.refactoring;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiJavaPackage;
-import org.jetbrains.annotations.NonNls;
 
 @SuppressWarnings({"HardCodedStringLiteral"})
 public class HelpID {
@@ -79,10 +78,10 @@ public class HelpID {
   public static final String INVERT_BOOLEAN             = "refactoring.invertBoolean";
   public static final String EXTRACT_METHOD_OBJECT = "refactoring.extractMethodObject";
   public static final String REPLACE_CONSTRUCTOR_WITH_BUILDER = "refactoring.replaceConstructorWithBuilder";
-  @NonNls public static final String ExtractClass = "refactorj.extractClass";
-  @NonNls public static final String IntroduceParameterObject = "refactorj.introduceParameterObject";
-  @NonNls public static final String RemoveMiddleman = "refactorj.removeMiddleman";
-  @NonNls public static final String WrapReturnValue = "refactorj.wrapReturnValue";
+  public static final String ExtractClass = "refactorj.extractClass";
+  public static final String IntroduceParameterObject = "refactorj.introduceParameterObject";
+  public static final String RemoveMiddleman = "refactorj.removeMiddleman";
+  public static final String WrapReturnValue = "refactorj.wrapReturnValue";
 
   public static String getMoveHelpID(PsiElement element) {
     if (element instanceof PsiJavaPackage){

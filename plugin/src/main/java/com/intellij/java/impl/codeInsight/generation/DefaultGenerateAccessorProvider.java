@@ -7,7 +7,6 @@ import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiField;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,7 +20,6 @@ import java.util.List;
 @ExtensionImpl
 public class DefaultGenerateAccessorProvider implements GenerateAccessorProvider {
   @RequiredReadAction
-  @Nonnull
   @Override
   public Collection<EncapsulatableClassMember> getEncapsulatableClassMembers(PsiClass s) {
     if (s.getLanguage() != JavaLanguage.INSTANCE) {

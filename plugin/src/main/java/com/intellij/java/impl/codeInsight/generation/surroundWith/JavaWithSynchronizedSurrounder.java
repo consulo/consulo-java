@@ -28,7 +28,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
 class JavaWithSynchronizedSurrounder extends JavaStatementsSurrounder{
   @Override
@@ -49,7 +48,7 @@ class JavaWithSynchronizedSurrounder extends JavaStatementsSurrounder{
       return null;
     }
 
-    @NonNls String text = "synchronized(a){\n}";
+    String text = "synchronized(a){\n}";
     PsiSynchronizedStatement synchronizedStatement = (PsiSynchronizedStatement)factory.createStatementFromText(text, null);
     synchronizedStatement = (PsiSynchronizedStatement)codeStyleManager.reformat(synchronizedStatement);
 

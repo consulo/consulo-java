@@ -28,25 +28,21 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class EmptyInitializerInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern("[a-zA-Z_0-9.]+")
     public String getID() {
         return "EmptyClassInitializer";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.emptyClassInitializerDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.emptyClassInitializerProblemDescriptor().get();
     }
@@ -56,7 +52,6 @@ public class EmptyInitializerInspection extends BaseInspection {
     }
 
     private static class EmptyInitializerFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.emptyClassInitializerDeleteQuickfix();
@@ -81,7 +76,7 @@ public class EmptyInitializerInspection extends BaseInspection {
 
         @Override
         public void visitClassInitializer(
-            @Nonnull PsiClassInitializer initializer
+            PsiClassInitializer initializer
         ) {
             super.visitClassInitializer(initializer);
             PsiCodeBlock body = initializer.getBody();

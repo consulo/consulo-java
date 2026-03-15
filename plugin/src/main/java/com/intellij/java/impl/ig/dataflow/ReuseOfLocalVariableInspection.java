@@ -37,23 +37,19 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ExtensionImpl
 public class ReuseOfLocalVariableInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.reuseOfLocalVariableDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.reuseOfLocalVariableProblemDescriptor().get();
     }
@@ -64,7 +60,6 @@ public class ReuseOfLocalVariableInspection extends BaseInspection {
     }
 
     private static class ReuseOfLocalVariableFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.reuseOfLocalVariableSplitQuickfix();
@@ -117,7 +112,7 @@ public class ReuseOfLocalVariableInspection extends BaseInspection {
             else {
                 rhsText = rhs.getText();
             }
-            @NonNls String newStatementText = type.getCanonicalText() + ' ' + newVariableName + " =  " + rhsText + ';';
+            String newStatementText = type.getCanonicalText() + ' ' + newVariableName + " =  " + rhsText + ';';
 
             PsiStatement newStatement = factory.createStatementFromText(newStatementText, assignmentStatement);
             PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement) assignmentStatement.replace(newStatement);
@@ -141,7 +136,7 @@ public class ReuseOfLocalVariableInspection extends BaseInspection {
     private static class ReuseOfLocalVariableVisitor extends BaseInspectionVisitor {
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression assignment
+            PsiAssignmentExpression assignment
         ) {
             super.visitAssignmentExpression(assignment);
             PsiElement assignmentParent = assignment.getParent();
@@ -249,8 +244,8 @@ public class ReuseOfLocalVariableInspection extends BaseInspection {
          */
         @Nullable
         public static PsiElement getChildWhichContainsElement(
-            @Nonnull PsiCodeBlock ancestor,
-            @Nonnull PsiElement descendant
+            PsiCodeBlock ancestor,
+            PsiElement descendant
         ) {
             PsiElement element = descendant;
             while (!element.equals(ancestor)) {

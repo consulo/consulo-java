@@ -18,7 +18,7 @@ package com.intellij.java.language.psi;
 
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A loop statement that exits on condition.

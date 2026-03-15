@@ -33,8 +33,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Advises typing in javadoc if necessary.
@@ -67,7 +66,7 @@ public class JavadocTypedHandler extends TypedHandlerDelegate {
    * @param file      current file
    * @return          <code>true</code> if closing tag is inserted; <code>false</code> otherwise
    */
-  private static boolean insertClosingTagIfNecessary(char c, @Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+  private static boolean insertClosingTagIfNecessary(char c, Project project, Editor editor, PsiFile file) {
     if (c != CLOSE_TAG_SYMBOL || !JavaSmartKeysSettings.getInstance().JAVADOC_GENERATE_CLOSING_TAG) {
       return false;
     }
@@ -108,7 +107,7 @@ public class JavadocTypedHandler extends TypedHandlerDelegate {
    * @return                tag name if the one is parsed; <code>null</code> otherwise
    */
   @Nullable
-  static CharSequence getTagName(@Nonnull CharSequence text, int afterTagOffset) {
+  static CharSequence getTagName(CharSequence text, int afterTagOffset) {
     if (afterTagOffset > text.length()) {
       return null;
     }

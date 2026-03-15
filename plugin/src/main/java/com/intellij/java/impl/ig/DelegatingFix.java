@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.InspectionGadgetsFix;
 
-import jakarta.annotation.Nonnull;
 
 public class DelegatingFix extends InspectionGadgetsFix {
     private final LocalQuickFix delegate;
@@ -33,7 +32,6 @@ public class DelegatingFix extends InspectionGadgetsFix {
         this.delegate = delegate;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return delegate.getName();

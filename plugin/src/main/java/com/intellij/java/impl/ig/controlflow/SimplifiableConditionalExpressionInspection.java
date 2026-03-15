@@ -29,12 +29,9 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SimplifiableConditionalExpressionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.simplifiableConditionalExpressionDisplayName();
@@ -46,7 +43,6 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
         return InspectionGadgetsLocalize.simplifiableConditionalExpressionProblemDescriptor(
@@ -60,7 +56,6 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
     }
 
     private static class SimplifiableConditionalFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
@@ -80,7 +75,6 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
         return new SimplifiableConditionalExpressionVisitor();
     }
 
-    @NonNls
     static String calculateReplacementExpression(
         PsiConditionalExpression expression
     ) {
@@ -93,7 +87,7 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
         String elseText = elseExpression.getText();
         String conditionText = condition.getText();
         if (BoolUtils.isTrue(thenExpression)) {
-            @NonNls String elseExpressionText;
+            String elseExpressionText;
             if (ParenthesesUtils.getPrecedence(elseExpression) >
                 ParenthesesUtils.OR_PRECEDENCE) {
                 elseExpressionText = '(' + elseText + ')';
@@ -107,7 +101,7 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
             return conditionText + " || " + elseExpressionText;
         }
         else if (BoolUtils.isFalse(thenExpression)) {
-            @NonNls String elseExpressionText;
+            String elseExpressionText;
             if (ParenthesesUtils.getPrecedence(elseExpression) >
                 ParenthesesUtils.AND_PRECEDENCE) {
                 elseExpressionText = '(' + elseText + ')';
@@ -120,7 +114,7 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
         }
         String thenText = thenExpression.getText();
         if (BoolUtils.isFalse(elseExpression)) {
-            @NonNls String thenExpressionText;
+            String thenExpressionText;
             if (ParenthesesUtils.getPrecedence(thenExpression) >
                 ParenthesesUtils.AND_PRECEDENCE) {
                 thenExpressionText = '(' + thenText + ')';
@@ -134,7 +128,7 @@ public class SimplifiableConditionalExpressionInspection extends BaseInspection 
             return conditionText + " && " + thenExpressionText;
         }
         else {
-            @NonNls String thenExpressionText;
+            String thenExpressionText;
             if (ParenthesesUtils.getPrecedence(thenExpression) >
                 ParenthesesUtils.OR_PRECEDENCE) {
                 thenExpressionText = '(' + thenText + ')';

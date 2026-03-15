@@ -21,9 +21,8 @@ import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementRef;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -31,7 +30,7 @@ import jakarta.annotation.Nullable;
 public class JamEnumAttributeElement<T extends Enum<T>> extends JamAttributeElement<T> {
   private final Class<T> myModelEnum;
 
-  public JamEnumAttributeElement(@Nonnull PsiElementRef<PsiAnnotation> parent, String attributeName, Class<T> modelEnum) {
+  public JamEnumAttributeElement(PsiElementRef<PsiAnnotation> parent, String attributeName, Class<T> modelEnum) {
     super(attributeName, parent);
     myModelEnum = modelEnum;
   }

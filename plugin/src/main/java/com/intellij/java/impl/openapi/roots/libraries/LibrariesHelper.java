@@ -20,9 +20,8 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.content.library.Library;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -34,12 +33,12 @@ public abstract class LibrariesHelper {
     return ServiceManager.getService(LibrariesHelper.class);
   }
 
-  public abstract boolean isClassAvailableInLibrary(Library library, @NonNls String fqn);
+  public abstract boolean isClassAvailableInLibrary(Library library, String fqn);
 
-  public abstract boolean isClassAvailable(@NonNls String[] urls, @NonNls String fqn);
+  public abstract boolean isClassAvailable(String[] urls, String fqn);
 
   @Nullable
-  public abstract VirtualFile findJarByClass(Library library, @NonNls String fqn);
+  public abstract VirtualFile findJarByClass(Library library, String fqn);
 
   @Nullable
   public abstract VirtualFile findRootByClass(List<VirtualFile> roots, String fqn);

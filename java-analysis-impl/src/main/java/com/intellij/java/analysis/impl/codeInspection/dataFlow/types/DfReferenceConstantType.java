@@ -5,8 +5,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiType;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Set;
@@ -15,18 +14,18 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTy
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes.TOP;
 
 public class DfReferenceConstantType extends DfConstantType<Object> implements DfReferenceType {
-  private final @Nonnull
+  private final 
   PsiType myPsiType;
-  private final @Nonnull
+  private final 
   TypeConstraint myConstraint;
-  private final @Nonnull
+  private final 
   Mutability myMutability;
   private final @Nullable
   SpecialField mySpecialField;
-  private final @Nonnull
+  private final 
   DfType mySpecialFieldType;
   
-  DfReferenceConstantType(@Nonnull Object constant, @Nonnull PsiType psiType, @Nonnull TypeConstraint type) {
+  DfReferenceConstantType(Object constant, PsiType psiType, TypeConstraint type) {
     super(constant);
     myPsiType = psiType;
     myConstraint = type;
@@ -35,9 +34,8 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
     mySpecialFieldType = mySpecialField == null ? BOTTOM : mySpecialField.fromConstant(constant);
   }
 
-  @Nonnull
   @Override
-  public DfType meet(@Nonnull DfType other) {
+  public DfType meet(DfType other) {
     if (other.isSuperType(this)) return this;
     if (other instanceof DfEphemeralReferenceType) return BOTTOM;
     if (other instanceof DfGenericObjectType) {
@@ -52,25 +50,21 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
     return BOTTOM;
   }
 
-  @Nonnull
   @Override
   public PsiType getPsiType() {
     return myPsiType;
   }
 
-  @Nonnull
   @Override
   public DfaNullability getNullability() {
     return DfaNullability.NOT_NULL;
   }
 
-  @Nonnull
   @Override
   public TypeConstraint getConstraint() {
     return myConstraint;
   }
 
-  @Nonnull
   @Override
   public Mutability getMutability() {
     return myMutability;
@@ -82,7 +76,6 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
     return mySpecialField;
   }
 
-  @Nonnull
   @Override
   public DfType getSpecialFieldType() {
     return mySpecialFieldType;
@@ -94,15 +87,13 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
                                    null, BOTTOM, false);
   }
 
-  @Nonnull
   @Override
   public DfReferenceType dropNullability() {
     return this;
   }
 
-  @Nonnull
   @Override
-  public DfType join(@Nonnull DfType other) {
+  public DfType join(DfType other) {
     if (other instanceof DfGenericObjectType || other instanceof DfEphemeralReferenceType) {
       return other.join(this);
     }

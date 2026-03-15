@@ -62,7 +62,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -173,7 +172,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         myExtractEnumProcessor.findEnumConstantConflicts(refUsages);
         if (!DestinationFolderComboBox.isAccessible(
@@ -280,21 +279,19 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
         return false;
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return JavaRefactoringLocalize.extractedClassCommandName(newClassName);
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usageInfos) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
         return new ExtractClassUsageViewDescriptor(sourceClass);
     }
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
+    protected void performRefactoring(UsageInfo[] usageInfos) {
         PsiClass psiClass = buildClass();
         if (psiClass == null) {
             return;
@@ -409,7 +406,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
             }
 
             @Override
-            public void visitMethod(@Nonnull PsiMethod method) {
+            public void visitMethod(PsiMethod method) {
                 if (methods.contains(method)) {
                     return;
                 }
@@ -417,7 +414,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
             }
 
             @Override
-            public void visitField(@Nonnull PsiField field) {
+            public void visitField(PsiField field) {
                 if (fields.contains(field)) {
                     return;
                 }
@@ -425,7 +422,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
             }
 
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 if (innerClasses.contains(aClass)) {
                     return;
                 }
@@ -505,7 +502,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
 
     @Override
     @RequiredReadAction
-    public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+    public void findUsages(List<FixableUsageInfo> usages) {
         for (PsiField field : fields) {
             findUsagesForField(field, usages);
             usages.add(new RemoveField(field));
@@ -872,7 +869,7 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
 
         @Override
         @RequiredReadAction
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+        public void visitAssignmentExpression(PsiAssignmentExpression expression) {
             super.visitAssignmentExpression(expression);
 
             PsiExpression lhs = expression.getLExpression();
@@ -886,14 +883,14 @@ public class ExtractClassProcessor extends FixableUsagesRefactoringProcessor {
 
         @Override
         @RequiredReadAction
-        public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression) {
+        public void visitPostfixExpression(PsiPostfixExpression expression) {
             super.visitPostfixExpression(expression);
             checkSetterNeeded(expression.getOperand(), expression.getOperationSign());
         }
 
         @Override
         @RequiredReadAction
-        public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+        public void visitPrefixExpression(PsiPrefixExpression expression) {
             super.visitPrefixExpression(expression);
             checkSetterNeeded(expression.getOperand(), expression.getOperationSign());
         }

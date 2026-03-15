@@ -24,11 +24,9 @@ import consulo.colorScheme.TextAttributesKey;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PackagePresentationProvider implements ItemPresentationProvider<PsiJavaPackage> {
-  @Nonnull
   @Override
   public Class<PsiJavaPackage> getItemClass() {
     return PsiJavaPackage.class;

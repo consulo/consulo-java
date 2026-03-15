@@ -20,7 +20,6 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import consulo.internal.com.sun.jdi.BooleanValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author egor
@@ -29,7 +28,7 @@ public class DoWhileStatementEvaluator extends LoopEvaluator
 {
 	private final Evaluator myConditionEvaluator;
 
-	public DoWhileStatementEvaluator(@Nonnull Evaluator conditionEvaluator, Evaluator bodyEvaluator, String labelName)
+	public DoWhileStatementEvaluator(Evaluator conditionEvaluator, Evaluator bodyEvaluator, String labelName)
 	{
 		super(labelName, bodyEvaluator);
 		myConditionEvaluator = DisableGC.create(conditionEvaluator);

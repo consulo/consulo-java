@@ -32,26 +32,23 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MoveDeclarationIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class MoveDeclarationIntention extends Intention {
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return LocalizeValue.localizeTODO("Move Declaration");
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new MoveDeclarationPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiLocalVariable variable = (PsiLocalVariable) element;
         PsiReference[] references = ReferencesSearch.search(variable, variable.getUseScope(), false).toArray(PsiReference.EMPTY_ARRAY);
@@ -91,7 +88,7 @@ public class MoveDeclarationIntention extends Intention {
         highlightElement(newDeclaration);
     }
 
-    private static void highlightElement(@Nonnull PsiElement element) {
+    private static void highlightElement(PsiElement element) {
         Project project = element.getProject();
         FileEditorManager editorManager =
             FileEditorManager.getInstance(project);
@@ -103,9 +100,9 @@ public class MoveDeclarationIntention extends Intention {
     }
 
     private static PsiDeclarationStatement moveDeclarationToReference(
-        @Nonnull PsiElement referenceElement,
-        @Nonnull PsiLocalVariable variable,
-        @Nonnull PsiCodeBlock block)
+        PsiElement referenceElement,
+        PsiLocalVariable variable,
+        PsiCodeBlock block)
         throws IncorrectOperationException {
         PsiStatement statement =
             PsiTreeUtil.getParentOfType(referenceElement,
@@ -136,7 +133,7 @@ public class MoveDeclarationIntention extends Intention {
     }
 
     private static PsiDeclarationStatement createNewDeclaration(
-        @Nonnull PsiLocalVariable variable, PsiExpression initializer)
+        PsiLocalVariable variable, PsiExpression initializer)
         throws IncorrectOperationException {
         PsiManager manager = variable.getManager();
         PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();

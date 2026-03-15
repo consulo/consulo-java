@@ -20,8 +20,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,7 +28,6 @@ import java.util.Collections;
 
 public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 {
-	@Nonnull
 	@Override
 	public FileType getFileType()
 	{
@@ -37,14 +35,13 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 	}
 
 	@Override
-	protected PsiFile createExpressionCodeFragment(@Nonnull Project project, @Nonnull String text, @Nullable PsiElement context, boolean isPhysical)
+	protected PsiFile createExpressionCodeFragment(Project project, String text, @Nullable PsiElement context, boolean isPhysical)
 	{
 		return JavaCodeFragmentFactory.getInstance(project).createExpressionCodeFragment(text, context, null, isPhysical);
 	}
 
-	@Nonnull
 	@Override
-	public Collection<Language> getSupportedLanguages(@Nonnull Project project, @Nullable XSourcePosition sourcePosition)
+	public Collection<Language> getSupportedLanguages(Project project, @Nullable XSourcePosition sourcePosition)
 	{
 		if(sourcePosition != null)
 		{
@@ -59,9 +56,8 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 		return Collections.emptyList();
 	}
 
-	@Nonnull
 	@Override
-	public XExpression createExpression(@Nonnull Project project, @Nonnull Document document, @Nullable Language language, @Nonnull EvaluationMode mode)
+	public XExpression createExpression(Project project, Document document, @Nullable Language language, EvaluationMode mode)
 	{
 		PsiFile psiFile = ReadAction.compute(() -> PsiDocumentManager.getInstance(project).getPsiFile(document));
 		if(psiFile != null)
@@ -72,7 +68,7 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 	}
 
 	@Override
-	protected PsiFile createExpressionCodeFragment(@Nonnull Project project, @Nonnull XExpression expression, @Nullable PsiElement context, boolean isPhysical)
+	protected PsiFile createExpressionCodeFragment(Project project, XExpression expression, @Nullable PsiElement context, boolean isPhysical)
 	{
 		TextWithImports text = TextWithImportsImpl.fromXExpression(expression);
 		if(text != null && context != null)

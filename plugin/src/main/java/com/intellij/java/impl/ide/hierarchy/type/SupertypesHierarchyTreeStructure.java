@@ -24,7 +24,6 @@ import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +34,7 @@ public final class SupertypesHierarchyTreeStructure extends HierarchyTreeStructu
     }
 
     @Override
-    @Nonnull
-    protected final Object[] buildChildren(@Nonnull HierarchyNodeDescriptor descriptor) {
+    protected final Object[] buildChildren(HierarchyNodeDescriptor descriptor) {
         Object element = ((TypeHierarchyNodeDescriptor)descriptor).getPsiClass();
         if (element instanceof PsiClass psiClass) {
             PsiClass[] supers = psiClass.getSupers();

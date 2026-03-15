@@ -25,25 +25,23 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class SurroundWithRequireNonNullFix implements LocalQuickFix {
     private final String myText;
     private final SmartPsiElementPointer<PsiExpression> myQualifierPointer;
 
-    public SurroundWithRequireNonNullFix(@Nonnull PsiExpression expressionToSurround) {
+    public SurroundWithRequireNonNullFix(PsiExpression expressionToSurround) {
         myText = expressionToSurround.getText();
         myQualifierPointer = SmartPointerManager.getInstance(expressionToSurround.getProject()).createSmartPsiElementPointer(expressionToSurround);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return JavaInspectionsLocalize.inspectionSurroundRequirenonnullQuickfix(myText);
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiExpression qualifier = myQualifierPointer.getElement();
         if (qualifier == null) {
             return;

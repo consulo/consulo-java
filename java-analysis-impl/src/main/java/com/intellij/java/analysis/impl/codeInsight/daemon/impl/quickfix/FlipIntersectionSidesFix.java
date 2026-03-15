@@ -32,7 +32,6 @@ import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -47,7 +46,7 @@ public class FlipIntersectionSidesFix implements SyntheticIntentionAction {
   private final PsiTypeElement myCastTypeElement;
 
   public FlipIntersectionSidesFix(String className,
-                                  @Nonnull List<PsiTypeElement> conjList,
+                                  List<PsiTypeElement> conjList,
                                   PsiTypeElement conjunct,
                                   PsiTypeElement castTypeElement) {
     myClassName = className;
@@ -57,14 +56,13 @@ public class FlipIntersectionSidesFix implements SyntheticIntentionAction {
     myCastTypeElement = castTypeElement;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Move '" + myClassName + "' to the beginning");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     for (PsiTypeElement typeElement : myConjuncts) {
       if (!typeElement.isValid()) {
         return false;
@@ -74,7 +72,7 @@ public class FlipIntersectionSidesFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }

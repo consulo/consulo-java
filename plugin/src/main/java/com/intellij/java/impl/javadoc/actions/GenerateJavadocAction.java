@@ -31,7 +31,6 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.layout.VerticalLayout;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -57,7 +56,7 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
     }
 
     @Override
-    protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
+    protected void analyze(Project project, AnalysisScope scope) {
         myConfigurable.apply();
         JavadocGenerationManager.getInstance(project).generateJavadoc(scope);
         dispose();

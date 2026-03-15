@@ -19,9 +19,7 @@ import consulo.ui.image.Image;
 import consulo.undoRedo.BasicUndoableAction;
 import consulo.undoRedo.ProjectUndoManager;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.function.BiConsumer;
 
@@ -32,14 +30,13 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
     private final LocalizeValue myMessage;
     private final boolean myValue;
 
-    public SetInspectionOptionFix(I inspection, BiConsumer<State, Boolean> propertySetter, @Nonnull LocalizeValue message, boolean value) {
+    public SetInspectionOptionFix(I inspection, BiConsumer<State, Boolean> propertySetter, LocalizeValue message, boolean value) {
         myID = inspection.getShortName();
         myPropertySetter = propertySetter;
         myMessage = message;
         myValue = value;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return myMessage;
@@ -52,7 +49,7 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
 
     @Override
     @RequiredWriteAction
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         VirtualFile vFile = descriptor.getPsiElement().getContainingFile().getVirtualFile();
         setOption(project, vFile, myValue);
         ProjectUndoManager.getInstance(project).undoableActionPerformed(new BasicUndoableAction(vFile) {
@@ -71,7 +68,7 @@ public class SetInspectionOptionFix<I extends AbstractBaseJavaLocalInspectionToo
     }
 
     @RequiredReadAction
-    private void setOption(@Nonnull Project project, @Nonnull VirtualFile vFile, boolean value) {
+    private void setOption(Project project, VirtualFile vFile, boolean value) {
         PsiFile file = PsiManager.getInstance(project).findFile(vFile);
         if (file == null) {
             return;

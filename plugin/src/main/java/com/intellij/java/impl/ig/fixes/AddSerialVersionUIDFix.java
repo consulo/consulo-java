@@ -27,11 +27,9 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class AddSerialVersionUIDFix extends InspectionGadgetsFix {
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.addSerialversionuidfieldQuickfix();
   }

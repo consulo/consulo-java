@@ -23,28 +23,23 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @ExtensionImpl
 public class AssertsWithoutMessagesInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assertsWithoutMessagesDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "MessageMissingOnJUnitAssertion";
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.assertsWithoutMessagesProblemDescriptor().get();
     }
@@ -56,7 +51,6 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
 
     private static class AssertionsWithoutMessagesVisitor extends BaseInspectionVisitor {
 
-        @NonNls
         private static final Set<String> s_assertMethods = new HashSet<String>(8);
 
         static {
@@ -73,7 +67,7 @@ public class AssertsWithoutMessagesInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

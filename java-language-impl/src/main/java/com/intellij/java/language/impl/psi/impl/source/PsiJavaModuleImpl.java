@@ -29,21 +29,19 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.collection.JBIterable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static consulo.language.psi.SyntaxTraverser.psiTraverser;
 
 public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> implements PsiJavaModule {
-  public PsiJavaModuleImpl(@Nonnull PsiJavaModuleStub stub) {
+  public PsiJavaModuleImpl(PsiJavaModuleStub stub) {
     super(stub, JavaStubElementTypes.MODULE);
   }
 
-  public PsiJavaModuleImpl(@Nonnull ASTNode node) {
+  public PsiJavaModuleImpl(ASTNode node) {
     super(node);
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiRequiresStatement> getRequires() {
     PsiJavaModuleStub stub = getGreenStub();
@@ -54,7 +52,6 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
     }
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiPackageAccessibilityStatement> getExports() {
     PsiJavaModuleStub stub = getGreenStub();
@@ -65,7 +62,6 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
     }
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiPackageAccessibilityStatement> getOpens() {
     PsiJavaModuleStub stub = getGreenStub();
@@ -76,25 +72,21 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
     }
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiUsesStatement> getUses() {
     return psiTraverser().children(this).filter(PsiUsesStatement.class);
   }
 
-  @Nonnull
   @Override
   public Iterable<PsiProvidesStatement> getProvides() {
     return psiTraverser().children(this).filter(PsiProvidesStatement.class);
   }
 
-  @Nonnull
   @Override
   public PsiJavaModuleReferenceElement getNameIdentifier() {
     return PsiTreeUtil.getRequiredChildOfType(this, PsiJavaModuleReferenceElement.class);
   }
 
-  @Nonnull
   @Override
   public String getName() {
     PsiJavaModuleStub stub = getGreenStub();
@@ -106,7 +98,7 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiElementFactory factory = PsiElementFactory.SERVICE.getInstance(getProject());
     PsiJavaModuleReferenceElement newName = factory.createModuleFromText("module " + name + " {}").getNameIdentifier();
     getNameIdentifier().replace(newName);
@@ -119,7 +111,7 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     PsiModifierList modifierList = getModifierList();
     return modifierList != null && modifierList.hasModifierProperty(name);
   }
@@ -140,14 +132,13 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
     return getNameIdentifier().getTextOffset();
   }
 
-  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     return getNameIdentifier();
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitModule(this);
     } else {

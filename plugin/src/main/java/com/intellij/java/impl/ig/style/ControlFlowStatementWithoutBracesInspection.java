@@ -27,19 +27,15 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ControlFlowStatementWithoutBracesInspection extends BaseInspection {
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesProblemDescriptor().get();
   }
@@ -51,7 +47,6 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
 
   private static class ControlFlowStatementFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.controlFlowStatementWithoutBracesAddQuickfix();
     }
@@ -64,7 +59,7 @@ public class ControlFlowStatementWithoutBracesInspection extends BaseInspection 
         return;
       }
       PsiStatement statement = (PsiStatement)parent;
-      @NonNls String elementText = element.getText();
+      String elementText = element.getText();
       PsiStatement statementWithoutBraces;
       if (statement instanceof PsiLoopStatement) {
         PsiLoopStatement loopStatement = (PsiLoopStatement)statement;

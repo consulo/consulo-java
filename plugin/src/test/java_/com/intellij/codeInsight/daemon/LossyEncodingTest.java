@@ -34,17 +34,14 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.encoding.EncodingManager;
 import consulo.virtualFileSystem.encoding.EncodingProjectManager;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
 
 public abstract class LossyEncodingTest extends LightDaemonAnalyzerTestCase {
-  @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lossyEncoding";
+  private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lossyEncoding";
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new LossyEncodingInspection()};
@@ -107,7 +104,7 @@ public abstract class LossyEncodingTest extends LightDaemonAnalyzerTestCase {
     doTestConfiguredFile(true, false, null);
   }
 
-  private void doTest(@NonNls String filePath) throws Exception {
+  private void doTest(String filePath) throws Exception {
     doTest(BASE_PATH + "/" + filePath, true, false);
   }
 

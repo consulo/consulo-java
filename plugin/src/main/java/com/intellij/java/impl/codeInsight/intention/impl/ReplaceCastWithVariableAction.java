@@ -30,8 +30,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Danila Ponomarenko
@@ -47,7 +46,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
 
   @RequiredReadAction
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     PsiTypeCastExpression typeCastExpression = PsiTreeUtil.getParentOfType(element, PsiTypeCastExpression.class);
     PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
 
@@ -78,7 +77,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     PsiTypeCastExpression typeCastExpression = PsiTreeUtil.getParentOfType(element, PsiTypeCastExpression.class);
 
     if (typeCastExpression == null) {
@@ -94,9 +93,9 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   @Nullable
   @RequiredReadAction
   private static PsiLocalVariable findReplacement(
-    @Nonnull PsiMethod method,
-    @Nonnull PsiVariable castedVar,
-    @Nonnull PsiTypeCastExpression expression
+    PsiMethod method,
+    PsiVariable castedVar,
+    PsiTypeCastExpression expression
   ) {
     TextRange expressionTextRange = expression.getTextRange();
     for (PsiExpression occurrence : CodeInsightUtil.findExpressionOccurrences(method,expression)){
@@ -120,10 +119,10 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   }
 
   private static boolean isChangedBetween(
-    @Nonnull final PsiVariable variable,
-    @Nonnull PsiElement scope,
-    @Nonnull final PsiElement start,
-    @Nonnull final PsiElement end
+    final PsiVariable variable,
+    PsiElement scope,
+    final PsiElement start,
+    final PsiElement end
   ) {
     if (variable.hasModifierProperty(PsiModifier.FINAL)) {
       return false;
@@ -163,7 +162,7 @@ public class ReplaceCastWithVariableAction extends PsiElementBaseIntentionAction
   }
 
   @Nullable
-  private static PsiLocalVariable getVariable(@Nonnull PsiExpression occurrence) {
+  private static PsiLocalVariable getVariable(PsiExpression occurrence) {
     PsiElement parent = occurrence.getParent();
 
     if (parent instanceof PsiLocalVariable localVariable) {

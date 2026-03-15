@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.language.ast.ASTNode;
 import com.intellij.java.language.psi.JavaTokenType;
@@ -30,13 +29,13 @@ import consulo.language.ast.IElementType;
  */
 public class PackageAccessibilityStatementElement extends CompositeElement
 {
-	public PackageAccessibilityStatementElement(@Nonnull IElementType type)
+	public PackageAccessibilityStatementElement(IElementType type)
 	{
 		super(type);
 	}
 
 	@Override
-	public void deleteChildInternal(@Nonnull ASTNode child)
+	public void deleteChildInternal(ASTNode child)
 	{
 		if(child.getElementType() == JavaElementType.MODULE_REFERENCE)
 		{
@@ -58,7 +57,7 @@ public class PackageAccessibilityStatementElement extends CompositeElement
 	}
 
 	@Nullable
-	private static ASTNode findNearestComma(@Nonnull ASTNode child)
+	private static ASTNode findNearestComma(ASTNode child)
 	{
 		ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
 		if(next != null && next.getElementType() == JavaTokenType.COMMA)

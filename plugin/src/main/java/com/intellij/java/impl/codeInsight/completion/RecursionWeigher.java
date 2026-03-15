@@ -35,9 +35,8 @@ import consulo.language.psi.filter.ClassFilter;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.application.util.function.CommonProcessors;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -57,7 +56,7 @@ class RecursionWeigher extends LookupElementWeigher {
 
   public RecursionWeigher(PsiElement position,
                           CompletionType completionType,
-                          @Nonnull PsiReferenceExpression reference,
+                          PsiReferenceExpression reference,
                           @Nullable PsiMethodCallExpression expression,
                           ExpectedTypeInfo[] expectedInfos) {
     super("recursion");
@@ -110,9 +109,8 @@ class RecursionWeigher extends LookupElementWeigher {
     recursive,
   }
 
-  @Nonnull
   @Override
-  public Result weigh(@Nonnull LookupElement element) {
+  public Result weigh(LookupElement element) {
     Object object = element.getObject();
     if (!(object instanceof PsiMethod || object instanceof PsiVariable || object instanceof PsiExpression)) {
       return Result.normal;
@@ -204,8 +202,7 @@ class RecursionWeigher extends LookupElementWeigher {
     return myCallQualifier instanceof PsiReferenceExpression && object.equals(((PsiReferenceExpression) myCallQualifier).advancedResolve(true).getElement());
   }
 
-  @Nonnull
-  public static PsiMethod findDeepestSuper(@Nonnull PsiMethod method) {
+  public static PsiMethod findDeepestSuper(PsiMethod method) {
     CommonProcessors.FindFirstProcessor<PsiMethod> processor = new CommonProcessors.FindFirstProcessor<>();
     MethodDeepestSuperSearcher.processDeepestSuperMethods(method, processor);
     PsiMethod first = processor.getFoundValue();

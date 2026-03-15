@@ -17,8 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java binary expression (addition, multiplication and so on).
@@ -34,7 +33,6 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 *
 	 * @return the left operand.
 	 */
-	@Nonnull
 	PsiExpression getLOperand();
 
 	/**
@@ -51,7 +49,6 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 *
 	 * @return the operation token.
 	 */
-	@Nonnull
 	PsiJavaToken getOperationSign();
 
 	/**
@@ -60,6 +57,5 @@ public interface PsiBinaryExpression extends PsiPolyadicExpression
 	 * @return the token type.
 	 */
 	@Override
-	@Nonnull
 	IElementType getOperationTokenType();
 }

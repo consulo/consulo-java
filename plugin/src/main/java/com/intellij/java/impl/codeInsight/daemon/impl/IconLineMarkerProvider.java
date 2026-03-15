@@ -38,8 +38,7 @@ import consulo.project.Project;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Shows small (16x16 or less) icons as gutters.
@@ -53,7 +52,7 @@ import jakarta.annotation.Nullable;
 public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
   @RequiredReadAction
   @Override
-  public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element) {
+  public LineMarkerInfo getLineMarkerInfo(PsiElement element) {
     if (element instanceof PsiAssignmentExpression) {
       PsiExpression lExpression = ((PsiAssignmentExpression) element).getLExpression();
       PsiExpression expr = ((PsiAssignmentExpression) element).getRExpression();
@@ -98,7 +97,7 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
     return null;
   }
 
-  private static boolean methodContainsReturnStatementOnly(@Nonnull PsiMethod method) {
+  private static boolean methodContainsReturnStatementOnly(PsiMethod method) {
     PsiCodeBlock body = method.getBody();
     if (body == null || body.getStatements().length != 1) {
       return false;
@@ -140,13 +139,11 @@ public class IconLineMarkerProvider extends LineMarkerProviderDescriptor {
     return AllIcons.Gutter.Colors;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("Icon preview");
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

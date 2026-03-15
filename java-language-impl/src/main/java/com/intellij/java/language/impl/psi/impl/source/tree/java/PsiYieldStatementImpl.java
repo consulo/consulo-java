@@ -11,8 +11,7 @@ import com.intellij.java.language.psi.PsiYieldStatement;
 import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiYieldStatementImpl extends CompositePsiElement implements PsiYieldStatement {
   public PsiYieldStatementImpl() {
@@ -31,7 +30,7 @@ public class PsiYieldStatementImpl extends CompositePsiElement implements PsiYie
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitYieldStatement(this);
     } else {

@@ -27,7 +27,6 @@ import consulo.component.persist.StoragePathMacros;
 import consulo.ide.ServiceManager;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 @Singleton
@@ -40,7 +39,6 @@ import java.io.IOException;
 @ServiceAPI(ComponentScope.APPLICATION)
 @ServiceImpl
 public class SetterTemplatesManager extends TemplatesManager {
-  @Nonnull
   public static SetterTemplatesManager getInstance() {
     return ServiceManager.getService(SetterTemplatesManager.class);
   }

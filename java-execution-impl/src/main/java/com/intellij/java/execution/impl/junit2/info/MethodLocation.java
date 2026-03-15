@@ -24,8 +24,7 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 
@@ -34,11 +33,10 @@ import java.util.Iterator;
 public class MethodLocation extends Location<PsiMethod> {
   private static final Logger LOG = Logger.getInstance(MethodLocation.class);
   private final Project myProject;
-  @Nonnull
   private final PsiMethod myMethod;
   private final Location<PsiClass> myClassLocation;
 
-  public MethodLocation(@Nonnull final Project project, @Nonnull final PsiMethod method, @Nonnull final Location<PsiClass> classLocation) {
+  public MethodLocation(final Project project, final PsiMethod method, final Location<PsiClass> classLocation) {
     myProject = project;
     myMethod = method;
     myClassLocation = classLocation;
@@ -49,12 +47,10 @@ public class MethodLocation extends Location<PsiMethod> {
     return new MethodLocation(classLocation.getProject(), psiElement, classLocation);
   }
 
-  @Nonnull
   public PsiMethod getPsiElement() {
     return myMethod;
   }
 
-  @Nonnull
   public Project getProject() {
     return myProject;
   }
@@ -69,7 +65,6 @@ public class MethodLocation extends Location<PsiMethod> {
     return myClassLocation.getPsiElement();
   }
 
-  @Nonnull
   public <T extends PsiElement> Iterator<Location<T>> getAncestors(final Class<T> ancestorClass, final boolean strict) {
     final Iterator<Location<T>> fromClass = myClassLocation.getAncestors(ancestorClass, false);
     if (strict) return fromClass;

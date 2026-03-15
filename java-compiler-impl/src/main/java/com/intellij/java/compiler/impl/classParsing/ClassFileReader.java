@@ -28,8 +28,7 @@ import com.intellij.java.language.util.cls.ClsFormatException;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.localize.CompilerLocalize;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,7 +56,7 @@ public class ClassFileReader {
   private static final String CONSTRUCTOR_NAME = "<init>";
   private boolean myParsingDone;
 
-  public ClassFileReader(@Nonnull File file, SymbolTable symbolTable, @Nullable final byte[] fileContent) {
+  public ClassFileReader(File file, SymbolTable symbolTable, @Nullable final byte[] fileContent) {
     mySymbolTable = symbolTable;
     myFile = file;
     myData = fileContent;

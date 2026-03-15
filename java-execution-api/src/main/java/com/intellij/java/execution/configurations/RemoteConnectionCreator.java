@@ -17,7 +17,7 @@ package com.intellij.java.execution.configurations;
 
 import consulo.execution.runner.ExecutionEnvironment;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface RemoteConnectionCreator {
   @Nullable

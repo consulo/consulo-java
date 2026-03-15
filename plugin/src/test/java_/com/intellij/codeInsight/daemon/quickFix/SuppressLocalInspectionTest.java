@@ -3,7 +3,6 @@ package com.intellij.codeInsight.daemon.quickFix;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.localCanBeFinal.LocalCanBeFinal;
-import jakarta.annotation.Nonnull;
 
 public abstract class SuppressLocalInspectionTest extends LightQuickFixTestCase {
   @Override
@@ -12,7 +11,6 @@ public abstract class SuppressLocalInspectionTest extends LightQuickFixTestCase 
    // LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_3);
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new LocalCanBeFinal()};

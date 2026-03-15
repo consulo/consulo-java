@@ -18,7 +18,6 @@ package com.intellij.java.language.psi;
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 
-import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -39,25 +38,18 @@ public interface PsiJavaModule extends NavigatablePsiElement, PsiNameIdentifierO
       "jdk.internal.vm.compiler", "jdk.xml.bind", "jdk.xml.ws");
 
   @Override
-  @Nonnull
   PsiJavaModuleReferenceElement getNameIdentifier();
 
   @Override
-  @Nonnull
   String getName();
 
-  @Nonnull
   Iterable<PsiRequiresStatement> getRequires();
 
-  @Nonnull
   Iterable<PsiPackageAccessibilityStatement> getExports();
 
-  @Nonnull
   Iterable<PsiPackageAccessibilityStatement> getOpens();
 
-  @Nonnull
   Iterable<PsiUsesStatement> getUses();
 
-  @Nonnull
   Iterable<PsiProvidesStatement> getProvides();
 }

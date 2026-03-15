@@ -33,8 +33,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole
@@ -43,7 +42,7 @@ import jakarta.annotation.Nullable;
 public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
     @Override
     @RequiredReadAction
-    public PsiElement getTarget(@Nonnull DataContext dataContext) {
+    public PsiElement getTarget(DataContext dataContext) {
         PsiMethod method = getMethodImpl(dataContext);
         if (method != null && method.getContainingClass() != null && !method.isPrivate() && !method.isStatic()) {
             return method;
@@ -96,7 +95,6 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
         return PsiTreeUtil.getParentOfType(element, PsiMethod.class, false);
     }
 
-    @Nonnull
     @Override
     public HierarchyBrowser createHierarchyBrowser(PsiElement target) {
         return new MethodHierarchyBrowser(target.getProject(), (PsiMethod)target);
@@ -104,11 +102,10 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
 
     @Override
     @RequiredReadAction
-    public void browserActivated(@Nonnull HierarchyBrowser hierarchyBrowser) {
+    public void browserActivated(HierarchyBrowser hierarchyBrowser) {
         ((MethodHierarchyBrowser)hierarchyBrowser).changeView(MethodHierarchyBrowserBase.METHOD_TYPE);
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

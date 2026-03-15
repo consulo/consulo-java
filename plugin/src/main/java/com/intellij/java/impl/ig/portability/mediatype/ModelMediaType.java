@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.portability.mediatype;
 
-import org.jetbrains.annotations.NonNls;
 
 public enum ModelMediaType {
   EXAMPLE("model/example"),
@@ -35,7 +34,7 @@ public enum ModelMediaType {
 
   private final String contentType;
 
-  ModelMediaType(@NonNls String contentType) {
+  ModelMediaType(String contentType) {
     this.contentType = contentType;
   }
 

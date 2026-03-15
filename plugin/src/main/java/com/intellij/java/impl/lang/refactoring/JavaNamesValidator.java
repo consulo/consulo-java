@@ -22,7 +22,6 @@ import consulo.language.Language;
 import consulo.language.editor.refactoring.NamesValidator;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Default NamesValidator interface implementation. Uses java language keyword set and java language rules for identifier.
@@ -39,7 +38,6 @@ public class JavaNamesValidator implements NamesValidator {
     return PsiNameHelper.getInstance(project).isIdentifier(name);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

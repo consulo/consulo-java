@@ -14,7 +14,6 @@ import consulo.language.psi.stub.ScalarIndexExtension;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 import static java.util.Collections.singletonMap;
@@ -28,7 +27,6 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String> {
 
   private final DataIndexer<String, Void, FileContent> myIndexer = data -> singletonMap(AutomaticJavaModule.moduleName(data.getFile()), null);
 
-  @Nonnull
   @Override
   public ID<String, Void> getName() {
     return NAME;
@@ -44,7 +42,6 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String> {
     return 6;
   }
 
-  @Nonnull
   @Override
   public KeyDescriptor<String> getKeyDescriptor() {
     return EnumeratorStringDescriptor.INSTANCE;
@@ -55,25 +52,21 @@ public class JavaAutoModuleNameIndex extends ScalarIndexExtension<String> {
     return false;
   }
 
-  @Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return myFilter;
   }
 
-  @Nonnull
   @Override
   public DataIndexer<String, Void, FileContent> getIndexer() {
     return myIndexer;
   }
 
-  @Nonnull
-  public static Collection<VirtualFile> getFilesByKey(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public static Collection<VirtualFile> getFilesByKey(String moduleName, GlobalSearchScope scope) {
     return FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, scope);
   }
 
-  @Nonnull
-  public static Collection<String> getAllKeys(@Nonnull Project project) {
+  public static Collection<String> getAllKeys(Project project) {
     return FileBasedIndex.getInstance().getAllKeys(NAME, project);
   }
 }

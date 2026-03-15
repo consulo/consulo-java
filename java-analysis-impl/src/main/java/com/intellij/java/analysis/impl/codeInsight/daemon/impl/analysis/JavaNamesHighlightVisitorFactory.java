@@ -5,7 +5,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.rawHighlight.HighlightVisitor;
 import consulo.language.editor.rawHighlight.HighlightVisitorFactory;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -14,11 +13,10 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaNamesHighlightVisitorFactory implements HighlightVisitorFactory {
   @Override
-  public boolean suitableForFile(@Nonnull PsiFile file) {
+  public boolean suitableForFile(PsiFile file) {
     return file instanceof PsiImportHolder;
   }
 
-  @Nonnull
   @Override
   public HighlightVisitor createVisitor() {
     return new JavaNamesHighlightVisitor();

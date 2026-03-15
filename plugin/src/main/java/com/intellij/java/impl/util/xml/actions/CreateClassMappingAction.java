@@ -32,7 +32,7 @@ import consulo.util.lang.StringUtil;
 import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.actions.generate.DomTemplateRunner;
 import consulo.xml.util.xml.ui.actions.generate.CreateDomElementAction;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;

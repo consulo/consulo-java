@@ -29,7 +29,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
-import jakarta.annotation.Nonnull;
 
 @ActionImpl(id = "EncapsulateFields")
 public class EncapsulateFieldsAction extends BaseRefactoringAction {
@@ -45,10 +44,10 @@ public class EncapsulateFieldsAction extends BaseRefactoringAction {
     @Override
     @RequiredReadAction
     protected boolean isAvailableOnElementInEditorAndFile(
-        @Nonnull PsiElement element,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull DataContext context
+        PsiElement element,
+        Editor editor,
+        PsiFile file,
+        DataContext context
     ) {
         PsiElement psiElement = file.findElementAt(editor.getCaretModel().getOffset());
         PsiClass containingClass = PsiTreeUtil.getParentOfType(psiElement, PsiClass.class, false);
@@ -65,7 +64,7 @@ public class EncapsulateFieldsAction extends BaseRefactoringAction {
 
     @Override
     @RequiredReadAction
-    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    public boolean isEnabledOnElements(PsiElement[] elements) {
         if (elements.length == 1) {
             return elements[0] instanceof PsiClass psiClass && psiClass.getLanguage().isKindOf(JavaLanguage.INSTANCE)
                 || isAcceptedField(elements[0]);
@@ -82,7 +81,7 @@ public class EncapsulateFieldsAction extends BaseRefactoringAction {
     }
 
     @Override
-    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+    public RefactoringActionHandler getHandler(DataContext dataContext) {
         return new EncapsulateFieldsHandler();
     }
 

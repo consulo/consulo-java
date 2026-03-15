@@ -23,7 +23,6 @@ import com.intellij.java.debugger.engine.jdi.ThreadGroupReferenceProxy;
 import consulo.logging.Logger;
 import consulo.internal.com.sun.jdi.ThreadGroupReference;
 import consulo.internal.com.sun.jdi.ThreadReference;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -61,7 +60,7 @@ public class ThreadGroupReferenceProxyImpl extends ObjectReferenceProxyImpl impl
     return myParentThreadGroupProxy;
   }
 
-  public @NonNls String toString() {
+  public String toString() {
     return "ThreadGroupReferenceProxy: " + getThreadGroupReference().toString();
   }
 

@@ -19,7 +19,6 @@ import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NonNls;
 
 class ConvertIntegerToDecimalPredicate implements PsiElementPredicate {
 
@@ -30,7 +29,7 @@ class ConvertIntegerToDecimalPredicate implements PsiElementPredicate {
     PsiLiteralExpression expression = (PsiLiteralExpression)element;
     PsiType type = expression.getType();
     if (PsiType.INT.equals(type) || PsiType.LONG.equals(type)) {
-      @NonNls String text = expression.getText();
+      String text = expression.getText();
       if (text == null || text.length() < 2) {
         return false;
       }
@@ -40,7 +39,7 @@ class ConvertIntegerToDecimalPredicate implements PsiElementPredicate {
       return text.charAt(0) == '0';
     }
     if (PsiType.DOUBLE.equals(type) || PsiType.FLOAT.equals(type)) {
-      @NonNls String text = expression.getText();
+      String text = expression.getText();
       if (text == null || text.length() < 2) {
         return false;
       }

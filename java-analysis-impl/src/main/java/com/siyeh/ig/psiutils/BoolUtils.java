@@ -21,17 +21,15 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.StringUtil;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Function;
 
 public class BoolUtils {
   private BoolUtils() {
   }
 
-  public static boolean isNegation(@Nonnull PsiExpression expression) {
+  public static boolean isNegation(PsiExpression expression) {
     if (!(expression instanceof PsiPrefixExpression)) {
       return false;
     }
@@ -64,12 +62,10 @@ public class BoolUtils {
     return ParenthesesUtils.stripParentheses(operand);
   }
 
-  @Nonnull
   public static String getNegatedExpressionText(@Nullable PsiExpression condition) {
     return getNegatedExpressionText(condition, ParenthesesUtils.NUM_PRECEDENCES);
   }
 
-  @Nonnull
   public static String getNegatedExpressionText(@Nullable PsiExpression expression, int precedence) {
     if (expression == null) {
       return "";
@@ -161,7 +157,7 @@ public class BoolUtils {
       return false;
     }
     final PsiLiteralExpression literalExpression = (PsiLiteralExpression) expression;
-    @NonNls final String text = literalExpression.getText();
+    final String text = literalExpression.getText();
     return PsiKeyword.TRUE.equals(text) || PsiKeyword.FALSE.equals(text);
   }
 

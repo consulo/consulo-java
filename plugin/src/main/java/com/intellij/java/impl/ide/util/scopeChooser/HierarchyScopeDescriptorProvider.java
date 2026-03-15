@@ -24,11 +24,9 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.ScopeDescriptor;
 import consulo.content.scope.ScopeDescriptorProvider;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class HierarchyScopeDescriptorProvider implements ScopeDescriptorProvider {
-  @Nonnull
   public ScopeDescriptor[] getScopeDescriptors(Project project) {
     return new ScopeDescriptor[]{new ClassHierarchyScopeDescriptor(project)};
   }

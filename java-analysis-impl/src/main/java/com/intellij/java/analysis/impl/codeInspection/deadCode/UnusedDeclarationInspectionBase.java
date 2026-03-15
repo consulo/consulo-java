@@ -61,9 +61,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -83,22 +81,18 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
   private Set<RefElement> myProcessedSuspicious = null;
   private int myPhase;
-  @NonNls
   public static final String SHORT_NAME = "unused";
-  @NonNls
   public static final String ALTERNATIVE_ID = "UnusedDeclaration";
 
   private static final Logger LOG = Logger.getInstance(UnusedDeclarationInspectionBase.class);
   private GlobalInspectionContext myContext;
   protected final UnusedSymbolLocalInspectionBase myLocalInspectionBase = createUnusedSymbolLocalInspection();
 
-  @Nonnull
   @Override
   public InspectionToolState<?> createStateProvider() {
     return new UnusedDeclarationInspectionState();
   }
 
-  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
@@ -119,19 +113,16 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionLocalize.inspectionDeadCodeDisplayName();
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesDeclarationRedundancy();
   }
 
   @Override
-  @Nonnull
   public String getShortName() {
     return SHORT_NAME;
   }
@@ -142,7 +133,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     return JavaLanguage.INSTANCE;
   }
 
-  private static boolean isExternalizableNoParameterConstructor(@Nonnull PsiMethod method, RefClass refClass) {
+  private static boolean isExternalizableNoParameterConstructor(PsiMethod method, RefClass refClass) {
     if (!method.isConstructor()) {
       return false;
     }
@@ -157,8 +148,8 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     return aClass == null || isExternalizable(aClass, refClass);
   }
 
-  private static boolean isSerializationImplicitlyUsedField(@Nonnull PsiField field) {
-    @NonNls final String name = field.getName();
+  private static boolean isSerializationImplicitlyUsedField(PsiField field) {
+    final String name = field.getName();
     if (!HighlightUtilBase.SERIAL_VERSION_UID_FIELD_NAME.equals(name) && !"serialPersistentFields".equals(name)) {
       return false;
     }
@@ -169,8 +160,8 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     return aClass == null || isSerializable(aClass, null);
   }
 
-  private static boolean isWriteObjectMethod(@Nonnull PsiMethod method, RefClass refClass) {
-    @NonNls final String name = method.getName();
+  private static boolean isWriteObjectMethod(PsiMethod method, RefClass refClass) {
+    final String name = method.getName();
     if (!"writeObject".equals(name)) {
       return false;
     }
@@ -188,8 +179,8 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     return !(aClass != null && !isSerializable(aClass, refClass));
   }
 
-  private static boolean isReadObjectMethod(@Nonnull PsiMethod method, RefClass refClass) {
-    @NonNls final String name = method.getName();
+  private static boolean isReadObjectMethod(PsiMethod method, RefClass refClass) {
+    final String name = method.getName();
     if (!"readObject".equals(name)) {
       return false;
     }
@@ -207,8 +198,8 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     return !(aClass != null && !isSerializable(aClass, refClass));
   }
 
-  private static boolean isWriteReplaceMethod(@Nonnull PsiMethod method, RefClass refClass) {
-    @NonNls final String name = method.getName();
+  private static boolean isWriteReplaceMethod(PsiMethod method, RefClass refClass) {
+    final String name = method.getName();
     if (!"writeReplace".equals(name)) {
       return false;
     }
@@ -226,8 +217,8 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     return !(aClass != null && !isSerializable(aClass, refClass));
   }
 
-  private static boolean isReadResolveMethod(@Nonnull PsiMethod method, RefClass refClass) {
-    @NonNls final String name = method.getName();
+  private static boolean isReadResolveMethod(PsiMethod method, RefClass refClass) {
+    final String name = method.getName();
     if (!"readResolve".equals(name)) {
       return false;
     }
@@ -252,7 +243,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     return serializableClass != null && isSerializable(aClass, refClass, serializableClass);
   }
 
-  private static boolean isExternalizable(@Nonnull PsiClass aClass, RefClass refClass) {
+  private static boolean isExternalizable(PsiClass aClass, RefClass refClass) {
     final GlobalSearchScope scope = aClass.getResolveScope();
     final PsiClass externalizableClass = JavaPsiFacade.getInstance(aClass.getProject()).findClass("java.io" +
                                                                                                     ".Externalizable", scope);
@@ -279,17 +270,17 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
   @Override
   public void runInspection(
-    @Nonnull final AnalysisScope scope,
-    @Nonnull InspectionManager manager,
-    @Nonnull final GlobalInspectionContext globalContext,
-    @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-    @Nonnull Object state
+    final AnalysisScope scope,
+    InspectionManager manager,
+    final GlobalInspectionContext globalContext,
+    ProblemDescriptionsProcessor problemDescriptionsProcessor,
+    Object state
   ) {
     UnusedDeclarationInspectionState inspectionState = (UnusedDeclarationInspectionState)state;
 
     globalContext.getRefManager().iterate(new RefJavaVisitor() {
       @Override
-      public void visitElement(@Nonnull final RefEntity refEntity) {
+      public void visitElement(final RefEntity refEntity) {
         if (refEntity instanceof RefJavaElement) {
           final RefElementImpl refElement = (RefElementImpl)refEntity;
           if (!refElement.isSuspicious()) {
@@ -311,14 +302,14 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
           refElement.accept(new RefJavaVisitor() {
             @Override
-            public void visitMethod(@Nonnull RefMethod method) {
+            public void visitMethod(RefMethod method) {
               if (inspectionState.isAddMainsEnabled() && method.isAppMain()) {
                 getEntryPointsManager().addEntryPoint(method, false);
               }
             }
 
             @Override
-            public void visitClass(@Nonnull RefClass aClass) {
+            public void visitClass(RefClass aClass) {
               if (inspectionState.isAddAppletEnabled() && aClass.isApplet() || inspectionState.isAddServletEnabled() && aClass.isServlet()) {
                 getEntryPointsManager().addEntryPoint(aClass, false);
               }
@@ -339,7 +330,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
           final PsiSearchHelper helper = PsiSearchHelper.getInstance(refManager.getProject());
           refManager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull final RefEntity refEntity) {
+            public void visitElement(final RefEntity refEntity) {
               if (refEntity instanceof RefClass && strictUnreferencedFilter.accepts((RefClass)refEntity)) {
                 findExternalClassReferences((RefClass)refEntity);
               }
@@ -364,7 +355,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
                 final DelegatingGlobalSearchScope globalSearchScope = new DelegatingGlobalSearchScope
                   (projectScope) {
                   @Override
-                  public boolean contains(@Nonnull VirtualFile file) {
+                  public boolean contains(VirtualFile file) {
                     return file.getFileType() != JavaFileType.INSTANCE && super.contains(file);
                   }
                 };
@@ -394,7 +385,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   }
 
   @SuppressWarnings("unchecked")
-  public boolean isEntryPoint(@Nonnull RefElement owner, @Nonnull UnusedDeclarationInspectionState state) {
+  public boolean isEntryPoint(RefElement owner, UnusedDeclarationInspectionState state) {
     final PsiElement element = owner.getPsiElement();
     if (RefUtil.isImplicitUsage(element)) {
       return true;
@@ -418,7 +409,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   }
 
   @SuppressWarnings("unchecked")
-  public boolean isEntryPoint(@Nonnull PsiElement element, @Nonnull UnusedDeclarationInspectionState state) {
+  public boolean isEntryPoint(PsiElement element, UnusedDeclarationInspectionState state) {
     final Project project = element.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     if (element instanceof PsiMethod && state.isAddMainsEnabled() && PsiClassImplUtil.isMainOrPremainMethod((PsiMethod)
@@ -463,13 +454,13 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   }
 
   private static class StrictUnreferencedFilter extends UnreferencedFilter {
-    private StrictUnreferencedFilter(@Nonnull UnusedDeclarationInspectionBase tool,
-                                     @Nonnull GlobalInspectionContext context) {
+    private StrictUnreferencedFilter(UnusedDeclarationInspectionBase tool,
+                                     GlobalInspectionContext context) {
       super(tool, context);
     }
 
     @Override
-    public int getElementProblemCount(@Nonnull RefJavaElement refElement) {
+    public int getElementProblemCount(RefJavaElement refElement) {
       final int problemCount = super.getElementProblemCount(refElement);
       if (problemCount > -1) {
         return problemCount;
@@ -479,10 +470,10 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
   }
 
   @Override
-  public boolean queryExternalUsagesRequests(@Nonnull InspectionManager manager,
-                                             @Nonnull GlobalInspectionContext globalContext,
-                                             @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-                                             @Nonnull Object state) {
+  public boolean queryExternalUsagesRequests(InspectionManager manager,
+                                             GlobalInspectionContext globalContext,
+                                             ProblemDescriptionsProcessor problemDescriptionsProcessor,
+                                             Object state) {
     checkForReachables(globalContext);
     final RefFilter filter = myPhase == 1 ? new StrictUnreferencedFilter(this,
                                                                          globalContext) : new RefUnreachableFilter(this, globalContext);
@@ -490,7 +481,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
     globalContext.getRefManager().iterate(new RefJavaVisitor() {
       @Override
-      public void visitElement(@Nonnull RefEntity refEntity) {
+      public void visitElement(RefEntity refEntity) {
         if (!(refEntity instanceof RefJavaElement)) {
           return;
         }
@@ -501,7 +492,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
         if (filter.accepts(refElement) && !myProcessedSuspicious.contains(refElement)) {
           refEntity.accept(new RefJavaVisitor() {
             @Override
-            public void visitField(@Nonnull final RefField refField) {
+            public void visitField(final RefField refField) {
               myProcessedSuspicious.add(refField);
               PsiField psiField = refField.getElement();
               if (psiField != null && isSerializationImplicitlyUsedField(psiField)) {
@@ -517,7 +508,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
             }
 
             @Override
-            public void visitMethod(@Nonnull final RefMethod refMethod) {
+            public void visitMethod(final RefMethod refMethod) {
               myProcessedSuspicious.add(refMethod);
               if (refMethod instanceof RefImplicitConstructor) {
                 visitClass(refMethod.getOwnerClass());
@@ -541,7 +532,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
             }
 
             @Override
-            public void visitClass(@Nonnull final RefClass refClass) {
+            public void visitClass(final RefClass refClass) {
               myProcessedSuspicious.add(refClass);
               if (!refClass.isAnonymous()) {
                 getJavaContext().enqueueDerivedClassesProcessor(
@@ -580,7 +571,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     return true;
   }
 
-  private static boolean isSerializablePatternMethod(@Nonnull PsiMethod psiMethod, RefClass refClass) {
+  private static boolean isSerializablePatternMethod(PsiMethod psiMethod, RefClass refClass) {
     return isReadObjectMethod(psiMethod, refClass) || isWriteObjectMethod(psiMethod,
                                                                           refClass) || isReadResolveMethod(psiMethod, refClass) ||
       isWriteReplaceMethod(psiMethod, refClass) || isExternalizableNoParameterConstructor(psiMethod,
@@ -614,13 +605,13 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     };
   }
 
-  public void checkForReachables(@Nonnull final GlobalInspectionContext context) {
+  public void checkForReachables(final GlobalInspectionContext context) {
     CodeScanner codeScanner = new CodeScanner();
 
     // Cleanup previous reachability information.
     context.getRefManager().iterate(new RefJavaVisitor() {
       @Override
-      public void visitElement(@Nonnull RefEntity refEntity) {
+      public void visitElement(RefEntity refEntity) {
         if (refEntity instanceof RefJavaElement) {
           final RefJavaElementImpl refElement = (RefJavaElementImpl)refEntity;
           if (!context.isToCheckMember(refElement, UnusedDeclarationInspectionBase.this)) {
@@ -653,7 +644,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     private final Set<RefMethod> myProcessedMethods = new HashSet<>();
 
     @Override
-    public void visitMethod(@Nonnull RefMethod method) {
+    public void visitMethod(RefMethod method) {
       if (!myProcessedMethods.contains(method)) {
         // Process class's static initializers
         if (method.isStatic() || method.isConstructor()) {
@@ -684,7 +675,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     }
 
     @Override
-    public void visitClass(@Nonnull RefClass refClass) {
+    public void visitClass(RefClass refClass) {
       boolean alreadyActive = refClass.isReachable();
       ((RefClassImpl)refClass).setReachable(true);
 
@@ -697,7 +688,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
     }
 
     @Override
-    public void visitField(@Nonnull RefField field) {
+    public void visitField(RefField field) {
       // Process class's static initializers.
       if (!field.isReachable()) {
         makeContentReachable((RefJavaElementImpl)field);
@@ -772,7 +763,7 @@ public abstract class UnusedDeclarationInspectionBase extends GlobalInspectionTo
 
   @Override
   @SuppressWarnings("unchecked")
-  public void initialize(@Nonnull GlobalInspectionContext context, @Nonnull Object state) {
+  public void initialize(GlobalInspectionContext context, Object state) {
     super.initialize(context, state);
     myContext = context;
     UnusedDeclarationInspectionState inspectionState = (UnusedDeclarationInspectionState)state;

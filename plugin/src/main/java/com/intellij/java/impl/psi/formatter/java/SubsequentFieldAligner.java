@@ -26,7 +26,6 @@ import consulo.language.codeStyle.AlignmentInColumnsConfig;
 import consulo.language.codeStyle.AlignmentInColumnsHelper;
 import consulo.language.codeStyle.AlignmentStrategy;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -42,7 +41,7 @@ public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider
 	private final AlignmentInColumnsHelper myAlignmentInColumnsHelper;
 	private AlignmentStrategy myAlignmentStrategy;
 
-	public SubsequentFieldAligner(@Nonnull CommonCodeStyleSettings settings)
+	public SubsequentFieldAligner(CommonCodeStyleSettings settings)
 	{
 		myAlignmentInColumnsHelper = AlignmentInColumnsHelper.INSTANCE;
 		myAlignmentStrategy = newAlignmentStrategy();
@@ -55,7 +54,7 @@ public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider
 	}
 
 	@Override
-	public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child)
+	public AlignmentStrategy getNextChildStrategy(ASTNode child)
 	{
 		if(!ElementType.JAVA_COMMENT_BIT_SET.contains(child.getElementType()) && !shouldUseVarDeclarationAlignment(child))
 		{
@@ -65,7 +64,7 @@ public class SubsequentFieldAligner extends ChildAlignmentStrategyProvider
 		return JavaElementType.FIELD == child.getElementType() ? myAlignmentStrategy : AlignmentStrategy.getNullStrategy();
 	}
 
-	protected boolean shouldUseVarDeclarationAlignment(@Nonnull ASTNode node)
+	protected boolean shouldUseVarDeclarationAlignment(ASTNode node)
 	{
 		return JavaElementType.FIELD == node.getElementType() && (!myAlignmentInColumnsHelper.useDifferentVarDeclarationAlignment(node, ALIGNMENT_IN_COLUMNS_CONFIG, mySettings
 				.KEEP_BLANK_LINES_IN_DECLARATIONS) || MultipleFieldDeclarationHelper.compoundFieldPart(node));

@@ -36,7 +36,6 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.ThreeState;
 import consulo.util.lang.function.Condition;
 import consulo.util.lang.function.Conditions;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -78,7 +77,6 @@ public class PreferByKindWeigher extends LookupElementWeigher {
     myExpectedTypes = expectedTypes;
   }
 
-  @Nonnull
   private static Condition<PsiClass> createSuitabilityCondition(PsiElement position) {
     if (IN_CATCH_TYPE.accepts(position) || IN_MULTI_CATCH_TYPE.accepts(position)) {
       PsiTryStatement tryStatement = PsiTreeUtil.getParentOfType(position, PsiTryStatement.class);
@@ -140,9 +138,8 @@ public class PreferByKindWeigher extends LookupElementWeigher {
     improbableKeyword,
   }
 
-  @Nonnull
   @Override
-  public MyResult weigh(@Nonnull LookupElement item) {
+  public MyResult weigh(LookupElement item) {
     Object object = item.getObject();
 
     if (object instanceof PsiKeyword) {
@@ -234,7 +231,6 @@ public class PreferByKindWeigher extends LookupElementWeigher {
     return MyResult.normal;
   }
 
-  @Nonnull
   private ThreeState isProbableKeyword(String keyword) {
     if (PsiKeyword.RETURN.equals(keyword)) {
       PsiStatement parentStatement = PsiTreeUtil.getParentOfType(myPosition, PsiStatement.class);

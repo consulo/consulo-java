@@ -8,7 +8,6 @@ import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.siyeh.ig.callMatcher.CallMatcher;
 
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.psi.CommonClassNames.*;
 
@@ -25,7 +24,7 @@ public class BoxingInliner implements CallInliner {
   );
 
   @Override
-  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(CFGBuilder builder, PsiMethodCallExpression call) {
     if (BOXING_CALL.test(call)) {
       PsiExpression arg = call.getArgumentList().getExpressions()[0];
       PsiType type = PsiPrimitiveType.getUnboxedType(call.getType());

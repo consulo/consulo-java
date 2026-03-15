@@ -35,7 +35,7 @@ import consulo.project.Project;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.awt.ColoredTableCellRenderer;
 import consulo.ui.ex.awt.ColumnInfo;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

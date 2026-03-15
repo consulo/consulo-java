@@ -25,19 +25,16 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddArrayCreationExpressionIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new ArrayCreationExpressionPredicate();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         PsiArrayInitializerExpression arrayInitializerExpression =
@@ -47,14 +44,13 @@ public class AddArrayCreationExpressionIntention extends MutablyNamedIntention {
         return IntentionPowerPackLocalize.addArrayCreationExpressionIntentionName(type.getPresentableText());
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.addArrayCreationExpressionIntentionFamilyName();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiArrayInitializerExpression arrayInitializerExpression =
             (PsiArrayInitializerExpression) element;

@@ -18,8 +18,7 @@ package com.intellij.java.language.psi;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -34,7 +33,6 @@ public interface PsiCatchSection extends PsiElement {
   PsiCatchSection[] EMPTY_ARRAY = new PsiCatchSection[0];
 
   ArrayFactory<PsiCatchSection> ARRAY_FACTORY = new ArrayFactory<PsiCatchSection>() {
-    @Nonnull
     @Override
     public PsiCatchSection[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiCatchSection[count];
@@ -75,7 +73,6 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the types, or empty list if the section is incomplete.
    */
-  @Nonnull
   List<PsiType> getPreciseCatchTypes();
 
   /**
@@ -83,7 +80,6 @@ public interface PsiCatchSection extends PsiElement {
    *
    * @return the statement instance.
    */
-  @Nonnull
   PsiTryStatement getTryStatement();
 
   @Nullable

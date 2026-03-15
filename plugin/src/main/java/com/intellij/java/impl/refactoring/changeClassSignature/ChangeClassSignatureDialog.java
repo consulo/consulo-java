@@ -38,8 +38,7 @@ import consulo.ui.ex.awt.ToolbarDecorator;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -69,7 +68,7 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.changeclasssignatureRefactoringName();
     private boolean myHideDefaultValueColumn;
 
-    public ChangeClassSignatureDialog(@Nonnull PsiClass aClass, boolean hideDefaultValueColumn) {
+    public ChangeClassSignatureDialog(PsiClass aClass, boolean hideDefaultValueColumn) {
         this(
             aClass,
             initTypeParameterInfos(aClass.getTypeParameters().length),
@@ -78,7 +77,6 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
         );
     }
 
-    @Nonnull
     private static List<TypeParameterInfo> initTypeParameterInfos(int length) {
         List<TypeParameterInfo> result = new ArrayList<>();
         for (int i = 0; i < length; i++) {
@@ -87,7 +85,6 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
         return result;
     }
 
-    @Nonnull
     private static List<PsiTypeCodeFragment> initTypeCodeFragment(int length) {
         List<PsiTypeCodeFragment> result = new ArrayList<>();
         for (int i = 0; i < length; i++) {
@@ -97,17 +94,17 @@ public class ChangeClassSignatureDialog extends RefactoringDialog {
     }
 
     public ChangeClassSignatureDialog(
-        @Nonnull PsiClass aClass,
-        @Nonnull Map<TypeParameterInfo, PsiTypeCodeFragment> parameters,
+        PsiClass aClass,
+        Map<TypeParameterInfo, PsiTypeCodeFragment> parameters,
         boolean hideDefaultValueColumn
     ) {
         this(aClass, parameters.keySet(), parameters.values(), hideDefaultValueColumn);
     }
 
     public ChangeClassSignatureDialog(
-        @Nonnull PsiClass aClass,
-        @Nonnull Collection<TypeParameterInfo> typeParameterInfos,
-        @Nonnull Collection<PsiTypeCodeFragment> typeCodeFragments,
+        PsiClass aClass,
+        Collection<TypeParameterInfo> typeParameterInfos,
+        Collection<PsiTypeCodeFragment> typeCodeFragments,
         boolean hideDefaultValueColumn
     ) {
         super(aClass.getProject(), true);

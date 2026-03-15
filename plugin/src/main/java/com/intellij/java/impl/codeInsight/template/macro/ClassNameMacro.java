@@ -30,7 +30,6 @@ import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassNameMacro extends Macro {
@@ -47,7 +46,7 @@ public class ClassNameMacro extends Macro {
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     int templateStartOffset = context.getTemplateStartOffset();
     int offset = templateStartOffset > 0 ? context.getTemplateStartOffset() - 1 : context.getTemplateStartOffset();
     PsiElement place = context.getPsiElementAtStartOffset();

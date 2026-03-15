@@ -30,8 +30,7 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiInstanceOfExpressionImpl extends ExpressionPsiElement implements PsiInstanceOfExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiInstanceOfExpressionImpl.class);
@@ -41,7 +40,6 @@ public class PsiInstanceOfExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  @Nonnull
   public PsiExpression getOperand() {
     return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.OPERAND);
   }
@@ -97,7 +95,7 @@ public class PsiInstanceOfExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitInstanceOfExpression(this);
     } else {
@@ -106,10 +104,10 @@ public class PsiInstanceOfExpressionImpl extends ExpressionPsiElement implements
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     if (lastParent != null) {
       return true;
     }

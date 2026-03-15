@@ -28,9 +28,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -47,7 +45,6 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
         myAssignmentExpression = assignmentExpression;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.changeToAppendText(buildAppendExpression(myAssignmentExpression.getRExpression(),
@@ -56,7 +53,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return JavaTokenType.PLUSEQ == myTokenType &&
             myAssignmentExpression.isValid() &&
             PsiManager.getInstance(project).isInProject(myAssignmentExpression) &&
@@ -71,7 +68,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -102,7 +99,7 @@ public class ChangeToAppendFix implements SyntheticIntentionAction {
     }
 
     @Nullable
-    private static StringBuilder buildAppendExpression(@Nullable PsiExpression concatenation, boolean useStringValueOf, @NonNls StringBuilder out)
+    private static StringBuilder buildAppendExpression(@Nullable PsiExpression concatenation, boolean useStringValueOf, StringBuilder out)
         throws IncorrectOperationException {
         final PsiType type = concatenation == null ? null : concatenation.getType();
         if (type == null) {

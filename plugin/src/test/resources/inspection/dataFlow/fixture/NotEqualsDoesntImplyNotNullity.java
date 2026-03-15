@@ -1,4 +1,4 @@
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 class TestIDEAWarn {
   void test(java.util.Map<Object, Object> values) {
     boolean condition = false;

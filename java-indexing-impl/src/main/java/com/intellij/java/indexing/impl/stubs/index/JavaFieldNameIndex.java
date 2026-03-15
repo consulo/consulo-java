@@ -28,7 +28,6 @@ import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -39,14 +38,13 @@ public class JavaFieldNameIndex extends StringStubIndexExtension<PsiField> {
     return ourInstance;
   }
 
-  @Nonnull
   @Override
   public StubIndexKey<String, PsiField> getKey() {
     return JavaStubIndexKeys.FIELDS;
   }
 
   @Override
-  public Collection<PsiField> get(final String s, final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiField> get(final String s, final Project project, final ProjectAwareSearchScope scope) {
     return super.get(s, project, new JavaSourceFilterScope(scope));
   }
 }

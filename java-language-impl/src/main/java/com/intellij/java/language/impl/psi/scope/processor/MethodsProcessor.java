@@ -17,7 +17,6 @@ package com.intellij.java.language.impl.psi.scope.processor;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 import consulo.util.dataholder.Key;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.PsiCallExpression;
@@ -35,7 +34,7 @@ import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.scope.JavaScopeProcessorEvent;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
 import com.intellij.java.language.psi.util.PsiUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,7 +55,7 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 	private PsiType[] myTypeArguments;
 	private final LanguageLevel myLanguageLevel;
 
-	public MethodsProcessor(@Nonnull PsiConflictResolver[] resolvers, @Nonnull List<CandidateInfo> container, @Nonnull PsiElement place, @Nonnull PsiFile placeFile)
+	public MethodsProcessor(PsiConflictResolver[] resolvers, List<CandidateInfo> container, PsiElement place, PsiFile placeFile)
 	{
 		super(null, ourFilter, resolvers, container, place, placeFile);
 		myLanguageLevel = PsiUtil.getLanguageLevel(placeFile);
@@ -72,13 +71,12 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 		myArgumentList = argList;
 	}
 
-	@Nonnull
 	public LanguageLevel getLanguageLevel()
 	{
 		return myLanguageLevel;
 	}
 
-	public void obtainTypeArguments(@Nonnull PsiCallExpression callExpression)
+	public void obtainTypeArguments(PsiCallExpression callExpression)
 	{
 		final PsiType[] typeArguments = callExpression.getTypeArguments();
 		if(typeArguments.length > 0)
@@ -103,7 +101,7 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 	}
 
 	@Override
-	public void handleEvent(@Nonnull Event event, Object associated)
+	public void handleEvent(Event event, Object associated)
 	{
 		if(event == JavaScopeProcessorEvent.START_STATIC)
 		{
@@ -130,13 +128,13 @@ public abstract class MethodsProcessor extends ConflictFilterProcessor implement
 		this.myIsConstructor = myIsConstructor;
 	}
 
-	public void forceAddResult(@Nonnull PsiMethod method)
+	public void forceAddResult(PsiMethod method)
 	{
 		add(new CandidateInfo(method, PsiSubstitutor.EMPTY, false, false, myCurrentFileContext));
 	}
 
 	@Override
-	public <T> T getHint(@Nonnull Key<T> hintKey)
+	public <T> T getHint(Key<T> hintKey)
 	{
 		if(hintKey == ElementClassHint.KEY)
 		{

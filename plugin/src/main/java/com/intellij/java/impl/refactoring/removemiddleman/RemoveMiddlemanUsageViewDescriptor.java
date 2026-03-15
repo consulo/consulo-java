@@ -19,13 +19,12 @@ import com.intellij.java.language.psi.PsiField;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewDescriptor;
-import jakarta.annotation.Nonnull;
 
 class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {
-    private @Nonnull
+    private 
     final PsiField field;
 
-    RemoveMiddlemanUsageViewDescriptor(@Nonnull PsiField field) {
+    RemoveMiddlemanUsageViewDescriptor(PsiField field) {
         super();
         this.field = field;
     }
@@ -40,7 +39,6 @@ class RemoveMiddlemanUsageViewDescriptor implements UsageViewDescriptor {
         return JavaRefactoringLocalize.removeMiddlemanFieldHeader().get();
     }
 
-    @Nonnull
     @Override
     public PsiElement[] getElements() {
         return new PsiElement[]{field};

@@ -22,11 +22,9 @@ import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.collection.MultiValuesMap;
 import consulo.util.xml.serializer.WriteExternalException;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -37,11 +35,8 @@ import java.util.TreeSet;
  */
 public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
   private static final Logger LOG = Logger.getInstance(ConfigFileInfoSetImpl.class);
-  @NonNls
   private static final String ELEMENT_NAME = "deploymentDescriptor";
-  @NonNls
   private static final String ID_ATTRIBUTE = "name";
-  @NonNls
   private static final String URL_ATTRIBUTE = "url";
   private final MultiValuesMap<ConfigFileMetaData, ConfigFileInfo> myConfigFiles = new MultiValuesMap<ConfigFileMetaData, ConfigFileInfo>();
   private
@@ -154,7 +149,7 @@ public class ConfigFileInfoSetImpl implements ConfigFileInfoSet {
     }
   }
 
-  public void setContainer(@Nonnull ConfigFileContainerImpl container) {
+  public void setContainer(ConfigFileContainerImpl container) {
     LOG.assertTrue(myContainer == null);
     myContainer = container;
     myContainer.updateDescriptors(myConfigFiles);

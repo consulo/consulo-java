@@ -75,7 +75,6 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -153,7 +152,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 	@RequiredReadAction
 	@SuppressWarnings({"UseOfSystemOutOrSystemErr"})
-	public static boolean isInspectionsEnabled(boolean online, @Nonnull Project project)
+	public static boolean isInspectionsEnabled(boolean online, Project project)
 	{
 		Module[] modules = ModuleManager.getInstance(project).getModules();
 		if (online)
@@ -276,19 +275,19 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 		SearchScope searchScope = new GlobalSearchScope(refManager.getProject())
 		{
 			@Override
-			public boolean contains(@Nonnull VirtualFile file)
+			public boolean contains(VirtualFile file)
 			{
 				return !scope.contains(file) || file.getFileType() != JavaFileType.INSTANCE;
 			}
 
 			@Override
-			public int compare(@Nonnull VirtualFile file1, @Nonnull VirtualFile file2)
+			public int compare(VirtualFile file1, VirtualFile file2)
 			{
 				return 0;
 			}
 
 			@Override
-			public boolean isSearchInModuleContent(@Nonnull Module aModule)
+			public boolean isSearchInModuleContent(Module aModule)
 			{
 				return true;
 			}
@@ -517,7 +516,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 	}
 
 	private static PsiReferenceProcessor createReferenceProcessor(
-		@Nonnull List<UsagesProcessor> processors,
+		List<UsagesProcessor> processors,
 		GlobalInspectionContext context
 	)
 	{
@@ -547,9 +546,9 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 	@Override
 	public void performPreRunActivities(
-		@Nonnull List<Tools> globalTools,
-		@Nonnull List<Tools> localTools,
-		@Nonnull GlobalInspectionContext context
+		List<Tools> globalTools,
+		List<Tools> localTools,
+		GlobalInspectionContext context
 	)
 	{
 		getEntryPointsManager(context.getRefManager()).resolveEntryPoints(context.getRefManager());
@@ -567,7 +566,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 
 
 	@Override
-	public void performPostRunActivities(@Nonnull List<InspectionToolWrapper> needRepeatSearchRequest, @Nonnull GlobalInspectionContext context)
+	public void performPostRunActivities(List<InspectionToolWrapper> needRepeatSearchRequest, GlobalInspectionContext context)
 	{
 		JobDescriptor progress = context.getStdJobDescriptors().FIND_EXTERNAL_USAGES;
 		progress.setTotalAmount(getRequestCount());

@@ -33,7 +33,6 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.Lists;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -97,7 +96,7 @@ public class HotSwapUIImpl extends HotSwapUI {
             private Map<DebuggerSession, Map<String, HotSwapFile>> myModifiedClasses;
 
             @Override
-            public void run(@Nonnull ProgressIndicator progressIndicator) {
+            public void run(ProgressIndicator progressIndicator) {
                 HotSwapProgressImpl progress = new HotSwapProgressImpl((Project) myProject, progressIndicator);
 
                 myModifiedClasses = HotSwapManager.scanForModifiedClasses(sessions, progress);

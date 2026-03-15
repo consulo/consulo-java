@@ -17,7 +17,6 @@
 package com.intellij.jam;
 
 import consulo.component.util.localize.AbstractBundle;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
 /**
@@ -25,7 +24,7 @@ import org.jetbrains.annotations.PropertyKey;
  */
 public class JamMessages extends AbstractBundle {
 
-  @NonNls protected static final String PATH_TO_BUNDLE = "messages.JamBundle";
+  protected static final String PATH_TO_BUNDLE = "messages.JamBundle";
 
   private static final JamMessages ourInstance = new JamMessages();
 

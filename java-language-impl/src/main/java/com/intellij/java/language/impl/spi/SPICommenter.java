@@ -19,8 +19,7 @@ import com.intellij.java.language.spi.SPILanguage;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Commenter;
 import consulo.language.Language;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
@@ -57,7 +56,6 @@ public class SPICommenter implements Commenter {
     return null;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return SPILanguage.INSTANCE;

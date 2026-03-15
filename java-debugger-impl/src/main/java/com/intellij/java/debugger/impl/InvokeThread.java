@@ -27,7 +27,6 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author lex
@@ -162,7 +161,7 @@ public abstract class InvokeThread<E extends PrioritizedTask>
 		workerRequest.setRequestFuture(ApplicationManager.getApplication().executeOnPooledThread(workerRequest));
 	}
 
-	private void run(final @Nonnull WorkerThreadRequest threadRequest)
+	private void run(final WorkerThreadRequest threadRequest)
 	{
 		try
 		{

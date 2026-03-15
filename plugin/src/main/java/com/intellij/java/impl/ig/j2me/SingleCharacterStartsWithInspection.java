@@ -28,19 +28,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class SingleCharacterStartsWithInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.singleCharacterStartswithDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.singleCharacterStartswithProblemDescriptor().get();
     }
@@ -51,7 +47,6 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
     }
 
     private static class SingleCharacterStartsWithFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.singleCharacterStartswithQuickfix();
@@ -74,7 +69,7 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
                 character = "\\'";
             }
             String qualifierText = qualifier.getText();
-            @NonNls String newExpression;
+            String newExpression;
             String referenceName = methodExpression.getReferenceName();
             if (HardcodedMethodConstants.STARTS_WITH.equals(referenceName)) {
                 newExpression = qualifierText + ".length() > 0 && " +
@@ -95,7 +90,7 @@ public class SingleCharacterStartsWithInspection extends BaseInspection {
 
     private static class SingleCharacterStartsWithVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             PsiReferenceExpression methodExpression = call.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

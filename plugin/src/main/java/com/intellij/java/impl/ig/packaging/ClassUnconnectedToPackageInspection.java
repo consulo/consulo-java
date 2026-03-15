@@ -28,13 +28,11 @@ import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
 public abstract class ClassUnconnectedToPackageInspection extends BaseGlobalInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classUnconnectedToPackageDisplayName();
@@ -44,11 +42,11 @@ public abstract class ClassUnconnectedToPackageInspection extends BaseGlobalInsp
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope analysisScope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalInspectionContext,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope analysisScope,
+        InspectionManager manager,
+        GlobalInspectionContext globalInspectionContext,
+        Object state
     ) {
         if (!(refEntity instanceof RefClass refClass)) {
             return null;

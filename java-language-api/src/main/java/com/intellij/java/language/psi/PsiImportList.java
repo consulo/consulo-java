@@ -17,10 +17,8 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the list of import statements contained in a Java or JSP file.
@@ -30,7 +28,6 @@ import jakarta.annotation.Nullable;
 public interface PsiImportList extends PsiElement {
   PsiImportList[] EMPTY_ARRAY = new PsiImportList[0];
   ArrayFactory<PsiImportList> ARRAY_FACTORY = new ArrayFactory<PsiImportList>() {
-    @Nonnull
     @Override
     public PsiImportList[] create(int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiImportList[count];
@@ -42,7 +39,6 @@ public interface PsiImportList extends PsiElement {
    *
    * @return the array of non-static import statements.
    */
-  @Nonnull
   PsiImportStatement[] getImportStatements();
 
   /**
@@ -50,7 +46,6 @@ public interface PsiImportList extends PsiElement {
    *
    * @return the array of static import statements.
    */
-  @Nonnull
   PsiImportStaticStatement[] getImportStaticStatements();
 
   /**
@@ -58,7 +53,6 @@ public interface PsiImportList extends PsiElement {
    *
    * @return the array of import statements.
    */
-  @Nonnull
   PsiImportStatementBase[] getAllImportStatements();
 
   /**
@@ -77,7 +71,7 @@ public interface PsiImportList extends PsiElement {
    * @return the import statement, or null if one was not found.
    */
   @Nullable
-  PsiImportStatement findOnDemandImportStatement(@NonNls String packageName);
+  PsiImportStatement findOnDemandImportStatement(String packageName);
 
   /**
    * Searches the list for a single import or import static statement importing the specified

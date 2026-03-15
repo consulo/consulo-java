@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaElementVisitor;
 import consulo.language.psi.PsiElement;
@@ -27,24 +26,23 @@ import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 
 class ClsDocTagImpl extends ClsElementImpl implements PsiDocTag {
   private final ClsDocCommentImpl myDocComment;
   private final PsiElement myNameElement;
 
-  public ClsDocTagImpl(ClsDocCommentImpl docComment, @NonNls String name) {
+  public ClsDocTagImpl(ClsDocCommentImpl docComment, String name) {
     myDocComment = docComment;
     myNameElement = new NameElement(this, name);
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append(myNameElement.getText());
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaDocElementType.DOC_TAG);
   }
 
@@ -54,24 +52,22 @@ class ClsDocTagImpl extends ClsElementImpl implements PsiDocTag {
   }
 
   @Override
-  @Nonnull
   public char[] textToCharArray() {
     return myNameElement.textToCharArray();
   }
 
   @Override
-  @Nonnull
   public String getName() {
     return getNameElement().getText().substring(1);
   }
 
   @Override
-  public boolean textMatches(@Nonnull CharSequence text) {
+  public boolean textMatches(CharSequence text) {
     return myNameElement.textMatches(text);
   }
 
   @Override
-  public boolean textMatches(@Nonnull PsiElement element) {
+  public boolean textMatches(PsiElement element) {
     return myNameElement.textMatches(element);
   }
 
@@ -81,7 +77,6 @@ class ClsDocTagImpl extends ClsElementImpl implements PsiDocTag {
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     return new PsiElement[]{myNameElement};
   }
@@ -112,7 +107,7 @@ class ClsDocTagImpl extends ClsElementImpl implements PsiDocTag {
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDocTag(this);
     }
@@ -122,7 +117,7 @@ class ClsDocTagImpl extends ClsElementImpl implements PsiDocTag {
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameElement(), name);
     return this;
   }
@@ -142,23 +137,21 @@ class ClsDocTagImpl extends ClsElementImpl implements PsiDocTag {
     }
 
     @Override
-    @Nonnull
     public char[] textToCharArray() {
       return myText.toCharArray();
     }
 
     @Override
-    @Nonnull
     public PsiElement[] getChildren() {
       return PsiElement.EMPTY_ARRAY;
     }
 
     @Override
-    public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+    public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     }
 
     @Override
-    public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+    public void setMirror(TreeElement element) throws InvalidMirrorException {
       setMirrorCheckingType(element, null);
     }
 
@@ -168,7 +161,7 @@ class ClsDocTagImpl extends ClsElementImpl implements PsiDocTag {
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
       visitor.visitElement(this);
     }
   }

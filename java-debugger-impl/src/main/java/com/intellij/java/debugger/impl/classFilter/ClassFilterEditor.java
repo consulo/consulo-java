@@ -37,8 +37,7 @@ import consulo.ui.ex.awt.util.TableUtil;
 import consulo.ui.ex.localize.UILocalize;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.table.*;
@@ -72,7 +71,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
       .addExtraAction(new AnActionButton(getAddButtonText(), getAddButtonIcon()) {
         @Override
         @RequiredUIAccess
-        public void actionPerformed(@Nonnull AnActionEvent e) {
+        public void actionPerformed(AnActionEvent e) {
           addClassFilter();
         }
 
@@ -86,7 +85,7 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
       decorator.addExtraAction(new AnActionButton(getAddPatternButtonText(), getAddPatternButtonIcon()) {
         @Override
         @RequiredUIAccess
-        public void actionPerformed(@Nonnull AnActionEvent e) {
+        public void actionPerformed(AnActionEvent e) {
           addPatternFilter();
         }
 
@@ -128,7 +127,6 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     getEmptyText().setText(UILocalize.noPatterns().get());
   }
 
-  @Nonnull
   @Override
   public StatusText getEmptyText() {
     return myTable.getEmptyText();
@@ -300,7 +298,6 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
     }
   }
 
-  @Nonnull
   protected com.intellij.java.debugger.ui.classFilter.ClassFilter createFilter(String pattern) {
     return new com.intellij.java.debugger.ui.classFilter.ClassFilter(pattern);
   }

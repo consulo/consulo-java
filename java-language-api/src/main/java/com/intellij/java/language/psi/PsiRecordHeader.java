@@ -2,12 +2,10 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface PsiRecordHeader extends PsiElement {
-  @Nonnull
   PsiRecordComponent[] getRecordComponents();
 
   @Nullable

@@ -22,18 +22,15 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.RelationType;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.EmptyStackException;
 import java.util.Set;
 
 public interface DfaMemoryState
 {
-	@Nonnull
 	DfaMemoryState createCopy();
 
-	@Nonnull
 	DfaMemoryState createClosureState();
 
 	/**
@@ -42,7 +39,6 @@ public interface DfaMemoryState
 	 * @return popped value
 	 * @throws EmptyStackException if stack is empty
 	 */
-	@Nonnull
 	DfaValue pop();
 
 	/**
@@ -51,7 +47,6 @@ public interface DfaMemoryState
 	 * @return top of stack value
 	 * @throws EmptyStackException if stack is empty
 	 */
-	@Nonnull
 	DfaValue peek();
 
 	/**
@@ -69,7 +64,7 @@ public interface DfaMemoryState
 	 *
 	 * @param value to push
 	 */
-	void push(@Nonnull DfaValue value);
+	void push(DfaValue value);
 
 	void emptyStack();
 
@@ -94,7 +89,7 @@ public interface DfaMemoryState
 	 * @param value2 second value to check
 	 * @return true if they are equal; false if not equal or not known
 	 */
-	boolean areEqual(@Nonnull DfaValue value1, @Nonnull DfaValue value2);
+	boolean areEqual(DfaValue value1, DfaValue value2);
 
 	boolean applyContractCondition(DfaCondition dfaCond);
 
@@ -106,7 +101,7 @@ public interface DfaMemoryState
 	 * @param dfType wanted type
 	 * @return true if update was successful. If false was returned the memory state may be in inconsistent state.
 	 */
-	boolean meetDfType(@Nonnull DfaValue value, @Nonnull DfType dfType);
+	boolean meetDfType(DfaValue value, DfType dfType);
 
 	/**
 	 * Forcibly sets the supplied dfType to given value if given value state can be memoized.
@@ -116,38 +111,36 @@ public interface DfaMemoryState
 	 * @param value  value to update.
 	 * @param dfType type to assign to value. Note that type might be adjusted, e.g. to be compatible with value declared PsiType.
 	 */
-	void setDfType(@Nonnull DfaValue value, @Nonnull DfType dfType);
+	void setDfType(DfaValue value, DfType dfType);
 
 	/**
 	 * @param value value to get the type of
 	 * @return the DfType of the value within this memory state
 	 */
-	@Nonnull
-	DfType getDfType(@Nonnull DfaValue value);
+	DfType getDfType(DfaValue value);
 
 	/**
 	 * @param value value to get the type of; if value is a primitive wrapper, it will be unboxed before fetching the DfType
 	 * @return the DfType of the value within this memory state
 	 */
-	@Nonnull
-	DfType getUnboxedDfType(@Nonnull DfaValue value);
+	DfType getUnboxedDfType(DfaValue value);
 
 	/**
 	 * @param value value to get the type of
 	 * @return the PsiType of given value, could be more precise than the declared type. May return null if not known.
 	 */
 	@Nullable
-	PsiType getPsiType(@Nonnull DfaValue value);
+	PsiType getPsiType(DfaValue value);
 
-	void flushFieldsQualifiedBy(@Nonnull Set<DfaValue> qualifiers);
+	void flushFieldsQualifiedBy(Set<DfaValue> qualifiers);
 
 	void flushFields();
 
-	void flushVariable(@Nonnull DfaVariableValue variable);
+	void flushVariable(DfaVariableValue variable);
 
 	boolean isNull(DfaValue dfaVar);
 
-	boolean checkNotNullable(@Nonnull DfaValue value);
+	boolean checkNotNullable(DfaValue value);
 
 	boolean isNotNull(DfaValue dfaVar);
 

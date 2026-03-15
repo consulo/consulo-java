@@ -29,7 +29,6 @@ import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MethodNameMacro extends Macro {
@@ -45,13 +44,12 @@ public class MethodNameMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "a";
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     PsiElement place = context.getPsiElementAtStartOffset();
     while (place != null){
       if (place instanceof PsiMethod){

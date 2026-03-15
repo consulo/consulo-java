@@ -8,8 +8,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a descriptor of {@link DfaVariableValue}. Two variables are the same if they have the same descriptor and qualifier.
@@ -49,8 +48,7 @@ public interface VariableDescriptor
 	 * @param qualifier qualifier to use
 	 * @return a field value
 	 */
-	@Nonnull
-	default DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier)
+	default DfaValue createValue(DfaValueFactory factory, @Nullable DfaValue qualifier)
 	{
 		return createValue(factory, qualifier, false);
 	}
@@ -63,8 +61,7 @@ public interface VariableDescriptor
 	 * @param forAccessor whether the value is created for accessor result
 	 * @return a field value
 	 */
-	@Nonnull
-	default DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor)
+	default DfaValue createValue(DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor)
 	{
 		if(qualifier instanceof DfaVariableValue)
 		{

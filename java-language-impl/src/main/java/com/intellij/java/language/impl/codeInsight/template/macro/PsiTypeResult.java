@@ -25,7 +25,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max, dsl
@@ -34,7 +33,7 @@ public class PsiTypeResult implements RecalculatableResult {
   private final SmartTypePointer myTypePointer;
   private final JavaPsiFacade myFacade;
 
-  public PsiTypeResult(@Nonnull PsiType type, Project project) {
+  public PsiTypeResult(PsiType type, Project project) {
     final PsiType actualType = PsiUtil.convertAnonymousToBaseType(type);
     myTypePointer = SmartTypePointerManager.getInstance(project).createSmartTypePointer(actualType);
     myFacade = JavaPsiFacade.getInstance(project);

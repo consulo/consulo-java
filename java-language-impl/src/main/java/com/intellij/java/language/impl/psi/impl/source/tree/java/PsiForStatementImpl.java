@@ -34,7 +34,6 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiForStatementImpl extends CompositePsiElement implements PsiForStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiForStatementImpl.class);
@@ -156,7 +155,7 @@ public class PsiForStatementImpl extends CompositePsiElement implements PsiForSt
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitForStatement(this);
     } else {
@@ -169,7 +168,7 @@ public class PsiForStatementImpl extends CompositePsiElement implements PsiForSt
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     final boolean isForInitialization = getChildRole(child) == ChildRole.FOR_INITIALIZATION;
 
     if (isForInitialization) {
@@ -185,10 +184,10 @@ public class PsiForStatementImpl extends CompositePsiElement implements PsiForSt
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
     if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.logging.Logger;
@@ -36,7 +35,6 @@ public class PsiBlockStatementImpl extends CompositePsiElement implements PsiBlo
   }
 
   @Override
-  @Nonnull
   public PsiCodeBlock getCodeBlock() {
     return (PsiCodeBlock)findChildByRoleAsPsiElement(ChildRole.BLOCK);
   }
@@ -65,7 +63,7 @@ public class PsiBlockStatementImpl extends CompositePsiElement implements PsiBlo
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitBlockStatement(this);
     }

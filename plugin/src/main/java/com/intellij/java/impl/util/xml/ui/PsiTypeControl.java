@@ -30,7 +30,6 @@ import consulo.xml.util.xml.ui.DomWrapper;
 import consulo.xml.util.xml.ui.EditorTextFieldControl;
 import consulo.xml.util.xml.ui.PsiTypePanel;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -41,7 +40,6 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
     super(domWrapper, commitOnEveryChange);
   }
 
-  @Nonnull
   public String getValue() {
     String rawValue = super.getValue();
     try {
@@ -61,7 +59,6 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
 
   public void setValue(String value) {
     PsiType type = JvmPsiTypeConverterImpl.convertFromString(value, new AbstractConvertContext() {
-      @Nonnull
       public DomElement getInvocationElement() {
         return getDomElement();
       }
@@ -76,7 +73,7 @@ public class PsiTypeControl extends EditorTextFieldControl<PsiTypePanel> {
     super.setValue(value);
   }
 
-  protected EditorTextField getEditorTextField(@Nonnull PsiTypePanel component) {
+  protected EditorTextField getEditorTextField(PsiTypePanel component) {
     return ((ReferenceEditorWithBrowseButton) component.getComponent(0)).getEditorTextField();
   }
 

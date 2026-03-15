@@ -23,8 +23,7 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.util.IncorrectOperationException;
 import consulo.usage.UsageInfo;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -35,15 +34,15 @@ import java.util.Collection;
 public interface MoveClassHandler {
     ExtensionPointName<MoveClassHandler> EP_NAME = ExtensionPointName.create(MoveClassHandler.class);
 
-    void prepareMove(@Nonnull PsiClass aClass);
+    void prepareMove(PsiClass aClass);
 
-    void finishMoveClass(@Nonnull PsiClass aClass);
+    void finishMoveClass(PsiClass aClass);
 
     /**
      * @return null if it cannot move aClass
      */
     @Nullable
-    PsiClass doMoveClass(@Nonnull PsiClass aClass, @Nonnull PsiDirectory moveDestination) throws IncorrectOperationException;
+    PsiClass doMoveClass(PsiClass aClass, PsiDirectory moveDestination) throws IncorrectOperationException;
 
     /**
      * @param clazz psiClass

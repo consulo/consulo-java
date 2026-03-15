@@ -24,14 +24,13 @@
  */
 package com.intellij.java.impl.refactoring.util.classMembers;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.editor.refactoring.classMember.ANDCombinedMemberInfoModel;
 import consulo.language.editor.refactoring.classMember.DelegatingMemberInfoModel;
 import consulo.language.editor.refactoring.classMember.MemberInfoBase;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class UsesAndInterfacesDependencyMemberInfoModel<T extends PsiMember, M extends MemberInfoBase<T>> extends
 		DelegatingMemberInfoModel<T, M>
@@ -48,13 +47,13 @@ public class UsesAndInterfacesDependencyMemberInfoModel<T extends PsiMember, M e
 	public UsesAndInterfacesDependencyMemberInfoModel(PsiClass aClass,
 			@Nullable PsiClass superClass,
 			boolean recursive,
-			@Nonnull final InterfaceContainmentVerifier interfaceContainmentVerifier)
+			final InterfaceContainmentVerifier interfaceContainmentVerifier)
 	{
 		super(new ANDCombinedMemberInfoModel<T, M>(new UsesDependencyMemberInfoModel<T, PsiClass, M>(aClass,
 				superClass, recursive)
 		{
 			@Override
-			public int checkForProblems(@Nonnull M memberInfo)
+			public int checkForProblems(M memberInfo)
 			{
 				int problem = super.checkForProblems(memberInfo);
 				if(problem == OK)

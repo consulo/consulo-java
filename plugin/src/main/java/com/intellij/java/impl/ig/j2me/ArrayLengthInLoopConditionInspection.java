@@ -24,17 +24,14 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ArrayLengthInLoopConditionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.arrayLengthInLoopConditionDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.arrayLengthInLoopConditionProblemDescriptor().get();
     }
@@ -47,7 +44,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitForStatement(@Nonnull PsiForStatement statement) {
+        public void visitForStatement(PsiForStatement statement) {
             super.visitForStatement(statement);
             PsiExpression condition = statement.getCondition();
             if (condition == null) {
@@ -57,7 +54,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
         }
 
         @Override
-        public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+        public void visitWhileStatement(PsiWhileStatement statement) {
             super.visitWhileStatement(statement);
             PsiExpression condition = statement.getCondition();
             if (condition == null) {
@@ -68,7 +65,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
 
         @Override
         public void visitDoWhileStatement(
-            @Nonnull PsiDoWhileStatement statement
+            PsiDoWhileStatement statement
         ) {
             super.visitDoWhileStatement(statement);
             PsiExpression condition = statement.getCondition();
@@ -84,7 +81,7 @@ public class ArrayLengthInLoopConditionInspection extends BaseInspection {
 
                     @Override
                     public void visitReferenceExpression(
-                        @Nonnull PsiReferenceExpression expression
+                        PsiReferenceExpression expression
                     ) {
                         super.visitReferenceExpression(expression);
                         String name = expression.getReferenceName();

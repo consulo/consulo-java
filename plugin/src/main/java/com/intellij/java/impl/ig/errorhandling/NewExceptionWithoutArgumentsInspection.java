@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -33,13 +32,11 @@ public class NewExceptionWithoutArgumentsInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreWithoutParameters = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.newExceptionWithoutArgumentsDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.newExceptionWithoutArgumentsProblemDescriptor().get();

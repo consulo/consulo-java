@@ -31,7 +31,6 @@ import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Mike
@@ -48,7 +47,7 @@ public class CreateClassFromUsageFix extends CreateClassFromUsageBaseFix impleme
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, Editor editor, PsiFile file) {
+  public void invoke(final Project project, Editor editor, PsiFile file) {
     final PsiJavaCodeReferenceElement element = getRefElement();
     assert element != null;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;

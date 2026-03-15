@@ -55,8 +55,7 @@ import consulo.util.lang.*;
 import consulo.util.lang.xml.XmlStringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -190,13 +189,13 @@ public class JavaDocInfoGenerator {
   }
 
   @RequiredReadAction
-  private static PsiDocTag getParamTagByName(@Nonnull PsiDocComment comment, String name) {
+  private static PsiDocTag getParamTagByName(PsiDocComment comment, String name) {
     PsiDocTag[] tags = comment.findTagsByName("param");
     return getTagByName(tags, name);
   }
 
   @RequiredReadAction
-  private static PsiDocTag getTagByName(@Nonnull PsiDocTag[] tags, String name) {
+  private static PsiDocTag getTagByName(PsiDocTag[] tags, String name) {
     for (PsiDocTag tag : tags) {
       PsiDocTagValue value = tag.getValueElement();
       if (value != null) {
@@ -241,7 +240,7 @@ public class JavaDocInfoGenerator {
   }
 
   @Nullable
-  private String fixupDoc(@Nonnull final StringBuilder buffer) {
+  private String fixupDoc(final StringBuilder buffer) {
     String text = buffer.toString();
     if (text.isEmpty()) {
       return null;
@@ -287,7 +286,7 @@ public class JavaDocInfoGenerator {
    * Converts a relative link into {@link DocumentationManagerProtocol#PSI_ELEMENT_PROTOCOL PSI_ELEMENT_PROTOCOL}-type link if possible
    */
   @Nullable
-  static String createReferenceForRelativeLink(@Nonnull String relativeLink, @Nonnull PsiElement contextElement) {
+  static String createReferenceForRelativeLink(String relativeLink, PsiElement contextElement) {
     String fragment = null;
     int hashPosition = relativeLink.indexOf('#');
     if (hashPosition >= 0) {
@@ -801,7 +800,7 @@ public class JavaDocInfoGenerator {
    * Finds doc comment immediately preceding package statement
    */
   @Nullable
-  private static ASTNode findRelevantCommentNode(@Nonnull ASTNode fileNode) {
+  private static ASTNode findRelevantCommentNode(ASTNode fileNode) {
     ASTNode node = fileNode.findChildByType(JavaElementType.PACKAGE_STATEMENT);
     if (node == null) {
       node = fileNode.getLastChildNode();
@@ -960,8 +959,8 @@ public class JavaDocInfoGenerator {
 
   @RequiredReadAction
   private static void generateAnnotations(
-    @Nonnull StringBuilder buffer,
-    @Nonnull PsiModifierListOwner owner,
+    StringBuilder buffer,
+    PsiModifierListOwner owner,
     boolean generateLink,
     boolean splitAnnotations,
     boolean useShortNames
@@ -1968,7 +1967,7 @@ public class JavaDocInfoGenerator {
   /**
    * @return Length of the generated label.
    */
-  public static int generateLink(StringBuilder buffer, String refText, String label, @Nonnull PsiElement context, boolean plainLink) {
+  public static int generateLink(StringBuilder buffer, String refText, String label, PsiElement context, boolean plainLink) {
     if (label == null) {
       PsiManager manager = context.getManager();
       label = JavaDocUtil.getLabelText(manager.getProject(), manager, refText, context);
@@ -2279,7 +2278,7 @@ public class JavaDocInfoGenerator {
   }
 
   @Nullable
-  private static PsiMethod findDelegateMethod(@Nonnull PsiMethod method) {
+  private static PsiMethod findDelegateMethod(PsiMethod method) {
     PsiDocCommentOwner delegate = DocumentationDelegateProvider.findDocumentationDelegate(method);
     return delegate instanceof PsiMethod psiMethod ? psiMethod : null;
   }
@@ -2301,7 +2300,7 @@ public class JavaDocInfoGenerator {
       inheritDocTagProvider = provider;
     }
 
-    private ParamInfo(String paramName, @Nonnull Pair<PsiDocTag, InheritDocProvider<PsiDocTag>> tagWithInheritProvider) {
+    private ParamInfo(String paramName, Pair<PsiDocTag, InheritDocProvider<PsiDocTag>> tagWithInheritProvider) {
       this(paramName, tagWithInheritProvider.first, tagWithInheritProvider.second);
     }
   }
@@ -2316,7 +2315,7 @@ public class JavaDocInfoGenerator {
   private static class MyVisitor extends JavaElementVisitor {
     private final StringBuilder myBuffer;
 
-    MyVisitor(@Nonnull StringBuilder buffer) {
+    MyVisitor(StringBuilder buffer) {
       myBuffer = buffer;
     }
 

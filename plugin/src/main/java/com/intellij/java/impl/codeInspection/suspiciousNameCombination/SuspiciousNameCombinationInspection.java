@@ -35,10 +35,8 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.ListDataEvent;
@@ -55,9 +53,7 @@ import java.util.Map;
 public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool {
     private final List<String> myNameGroups = new ArrayList<>();
     private final Map<String, String> myWordToGroupMap = new HashMap<>();
-    @NonNls
     private static final String ELEMENT_GROUPS = "group";
-    @NonNls
     private static final String ATTRIBUTE_NAMES = "names";
 
     public SuspiciousNameCombinationInspection() {
@@ -70,7 +66,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
         myWordToGroupMap.clear();
     }
 
-    private void addNameGroup(@NonNls String group) {
+    private void addNameGroup(String group) {
         myNameGroups.add(group);
         List<String> words = StringUtil.split(group, ",");
         for (String word : words) {
@@ -83,29 +79,24 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
         return true;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesProbableBugs();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.suspiciousNameCombinationDisplayName();
     }
 
     @Override
-    @Nonnull
-    @NonNls
     public String getShortName() {
         return "SuspiciousNameCombination";
     }
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -120,7 +111,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
 
     @Override
-    public void readSettings(@Nonnull Element node) throws InvalidDataException {
+    public void readSettings(Element node) throws InvalidDataException {
         clearNameGroups();
         for (Object o : node.getChildren(ELEMENT_GROUPS)) {
             Element e = (Element) o;
@@ -129,7 +120,7 @@ public class SuspiciousNameCombinationInspection extends BaseLocalInspectionTool
     }
 
     @Override
-    public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+    public void writeSettings(Element node) throws WriteExternalException {
         for (String group : myNameGroups) {
             Element e = new Element(ELEMENT_GROUPS);
             node.addContent(e);

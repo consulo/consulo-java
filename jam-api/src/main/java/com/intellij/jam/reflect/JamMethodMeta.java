@@ -20,8 +20,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.pom.PomTarget;
 import consulo.language.sem.SemKey;
 import consulo.util.lang.function.PairConsumer;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -66,7 +65,7 @@ public class JamMethodMeta<Jam extends JamElement> extends JamMemberMeta<PsiMeth
   }
 
   @Override
-  public JamMethodMeta<Jam> addPomTargetProducer(@Nonnull PairConsumer<Jam, Consumer<PomTarget>> producer) {
+  public JamMethodMeta<Jam> addPomTargetProducer(PairConsumer<Jam, Consumer<PomTarget>> producer) {
     super.addPomTargetProducer(producer);
     return this;
   }

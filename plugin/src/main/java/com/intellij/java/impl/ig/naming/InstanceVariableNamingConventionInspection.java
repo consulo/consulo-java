@@ -23,7 +23,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstanceVariableNamingConventionInspection
@@ -32,7 +31,6 @@ public class InstanceVariableNamingConventionInspection
   private static final int DEFAULT_MIN_LENGTH = 5;
   private static final int DEFAULT_MAX_LENGTH = 32;
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.instanceVariableNamingConventionDisplayName();
   }
@@ -45,7 +43,6 @@ public class InstanceVariableNamingConventionInspection
     return true;
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     String fieldName = (String)infos[0];
     if (fieldName.length() < getMinLength()) {
@@ -76,7 +73,7 @@ public class InstanceVariableNamingConventionInspection
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       super.visitField(field);
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         return;

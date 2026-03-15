@@ -1,8 +1,6 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 abstract class P2 {
-    @Nonnull
     String foo(@jakarta.annotation.Nonnull P p) {
         return "";
     }
@@ -22,7 +20,6 @@ class PPP2 extends P2 {
 
 ///////  in library
 interface Foo {
-    @Nonnull
     String getTitle();
 }
 class FooImpl extends java.awt.Frame implements Foo {

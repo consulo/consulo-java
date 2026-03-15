@@ -28,18 +28,15 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MissingDeprecatedAnnotationInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.missingDeprecatedAnnotationDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.missingDeprecatedAnnotationProblemDescriptor().get();
     }
@@ -55,7 +52,6 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
     }
 
     private static class MissingDeprecatedAnnotationFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.missingDeprecatedAnnotationAddQuickfix();
@@ -86,7 +82,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
     private static class MissingDeprecatedAnnotationVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             super.visitClass(aClass);
             if (!PsiUtil.isLanguageLevel5OrHigher(aClass)) {
                 return;
@@ -98,7 +94,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
                 return;
             }
@@ -112,7 +108,7 @@ public class MissingDeprecatedAnnotationInspection extends BaseInspection {
         }
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             if (!PsiUtil.isLanguageLevel5OrHigher(field)) {
                 return;
             }

@@ -7,7 +7,6 @@ import consulo.language.psi.PsiReferenceRegistrar;
 import consulo.xml.lang.xml.XMLLanguage;
 import consulo.xml.patterns.XmlPatterns;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -17,14 +16,13 @@ import jakarta.annotation.Nonnull;
 public class XmlJavaReferenceContributor extends PsiReferenceContributor
 {
 	@Override
-	public void registerReferenceProviders(@Nonnull PsiReferenceRegistrar registrar)
+	public void registerReferenceProviders(PsiReferenceRegistrar registrar)
 	{
 		JavaClassListReferenceProvider classListProvider = new JavaClassListReferenceProvider();
 		registrar.registerReferenceProvider(XmlPatterns.xmlAttributeValue(), classListProvider, PsiReferenceRegistrar.LOWER_PRIORITY);
 		registrar.registerReferenceProvider(XmlPatterns.xmlTag(), classListProvider, PsiReferenceRegistrar.LOWER_PRIORITY);
 	}
 
-	@Nonnull
 	@Override
 	public Language getLanguage()
 	{

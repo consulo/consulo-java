@@ -7,8 +7,7 @@ import consulo.container.plugin.PluginManager;
 import consulo.execution.coverage.CoverageSuite;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +21,7 @@ public class IDEACoverageRunner extends JavaCoverageRunner {
     private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class);
 
     @Override
-    public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @Nullable CoverageSuite coverageSuite) {
+    public ProjectData loadCoverageData(File sessionDataFile, @Nullable CoverageSuite coverageSuite) {
         return ProjectDataLoader.load(sessionDataFile);
     }
 

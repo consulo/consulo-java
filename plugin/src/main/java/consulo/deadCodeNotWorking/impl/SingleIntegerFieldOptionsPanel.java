@@ -16,8 +16,6 @@
 package consulo.deadCodeNotWorking.impl;
 
 import consulo.language.editor.inspection.InspectionTool;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -33,12 +31,12 @@ import java.text.ParseException;
 public class SingleIntegerFieldOptionsPanel extends JPanel
 {
 
-	public SingleIntegerFieldOptionsPanel(String labelString, InspectionTool owner, @NonNls String property)
+	public SingleIntegerFieldOptionsPanel(String labelString, InspectionTool owner, String property)
 	{
 		this(labelString, owner, property, 2);
 	}
 
-	public SingleIntegerFieldOptionsPanel(String labelString, InspectionTool owner, @NonNls String property, int integerFieldColumns)
+	public SingleIntegerFieldOptionsPanel(String labelString, InspectionTool owner, String property, int integerFieldColumns)
 	{
 		super(new GridBagLayout());
 		JLabel label = new JLabel(labelString);
@@ -61,7 +59,7 @@ public class SingleIntegerFieldOptionsPanel extends JPanel
 		add(valueField, constraints);
 	}
 
-	public static JFormattedTextField createIntegerFieldTrackingValue(@Nonnull InspectionTool owner, @Nonnull String property, int integerFieldColumns)
+	public static JFormattedTextField createIntegerFieldTrackingValue(InspectionTool owner, String property, int integerFieldColumns)
 	{
 		JFormattedTextField valueField = new JFormattedTextField();
 		valueField.setColumns(integerFieldColumns);

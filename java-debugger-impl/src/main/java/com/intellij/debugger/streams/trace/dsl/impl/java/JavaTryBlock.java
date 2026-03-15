@@ -4,7 +4,6 @@ package com.intellij.debugger.streams.trace.dsl.impl.java;
 import consulo.execution.debug.stream.trace.dsl.CodeBlock;
 import consulo.execution.debug.stream.trace.dsl.StatementFactory;
 import consulo.execution.debug.stream.trace.dsl.impl.common.TryBlockBase;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -12,12 +11,11 @@ import jakarta.annotation.Nonnull;
 public class JavaTryBlock extends TryBlockBase {
     private final CodeBlock block;
 
-    public JavaTryBlock(@Nonnull CodeBlock block, @Nonnull StatementFactory statementFactory) {
+    public JavaTryBlock(CodeBlock block, StatementFactory statementFactory) {
         super(statementFactory);
         this.block = block;
     }
 
-    @Nonnull
     @Override
     public String toCode(int indent) {
         CatchBlockDescriptor descriptor = myCatchDescriptor;

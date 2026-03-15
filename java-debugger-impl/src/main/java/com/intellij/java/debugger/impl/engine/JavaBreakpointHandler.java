@@ -15,8 +15,7 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
@@ -37,20 +36,20 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 {
 	protected final DebugProcessImpl myProcess;
 
-	public JavaBreakpointHandler(@Nonnull Class<? extends XBreakpointType<?, ?>> breakpointTypeClass, DebugProcessImpl process)
+	public JavaBreakpointHandler(Class<? extends XBreakpointType<?, ?>> breakpointTypeClass, DebugProcessImpl process)
 	{
 		super(breakpointTypeClass);
 		myProcess = process;
 	}
 
 	@Nullable
-	protected Breakpoint createJavaBreakpoint(@Nonnull XBreakpoint xBreakpoint)
+	protected Breakpoint createJavaBreakpoint(XBreakpoint xBreakpoint)
 	{
 		return null;
 	}
 
 	@Override
-	public void registerBreakpoint(@Nonnull XBreakpoint breakpoint)
+	public void registerBreakpoint(XBreakpoint breakpoint)
 	{
 		Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint == null)
@@ -81,7 +80,7 @@ public class JavaBreakpointHandler extends XBreakpointHandler
 	}
 
 	@Override
-	public void unregisterBreakpoint(@Nonnull final XBreakpoint breakpoint, boolean temporary)
+	public void unregisterBreakpoint(final XBreakpoint breakpoint, boolean temporary)
 	{
 		final Breakpoint javaBreakpoint = BreakpointManager.getJavaBreakpoint(breakpoint);
 		if(javaBreakpoint != null)

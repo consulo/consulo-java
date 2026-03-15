@@ -29,8 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.ui.ex.action.AnAction;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -55,7 +54,6 @@ public class ApplicationRunLineMarkerProvider extends RunLineMarkerContributor {
     return e instanceof PsiIdentifier;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

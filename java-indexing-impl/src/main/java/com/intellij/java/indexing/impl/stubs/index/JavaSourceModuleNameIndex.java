@@ -17,9 +17,8 @@ import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.virtualFileSystem.fileType.FileTypeRegistry;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -36,7 +35,7 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
   private final FileType myManifestFileType = FileTypeRegistry.getInstance().getFileTypeByExtension("MF");
   private final FileBasedIndex.InputFilter myFilter = new DefaultFileTypeSpecificInputFilter(myManifestFileType) {
     @Override
-    public boolean acceptInput(@Nullable Project project, @Nonnull VirtualFile f) {
+    public boolean acceptInput(@Nullable Project project, VirtualFile f) {
       return f.isInLocalFileSystem();
     }
   };
@@ -52,7 +51,6 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return emptyMap();
   };
 
-  @Nonnull
   @Override
   public ID<String, Void> getName() {
     return NAME;
@@ -63,7 +61,6 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return 2;
   }
 
-  @Nonnull
   @Override
   public KeyDescriptor<String> getKeyDescriptor() {
     return EnumeratorStringDescriptor.INSTANCE;
@@ -74,31 +71,26 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
     return true;
   }
 
-  @Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return myFilter;
   }
 
-  @Nonnull
   @Override
   public DataIndexer<String, Void, FileContent> getIndexer() {
     return myIndexer;
   }
 
-  @Nonnull
   @Override
   public Collection<FileType> getFileTypesWithSizeLimitNotApplicable() {
     return Collections.singleton(JavaClassFileType.INSTANCE);
   }
 
-  @Nonnull
-  public static Collection<VirtualFile> getFilesByKey(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public static Collection<VirtualFile> getFilesByKey(String moduleName, GlobalSearchScope scope) {
     return FileBasedIndex.getInstance().getContainingFiles(NAME, moduleName, new JavaAutoModuleFilterScope(scope));
   }
 
-  @Nonnull
-  public static Collection<String> getAllKeys(@Nonnull Project project) {
+  public static Collection<String> getAllKeys(Project project) {
     return FileBasedIndex.getInstance().getAllKeys(NAME, project);
   }
 }

@@ -21,12 +21,10 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Couple;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.Joining;
 import one.util.streamex.StreamEx;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -36,7 +34,6 @@ public class CreateSwitchBranchesUtil {
      * @param names names of individual branches to create (non-empty)
      * @return a name of the action which creates missing switch branches.
      */
-    @Nonnull
     public static LocalizeValue getActionName(Collection<String> names) {
         if (names.size() == 1) {
             return LocalizeValue.localizeTODO("Create missing switch branch '" + names.iterator().next() + "'");
@@ -67,16 +64,16 @@ public class CreateSwitchBranchesUtil {
      * @return a list of created branches
      */
     public static List<PsiSwitchLabelStatementBase> createMissingBranches(
-        @Nonnull PsiSwitchBlock switchBlock,
-        @Nonnull List<String> allNames,
-        @Nonnull Collection<String> missingNames,
-        @Nonnull Function<PsiSwitchLabelStatementBase, List<String>> caseExtractor
+        PsiSwitchBlock switchBlock,
+        List<String> allNames,
+        Collection<String> missingNames,
+        Function<PsiSwitchLabelStatementBase, List<String>> caseExtractor
     ) {
         boolean isRuleBasedFormat = SwitchUtils.isRuleFormatSwitch(switchBlock);
         PsiCodeBlock body = switchBlock.getBody();
         if (body == null) {
             // replace entire switch statement if no code block is present
-            @NonNls StringBuilder newStatementText = new StringBuilder();
+            StringBuilder newStatementText = new StringBuilder();
             CommentTracker commentTracker = new CommentTracker();
             PsiExpression switchExpression = switchBlock.getExpression();
             newStatementText.append("switch(").append(switchExpression == null ? "" : commentTracker.text(switchExpression)).append("){");
@@ -130,7 +127,7 @@ public class CreateSwitchBranchesUtil {
      * @param block       parent switch block
      * @param addedLabels list of created labels (returned from {@link #createMissingBranches(PsiSwitchBlock, List, Collection, Function)}).
      */
-    public static void createTemplate(@Nonnull PsiSwitchBlock block, List<PsiSwitchLabelStatementBase> addedLabels) {
+    public static void createTemplate(PsiSwitchBlock block, List<PsiSwitchLabelStatementBase> addedLabels) {
         if (!(block instanceof PsiSwitchExpression)) {
             return;
         }
@@ -146,8 +143,7 @@ public class CreateSwitchBranchesUtil {
         builder.run(editor, true);
     }
 
-    @Nonnull
-    private static List<PsiExpression> getElementsToReplace(@Nonnull List<PsiSwitchLabelStatementBase> labels) {
+    private static List<PsiExpression> getElementsToReplace(List<PsiSwitchLabelStatementBase> labels) {
         List<PsiExpression> elementsToReplace = new ArrayList<>();
         for (PsiSwitchLabelStatementBase label : labels) {
             if (label instanceof PsiSwitchLabeledRuleStatement) {
@@ -224,7 +220,7 @@ public class CreateSwitchBranchesUtil {
      * @return an editor, or null if not found.
      */
     @Nullable
-    public static Editor prepareForTemplateAndObtainEditor(@Nonnull PsiElement element) {
+    public static Editor prepareForTemplateAndObtainEditor(PsiElement element) {
         PsiFile file = element.getContainingFile();
         Project project = file.getProject();
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();

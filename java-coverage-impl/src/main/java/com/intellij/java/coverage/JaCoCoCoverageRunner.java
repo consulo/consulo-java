@@ -18,8 +18,7 @@ import consulo.module.ModuleManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jacoco.core.analysis.*;
 import org.jacoco.core.data.ExecutionDataReader;
 import org.jacoco.core.data.ExecutionDataStore;
@@ -37,7 +36,7 @@ import java.util.Collection;
 public class JaCoCoCoverageRunner extends JavaCoverageRunner {
     @Override
     @RequiredReadAction
-    public ProjectData loadCoverageData(@Nonnull File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
+    public ProjectData loadCoverageData(File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
         ProjectData data = new ProjectData();
         try {
             Project project =
@@ -53,7 +52,7 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner {
     }
 
     @RequiredReadAction
-    private static void loadExecutionData(@Nonnull File sessionDataFile, ProjectData data, @Nonnull Project project) throws IOException {
+    private static void loadExecutionData(File sessionDataFile, ProjectData data, Project project) throws IOException {
         ExecutionDataStore executionDataStore = new ExecutionDataStore();
         FileInputStream fis = null;
         try {

@@ -51,8 +51,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -77,7 +76,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
 
     @Override
     @RequiredReadAction
-    public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet _result) {
+    public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet _result) {
         if (parameters.getCompletionType() == CompletionType.CLASS_NAME
             || parameters.isExtendedCompletion() && mayContainClassName(parameters)) {
             addAllClasses(parameters, _result);
@@ -105,10 +104,10 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
 
     @RequiredReadAction
     public static void addAllClasses(
-        @Nonnull CompletionParameters parameters,
+        CompletionParameters parameters,
         final boolean filterByScope,
-        @Nonnull final PrefixMatcher matcher,
-        @Nonnull final Consumer<LookupElement> consumer
+        final PrefixMatcher matcher,
+        final Consumer<LookupElement> consumer
     ) {
         final PsiElement insertedElement = parameters.getPosition();
 
@@ -222,7 +221,6 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         );
     }
 
-    @Nonnull
     @RequiredReadAction
     private static MultiMap<String, PsiClass> getAllAnnotationClasses(PsiElement context, PrefixMatcher matcher) {
         MultiMap<String, PsiClass> map = new MultiMap<>();
@@ -249,9 +247,8 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
         return map;
     }
 
-    @Nonnull
     @RequiredReadAction
-    private static String getClassNameWithContainers(@Nonnull PsiClass psiClass) {
+    private static String getClassNameWithContainers(PsiClass psiClass) {
         String name = ObjectUtil.assertNotNull(psiClass.getName());
         for (PsiClass parent : JBIterable.generate(psiClass, PsiClass::getContainingClass)) {
             name = parent.getName() + "." + name;
@@ -297,7 +294,7 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
 
     @Override
     @RequiredReadAction
-    public String handleEmptyLookup(@Nonnull CompletionParameters parameters, Editor editor) {
+    public String handleEmptyLookup(CompletionParameters parameters, Editor editor) {
         if (!(parameters.getOriginalFile() instanceof PsiJavaFile)) {
             return null;
         }
@@ -319,7 +316,6 @@ public class JavaClassNameCompletionContributor extends CompletionContributor {
             && parameters.getOriginalFile().getLanguage().isKindOf(JavaLanguage.INSTANCE);
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

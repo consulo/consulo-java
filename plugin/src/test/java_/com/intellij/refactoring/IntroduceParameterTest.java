@@ -17,11 +17,9 @@ import consulo.util.collection.primitive.ints.IntList;
 
 import java.util.List;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.util.collection.primitive.ints.IntLists;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
 import consulo.dataContext.DataContext;
@@ -41,7 +39,6 @@ import com.intellij.testFramework.TestDataPath;
 @TestDataPath("$CONTENT_ROOT/testData")
 public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 {
-	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{
@@ -416,7 +413,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 			{
 				@Nullable
 				@Override
-				public <T> T getData(@Nonnull Key<T> key)
+				public <T> T getData(Key<T> key)
 				{
 					return null;
 				}
@@ -438,7 +435,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 
 	private static boolean perform(boolean replaceAllOccurences,
 			int replaceFieldsWithGetters,
-			@NonNls String parameterName,
+			String parameterName,
 			boolean searchForSuper,
 			boolean declareFinal,
 			boolean removeUnusedParameters,
@@ -449,7 +446,7 @@ public abstract class IntroduceParameterTest extends LightRefactoringTestCase
 
 	private static boolean perform(boolean replaceAllOccurences,
 			int replaceFieldsWithGetters,
-			@NonNls String parameterName,
+			String parameterName,
 			boolean searchForSuper,
 			boolean declareFinal,
 			boolean removeUnusedParameters,

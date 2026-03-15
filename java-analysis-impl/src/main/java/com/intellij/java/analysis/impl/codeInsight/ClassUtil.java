@@ -20,8 +20,7 @@
 package com.intellij.java.analysis.impl.codeInsight;
 
 import com.intellij.java.language.psi.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +30,7 @@ public class ClassUtil {
   private ClassUtil() { }
 
   @Nullable
-  public static PsiMethod getAnyAbstractMethod(@Nonnull PsiClass aClass) {
+  public static PsiMethod getAnyAbstractMethod(PsiClass aClass) {
     PsiMethod methodToImplement = getAnyMethodToImplement(aClass);
     if (methodToImplement != null) {
       return methodToImplement;
@@ -45,7 +44,7 @@ public class ClassUtil {
   }
 
   @Nullable
-  public static PsiMethod getAnyMethodToImplement(@Nonnull PsiClass aClass) {
+  public static PsiMethod getAnyMethodToImplement(PsiClass aClass) {
     Set<PsiMethod> alreadyImplemented = new HashSet<PsiMethod>();
     for (HierarchicalMethodSignature signatureHierarchical : aClass.getVisibleSignatures()) {
       for (PsiMethod superS : signatureHierarchical.getMethod().findSuperMethods()) {
@@ -79,7 +78,7 @@ public class ClassUtil {
   }
 
   @Nullable
-  private static PsiMethod checkPackageLocalInSuperClass(@Nonnull PsiClass aClass) {
+  private static PsiMethod checkPackageLocalInSuperClass(PsiClass aClass) {
     // super class can have package local abstract methods not accessible for overriding
     PsiClass superClass = aClass.getSuperClass();
     if (superClass == null) return null;

@@ -28,17 +28,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssignmentUsedAsConditionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentUsedAsConditionDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.assignmentUsedAsConditionProblemDescriptor().get();
@@ -50,7 +47,6 @@ public class AssignmentUsedAsConditionInspection extends BaseInspection {
     }
 
     private static class AssignmentUsedAsConditionFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.assignmentUsedAsConditionReplaceQuickfix();
@@ -75,7 +71,7 @@ public class AssignmentUsedAsConditionInspection extends BaseInspection {
 
     private static class AssignmentUsedAsConditionVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+        public void visitAssignmentExpression(PsiAssignmentExpression expression) {
             super.visitAssignmentExpression(expression);
             if (!WellFormednessUtils.isWellFormed(expression)) {
                 return;

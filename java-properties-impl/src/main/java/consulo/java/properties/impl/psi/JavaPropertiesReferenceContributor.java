@@ -22,7 +22,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.psi.PsiReferenceContributor;
 import consulo.language.psi.PsiReferenceRegistrar;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.literalExpression;
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiNameValuePair;
@@ -39,7 +38,6 @@ public class JavaPropertiesReferenceContributor extends PsiReferenceContributor 
                                         new ResourceBundleReferenceProvider());
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

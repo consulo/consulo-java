@@ -24,8 +24,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.ObjectUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -39,10 +38,8 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   PsiType myType;
   private final int myArgCount;
   private final
-  @Nonnull
   MutationSignature myMutation;
   private final
-  @Nonnull
   PsiElement myContext; // PsiCall or PsiMethodReferenceExpression
   private final
   @Nullable
@@ -55,7 +52,7 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   private final Nullability[] myArgRequiredNullability;
   private final Nullability myReturnNullability;
 
-  public MethodCallInstruction(@Nonnull PsiMethodReferenceExpression reference, @Nonnull List<? extends MethodContract> contracts) {
+  public MethodCallInstruction(PsiMethodReferenceExpression reference, List<? extends MethodContract> contracts) {
     super(reference);
     myContext = reference;
     JavaResolveResult resolveResult = reference.advancedResolve(false);
@@ -85,7 +82,7 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
     myMutation = MutationSignature.fromMethod(myTargetMethod);
   }
 
-  public MethodCallInstruction(@Nonnull PsiCall call, @Nullable DfaValue precalculatedReturnValue, List<? extends MethodContract> contracts) {
+  public MethodCallInstruction(PsiCall call, @Nullable DfaValue precalculatedReturnValue, List<? extends MethodContract> contracts) {
     super(ObjectUtil.tryCast(call, PsiExpression.class));
     myContext = call;
     myContracts = Collections.unmodifiableList(contracts);
@@ -186,7 +183,6 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   }
 
   public
-  @Nonnull
   MutationSignature getMutationSignature() {
     return myMutation;
   }
@@ -222,7 +218,6 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   }
 
   public
-  @Nonnull
   PsiElement getContext() {
     return myContext;
   }
@@ -234,7 +229,6 @@ public class MethodCallInstruction extends ExpressionPushingInstruction<PsiExpre
   }
 
   public
-  @Nonnull
   Nullability getReturnNullability() {
     return myReturnNullability;
   }

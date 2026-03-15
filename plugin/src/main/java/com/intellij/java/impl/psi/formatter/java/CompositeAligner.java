@@ -3,8 +3,7 @@ package com.intellij.java.impl.psi.formatter.java;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.AlignmentStrategy;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class CompositeAligner extends ChildAlignmentStrategyProvider {
   }
 
   @Override
-  public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child) {
+  public AlignmentStrategy getNextChildStrategy(ASTNode child) {
     AlignerConfigurationWrapper currentAlignmentWrapper = null;
     for (AlignerConfigurationWrapper configuration : myConfigurations) {
       if (configuration.myConfiguration.shouldAlign(child)) {
@@ -53,9 +52,8 @@ public class CompositeAligner extends ChildAlignmentStrategyProvider {
     /**
      * Method used to determine, whether current alignment strategy should be applied to given child
      */
-    boolean shouldAlign(@Nonnull ASTNode child);
+    boolean shouldAlign(ASTNode child);
 
-    @Nonnull
     AlignmentStrategy createStrategy();
   }
 

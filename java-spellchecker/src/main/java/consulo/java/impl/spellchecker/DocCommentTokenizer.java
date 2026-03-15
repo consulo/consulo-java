@@ -22,7 +22,6 @@ import consulo.language.spellcheker.tokenizer.TokenConsumer;
 import consulo.language.spellcheker.tokenizer.Tokenizer;
 import consulo.language.spellcheker.tokenizer.splitter.CommentTokenSplitter;
 
-import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -35,7 +34,7 @@ public class DocCommentTokenizer extends Tokenizer<PsiDocComment>
   private static final Set<String> excludedTags = Set.of("author", "see", "by", "link");
 
   @Override
-  public void tokenize(@Nonnull PsiDocComment comment, TokenConsumer consumer) {
+  public void tokenize(PsiDocComment comment, TokenConsumer consumer) {
     final CommentTokenSplitter splitter = CommentTokenSplitter.getInstance();
 
     for (PsiElement el : comment.getChildren()) {

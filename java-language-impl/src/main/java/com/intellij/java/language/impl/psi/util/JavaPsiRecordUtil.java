@@ -11,8 +11,7 @@ import consulo.language.psi.SyntheticElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ObjectUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.stream.Stream;
 
 /**
@@ -25,7 +24,7 @@ public final class JavaPsiRecordUtil {
    * Note that if accessor is not well-formed (e.g. has wrong return type), the corresponding record component will still be returned.
    */
   @Nullable
-  public static PsiRecordComponent getRecordComponentForAccessor(@Nonnull PsiMethod accessor) {
+  public static PsiRecordComponent getRecordComponentForAccessor(PsiMethod accessor) {
     PsiClass aClass = accessor.getContainingClass();
     if (aClass == null) {
       PsiElement parent = accessor.getParent();
@@ -51,7 +50,7 @@ public final class JavaPsiRecordUtil {
    * @return synthetic field that corresponds to given component, or null if not found (e.g. if this component doesn't belong to a class)
    */
   @Nullable
-  public static PsiField getFieldForComponent(@Nonnull PsiRecordComponent component) {
+  public static PsiField getFieldForComponent(PsiRecordComponent component) {
     PsiClass aClass = component.getContainingClass();
     if (aClass == null)
       return null;
@@ -69,7 +68,7 @@ public final class JavaPsiRecordUtil {
    * @return record component that corresponds to the parameter
    */
   @Nullable
-  public static PsiRecordComponent getComponentForCanonicalConstructorParameter(@Nonnull PsiParameter parameter) {
+  public static PsiRecordComponent getComponentForCanonicalConstructorParameter(PsiParameter parameter) {
     PsiClass aClass = PsiTreeUtil.getParentOfType(parameter, PsiClass.class);
     if (aClass == null)
       return null;
@@ -85,7 +84,7 @@ public final class JavaPsiRecordUtil {
    * @return the corresponding record component; null if given field doesn't correspond to the record component.
    */
   @Nullable
-  public static PsiRecordComponent getComponentForField(@Nonnull PsiField field) {
+  public static PsiRecordComponent getComponentForField(PsiField field) {
     return field instanceof LightRecordField ? ((LightRecordField) field).getRecordComponent() : null;
   }
 
@@ -94,7 +93,7 @@ public final class JavaPsiRecordUtil {
    * @return true if given method is a compact constructor (has no parameter list),
    * regardless whether it's declared in the record or not
    */
-  public static boolean isCompactConstructor(@Nonnull PsiMethod method) {
+  public static boolean isCompactConstructor(PsiMethod method) {
     return method.isConstructor() && method.getParameterList().getText() == null;
   }
 
@@ -102,7 +101,7 @@ public final class JavaPsiRecordUtil {
    * @param method method to check
    * @return true if given method is an explicit canonical (non-compact) constructor for a record class
    */
-  public static boolean isExplicitCanonicalConstructor(@Nonnull PsiMethod method) {
+  public static boolean isExplicitCanonicalConstructor(PsiMethod method) {
     if (!method.isConstructor() || isCompactConstructor(method))
       return false;
     if (method instanceof SyntheticElement)
@@ -117,7 +116,7 @@ public final class JavaPsiRecordUtil {
    * @param method method to check
    * @return true if given method is a canonical constructor for a record class (either compact, or non-compact, or implicit constructor)
    */
-  public static boolean isCanonicalConstructor(@Nonnull PsiMethod method) {
+  public static boolean isCanonicalConstructor(PsiMethod method) {
     if (method instanceof LightRecordCanonicalConstructor)
       return true;
     if (!method.isConstructor())
@@ -128,7 +127,7 @@ public final class JavaPsiRecordUtil {
     return method.getParameterList().getText() == null || hasCanonicalSignature(method, aClass.getRecordComponents());
   }
 
-  private static boolean hasCanonicalSignature(@Nonnull PsiMethod method, PsiRecordComponent[] components) {
+  private static boolean hasCanonicalSignature(PsiMethod method, PsiRecordComponent[] components) {
     PsiParameter[] parameters = method.getParameterList().getParameters();
     if (components.length != parameters.length)
       return false;
@@ -153,7 +152,7 @@ public final class JavaPsiRecordUtil {
    * null if the supplied class is not a record. Returns a synthetic constructor if it's not explicitly defined.
    */
   @Nullable
-  public static PsiMethod findCanonicalConstructor(@Nonnull PsiClass recordClass) {
+  public static PsiMethod findCanonicalConstructor(PsiClass recordClass) {
     if (!recordClass.isRecord())
       return null;
     PsiMethod[] constructors = recordClass.getConstructors();

@@ -5,8 +5,7 @@ import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkTable;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,17 +19,17 @@ public class JavaSdkTypeUtil {
   }
 
   @Nullable
-  public static JavaSdkVersion getVersion(@Nonnull Sdk sdk) {
+  public static JavaSdkVersion getVersion(Sdk sdk) {
     String version = sdk.getVersionString();
     return version == null ? null : JavaSdkVersion.fromVersionString(version);
   }
 
   @Nullable
-  public static JavaSdkVersion getVersion(@Nonnull String versionString) {
+  public static JavaSdkVersion getVersion(String versionString) {
     return JavaSdkVersion.fromVersionString(versionString);
   }
 
-  public static boolean isOfVersionOrHigher(@Nonnull Sdk sdk, @Nonnull JavaSdkVersion version) {
+  public static boolean isOfVersionOrHigher(Sdk sdk, JavaSdkVersion version) {
     JavaSdkVersion sdkVersion = getVersion(sdk);
     return sdkVersion != null && sdkVersion.isAtLeast(version);
   }

@@ -32,7 +32,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -53,21 +52,18 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
         return true;
     }
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "override";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.missingOverrideAnnotationDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.missingOverrideAnnotationProblemDescriptor().get();
     }
@@ -86,7 +82,6 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
     }
 
     private static class MissingOverrideAnnotationFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.missingOverrideAnnotationAddQuickfix();
@@ -127,7 +122,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (!PsiUtil.isLanguageLevel5OrHigher(method)) {
                 return;
             }
@@ -224,7 +219,7 @@ public class MissingOverrideAnnotationInspection extends BaseInspection implemen
         }
 
         private PsiMethod[] getSuperMethodsInJavaSense(
-            @Nonnull PsiMethod method, @Nonnull PsiClass methodClass
+            PsiMethod method, PsiClass methodClass
         ) {
             PsiMethod[] superMethods = method.findSuperMethods();
             List<PsiMethod> toExclude = new SmartList<PsiMethod>();

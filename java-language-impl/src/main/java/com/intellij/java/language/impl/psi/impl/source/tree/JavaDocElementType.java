@@ -33,9 +33,7 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Set;
@@ -46,12 +44,11 @@ public interface JavaDocElementType {
   class JavaDocCompositeElementType extends IJavaDocElementType implements ICompositeElementType {
     private final Supplier<ASTNode> myFactory;
 
-    private JavaDocCompositeElementType(@NonNls final String debugName, final Supplier<ASTNode> factory) {
+    private JavaDocCompositeElementType(final String debugName, final Supplier<ASTNode> factory) {
       super(debugName);
       myFactory = factory;
     }
 
-    @Nonnull
     @Override
     public ASTNode createCompositeNode() {
       return myFactory.get();
@@ -59,7 +56,7 @@ public interface JavaDocElementType {
   }
 
   class JavaDocLazyElementType extends ILazyParseableElementType {
-    private JavaDocLazyElementType(@NonNls final String debugName) {
+    private JavaDocLazyElementType(final String debugName) {
       super(debugName, JavaLanguage.INSTANCE);
     }
 
@@ -73,14 +70,13 @@ public interface JavaDocElementType {
 
     private final Set<IElementType> myParentElementTypes;
 
-    public JavaDocParentProviderElementType(@Nonnull String debugName, @Nonnull IElementType parentElementType) {
+    public JavaDocParentProviderElementType(String debugName, IElementType parentElementType) {
       super(debugName);
       myParentElementTypes = Collections.singleton(parentElementType);
     }
 
     @Override
     public
-    @Nonnull
     Set<IElementType> getParents() {
       return myParentElementTypes;
     }
@@ -143,9 +139,9 @@ public interface JavaDocElementType {
 
     @Override
     public boolean isParsable(@Nullable ASTNode parent,
-                              @Nonnull CharSequence buffer,
-                              @Nonnull Language fileLanguage,
-                              @Nonnull Project project) {
+                              CharSequence buffer,
+                              Language fileLanguage,
+                              Project project) {
       if (!StringUtil.startsWith(buffer, "/**") || !StringUtil.endsWith(buffer, "*/")) {
         return false;
       }

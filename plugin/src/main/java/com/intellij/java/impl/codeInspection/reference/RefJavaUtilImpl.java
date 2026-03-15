@@ -35,8 +35,7 @@ import consulo.language.editor.inspection.reference.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
 
 @Singleton
@@ -50,7 +49,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
         }
         findIn.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+            public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
             }
 
             @Override
@@ -76,13 +75,13 @@ public class RefJavaUtilImpl extends RefJavaUtil {
             }
 
             @Override
-            public void visitEnumConstant(@Nonnull PsiEnumConstant enumConstant) {
+            public void visitEnumConstant(PsiEnumConstant enumConstant) {
                 super.visitEnumConstant(enumConstant);
                 processNewLikeConstruct(enumConstant.resolveConstructor(), enumConstant.getArgumentList());
             }
 
             @Override
-            public void visitNewExpression(@Nonnull PsiNewExpression newExpr) {
+            public void visitNewExpression(PsiNewExpression newExpr) {
                 super.visitNewExpression(newExpr);
                 PsiMethod psiConstructor = newExpr.resolveConstructor();
                 PsiExpressionList argumentList = newExpr.getArgumentList();
@@ -120,7 +119,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
             }
 
             @Override
-            public void visitAnonymousClass(@Nonnull PsiAnonymousClass psiClass) {
+            public void visitAnonymousClass(PsiAnonymousClass psiClass) {
                 super.visitAnonymousClass(psiClass);
                 RefClassImpl refClass = (RefClassImpl) refFrom.getRefManager().getReference(psiClass);
                 refFrom.addReference(refClass, psiClass, psiFrom, false, true, null);
@@ -128,7 +127,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
 
             @Override
             @RequiredReadAction
-            public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+            public void visitReturnStatement(PsiReturnStatement statement) {
                 super.visitReturnStatement(statement);
 
                 if (refFrom instanceof RefMethodImpl refMethod) {
@@ -137,7 +136,7 @@ public class RefJavaUtilImpl extends RefJavaUtil {
             }
 
             @Override
-            public void visitClassObjectAccessExpression(@Nonnull PsiClassObjectAccessExpression expression) {
+            public void visitClassObjectAccessExpression(PsiClassObjectAccessExpression expression) {
                 super.visitClassObjectAccessExpression(expression);
                 PsiTypeElement operand = expression.getOperand();
                 if (operand.getType() instanceof PsiClassType classType) {

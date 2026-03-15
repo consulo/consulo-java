@@ -26,7 +26,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Condition;
 import consulo.xml.util.xml.*;
 
-import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,7 +37,6 @@ import java.util.List;
  */
 public class ClassMappingNameConverter extends ResolvingConverter.StringConverter {
 
-  @Nonnull
   @Override
   public Collection<? extends String> getVariants(ConvertContext context) {
     DomElement parent = context.getInvocationElement().getParent();

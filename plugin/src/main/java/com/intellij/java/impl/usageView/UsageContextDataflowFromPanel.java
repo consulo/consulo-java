@@ -19,11 +19,10 @@ package com.intellij.java.impl.usageView;
 import consulo.project.Project;
 import consulo.usage.UsageViewPresentation;
 
-import jakarta.annotation.Nonnull;
 
 public class UsageContextDataflowFromPanel extends UsageContextDataflowToPanel {
 
-  public UsageContextDataflowFromPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation) {
+  public UsageContextDataflowFromPanel(Project project, UsageViewPresentation presentation) {
     super(project, presentation);
   }
 

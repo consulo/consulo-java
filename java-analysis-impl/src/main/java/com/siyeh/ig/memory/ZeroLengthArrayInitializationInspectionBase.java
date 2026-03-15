@@ -24,25 +24,21 @@ import com.siyeh.ig.psiutils.ConstructionUtils;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseInspection {
   @Pattern(VALID_ID_PATTERN)
   @Override
-  @Nonnull
   public String getID() {
     return "ZeroLengthArrayAllocation";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.arrayAllocationZeroLengthDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.arrayAllocationZeroLengthProblemDescriptor().get();
   }
@@ -60,7 +56,7 @@ public abstract class ZeroLengthArrayInitializationInspectionBase extends BaseIn
   private static class ZeroLengthArrayInitializationVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!ConstructionUtils.isEmptyArrayInitializer(expression)) {
         return;

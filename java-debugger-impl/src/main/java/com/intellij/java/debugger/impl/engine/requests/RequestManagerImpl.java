@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.DebugProcessAdapterImpl;

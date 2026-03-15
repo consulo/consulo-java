@@ -25,9 +25,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.function.Condition;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -38,17 +37,16 @@ import java.util.Set;
 public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference> {
   private final GlobalSearchScope mySearchScope;
 
-  public PackageReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement) {
+  public PackageReferenceSet(String str, PsiElement element, int startInElement) {
     this(str, element, startInElement, element.getResolveScope());
   }
 
-  public PackageReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement, @Nonnull GlobalSearchScope scope) {
+  public PackageReferenceSet(String str, PsiElement element, int startInElement, GlobalSearchScope scope) {
     super(str, element, startInElement, DOT_SEPARATOR);
     mySearchScope = scope;
   }
 
   @Override
-  @Nonnull
   protected PsiPackageReference createReference(TextRange range, int index) {
     return new PsiPackageReference(this, range, index);
   }
@@ -65,7 +63,6 @@ public class PackageReferenceSet extends ReferenceSetBase<PsiPackageReference> {
     return Collections.emptyList();
   }
 
-  @Nonnull
   protected GlobalSearchScope getResolveScope() {
     return mySearchScope;
   }

@@ -7,7 +7,6 @@ import consulo.language.icon.IconDescriptor;
 import consulo.language.icon.IconDescriptorUpdater;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -19,7 +18,7 @@ import jakarta.annotation.Nonnull;
 public class JavaModuleIconDescriptorUpdater implements IconDescriptorUpdater {
   @RequiredReadAction
   @Override
-  public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement psiElement, int i) {
+  public void updateIcon(IconDescriptor iconDescriptor, PsiElement psiElement, int i) {
 //		if(psiElement instanceof PsiDirectory && isModuleDirectory((PsiDirectory) psiElement))
     //		{
     //			iconDescriptor.setMainIcon(AllIcons.Nodes.Module);

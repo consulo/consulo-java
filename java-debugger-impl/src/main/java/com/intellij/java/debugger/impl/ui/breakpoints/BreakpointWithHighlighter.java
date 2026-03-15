@@ -15,8 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.execution.debug.XSourcePosition;
 import consulo.execution.debug.breakpoint.XLineBreakpoint;
@@ -188,7 +187,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		return getSetIcon(muted);
 	}
 
-	protected BreakpointWithHighlighter(@Nonnull Project project, XBreakpoint xBreakpoint)
+	protected BreakpointWithHighlighter(Project project, XBreakpoint xBreakpoint)
 	{
 		//for persistency
 		super(project, xBreakpoint);
@@ -213,7 +212,6 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	}
 
 	@SuppressWarnings("HardCodedStringLiteral")
-	@Nonnull
 	public String getDescription()
 	{
 		final StringBuilder buf = new StringBuilder();
@@ -259,7 +257,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	static void createLocationBreakpointRequest(@Nonnull FilteredRequestor requestor, @Nullable Location location, @Nonnull DebugProcessImpl debugProcess)
+	static void createLocationBreakpointRequest(FilteredRequestor requestor, @Nullable Location location, DebugProcessImpl debugProcess)
 	{
 		if(location != null)
 		{
@@ -269,7 +267,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	}
 
 	@Override
-	public void createRequest(@Nonnull DebugProcessImpl debugProcess)
+	public void createRequest(DebugProcessImpl debugProcess)
 	{
 		DebuggerManagerThreadImpl.assertIsManagerThread();
 		// check is this breakpoint is enabled, vm reference is valid and there're no requests created yet
@@ -295,7 +293,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		updateUI();
 	}
 
-	protected boolean isMuted(@Nonnull final DebugProcessImpl debugProcess)
+	protected boolean isMuted(final DebugProcessImpl debugProcess)
 	{
 		return debugProcess.areBreakpointsMuted();
 	}
@@ -364,7 +362,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 		}
 	}
 
-	public boolean isAt(@Nonnull Document document, int offset)
+	public boolean isAt(Document document, int offset)
 	{
 		final VirtualFile file = FileDocumentManager.getInstance().getFile(document);
 		int line = document.getLineNumber(offset);
@@ -425,7 +423,7 @@ public abstract class BreakpointWithHighlighter<P extends JavaBreakpointProperti
 	}
 
 	@Override
-	public void readExternal(@Nonnull Element breakpointNode) throws InvalidDataException
+	public void readExternal(Element breakpointNode) throws InvalidDataException
 	{
 		super.readExternal(breakpointNode);
 		//noinspection HardCodedStringLiteral

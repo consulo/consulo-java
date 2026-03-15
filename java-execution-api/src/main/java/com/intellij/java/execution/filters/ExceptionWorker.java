@@ -35,10 +35,8 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +46,6 @@ import java.util.List;
  * Time: 8:36 PM
  */
 public class ExceptionWorker {
-  @NonNls
   private static final String AT = "at";
   private static final String AT_PREFIX = AT + " ";
   private static final String STANDALONE_AT = " " + AT + " ";
@@ -61,7 +58,7 @@ public class ExceptionWorker {
   private Trinity<TextRange, TextRange, TextRange> myInfo;
   private final ExceptionInfoCache myCache;
 
-  public ExceptionWorker(@Nonnull ExceptionInfoCache cache) {
+  public ExceptionWorker(ExceptionInfoCache cache) {
     myProject = cache.getProject();
     myCache = cache;
   }

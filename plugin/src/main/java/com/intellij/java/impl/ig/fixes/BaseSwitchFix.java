@@ -13,25 +13,24 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 public abstract class BaseSwitchFix implements LocalQuickFix, SyntheticIntentionAction
 {
 	protected final SmartPsiElementPointer<PsiSwitchBlock> myBlock;
 
-	public BaseSwitchFix(@Nonnull PsiSwitchBlock block)
+	public BaseSwitchFix(PsiSwitchBlock block)
 	{
 		myBlock = SmartPointerManager.createPointer(block);
 	}
 
 	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(Project project, ProblemDescriptor descriptor)
 	{
 		invoke();
 	}
 
 	@Override
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException
+	public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException
 	{
 		invoke();
 	}
@@ -45,7 +44,7 @@ public abstract class BaseSwitchFix implements LocalQuickFix, SyntheticIntention
 	abstract protected void invoke();
 
 	@Override
-	public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file)
+	public boolean isAvailable(Project project, Editor editor, PsiFile file)
 	{
 		PsiSwitchBlock startSwitch = myBlock.getElement();
 		if(startSwitch == null)

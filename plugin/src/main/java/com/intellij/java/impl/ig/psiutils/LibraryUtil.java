@@ -17,8 +17,7 @@ package com.intellij.java.impl.ig.psiutils;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LibraryUtil {
 
@@ -31,12 +30,12 @@ public class LibraryUtil {
   }
 
   public static boolean callOnLibraryMethod(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     PsiMethod method = expression.resolveMethod();
     return method instanceof PsiCompiledElement;
   }
 
-  public static boolean isOverrideOfLibraryMethod(@Nonnull PsiMethod method) {
+  public static boolean isOverrideOfLibraryMethod(PsiMethod method) {
     PsiMethod[] superMethods = method.findSuperMethods();
     for (PsiMethod superMethod : superMethods) {
       PsiClass containingClass = superMethod.getContainingClass();

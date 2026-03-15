@@ -29,8 +29,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -60,7 +59,6 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
         return null;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public LocalizeValue getText() {
@@ -72,7 +70,7 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
     }
 
     @Nullable
-    private static PsiMethod findWrapper(PsiType type, @Nonnull PsiClassType expectedType, boolean primitiveExpected) {
+    private static PsiMethod findWrapper(PsiType type, PsiClassType expectedType, boolean primitiveExpected) {
         PsiClass aClass = expectedType.resolve();
         if (aClass != null) {
             PsiType expectedReturnType = expectedType;
@@ -107,7 +105,7 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return myExpression.isValid()
             && myExpression.getManager().isInProject(myExpression)
             && myExpectedType != null
@@ -118,7 +116,7 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
 
     @Override
     @RequiredWriteAction
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -141,7 +139,7 @@ public class WrapExpressionFix implements SyntheticIntentionAction {
     public static void registerWrapAction(
         JavaResolveResult[] candidates,
         PsiExpression[] expressions,
-        @Nullable HighlightInfo.Builder hlBuilder
+        HighlightInfo.@Nullable Builder hlBuilder
     ) {
         if (hlBuilder == null) {
             return;

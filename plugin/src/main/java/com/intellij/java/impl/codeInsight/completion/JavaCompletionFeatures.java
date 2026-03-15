@@ -15,16 +15,15 @@
  */
 package com.intellij.java.impl.codeInsight.completion;
 
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author peter
  */
 public interface JavaCompletionFeatures {
-  @NonNls String SECOND_SMART_COMPLETION_CHAIN = "editing.completion.second.smarttype.chain";
-  @NonNls String SECOND_SMART_COMPLETION_TOAR = "editing.completion.second.smarttype.toar";
-  @NonNls String SECOND_SMART_COMPLETION_ASLIST = "editing.completion.second.smarttype.aslist";
-  @NonNls String SECOND_SMART_COMPLETION_ARRAY_MEMBER = "editing.completion.second.smarttype.array.member";
-  @NonNls String GLOBAL_MEMBER_NAME = "editing.completion.global.member.name";
-  @NonNls String AFTER_NEW = "editing.completion.smarttype.afternew";
+  String SECOND_SMART_COMPLETION_CHAIN = "editing.completion.second.smarttype.chain";
+  String SECOND_SMART_COMPLETION_TOAR = "editing.completion.second.smarttype.toar";
+  String SECOND_SMART_COMPLETION_ASLIST = "editing.completion.second.smarttype.aslist";
+  String SECOND_SMART_COMPLETION_ARRAY_MEMBER = "editing.completion.second.smarttype.array.member";
+  String GLOBAL_MEMBER_NAME = "editing.completion.global.member.name";
+  String AFTER_NEW = "editing.completion.smarttype.afternew";
 }

@@ -8,8 +8,7 @@ import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.coverage.CoverageSuitesBundle;
 import consulo.language.psi.PsiFile;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.Set;
@@ -25,16 +24,16 @@ public abstract class JavaCoverageEngineExtension {
 
     public abstract boolean isApplicableTo(@Nullable RunConfigurationBase conf);
 
-    public boolean suggestQualifiedName(@Nonnull PsiFile sourceFile, PsiClass[] classes, Set<String> names) {
+    public boolean suggestQualifiedName(PsiFile sourceFile, PsiClass[] classes, Set<String> names) {
         return false;
     }
 
     public boolean collectOutputFiles(
-        @Nonnull PsiFile srcFile,
+        PsiFile srcFile,
         @Nullable VirtualFile output,
         @Nullable VirtualFile testoutput,
-        @Nonnull CoverageSuitesBundle suite,
-        @Nonnull Set<File> classFiles
+        CoverageSuitesBundle suite,
+        Set<File> classFiles
     ) {
         return false;
     }

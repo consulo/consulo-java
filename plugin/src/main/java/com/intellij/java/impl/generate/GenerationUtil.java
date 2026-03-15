@@ -51,7 +51,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class GenerationUtil
 {

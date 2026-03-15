@@ -16,7 +16,6 @@
 package com.intellij.java.impl.codeInsight.intention.impl;
 
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import consulo.application.AllIcons;
 import consulo.codeEditor.Editor;
@@ -36,24 +35,23 @@ public class RunRefactoringAction extends BaseRefactoringIntentionAction impleme
   private final RefactoringActionHandler myHandler;
   private final LocalizeValue myCommandName;
 
-  public RunRefactoringAction(RefactoringActionHandler handler, @Nonnull LocalizeValue commandName) {
+  public RunRefactoringAction(RefactoringActionHandler handler, LocalizeValue commandName) {
     myHandler = handler;
     myCommandName = commandName;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return myCommandName;
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     return true;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     myHandler.invoke(project, editor, element.getContainingFile(), null);
   }
 

@@ -21,23 +21,18 @@ import consulo.fileEditor.structureView.tree.ActionPresentationData;
 import consulo.fileEditor.structureView.tree.Filter;
 import consulo.fileEditor.structureView.tree.TreeElement;
 import consulo.ide.localize.IdeLocalize;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class FieldsFilter implements Filter {
-  @NonNls
   public static final String ID = "SHOW_FIELDS";
 
   public boolean isVisible(TreeElement treeNode) {
     return !(treeNode instanceof PsiFieldTreeElement);
   }
 
-  @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeLocalize.actionStructureviewShowFields().get(), null, AllIcons.Nodes.Field);
   }
 
-  @Nonnull
   public String getName() {
     return ID;
   }

@@ -3,7 +3,6 @@ package com.siyeh.igtest.style;
 import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 public class One extends BaseInspection {
 
@@ -15,12 +14,10 @@ public class One extends BaseInspection {
         return LocalizeValue.empty();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return null;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.empty();

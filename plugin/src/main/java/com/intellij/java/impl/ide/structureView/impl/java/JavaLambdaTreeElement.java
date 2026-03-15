@@ -22,7 +22,6 @@ import consulo.project.DumbService;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiType;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -93,7 +92,6 @@ public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExp
 		return super.toString() + (myFunctionalName == null ? "" : " (" + getLocationString() + ")");
 	}
 
-	@Nonnull
 	@Override
 	public Collection<StructureViewTreeElement> getChildrenBase()
 	{

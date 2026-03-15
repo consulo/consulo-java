@@ -33,7 +33,6 @@ import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
-import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -75,12 +74,12 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
     }
   }
 
-  protected void doTest(@NonNls String filePath, boolean checkWarnings, boolean checkInfos) {
+  protected void doTest(String filePath, boolean checkWarnings, boolean checkInfos) {
     configureByFile(filePath);
     doTestConfiguredFile(checkWarnings, checkInfos, filePath);
   }
 
-  protected void doTestNewInference(@NonNls String filePath, boolean checkWarnings, boolean checkInfos) {
+  protected void doTestNewInference(String filePath, boolean checkWarnings, boolean checkInfos) {
     final PsiResolveHelperImpl helper = (PsiResolveHelperImpl)JavaPsiFacade.getInstance(LightPlatformTestCase.getProject()).getResolveHelper();
     //helper.setTestHelper(new PsiGraphInferenceHelper(getPsiManager()));
     try {
@@ -92,7 +91,7 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
     }
   }
 
-  protected void doTest(@NonNls String filePath, boolean checkWarnings, boolean checkWeakWarnings, boolean checkInfos) {
+  protected void doTest(String filePath, boolean checkWarnings, boolean checkWeakWarnings, boolean checkInfos) {
     configureByFile(filePath);
     doTestConfiguredFile(checkWarnings, checkWeakWarnings, checkInfos, filePath);
   }
@@ -128,7 +127,7 @@ public abstract class LightDaemonAnalyzerTestCase extends LightCodeInsightTestCa
     data.checkResult(infos, LightPlatformCodeInsightTestCase.getEditor().getDocument().getText(), filePath);
   }
 
-  protected HighlightTestInfo doTestFile(@NonNls @Nonnull String filePath) {
+  protected HighlightTestInfo doTestFile(@Nonnull String filePath) {
     return new HighlightTestInfo(getTestRootDisposable(), filePath) {
       @Override
       public HighlightTestInfo doTest() {

@@ -28,8 +28,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author cdr
@@ -42,7 +41,7 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     boolean available = super.isAvailable(project, editor, file);
     if (!available) return false;
     PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);
@@ -57,7 +56,7 @@ public class CreateCastExpressionFromInstanceofAction extends CreateLocalVarFrom
 
   @Override
   @RequiredUIAccess
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
     PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);

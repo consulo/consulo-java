@@ -40,8 +40,7 @@ import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.lang.CharArrayUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -60,7 +59,7 @@ public class ToggleMethodBreakpointAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public void update(@Nonnull AnActionEvent event) {
+    public void update(AnActionEvent event) {
         boolean toEnable = getPlace(event) != null;
 
         if (ActionPlaces.isPopupPlace(event.getPlace())) {

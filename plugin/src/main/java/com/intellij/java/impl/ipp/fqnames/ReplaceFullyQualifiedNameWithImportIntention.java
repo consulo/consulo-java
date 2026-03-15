@@ -29,7 +29,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,20 +42,18 @@ import java.util.List;
 @IntentionMetaData(ignoreId = "java.ReplaceFullyQualifiedNameWithImportIntention", fileExtensions = "java", categories = {"Java",
     "Declaration"})
 public class ReplaceFullyQualifiedNameWithImportIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceFullyQualifiedNameWithImportIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new FullyQualifiedNamePredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) {
+    public void processIntention(PsiElement element) {
         PsiJavaCodeReferenceElement reference = (PsiJavaCodeReferenceElement) element;
         PsiElement target = reference.resolve();
         if (!(target instanceof PsiClass)) {

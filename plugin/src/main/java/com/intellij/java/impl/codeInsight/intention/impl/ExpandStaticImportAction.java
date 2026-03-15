@@ -39,7 +39,6 @@ import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListPopup;
 import consulo.ui.ex.popup.PopupStep;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -57,7 +56,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!PsiUtil.isLanguageLevel5OrHigher(element)) return false;
     PsiElement parent = element.getParent();
     if (!(element instanceof PsiIdentifier) || !(parent instanceof PsiJavaCodeReferenceElement)) {
@@ -117,7 +116,7 @@ public class ExpandStaticImportAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     invoke(project, element.getContainingFile(), editor, element);
   }
 }

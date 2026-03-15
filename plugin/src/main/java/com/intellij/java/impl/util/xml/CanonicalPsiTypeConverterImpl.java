@@ -32,19 +32,15 @@ import consulo.util.collection.ArrayUtil;
 import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.CustomReferenceConverter;
 import consulo.xml.util.xml.GenericDomValue;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
  */
 public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter implements CustomReferenceConverter<PsiType> {
 
-  @NonNls
   static final String[] PRIMITIVES = new String[]{"boolean", "byte",
       "char", "double", "float", "int", "long", "short"};
-  @NonNls
   private static final String ARRAY_PREFIX = "[L";
   private static final JavaClassReferenceProvider CLASS_REFERENCE_PROVIDER = new JavaClassReferenceProvider();
 
@@ -61,7 +57,6 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
     return t == null ? null : t.getCanonicalText();
   }
 
-  @Nonnull
   public PsiReference[] createReferences(final GenericDomValue<PsiType> genericDomValue, final PsiElement element, ConvertContext context) {
     String str = genericDomValue.getStringValue();
     if (str == null) {
@@ -87,7 +82,6 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
             return true;
           }
 
-          @Nonnull
           public JavaResolveResult advancedResolve(boolean incompleteCode) {
             PsiType type = genericDomValue.getValue();
             if (type != null) {
@@ -108,7 +102,6 @@ public class CanonicalPsiTypeConverterImpl extends CanonicalPsiTypeConverter imp
             }
           }
 
-          @Nonnull
           public Object[] getVariants() {
             Object[] variants = super.getVariants();
             if (myIndex == 0) {

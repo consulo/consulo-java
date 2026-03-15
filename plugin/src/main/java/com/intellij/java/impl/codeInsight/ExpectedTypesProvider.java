@@ -45,10 +45,8 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Stack;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.function.Function;
@@ -68,23 +66,21 @@ public class ExpectedTypesProvider {
 
     private static final Logger LOG = Logger.getInstance(ExpectedTypesProvider.class);
 
-    public static ExpectedTypesProvider getInstance(@Nonnull Project project) {
+    public static ExpectedTypesProvider getInstance(Project project) {
         return ServiceManager.getService(project, ExpectedTypesProvider.class);
     }
 
     private static final int MAX_COUNT = 50;
     private static final ExpectedClassProvider ourGlobalScopeClassProvider = new ExpectedClassProvider() {
         @Override
-        @Nonnull
-        public PsiField[] findDeclaredFields(@Nonnull PsiManager manager, @Nonnull String name) {
+        public PsiField[] findDeclaredFields(PsiManager manager, String name) {
             PsiShortNamesCache cache = PsiShortNamesCache.getInstance(manager.getProject());
             GlobalSearchScope scope = GlobalSearchScope.allScope(manager.getProject());
             return cache.getFieldsByName(name, scope);
         }
 
         @Override
-        @Nonnull
-        public PsiMethod[] findDeclaredMethods(@Nonnull PsiManager manager, @Nonnull String name) {
+        public PsiMethod[] findDeclaredMethods(PsiManager manager, String name) {
             PsiShortNamesCache cache = PsiShortNamesCache.getInstance(manager.getProject());
             GlobalSearchScope scope = GlobalSearchScope.allScope(manager.getProject());
             return cache.getMethodsByNameIfNotMoreThan(name, scope, MAX_COUNT);
@@ -100,43 +96,37 @@ public class ExpectedTypesProvider {
         PsiType.DOUBLE
     };
 
-    @Nonnull
-    public static ExpectedTypeInfo createInfo(@Nonnull PsiType type,
+    public static ExpectedTypeInfo createInfo(PsiType type,
                                               @ExpectedTypeInfo.Type int kind,
                                               PsiType defaultType,
-                                              @Nonnull TailType tailType) {
+                                              TailType tailType) {
         return createInfoImpl(type, kind, defaultType, tailType);
     }
 
-    @Nonnull
-    private static ExpectedTypeInfoImpl createInfoImpl(@Nonnull PsiType type, PsiType defaultType) {
+    private static ExpectedTypeInfoImpl createInfoImpl(PsiType type, PsiType defaultType) {
         return createInfoImpl(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, defaultType, TailType.NONE);
     }
 
-    @Nonnull
-    private static ExpectedTypeInfoImpl createInfoImpl(@Nonnull PsiType type,
+    private static ExpectedTypeInfoImpl createInfoImpl(PsiType type,
                                                        @ExpectedTypeInfo.Type int kind,
                                                        PsiType defaultType,
-                                                       @Nonnull TailType tailType) {
+                                                       TailType tailType) {
         return new ExpectedTypeInfoImpl(type, kind, defaultType, tailType, null, ExpectedTypeInfoImpl.NULL);
     }
 
-    @Nonnull
-    private static ExpectedTypeInfoImpl createInfoImpl(@Nonnull PsiType type,
+    private static ExpectedTypeInfoImpl createInfoImpl(PsiType type,
                                                        int kind,
                                                        PsiType defaultType,
-                                                       @Nonnull TailType tailType,
+                                                       TailType tailType,
                                                        PsiMethod calledMethod,
                                                        Supplier<String> expectedName) {
         return new ExpectedTypeInfoImpl(type, kind, defaultType, tailType, calledMethod, expectedName);
     }
 
-    @Nonnull
     public static ExpectedTypeInfo[] getExpectedTypes(@Nullable PsiExpression expr, boolean forCompletion) {
         return getExpectedTypes(expr, forCompletion, false, false);
     }
 
-    @Nonnull
     public static ExpectedTypeInfo[] getExpectedTypes(@Nullable PsiExpression expr,
                                                       boolean forCompletion,
                                                       boolean voidable,
@@ -144,7 +134,6 @@ public class ExpectedTypesProvider {
         return getExpectedTypes(expr, forCompletion, ourGlobalScopeClassProvider, voidable, usedAfter);
     }
 
-    @Nonnull
     public static ExpectedTypeInfo[] getExpectedTypes(@Nullable PsiExpression expr,
                                                       boolean forCompletion,
                                                       ExpectedClassProvider classProvider,
@@ -152,7 +141,6 @@ public class ExpectedTypesProvider {
         return getExpectedTypes(expr, forCompletion, classProvider, false, usedAfter);
     }
 
-    @Nonnull
     public static ExpectedTypeInfo[] getExpectedTypes(@Nullable PsiExpression expr,
                                                       boolean forCompletion,
                                                       ExpectedClassProvider classProvider,
@@ -185,9 +173,9 @@ public class ExpectedTypesProvider {
         return visitor.getResult();
     }
 
-    public static PsiType[] processExpectedTypes(@Nonnull ExpectedTypeInfo[] infos,
-                                                 @Nonnull PsiTypeVisitor<PsiType> visitor,
-                                                 @Nonnull Project project) {
+    public static PsiType[] processExpectedTypes(ExpectedTypeInfo[] infos,
+                                                 PsiTypeVisitor<PsiType> visitor,
+                                                 Project project) {
         LinkedHashSet<PsiType> set = new LinkedHashSet<PsiType>();
         for (ExpectedTypeInfo info : infos) {
             ExpectedTypeInfoImpl infoImpl = (ExpectedTypeInfoImpl) info;
@@ -221,18 +209,18 @@ public class ExpectedTypesProvider {
         return set.toArray(PsiType.createArray(set.size()));
     }
 
-    private static void processType(@Nonnull PsiType type,
-                                    @Nonnull PsiTypeVisitor<PsiType> visitor,
-                                    @Nonnull Set<PsiType> typeSet) {
+    private static void processType(PsiType type,
+                                    PsiTypeVisitor<PsiType> visitor,
+                                    Set<PsiType> typeSet) {
         PsiType accepted = type.accept(visitor);
         if (accepted != null) {
             typeSet.add(accepted);
         }
     }
 
-    public static void processPrimitiveTypeAndSubtypes(@Nonnull PsiPrimitiveType type,
-                                                       @Nonnull PsiTypeVisitor<PsiType> visitor,
-                                                       @Nonnull Set<PsiType> set) {
+    public static void processPrimitiveTypeAndSubtypes(PsiPrimitiveType type,
+                                                       PsiTypeVisitor<PsiType> visitor,
+                                                       Set<PsiType> set) {
         if (type.equals(PsiType.BOOLEAN) || type.equals(PsiType.VOID) || type.equals(PsiType.NULL)) {
             return;
         }
@@ -246,10 +234,10 @@ public class ExpectedTypesProvider {
         }
     }
 
-    public static void processAllSuperTypes(@Nonnull PsiType type,
-                                            @Nonnull PsiTypeVisitor<PsiType> visitor,
-                                            @Nonnull Project project,
-                                            @Nonnull Set<PsiType> set) {
+    public static void processAllSuperTypes(PsiType type,
+                                            PsiTypeVisitor<PsiType> visitor,
+                                            Project project,
+                                            Set<PsiType> set) {
         if (type instanceof PsiPrimitiveType) {
             if (type.equals(PsiType.BOOLEAN) || type.equals(PsiType.VOID) || type.equals(PsiType.NULL)) {
                 return;
@@ -289,7 +277,6 @@ public class ExpectedTypesProvider {
         private final ExpectedClassProvider myClassProvider;
         private final boolean myVoidable;
         final List<ExpectedTypeInfo> myResult = ContainerUtil.newArrayList();
-        @NonNls
         private static final String LENGTH_SYNTHETIC_ARRAY_FIELD = "length";
 
         private MyParentVisitor(PsiExpression expr,
@@ -304,7 +291,6 @@ public class ExpectedTypesProvider {
             myUsedAfter = usedAfter;
         }
 
-        @Nonnull
         public ExpectedTypeInfo[] getResult() {
             return myResult.toArray(new ExpectedTypeInfo[myResult.size()]);
         }
@@ -324,7 +310,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitAnnotationMethod(@Nonnull PsiAnnotationMethod method) {
+        public void visitAnnotationMethod(PsiAnnotationMethod method) {
             if (myExpr == method.getDefaultValue()) {
                 PsiType type = method.getReturnType();
                 if (type != null) {
@@ -334,7 +320,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             if (myForCompletion) {
                 MyParentVisitor visitor = new MyParentVisitor(expression, myForCompletion, myClassProvider,
                     myVoidable, myUsedAfter);
@@ -370,13 +356,13 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             myExpr = (PsiExpression) myExpr.getParent();
             expression.getParent().accept(this);
         }
 
         @Override
-        public void visitAnnotationArrayInitializer(@Nonnull PsiArrayInitializerMemberValue initializer) {
+        public void visitAnnotationArrayInitializer(PsiArrayInitializerMemberValue initializer) {
             PsiElement parent = initializer.getParent();
             while (parent instanceof PsiArrayInitializerMemberValue) {
                 parent = parent.getParent();
@@ -394,7 +380,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitNameValuePair(@Nonnull PsiNameValuePair pair) {
+        public void visitNameValuePair(PsiNameValuePair pair) {
             PsiType type = getAnnotationMethodType(pair);
             if (type == null) {
                 return;
@@ -407,7 +393,7 @@ public class ExpectedTypesProvider {
         }
 
         @Nullable
-        private static PsiType getAnnotationMethodType(@Nonnull PsiNameValuePair pair) {
+        private static PsiType getAnnotationMethodType(PsiNameValuePair pair) {
             PsiReference reference = pair.getReference();
             if (reference != null) {
                 PsiElement method = reference.resolve();
@@ -493,7 +479,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitForStatement(@Nonnull PsiForStatement statement) {
+        public void visitForStatement(PsiForStatement statement) {
             if (myExpr.equals(statement.getCondition())) {
                 myResult.add(createInfoImpl(PsiType.BOOLEAN, ExpectedTypeInfo.TYPE_STRICTLY, PsiType.BOOLEAN,
                     TailType.SEMICOLON));
@@ -501,7 +487,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitAssertStatement(@Nonnull PsiAssertStatement statement) {
+        public void visitAssertStatement(PsiAssertStatement statement) {
             if (statement.getAssertDescription() == myExpr) {
                 PsiClassType stringType = PsiType.getJavaLangString(myExpr.getManager(),
                     myExpr.getResolveScope());
@@ -515,7 +501,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+        public void visitForeachStatement(PsiForeachStatement statement) {
             if (myExpr.equals(statement.getIteratedValue())) {
                 PsiType type = statement.getIterationParameter().getType();
 
@@ -536,7 +522,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+        public void visitSwitchStatement(PsiSwitchStatement statement) {
             myResult.add(createInfoImpl(PsiType.LONG, PsiType.INT));
             if (!PsiUtil.isLanguageLevel5OrHigher(statement)) {
                 return;
@@ -549,7 +535,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitSwitchLabelStatement(@Nonnull PsiSwitchLabelStatement statement) {
+        public void visitSwitchLabelStatement(PsiSwitchLabelStatement statement) {
             PsiSwitchStatement switchStatement = statement.getEnclosingSwitchStatement();
             if (switchStatement != null) {
                 PsiExpression expression = switchStatement.getExpression();
@@ -564,7 +550,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
+        public void visitSynchronizedStatement(PsiSynchronizedStatement statement) {
             PsiElementFactory factory = JavaPsiFacade.getInstance(statement.getProject()).getElementFactory();
             PsiType objectType = factory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_OBJECT,
                 myExpr.getResolveScope());
@@ -572,7 +558,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             PsiType type = variable.getType();
             TailType tail = variable instanceof PsiResourceVariable ? TailType.NONE : TailType.SEMICOLON;
             myResult.add(createInfoImpl(type, ExpectedTypeInfo.TYPE_OR_SUBTYPE, type, tail, null,
@@ -580,7 +566,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
+        public void visitAssignmentExpression(PsiAssignmentExpression assignment) {
             if (myExpr.equals(assignment.getRExpression())) {
                 PsiExpression lExpr = assignment.getLExpression();
                 PsiType type = lExpr.getType();
@@ -622,7 +608,7 @@ public class ExpectedTypesProvider {
             }
         }
 
-        private static TailType getAssignmentRValueTailType(@Nonnull PsiAssignmentExpression assignment) {
+        private static TailType getAssignmentRValueTailType(PsiAssignmentExpression assignment) {
             if (assignment.getParent() instanceof PsiExpressionStatement) {
                 if (!(assignment.getParent().getParent() instanceof PsiForStatement)) {
                     return TailType.SEMICOLON;
@@ -637,7 +623,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitExpressionList(@Nonnull PsiExpressionList list) {
+        public void visitExpressionList(PsiExpressionList list) {
             PsiResolveHelper helper = JavaPsiFacade.getInstance(list.getProject()).getResolveHelper();
             if (list.getParent() instanceof PsiMethodCallExpression) {
                 PsiMethodCallExpression methodCall = (PsiMethodCallExpression) list.getParent();
@@ -656,8 +642,8 @@ public class ExpectedTypesProvider {
             }
         }
 
-        private void getExpectedArgumentsTypesForEnumConstant(@Nonnull PsiEnumConstant enumConstant,
-                                                              @Nonnull PsiExpressionList list) {
+        private void getExpectedArgumentsTypesForEnumConstant(PsiEnumConstant enumConstant,
+                                                              PsiExpressionList list) {
             PsiClass aClass = enumConstant.getContainingClass();
             if (aClass != null) {
                 LOG.assertTrue(aClass.isEnum());
@@ -665,8 +651,8 @@ public class ExpectedTypesProvider {
             }
         }
 
-        private void getExpectedArgumentsTypesForNewExpression(@Nonnull PsiNewExpression newExpr,
-                                                               @Nonnull PsiExpressionList list) {
+        private void getExpectedArgumentsTypesForNewExpression(PsiNewExpression newExpr,
+                                                               PsiExpressionList list) {
             PsiType newType = newExpr.getType();
             if (newType instanceof PsiClassType) {
                 JavaResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(newType);
@@ -692,8 +678,8 @@ public class ExpectedTypesProvider {
             }
         }
 
-        private void getExpectedTypesForConstructorCall(@Nonnull PsiClass referencedClass,
-                                                        @Nonnull PsiExpressionList argumentList,
+        private void getExpectedTypesForConstructorCall(PsiClass referencedClass,
+                                                        PsiExpressionList argumentList,
                                                         PsiSubstitutor substitutor) {
             List<CandidateInfo> array = new ArrayList<CandidateInfo>();
             for (PsiMethod constructor : referencedClass.getConstructors()) {
@@ -706,7 +692,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expr) {
+        public void visitPolyadicExpression(PsiPolyadicExpression expr) {
             PsiExpression[] operands = expr.getOperands();
             int index = Arrays.asList(operands).indexOf(myExpr);
             assert index >= 0;
@@ -817,7 +803,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitPrefixExpression(@Nonnull PsiPrefixExpression expr) {
+        public void visitPrefixExpression(PsiPrefixExpression expr) {
             IElementType i = expr.getOperationTokenType();
             PsiType type = expr.getType();
             TailType tailType = expr.getParent() instanceof PsiAssignmentExpression && (
@@ -849,7 +835,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitPostfixExpression(@Nonnull PsiPostfixExpression expr) {
+        public void visitPostfixExpression(PsiPostfixExpression expr) {
             if (myForCompletion) {
                 return;
             }
@@ -871,7 +857,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitArrayInitializerExpression(@Nonnull PsiArrayInitializerExpression expr) {
+        public void visitArrayInitializerExpression(PsiArrayInitializerExpression expr) {
             PsiElement pParent = expr.getParent();
             PsiType arrayType = null;
             if (pParent instanceof PsiVariable) {
@@ -894,7 +880,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             PsiExpression[] arrayDimensions = expression.getArrayDimensions();
             for (PsiExpression dimension : arrayDimensions) {
                 if (myExpr.equals(dimension)) {
@@ -905,7 +891,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitArrayAccessExpression(@Nonnull PsiArrayAccessExpression expr) {
+        public void visitArrayAccessExpression(PsiArrayAccessExpression expr) {
             if (myExpr.equals(expr.getIndexExpression())) {
                 myResult.add(createInfoImpl(PsiType.INT, PsiType.INT));
             }
@@ -936,7 +922,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitConditionalExpression(@Nonnull PsiConditionalExpression expr) {
+        public void visitConditionalExpression(PsiConditionalExpression expr) {
             if (myExpr.equals(expr.getCondition())) {
                 if (myForCompletion) {
                     myExpr = expr;
@@ -965,7 +951,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitThrowStatement(@Nonnull PsiThrowStatement statement) {
+        public void visitThrowStatement(PsiThrowStatement statement) {
             if (statement.getException() == myExpr) {
                 PsiManager manager = statement.getManager();
                 PsiType throwableType = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory()
@@ -999,7 +985,7 @@ public class ExpectedTypesProvider {
         }
 
         @Override
-        public void visitCodeFragment(@Nonnull JavaCodeFragment codeFragment) {
+        public void visitCodeFragment(JavaCodeFragment codeFragment) {
             if (codeFragment instanceof PsiExpressionCodeFragment) {
                 PsiType type = ((PsiExpressionCodeFragment) codeFragment).getExpectedType();
                 if (type != null) {
@@ -1008,10 +994,9 @@ public class ExpectedTypesProvider {
             }
         }
 
-        @Nonnull
-        private ExpectedTypeInfo[] getExpectedArgumentTypesForMethodCall(@Nonnull CandidateInfo[] allCandidates,
-                                                                         @Nonnull PsiExpressionList argumentList,
-                                                                         @Nonnull PsiExpression argument,
+        private ExpectedTypeInfo[] getExpectedArgumentTypesForMethodCall(CandidateInfo[] allCandidates,
+                                                                         PsiExpressionList argumentList,
+                                                                         PsiExpression argument,
                                                                          boolean forCompletion) {
             if (allCandidates.length == 0) {
                 return ExpectedTypeInfo.EMPTY_ARRAY;
@@ -1088,12 +1073,11 @@ public class ExpectedTypesProvider {
             return array.toArray(new ExpectedTypeInfo[array.size()]);
         }
 
-        @Nonnull
-        private static TailType getMethodArgumentTailType(@Nonnull PsiExpression argument,
+        private static TailType getMethodArgumentTailType(PsiExpression argument,
                                                           int index,
-                                                          @Nonnull PsiMethod method,
-                                                          @Nonnull PsiSubstitutor substitutor,
-                                                          @Nonnull PsiParameter[] params) {
+                                                          PsiMethod method,
+                                                          PsiSubstitutor substitutor,
+                                                          PsiParameter[] params) {
             if (index >= params.length || index == params.length - 2 && params[index + 1].isVarArgs()) {
                 return TailType.NONE;
             }
@@ -1113,13 +1097,13 @@ public class ExpectedTypesProvider {
             return CommaTailType.INSTANCE;
         }
 
-        private static void inferMethodCallArgumentTypes(@Nonnull PsiExpression argument,
+        private static void inferMethodCallArgumentTypes(PsiExpression argument,
                                                          boolean forCompletion,
-                                                         @Nonnull PsiExpression[] args,
+                                                         PsiExpression[] args,
                                                          int index,
-                                                         @Nonnull PsiMethod method,
-                                                         @Nonnull PsiSubstitutor substitutor,
-                                                         @Nonnull Set<ExpectedTypeInfo> array) {
+                                                         PsiMethod method,
+                                                         PsiSubstitutor substitutor,
+                                                         Set<ExpectedTypeInfo> array) {
             LOG.assertTrue(substitutor.isValid());
             PsiParameter[] parameters = method.getParameterList().getParameters();
             if (!forCompletion && parameters.length != args.length) {
@@ -1157,8 +1141,8 @@ public class ExpectedTypesProvider {
         }
 
         @Nullable
-        private static PsiType getTypeParameterValue(@Nonnull PsiClass rootClass,
-                                                     @Nonnull PsiClass derivedClass,
+        private static PsiType getTypeParameterValue(PsiClass rootClass,
+                                                     PsiClass derivedClass,
                                                      PsiSubstitutor substitutor,
                                                      int index) {
             PsiTypeParameter[] typeParameters = rootClass.getTypeParameters();
@@ -1176,9 +1160,9 @@ public class ExpectedTypesProvider {
         }
 
         @Nullable
-        protected static PsiType checkMethod(@Nonnull PsiMethod method,
-                                             @Nonnull @NonNls String className,
-                                             @Nonnull Function<PsiClass, PsiType> function) {
+        protected static PsiType checkMethod(PsiMethod method,
+                                             String className,
+                                             Function<PsiClass, PsiType> function) {
             PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return null;
@@ -1201,18 +1185,18 @@ public class ExpectedTypesProvider {
         }
 
         @Nullable
-        private static PsiType getDefaultType(@Nonnull PsiMethod method,
+        private static PsiType getDefaultType(PsiMethod method,
                                               PsiSubstitutor substitutor,
-                                              @Nonnull PsiType parameterType,
-                                              @Nonnull PsiExpression argument,
-                                              @Nonnull PsiExpression[] args,
+                                              PsiType parameterType,
+                                              PsiExpression argument,
+                                              PsiExpression[] args,
                                               int index) {
             PsiClass containingClass = method.getContainingClass();
             if (containingClass == null) {
                 return parameterType;
             }
 
-            @NonNls String name = method.getName();
+            String name = method.getName();
             if ("contains".equals(name) || "remove".equals(name)) {
                 PsiType type = checkMethod(method, CommonClassNames.JAVA_UTIL_COLLECTION,
                     psiClass -> getTypeParameterValue(psiClass, containingClass, substitutor, 0));
@@ -1282,7 +1266,7 @@ public class ExpectedTypesProvider {
             return parameterType;
         }
 
-        private static PsiType getParameterType(@Nonnull PsiParameter parameter, @Nonnull PsiSubstitutor substitutor) {
+        private static PsiType getParameterType(PsiParameter parameter, PsiSubstitutor substitutor) {
             PsiType type = parameter.getType();
             LOG.assertTrue(type.isValid());
             if (parameter.isVarArgs()) {
@@ -1306,7 +1290,7 @@ public class ExpectedTypesProvider {
             return parameterType;
         }
 
-        private static Supplier<String> getPropertyName(@Nonnull PsiVariable variable) {
+        private static Supplier<String> getPropertyName(PsiVariable variable) {
             return () -> {
                 String name = variable.getName();
                 if (name == null) {
@@ -1318,7 +1302,6 @@ public class ExpectedTypesProvider {
             };
         }
 
-        @Nonnull
         private List<ExpectedTypeInfo> anyArrayType() {
             PsiType objType = PsiType.getJavaLangObject(myExpr.getManager(),
                 myExpr.getResolveScope()).createArrayType();
@@ -1330,8 +1313,7 @@ public class ExpectedTypesProvider {
             return Arrays.asList(info, info1, info2);
         }
 
-        @Nonnull
-        private ExpectedTypeInfo[] findClassesWithDeclaredMethod(@Nonnull PsiMethodCallExpression methodCallExpr,
+        private ExpectedTypeInfo[] findClassesWithDeclaredMethod(PsiMethodCallExpression methodCallExpr,
                                                                  boolean forCompletion) {
             PsiReferenceExpression reference = methodCallExpr.getMethodExpression();
             if (reference.getQualifierExpression() instanceof PsiClassObjectAccessExpression) {
@@ -1366,8 +1348,7 @@ public class ExpectedTypesProvider {
             return types.toArray(new ExpectedTypeInfo[types.size()]);
         }
 
-        @Nonnull
-        private ExpectedTypeInfo[] findClassesWithDeclaredField(@Nonnull PsiReferenceExpression expression) {
+        private ExpectedTypeInfo[] findClassesWithDeclaredField(PsiReferenceExpression expression) {
             JavaPsiFacade facade = JavaPsiFacade.getInstance(expression.getProject());
             PsiField[] fields = myClassProvider.findDeclaredFields(expression.getManager(),
                 expression.getReferenceName());
@@ -1403,10 +1384,9 @@ public class ExpectedTypesProvider {
         PsiMethod[] findDeclaredMethods(PsiManager manager, String name);
     }
 
-    @Nonnull
-    public static TailType getFinalCallParameterTailType(@Nonnull PsiElement call,
+    public static TailType getFinalCallParameterTailType(PsiElement call,
                                                          @Nullable PsiType returnType,
-                                                         @Nonnull PsiMethod method) {
+                                                         PsiMethod method) {
         if (method.isConstructor() &&
             call instanceof PsiMethodCallExpression && ((PsiMethodCallExpression) call).getMethodExpression() instanceof PsiSuperExpression) {
             return TailTypes.CALL_RPARENTH_SEMICOLON;

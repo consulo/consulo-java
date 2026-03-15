@@ -5,18 +5,17 @@ import consulo.execution.debug.stream.trace.dsl.Expression;
 import consulo.execution.debug.stream.trace.dsl.StatementFactory;
 import consulo.execution.debug.stream.trace.dsl.impl.LineSeparatedCodeBlock;
 import consulo.execution.debug.stream.trace.dsl.impl.TextExpression;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
  */
 public class JavaCodeBlock extends LineSeparatedCodeBlock {
-    public JavaCodeBlock(@Nonnull StatementFactory statementFactory) {
+    public JavaCodeBlock(StatementFactory statementFactory) {
         super(statementFactory, ";");
     }
 
     @Override
-    public void doReturn(@Nonnull Expression expression) {
+    public void doReturn(Expression expression) {
         addStatement(new TextExpression("return " + expression.toCode()));
     }
 }

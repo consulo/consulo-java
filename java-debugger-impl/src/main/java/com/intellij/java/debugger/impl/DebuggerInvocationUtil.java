@@ -21,12 +21,11 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.project.Project;
 import consulo.ui.ModalityState;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
 public class DebuggerInvocationUtil {
-    public static void swingInvokeLater(final Project project, @Nonnull @RequiredUIAccess Runnable runnable) {
+    public static void swingInvokeLater(final Project project, @RequiredUIAccess Runnable runnable) {
         SwingUtilities.invokeLater(() -> {
             if (project != null && !project.isDisposed()) {
                 runnable.run();
@@ -34,7 +33,7 @@ public class DebuggerInvocationUtil {
         });
     }
 
-    public static void invokeLater(final Project project, @Nonnull final Runnable runnable) {
+    public static void invokeLater(final Project project, final Runnable runnable) {
         Application.get().invokeLater(() -> {
             if (project != null && !project.isDisposed()) {
                 runnable.run();
@@ -42,7 +41,7 @@ public class DebuggerInvocationUtil {
         });
     }
 
-    public static void invokeLater(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
+    public static void invokeLater(final Project project, final Runnable runnable, ModalityState state) {
         Application.get().invokeLater(() -> {
             if (project == null || project.isDisposed()) {
                 return;
@@ -52,7 +51,7 @@ public class DebuggerInvocationUtil {
         }, state);
     }
 
-    public static void invokeAndWait(final Project project, @Nonnull final Runnable runnable, ModalityState state) {
+    public static void invokeAndWait(final Project project, final Runnable runnable, ModalityState state) {
         Application.get().invokeAndWait(() -> {
             if (project == null || project.isDisposed()) {
                 return;

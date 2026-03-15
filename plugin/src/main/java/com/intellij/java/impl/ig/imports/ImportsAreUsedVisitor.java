@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,7 +44,7 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+  public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
     followReferenceToImport(reference);
     super.visitReferenceElement(reference);
   }
@@ -137,7 +136,7 @@ class ImportsAreUsedVisitor extends JavaRecursiveElementVisitor {
     return null;
   }
 
-  private void removeAll(@Nonnull PsiImportStatementBase importStatement) {
+  private void removeAll(PsiImportStatementBase importStatement) {
     for (int i = importStatements.size() - 1; i >= 0; i--) {
       PsiImportStatementBase statement = importStatements.get(i);
       String statementText = statement.getText();

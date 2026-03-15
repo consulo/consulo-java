@@ -24,7 +24,6 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathExpressionException;
@@ -44,14 +43,12 @@ public class MalformedXPathInspection extends BaseInspection {
         xpathMethodNames.add("evaluate");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.malformedXpathExpressionDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.malformedXpathExpressionProblemDescription().get();
     }
@@ -69,7 +66,7 @@ public class MalformedXPathInspection extends BaseInspection {
     private static class MalformedXPathVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiExpressionList argumentList = expression.getArgumentList();
             PsiExpression[] arguments = argumentList.getExpressions();

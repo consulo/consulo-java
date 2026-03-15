@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import jakarta.annotation.Nonnull;
 import consulo.ui.ex.tree.PresentationData;
 import consulo.project.ui.view.tree.ProjectViewNode;
 import consulo.project.ui.view.tree.TreeStructureProvider;
@@ -34,7 +33,6 @@ class ClassNameConvertor implements TreeStructureProvider {
         final String name = ((PsiFile)o).getName();
         ProjectViewNode viewNode = new ProjectViewNode<PsiFile>(myProject, (PsiFile)o, settings) {
           @Override
-          @Nonnull
           public Collection<AbstractTreeNode> getChildren() {
             return Collections.emptyList();
           }
@@ -50,7 +48,7 @@ class ClassNameConvertor implements TreeStructureProvider {
           }
 
           @Override
-          public boolean contains(@Nonnull VirtualFile file) {
+          public boolean contains(VirtualFile file) {
             return false;
           }
 

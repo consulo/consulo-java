@@ -19,8 +19,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiLanguageInjectionHost;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.CharArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.ArrayList;
@@ -35,7 +34,6 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
 
   @Override
   public
-  @Nonnull
   String getName() {
     return getNameElement().getText().substring(1);
   }
@@ -55,13 +53,12 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getDataElements() {
     return getChildrenAsPsiElements(PsiInlineDocTagImpl.VALUE_BIT_SET, PsiElement.ARRAY_FACTORY);
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -73,7 +70,7 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     super.accept(visitor);
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitSnippetTag(this);
@@ -94,7 +91,6 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Contract(pure = true)
-  @Nonnull
   public List<TextRange> getContentRanges() {
     final PsiSnippetDocTagValue valueElement = getValueElement();
     if (valueElement == null) return Collections.emptyList();
@@ -119,9 +115,8 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Contract(pure = true)
-  @Nonnull
-  private static List<TextRange> getRanges(@Nonnull TextRange snippetBodyTextRangeRelativeToSnippet,
-                                           @Nonnull String[] lines) {
+  private static List<TextRange> getRanges(TextRange snippetBodyTextRangeRelativeToSnippet,
+                                           String[] lines) {
     final int firstLine = getFirstNonEmptyLine(lines);
     final int lastLine = getLastNonEmptyLine(lines);
 
@@ -161,7 +156,7 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
    * @return the indent that is either the passed indent, or a new indent that goes after the last leading asterisk.
    */
   @Contract(pure = true)
-  private static int getIndentSize(@Nonnull final String line, int indent) {
+  private static int getIndentSize(final String line, int indent) {
     final int ownLineIndent = CharArrayUtil.shiftForward(line, 0, " *");
 
     final String maxPossibleIndent = line.substring(0, ownLineIndent);
@@ -171,8 +166,8 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Contract(pure = true)
-  private static int getStartOffsetOfFirstNonEmptyLine(@Nonnull TextRange snippetBodyTextRangeRelativeToSnippet,
-                                                       @Nonnull String[] lines,
+  private static int getStartOffsetOfFirstNonEmptyLine(TextRange snippetBodyTextRangeRelativeToSnippet,
+                                                       String[] lines,
                                                        int firstLine) {
     int start = snippetBodyTextRangeRelativeToSnippet.getStartOffset();
     for (int i = 0; i < Math.min(firstLine, lines.length); i++) {
@@ -182,7 +177,7 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Contract(pure = true)
-  private static int getIndent(@Nonnull String[] lines, int firstLine, int lastLine) {
+  private static int getIndent(String[] lines, int firstLine, int lastLine) {
     int minIndent = Integer.MAX_VALUE;
     for (int i = firstLine; i <= lastLine && i < lines.length; i++) {
       String line = lines[i];
@@ -200,7 +195,7 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Contract(pure = true)
-  private static int getLastNonEmptyLine(@Nonnull String[] lines) {
+  private static int getLastNonEmptyLine(String[] lines) {
     int lastLine = lines.length - 1;
     while (lastLine > 0 && isEmptyOrSpacesWithLeadingAsterisksOnly(lines[lastLine])) {
       lastLine--;
@@ -209,7 +204,7 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Contract(pure = true)
-  private static int getFirstNonEmptyLine(@Nonnull String[] lines) {
+  private static int getFirstNonEmptyLine(String[] lines) {
     int firstLine = 0;
     while (firstLine < lines.length && isEmptyOrSpacesWithLeadingAsterisksOnly(lines[firstLine])) {
       firstLine++;
@@ -218,13 +213,13 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   }
 
   @Contract(pure = true)
-  private static boolean isEmptyOrSpacesWithLeadingAsterisksOnly(@Nonnull String lines) {
+  private static boolean isEmptyOrSpacesWithLeadingAsterisksOnly(String lines) {
     if (lines.isEmpty()) return true;
     return lines.matches("^\\s*\\**\\s*$");
   }
 
   @Contract(pure = true)
-  private static int calculateIndent(@Nonnull String content) {
+  private static int calculateIndent(String content) {
     if (content.isEmpty()) return 0;
     final String noIndent = content.replaceAll("^\\s*\\*\\s*", "");
     return content.length() - noIndent.length();
@@ -233,26 +228,25 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
   @Contract(pure = true)
   private static
   @Nullable
-  ASTNode getColonElement(@Nonnull PsiSnippetDocTagBody snippetBodyBody) {
+  ASTNode getColonElement(PsiSnippetDocTagBody snippetBodyBody) {
     final ASTNode[] colonElements = snippetBodyBody.getNode().getChildren(TokenSet.create(JavaDocTokenType.DOC_TAG_VALUE_COLON));
     return colonElements.length == 1 ? colonElements[0] : null;
   }
 
   @Override
-  public PsiLanguageInjectionHost updateText(@Nonnull String text) {
+  public PsiLanguageInjectionHost updateText(String text) {
     return new SnippetDocTagManipulator().handleContentChange(this, text);
   }
 
   @Override
   public
-  @Nonnull
   LiteralTextEscaper<? extends PsiLanguageInjectionHost> createLiteralTextEscaper() {
     return new LiteralTextEscaper<PsiSnippetDocTagImpl>(this) {
 
       private int[] myOffsets;
 
       @Override
-      public boolean decode(@Nonnull TextRange rangeInsideHost, @Nonnull StringBuilder outChars) {
+      public boolean decode(TextRange rangeInsideHost, StringBuilder outChars) {
         final List<TextRange> ranges = myHost.getContentRanges();
 
         final String content = rangeInsideHost.substring(myHost.getText());
@@ -278,7 +272,7 @@ public class PsiSnippetDocTagImpl extends CompositePsiElement implements PsiSnip
       }
 
       @Override
-      public int getOffsetInHost(int offsetInDecoded, @Nonnull TextRange rangeInsideHost) {
+      public int getOffsetInHost(int offsetInDecoded, TextRange rangeInsideHost) {
         if (offsetInDecoded >= myOffsets.length) {
           return -1;
         }

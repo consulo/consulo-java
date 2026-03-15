@@ -31,8 +31,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Function;
@@ -47,7 +46,6 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
         myBody = body;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         PsiClass myTargetClass = (PsiClass) getStartElement();
@@ -67,11 +65,11 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiClass myTargetClass = (PsiClass) startElement;
         if (!FileModificationService.getInstance().preparePsiElementForWrite(myTargetClass.getContainingFile())) {
@@ -88,7 +86,7 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
         CreateMethodFromUsageFix.doCreate(myTargetClass, method, arguments, PsiSubstitutor.EMPTY, ExpectedTypeInfo.EMPTY_ARRAY, method);
     }
 
-    private PsiMethod createMethod(@Nonnull PsiClass myTargetClass) {
+    private PsiMethod createMethod(PsiClass myTargetClass) {
         Project project = myTargetClass.getProject();
         JVMElementFactory elementFactory = JVMElementFactories.getFactory(myTargetClass.getLanguage(), project);
         if (elementFactory == null) {
@@ -99,7 +97,7 @@ public class CreateMethodQuickFix extends LocalQuickFixAndIntentionActionOnPsiEl
     }
 
     @Nullable
-    public static CreateMethodQuickFix createFix(@Nonnull PsiClass targetClass, String signature, String body) {
+    public static CreateMethodQuickFix createFix(PsiClass targetClass, String signature, String body) {
         CreateMethodQuickFix fix = new CreateMethodQuickFix(targetClass, signature, body);
         try {
             fix.createMethod(targetClass);

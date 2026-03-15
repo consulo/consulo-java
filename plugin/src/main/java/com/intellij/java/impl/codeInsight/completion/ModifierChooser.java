@@ -24,8 +24,7 @@ import consulo.language.psi.filter.FilterPositionUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,7 @@ public class ModifierChooser {
     }
   };
 
-  static String[] getKeywords(@Nonnull PsiElement position) {
+  static String[] getKeywords(PsiElement position) {
     PsiModifierList list = findModifierList(position);
     if (list == null && !shouldSuggestModifiers(position)) {
       return ArrayUtil.EMPTY_STRING_ARRAY;
@@ -123,7 +122,7 @@ public class ModifierChooser {
   }
 
   @Nullable
-  public static PsiModifierList findModifierList(@Nonnull PsiElement element) {
+  public static PsiModifierList findModifierList(PsiElement element) {
     if (element.getParent() instanceof PsiModifierList) {
       return (PsiModifierList)element.getParent();
     }

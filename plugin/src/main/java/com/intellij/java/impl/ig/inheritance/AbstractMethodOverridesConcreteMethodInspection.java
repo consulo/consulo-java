@@ -24,18 +24,15 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AbstractMethodOverridesConcreteMethodInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.abstractMethodOverridesConcreteMethodDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.abstractMethodOverridesConcreteMethodProblemDescriptor().get();
     }
@@ -49,7 +46,7 @@ public class AbstractMethodOverridesConcreteMethodInspection extends BaseInspect
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //no call to super, so we don't drill into anonymous classes
             if (method.isConstructor()) {
                 return;

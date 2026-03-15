@@ -27,11 +27,9 @@ import consulo.language.psi.PsiErrorElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -82,7 +80,7 @@ public class SwitchUtils {
      *                                             because nested deconstruction patterns don't cover null values
      * @return exhaustiveness state.
      */
-    public static @Nonnull SwitchExhaustivenessState evaluateSwitchCompleteness(@Nonnull PsiSwitchBlock switchBlock,
+    public static SwitchExhaustivenessState evaluateSwitchCompleteness(PsiSwitchBlock switchBlock,
                                                                                 boolean considerNestedDeconstructionPatterns) {
         PsiExpression selector = switchBlock.getExpression();
         if (selector == null) {
@@ -136,7 +134,7 @@ public class SwitchUtils {
      * @param block switch block to analyze
      * @return true if this block is not exhaustive while it should be
      */
-    public static boolean hasExhaustivenessError(@Nonnull PsiSwitchBlock block) {
+    public static boolean hasExhaustivenessError(PsiSwitchBlock block) {
         return hasExhaustivenessError(block, JavaPsiSwitchUtil.getCaseLabelElements(block));
     }
 
@@ -145,7 +143,7 @@ public class SwitchUtils {
      * @param elements list of labels to analyze (can be a subset of all labels of the block)
      * @return true if this block is not exhaustive while it should be
      */
-    public static boolean hasExhaustivenessError(@Nonnull PsiSwitchBlock block, @Nonnull List<PsiCaseLabelElement> elements) {
+    public static boolean hasExhaustivenessError(PsiSwitchBlock block, List<PsiCaseLabelElement> elements) {
         PsiExpression selector = block.getExpression();
         if (selector == null) {
             return false;
@@ -190,7 +188,7 @@ public class SwitchUtils {
         return !recordExhaustive;
     }
 
-    private static @Nonnull List<PsiEnumConstant> getEnumConstants(@Nonnull List<? extends PsiCaseLabelElement> elements) {
+    private static List<PsiEnumConstant> getEnumConstants(List<? extends PsiCaseLabelElement> elements) {
         return StreamEx.of(elements).map(JavaPsiSwitchUtil::getEnumConstant).nonNull().toList();
     }
 
@@ -202,7 +200,7 @@ public class SwitchUtils {
      * @param statement the statement to count the cases of.
      * @return a negative number if a default case was encountered.
      */
-    public static int calculateBranchCount(@Nonnull PsiSwitchStatement statement) {
+    public static int calculateBranchCount(PsiSwitchStatement statement) {
         // preserved for plugin compatibility
         return calculateBranchCount((PsiSwitchBlock) statement);
     }
@@ -215,7 +213,7 @@ public class SwitchUtils {
      * @param block the switch block to count the cases of.
      * @return a negative number if a default case was encountered.
      */
-    public static int calculateBranchCount(@Nonnull PsiSwitchBlock block) {
+    public static int calculateBranchCount(PsiSwitchBlock block) {
         final PsiCodeBlock body = block.getBody();
         if (body == null) {
             return 0;
@@ -359,7 +357,7 @@ public class SwitchUtils {
         }
         final PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
         final PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-        @NonNls final String referenceName = methodExpression.getReferenceName();
+        final String referenceName = methodExpression.getReferenceName();
         if (!"equals".equals(referenceName)) {
             return null;
         }
@@ -405,7 +403,7 @@ public class SwitchUtils {
             PsiUtil.isConstantExpression(expression);
     }
 
-    public static String findUniqueLabelName(PsiStatement statement, @NonNls String baseName) {
+    public static String findUniqueLabelName(PsiStatement statement, String baseName) {
         final PsiElement ancestor = PsiTreeUtil.getParentOfType(statement, PsiMember.class);
         if (!checkForLabel(baseName, ancestor)) {
             return baseName;
@@ -434,7 +432,7 @@ public class SwitchUtils {
      * If switch body has no labels yet and language level permits, rule-based format is assumed.
      */
     @RequiredReadAction
-    public static boolean isRuleFormatSwitch(@Nonnull PsiSwitchBlock block) {
+    public static boolean isRuleFormatSwitch(PsiSwitchBlock block) {
         if (!PsiUtil.isAvailable(JavaFeature.ENHANCED_SWITCH, block)) {
             return false;
         }
@@ -459,7 +457,7 @@ public class SwitchUtils {
      */
     @Contract(pure = true)
     @RequiredReadAction
-    private static boolean isBeingCompleted(@Nonnull PsiSwitchLabelStatementBase label) {
+    private static boolean isBeingCompleted(PsiSwitchLabelStatementBase label) {
         if (!(label.getLastChild() instanceof PsiErrorElement)) {
             return false;
         }
@@ -473,7 +471,6 @@ public class SwitchUtils {
      * @return list of enum constants which are targets of the specified label; empty list if the supplied element is not a switch label,
      * or it is not an enum switch.
      */
-    @Nonnull
     public static List<PsiEnumConstant> findEnumConstants(PsiSwitchLabelStatementBase label) {
         if (label == null) {
             return Collections.emptyList();

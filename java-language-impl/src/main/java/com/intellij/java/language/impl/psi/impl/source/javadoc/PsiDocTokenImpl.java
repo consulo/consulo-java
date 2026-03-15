@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.javadoc;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaElementVisitor;
 import consulo.language.psi.PsiElementVisitor;
@@ -34,7 +33,7 @@ public class PsiDocTokenImpl extends LeafPsiElement implements PsiDocToken{
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDocToken(this);
     }

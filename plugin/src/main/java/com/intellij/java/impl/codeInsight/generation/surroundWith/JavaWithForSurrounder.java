@@ -28,7 +28,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
 class JavaWithForSurrounder extends JavaStatementsSurrounder{
   @Override
@@ -48,7 +47,7 @@ class JavaWithForSurrounder extends JavaStatementsSurrounder{
       return null;
     }
 
-    @NonNls String text = "for(a;b;c){\n}";
+    String text = "for(a;b;c){\n}";
     PsiForStatement forStatement = (PsiForStatement)factory.createStatementFromText(text, null);
     forStatement = (PsiForStatement)codeStyleManager.reformat(forStatement);
 

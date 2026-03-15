@@ -35,7 +35,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -48,8 +47,8 @@ import java.util.function.Supplier;
 public class JavaDirectInheritorsSearcher implements DirectClassInheritorsSearchExecutor {
     @Override
     public boolean execute(
-        @Nonnull DirectClassInheritorsSearch.SearchParameters p,
-        @Nonnull Predicate<? super PsiClass> consumer
+        DirectClassInheritorsSearch.SearchParameters p,
+        Predicate<? super PsiClass> consumer
     ) {
         PsiClass aClass = p.getClassToProcess();
 

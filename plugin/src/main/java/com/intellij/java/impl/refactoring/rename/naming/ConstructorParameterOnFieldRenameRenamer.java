@@ -29,7 +29,6 @@ import consulo.language.psi.PsiNamedElement;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.editor.refactoring.RefactoringBundle;
 import consulo.language.editor.refactoring.rename.AutomaticRenamer;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,12 +37,11 @@ import java.util.Set;
  * @author ven
  */
 public class ConstructorParameterOnFieldRenameRenamer extends AutomaticRenamer {
-  @NonNls
-  protected String canonicalNameToName(@NonNls String canonicalName, PsiNamedElement element) {
+  protected String canonicalNameToName(String canonicalName, PsiNamedElement element) {
     return JavaCodeStyleManager.getInstance(element.getProject()).propertyNameToVariableName(canonicalName, VariableKind.PARAMETER);
   }
 
-  protected String nameToCanonicalName(@NonNls String name, PsiNamedElement element) {
+  protected String nameToCanonicalName(String name, PsiNamedElement element) {
     return JavaCodeStyleManager.getInstance(element.getProject()).variableNameToPropertyName(name, VariableKind.FIELD);
   }
 

@@ -22,17 +22,14 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassLoaderInstantiationInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.classLoaderInstantiationDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.classLoaderInstantiationProblemDescriptor().get();
   }
@@ -45,7 +42,7 @@ public class ClassLoaderInstantiationInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!TypeUtils.expressionHasTypeOrSubtype(expression,
                                                 "java.lang.ClassLoader")) {

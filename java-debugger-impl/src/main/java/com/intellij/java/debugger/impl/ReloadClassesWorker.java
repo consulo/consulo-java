@@ -26,7 +26,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.MessageCategory;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -2,24 +2,21 @@
 package com.intellij.debugger.streams.trace.impl;
 
 import consulo.internal.com.sun.jdi.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
 public class JvmValue implements consulo.execution.debug.stream.trace.Value {
     private final consulo.internal.com.sun.jdi.Value value;
 
-    public JvmValue(@Nonnull consulo.internal.com.sun.jdi.Value value) {
+    public JvmValue(consulo.internal.com.sun.jdi.Value value) {
         this.value = value;
     }
 
-    @Nonnull
     public consulo.internal.com.sun.jdi.Value getValue() {
         return value;
     }
 
-    @Nonnull
     @Override
     public String typeName() {
         return value.type().name();
@@ -42,8 +39,7 @@ public class JvmValue implements consulo.execution.debug.stream.trace.Value {
         return value.hashCode();
     }
 
-    @Nullable
-    public static consulo.execution.debug.stream.trace.Value convertJvmValueToStreamValue(@Nullable consulo.internal.com.sun.jdi.Value jvmValue) {
+    public static consulo.execution.debug.stream.trace.@Nullable Value convertJvmValueToStreamValue(consulo.internal.com.sun.jdi.@Nullable Value jvmValue) {
         if (jvmValue == null) {
             return null;
         }
@@ -84,14 +80,13 @@ public class JvmValue implements consulo.execution.debug.stream.trace.Value {
 class JvmArrayReference extends JvmValue implements consulo.execution.debug.stream.trace.ArrayReference {
     private final consulo.internal.com.sun.jdi.ArrayReference reference;
 
-    JvmArrayReference(@Nonnull consulo.internal.com.sun.jdi.ArrayReference reference) {
+    JvmArrayReference(consulo.internal.com.sun.jdi.ArrayReference reference) {
         super(reference);
         this.reference = reference;
     }
 
-    @Nullable
     @Override
-    public consulo.execution.debug.stream.trace.Value getValue(int i) {
+    public consulo.execution.debug.stream.trace.@Nullable Value getValue(int i) {
         return JvmValue.convertJvmValueToStreamValue(reference.getValue(i));
     }
 
@@ -104,12 +99,11 @@ class JvmArrayReference extends JvmValue implements consulo.execution.debug.stre
 class JvmPrimitiveValue extends JvmValue {
     private final PrimitiveValue primitiveValue;
 
-    JvmPrimitiveValue(@Nonnull PrimitiveValue value) {
+    JvmPrimitiveValue(PrimitiveValue value) {
         super(value);
         this.primitiveValue = value;
     }
 
-    @Nonnull
     public PrimitiveValue getPrimitiveValue() {
         return primitiveValue;
     }
@@ -118,7 +112,7 @@ class JvmPrimitiveValue extends JvmValue {
 class JvmDoubleValue extends JvmPrimitiveValue implements consulo.execution.debug.stream.trace.DoubleValue {
     private final consulo.internal.com.sun.jdi.DoubleValue doubleValue;
 
-    JvmDoubleValue(@Nonnull consulo.internal.com.sun.jdi.DoubleValue value) {
+    JvmDoubleValue(consulo.internal.com.sun.jdi.DoubleValue value) {
         super(value);
         this.doubleValue = value;
     }
@@ -132,7 +126,7 @@ class JvmDoubleValue extends JvmPrimitiveValue implements consulo.execution.debu
 class JvmLongValue extends JvmPrimitiveValue implements consulo.execution.debug.stream.trace.LongValue {
     private final consulo.internal.com.sun.jdi.LongValue longValue;
 
-    JvmLongValue(@Nonnull consulo.internal.com.sun.jdi.LongValue value) {
+    JvmLongValue(consulo.internal.com.sun.jdi.LongValue value) {
         super(value);
         this.longValue = value;
     }
@@ -146,7 +140,7 @@ class JvmLongValue extends JvmPrimitiveValue implements consulo.execution.debug.
 class JvmByteValue extends JvmPrimitiveValue implements consulo.execution.debug.stream.trace.ByteValue {
     private final consulo.internal.com.sun.jdi.ByteValue byteValue;
 
-    JvmByteValue(@Nonnull consulo.internal.com.sun.jdi.ByteValue value) {
+    JvmByteValue(consulo.internal.com.sun.jdi.ByteValue value) {
         super(value);
         this.byteValue = value;
     }
@@ -160,7 +154,7 @@ class JvmByteValue extends JvmPrimitiveValue implements consulo.execution.debug.
 class JvmCharValue extends JvmPrimitiveValue implements consulo.execution.debug.stream.trace.CharValue {
     private final consulo.internal.com.sun.jdi.CharValue charValue;
 
-    JvmCharValue(@Nonnull consulo.internal.com.sun.jdi.CharValue value) {
+    JvmCharValue(consulo.internal.com.sun.jdi.CharValue value) {
         super(value);
         this.charValue = value;
     }
@@ -174,7 +168,7 @@ class JvmCharValue extends JvmPrimitiveValue implements consulo.execution.debug.
 class JvmFloatValue extends JvmPrimitiveValue implements consulo.execution.debug.stream.trace.FloatValue {
     private final consulo.internal.com.sun.jdi.FloatValue floatValue;
 
-    JvmFloatValue(@Nonnull consulo.internal.com.sun.jdi.FloatValue value) {
+    JvmFloatValue(consulo.internal.com.sun.jdi.FloatValue value) {
         super(value);
         this.floatValue = value;
     }
@@ -188,7 +182,7 @@ class JvmFloatValue extends JvmPrimitiveValue implements consulo.execution.debug
 class JvmBooleanValue extends JvmPrimitiveValue implements consulo.execution.debug.stream.trace.BooleanValue {
     private final consulo.internal.com.sun.jdi.BooleanValue booleanValue;
 
-    JvmBooleanValue(@Nonnull consulo.internal.com.sun.jdi.BooleanValue value) {
+    JvmBooleanValue(consulo.internal.com.sun.jdi.BooleanValue value) {
         super(value);
         this.booleanValue = value;
     }
@@ -202,7 +196,7 @@ class JvmBooleanValue extends JvmPrimitiveValue implements consulo.execution.deb
 class JvmIntegerValue extends JvmPrimitiveValue implements consulo.execution.debug.stream.trace.IntegerValue {
     private final consulo.internal.com.sun.jdi.IntegerValue integerValue;
 
-    JvmIntegerValue(@Nonnull consulo.internal.com.sun.jdi.IntegerValue value) {
+    JvmIntegerValue(consulo.internal.com.sun.jdi.IntegerValue value) {
         super(value);
         this.integerValue = value;
     }
@@ -216,7 +210,7 @@ class JvmIntegerValue extends JvmPrimitiveValue implements consulo.execution.deb
 class JvmShortValue extends JvmPrimitiveValue implements consulo.execution.debug.stream.trace.ShortValue {
     private final consulo.internal.com.sun.jdi.ShortValue shortValue;
 
-    JvmShortValue(@Nonnull consulo.internal.com.sun.jdi.ShortValue value) {
+    JvmShortValue(consulo.internal.com.sun.jdi.ShortValue value) {
         super(value);
         this.shortValue = value;
     }

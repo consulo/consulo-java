@@ -26,19 +26,16 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class ExtendsAnnotationInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ClassExplicitlyAnnotation";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.extendsAnnotationDisplayName();
@@ -48,7 +45,6 @@ public class ExtendsAnnotationInspection extends BaseInspection {
         return true;
     }
 
-    @Nonnull
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
         PsiClass containingClass = (PsiClass) infos[0];
@@ -63,7 +59,7 @@ public class ExtendsAnnotationInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (!PsiUtil.isLanguageLevel5OrHigher(aClass)) {
                 return;
             }

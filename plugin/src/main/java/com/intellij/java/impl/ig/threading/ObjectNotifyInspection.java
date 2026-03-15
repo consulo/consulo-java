@@ -30,22 +30,18 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ObjectNotifyInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "CallToNotifyInsteadOfNotifyAll";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.objectNotifyDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.objectNotifyProblemDescriptor().get();
   }
@@ -60,7 +56,6 @@ public class ObjectNotifyInspection extends BaseInspection {
 
   private static class ObjectNotifyFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.objectNotifyReplaceQuickfix();
     }
@@ -90,7 +85,7 @@ public class ObjectNotifyInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

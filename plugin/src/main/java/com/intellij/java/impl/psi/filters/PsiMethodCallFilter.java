@@ -22,20 +22,17 @@ import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class PsiMethodCallFilter implements ElementFilter {
-  @NonNls
   private final String myClassName;
-  @NonNls
   private final Set<String> myMethodNames;
 
 
-  public PsiMethodCallFilter(@NonNls String className, @NonNls String... methodNames) {
+  public PsiMethodCallFilter(String className, String... methodNames) {
     myClassName = className;
     myMethodNames = new HashSet<String>(Arrays.asList(methodNames));
   }
@@ -62,7 +59,6 @@ public class PsiMethodCallFilter implements ElementFilter {
     return PsiMethodCallExpression.class.isAssignableFrom(hintClass);
   }
 
-  @NonNls
   public String toString() {
     return "methodcall(" + myClassName + "." + myMethodNames + ")";
   }

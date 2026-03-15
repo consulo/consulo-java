@@ -20,7 +20,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import jakarta.annotation.Nonnull;
 
 /**
  * An instruction that pushes given value to the stack
@@ -28,16 +27,15 @@ import jakarta.annotation.Nonnull;
 public class PushInstruction extends EvalInstruction
 {
 	private final
-	@Nonnull
 	DfaValue myValue;
 	private final boolean myReferenceWrite;
 
-	public PushInstruction(@Nonnull DfaValue value, PsiExpression place)
+	public PushInstruction(DfaValue value, PsiExpression place)
 	{
 		this(value, place, false);
 	}
 
-	public PushInstruction(@Nonnull DfaValue value, PsiExpression place, final boolean isReferenceWrite)
+	public PushInstruction(DfaValue value, PsiExpression place, final boolean isReferenceWrite)
 	{
 		super(place, 0);
 		myValue = value;
@@ -49,7 +47,6 @@ public class PushInstruction extends EvalInstruction
 		return myReferenceWrite;
 	}
 
-	@Nonnull
 	public DfaValue getValue()
 	{
 		return myValue;
@@ -57,8 +54,7 @@ public class PushInstruction extends EvalInstruction
 
 	@Override
 	public
-	@Nonnull
-	DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue ... arguments)
+	DfaValue eval(DfaValueFactory factory, DfaMemoryState state, DfaValue ... arguments)
 	{
 		return myValue;
 	}

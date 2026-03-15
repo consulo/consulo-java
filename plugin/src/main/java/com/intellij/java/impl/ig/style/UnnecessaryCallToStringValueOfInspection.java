@@ -28,19 +28,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryCallToStringValueofDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         String text = (String) infos[0];
         return InspectionGadgetsLocalize.unnecessaryCallToStringValueofProblemDescriptor(text).get();
@@ -72,7 +69,6 @@ public class UnnecessaryCallToStringValueOfInspection extends BaseInspection {
             this.replacementText = replacementText;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryCallToStringValueofQuickfix(replacementText);

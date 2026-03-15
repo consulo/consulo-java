@@ -1,9 +1,7 @@
 // "Annotate method as '@NotNull'" "true"
 
-import jakarta.annotation.Nonnull;
 
 class X {
-    @Nonnull
     String foo() {
         return "X";
     }

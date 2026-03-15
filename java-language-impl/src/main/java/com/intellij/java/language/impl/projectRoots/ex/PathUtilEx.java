@@ -25,7 +25,7 @@ import consulo.project.Project;
 import consulo.util.lang.ComparatorUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;

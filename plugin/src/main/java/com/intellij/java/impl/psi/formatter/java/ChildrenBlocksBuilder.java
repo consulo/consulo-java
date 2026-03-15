@@ -21,7 +21,6 @@ import consulo.language.codeStyle.*;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Condition;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +86,7 @@ public class ChildrenBlocksBuilder {
       return this;
     }
 
-    public Config setAlignment(@Nonnull IElementType elementType, @Nonnull Alignment alignment) {
+    public Config setAlignment(IElementType elementType, Alignment alignment) {
       myAlignments.put(elementType, alignment);
       return this;
     }

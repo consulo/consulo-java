@@ -33,8 +33,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.function.Supplier;
@@ -138,7 +137,6 @@ public class JavaTestGenerator implements TestGenerator {
     return CodeInsightLocalize.intentionCreateTestDialogJava().get();
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

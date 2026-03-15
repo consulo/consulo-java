@@ -27,8 +27,7 @@ import consulo.logging.Logger;
 import consulo.usage.UsageInfo;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -69,7 +68,7 @@ public class ThrowSearchUtil {
      * @param root
      * @return true, if we should continue processing
      */
-    private static boolean processExn(@Nonnull PsiParameter aCatch, @Nonnull Predicate<UsageInfo> processor, @Nonnull Root root) {
+    private static boolean processExn(PsiParameter aCatch, Predicate<UsageInfo> processor, Root root) {
         PsiType type = aCatch.getType();
         if (type.isAssignableFrom(root.myType)) {
             processor.test(new UsageInfo(aCatch));
@@ -84,11 +83,11 @@ public class ThrowSearchUtil {
 
     @RequiredReadAction
     private static boolean scanCatches(
-        @Nonnull PsiElement elem,
-        @Nonnull Predicate<UsageInfo> processor,
-        @Nonnull Root root,
-        @Nonnull FindUsagesOptions options,
-        @Nonnull Set<PsiMethod> processed
+        PsiElement elem,
+        Predicate<UsageInfo> processor,
+        Root root,
+        FindUsagesOptions options,
+        Set<PsiMethod> processed
     ) {
         while (elem != null) {
             PsiElement parent = elem.getParent();
@@ -126,7 +125,7 @@ public class ThrowSearchUtil {
     }
 
     @RequiredReadAction
-    public static boolean addThrowUsages(@Nonnull Predicate<UsageInfo> processor, @Nonnull Root root, @Nonnull FindUsagesOptions options) {
+    public static boolean addThrowUsages(Predicate<UsageInfo> processor, Root root, FindUsagesOptions options) {
         Set<PsiMethod> processed = new HashSet<>();
         return scanCatches(root.myElement, processor, root, options, processed);
     }

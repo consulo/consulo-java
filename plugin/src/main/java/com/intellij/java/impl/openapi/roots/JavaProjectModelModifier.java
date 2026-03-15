@@ -25,8 +25,7 @@ import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.content.library.Library;
 import consulo.util.concurrent.AsyncResult;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -52,7 +51,7 @@ public abstract class JavaProjectModelModifier {
      * {@code null} otherwise
      */
     @Nullable
-    public abstract AsyncResult<Void> addModuleDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope);
+    public abstract AsyncResult<Void> addModuleDependency(Module from, Module to, DependencyScope scope);
 
     /**
      * Implementation of this method should add dependency from modules {@code modules} to an external library with scope {@code scope} accordingly
@@ -65,9 +64,9 @@ public abstract class JavaProjectModelModifier {
      */
     @Nullable
     public abstract AsyncResult<Void> addExternalLibraryDependency(
-        @Nonnull Collection<Module> modules,
-        @Nonnull ExternalLibraryDescriptor descriptor,
-        @Nonnull DependencyScope scope
+        Collection<Module> modules,
+        ExternalLibraryDescriptor descriptor,
+        DependencyScope scope
     );
 
     /**
@@ -80,7 +79,7 @@ public abstract class JavaProjectModelModifier {
      * {@code null} otherwise
      */
     @Nullable
-    public abstract AsyncResult<Void> addLibraryDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope);
+    public abstract AsyncResult<Void> addLibraryDependency(Module from, Library library, DependencyScope scope);
 
     /**
      * Implementation of this method should set language level for module {@code module} to the specified value accordingly
@@ -91,5 +90,5 @@ public abstract class JavaProjectModelModifier {
      * @return {@link AsyncResult} instance if language level can be set by this dependencies management system or {@code null} otherwise
      */
     @Nullable
-    public abstract AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel level);
+    public abstract AsyncResult<Void> changeLanguageLevel(Module module, LanguageLevel level);
 }

@@ -29,8 +29,6 @@ import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -65,7 +63,6 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
         return (ThreadReference) getObjectReference();
     }
 
-    @Nonnull
     @Override
     public VirtualMachineProxyImpl getVirtualMachine() {
         DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -109,7 +106,6 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
         clearCaches();
     }
 
-    @NonNls
     public String toString() {
         try {
             return name() + ": " + DebuggerUtilsEx.getThreadStatusText(status());
@@ -213,7 +209,6 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
      * this is useful when you need all frames but do not plan to invoke anything
      * as only one request is sent
      */
-    @Nonnull
     public List<StackFrameProxyImpl> forceFrames() throws EvaluateException {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         final ThreadReference threadRef = getThreadReference();
@@ -246,7 +241,6 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
         return myFrames;
     }
 
-    @Nonnull
     public List<StackFrameProxyImpl> frames() throws EvaluateException {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         final ThreadReference threadRef = getThreadReference();
@@ -266,7 +260,7 @@ public final class ThreadReferenceProxyImpl extends ObjectReferenceProxyImpl imp
         return myFrames;
     }
 
-    private void checkFrames(@Nonnull final ThreadReference threadRef) throws EvaluateException {
+    private void checkFrames(final ThreadReference threadRef) throws EvaluateException {
         int frameCount = frameCount();
         if (myFramesFromBottom.size() < frameCount) {
             List<StackFrame> frames;

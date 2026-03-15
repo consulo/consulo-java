@@ -61,9 +61,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.virtualFileSystem.util.VirtualFileVisitor;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,7 +90,6 @@ public class BackendCompilerWrapper
 	private final Project myProject;
 	private final Map<Module, VirtualFile> myModuleToTempDirMap = new HashMap<>();
 	private final ProjectFileIndex myProjectFileIndex;
-	@NonNls
 	private static final String PACKAGE_ANNOTATION_FILE_NAME = "package-info.java";
 	private static final FileObject ourStopThreadToken = new FileObject(new File(""), new byte[0]);
 	public final Map<String, Set<CompiledClass>> myFileNameToSourceMap = new HashMap<>();
@@ -104,10 +101,10 @@ public class BackendCompilerWrapper
 	public BackendCompilerWrapper(
 		TranslatingCompiler translatingCompiler,
 		Chunk<Module> chunk,
-		@Nonnull final Project project,
-		@Nonnull List<VirtualFile> filesToCompile,
-		@Nonnull CompileContextEx compileContext,
-		@Nonnull BackendCompiler compiler,
+		final Project project,
+		List<VirtualFile> filesToCompile,
+		CompileContextEx compileContext,
+		BackendCompiler compiler,
 		TranslatingCompiler.OutputSink sink
 	)
 	{
@@ -128,7 +125,7 @@ public class BackendCompilerWrapper
 		myStatistics = stat;
 	}
 
-	public void compile(@Nonnull Map<File, FileObject> parsingInfo) throws CompilerException, CacheCorruptedException
+	public void compile(Map<File, FileObject> parsingInfo) throws CompilerException, CacheCorruptedException
 	{
 		Application application = myProject.getApplication();
 		try
@@ -202,7 +199,6 @@ public class BackendCompilerWrapper
 		return CompilerUtil.buildModuleToFilesMap(myCompileContext, filesToCompile);
 	}
 
-	@Nonnull
 	private AsyncFileService getAsyncFileService()
 	{
 		return Application.get().getInstance(AsyncFileService.class);
@@ -418,7 +414,7 @@ public class BackendCompilerWrapper
 		}
 	}
 
-	private void doCompile(@Nonnull final ModuleChunk chunk, @Nonnull String outputDir, Map<File, FileObject> parsingInfo) throws IOException
+	private void doCompile(final ModuleChunk chunk, String outputDir, Map<File, FileObject> parsingInfo) throws IOException
 	{
 		myCompileContext.getProgressIndicator().checkCanceled();
 
@@ -790,7 +786,7 @@ public class BackendCompilerWrapper
 			VirtualFileUtil.visitChildrenRecursively(from, new VirtualFileVisitor()
 			{
 				@Override
-				public boolean visitFile(@Nonnull VirtualFile file)
+				public boolean visitFile(VirtualFile file)
 				{
 					if (!file.isDirectory())
 					{

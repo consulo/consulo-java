@@ -3,7 +3,6 @@ package com.intellij.java.impl.ide.actions;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.fileTemplate.FileTemplateContributor;
 import consulo.fileTemplate.FileTemplateRegistrator;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -12,7 +11,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaFileTemplateContributor implements FileTemplateContributor {
   @Override
-  public void register(@Nonnull FileTemplateRegistrator registrator) {
+  public void register(FileTemplateRegistrator registrator) {
     registrator.registerInternalTemplate("Java Class");
     registrator.registerInternalTemplate("Java Interface");
     registrator.registerInternalTemplate("Java Enum");

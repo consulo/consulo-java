@@ -37,8 +37,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -152,7 +151,7 @@ public class JVMNameUtil
 	{
 		private final List<JVMName> myList = new ArrayList<JVMName>();
 
-		public void append(@Nonnull JVMName evaluator)
+		public void append(JVMName evaluator)
 		{
 			myList.add(evaluator);
 		}
@@ -335,7 +334,7 @@ public class JVMNameUtil
 		}
 	}
 
-	public static JVMName getJVMQualifiedName(@Nonnull PsiClass psiClass)
+	public static JVMName getJVMQualifiedName(PsiClass psiClass)
 	{
 		final String name = getNonAnonymousClassName(psiClass);
 		if(name != null)
@@ -394,13 +393,12 @@ public class JVMNameUtil
 		return getJVMSignature(method, true, declaringClass);
 	}
 
-	public static JVMName getJVMSignature(@Nonnull PsiMethod method)
+	public static JVMName getJVMSignature(PsiMethod method)
 	{
 		return getJVMSignature(method, method.isConstructor(), method.getContainingClass());
 	}
 
-	@Nonnull
-	public static String getJVMMethodName(@Nonnull PsiMethod method)
+	public static String getJVMMethodName(PsiMethod method)
 	{
 		return method.isConstructor() ? CONSTRUCTOR_NAME : method.getName();
 	}

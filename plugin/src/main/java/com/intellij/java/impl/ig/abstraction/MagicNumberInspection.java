@@ -28,7 +28,6 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -47,13 +46,11 @@ public class MagicNumberInspection extends BaseInspection {
     public boolean ignoreInitialCapacity = false;
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.magicNumberDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.magicNumberProblemDescriptor().get();
     }
@@ -86,7 +83,7 @@ public class MagicNumberInspection extends BaseInspection {
     private class MagicNumberVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+        public void visitLiteralExpression(PsiLiteralExpression expression) {
             super.visitLiteralExpression(expression);
             PsiType type = expression.getType();
             if (!ClassUtils.isPrimitiveNumericType(type) || PsiType.CHAR.equals(type)) {

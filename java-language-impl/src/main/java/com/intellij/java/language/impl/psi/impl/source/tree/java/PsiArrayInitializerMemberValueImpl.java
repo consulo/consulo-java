@@ -32,7 +32,6 @@ import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -46,7 +45,6 @@ public class PsiArrayInitializerMemberValueImpl extends CompositePsiElement impl
   }
 
   @Override
-  @Nonnull
   public PsiAnnotationMemberValue[] getInitializers() {
     return getChildrenAsPsiElements(MEMBER_SET, PsiAnnotationMemberValue.ARRAY_FACTORY);
   }
@@ -96,7 +94,7 @@ public class PsiArrayInitializerMemberValueImpl extends CompositePsiElement impl
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (MEMBER_SET.contains(child.getElementType())) {
       JavaSourceUtil.deleteSeparatingComma(this, child);
     }
@@ -105,7 +103,7 @@ public class PsiArrayInitializerMemberValueImpl extends CompositePsiElement impl
   }
 
   @Override
-  public final void accept(@Nonnull PsiElementVisitor visitor) {
+  public final void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitAnnotationArrayInitializer(this);
     } else {

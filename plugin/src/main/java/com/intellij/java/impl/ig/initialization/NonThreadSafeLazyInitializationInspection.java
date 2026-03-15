@@ -32,20 +32,16 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 
 @ExtensionImpl
 public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonThreadSafeLazyInitializationDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonThreadSafeLazyInitializationProblemDescriptor().get();
     }
@@ -59,7 +55,7 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression expression
+            PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
             PsiExpression lhs = expression.getLExpression();
@@ -204,7 +200,6 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
     }
 
     private static class IntroduceHolderFix extends InspectionGadgetsFix {
-      @Nonnull
       @Override
       public LocalizeValue getName() {
         return LocalizeValue.localizeTODO("Introduce holder class");
@@ -218,7 +213,7 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
             }
             PsiField field = (PsiField) resolved;
             String holderName = suggestHolderName(field);
-            @NonNls String text = "private static class " + holderName
+            String text = "private static class " + holderName
                 + " {" +
                 "private static final " + field.getType().getCanonicalText() + " " +
                 field.getName() + " = " + ((PsiAssignmentExpression) expression.getParent()).getRExpression().getText() + ";"
@@ -240,7 +235,6 @@ public class NonThreadSafeLazyInitializationInspection extends BaseInspection {
             field.delete();
         }
 
-        @NonNls
         private static String suggestHolderName(PsiField field) {
             String string = field.getType().getDeepComponentType().getPresentableText();
             int index = string.indexOf('<');

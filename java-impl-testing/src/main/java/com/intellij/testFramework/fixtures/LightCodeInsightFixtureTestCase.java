@@ -17,7 +17,6 @@ package com.intellij.testFramework.fixtures;
 
 import java.io.File;
 
-import org.jetbrains.annotations.NonNls;
 import javax.annotation.Nonnull;
 import consulo.language.Language;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -73,7 +72,6 @@ public abstract class LightCodeInsightFixtureTestCase extends UsefulTestCase {
    *
    * @return relative path to the test data.
    */
-  @NonNls
   protected String getBasePath() {
     return "";
   }
@@ -89,7 +87,6 @@ public abstract class LightCodeInsightFixtureTestCase extends UsefulTestCase {
    *
    * @return absolute path to the test data.
    */
-  @NonNls
   protected String getTestDataPath() {
     String communityPath = PlatformTestUtil.getCommunityPath().replace(File.separatorChar, '/');
     String path = communityPath + getBasePath();

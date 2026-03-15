@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     private BaseInspection inspection = null;
@@ -44,7 +43,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerNewExpressionError(@Nonnull PsiNewExpression expression, Object... infos) {
+    protected final void registerNewExpressionError(PsiNewExpression expression, Object... infos) {
         PsiJavaCodeReferenceElement classReference = expression.getClassOrAnonymousClassReference();
         if (classReference == null) {
             registerError(expression, infos);
@@ -55,7 +54,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerMethodCallError(@Nonnull PsiMethodCallExpression expression, Object... infos) {
+    protected final void registerMethodCallError(PsiMethodCallExpression expression, Object... infos) {
         PsiReferenceExpression methodExpression = expression.getMethodExpression();
         PsiElement nameToken = methodExpression.getReferenceNameElement();
         if (nameToken == null) {
@@ -67,7 +66,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerStatementError(@Nonnull PsiStatement statement, Object... infos) {
+    protected final void registerStatementError(PsiStatement statement, Object... infos) {
         PsiElement statementToken = statement.getFirstChild();
         if (statementToken == null) {
             registerError(statement, infos);
@@ -78,7 +77,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerClassError(@Nonnull PsiClass aClass, Object... infos) {
+    protected final void registerClassError(PsiClass aClass, Object... infos) {
         PsiElement nameIdentifier;
         if (aClass instanceof PsiEnumConstantInitializer enumConstantInitializer) {
             PsiEnumConstant enumConstant = enumConstantInitializer.getEnumConstant();
@@ -102,7 +101,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerMethodError(@Nonnull PsiMethod method, Object... infos) {
+    protected final void registerMethodError(PsiMethod method, Object... infos) {
         PsiElement nameIdentifier = method.getNameIdentifier();
         if (nameIdentifier == null) {
             registerError(method.getContainingFile(), infos);
@@ -113,7 +112,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerVariableError(@Nonnull PsiVariable variable, Object... infos) {
+    protected final void registerVariableError(PsiVariable variable, Object... infos) {
         PsiElement nameIdentifier = variable.getNameIdentifier();
         if (nameIdentifier == null) {
             registerError(variable, infos);
@@ -124,7 +123,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerTypeParameterError(@Nonnull PsiTypeParameter typeParameter, Object... infos) {
+    protected final void registerTypeParameterError(PsiTypeParameter typeParameter, Object... infos) {
         PsiElement nameIdentifier = typeParameter.getNameIdentifier();
         if (nameIdentifier == null) {
             registerError(typeParameter, infos);
@@ -135,13 +134,13 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerFieldError(@Nonnull PsiField field, Object... infos) {
+    protected final void registerFieldError(PsiField field, Object... infos) {
         PsiElement nameIdentifier = field.getNameIdentifier();
         registerError(nameIdentifier, infos);
     }
 
     @RequiredReadAction
-    protected final void registerModifierError(@Nonnull String modifier, @Nonnull PsiModifierListOwner parameter, Object... infos) {
+    protected final void registerModifierError(String modifier, PsiModifierListOwner parameter, Object... infos) {
         PsiModifierList modifiers = parameter.getModifierList();
         if (modifiers == null) {
             return;
@@ -156,7 +155,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerClassInitializerError(@Nonnull PsiClassInitializer initializer, Object... infos) {
+    protected final void registerClassInitializerError(PsiClassInitializer initializer, Object... infos) {
         PsiCodeBlock body = initializer.getBody();
         PsiJavaToken lBrace = body.getLBrace();
         if (lBrace == null) {
@@ -168,12 +167,12 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerError(@Nonnull PsiElement location, Object... infos) {
+    protected final void registerError(PsiElement location, Object... infos) {
         registerError(location, ProblemHighlightType.GENERIC_ERROR_OR_WARNING, infos);
     }
 
     @RequiredReadAction
-    protected final void registerError(@Nonnull PsiElement location, ProblemHighlightType highlightType, Object... infos) {
+    protected final void registerError(PsiElement location, ProblemHighlightType highlightType, Object... infos) {
         if (location.getTextLength() == 0 && !(location instanceof PsiFile)) {
             return;
         }
@@ -190,7 +189,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @RequiredReadAction
-    protected final void registerErrorAtOffset(@Nonnull PsiElement location, int offset, int length, Object... infos) {
+    protected final void registerErrorAtOffset(PsiElement location, int offset, int length, Object... infos) {
         if (location.getTextLength() == 0 || length == 0) {
             return;
         }
@@ -204,7 +203,6 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
             .create();
     }
 
-    @Nonnull
     private InspectionGadgetsFix[] createFixes(Object... infos) {
         if (!onTheFly && inspection.buildQuickFixesOnlyForOnTheFlyErrors()) {
             return InspectionGadgetsFix.EMPTY_ARRAY;
@@ -221,7 +219,7 @@ public abstract class BaseInspectionVisitor extends JavaElementVisitor {
     }
 
     @Override
-    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(PsiReferenceExpression expression) {
         visitExpression(expression);
     }
 

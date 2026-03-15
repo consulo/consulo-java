@@ -24,17 +24,14 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NoopMethodInAbstractClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.noopMethodInAbstractClassDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.noopMethodInAbstractClassProblemDescriptor().get();
     }
@@ -46,7 +43,7 @@ public class NoopMethodInAbstractClassInspection extends BaseInspection {
     private static class NoopMethodInAbstractClassVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (method.isConstructor()) {
                 return;
             }

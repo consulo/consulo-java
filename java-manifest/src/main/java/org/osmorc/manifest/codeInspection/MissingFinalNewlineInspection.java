@@ -38,8 +38,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.Header;
@@ -51,7 +50,6 @@ import org.osmorc.manifest.lang.psi.Section;
  */
 @ExtensionImpl
 public class MissingFinalNewlineInspection extends LocalInspectionTool {
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.inspectionGeneralToolsGroupName();
@@ -63,13 +61,11 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
         return ManifestLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Missing Final New Line");
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return getClass().getSimpleName();
@@ -80,7 +76,6 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
         return true;
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;
@@ -88,7 +83,7 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
 
     @Override
     @RequiredReadAction
-    public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly) {
+    public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly) {
         if (file instanceof ManifestFile) {
             String text = file.getText();
             // http://ea.jetbrains.com/browser/ea_problems/22570
@@ -119,14 +114,13 @@ public class MissingFinalNewlineInspection extends LocalInspectionTool {
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Add newline");
         }
 
         @Override
         @RequiredUIAccess
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             if (section.getLastChild() instanceof Header header) {
                 header.getNode().addLeaf(ManifestTokenType.NEWLINE, "\n", null);
             }

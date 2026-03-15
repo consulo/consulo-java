@@ -7,10 +7,8 @@ import consulo.language.codeStyle.BraceStyle;
 import consulo.language.codeStyle.ForceBraces;
 import consulo.language.codeStyle.WrapType;
 import consulo.language.codeStyle.setting.CodeStyleBean;
-import jakarta.annotation.Nonnull;
 
 public class JavaCodeStyleBean extends CodeStyleBean {
-    @Nonnull
     @Override
     protected Language getLanguage() {
         return JavaLanguage.INSTANCE;

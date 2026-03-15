@@ -32,8 +32,6 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,7 +48,6 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
     return true;
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     PsiType type = (PsiType)infos[1];
@@ -62,7 +59,6 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
     return new TryWithIdenticalCatchesVisitor();
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.tryWithIdenticalCatchesDisplayName();
@@ -169,7 +165,6 @@ public class TryWithIdenticalCatchesInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.tryWithIdenticalCatchesQuickfix();
     }

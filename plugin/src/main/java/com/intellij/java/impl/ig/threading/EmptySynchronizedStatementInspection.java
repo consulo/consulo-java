@@ -23,17 +23,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptySynchronizedStatementInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.emptySynchronizedStatementDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.emptySynchronizedStatementProblemDescriptor().get();
   }
@@ -45,7 +42,7 @@ public class EmptySynchronizedStatementInspection extends BaseInspection {
   private static class EmptySynchronizedStatementVisitor extends BaseInspectionVisitor {
     @Override
     public void visitSynchronizedStatement(
-      @Nonnull PsiSynchronizedStatement statement) {
+      PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
      /* if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
         return;

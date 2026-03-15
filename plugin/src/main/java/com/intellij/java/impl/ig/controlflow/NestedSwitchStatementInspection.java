@@ -24,17 +24,14 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NestedSwitchStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nestedSwitchStatementDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nestedSwitchStatementProblemDescriptor().get();
     }
@@ -46,7 +43,7 @@ public class NestedSwitchStatementInspection extends BaseInspection {
     private static class NestedSwitchStatementVisitor extends BaseInspectionVisitor {
         @Override
         public void visitSwitchStatement(
-            @Nonnull PsiSwitchStatement statement
+            PsiSwitchStatement statement
         ) {
             super.visitSwitchStatement(statement);
             PsiElement containingSwitchStatement =

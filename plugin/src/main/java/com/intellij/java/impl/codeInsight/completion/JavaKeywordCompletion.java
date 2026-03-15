@@ -49,8 +49,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Conditions;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +124,7 @@ public class JavaKeywordCompletion {
                                                                                            psiElement(PsiPrefixExpression.class))))),
         not(psiElement().afterLeaf(".")));
 
-  static boolean isEndOfBlock(@Nonnull PsiElement element) {
+  static boolean isEndOfBlock(PsiElement element) {
     PsiElement prev = prevSignificantLeaf(element);
     if (prev == null) {
       PsiFile file = element.getContainingFile();
@@ -602,7 +601,6 @@ public class JavaKeywordCompletion {
     }
   }
 
-  @Nonnull
   @RequiredReadAction
   private LookupElement createTypeDeclaration(String keyword, String className) {
     LookupElement element;
@@ -671,7 +669,7 @@ public class JavaKeywordCompletion {
     return null;
   }
 
-  private static boolean nextIsIdentifier(@Nonnull PsiElement position) {
+  private static boolean nextIsIdentifier(PsiElement position) {
     PsiElement nextLeaf = PsiTreeUtil.nextLeaf(position);
     if (nextLeaf == null) return false;
     PsiElement parent = nextLeaf.getParent();
@@ -682,7 +680,7 @@ public class JavaKeywordCompletion {
   }
 
   @Nullable
-  private static PsiJavaFile getFileForDeclaration(@Nonnull PsiElement elementBeforeName) {
+  private static PsiJavaFile getFileForDeclaration(PsiElement elementBeforeName) {
     PsiElement parent = elementBeforeName.getParent();
     if (parent == null) return null;
     PsiElement grandParent = parent.getParent();
@@ -918,7 +916,7 @@ public class JavaKeywordCompletion {
     return psiElement().insideStarting(psiElement(PsiTypeElement.class).withParent(PsiCatchSection.class)).accepts(position);
   }
 
-  static boolean isDeclarationStart(@Nonnull PsiElement position) {
+  static boolean isDeclarationStart(PsiElement position) {
     if (psiElement().afterLeaf("@", ".").accepts(position)) return false;
 
     PsiElement parent = position.getParent();

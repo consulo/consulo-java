@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a list of Java classes referenced by the {@code implements}, {@code extends}, {@code throws}, or {@code with} clause.
@@ -33,13 +32,11 @@ public interface PsiReferenceList extends PsiElement {
   /**
    * Returns the array of reference elements contained in the list.
    */
-  @Nonnull
   PsiJavaCodeReferenceElement[] getReferenceElements();
 
   /**
    * Returns the array of classes referenced by elements in the list.
    */
-  @Nonnull
   PsiClassType[] getReferencedTypes();
 
   Role getRole();

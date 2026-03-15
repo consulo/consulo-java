@@ -17,7 +17,6 @@ package com.intellij.java.execution.impl.junit2;
 
 import java.util.Collections;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
 import consulo.execution.action.Location;
 import consulo.execution.action.PsiLocation;
@@ -30,14 +29,14 @@ import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiMemberParameterizedLocation extends PsiLocation<PsiElement>
 {
 	private final PsiClass myContainingClass;
 	private final String myParamSetName;
 
-	public PsiMemberParameterizedLocation(@Nonnull Project project, @Nonnull PsiElement psiElement, @Nullable PsiClass containingClass, String paramSetName)
+	public PsiMemberParameterizedLocation(Project project, PsiElement psiElement, @Nullable PsiClass containingClass, String paramSetName)
 	{
 		super(project, psiElement);
 		myContainingClass = containingClass;

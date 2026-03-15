@@ -43,8 +43,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -53,13 +52,12 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
   private TextRange mySelectionRange;
 
   @Override
-  public void applyFix(@Nonnull final Project project, @Nonnull final ProblemDescriptor descriptor) {
+  public void applyFix(final Project project, final ProblemDescriptor descriptor) {
     // do it later because the fix was called inside writeAction
     project.getApplication().invokeLater(() -> doFix(descriptor, project));
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return CodeInsightLocalize.inspectionI18nQuickfix();
   }
@@ -160,7 +158,7 @@ public class I18nizeQuickFix implements LocalQuickFix, I18nQuickFixHandler {
 
   @RequiredReadAction
   protected PsiElement doReplacementInJava(
-    @Nonnull final PsiFile psiFile,
+    final PsiFile psiFile,
     final Editor editor,
     final PsiLiteralExpression literalExpression,
     String i18nizedText

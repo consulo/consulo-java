@@ -15,7 +15,6 @@ package com.intellij.java.execution;
 
 import consulo.project.Project;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 /**
@@ -61,7 +60,7 @@ public enum ShortenCommandLine {
     return NONE;
   }
 
-  public static ShortenCommandLine readShortenClasspathMethod(@Nonnull Element element) {
+  public static ShortenCommandLine readShortenClasspathMethod(Element element) {
     Element mode = element.getChild("shortenClasspath");
     if (mode != null) {
       return valueOf(mode.getAttributeValue("name"));
@@ -69,7 +68,7 @@ public enum ShortenCommandLine {
     return null;
   }
 
-  public static void writeShortenClasspathMethod(@Nonnull Element element, ShortenCommandLine shortenCommandLine) {
+  public static void writeShortenClasspathMethod(Element element, ShortenCommandLine shortenCommandLine) {
     if (shortenCommandLine != null) {
       element.addContent(new Element("shortenClasspath").setAttribute("name", shortenCommandLine.name()));
     }

@@ -16,7 +16,7 @@
 
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven

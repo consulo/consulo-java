@@ -12,8 +12,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,9 +27,9 @@ public final class CheckerFrameworkSupport implements AnnotationPackageSupport {
   @RequiredReadAction
   @Nullable
   @Override
-  public NullabilityAnnotationInfo getNullabilityByContainerAnnotation(@Nonnull PsiAnnotation anno,
-                                                                       @Nonnull PsiElement context,
-                                                                       @Nonnull PsiAnnotation.TargetType[] types,
+  public NullabilityAnnotationInfo getNullabilityByContainerAnnotation(PsiAnnotation anno,
+                                                                       PsiElement context,
+                                                                       PsiAnnotation.TargetType[] types,
                                                                        boolean superPackage) {
     if (context instanceof PsiTypeParameter) {
       // DefaultQualifier is not applicable to type parameter declarations
@@ -87,9 +86,8 @@ public final class CheckerFrameworkSupport implements AnnotationPackageSupport {
     return false;
   }
 
-  @Nonnull
   @Override
-  public List<String> getNullabilityAnnotations(@Nonnull Nullability nullability) {
+  public List<String> getNullabilityAnnotations(Nullability nullability) {
     return switch (nullability) {
       case NOT_NULL -> Arrays.asList("org.checkerframework.checker.nullness.qual.NonNull",
                                      "org.checkerframework.checker.nullness.compatqual.NonNullDecl",

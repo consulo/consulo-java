@@ -44,15 +44,13 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public class RenameWrongRefFix implements SyntheticIntentionAction {
   private final PsiReferenceExpression myRefExpr;
-  @NonNls private static final String INPUT_VARIABLE_NAME = "INPUTVAR";
-  @NonNls private static final String OTHER_VARIABLE_NAME = "OTHERVAR";
+  private static final String INPUT_VARIABLE_NAME = "INPUTVAR";
+  private static final String OTHER_VARIABLE_NAME = "OTHERVAR";
   private final boolean myUnresolvedOnly;
 
   public RenameWrongRefFix(PsiReferenceExpression refExpr) {
@@ -65,13 +63,12 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.renameWrongReferenceText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!myRefExpr.isValid() || !myRefExpr.getManager().isInProject(myRefExpr)) return false;
     int offset = editor.getCaretModel().getOffset();
     PsiElement refName = myRefExpr.getReferenceNameElement();
@@ -160,7 +157,7 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
         }
 
         @Override
-        public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+        public boolean execute(PsiElement element, ResolveState state) {
           if (element instanceof PsiNamedElement
               && element instanceof PsiModifierListOwner
               && myFilterMethods == element instanceof PsiMethod) {
@@ -189,7 +186,7 @@ public class RenameWrongRefFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiReferenceExpression[] refs = CreateFromUsageUtils.collectExpressions(myRefExpr, PsiMember.class, PsiFile.class);
     PsiElement element = PsiTreeUtil.getParentOfType(myRefExpr, PsiMember.class, PsiFile.class);

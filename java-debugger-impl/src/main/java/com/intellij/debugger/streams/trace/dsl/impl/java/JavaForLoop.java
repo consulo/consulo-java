@@ -5,7 +5,6 @@ import consulo.execution.debug.stream.trace.dsl.Convertable;
 import consulo.execution.debug.stream.trace.dsl.Expression;
 import consulo.execution.debug.stream.trace.dsl.ForLoopBody;
 import consulo.execution.debug.stream.trace.dsl.VariableDeclaration;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -16,17 +15,16 @@ public class JavaForLoop implements Convertable {
     private final Expression afterThought;
     private final ForLoopBody loopBody;
 
-    public JavaForLoop(@Nonnull VariableDeclaration initialization,
-                       @Nonnull Expression condition,
-                       @Nonnull Expression afterThought,
-                       @Nonnull ForLoopBody loopBody) {
+    public JavaForLoop(VariableDeclaration initialization,
+                       Expression condition,
+                       Expression afterThought,
+                       ForLoopBody loopBody) {
         this.initialization = initialization;
         this.condition = condition;
         this.afterThought = afterThought;
         this.loopBody = loopBody;
     }
 
-    @Nonnull
     @Override
     public String toCode(int indent) {
         return IndentUtil.withIndent("for (" + initialization.toCode() + "; " +

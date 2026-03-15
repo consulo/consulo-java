@@ -25,8 +25,7 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -52,7 +51,7 @@ class ChainMethodCallsBlockBuilder {
                                Indent indent,
                                CommonCodeStyleSettings settings,
                                JavaCodeStyleSettings javaSettings,
-                               @Nonnull FormattingMode formattingMode) {
+                               FormattingMode formattingMode) {
     myBlockWrap = wrap;
     myBlockAlignment = alignment;
     myBlockIndent = indent;
@@ -104,7 +103,7 @@ class ChainMethodCallsBlockBuilder {
     return blocks;
   }
 
-  private int getCommonIndentSize(@Nonnull List<ChainedCallChunk> chunks) {
+  private int getCommonIndentSize(List<ChainedCallChunk> chunks) {
     String commonIndent = null;
     for (ChainedCallChunk chunk : chunks) {
       if (isMethodCall(chunk) && isBuilderMethod(chunk, myJavaSettings)) {
@@ -122,7 +121,7 @@ class ChainMethodCallsBlockBuilder {
     return commonIndent != null ? commonIndent.length() : -1;
   }
 
-  private static int getRelativeIndentSize(int commonIndentSize, @Nonnull ChainedCallChunk chunk) {
+  private static int getRelativeIndentSize(int commonIndentSize, ChainedCallChunk chunk) {
     if (commonIndentSize >= 0) {
       String indentString = chunk.getIndentString();
       if (indentString != null) {
@@ -140,12 +139,12 @@ class ChainMethodCallsBlockBuilder {
     return false;
   }
 
-  private static boolean isBuilderMethod(@Nonnull ChainedCallChunk chunk, JavaCodeStyleSettings settings) {
+  private static boolean isBuilderMethod(ChainedCallChunk chunk, JavaCodeStyleSettings settings) {
     String identifier = chunk.getIdentifier();
     return identifier != null && settings.isBuilderMethod(identifier);
   }
 
-  private boolean canWrap(int chunkIndex, @Nonnull List<? extends ChainedCallChunk> methodCall) {
+  private boolean canWrap(int chunkIndex, List<? extends ChainedCallChunk> methodCall) {
     if (chunkIndex <= 0) return false;
     ChainedCallChunk prev = methodCall.get(chunkIndex - 1);
     boolean isFirst = !isMethodCall(prev) || chunkIndex == 1;
@@ -165,12 +164,11 @@ class ChainMethodCallsBlockBuilder {
       && !chunkIsFirstInChainMethodCall(currentMethodChunk, methodCall);
   }
 
-  private static boolean chunkIsFirstInChainMethodCall(@Nonnull ChainedCallChunk callChunk, @Nonnull List<ChainedCallChunk> methodCall) {
+  private static boolean chunkIsFirstInChainMethodCall(ChainedCallChunk callChunk, List<ChainedCallChunk> methodCall) {
     return !methodCall.isEmpty() && callChunk == methodCall.get(0);
   }
 
-  @Nonnull
-  private static List<ChainedCallChunk> splitMethodCallOnChunksByDots(@Nonnull List<? extends ASTNode> nodes,
+  private static List<ChainedCallChunk> splitMethodCallOnChunksByDots(List<? extends ASTNode> nodes,
                                                                       CommonCodeStyleSettings settings) {
     List<ChainedCallChunk> result = new ArrayList<>();
 
@@ -192,14 +190,14 @@ class ChainMethodCallsBlockBuilder {
     return result;
   }
 
-  private Alignment createCallChunkAlignment(int chunkIndex, @Nonnull List<ChainedCallChunk> methodCall) {
+  private Alignment createCallChunkAlignment(int chunkIndex, List<ChainedCallChunk> methodCall) {
     ChainedCallChunk current = methodCall.get(chunkIndex);
     return shouldAlignMethod(current, methodCall)
       ? AbstractJavaBlock.createAlignment(mySettings.ALIGN_MULTILINE_CHAINED_METHODS, null)
       : null;
   }
 
-  private static boolean isMethodCall(@Nonnull ChainedCallChunk callChunk) {
+  private static boolean isMethodCall(ChainedCallChunk callChunk) {
     for (Iterator<ASTNode> iter = callChunk.nodes.iterator(); iter.hasNext(); ) {
       ASTNode node = iter.next();
       if (node.getElementType() == JavaTokenType.IDENTIFIER) {
@@ -224,7 +222,7 @@ class ChainMethodCallsBlockBuilder {
   }
 
 
-  private record ChainedCallChunk(@Nonnull List<ASTNode> nodes) {
+  private record ChainedCallChunk(List<ASTNode> nodes) {
     boolean isEmpty() {
       return nodes.isEmpty();
     }

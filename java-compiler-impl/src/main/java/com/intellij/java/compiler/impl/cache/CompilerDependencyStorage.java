@@ -23,7 +23,6 @@ import consulo.disposer.Disposable;
 import consulo.logging.Logger;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
-import jakarta.annotation.Nonnull;
 
 import java.io.*;
 import java.util.PrimitiveIterator;
@@ -78,7 +77,6 @@ public class CompilerDependencyStorage<Key> implements Flushable, Disposable
 
 		myCache = new SLRUCache<>(cacheSize * 2, cacheSize)
 		{
-			@Nonnull
 			public IntInfo createValue(Key key)
 			{
 				return new IntInfo(key);

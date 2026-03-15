@@ -20,7 +20,6 @@ import java.lang.annotation.IncompleteAnnotationException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiAnnotation;
@@ -29,12 +28,10 @@ import com.intellij.java.language.psi.PsiNameValuePair;
 
 class AnnotationInvocationHandler implements InvocationHandler
 {
-	@Nonnull
 	private final Class<? extends Annotation> type;
-	@Nonnull
 	private final PsiAnnotation myAnnotation;
 
-	AnnotationInvocationHandler(@Nonnull Class<? extends Annotation> type, @Nonnull PsiAnnotation annotation)
+	AnnotationInvocationHandler(Class<? extends Annotation> type, PsiAnnotation annotation)
 	{
 		this.type = type;
 		myAnnotation = annotation;

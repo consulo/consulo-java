@@ -10,8 +10,7 @@ import consulo.logging.Logger;
 import consulo.platform.Platform;
 import consulo.util.io.FilePermissionCopier;
 import consulo.util.io.FileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public abstract class JavaCoverageRunner extends CoverageRunner {
     }
 
     @Override
-    public boolean acceptsCoverageEngine(@Nonnull CoverageEngine engine) {
+    public boolean acceptsCoverageEngine(CoverageEngine engine) {
         return engine instanceof JavaCoverageEngine;
     }
 
@@ -40,8 +39,7 @@ public abstract class JavaCoverageRunner extends CoverageRunner {
         boolean isSampling
     );
 
-    @Nonnull
-    protected static String handleSpacesInPath(@Nonnull File parent) {
+    protected static String handleSpacesInPath(File parent) {
         String agentPath;
         String userDefined = Platform.current().jvm().getRuntimeProperty(COVERAGE_AGENT_PATH);
         if (userDefined != null && new File(userDefined).exists()) {

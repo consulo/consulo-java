@@ -31,8 +31,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author cdr
@@ -46,13 +45,12 @@ public class ReuseVariableDeclarationFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.reuseVariableDeclarationText(myVariable.getName());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (myVariable == null || !myVariable.isValid()) {
       return false;
     }
@@ -63,7 +61,7 @@ public class ReuseVariableDeclarationFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiVariable refVariable = findPreviousVariable();
     if (refVariable == null) return;
 

@@ -25,7 +25,6 @@ import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 @ServiceAPI(ComponentScope.PROJECT)
@@ -34,20 +33,15 @@ public abstract class GuessManager {
     return ServiceManager.getService(project, GuessManager.class);
   }
 
-  @Nonnull
   public abstract PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore);
 
-  @Nonnull
   public abstract PsiType[] guessTypeToCast(PsiExpression expr);
 
-  @Nonnull
-  public abstract MultiMap<PsiExpression, PsiType> getControlFlowExpressionTypes(@Nonnull PsiExpression forPlace, boolean honorAssignments);
+  public abstract MultiMap<PsiExpression, PsiType> getControlFlowExpressionTypes(PsiExpression forPlace, boolean honorAssignments);
 
-  @Nonnull
-  public List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr) {
+  public List<PsiType> getControlFlowExpressionTypeConjuncts(PsiExpression expr) {
     return getControlFlowExpressionTypeConjuncts(expr, true);
   }
 
-  @Nonnull
-  public abstract List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr, boolean honorAssignments);
+  public abstract List<PsiType> getControlFlowExpressionTypeConjuncts(PsiExpression expr, boolean honorAssignments);
 }

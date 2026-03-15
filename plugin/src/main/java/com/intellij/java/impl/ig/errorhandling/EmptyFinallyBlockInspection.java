@@ -29,11 +29,9 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptyFinallyBlockInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.emptyFinallyBlockDisplayName();
@@ -45,7 +43,6 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.emptyFinallyBlockProblemDescriptor().get();
     }
@@ -62,7 +59,6 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
     }
 
     private static class RemoveTryFinallyBlockFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.removeTryFinallyBlockQuickfix();
@@ -104,7 +100,6 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
     }
 
     private static class RemoveFinallyBlockFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.removeFinallyBlockQuickfix();
@@ -151,7 +146,7 @@ public class EmptyFinallyBlockInspection extends BaseInspection {
 
         @Override
         public void visitTryStatement(
-            @Nonnull PsiTryStatement statement
+            PsiTryStatement statement
         ) {
             super.visitTryStatement(statement);
             /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {

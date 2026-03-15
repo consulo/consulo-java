@@ -36,7 +36,6 @@ import consulo.ui.ex.awt.FormBuilder;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.NonFocusableCheckBox;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -109,7 +108,6 @@ class AnonymousToInnerDialog extends DialogWrapper{
     myNameField.selectNameWithoutExtension();
   }
 
-  @Nonnull
   protected Action[] createActions(){
     return new Action[]{getOKAction(),getCancelAction(),getHelpAction()};
   }

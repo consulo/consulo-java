@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.util.lang.StringUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -29,10 +28,9 @@ import consulo.language.psi.PsiManager;
  */
 public class PackageWrapper {
   private final PsiManager myManager;
-  @Nonnull
   private final String myQualifiedName;
 
-  public PackageWrapper(PsiManager manager, @Nonnull String qualifiedName) {
+  public PackageWrapper(PsiManager manager, String qualifiedName) {
     myManager = manager;
     myQualifiedName = qualifiedName;
   }
@@ -61,7 +59,6 @@ public class PackageWrapper {
     return JavaPsiFacade.getInstance(myManager.getProject()).findPackage(myQualifiedName) != null;
   }
 
-  @Nonnull
   public String getQualifiedName() {
     return myQualifiedName;
   }

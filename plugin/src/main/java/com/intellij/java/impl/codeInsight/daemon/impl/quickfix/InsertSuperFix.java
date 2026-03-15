@@ -29,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class InsertSuperFix implements SyntheticIntentionAction, HighPriorityAction {
   private static final Logger LOG = Logger.getInstance(InsertSuperFix.class);
@@ -41,13 +40,12 @@ public class InsertSuperFix implements SyntheticIntentionAction, HighPriorityAct
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.insertSuperConstructorCallText("super();");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myConstructor.isValid()
         && myConstructor.getBody() != null
         && myConstructor.getBody().getLBrace() != null
@@ -56,7 +54,7 @@ public class InsertSuperFix implements SyntheticIntentionAction, HighPriorityAct
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myConstructor.getContainingFile())) return;
     try {
       PsiStatement superCall =

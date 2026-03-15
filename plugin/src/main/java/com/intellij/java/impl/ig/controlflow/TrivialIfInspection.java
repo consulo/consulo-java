@@ -33,20 +33,16 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class TrivialIfInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "RedundantIfStatement";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.trivialIfDisplayName();
@@ -58,7 +54,6 @@ public class TrivialIfInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.trivialIfProblemDescriptor().get();
     }
@@ -69,7 +64,6 @@ public class TrivialIfInspection extends BaseInspection {
     }
 
     private static class TrivialIfFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
@@ -119,7 +113,7 @@ public class TrivialIfInspection extends BaseInspection {
                     statement,
                     PsiWhiteSpace.class
                 );
-            @NonNls String newStatement = "return " + conditionText + ';';
+            String newStatement = "return " + conditionText + ';';
             replaceStatement(statement, newStatement);
             assert nextStatement != null;
             deleteElement(nextStatement);
@@ -132,7 +126,7 @@ public class TrivialIfInspection extends BaseInspection {
                 return;
             }
             String conditionText = condition.getText();
-            @NonNls String newStatement = "return " + conditionText + ';';
+            String newStatement = "return " + conditionText + ';';
             replaceStatement(statement, newStatement);
         }
 
@@ -249,7 +243,7 @@ public class TrivialIfInspection extends BaseInspection {
             if (nextStatement == null) {
                 return;
             }
-            @NonNls String newStatement = "return " + conditionText + ';';
+            String newStatement = "return " + conditionText + ';';
             replaceStatement(statement, newStatement);
             deleteElement(nextStatement);
         }
@@ -264,7 +258,7 @@ public class TrivialIfInspection extends BaseInspection {
             }
             String conditionText =
                 BoolUtils.getNegatedExpressionText(condition);
-            @NonNls String newStatement = "return " + conditionText + ';';
+            String newStatement = "return " + conditionText + ';';
             replaceStatement(statement, newStatement);
         }
 
@@ -305,7 +299,7 @@ public class TrivialIfInspection extends BaseInspection {
     private static class TrivialIfVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitIfStatement(@Nonnull PsiIfStatement ifStatement) {
+        public void visitIfStatement(PsiIfStatement ifStatement) {
             super.visitIfStatement(ifStatement);
             PsiExpression condition = ifStatement.getCondition();
             if (condition == null) {

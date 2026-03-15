@@ -1,4 +1,3 @@
-import jakarta.annotation.Nonnull;
 
 public class StaticInnerClass {
   public StaticInnerClass() {
@@ -6,7 +5,7 @@ public class StaticInnerClass {
   }
 
   public static class Inner {
-    public Inner(@Nonnull String s) {
+    public Inner(String s) {
     }
   }
 }

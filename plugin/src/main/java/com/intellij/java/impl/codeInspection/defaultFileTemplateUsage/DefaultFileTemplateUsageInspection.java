@@ -29,9 +29,7 @@ import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author cdr
@@ -47,27 +45,23 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
   public boolean CHECK_METHOD_BODY = true;
 
   @Override
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.inspectionGeneralToolsGroupName();
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionLocalize.defaultFileTemplateDisplayName();
   }
 
   @Override
-  @Nonnull
-  @NonNls
   public String getShortName() {
     return "DefaultFileTemplate";
   }
 
   @Override
   @Nullable
-  public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+  public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly, Object state) {
     ProblemDescriptor descriptor = FileHeaderChecker.checkFileHeader(file, manager, isOnTheFly);
     return descriptor == null ? null : new ProblemDescriptor[]{descriptor};
   }
@@ -91,7 +85,6 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionLocalize.defaultFileTemplateEditTemplate();
     }
@@ -102,7 +95,7 @@ public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionT
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
       FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
       configurable.setTemplate(myTemplateToEdit, null);
       ShowSettingsUtil.getInstance().editConfigurable(project, configurable).doWhenDone(

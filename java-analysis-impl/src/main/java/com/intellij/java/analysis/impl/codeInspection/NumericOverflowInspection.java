@@ -33,9 +33,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * User: cdr
@@ -44,7 +42,6 @@ import jakarta.annotation.Nonnull;
 public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool {
   private static final Key<String> HAS_OVERFLOW_IN_CHILD = Key.create("HAS_OVERFLOW_IN_CHILD");
 
-  @Nonnull
   @Override
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesNumericIssues();
@@ -55,21 +52,18 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
     return true;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Numeric overflow");
   }
 
-  @Nonnull
   @Override
   public String getShortName() {
     return "NumericOverflow";
   }
 
-  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -89,7 +83,7 @@ public class NumericOverflowInspection extends BaseJavaBatchLocalInspectionTool 
     };
   }
 
-  private static boolean hasOverflow(PsiExpression expr, @Nonnull Project project) {
+  private static boolean hasOverflow(PsiExpression expr, Project project) {
     if (!TypeConversionUtil.isNumericType(expr.getType())) return false;
     boolean overflow = false;
     try {

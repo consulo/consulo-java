@@ -8,8 +8,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiManager;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -20,20 +19,18 @@ public final class TypeConstraints {
      * Top constraint (no restriction; any non-primitive value satisfies this)
      */
     public static final TypeConstraint TOP = new TypeConstraint() {
-        @Nonnull
         @Override
-        public TypeConstraint join(@Nonnull TypeConstraint other) {
+        public TypeConstraint join(TypeConstraint other) {
             return this;
         }
 
-        @Nonnull
         @Override
-        public TypeConstraint meet(@Nonnull TypeConstraint other) {
+        public TypeConstraint meet(TypeConstraint other) {
             return other;
         }
 
         @Override
-        public boolean isSuperConstraintOf(@Nonnull TypeConstraint other) {
+        public boolean isSuperConstraintOf(TypeConstraint other) {
             return true;
         }
 
@@ -51,20 +48,18 @@ public final class TypeConstraints {
      * Bottom constraint (no actual type satisfies this)
      */
     public static final TypeConstraint BOTTOM = new TypeConstraint() {
-        @Nonnull
         @Override
-        public TypeConstraint join(@Nonnull TypeConstraint other) {
+        public TypeConstraint join(TypeConstraint other) {
             return other;
         }
 
-        @Nonnull
         @Override
-        public TypeConstraint meet(@Nonnull TypeConstraint other) {
+        public TypeConstraint meet(TypeConstraint other) {
             return this;
         }
 
         @Override
-        public boolean isSuperConstraintOf(@Nonnull TypeConstraint other) {
+        public boolean isSuperConstraintOf(TypeConstraint other) {
             return other == this;
         }
 
@@ -94,22 +89,20 @@ public final class TypeConstraints {
         }
 
         @Override
-        public boolean isAssignableFrom(@Nonnull Exact other) {
+        public boolean isAssignableFrom(Exact other) {
             return true;
         }
 
         @Override
-        public boolean isConvertibleFrom(@Nonnull Exact other) {
+        public boolean isConvertibleFrom(Exact other) {
             return true;
         }
 
-        @Nonnull
         @Override
         public TypeConstraint instanceOf() {
             return TOP;
         }
 
-        @Nonnull
         @Override
         public TypeConstraint notInstanceOf() {
             return BOTTOM;
@@ -126,8 +119,7 @@ public final class TypeConstraints {
         }
     };
 
-    @Nullable
-    private static TypeConstraint.Exact createExact(@Nonnull PsiType type) {
+    private static TypeConstraint.@Nullable Exact createExact(PsiType type) {
         if (type instanceof PsiArrayType arrayType) {
             PsiType componentType = arrayType.getComponentType();
             if (componentType instanceof PsiPrimitiveType) {
@@ -158,9 +150,8 @@ public final class TypeConstraints {
      * @return a constraint for the object that has exactly given PsiType;
      * {@link #BOTTOM} if the object of given type cannot be instantiated.
      */
-    @Nonnull
     @Contract(pure = true)
-    public static TypeConstraint exact(@Nonnull PsiType type) {
+    public static TypeConstraint exact(PsiType type) {
         type = normalizeType(type);
         TypeConstraint.Exact exact = createExact(type);
         if (exact != null && exact.canBeInstantiated()) {
@@ -173,9 +164,8 @@ public final class TypeConstraints {
      * @param type PsiType
      * @return a constraint for the object whose type is the supplied type or any subtype
      */
-    @Nonnull
     @Contract(pure = true)
-    public static TypeConstraint instanceOf(@Nonnull PsiType type) {
+    public static TypeConstraint instanceOf(PsiType type) {
         if (type instanceof PsiLambdaExpressionType || type instanceof PsiMethodReferenceType) {
             return TOP;
         }
@@ -202,8 +192,7 @@ public final class TypeConstraints {
         return exact.instanceOf();
     }
 
-    @Nonnull
-    private static PsiType normalizeType(@Nonnull PsiType psiType) {
+    private static PsiType normalizeType(PsiType psiType) {
         if (psiType instanceof PsiArrayType) {
             return PsiTypesUtil.createArrayType(normalizeType(psiType.getDeepComponentType()), psiType.getArrayDimensions());
         }
@@ -227,8 +216,7 @@ public final class TypeConstraints {
         return psiType;
     }
 
-    @Nonnull
-    private static PsiType normalizeClassType(@Nonnull PsiClassType psiType, Set<PsiClass> processed) {
+    private static PsiType normalizeClassType(PsiClassType psiType, Set<PsiClass> processed) {
         PsiClass aClass = psiType.resolve();
         if (aClass instanceof PsiTypeParameter) {
             PsiClassType[] types = aClass.getExtendsListTypes();
@@ -248,8 +236,7 @@ public final class TypeConstraints {
         return psiType.rawType();
     }
 
-    @Nonnull
-    private static TypeConstraint.Exact exactClass(@Nonnull PsiClass psiClass) {
+    private static TypeConstraint.Exact exactClass(PsiClass psiClass) {
         String name = psiClass.getQualifiedName();
         if (name != null) {
             switch (name) {
@@ -279,13 +266,11 @@ public final class TypeConstraints {
             myType = type;
         }
 
-        @Nonnull
         @Override
         public PsiType getPsiType(Project project) {
             return myType.createArrayType();
         }
 
-        @Nonnull
         @Override
         public String toString() {
             return myType.getCanonicalText() + "[]";
@@ -306,12 +291,12 @@ public final class TypeConstraints {
         }
 
         @Override
-        public boolean isAssignableFrom(@Nonnull Exact other) {
+        public boolean isAssignableFrom(Exact other) {
             return other.equals(this);
         }
 
         @Override
-        public boolean isConvertibleFrom(@Nonnull Exact other) {
+        public boolean isConvertibleFrom(Exact other) {
             return other.equals(this) || other.isAssignableFrom(this);
         }
     }
@@ -319,20 +304,17 @@ public final class TypeConstraints {
     private enum ArraySuperInterface implements TypeConstraint.Exact {
         CLONEABLE(CommonClassNames.JAVA_LANG_CLONEABLE),
         SERIALIZABLE(CommonClassNames.JAVA_IO_SERIALIZABLE);
-        @Nonnull
         private final String myReference;
 
-        ArraySuperInterface(@Nonnull String reference) {
+        ArraySuperInterface(String reference) {
             myReference = reference;
         }
 
-        @Nonnull
         @Override
         public PsiType getPsiType(Project project) {
             return JavaPsiFacade.getElementFactory(project).createTypeByFQClassName(myReference);
         }
 
-        @Nonnull
         @Override
         public String toString() {
             return myReference;
@@ -349,7 +331,7 @@ public final class TypeConstraints {
         }
 
         @Override
-        public boolean isAssignableFrom(@Nonnull Exact other) {
+        public boolean isAssignableFrom(Exact other) {
             if (equals(other)) {
                 return true;
             }
@@ -364,7 +346,7 @@ public final class TypeConstraints {
         }
 
         @Override
-        public boolean isConvertibleFrom(@Nonnull Exact other) {
+        public boolean isConvertibleFrom(Exact other) {
             return !other.isFinal() || isAssignableFrom(other);
         }
 
@@ -376,10 +358,9 @@ public final class TypeConstraints {
 
     private static final class ExactClass implements TypeConstraint.Exact {
         private final
-        @Nonnull
         PsiClass myClass;
 
-        ExactClass(@Nonnull PsiClass aClass) {
+        ExactClass(PsiClass aClass) {
             assert !(aClass instanceof PsiTypeParameter);
             myClass = aClass;
         }
@@ -410,13 +391,11 @@ public final class TypeConstraints {
             return name != null && (CommonClassNames.JAVA_LANG_STRING.equals(name) || TypeConversionUtil.isPrimitiveWrapper(name));
         }
 
-        @Nonnull
         @Override
         public PsiType getPsiType(Project project) {
             return JavaPsiFacade.getElementFactory(project).createType(myClass);
         }
 
-        @Nonnull
         @Override
         @RequiredReadAction
         public String toString() {
@@ -449,7 +428,7 @@ public final class TypeConstraints {
         }
 
         @Override
-        public boolean isAssignableFrom(@Nonnull Exact other) {
+        public boolean isAssignableFrom(Exact other) {
             if (equals(other) || other instanceof Unresolved) {
                 return true;
             }
@@ -461,7 +440,7 @@ public final class TypeConstraints {
         }
 
         @Override
-        public boolean isConvertibleFrom(@Nonnull Exact other) {
+        public boolean isConvertibleFrom(Exact other) {
             if (equals(other) || other instanceof Unresolved || other == EXACTLY_OBJECT) {
                 return true;
             }
@@ -491,10 +470,9 @@ public final class TypeConstraints {
 
     private static final class ExactArray implements TypeConstraint.Exact {
         private final
-        @Nonnull
         Exact myComponent;
 
-        private ExactArray(@Nonnull Exact component) {
+        private ExactArray(Exact component) {
             myComponent = component;
         }
 
@@ -515,7 +493,6 @@ public final class TypeConstraints {
             return myComponent.hashCode() * 31 + 1;
         }
 
-        @Nonnull
         @Override
         public String toString() {
             return myComponent + "[]";
@@ -532,12 +509,12 @@ public final class TypeConstraints {
         }
 
         @Override
-        public boolean isAssignableFrom(@Nonnull Exact other) {
+        public boolean isAssignableFrom(Exact other) {
             return other instanceof ExactArray exactArray && myComponent.isAssignableFrom(exactArray.myComponent);
         }
 
         @Override
-        public boolean isConvertibleFrom(@Nonnull Exact other) {
+        public boolean isConvertibleFrom(Exact other) {
             if (other instanceof ExactArray exactArray) {
                 return myComponent.isConvertibleFrom(exactArray.myComponent);
             }
@@ -553,7 +530,6 @@ public final class TypeConstraints {
 
         @Override
         public
-        @Nonnull
         Exact getArrayComponent() {
             return myComponent;
         }
@@ -561,10 +537,9 @@ public final class TypeConstraints {
 
     private static final class Unresolved implements TypeConstraint.Exact {
         private final
-        @Nonnull
         String myReference;
 
-        private Unresolved(@Nonnull String reference) {
+        private Unresolved(String reference) {
             myReference = reference;
         }
 
@@ -583,7 +558,6 @@ public final class TypeConstraints {
             return myReference.hashCode();
         }
 
-        @Nonnull
         @Override
         public String toString() {
             return "<unresolved> " + myReference;
@@ -600,12 +574,12 @@ public final class TypeConstraints {
         }
 
         @Override
-        public boolean isAssignableFrom(@Nonnull Exact other) {
+        public boolean isAssignableFrom(Exact other) {
             return other instanceof Unresolved || other instanceof ExactClass;
         }
 
         @Override
-        public boolean isConvertibleFrom(@Nonnull Exact other) {
+        public boolean isConvertibleFrom(Exact other) {
             return other instanceof Unresolved || other instanceof ExactClass || other instanceof ArraySuperInterface;
         }
     }

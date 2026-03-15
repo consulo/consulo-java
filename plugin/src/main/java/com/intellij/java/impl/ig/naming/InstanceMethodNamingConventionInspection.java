@@ -26,7 +26,6 @@ import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstanceMethodNamingConventionInspection extends ConventionInspection {
@@ -35,7 +34,6 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
   private static final int DEFAULT_MAX_LENGTH = 32;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.instanceMethodNamingConventionDisplayName();
   }
@@ -51,7 +49,6 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     String methodName = (String)infos[0];
     if (methodName.length() < getMinLength()) {
@@ -86,7 +83,7 @@ public class InstanceMethodNamingConventionInspection extends ConventionInspecti
   private class NamingConventionsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       if (method.isConstructor() || method.hasModifierProperty(PsiModifier.STATIC)) {
         return;

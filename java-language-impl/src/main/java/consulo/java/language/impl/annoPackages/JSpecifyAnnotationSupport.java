@@ -10,7 +10,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,8 +24,7 @@ public final class JSpecifyAnnotationSupport implements AnnotationPackageSupport
     private static final String DEFAULT_NULLNESS_UNKNOWN = PACKAGE_NAME + "." + "NullUnmarked";
 
     @Override
-    @Nonnull
-    public ContextNullabilityInfo getNullabilityByContainerAnnotation(@Nonnull PsiAnnotation anno,
+    public ContextNullabilityInfo getNullabilityByContainerAnnotation(PsiAnnotation anno,
                                                                       PsiAnnotation.TargetType[] types,
                                                                       boolean superPackage) {
         if (superPackage) {
@@ -53,7 +51,7 @@ public final class JSpecifyAnnotationSupport implements AnnotationPackageSupport
     }
 
     @Override
-    public @Nonnull List<PsiAnnotation> getConflictingContainerAnnotations(@Nonnull PsiAnnotationOwner owner) {
+    public List<PsiAnnotation> getConflictingContainerAnnotations(PsiAnnotationOwner owner) {
         PsiAnnotation marked = owner.findAnnotation(DEFAULT_NOT_NULL);
         PsiAnnotation unmarked = owner.findAnnotation(DEFAULT_NULLNESS_UNKNOWN);
         if (marked != null && unmarked != null) {
@@ -62,7 +60,7 @@ public final class JSpecifyAnnotationSupport implements AnnotationPackageSupport
         return List.of();
     }
 
-    static boolean resolvesToTypeParameter(@Nonnull PsiElement context) {
+    static boolean resolvesToTypeParameter(PsiElement context) {
         PsiType targetType = context instanceof PsiMethod method ? method.getReturnType() :
             context instanceof PsiVariable variable ? variable.getType() :
                 context instanceof PsiJavaCodeReferenceElement && context.getParent() instanceof PsiTypeElement typeElement ? typeElement.getType() :
@@ -71,7 +69,7 @@ public final class JSpecifyAnnotationSupport implements AnnotationPackageSupport
     }
 
     @Override
-    public @Nonnull List<String> getNullabilityAnnotations(@Nonnull Nullability nullability) {
+    public List<String> getNullabilityAnnotations(Nullability nullability) {
         return switch (nullability) {
             case NOT_NULL -> Collections.singletonList(NOT_NULL);
             case NULLABLE -> Collections.singletonList(NULLABLE);

@@ -22,8 +22,7 @@ import consulo.module.Module;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.xml.serializer.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import java.io.File;
@@ -44,7 +43,6 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
     myConfigurationModule = new JavaRunConfigurationModule(project, true);
   }
 
-  @Nonnull
   @Override
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
     SettingsEditorGroup<JarApplicationConfiguration> group = new SettingsEditorGroup<>();
@@ -55,7 +53,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
   }
 
   @Override
-  public void readExternal(@Nonnull Element element) throws InvalidDataException {
+  public void readExternal(Element element) throws InvalidDataException {
     super.readExternal(element);
     JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
     XmlSerializer.deserializeInto(myBean, element);
@@ -82,7 +80,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
   }
 
   @Override
-  public void writeExternal(@Nonnull Element element) throws WriteExternalException {
+  public void writeExternal(Element element) throws WriteExternalException {
     super.writeExternal(element);
     JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
     XmlSerializer.serializeInto(myBean, element, SERIALIZATION_FILTERS);
@@ -103,7 +101,6 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
     JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
   }
 
-  @Nonnull
   public Module[] getModules() {
     Module module = myConfigurationModule.getModule();
     return module != null ? new Module[]{module} : Module.EMPTY_ARRAY;
@@ -111,7 +108,7 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
 
   @Nullable
   @Override
-  public RunProfileState getState(@Nonnull Executor executor, @Nonnull ExecutionEnvironment environment) throws ExecutionException {
+  public RunProfileState getState(Executor executor, ExecutionEnvironment environment) throws ExecutionException {
     return new JarApplicationCommandLineState(this, environment);
   }
 
@@ -189,12 +186,11 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
   }
 
   @Override
-  public void setEnvs(@Nonnull Map<String, String> envs) {
+  public void setEnvs(Map<String, String> envs) {
     myEnvs.clear();
     myEnvs.putAll(envs);
   }
 
-  @Nonnull
   @Override
   public Map<String, String> getEnvs() {
     return myEnvs;

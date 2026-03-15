@@ -1,7 +1,6 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Language;
 
 import java.util.Arrays;
@@ -14,12 +13,10 @@ import java.util.stream.Collectors;
  */
 public final class LiteralNameSuggester {
   private static final class PatternBasedSuggestions {
-    @Nonnull
     private final Pattern pattern;
-    @Nonnull
     private final List<String> names;
 
-    PatternBasedSuggestions(@Nonnull @Language("regexp") String pattern, @Nonnull String... names) {
+    PatternBasedSuggestions(@Language("regexp") String pattern, String... names) {
       this.pattern = Pattern.compile(pattern);
       this.names = Arrays.asList(names);
     }

@@ -43,8 +43,7 @@ import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizable;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import javax.swing.*;
@@ -311,7 +310,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+    public void writeSettings(Element node) throws WriteExternalException {
         super.writeSettings(node);
         if (myIgnoreSimpleAccessors) {
             Element option = new Element(IGNORE_ACCESSORS_ATTR_NAME);
@@ -321,7 +320,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    public void readSettings(@Nonnull Element node) throws InvalidDataException {
+    public void readSettings(Element node) throws InvalidDataException {
         super.readSettings(node);
         Element ignoreAccessorsTag = node.getChild(IGNORE_ACCESSORS_ATTR_NAME);
         if (ignoreAccessorsTag != null) {
@@ -343,14 +342,13 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionJavadocProblemAddTag(myTag, myValue);
         }
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
             try {
                 PsiDocCommentOwner owner = PsiTreeUtil.getParentOfType(descriptor.getEndElement(), PsiDocCommentOwner.class);
@@ -402,8 +400,8 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     @Nullable
     @RequiredReadAction
     public ProblemDescriptor[] checkClass(
-        @Nonnull PsiClass psiClass,
-        @Nonnull InspectionManager manager,
+        PsiClass psiClass,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -537,8 +535,8 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     @Nullable
     @RequiredReadAction
     public ProblemDescriptor[] checkField(
-        @Nonnull PsiField psiField,
-        @Nonnull InspectionManager manager,
+        PsiField psiField,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -583,8 +581,8 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     @Nullable
     @RequiredReadAction
     public ProblemDescriptor[] checkMethod(
-        @Nonnull PsiMethod psiMethod,
-        @Nonnull InspectionManager manager,
+        PsiMethod psiMethod,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -806,7 +804,7 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
         PsiDocTag[] tags,
         Map<PsiClassType, PsiClass> declaredExceptions,
         InspectionManager manager,
-        @Nonnull List<ProblemDescriptor> problems,
+        List<ProblemDescriptor> problems,
         boolean isOnTheFly
     ) {
         for (PsiDocTag tag : tags) {
@@ -903,7 +901,6 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionJavadocProblemAddParamTag(myName);
         }
@@ -1350,19 +1347,16 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionJavadocDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesJavadocIssues();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }
@@ -1379,13 +1373,12 @@ public class JavaDocLocalInspection extends BaseLocalInspectionTool {
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return JavaQuickFixLocalize.addDoctagToCustomTags(myTag);
         }
 
         @Override
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             if (myTag == null) {
                 return;
             }

@@ -6,8 +6,7 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiEnumConstant;
 import consulo.java.analysis.localize.JavaAnalysisLocalize;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.util.*;
@@ -17,29 +16,25 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTy
 
 class DfGenericObjectType extends DfAntiConstantType<Object> implements DfReferenceType {
     private final
-    @Nonnull
     TypeConstraint myConstraint;
     private final
-    @Nonnull
     DfaNullability myNullability;
     private final
-    @Nonnull
     Mutability myMutability;
     private final
     @Nullable
     SpecialField mySpecialField;
     private final
-    @Nonnull
     DfType mySpecialFieldType;
     private final boolean myLocal;
 
     DfGenericObjectType(
-        @Nonnull Set<Object> notValues,
-        @Nonnull TypeConstraint constraint,
-        @Nonnull DfaNullability nullability,
-        @Nonnull Mutability mutability,
+        Set<Object> notValues,
+        TypeConstraint constraint,
+        DfaNullability nullability,
+        Mutability mutability,
         @Nullable SpecialField field,
-        @Nonnull DfType type,
+        DfType type,
         boolean local
     ) {
         super(notValues);
@@ -52,19 +47,16 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
         myLocal = local;
     }
 
-    @Nonnull
     @Override
     public DfaNullability getNullability() {
         return myNullability;
     }
 
-    @Nonnull
     @Override
     public TypeConstraint getConstraint() {
         return myConstraint;
     }
 
-    @Nonnull
     @Override
     public Mutability getMutability() {
         return myMutability;
@@ -81,7 +73,6 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
         return mySpecialField;
     }
 
-    @Nonnull
     @Override
     public DfType getSpecialFieldType() {
         return mySpecialFieldType;
@@ -100,7 +91,6 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
         return myNullability == DfaNullability.NOT_NULL ? result.join(DfTypes.NULL) : result.meet(DfTypes.NOT_NULL_OBJECT);
     }
 
-    @Nonnull
     @Override
     public Set<Object> getNotValues() {
         if (myNullability == DfaNullability.NOT_NULL) {
@@ -111,7 +101,6 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
         return super.getNotValues();
     }
 
-    @Nonnull
     @Override
     public DfReferenceType dropTypeConstraint() {
         return myConstraint == TypeConstraints.TOP
@@ -127,7 +116,6 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
             );
     }
 
-    @Nonnull
     @Override
     public DfReferenceType dropMutability() {
         return myMutability == Mutability.UNKNOWN
@@ -143,7 +131,6 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
             );
     }
 
-    @Nonnull
     @Override
     public DfReferenceType dropLocality() {
         return myLocal
@@ -151,7 +138,6 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
             : this;
     }
 
-    @Nonnull
     @Override
     public DfReferenceType dropNullability() {
         return myNullability == DfaNullability.UNKNOWN
@@ -167,7 +153,6 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
             );
     }
 
-    @Nonnull
     @Override
     public DfReferenceType dropSpecialField() {
         return mySpecialField == null ? this :
@@ -175,7 +160,7 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
     }
 
     @Override
-    public boolean isSuperType(@Nonnull DfType other) {
+    public boolean isSuperType(DfType other) {
         if (other == BOTTOM) {
             return true;
         }
@@ -227,7 +212,7 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
     }
 
     @Override
-    public boolean isMergeable(@Nonnull DfType other) {
+    public boolean isMergeable(DfType other) {
         if (!isSuperType(other)) {
             return false;
         }
@@ -238,9 +223,8 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
         return true;
     }
 
-    @Nonnull
     @Override
-    public DfType join(@Nonnull DfType other) {
+    public DfType join(DfType other) {
         if (isSuperType(other)) {
             return this;
         }
@@ -272,9 +256,8 @@ class DfGenericObjectType extends DfAntiConstantType<Object> implements DfRefere
         return new DfGenericObjectType(notValues, constraint, nullability, mutability, sf, sfType, locality);
     }
 
-    @Nonnull
     @Override
-    public DfType meet(@Nonnull DfType other) {
+    public DfType meet(DfType other) {
         if (other instanceof DfConstantType || other instanceof DfEphemeralReferenceType) {
             return other.meet(this);
         }

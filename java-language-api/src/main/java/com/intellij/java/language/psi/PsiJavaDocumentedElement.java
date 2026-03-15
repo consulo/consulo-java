@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A valid target element for a Javadoc comment (class member, module declaration etc.)

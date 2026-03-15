@@ -22,8 +22,7 @@ import consulo.util.lang.ThreeState;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
@@ -33,7 +32,6 @@ import static com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil.ha
 
 public final class CommonDataflow {
   private static class DataflowPoint {
-    @Nonnull
     DfType myDfType = DfTypes.BOTTOM;
     // empty = top; null = bottom
     @Nullable
@@ -93,10 +91,8 @@ public final class CommonDataflow {
    */
   public static final class DataflowResult {
     private final
-    @Nonnull
     Map<PsiExpression, DataflowPoint> myData = new HashMap<>();
     private
-    @Nonnull
     Map<PsiExpression, DataflowPoint> myDataAssertionsDisabled = myData;
     private final RunnerResult myResult;
 
@@ -104,7 +100,6 @@ public final class CommonDataflow {
       myResult = result;
     }
 
-    @Nonnull
     DataflowResult copy() {
       DataflowResult copy = new DataflowResult(myResult);
       myData.forEach((expression, point) -> copy.myData.put(expression, new DataflowPoint(point)));
@@ -187,7 +182,6 @@ public final class CommonDataflow {
      * @param expression an expression to get its value
      * @return a set of possible values or empty set if not known
      */
-    @Nonnull
     public Set<Object> getExpressionValues(@Nullable PsiExpression expression) {
       DataflowPoint point = myData.get(expression);
       if (point == null) {
@@ -203,7 +197,6 @@ public final class CommonDataflow {
      * May return {@link DfTypes#TOP} if no information from dataflow is known about this expression
      * @see #getDfTypeNoAssertions(PsiExpression)
      */
-    @Nonnull
     public DfType getDfType(PsiExpression expression) {
       DataflowPoint point = myData.get(expression);
       return point == null ? DfTypes.TOP : point.myDfType;
@@ -215,14 +208,12 @@ public final class CommonDataflow {
      * May return {@link DfTypes#TOP} if no information from dataflow is known about this expression
      * @see #getDfType(PsiExpression)
      */
-    @Nonnull
     public DfType getDfTypeNoAssertions(PsiExpression expression) {
       DataflowPoint point = myDataAssertionsDisabled.get(expression);
       return point == null ? DfTypes.TOP : point.myDfType;
     }
   }
 
-  @Nonnull
   private static DataflowResult runDFA(@Nullable PsiElement block) {
     if (block == null) {
       return new DataflowResult(RunnerResult.NOT_APPLICABLE);
@@ -310,7 +301,6 @@ public final class CommonDataflow {
    * @param expression an expression to infer the DfType
    * @return DfType for that expression. May return {@link DfTypes#TOP} if no information from dataflow is known about this expression
    */
-  @Nonnull
   public static DfType getDfType(PsiExpression expression) {
     DataflowResult result = getDataflowResult(expression);
     if (result == null) {
@@ -376,10 +366,10 @@ public final class CommonDataflow {
     }
 
     @Override
-    protected void beforeExpressionPush(@Nonnull DfaValue value,
-                                        @Nonnull PsiExpression expression,
+    protected void beforeExpressionPush(DfaValue value,
+                                        PsiExpression expression,
                                         @Nullable TextRange range,
-                                        @Nonnull DfaMemoryState state) {
+                                        DfaMemoryState state) {
       if (range == null) {
         // Do not track instructions which cover part of expression
         myResult.add(expression, state, value);

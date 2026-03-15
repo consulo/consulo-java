@@ -37,19 +37,16 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class RedundantMethodOverrideInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.redundantMethodOverrideDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.redundantMethodOverrideProblemDescriptor().get();
     }
@@ -61,7 +58,6 @@ public class RedundantMethodOverrideInspection extends BaseInspection {
     }
 
     private static class RedundantMethodOverrideFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.redundantMethodOverrideQuickfix();
@@ -118,7 +114,7 @@ public class RedundantMethodOverrideInspection extends BaseInspection {
             private final PsiMethod myMethod;
             private final PsiMethod mySuperMethod;
 
-            ParameterEquivalenceChecker(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod) {
+            ParameterEquivalenceChecker(PsiMethod method, PsiMethod superMethod) {
                 myMethod = method;
                 mySuperMethod = superMethod;
             }

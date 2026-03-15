@@ -17,7 +17,7 @@ package com.intellij.java.impl.ipp.base;
 
 import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class PsiElementEditorPredicate implements PsiElementPredicate {
   public abstract boolean satisfiedBy(PsiElement element, @Nullable Editor editor);

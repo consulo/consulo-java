@@ -37,8 +37,7 @@ import consulo.ui.event.ComponentEventListener;
 import consulo.ui.event.ValueComponentEvent;
 import consulo.ui.layout.LabeledLayout;
 import consulo.ui.layout.VerticalLayout;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
     private RadioButton myRbAsIs;
@@ -155,7 +154,6 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
         myRbPublic.setValue(true);
     }
 
-    @Nonnull
     @Override
     public Component getComponent() {
         return myLayout;

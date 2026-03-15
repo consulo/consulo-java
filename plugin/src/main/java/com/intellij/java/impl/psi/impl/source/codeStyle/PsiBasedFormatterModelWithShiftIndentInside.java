@@ -32,8 +32,6 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.xml.psi.xml.XmlTokenType;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormattingModel {
   private static final Logger LOG = Logger.getInstance(PsiBasedFormatterModelWithShiftIndentInside.class);
@@ -41,7 +39,7 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
   private final Project myProject;
 
   public PsiBasedFormatterModelWithShiftIndentInside(PsiFile file,
-                                                     @Nonnull Block rootBlock,
+                                                     Block rootBlock,
                                                      FormattingDocumentModel documentModel) {
     super(file, rootBlock, documentModel);
     myProject = file.getProject();
@@ -76,7 +74,7 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
         if (type == TokenType.WHITE_SPACE) {
           String text = prevNode.getText();
 
-          @NonNls String cdataStartMarker = "<![CDATA[";
+          String cdataStartMarker = "<![CDATA[";
           int cdataPos = text.indexOf(cdataStartMarker);
           if (cdataPos != -1 && whiteSpace.indexOf(cdataStartMarker) == -1) {
             whiteSpace = DocumentBasedFormattingModel.mergeWsWithCdataMarker(whiteSpace, text, cdataPos);
@@ -89,7 +87,7 @@ public class PsiBasedFormatterModelWithShiftIndentInside extends PsiBasedFormatt
           type = prevNode != null ? prevNode.getElementType() : null;
         }
 
-        @NonNls String cdataEndMarker = "]]>";
+        String cdataEndMarker = "]]>";
         if (type == XmlTokenType.XML_CDATA_END && whiteSpace.indexOf(cdataEndMarker) == -1) {
           ASTNode at = findElementAt(prevNode.getStartOffset());
 

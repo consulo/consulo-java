@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPolyExpressionUtil;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Set;
 
 public class FunctionalInterfaceParameterizationUtil {

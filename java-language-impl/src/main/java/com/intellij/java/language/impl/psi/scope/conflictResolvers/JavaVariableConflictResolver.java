@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ import java.util.List;
  */
 public class JavaVariableConflictResolver implements PsiConflictResolver{
   @Override
-  public CandidateInfo resolveConflict(@Nonnull List<CandidateInfo> conflicts){
+  public CandidateInfo resolveConflict(List<CandidateInfo> conflicts){
     final int size = conflicts.size();
     if (size == 1){
       return conflicts.get(0);

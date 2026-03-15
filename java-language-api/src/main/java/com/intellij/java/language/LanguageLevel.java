@@ -11,8 +11,7 @@ import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -125,7 +124,6 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
     /**
      * String representation of the level, suitable to pass as a value of compiler's "-source" and "-target" options
      */
-    @Nonnull
     public String getCompilerComplianceDefaultOption() {
         int major = getMajor();
         return major <= 8 ? "1." + major : String.valueOf(major);
@@ -135,12 +133,10 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
         return myPreview;
     }
 
-    @Nonnull
     public JavaLanguageVersion toLangVersion() {
         return myLangVersion;
     }
 
-    @Nonnull
     public LocalizeValue getDescription() {
         return myPresentableText;
     }
@@ -170,7 +166,7 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
      * @return true if this language level is strictly less than the level we are comparing to.
      * A preview level for Java version X is assumed to be between non-preview version X and non-preview version X+1
      */
-    public boolean isLessThan(@Nonnull LanguageLevel level) {
+    public boolean isLessThan(LanguageLevel level) {
         return compareTo(level) < 0;
     }
 
@@ -179,7 +175,6 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
         return this;
     }
 
-    @Nonnull
     @Override
     public String getName() {
         return name();
@@ -188,7 +183,6 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
     /**
      * @return the {@link JavaVersion} object that corresponds to this language level
      */
-    @Nonnull
     public JavaVersion toJavaVersion() {
         return myVersion;
     }
@@ -200,7 +194,6 @@ public enum LanguageLevel implements Named, NamedPointer<LanguageLevel> {
         return myVersion.feature;
     }
 
-    @Nonnull
     public static Set<String> getAllCompilerOptions() {
         Set<String> options = new LinkedHashSet<>();
         for (LanguageLevel level : values()) {

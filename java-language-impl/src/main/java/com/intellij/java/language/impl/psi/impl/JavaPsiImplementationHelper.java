@@ -26,8 +26,7 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole
@@ -55,7 +54,7 @@ public abstract class JavaPsiImplementationHelper {
 
   @Nullable
   @RequiredReadAction
-  public abstract PsiElement getDefaultMemberAnchor(@Nonnull PsiClass psiClass, @Nonnull PsiMember firstPsi);
+  public abstract PsiElement getDefaultMemberAnchor(PsiClass psiClass, PsiMember firstPsi);
 
   public abstract void setupCatchBlock(String exceptionName, PsiElement context, PsiCatchSection element);
 }

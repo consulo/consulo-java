@@ -40,8 +40,7 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -79,19 +78,16 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
         myCallingMethod = PsiTreeUtil.getParentOfType(myMethodCall, PsiMethod.class);
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return InlineParameterHandler.REFACTORING_NAME;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new InlineViewDescriptor(myParameter);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -179,7 +175,7 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         UsageInfo[] usages = refUsages.get();
         InaccessibleExpressionsDetector detector = new InaccessibleExpressionsDetector(conflicts);
@@ -316,7 +312,7 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
         private final PsiVariable myVariable;
 
         @RequiredReadAction
-        public LocalReplacementUsageInfo(@Nonnull PsiReference element, @Nonnull PsiElement replacement) {
+        public LocalReplacementUsageInfo(PsiReference element, PsiElement replacement) {
             super(element);
             myVariable = element.resolve() instanceof PsiVariable variable ? variable : null;
             myReplacement = replacement;
@@ -380,7 +376,7 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
 
         @Override
         @RequiredReadAction
-        public void visitThisExpression(@Nonnull PsiThisExpression thisExpression) {
+        public void visitThisExpression(PsiThisExpression thisExpression) {
             super.visitThisExpression(thisExpression);
             PsiJavaCodeReferenceElement qualifier = thisExpression.getQualifier();
             PsiElement containingClass;
@@ -410,7 +406,7 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
 
         @Override
         @RequiredReadAction
-        public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+        public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
             super.visitReferenceElement(reference);
             if (myMethod.isStatic() && reference.resolve() instanceof PsiClass psiClass && !psiClass.isStatic()) {
                 myConflicts.putValue(
@@ -424,7 +420,7 @@ public class InlineParameterExpressionProcessor extends BaseRefactoringProcessor
 
         @Override
         @RequiredReadAction
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             PsiJavaCodeReferenceElement reference = expression.getClassOrAnonymousClassReference();
             if (reference != null && reference.resolve() instanceof PsiClass refClass) {

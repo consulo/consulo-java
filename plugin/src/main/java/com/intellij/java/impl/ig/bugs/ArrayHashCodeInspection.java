@@ -28,17 +28,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ArrayHashCodeInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.arrayHashCodeDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.arrayHashCodeProblemDescriptor().get();
@@ -65,7 +62,6 @@ public class ArrayHashCodeInspection extends BaseInspection {
             this.deepHashCode = deepHashCode;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return deepHashCode
@@ -107,7 +103,7 @@ public class ArrayHashCodeInspection extends BaseInspection {
 
     private static class ArrayHashCodeVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

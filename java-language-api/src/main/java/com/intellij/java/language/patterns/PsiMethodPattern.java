@@ -28,9 +28,7 @@ import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.BiPredicate;
 
 /**
@@ -41,10 +39,10 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
     super(PsiMethod.class);
   }
 
-  public PsiMethodPattern withParameterCount(@NonNls final int paramCount) {
+  public PsiMethodPattern withParameterCount(final int paramCount) {
     return with(new PatternCondition<PsiMethod>("withParameterCount") {
       @Override
-      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(final PsiMethod method, final ProcessingContext context) {
         return method.getParameterList().getParametersCount() == paramCount;
       }
     });
@@ -56,11 +54,11 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
    * The special values are:<bl><li>"?" - means any type</li><li>".." - instructs pattern to accept the rest of the arguments</li></bl>
    * @return
    */
-  public PsiMethodPattern withParameters(@NonNls final String... inputTypes) {
+  public PsiMethodPattern withParameters(final String... inputTypes) {
     final String[] types = inputTypes.length == 0 ? ArrayUtil.EMPTY_STRING_ARRAY : inputTypes;
     return with(new PatternCondition<PsiMethod>("withParameters") {
       @Override
-      public boolean accepts(@Nonnull final PsiMethod psiMethod, final ProcessingContext context) {
+      public boolean accepts(final PsiMethod psiMethod, final ProcessingContext context) {
         final PsiParameterList parameterList = psiMethod.getParameterList();
         int dotsIndex = -1;
         while (++dotsIndex <types.length) {
@@ -99,7 +97,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
     });
   }
 
-  public PsiMethodPattern definedInClass(@NonNls final String qname) {
+  public PsiMethodPattern definedInClass(final String qname) {
     return definedInClass(PsiJavaPatterns.psiClass().withQualifiedName(qname));
   }
 
@@ -128,7 +126,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern constructor(final boolean isConstructor) {
     return with(new PatternCondition<PsiMethod>("constructor") {
       @Override
-      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(final PsiMethod method, final ProcessingContext context) {
         return method.isConstructor() == isConstructor;
       }
     });
@@ -138,7 +136,7 @@ public class PsiMethodPattern extends PsiMemberPattern<PsiMethod,PsiMethodPatter
   public PsiMethodPattern withThrowsList(final ElementPattern<?> pattern) {
     return with(new PatternCondition<PsiMethod>("withThrowsList") {
       @Override
-      public boolean accepts(@Nonnull final PsiMethod method, final ProcessingContext context) {
+      public boolean accepts(final PsiMethod method, final ProcessingContext context) {
         return pattern.accepts(method.getThrowsList());
       }
     });

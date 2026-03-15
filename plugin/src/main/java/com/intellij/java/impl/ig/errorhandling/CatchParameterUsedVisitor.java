@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
-import jakarta.annotation.Nonnull;
 
 class CatchParameterUsedVisitor extends JavaRecursiveElementVisitor {
 
@@ -32,7 +31,7 @@ class CatchParameterUsedVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (!used) {
       super.visitElement(element);
     }
@@ -40,7 +39,7 @@ class CatchParameterUsedVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @Nonnull PsiReferenceExpression reference) {
+    PsiReferenceExpression reference) {
     if (used) {
       return;
     }

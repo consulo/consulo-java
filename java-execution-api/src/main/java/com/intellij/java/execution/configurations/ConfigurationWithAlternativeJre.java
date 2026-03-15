@@ -15,7 +15,7 @@
  */
 package com.intellij.java.execution.configurations;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author egor

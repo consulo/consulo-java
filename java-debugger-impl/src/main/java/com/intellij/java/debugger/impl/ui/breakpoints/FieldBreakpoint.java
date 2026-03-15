@@ -52,9 +52,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.function.Supplier;
 
@@ -67,14 +65,13 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
     private static final Logger LOG = Logger.getInstance(FieldBreakpoint.class);
     private boolean myIsStatic;
 
-    @NonNls
     public static final Key<FieldBreakpoint> CATEGORY = BreakpointCategory.lookup("field_breakpoints");
 
     protected FieldBreakpoint(Project project, XBreakpoint breakpoint) {
         super(project, breakpoint);
     }
 
-    private FieldBreakpoint(Project project, @Nonnull String fieldName, XBreakpoint breakpoint) {
+    private FieldBreakpoint(Project project, String fieldName, XBreakpoint breakpoint) {
         super(project, breakpoint);
         setFieldName(fieldName);
     }
@@ -260,7 +257,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
         return className != null && !className.isEmpty() ? className + "." + getFieldName() : getFieldName();
     }
 
-    public static FieldBreakpoint create(@Nonnull Project project, String fieldName, XBreakpoint xBreakpoint) {
+    public static FieldBreakpoint create(Project project, String fieldName, XBreakpoint xBreakpoint) {
         FieldBreakpoint breakpoint = new FieldBreakpoint(project, fieldName, xBreakpoint);
         return (FieldBreakpoint) breakpoint.init();
     }
@@ -276,7 +273,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
     }
 
     @Override
-    public boolean isAt(@Nonnull Document document, int offset) {
+    public boolean isAt(Document document, int offset) {
         PsiField field = findField(myProject, document, offset);
         return field == getPsiField();
     }
@@ -347,7 +344,7 @@ public class FieldBreakpoint extends BreakpointWithHighlighter<JavaFieldBreakpoi
     }
 
     @Override
-    public void readExternal(@Nonnull Element breakpointNode) throws InvalidDataException {
+    public void readExternal(Element breakpointNode) throws InvalidDataException {
         super.readExternal(breakpointNode);
         //noinspection HardCodedStringLiteral
         setFieldName(breakpointNode.getAttributeValue("field_name"));

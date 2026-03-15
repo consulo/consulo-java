@@ -30,18 +30,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryEnumModifierInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryEnumModifierDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiElement parent = (PsiElement) infos[1];
         return parent instanceof PsiMethod
@@ -66,7 +63,6 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
             myName = InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(modifier.getText());
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return myName;
@@ -94,7 +90,7 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
 
     private static class UnnecessaryEnumModifierVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (!aClass.isEnum() || !ClassUtils.isInnerClass(aClass) || !aClass.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
@@ -112,7 +108,7 @@ public class UnnecessaryEnumModifierInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (!method.isConstructor() || !method.hasModifierProperty(PsiModifier.PRIVATE)) {
                 return;
             }

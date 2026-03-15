@@ -2,12 +2,10 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.language.psi.PsiPrimitiveType;
-import jakarta.annotation.Nonnull;
 
 /**
  * A type that represents concrete JVM primitive type or subset of values of given type
  */
 public interface DfPrimitiveType extends DfType {
-  @Nonnull
   PsiPrimitiveType getPsiType();
 }

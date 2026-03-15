@@ -23,7 +23,6 @@ import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Set;
@@ -64,7 +63,6 @@ class NonNullInAnalysis extends Analysis<PResult>
 		return meet(delta, result);
 	}
 
-	@Nonnull
 	Equation mkEquation(PResult result)
 	{
 		if(Identity == result || Return == result)
@@ -88,7 +86,6 @@ class NonNullInAnalysis extends Analysis<PResult>
 	private PResult subResult;
 
 	@Override
-	@Nonnull
 	protected Equation analyze() throws AnalyzerException
 	{
 		pendingPush(new ProceedState(createStartState()));

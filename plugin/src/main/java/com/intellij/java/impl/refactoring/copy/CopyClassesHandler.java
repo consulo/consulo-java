@@ -48,8 +48,7 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
@@ -319,7 +318,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
         Map<PsiFile, String> map,
         Object targetDirectory,
         PsiDirectory defaultTargetDirectory,
-        @Nonnull LocalizeValue commandName,
+        LocalizeValue commandName,
         boolean selectInActivePanel
     ) {
         boolean[] result = new boolean[]{false};
@@ -460,7 +459,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
     }
 
     @RequiredUIAccess
-    private static PsiFile copy(@Nonnull PsiFile file, PsiDirectory directory, String name, String relativePath, int[] choice) {
+    private static PsiFile copy(PsiFile file, PsiDirectory directory, String name, String relativePath, int[] choice) {
         String fileName = getNewFileName(file, name);
         if (relativePath != null && !relativePath.isEmpty()) {
             return buildRelativeDir(directory, relativePath).findOrCreateTargetDirectory().copyFileFrom(fileName, file);
@@ -485,10 +484,9 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
         return file.getName();
     }
 
-    @Nonnull
     private static MoveDirectoryWithClassesProcessor.TargetDirectoryWrapper buildRelativeDir(
-        @Nonnull PsiDirectory directory,
-        @Nonnull String relativePath
+        PsiDirectory directory,
+        String relativePath
     ) {
         MoveDirectoryWithClassesProcessor.TargetDirectoryWrapper current = null;
         for (String pathElement : relativePath.split("/")) {
@@ -543,7 +541,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
 
     @RequiredWriteAction
     private static void decodeRefs(
-        @Nonnull PsiElement element,
+        PsiElement element,
         final Map<PsiClass, PsiElement> oldToNewMap,
         final Set<PsiElement> rebindExpressions
     ) {
@@ -557,7 +555,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
 
             @Override
             @RequiredWriteAction
-            public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            public void visitNewExpression(PsiNewExpression expression) {
                 PsiJavaCodeReferenceElement referenceElement = expression.getClassReference();
                 if (referenceElement != null) {
                     decodeRef(referenceElement, oldToNewMap, rebindExpressions);
@@ -567,7 +565,7 @@ public class CopyClassesHandler extends CopyHandlerDelegateBase {
 
             @Override
             @RequiredWriteAction
-            public void visitTypeElement(@Nonnull PsiTypeElement type) {
+            public void visitTypeElement(PsiTypeElement type) {
                 PsiJavaCodeReferenceElement referenceElement = type.getInnermostComponentReferenceElement();
                 if (referenceElement != null) {
                     decodeRef(referenceElement, oldToNewMap, rebindExpressions);

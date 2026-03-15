@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.xml.util.xml.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,10 +41,8 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
   @Nullable
   protected abstract PsiClass getTargetClass(ConvertContext context);
 
-  @Nonnull
   protected abstract PropertyMemberType[] getMemberTypes(ConvertContext context);
 
-  @Nonnull
   protected PsiType getPsiType(ConvertContext context) {
     return PsiType.getJavaLangObject(context.getPsiManager(), (GlobalSearchScope) ProjectScopes.getAllScope(context.getPsiManager().getProject()));
   }
@@ -92,7 +89,6 @@ public abstract class AbstractMemberResolveConverter extends ResolvingConverter<
     return CodeInsightLocalize.errorCannotResolve01(TypePresentationService.getInstance().getTypeName(parent), s).get();
   }
 
-  @Nonnull
   public Collection<? extends PsiMember> getVariants(ConvertContext context) {
     PsiClass psiClass = getTargetClass(context);
     if (psiClass == null) return Collections.emptyList();

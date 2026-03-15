@@ -29,7 +29,6 @@ import consulo.language.util.CharTable;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -123,7 +122,7 @@ public class AnnotationParamListElement extends CompositeElement {
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (child.getElementType() == JavaElementType.NAME_VALUE_PAIR) {
       JavaSourceUtil.deleteSeparatingComma(this, child);
     }

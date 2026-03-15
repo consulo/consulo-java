@@ -28,25 +28,21 @@ import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class StaticCallOnSubclassInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "StaticMethodReferencedViaSubclass";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.staticMethodViaSubclassDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiClass declaringClass = (PsiClass) infos[0];
         PsiClass referencedClass = (PsiClass) infos[1];
@@ -61,7 +57,6 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
     }
 
     private static class StaticCallOnSubclassFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.staticMethodViaSubclassRationalizeQuickfix();
@@ -101,7 +96,7 @@ public class StaticCallOnSubclassInspection extends BaseInspection {
     private static class StaticCallOnSubclassVisitor extends BaseInspectionVisitor {
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression call
+            PsiMethodCallExpression call
         ) {
             super.visitMethodCallExpression(call);
             PsiReferenceExpression methodExpression =

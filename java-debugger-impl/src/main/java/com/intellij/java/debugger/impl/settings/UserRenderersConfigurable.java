@@ -25,7 +25,6 @@ import consulo.ui.ex.action.ActionToolbarPosition;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -87,8 +86,7 @@ public final class UserRenderersConfigurable extends JPanel implements IdeaConfi
     }
 
     @Override
-    @Nonnull
-    public JComponent getComponent(@Nonnull Disposable parentDisposable) {
+    public JComponent getComponent(Disposable parentDisposable) {
         return this;
     }
 
@@ -133,7 +131,7 @@ public final class UserRenderersConfigurable extends JPanel implements IdeaConfi
     }
 
     @Override
-    public void apply(@Nonnull NodeRendererSettings settings) {
+    public void apply(NodeRendererSettings settings) {
         myRendererDataConfigurable.apply();
         flushTo(settings.getCustomRenderers());
 
@@ -150,7 +148,7 @@ public final class UserRenderersConfigurable extends JPanel implements IdeaConfi
     }
 
     @Override
-    public boolean isModified(@Nonnull NodeRendererSettings settings) {
+    public boolean isModified(NodeRendererSettings settings) {
         if (myRendererDataConfigurable.isModified()) {
             return true;
         }
@@ -164,7 +162,7 @@ public final class UserRenderersConfigurable extends JPanel implements IdeaConfi
     }
 
     @Override
-    public void reset(@Nonnull NodeRendererSettings settings) {
+    public void reset(NodeRendererSettings settings) {
         myRendererChooser.removeAllElements();
         final RendererConfiguration rendererConfiguration = settings.getCustomRenderers();
         final ArrayList<NodeRenderer> elementsToSelect = new ArrayList<NodeRenderer>(1);

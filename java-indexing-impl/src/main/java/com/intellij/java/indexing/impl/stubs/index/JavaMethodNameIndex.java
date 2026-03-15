@@ -27,7 +27,6 @@ import consulo.language.psi.stub.StringStubIndexExtension;
 import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -40,14 +39,13 @@ public class JavaMethodNameIndex extends StringStubIndexExtension<PsiMethod> {
     return ourInstance;
   }
 
-  @Nonnull
   @Override
   public StubIndexKey<String, PsiMethod> getKey() {
     return JavaStubIndexKeys.METHODS;
   }
 
   @Override
-  public Collection<PsiMethod> get(final String s, final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiMethod> get(final String s, final Project project, final ProjectAwareSearchScope scope) {
     return super.get(s, project, new JavaSourceFilterScope(scope));
   }
 }

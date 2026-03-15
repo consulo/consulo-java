@@ -29,7 +29,6 @@ import consulo.language.psi.PsiFile;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 	@Override
 	public Pair<PsiType, ConstraintType> inferTypeConstraintFromCallContext(PsiExpression innerMethodCall,
 																																					PsiExpressionList expressionList,
-																																					@Nonnull PsiCallExpression contextCall,
+																																					PsiCallExpression contextCall,
 																																					PsiTypeParameter typeParameter)
 	{
 		PsiExpression[] expressions = expressionList.getExpressions();
@@ -153,8 +152,7 @@ public class ProcessCandidateParameterTypeInferencePolicy extends DefaultParamet
 		return null;
 	}
 
-	@Nonnull
-	protected JavaResolveResult[] getResults(@Nonnull PsiCallExpression contextCall, final int exprIdx) throws MethodProcessorSetupFailedException
+	protected JavaResolveResult[] getResults(PsiCallExpression contextCall, final int exprIdx) throws MethodProcessorSetupFailedException
 	{
 		PsiFile containingFile = contextCall.getContainingFile();
 		final MethodCandidatesProcessor processor = new MethodCandidatesProcessor(contextCall, containingFile);

@@ -28,8 +28,7 @@ import consulo.process.event.ProcessEvent;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -77,20 +76,20 @@ public abstract class SearchForTestsTask extends Task.Backgroundable {
   public void attachTaskToProcess(final ProcessHandler handler) {
     handler.addProcessListener(new ProcessAdapter() {
       @Override
-      public void processTerminated(@Nonnull final ProcessEvent event) {
+      public void processTerminated(final ProcessEvent event) {
         handler.removeProcessListener(this);
         ensureFinished();
       }
 
       @Override
-      public void startNotified(@Nonnull final ProcessEvent event) {
+      public void startNotified(final ProcessEvent event) {
         startSearch();
       }
     });
   }
 
   @Override
-  public void run(@Nonnull ProgressIndicator indicator) {
+  public void run(ProgressIndicator indicator) {
     try {
       myProcessIndicator = indicator;
       mySocket = myServerSocket.accept();
@@ -121,7 +120,7 @@ public abstract class SearchForTestsTask extends Task.Backgroundable {
   /**
    * @return true if runnable has been executed with no write action interference and in "smart" mode
    */
-  private boolean run(@Nonnull Runnable runnable, ProgressIndicator indicator) {
+  private boolean run(Runnable runnable, ProgressIndicator indicator) {
     DumbService dumbService = DumbService.getInstance((Project) myProject);
 
     indicator.checkCanceled();

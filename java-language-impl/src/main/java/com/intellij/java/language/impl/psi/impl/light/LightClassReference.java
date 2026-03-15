@@ -20,25 +20,22 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 public class LightClassReference extends LightClassReferenceBase implements PsiJavaCodeReferenceElement {
 
   private final String myClassName;
   private final PsiElement myContext;
-  @Nonnull
   private final GlobalSearchScope myResolveScope;
   private final PsiClass myRefClass;
   private final PsiSubstitutor mySubstitutor;
 
-  private LightClassReference(@Nonnull PsiManager manager,
-                              @Nonnull @NonNls String text,
-                              @Nullable @NonNls String className,
+  private LightClassReference(PsiManager manager,
+                              String text,
+                              @Nullable String className,
                               @Nullable PsiSubstitutor substitutor,
-                              @Nonnull GlobalSearchScope resolveScope,
+                              GlobalSearchScope resolveScope,
                               @Nullable PsiElement context,
                               @Nullable PsiClass refClass) {
     super(manager, text);
@@ -50,23 +47,23 @@ public class LightClassReference extends LightClassReferenceBase implements PsiJ
     mySubstitutor = substitutor;
   }
 
-  public LightClassReference(@Nonnull PsiManager manager, @Nonnull @NonNls String text, @Nonnull @NonNls String className, @Nonnull GlobalSearchScope resolveScope) {
+  public LightClassReference(PsiManager manager, String text, String className, GlobalSearchScope resolveScope) {
     this(manager, text, className, null, resolveScope, null, null);
   }
 
-  public LightClassReference(@Nonnull PsiManager manager,
-                             @Nonnull @NonNls String text,
-                             @Nonnull @NonNls String className,
+  public LightClassReference(PsiManager manager,
+                             String text,
+                             String className,
                              PsiSubstitutor substitutor,
-                             @Nonnull PsiElement context) {
+                             PsiElement context) {
     this(manager, text, className, substitutor, context.getResolveScope(), context, null);
   }
 
-  public LightClassReference(@Nonnull PsiManager manager, @Nonnull @NonNls String text, @Nonnull PsiClass refClass) {
+  public LightClassReference(PsiManager manager, String text, PsiClass refClass) {
     this(manager, text, refClass, null);
   }
 
-  public LightClassReference(@Nonnull PsiManager manager, @Nonnull @NonNls String text, @Nonnull PsiClass refClass, PsiSubstitutor substitutor) {
+  public LightClassReference(PsiManager manager, String text, PsiClass refClass, PsiSubstitutor substitutor) {
     this(manager, text, null, substitutor, refClass.getResolveScope(), null, refClass);
   }
 
@@ -85,7 +82,6 @@ public class LightClassReference extends LightClassReferenceBase implements PsiJ
   }
 
   @Override
-  @Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     final PsiElement resolved = resolve();
     if (resolved == null) {
@@ -147,7 +143,6 @@ public class LightClassReference extends LightClassReferenceBase implements PsiJ
     return myRefClass == null || myRefClass.isValid();
   }
 
-  @Nonnull
   @Override
   public GlobalSearchScope getResolveScope() {
     return myResolveScope;

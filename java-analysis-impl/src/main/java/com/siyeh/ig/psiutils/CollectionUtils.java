@@ -18,8 +18,7 @@ package com.siyeh.ig.psiutils;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
@@ -231,7 +230,7 @@ public class CollectionUtils {
         return "java.util.WeakHashMap".equals(typeText);
     }
 
-    public static boolean isConstantEmptyArray(@Nonnull PsiField field) {
+    public static boolean isConstantEmptyArray(PsiField field) {
         return field.isStatic() && field.isFinal() && isEmptyArray(field);
     }
 
@@ -244,7 +243,7 @@ public class CollectionUtils {
         return ConstructionUtils.isEmptyArrayInitializer(initializer);
     }
 
-    public static boolean isArrayOrCollectionField(@Nonnull PsiField field) {
+    public static boolean isArrayOrCollectionField(PsiField field) {
         PsiType type = field.getType();
         if (isCollectionClassOrInterface(type)) {
             return true;

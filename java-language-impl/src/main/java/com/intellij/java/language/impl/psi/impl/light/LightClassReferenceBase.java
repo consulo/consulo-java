@@ -26,7 +26,6 @@ import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
 
 abstract class LightClassReferenceBase extends LightElement implements PsiJavaCodeReferenceElement {
 
@@ -34,13 +33,12 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
 
   private LightReferenceParameterList myParameterList;
 
-  protected LightClassReferenceBase(@Nonnull PsiManager manager, @Nonnull String text) {
+  protected LightClassReferenceBase(PsiManager manager, String text) {
     super(manager, JavaLanguage.INSTANCE);
     myText = text;
   }
 
   @Override
-  @Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     final JavaResolveResult result = advancedResolve(incompleteCode);
     if (result != JavaResolveResult.EMPTY) {
@@ -50,7 +48,7 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
   }
 
   @Override
-  public void processVariants(@Nonnull PsiScopeProcessor processor) {
+  public void processVariants(PsiScopeProcessor processor) {
     throw new RuntimeException("Variants are not available for light references");
   }
 
@@ -88,7 +86,6 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
   }
 
   @Override
-  @Nonnull
   public String getCanonicalText() {
     String name = getQualifiedName();
     if (name == null) {
@@ -114,19 +111,19 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
   }
 
   @Override
-  public PsiElement handleElementRename(@Nonnull String newElementName) throws IncorrectOperationException {
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     //TODO?
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     //TODO?
     throw new UnsupportedOperationException();
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceElement(this);
     } else {
@@ -140,12 +137,11 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
   }
 
   @Override
-  public boolean isReferenceTo(@Nonnull PsiElement element) {
+  public boolean isReferenceTo(PsiElement element) {
     return element instanceof PsiClass && getManager().areElementsEquivalent(resolve(), element);
   }
 
   @Override
-  @Nonnull
   public Object[] getVariants() {
     throw new RuntimeException("Variants are not available for light references");
   }
@@ -155,20 +151,17 @@ abstract class LightClassReferenceBase extends LightElement implements PsiJavaCo
     return false;
   }
 
-  @Nonnull
   @Override
   public TextRange getRangeInElement() {
     return new TextRange(0, getTextLength());
   }
 
-  @Nonnull
   @Override
   public PsiElement getElement() {
     return this;
   }
 
   @Override
-  @Nonnull
   public PsiType[] getTypeParameters() {
     return PsiType.EMPTY_ARRAY;
   }

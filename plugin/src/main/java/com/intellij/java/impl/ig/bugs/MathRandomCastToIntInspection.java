@@ -27,18 +27,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MathRandomCastToIntInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.mathRandomCastToIntDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.mathRandomCastToIntProblemDescriptor().get();
@@ -65,7 +61,6 @@ public class MathRandomCastToIntInspection extends BaseInspection {
     }
 
     private static class MathRandomCastToIntegerFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.mathRandomCastToIntQuickfix();
@@ -88,7 +83,7 @@ public class MathRandomCastToIntInspection extends BaseInspection {
             if (operand == null) {
                 return;
             }
-            @NonNls StringBuilder newExpression = new StringBuilder();
+            StringBuilder newExpression = new StringBuilder();
             newExpression.append("(int)(");
             PsiExpression[] operands = polyadicExpression.getOperands();
             for (PsiExpression expression : operands) {
@@ -132,7 +127,7 @@ public class MathRandomCastToIntInspection extends BaseInspection {
             }
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) operand;
             PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            @NonNls String referenceName = methodExpression.getReferenceName();
+            String referenceName = methodExpression.getReferenceName();
             if (!"random".equals(referenceName)) {
                 return;
             }

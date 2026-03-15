@@ -22,24 +22,20 @@ import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TestCaseInProductCodeInspectionBase extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.testCaseInProductCodeDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "JUnitTestCaseInProductSource";
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.testCaseInProductCodeProblemDescriptor().get();
     }
@@ -57,7 +53,7 @@ public class TestCaseInProductCodeInspectionBase extends BaseInspection {
     private static class TestCaseInProductCodeVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (TestUtils.isInTestSourceContent(aClass) || !TestUtils.isJUnitTestClass(aClass)) {
                 return;
             }

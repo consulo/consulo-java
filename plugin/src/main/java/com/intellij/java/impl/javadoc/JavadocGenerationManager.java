@@ -31,7 +31,6 @@ import consulo.platform.base.localize.CommonLocalize;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.xml.serializer.XmlSerializer;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
@@ -44,7 +43,7 @@ public final class JavadocGenerationManager implements PersistentStateComponent<
   private final JavadocConfiguration myConfiguration = new JavadocConfiguration();
   private final Project myProject;
 
-  public static JavadocGenerationManager getInstance(@Nonnull Project project) {
+  public static JavadocGenerationManager getInstance(Project project) {
     return ServiceManager.getService(project, JavadocGenerationManager.class);
   }
 
@@ -63,7 +62,6 @@ public final class JavadocGenerationManager implements PersistentStateComponent<
     XmlSerializer.deserializeInto(myConfiguration, state);
   }
 
-  @Nonnull
   public JavadocConfiguration getConfiguration() {
     return myConfiguration;
   }

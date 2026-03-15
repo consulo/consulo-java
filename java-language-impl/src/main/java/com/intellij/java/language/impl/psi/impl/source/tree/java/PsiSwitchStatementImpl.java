@@ -12,7 +12,6 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.ast.ChildRoleBase;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
 
 public class PsiSwitchStatementImpl extends PsiSwitchBlockImpl implements PsiSwitchStatement
 {
@@ -45,7 +44,7 @@ public class PsiSwitchStatementImpl extends PsiSwitchBlockImpl implements PsiSwi
 	}
 
 	@Override
-	public int getChildRole(@Nonnull ASTNode child)
+	public int getChildRole(ASTNode child)
 	{
 		LOG.assertTrue(child.getTreeParent() == this);
 		IElementType i = child.getElementType();
@@ -73,7 +72,7 @@ public class PsiSwitchStatementImpl extends PsiSwitchBlockImpl implements PsiSwi
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

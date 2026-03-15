@@ -17,10 +17,8 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmModifier;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.psi.PsiJvmConversionHelper.getListAnnotations;
 
@@ -45,23 +43,22 @@ public interface PsiModifierListOwner extends PsiElement {
      * @param name the name of the modifier to check.
      * @return true if the element has the modifier, false otherwise
      */
-    boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name);
+    boolean hasModifierProperty(@PsiModifier.ModifierConstant String name);
 
-    @Nonnull
     default PsiAnnotation[] getAnnotations() {
         return getListAnnotations(this);
     }
 
-    default boolean hasModifier(@Nonnull JvmModifier modifier) {
+    default boolean hasModifier(JvmModifier modifier) {
         return PsiJvmConversionHelper.hasListModifier(this, modifier);
     }
 
     @Nullable
-    default PsiAnnotation getAnnotation(@Nonnull String fqn) {
+    default PsiAnnotation getAnnotation(String fqn) {
         return PsiJvmConversionHelper.getListAnnotation(this, fqn);
     }
 
-    default boolean hasAnnotation(@Nonnull String fqn) {
+    default boolean hasAnnotation(String fqn) {
         return PsiJvmConversionHelper.hasListAnnotation(this, fqn);
     }
 }

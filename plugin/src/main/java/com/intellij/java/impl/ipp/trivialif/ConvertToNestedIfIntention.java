@@ -29,8 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna
@@ -39,14 +38,12 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertToNestedIfIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ConvertToNestedIfIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.convertToNestedIfIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new PsiElementPredicate() {
 
@@ -67,7 +64,7 @@ public class ConvertToNestedIfIntention extends Intention {
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) {
+    public void processIntention(PsiElement element) {
         PsiReturnStatement returnStatement = (PsiReturnStatement) element;
         PsiExpression returnValue = returnStatement.getReturnValue();
         if (returnValue == null || ErrorUtil.containsDeepError(returnValue)) {

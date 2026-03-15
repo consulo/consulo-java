@@ -29,16 +29,13 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TransientFieldInNonSerializableClassInspection extends BaseInspection {
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.transientFieldInNonSerializableClassDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiField field = (PsiField) infos[0];
         return InspectionGadgetsLocalize.transientFieldInNonSerializableClassProblemDescriptor(field.getName()).get();
@@ -49,7 +46,6 @@ public class TransientFieldInNonSerializableClassInspection extends BaseInspecti
     }
 
   private static class TransientFieldInNonSerializableClassFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.transientFieldInNonSerializableClassRemoveQuickfix();
@@ -67,7 +63,7 @@ public class TransientFieldInNonSerializableClassInspection extends BaseInspecti
 
     private static class TransientFieldInNonSerializableClassVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             if (!field.hasModifierProperty(PsiModifier.TRANSIENT)) {
                 return;
             }

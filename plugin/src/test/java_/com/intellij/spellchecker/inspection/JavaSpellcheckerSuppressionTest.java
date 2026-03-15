@@ -15,13 +15,11 @@
  */
 package com.intellij.spellchecker.inspection;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 
 public abstract class JavaSpellcheckerSuppressionTest extends LightQuickFixTestCase
 {
-	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{

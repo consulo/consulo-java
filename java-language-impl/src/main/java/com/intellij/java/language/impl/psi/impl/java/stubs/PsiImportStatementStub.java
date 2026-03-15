@@ -22,7 +22,7 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import consulo.language.psi.stub.StubElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface PsiImportStatementStub extends StubElement<PsiImportStatementBase> {
   boolean isStatic();

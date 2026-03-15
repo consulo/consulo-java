@@ -34,7 +34,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 public class ExtractClassHandler implements ElementsHandler {
     protected static String getHelpID() {
@@ -48,7 +47,7 @@ public class ExtractClassHandler implements ElementsHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
         CaretModel caretModel = editor.getCaretModel();
@@ -142,7 +141,7 @@ public class ExtractClassHandler implements ElementsHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length != 1) {
             return;
         }

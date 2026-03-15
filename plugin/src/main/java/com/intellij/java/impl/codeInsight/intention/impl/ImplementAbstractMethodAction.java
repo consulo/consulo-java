@@ -40,8 +40,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ImplementAbstractMethodAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
@@ -52,7 +51,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     int offset = editor.getCaretModel().getOffset();
     PsiMethod method = findMethod(file, offset);
 
@@ -119,7 +118,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
     }
 
     @Override
-    public boolean execute(@Nonnull PsiElement element) {
+    public boolean execute(PsiElement element) {
       if (element instanceof PsiClass) {
         PsiClass aClass = (PsiClass)element;
         if (aClass.isInterface()) return true;
@@ -170,7 +169,7 @@ public class ImplementAbstractMethodAction extends BaseIntentionAction {
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiMethod method = findMethod(file, editor.getCaretModel().getOffset());
     if (method == null) return;
     if (!project.getApplication().isUnitTestMode() && !editor.getContentComponent().isShowing()) return;

@@ -20,7 +20,6 @@ import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -28,7 +27,6 @@ import jakarta.annotation.Nonnull;
 public abstract class RenameLocalTest extends LightRefactoringTestCase {
   private static final String BASE_PATH = "/refactoring/renameLocal/";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

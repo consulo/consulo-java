@@ -27,19 +27,16 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "RedundantConditionalExpression";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryConditionalExpressionDisplayName();
@@ -53,7 +50,6 @@ public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
         return new UnnecessaryConditionalExpressionVisitor();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiConditionalExpression expression = (PsiConditionalExpression) infos[0];
         return InspectionGadgetsLocalize.simplifiableConditionalExpressionProblemDescriptor(calculateReplacementExpression(expression))
@@ -83,7 +79,6 @@ public class UnnecessaryConditionalExpressionInspection extends BaseInspection {
     private static class UnnecessaryConditionalFix
         extends InspectionGadgetsFix {
 
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();
         }

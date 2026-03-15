@@ -25,7 +25,6 @@ import consulo.module.Module;
 import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.project.Project;
 import consulo.util.concurrent.AsyncResult;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -37,16 +36,15 @@ import java.util.Collection;
 @Singleton
 @ServiceImpl
 public class JavaProjectModelModificationServiceImpl extends JavaProjectModelModificationService {
-    @Nonnull
     private final Project myProject;
 
     @Inject
-    public JavaProjectModelModificationServiceImpl(@Nonnull Project project) {
+    public JavaProjectModelModificationServiceImpl(Project project) {
         myProject = project;
     }
 
     @Override
-    public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Module to, @Nonnull DependencyScope scope) {
+    public AsyncResult<Void> addDependency(Module from, Module to, DependencyScope scope) {
         AsyncResult<Void> asyncResult = myProject.getExtensionPoint(JavaProjectModelModifier.class)
             .computeSafeIfAny(modifier -> modifier.addModuleDependency(from, to, scope));
         return asyncResult != null ? asyncResult : AsyncResult.rejected();
@@ -54,9 +52,9 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
 
     @Override
     public AsyncResult<Void> addDependency(
-        @Nonnull Collection<Module> from,
-        @Nonnull ExternalLibraryDescriptor libraryDescriptor,
-        @Nonnull DependencyScope scope
+        Collection<Module> from,
+        ExternalLibraryDescriptor libraryDescriptor,
+        DependencyScope scope
     ) {
         AsyncResult<Void> asyncResult = myProject.getExtensionPoint(JavaProjectModelModifier.class)
             .computeSafeIfAny(modifier -> modifier.addExternalLibraryDependency(from, libraryDescriptor, scope));
@@ -64,14 +62,14 @@ public class JavaProjectModelModificationServiceImpl extends JavaProjectModelMod
     }
 
     @Override
-    public AsyncResult<Void> addDependency(@Nonnull Module from, @Nonnull Library library, @Nonnull DependencyScope scope) {
+    public AsyncResult<Void> addDependency(Module from, Library library, DependencyScope scope) {
         AsyncResult<Void> asyncResult = myProject.getExtensionPoint(JavaProjectModelModifier.class)
             .computeSafeIfAny(modifier -> modifier.addLibraryDependency(from, library, scope));
         return asyncResult != null ? asyncResult : AsyncResult.rejected();
     }
 
     @Override
-    public AsyncResult<Void> changeLanguageLevel(@Nonnull Module module, @Nonnull LanguageLevel languageLevel) {
+    public AsyncResult<Void> changeLanguageLevel(Module module, LanguageLevel languageLevel) {
         AsyncResult<Void> asyncResult = myProject.getExtensionPoint(JavaProjectModelModifier.class)
             .computeSafeIfAny(modifier -> modifier.changeLanguageLevel(module, languageLevel));
         return asyncResult != null ? asyncResult : AsyncResult.rejected();

@@ -17,7 +17,7 @@
 package com.intellij.java.language.impl.ui;
 
 import com.intellij.java.language.psi.PsiJavaPackage;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 

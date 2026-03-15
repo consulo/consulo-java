@@ -22,26 +22,22 @@ import com.siyeh.ig.psiutils.TestUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "BeforeOrAfterWithIncorrectSignature";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.beforeOrAfterIsPublicVoidNoArgDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.beforeOrAfterIsPublicVoidNoArgProblemDescriptor().get();
     }
@@ -55,7 +51,7 @@ public class BeforeOrAfterIsPublicVoidNoArgInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //note: no call to super;
             if (!TestUtils.isJUnit4BeforeOrAfterMethod(method)) {
                 return;

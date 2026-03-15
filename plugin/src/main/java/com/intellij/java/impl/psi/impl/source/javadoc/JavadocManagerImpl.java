@@ -32,8 +32,7 @@ import consulo.project.Project;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +81,6 @@ public class JavadocManagerImpl implements JavadocManager {
   }
 
   @Override
-  @Nonnull
   public JavadocTagInfo[] getTagInfos(PsiElement context) {
     List<JavadocTagInfo> result = new ArrayList<>();
 

@@ -1,7 +1,5 @@
-import jakarta.annotation.Nonnull;
 
 public class Test {
-    @Nonnull
     public Object foo() {
         return new Object();
     }

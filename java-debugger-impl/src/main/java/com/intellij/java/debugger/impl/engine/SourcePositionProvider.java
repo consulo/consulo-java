@@ -23,8 +23,7 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class SourcePositionProvider {
@@ -32,18 +31,18 @@ public abstract class SourcePositionProvider {
 
     @Nullable
     public static SourcePosition getSourcePosition(
-        @Nonnull NodeDescriptor descriptor,
-        @Nonnull Project project,
-        @Nonnull DebuggerContextImpl context
+        NodeDescriptor descriptor,
+        Project project,
+        DebuggerContextImpl context
     ) {
         return getSourcePosition(descriptor, project, context, false);
     }
 
     @Nullable
     public static SourcePosition getSourcePosition(
-        @Nonnull NodeDescriptor descriptor,
-        @Nonnull Project project,
-        @Nonnull DebuggerContextImpl context,
+        NodeDescriptor descriptor,
+        Project project,
+        DebuggerContextImpl context,
         boolean nearest
     ) {
         for (SourcePositionProvider provider : EP_NAME.getExtensions()) {
@@ -57,9 +56,9 @@ public abstract class SourcePositionProvider {
 
     @Nullable
     protected abstract SourcePosition computeSourcePosition(
-        @Nonnull NodeDescriptor descriptor,
-        @Nonnull Project project,
-        @Nonnull DebuggerContextImpl context,
+        NodeDescriptor descriptor,
+        Project project,
+        DebuggerContextImpl context,
         boolean nearest
     );
 }

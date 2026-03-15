@@ -36,8 +36,7 @@ import consulo.project.Project;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.PrimitiveIterator;
@@ -62,7 +61,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
      */
     @RequiredReadAction
     @Nullable
-    public static PsiClass getClassToPerformStaticImport(@Nonnull PsiElement element) {
+    public static PsiClass getClassToPerformStaticImport(PsiElement element) {
         if (!PsiUtil.isLanguageLevel5OrHigher(element)) {
             return null;
         }
@@ -107,7 +106,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+    public boolean isAvailable(Project project, Editor editor, PsiElement element) {
         PsiClass classToImport = getClassToPerformStaticImport(element);
         if (classToImport != null) {
             setText(CodeInsightLocalize.intentionAddOnDemandStaticImportText(classToImport.getQualifiedName()));
@@ -196,7 +195,7 @@ public class AddOnDemandStaticImportAction extends PsiElementBaseIntentionAction
 
     @Override
     @RequiredReadAction
-    public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
         invoke(project, element.getContainingFile(), editor, element);
     }
 

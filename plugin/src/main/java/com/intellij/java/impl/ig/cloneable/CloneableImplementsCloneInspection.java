@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -40,21 +39,18 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
      */
     public boolean m_ignoreCloneableDueToInheritance = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "CloneableClassWithoutClone";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.cloneableClassWithoutCloneDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.cloneableClassWithoutCloneProblemDescriptor().get();
     }
@@ -71,7 +67,6 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
     }
 
     private static class CreateCloneMethodFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.cloneableClassWithoutCloneQuickfix();
@@ -103,7 +98,7 @@ public class CloneableImplementsCloneInspection extends BaseInspection {
     private class CloneableImplementsCloneVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so it doesn't drill down
             if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
                 return;

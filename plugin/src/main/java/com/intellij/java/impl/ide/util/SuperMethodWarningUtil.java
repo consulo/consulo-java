@@ -36,7 +36,6 @@ import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -46,15 +45,13 @@ public class SuperMethodWarningUtil {
     private SuperMethodWarningUtil() {
     }
 
-    @Nonnull
     @RequiredUIAccess
-    public static PsiMethod[] checkSuperMethods(PsiMethod method, @Nonnull LocalizeValue actionString) {
+    public static PsiMethod[] checkSuperMethods(PsiMethod method, LocalizeValue actionString) {
         return checkSuperMethods(method, actionString, null);
     }
 
-    @Nonnull
     @RequiredUIAccess
-    public static PsiMethod[] checkSuperMethods(PsiMethod method, @Nonnull LocalizeValue actionString, Collection<PsiElement> ignore) {
+    public static PsiMethod[] checkSuperMethods(PsiMethod method, LocalizeValue actionString, Collection<PsiElement> ignore) {
         PsiClass aClass = method.getContainingClass();
         if (aClass == null) {
             return new PsiMethod[]{method};
@@ -102,7 +99,7 @@ public class SuperMethodWarningUtil {
     }
 
     @RequiredUIAccess
-    public static PsiMethod checkSuperMethod(PsiMethod method, @Nonnull LocalizeValue actionString) {
+    public static PsiMethod checkSuperMethod(PsiMethod method, LocalizeValue actionString) {
         PsiClass aClass = method.getContainingClass();
         if (aClass == null) {
             return method;
@@ -143,7 +140,7 @@ public class SuperMethodWarningUtil {
     @RequiredReadAction
     public static void checkSuperMethod(
         PsiMethod method,
-        @Nonnull LocalizeValue actionString,
+        LocalizeValue actionString,
         PsiElementProcessor<PsiMethod> processor,
         Editor editor
     ) {
@@ -193,7 +190,7 @@ public class SuperMethodWarningUtil {
     }
 
     @RequiredUIAccess
-    public static int askWhetherShouldAnnotateBaseMethod(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod) {
+    public static int askWhetherShouldAnnotateBaseMethod(PsiMethod method, PsiMethod superMethod) {
         LocalizeValue implement = !method.isAbstract() && superMethod.isAbstract()
             ? InspectionLocalize.inspectionAnnotateQuickfixImplements()
             : InspectionLocalize.inspectionAnnotateQuickfixOverrides();

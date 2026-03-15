@@ -25,18 +25,15 @@ import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CloneInNonCloneableClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.cloneMethodInNonCloneableClassDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiClass aClass = (PsiClass) infos[0];
         String className = aClass.getName();
@@ -60,7 +57,7 @@ public class CloneInNonCloneableClassInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (!CloneUtils.isClone(method)) {
                 return;
             }

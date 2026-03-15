@@ -30,7 +30,6 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Header;
 import org.osmorc.manifest.lang.psi.impl.HeaderImpl;
 import org.osmorc.manifest.lang.psi.stub.HeaderStub;
@@ -48,7 +47,7 @@ public class HeaderElementType extends AbstractManifestStubElementType<HeaderStu
 
 
   @Override
-  public Header createPsi(@Nonnull HeaderStub stub) {
+  public Header createPsi(HeaderStub stub) {
     return new HeaderImpl(stub, this);
   }
 
@@ -58,19 +57,18 @@ public class HeaderElementType extends AbstractManifestStubElementType<HeaderStu
   }
 
   @Override
-  public HeaderStub createStub(@Nonnull Header psi, StubElement parentStub) {
+  public HeaderStub createStub(Header psi, StubElement parentStub) {
     return new HeaderStubImpl(parentStub, psi.getName());
   }
 
-  public void serialize(@Nonnull HeaderStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(HeaderStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
   }
 
-  @Nonnull
-  public HeaderStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public HeaderStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new HeaderStubImpl(parentStub, dataStream.readName().toString());
   }
 
-  public void indexStub(@Nonnull HeaderStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(HeaderStub stub, IndexSink sink) {
   }
 }

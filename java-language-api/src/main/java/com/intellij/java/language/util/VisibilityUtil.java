@@ -33,10 +33,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 
 public class VisibilityUtil {
     public static final String ESCALATE_VISIBILITY = "EscalateVisible";
@@ -109,7 +106,6 @@ public class VisibilityUtil {
         return PsiModifier.PACKAGE_LOCAL;
     }
 
-    @Nonnull
     public static String getVisibilityString(@PsiModifier.ModifierConstant String visibilityModifier) {
         if (PsiModifier.PACKAGE_LOCAL.equals(visibilityModifier)) {
             return "";
@@ -117,9 +113,7 @@ public class VisibilityUtil {
         return visibilityModifier;
     }
 
-    @Nls
-    @Nonnull
-    public static String getVisibilityStringToDisplay(@Nonnull PsiMember member) {
+    public static String getVisibilityStringToDisplay(PsiMember member) {
         if (member.isPublic()) {
             return toPresentableText(PsiModifier.PUBLIC);
         }
@@ -132,8 +126,7 @@ public class VisibilityUtil {
         return toPresentableText(PsiModifier.PACKAGE_LOCAL);
     }
 
-    @Nonnull
-    public static String toPresentableText(@PsiModifier.ModifierConstant @Nonnull String modifier) {
+    public static String toPresentableText(@PsiModifier.ModifierConstant String modifier) {
         return PsiBundle.visibilityPresentation(modifier);
     }
 

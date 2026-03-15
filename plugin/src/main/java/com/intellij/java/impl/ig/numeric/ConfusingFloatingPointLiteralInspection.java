@@ -27,21 +27,18 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ConfusingFloatingPointLiteralInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.confusingFloatingPointLiteralDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.confusingFloatingPointLiteralProblemDescriptor().get();
   }
@@ -54,7 +51,6 @@ public class ConfusingFloatingPointLiteralInspection
   private static class ConfusingFloatingPointLiteralFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.confusingFloatingPointLiteralChangeQuickfix();
     }
@@ -128,7 +124,7 @@ public class ConfusingFloatingPointLiteralInspection
 
     @Override
     public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression literal) {
+      PsiLiteralExpression literal) {
       super.visitLiteralExpression(literal);
       PsiType type = literal.getType();
       if (type == null) {

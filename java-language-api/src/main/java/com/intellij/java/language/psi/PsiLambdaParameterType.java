@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * A type which represents an omitted type for parameter of lambda expression.
@@ -25,18 +24,16 @@ import jakarta.annotation.Nonnull;
 public class PsiLambdaParameterType extends PsiType {
   private final PsiParameter myParameter;
 
-  public PsiLambdaParameterType(@Nonnull PsiParameter parameter) {
+  public PsiLambdaParameterType(PsiParameter parameter) {
     super(TypeAnnotationProvider.EMPTY);
     myParameter = parameter;
   }
 
-  @Nonnull
   @Override
   public String getPresentableText() {
     return getCanonicalText();
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText() {
     return "<lambda parameter>";
@@ -48,12 +45,12 @@ public class PsiLambdaParameterType extends PsiType {
   }
 
   @Override
-  public boolean equalsToText(@Nonnull String text) {
+  public boolean equalsToText(String text) {
     return false;
   }
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(PsiTypeVisitor<A> visitor) {
     return visitor.visitType(this);
   }
 
@@ -62,7 +59,6 @@ public class PsiLambdaParameterType extends PsiType {
     return null;
   }
 
-  @Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     return PsiType.EMPTY_ARRAY;

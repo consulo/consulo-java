@@ -32,8 +32,7 @@ import consulo.ui.ex.awt.MessageDialogBuilder;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,14 +40,14 @@ import java.util.List;
 
 public class JvmDropFrameActionHandler implements XDropFrameHandler {
     private static final Logger LOG = Logger.getInstance(JvmDropFrameActionHandler.class);
-    private final @Nonnull DebuggerSession myDebugSession;
+    private final DebuggerSession myDebugSession;
 
-    public JvmDropFrameActionHandler(@Nonnull DebuggerSession process) {
+    public JvmDropFrameActionHandler(DebuggerSession process) {
         myDebugSession = process;
     }
 
     @Override
-    public boolean canDrop(@Nonnull XStackFrame frame) {
+    public boolean canDrop(XStackFrame frame) {
         //noinspection SimplifiableIfStatement
         if (frame instanceof JavaStackFrame javaStackFrame) {
             return javaStackFrame.getStackFrameProxy().getVirtualMachine().canPopFrames() && javaStackFrame.getDescriptor().canDrop();
@@ -58,7 +57,7 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
 
     @Override
     @RequiredUIAccess
-    public void drop(@Nonnull XStackFrame frame) {
+    public void drop(XStackFrame frame) {
         if (frame instanceof JavaStackFrame stackFrame) {
             var project = myDebugSession.getProject();
             var debugProcess = myDebugSession.getProcess();
@@ -71,12 +70,12 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                     stackFrame,
                     new XDebuggerEvaluator.XEvaluationCallback() {
                         @Override
-                        public void evaluated(@Nonnull XValue result) {
+                        public void evaluated(XValue result) {
                             popFrame(debugProcess, debuggerContext, stackFrame);
                         }
 
                         @Override
-                        public void errorOccurred(@Nonnull LocalizeValue errorMessage) {
+                        public void errorOccurred(LocalizeValue errorMessage) {
                             showError(
                                 project,
                                 JavaDebuggerLocalize.errorExecutingFinally(errorMessage),
@@ -154,7 +153,6 @@ public class JvmDropFrameActionHandler implements XDropFrameHandler {
                                 return false;
                             }
 
-                            @Nonnull
                             @Override
                             public LocalizeValue getDoNotShowMessage() {
                                 return CommonLocalize.dialogOptionsDoNotShow();

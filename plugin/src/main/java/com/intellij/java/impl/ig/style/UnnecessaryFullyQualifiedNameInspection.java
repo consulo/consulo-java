@@ -37,7 +37,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.project.ui.wm.StatusBar;
 import consulo.project.ui.wm.WindowManager;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -55,7 +54,6 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
   public boolean m_ignoreJavadoc = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameDisplayName();
   }
@@ -67,7 +65,6 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     boolean inSameFile = (Boolean)infos[0];
     return inSameFile
@@ -89,7 +86,6 @@ public class UnnecessaryFullyQualifiedNameInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return inSameFile
         ? InspectionGadgetsLocalize.unnecessaryFullyQualifiedNameRemoveQuickfix()

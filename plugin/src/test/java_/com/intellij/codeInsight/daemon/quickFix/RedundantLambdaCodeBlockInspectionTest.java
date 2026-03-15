@@ -15,14 +15,12 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInspection.RedundantLambdaCodeBlockInspection;
 
 
 public abstract class RedundantLambdaCodeBlockInspectionTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

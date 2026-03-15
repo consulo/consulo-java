@@ -17,7 +17,6 @@ package com.intellij.java.impl.ig.fixes;
 
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.ProblemDescriptor;
 import com.intellij.java.language.psi.PsiExpression;
@@ -29,7 +28,7 @@ import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.psiutils.FinalUtils;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
 
@@ -39,9 +38,8 @@ public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
     this.fieldName = fieldName;
   }
 
-  @Nonnull
   public static InspectionGadgetsFix buildFixUnconditional(
-    @Nonnull PsiField field) {
+    PsiField field) {
     return new MakeFieldStaticFinalFix(field.getName());
   }
 
@@ -57,7 +55,6 @@ public class MakeFieldStaticFinalFix extends InspectionGadgetsFix {
     return new MakeFieldStaticFinalFix(field.getName());
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.makeStaticFinalQuickfix(fieldName);
   }

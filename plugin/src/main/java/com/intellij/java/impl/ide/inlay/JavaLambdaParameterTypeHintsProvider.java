@@ -11,7 +11,6 @@ import consulo.language.editor.inlay.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaLambdaParameterTypeHintsProvider implements DeclarativeInlayHintsProvider {
@@ -22,37 +21,31 @@ public class JavaLambdaParameterTypeHintsProvider implements DeclarativeInlayHin
         return new Collector();
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return PROVIDER_ID;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return JavaLocalize.settingsInlayJavaImplicitTypesLambda();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDescription() {
         return JavaLocalize.settingsInlayJavaImplicitTypesLambdaDescription();
     }
 
-    @Nonnull
     @Override
     public InlayGroup getGroup() {
         return InlayGroup.TYPES_GROUP;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getPreviewFileText() {
         return JavaLocalize.inlayprovidersJavaImplicitTypesLambda();

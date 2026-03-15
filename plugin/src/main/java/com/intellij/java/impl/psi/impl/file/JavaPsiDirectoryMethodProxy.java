@@ -27,7 +27,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
@@ -35,7 +34,7 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
 
 
   @Override
-  public boolean checkCreateFile(@Nonnull PsiDirectory psiDirectory, @Nonnull String name) throws IncorrectOperationException {
+  public boolean checkCreateFile(PsiDirectory psiDirectory, String name) throws IncorrectOperationException {
     FileType type = FileTypeManager.getInstance().getFileTypeByFileName(name);
     if (type == JavaClassFileType.INSTANCE) {
       throw new IncorrectOperationException("Cannot create class-file");
@@ -45,7 +44,7 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
   }
 
   @Override
-  public PsiElement add(@Nonnull PsiDirectory psiDirectory, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement add(PsiDirectory psiDirectory, PsiElement element) throws IncorrectOperationException {
     if (element instanceof PsiClass) {
       String name = ((PsiClass) element).getName();
       if (name != null) {
@@ -61,7 +60,7 @@ public class JavaPsiDirectoryMethodProxy implements PsiDirectoryMethodProxy {
   }
 
   @Override
-  public boolean checkAdd(@Nonnull PsiDirectory psiDirectory, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public boolean checkAdd(PsiDirectory psiDirectory, PsiElement element) throws IncorrectOperationException {
     if (element instanceof PsiClass) {
       if (((PsiClass) element).getContainingClass() == null) {
         JavaDirectoryServiceImpl.checkCreateClassOrInterface(psiDirectory, ((PsiClass) element).getName());

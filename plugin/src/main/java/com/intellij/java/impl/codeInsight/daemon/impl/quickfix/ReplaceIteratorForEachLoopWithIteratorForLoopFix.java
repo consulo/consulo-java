@@ -28,9 +28,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Pavel.Dolgov
@@ -38,11 +36,10 @@ import jakarta.annotation.Nonnull;
 public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements SyntheticIntentionAction {
   private final PsiForeachStatement myStatement;
 
-  public ReplaceIteratorForEachLoopWithIteratorForLoopFix(@Nonnull PsiForeachStatement statement) {
+  public ReplaceIteratorForEachLoopWithIteratorForLoopFix(PsiForeachStatement statement) {
     myStatement = statement;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Replace 'for each' loop with iterator 'for' loop");
@@ -54,12 +51,12 @@ public class ReplaceIteratorForEachLoopWithIteratorForLoopFix implements Synthet
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myStatement.isValid() && myStatement.getManager().isInProject(myStatement);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiExpression iteratedValue = myStatement.getIteratedValue();
     if (iteratedValue == null) {
       return;

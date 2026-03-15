@@ -31,20 +31,17 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class NegatedEqualityExpressionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.negatedEqualityExpressionDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.negatedEqualityExpressionProblemDescriptor(infos[0]).get();
@@ -56,7 +53,6 @@ public class NegatedEqualityExpressionInspection extends BaseInspection {
     }
 
     private static class NegatedEqualityExpressionFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.negatedEqualityExpressionQuickfix();

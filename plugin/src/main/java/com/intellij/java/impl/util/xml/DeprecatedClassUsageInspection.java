@@ -35,8 +35,7 @@ import consulo.xml.psi.XmlElementVisitor;
 import consulo.xml.psi.xml.XmlAttribute;
 import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -49,17 +48,15 @@ public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionToo
         return XMLLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
     }
 
-    @Nonnull
     @Override
-    public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder,
+    public PsiElementVisitor buildVisitor(final ProblemsHolder holder,
                                           boolean isOnTheFly,
-                                          @Nonnull LocalInspectionToolSession session,
+                                          LocalInspectionToolSession session,
                                           Object state) {
         return new XmlElementVisitor() {
             @Override
@@ -95,19 +92,16 @@ public class DeprecatedClassUsageInspection extends XmlSuppressableInspectionToo
         return true;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return JavaLanguageLocalize.javaLanguageDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Deprecated API usage in XML");
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "DeprecatedClassUsageInspection";

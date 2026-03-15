@@ -39,7 +39,6 @@ import consulo.xml.util.xml.highlighting.DomElementProblemDescriptor;
 import consulo.xml.util.xml.highlighting.DomHighlightingHelper;
 import consulo.xml.util.xml.impl.GenericValueReferenceProvider;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collections;
 import java.util.List;
 
@@ -50,13 +49,12 @@ import java.util.List;
 public class ExtendsClassChecker extends DomCustomAnnotationChecker<ExtendClass> {
   private static final GenericValueReferenceProvider ourProvider = new GenericValueReferenceProvider();
 
-  @Nonnull
   public Class<ExtendClass> getAnnotationClass() {
     return ExtendClass.class;
   }
 
-  public List<DomElementProblemDescriptor> checkForProblems(@Nonnull ExtendClass extend, @Nonnull DomElement _element, @Nonnull DomElementAnnotationHolder holder,
-                                                            @Nonnull DomHighlightingHelper helper) {
+  public List<DomElementProblemDescriptor> checkForProblems(ExtendClass extend, DomElement _element, DomElementAnnotationHolder holder,
+                                                            DomHighlightingHelper helper) {
     if (!(_element instanceof GenericDomValue)) return Collections.emptyList();
     GenericDomValue element = (GenericDomValue) _element;
 
@@ -79,7 +77,6 @@ public class ExtendsClassChecker extends DomCustomAnnotationChecker<ExtendClass>
     return Collections.emptyList();
   }
 
-  @Nonnull
   public static List<DomElementProblemDescriptor> checkExtendClass(GenericDomValue element, PsiClass value, String name,
                                                                    boolean instantiatable, boolean canBeDecorator, boolean allowInterface,
                                                                    boolean allowNonPublic,

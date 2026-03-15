@@ -28,7 +28,6 @@ import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Set;
@@ -39,7 +38,6 @@ public abstract class ClassWithTooManyDependenciesInspection extends BaseGlobalI
 	@SuppressWarnings({"PublicField"})
 	public int limit = 10;
 
-	@Nonnull
 	@Override
 	public LocalizeValue getDisplayName()
 	{
@@ -59,7 +57,7 @@ public abstract class ClassWithTooManyDependenciesInspection extends BaseGlobalI
 		{
 
 			@Override
-			public void visitClass(@Nonnull RefClass refClass)
+			public void visitClass(RefClass refClass)
 			{
 				super.visitClass(refClass);
 				if(!(refClass.getOwner() instanceof RefFile))

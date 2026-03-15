@@ -49,7 +49,6 @@ import consulo.virtualFileSystem.fileType.FileType;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 @ExtensionImpl(id = "java-annotation-processor", order = "before java-compiler")
@@ -65,7 +64,6 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
   }
 
   @Override
-  @Nonnull
   public String getDescription() {
     return CompilerLocalize.annotationProcessingCompilerDescription().get();
   }
@@ -126,13 +124,11 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
     }
   }
 
-  @Nonnull
   @Override
   public FileType[] getInputFileTypes() {
     return new FileType[]{JavaFileType.INSTANCE};
   }
 
-  @Nonnull
   @Override
   public FileType[] getOutputFileTypes() {
     return new FileType[]{

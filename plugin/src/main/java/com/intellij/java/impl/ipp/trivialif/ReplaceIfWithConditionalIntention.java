@@ -29,25 +29,22 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceIfWithConditionalIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ReplaceIfWithConditionalIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceIfWithConditionalIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ReplaceIfWithConditionalPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiIfStatement ifStatement = (PsiIfStatement) element.getParent();
         if (ifStatement == null) {

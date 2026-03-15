@@ -24,8 +24,7 @@ import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import java.io.File;
@@ -88,7 +87,6 @@ public class JavaCoverageEnabledConfiguration extends CoverageEnabledConfigurati
     }
 
 
-    @Nonnull
     public JavaCoverageEngine getCoverageProvider() {
         return myCoverageProvider;
     }

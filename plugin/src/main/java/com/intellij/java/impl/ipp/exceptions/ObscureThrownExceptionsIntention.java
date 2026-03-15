@@ -24,8 +24,7 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,14 +33,13 @@ import java.util.Set;
 @IntentionMetaData(ignoreId = "java.ObscureThrownExceptionsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ObscureThrownExceptionsPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         if (!(element instanceof PsiReferenceList)) {
             return;
         }
@@ -97,7 +95,6 @@ public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
         return aClass1;
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         PsiReferenceList referenceList = (PsiReferenceList) element;
@@ -109,7 +106,6 @@ public class ObscureThrownExceptionsIntention extends MutablyNamedIntention {
         return IntentionPowerPackLocalize.obscureThrownExceptionsIntentionName(commonSuperClass.getName());
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.obscureThrownExceptionsIntentionFamilyName();

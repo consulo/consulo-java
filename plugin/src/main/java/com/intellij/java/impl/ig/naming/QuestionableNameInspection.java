@@ -30,7 +30,6 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 import javax.swing.*;
@@ -56,26 +55,24 @@ public class QuestionableNameInspection extends BaseInspection {
         parseString(nameString, nameList);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.questionableNameDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.questionableNameProblemDescriptor().get();
     }
 
     @Override
-    public void readSettings(@Nonnull Element element) throws InvalidDataException {
+    public void readSettings(Element element) throws InvalidDataException {
         super.readSettings(element);
         parseString(nameString, nameList);
     }
 
     @Override
-    public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+    public void writeSettings(Element element) throws WriteExternalException {
         nameString = formatString(nameList);
         super.writeSettings(element);
     }
@@ -105,7 +102,7 @@ public class QuestionableNameInspection extends BaseInspection {
         private final Set<String> nameSet = new HashSet(nameList);
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             String name = variable.getName();
             if (nameSet.contains(name)) {
                 registerVariableError(variable);
@@ -113,7 +110,7 @@ public class QuestionableNameInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             String name = method.getName();
             if (nameSet.contains(name)) {
                 registerMethodError(method);
@@ -121,7 +118,7 @@ public class QuestionableNameInspection extends BaseInspection {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             String name = aClass.getName();
             if (nameSet.contains(name)) {
                 registerClassError(aClass);

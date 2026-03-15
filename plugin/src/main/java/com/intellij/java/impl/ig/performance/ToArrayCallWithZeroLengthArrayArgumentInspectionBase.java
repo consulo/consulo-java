@@ -25,19 +25,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.toArrayCallWithZeroLengthArrayArgumentDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         PsiExpression argument = (PsiExpression) infos[1];
         return InspectionGadgetsLocalize.toArrayCallWithZeroLengthArrayArgumentProblemDescriptor(argument.getText()).get();
@@ -53,7 +49,7 @@ public class ToArrayCallWithZeroLengthArrayArgumentInspectionBase extends BaseIn
         public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!"toArray".equals(methodName)) {
                 return;
             }

@@ -32,22 +32,21 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
 public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceElement, PsiJavaCodeReferenceElement> implements SyntheticIntentionAction {
-  public ImportClassFix(@Nonnull PsiJavaCodeReferenceElement element) {
+  public ImportClassFix(PsiJavaCodeReferenceElement element) {
     super(element, element);
   }
 
   @Override
-  protected String getReferenceName(@Nonnull PsiJavaCodeReferenceElement reference) {
+  protected String getReferenceName(PsiJavaCodeReferenceElement reference) {
     return reference.getReferenceName();
   }
 
   @Override
-  protected PsiElement getReferenceNameElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+  protected PsiElement getReferenceNameElement(PsiJavaCodeReferenceElement reference) {
     return reference.getReferenceNameElement();
   }
 
@@ -63,7 +62,7 @@ public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceEleme
   }
 
   @Override
-  protected boolean hasTypeParameters(@Nonnull PsiJavaCodeReferenceElement reference) {
+  protected boolean hasTypeParameters(PsiJavaCodeReferenceElement reference) {
     PsiReferenceParameterList refParameters = reference.getParameterList();
     return refParameters != null && refParameters.getTypeParameterElements().length > 0;
   }
@@ -110,9 +109,8 @@ public class ImportClassFix extends ImportClassFixBase<PsiJavaCodeReferenceEleme
       ? javaCodeReferenceElement.getReferenceName() : super.getRequiredMemberName(reference);
   }
 
-  @Nonnull
   @Override
-  protected List<PsiClass> filterByContext(@Nonnull List<PsiClass> candidates, @Nonnull PsiJavaCodeReferenceElement ref) {
+  protected List<PsiClass> filterByContext(List<PsiClass> candidates, PsiJavaCodeReferenceElement ref) {
     PsiElement typeElement = ref.getParent();
     if (typeElement instanceof PsiTypeElement) {
       PsiElement var = typeElement.getParent();

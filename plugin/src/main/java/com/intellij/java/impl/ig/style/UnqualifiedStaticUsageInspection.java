@@ -28,7 +28,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -47,12 +46,10 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
    */
   public boolean m_ignoreStaticAccessFromStaticContext = false;
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unqualifiedStaticUsageDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return infos[0] instanceof PsiMethodCallExpression
       ? InspectionGadgetsLocalize.unqualifiedStaticUsageProblemDescriptor().get()
@@ -99,7 +96,6 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
       m_fixField = fixField;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return m_fixField
         ? InspectionGadgetsLocalize.unqualifiedStaticUsageQualifyFieldQuickfix()
@@ -123,7 +119,7 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (m_ignoreStaticMethodCalls) {
         return;
@@ -138,7 +134,7 @@ public abstract class UnqualifiedStaticUsageInspection extends BaseInspection {
 
     @Override
     public void visitReferenceExpression(
-      @Nonnull PsiReferenceExpression expression) {
+      PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       if (m_ignoreStaticFieldAccesses) {
         return;

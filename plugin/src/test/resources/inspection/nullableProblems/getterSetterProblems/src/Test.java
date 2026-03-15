@@ -1,8 +1,6 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class B {
-     @Nonnull
      B b;
 
     public B getB() {
@@ -41,7 +39,6 @@ class C {
     this.c = c;
   }
 
-  @Nonnull
   C c1;
   @jakarta.annotation.Nullable
   public C getC1() {

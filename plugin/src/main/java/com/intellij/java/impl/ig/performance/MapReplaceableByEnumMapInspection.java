@@ -24,19 +24,16 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MapReplaceableByEnumMapInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.mapReplaceableByEnumMapDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.mapReplaceableByEnumMapProblemDescriptor().get();
   }
@@ -50,7 +47,7 @@ public class MapReplaceableByEnumMapInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       PsiType type = expression.getType();
       if (!(type instanceof PsiClassType)) {

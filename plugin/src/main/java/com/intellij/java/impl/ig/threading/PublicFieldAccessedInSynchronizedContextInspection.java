@@ -23,22 +23,18 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PublicFieldAccessedInSynchronizedContextInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.publicFieldAccessedInSynchronizedContextDisplayName();
   }
 
-  @Nonnull
   public String getID() {
     return "NonPrivateFieldAccessedInSynchronizedContext";
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.publicFieldAccessedInSynchronizedContextProblemDescriptor().get();
   }
@@ -50,7 +46,7 @@ public class PublicFieldAccessedInSynchronizedContextInspection extends BaseInsp
   private static class PublicFieldAccessedInSynchronizedContextVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(PsiReferenceExpression expression) {
       PsiExpression qualifier = expression.getQualifierExpression();
       if (qualifier != null && !(qualifier instanceof PsiThisExpression) && !(qualifier instanceof PsiSuperExpression)) {
         return;

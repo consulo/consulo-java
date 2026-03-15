@@ -16,8 +16,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the call of a Java method or constructor or a Java enum constant..
@@ -47,7 +46,6 @@ public interface PsiCall extends PsiElement {
      *
      * @return the resolve result, or {@link JavaResolveResult#EMPTY} if unresolved
      */
-    @Nonnull
     JavaResolveResult resolveMethodGenerics();
 
 
@@ -59,7 +57,6 @@ public interface PsiCall extends PsiElement {
      *                       invalid results.
      * @return the array of results for resolving the called method.
      */
-    @Nonnull
     default JavaResolveResult[] multiResolve(boolean incompleteCode) {
         JavaResolveResult result = resolveMethodGenerics();
         return result == JavaResolveResult.EMPTY ? JavaResolveResult.EMPTY_ARRAY : new JavaResolveResult[]{result};

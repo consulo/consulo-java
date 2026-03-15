@@ -21,7 +21,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,19 +38,16 @@ public class MethodCouplingInspection extends MethodMetricInspection {
   public boolean m_includeLibraryClasses = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "OverlyCoupledMethod";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.methodCouplingDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     Integer coupling = (Integer)infos[0];
     return InspectionGadgetsLocalize.methodCouplingProblemDescriptor(coupling).get();
@@ -121,7 +117,7 @@ public class MethodCouplingInspection extends MethodMetricInspection {
   private class MethodCouplingVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

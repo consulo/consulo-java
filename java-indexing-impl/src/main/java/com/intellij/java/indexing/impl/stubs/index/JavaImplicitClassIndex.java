@@ -9,8 +9,7 @@ import consulo.language.psi.stub.StringStubIndexExtension;
 import consulo.language.psi.stub.StubIndex;
 import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -23,16 +22,16 @@ public class JavaImplicitClassIndex extends StringStubIndexExtension<PsiImplicit
   }
 
   @Override
-  public @Nonnull StubIndexKey<String, PsiImplicitClass> getKey() {
+  public StubIndexKey<String, PsiImplicitClass> getKey() {
     return JavaStubIndexKeys.IMPLICIT_CLASSES;
   }
 
-  public Collection<String> getAllClasses(@Nonnull Project project) {
+  public Collection<String> getAllClasses(Project project) {
     return StubIndex.getInstance().getAllKeys(getKey(), project);
   }
 
-  public @Nonnull Collection<PsiImplicitClass> getElements(@Nonnull String key,
-                                                           @Nonnull Project project,
+  public Collection<PsiImplicitClass> getElements(String key,
+                                                           Project project,
                                                            @Nullable GlobalSearchScope scope) {
     return StubIndex.getElements(JavaStubIndexKeys.IMPLICIT_CLASSES, key, project, scope, PsiImplicitClass.class);
   }

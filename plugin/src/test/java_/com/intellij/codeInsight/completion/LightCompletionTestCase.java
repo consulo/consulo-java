@@ -21,8 +21,6 @@ import consulo.ide.impl.idea.codeInsight.lookup.impl.LookupImpl;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import java.util.HashSet;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,7 +41,7 @@ public abstract class LightCompletionTestCase extends LightCodeInsightTestCase {
   }
 
   @Override
-  protected void configureByFile(@Nonnull String filePath) {
+  protected void configureByFile(String filePath) {
     super.configureByFile(filePath);
 
     complete();
@@ -83,7 +81,7 @@ public abstract class LightCompletionTestCase extends LightCodeInsightTestCase {
     }
   }
 
-  protected void testByCount(int finalCount, @NonNls String... values) {
+  protected void testByCount(int finalCount, String... values) {
     if (myItems == null) {
       assertEquals(finalCount, 0);
       return;
@@ -103,7 +101,7 @@ public abstract class LightCompletionTestCase extends LightCodeInsightTestCase {
     assertEquals(finalCount, index);
   }
 
-  protected void assertStringItems(@NonNls String... items) {
+  protected void assertStringItems(String... items) {
     assertOrderedEquals(getLookupStrings(new ArrayList<String>()), items);
   }
 

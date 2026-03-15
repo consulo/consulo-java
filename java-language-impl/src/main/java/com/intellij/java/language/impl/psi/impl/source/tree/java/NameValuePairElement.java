@@ -24,7 +24,6 @@ import consulo.language.ast.ChildRoleBase;
 import consulo.language.impl.ast.*;
 import consulo.language.util.CharTable;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -79,7 +78,7 @@ public class NameValuePairElement extends CompositeElement {
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     super.deleteChildInternal(child);
     if (child.getElementType() == JavaTokenType.IDENTIFIER) {
       final ASTNode sign = findChildByRole(ChildRole.OPERATION_SIGN);

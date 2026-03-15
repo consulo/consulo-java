@@ -29,23 +29,20 @@ import consulo.language.psi.PsiParserFacade;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ChangeToEndOfLineCommentIntention", fileExtensions = "java", categories = {"Java", "Comments"})
 public class ChangeToEndOfLineCommentIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.changeToEndOfLineCommentIntentionName();
     }
 
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new CStyleCommentPredicate();
     }
 
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiComment comment = (PsiComment) element;
         Project project = comment.getProject();

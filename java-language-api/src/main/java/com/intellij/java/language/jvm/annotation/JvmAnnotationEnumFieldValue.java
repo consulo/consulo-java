@@ -4,8 +4,7 @@ package com.intellij.java.language.jvm.annotation;
 import com.intellij.java.language.jvm.JvmClass;
 import com.intellij.java.language.jvm.JvmEnumField;
 import com.intellij.java.language.jvm.JvmField;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an <a href="https://docs.oracle.com/javase/specs/jvms/se8/html/jvms-4.html#jvms-4.7.16.1-130">enum_const_value</a> struct.
@@ -45,7 +44,6 @@ public interface JvmAnnotationEnumFieldValue extends JvmAnnotationAttributeValue
    *
    * @return fully qualified name of the containing class of the referenced enum field
    */
-  @NonNls
   @Nullable
   default String getContainingClassName() {
     JvmClass containingClass = getContainingClass();

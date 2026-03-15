@@ -18,8 +18,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -60,7 +59,7 @@ public class ClassDataIndexer implements BiFunction<Project, VirtualFile,Map<HMe
 
   @Nullable
   @Override
-  public Map<HMember, Equations> apply(Project project, @Nonnull VirtualFile file) {
+  public Map<HMember, Equations> apply(Project project, VirtualFile file) {
     HashMap<HMember, Equations> map = new HashMap<>();
     if (isFileExcluded(file)) {
       return map;
@@ -150,7 +149,6 @@ public class ClassDataIndexer implements BiFunction<Project, VirtualFile,Map<HMe
     return effect;
   }
 
-  @Nonnull
   private static Equations convertEquations(EKey methodKey, List<Equation> rawMethodEquations) {
     List<DirectionResultPair> compressedMethodEquations =
         ContainerUtil.map(rawMethodEquations, equation -> new DirectionResultPair(equation.key.dirKey, equation.result));
@@ -215,7 +213,6 @@ public class ClassDataIndexer implements BiFunction<Project, VirtualFile,Map<HMe
     return staticFields;
   }
 
-  @Nonnull
   static List<Equations> getEquations(GlobalSearchScope scope, HMember key) {
     return ContainerUtil.mapNotNull(FileBasedIndex.getInstance().getContainingFiles(BytecodeAnalysisIndex.NAME, key, scope),
         file -> ourGist.getFileData(null, file).get(key));
@@ -619,7 +616,6 @@ public class ClassDataIndexer implements BiFunction<Project, VirtualFile,Map<HMe
       return result;
     }
 
-    @Nonnull
     private static LeakingParameters leakingParametersAndFrames(Member method, MethodNode methodNode, Type[] argumentTypes, boolean jsr)
         throws AnalyzerException {
       return argumentTypes.length < 32 ?

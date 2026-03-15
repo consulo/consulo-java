@@ -15,7 +15,7 @@
  */
 package com.intellij.jam.reflect;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.jam.JamElement;
 import com.intellij.java.language.psi.PsiParameter;

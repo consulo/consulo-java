@@ -26,7 +26,6 @@ import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
 import consulo.ui.ex.RelativePoint;
 import consulo.ui.ex.popup.JBPopup;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +34,7 @@ import java.awt.*;
  * @author egor
  */
 public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFullValueEvaluator {
-    public CustomPopupFullValueEvaluator(@Nonnull LocalizeValue linkText, @Nonnull EvaluationContextImpl evaluationContext) {
+    public CustomPopupFullValueEvaluator(LocalizeValue linkText, EvaluationContextImpl evaluationContext) {
         super(linkText, evaluationContext);
         setShowValuePopup(false);
     }
@@ -45,7 +44,7 @@ public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFul
     protected abstract JComponent createComponent(T data);
 
     @Override
-    public void evaluate(@Nonnull final XFullValueEvaluationCallback callback) {
+    public void evaluate(final XFullValueEvaluationCallback callback) {
         final T data = getData();
         Application.get().invokeLater(() -> {
             if (callback.isObsolete()) {

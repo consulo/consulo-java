@@ -25,8 +25,7 @@ import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -39,7 +38,7 @@ public abstract class VariableTypeMacroBase extends Macro {
   protected abstract PsiElement[] getVariables(Expression[] params, ExpressionContext context);
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length < 2) return null;
     Set<LookupElement> set = new LinkedHashSet<LookupElement>();
@@ -50,14 +49,13 @@ public abstract class VariableTypeMacroBase extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length == 0) return null;
     return new JavaPsiElementResult(vars[0]);
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "a";
   }

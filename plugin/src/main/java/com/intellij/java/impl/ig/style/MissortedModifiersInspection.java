@@ -30,8 +30,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.*;
@@ -44,12 +42,10 @@ public class MissortedModifiersInspection extends BaseInspection {
    */
   public boolean m_requireAnnotationsFirst = true;
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.missortedModifiersDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.missortedModifiersProblemDescriptor().get();
   }
@@ -69,7 +65,6 @@ public class MissortedModifiersInspection extends BaseInspection {
 
   private static class SortModifiersFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.missortedModifiersSortQuickfix();
     }
@@ -85,7 +80,7 @@ public class MissortedModifiersInspection extends BaseInspection {
           PsiComment comment = (PsiComment)child;
           IElementType tokenType = comment.getTokenType();
           if (JavaTokenType.END_OF_LINE_COMMENT.equals(tokenType)) {
-            @NonNls String text = child.getText() + '\n';
+            String text = child.getText() + '\n';
             modifiers.add(text);
           }
           else {
@@ -100,7 +95,7 @@ public class MissortedModifiersInspection extends BaseInspection {
         }
       }
       Collections.sort(modifiers, new ModifierComparator());
-      @NonNls StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new StringBuilder();
       for (String modifier : modifiers) {
         buffer.append(modifier);
         buffer.append(' ');
@@ -122,38 +117,38 @@ public class MissortedModifiersInspection extends BaseInspection {
       new ModifierComparator();
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       super.visitClass(aClass);
       checkForMissortedModifiers(aClass);
     }
 
     @Override
     public void visitClassInitializer(
-      @Nonnull PsiClassInitializer initializer) {
+      PsiClassInitializer initializer) {
       super.visitClassInitializer(initializer);
       checkForMissortedModifiers(initializer);
     }
 
     @Override
-    public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+    public void visitLocalVariable(PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       checkForMissortedModifiers(variable);
     }
 
     @Override
-    public void visitParameter(@Nonnull PsiParameter parameter) {
+    public void visitParameter(PsiParameter parameter) {
       super.visitParameter(parameter);
       checkForMissortedModifiers(parameter);
     }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       checkForMissortedModifiers(method);
     }
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       super.visitField(field);
       checkForMissortedModifiers(field);
     }
@@ -200,7 +195,7 @@ public class MissortedModifiersInspection extends BaseInspection {
     /**
      * @noinspection StaticCollection
      */
-    @NonNls private static final Map<String, Integer> s_modifierOrder =
+    private static final Map<String, Integer> s_modifierOrder =
       new HashMap<String, Integer>(11);
 
     static {

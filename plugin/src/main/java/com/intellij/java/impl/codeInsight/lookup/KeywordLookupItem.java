@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiKeyword;
 import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -30,7 +29,7 @@ import jakarta.annotation.Nonnull;
 public class KeywordLookupItem extends LookupItem<PsiKeyword> implements TypedLookupItem {
   private final PsiElement myPosition;
 
-  public KeywordLookupItem(PsiKeyword keyword, @Nonnull PsiElement position) {
+  public KeywordLookupItem(PsiKeyword keyword, PsiElement position) {
     super(keyword, keyword.getText());
     myPosition = position;
   }

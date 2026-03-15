@@ -23,18 +23,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiNamedElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ClassReferencesSubclassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classReferencesSubclassDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiNamedElement element = (PsiNamedElement) infos[0];
         String containingClassName = element.getName();
@@ -51,20 +48,20 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
     private static class ClassReferencesSubclassVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             PsiTypeElement typeElement = variable.getTypeElement();
             checkTypeElement(typeElement);
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             PsiTypeElement typeElement = method.getReturnTypeElement();
             checkTypeElement(typeElement);
         }
 
         @Override
         public void visitInstanceOfExpression(
-            @Nonnull PsiInstanceOfExpression expression
+            PsiInstanceOfExpression expression
         ) {
             PsiTypeElement typeElement = expression.getCheckType();
             checkTypeElement(typeElement);
@@ -72,7 +69,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
         @Override
         public void visitTypeCastExpression(
-            @Nonnull PsiTypeCastExpression expression
+            PsiTypeCastExpression expression
         ) {
             PsiTypeElement typeElement = expression.getCastType();
             checkTypeElement(typeElement);
@@ -80,7 +77,7 @@ public class ClassReferencesSubclassInspection extends BaseInspection {
 
         @Override
         public void visitClassObjectAccessExpression(
-            @Nonnull PsiClassObjectAccessExpression expression
+            PsiClassObjectAccessExpression expression
         ) {
             PsiTypeElement typeElement = expression.getOperand();
             checkTypeElement(typeElement);

@@ -34,8 +34,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.ref.SoftReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.Reference;
 
@@ -45,15 +44,14 @@ import java.lang.ref.Reference;
  */
 public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStub> implements PsiNameValuePair {
 
-  public PsiNameValuePairImpl(@Nonnull PsiNameValuePairStub stub) {
+  public PsiNameValuePairImpl(PsiNameValuePairStub stub) {
     super(stub, JavaStubElementTypes.NAME_VALUE_PAIR);
   }
 
-  public PsiNameValuePairImpl(@Nonnull ASTNode node) {
+  public PsiNameValuePairImpl(ASTNode node) {
     super(node);
   }
 
-  @Nonnull
   @Override
   public NameValuePairElement getNode() {
     return (NameValuePairElement) super.getNode();
@@ -88,9 +86,8 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
     return node == null ? null : (PsiAnnotationMemberValue) node.getPsi();
   }
 
-  @Nonnull
   @Override
-  public PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue) {
+  public PsiAnnotationMemberValue setValue(PsiAnnotationMemberValue newValue) {
     getValue().replace(newValue);
     return getValue();
   }
@@ -164,7 +161,6 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
       }
 
       @Override
-      @Nonnull
       public String getCanonicalText() {
         String name = getName();
         return name != null ? name : PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME;
@@ -185,7 +181,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
       }
 
       @Override
-      public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+      public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
         throw new IncorrectOperationException("Not implemented");
       }
 
@@ -202,7 +198,7 @@ public class PsiNameValuePairImpl extends JavaStubPsiElement<PsiNameValuePairStu
   }
 
   @Override
-  public final void accept(@Nonnull PsiElementVisitor visitor) {
+  public final void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitNameValuePair(this);
     } else {

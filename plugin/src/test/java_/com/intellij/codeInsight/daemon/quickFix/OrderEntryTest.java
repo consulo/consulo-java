@@ -13,7 +13,6 @@ import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +24,7 @@ import static org.junit.Assert.fail;
  * @author cdr
  */
 public abstract class OrderEntryTest extends DaemonAnalyzerTestCase {
-  @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/quickFix/orderEntry/";
+  private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/quickFix/orderEntry/";
 
 //  @Override
 //  protected void setUpProject() throws Exception {

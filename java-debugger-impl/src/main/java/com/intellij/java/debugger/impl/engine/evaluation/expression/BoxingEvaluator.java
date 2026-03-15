@@ -22,7 +22,7 @@ import com.intellij.java.debugger.impl.engine.JVMNameUtil;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.language.psi.CommonClassNames;
 import consulo.internal.com.sun.jdi.*;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

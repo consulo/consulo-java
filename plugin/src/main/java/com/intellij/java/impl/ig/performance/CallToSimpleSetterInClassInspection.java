@@ -32,8 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -45,19 +44,16 @@ public class CallToSimpleSetterInClassInspection extends BaseInspection {
     @SuppressWarnings("UnusedDeclaration")
     public boolean onlyReportPrivateSetter = false;
 
-    @Nonnull
     @Override
     public String getID() {
         return "CallToSimpleSetterFromWithinClass";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.callToSimpleSetterInClassDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.callToSimpleSetterInClassProblemDescriptor().get();
@@ -84,7 +80,6 @@ public class CallToSimpleSetterInClassInspection extends BaseInspection {
     }
 
     private static class InlineCallFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.callToSimpleSetterInClassInlineQuickfix();
@@ -152,7 +147,7 @@ public class CallToSimpleSetterInClassInspection extends BaseInspection {
 
     private class CallToSimpleSetterInClassVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             PsiClass containingClass = ClassUtils.getContainingClass(call);
             if (containingClass == null) {

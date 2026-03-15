@@ -21,7 +21,6 @@ import consulo.util.lang.Comparing;
 import consulo.ide.impl.idea.util.NotNullFunction;
 import consulo.module.extension.ModuleExtensionWithSdk;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -38,7 +37,7 @@ public class LazyValueBySdk<T> {
 
   private Sdk myLastSdk;
 
-  public LazyValueBySdk(@Nonnull ModuleExtensionWithSdk<?> extension, @Nonnull T defaultValue, @Nonnull NotNullFunction<Sdk, T> func) {
+  public LazyValueBySdk(ModuleExtensionWithSdk<?> extension, T defaultValue, NotNullFunction<Sdk, T> func) {
     myExtension = extension;
     myFunc = func;
     myDefaultValue = defaultValue;

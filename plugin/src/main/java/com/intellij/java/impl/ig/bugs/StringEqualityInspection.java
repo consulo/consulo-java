@@ -28,17 +28,14 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringEqualityInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringComparisonDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringComparisonProblemDescriptor().get();
     }
@@ -58,7 +55,7 @@ public class StringEqualityInspection extends BaseInspection {
     private static class ObjectEqualityVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+        public void visitBinaryExpression(PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
             if (!ComparisonUtils.isEqualityComparison(expression)) {
                 return;

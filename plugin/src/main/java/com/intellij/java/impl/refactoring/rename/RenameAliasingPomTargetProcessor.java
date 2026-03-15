@@ -23,14 +23,13 @@ import consulo.language.pom.PomService;
 import consulo.language.pom.PomTarget;
 import consulo.language.pom.PomTargetPsiElement;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 
 @ExtensionImpl
 public class RenameAliasingPomTargetProcessor extends RenamePsiElementProcessor {
     @Override
-    public boolean canProcessElement(@Nonnull PsiElement element) {
+    public boolean canProcessElement(PsiElement element) {
         return element instanceof PomTarget || element instanceof PomTargetPsiElement;
     }
 

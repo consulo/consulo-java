@@ -48,13 +48,10 @@ import consulo.util.lang.Comparing;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizableStringList;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public abstract class EntryPointsManagerBase extends EntryPointsManager implements PersistentStateComponent<Element> {
-  @NonNls
   private static final String[] STANDARD_ANNOS = {
       "javax.ws.rs.*",
   };
@@ -82,9 +79,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   private final Map<String, SmartRefElementPointer> myPersistentEntryPoints;
   private final Set<RefElement> myTemporaryEntryPoints;
   private static final String VERSION = "2.0";
-  @NonNls
   private static final String VERSION_ATTR = "version";
-  @NonNls
   private static final String ENTRY_POINT_ATTR = "entry_point";
   private boolean myAddNonJavaEntries = true;
   private boolean myResolved = false;
@@ -152,7 +147,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   }
 
   @Override
-  public void resolveEntryPoints(@Nonnull final RefManager manager) {
+  public void resolveEntryPoints(final RefManager manager) {
     if (!myResolved) {
       myResolved = true;
       cleanup();
@@ -182,7 +177,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   }
 
   @Override
-  public void addEntryPoint(@Nonnull RefElement newEntryPoint, boolean isPersistent) {
+  public void addEntryPoint(RefElement newEntryPoint, boolean isPersistent) {
     if (!newEntryPoint.isValid()) {
       return;
     }
@@ -228,7 +223,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   }
 
   @Override
-  public void removeEntryPoint(@Nonnull RefElement anEntryPoint) {
+  public void removeEntryPoint(RefElement anEntryPoint) {
     if (anEntryPoint instanceof RefClass) {
       RefClass refClass = (RefClass) anEntryPoint;
       if (!refClass.isInterface()) {
@@ -266,7 +261,6 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
     }
   }
 
-  @Nonnull
   @Override
   public RefElement[] getEntryPoints() {
     validateEntryPoints();
@@ -377,7 +371,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   }
 
   @Override
-  public boolean isEntryPoint(@Nonnull PsiElement element) {
+  public boolean isEntryPoint(PsiElement element) {
     if (!(element instanceof PsiModifierListOwner)) {
       return false;
     }
@@ -397,18 +391,17 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
       return JavaQuickFixLocalize.fixUnusedSymbolInjectionText("fields", myQualifiedName);
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project1, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project1, Editor editor, PsiFile file) {
       return true;
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
       //TODO [VISTALL]
       //myWriteAnnotations.add(myQualifiedName);
       //ProjectInspectionProfileManager.getInstance(project).fireProfileChanged();

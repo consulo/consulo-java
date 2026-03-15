@@ -2,7 +2,6 @@
 package com.intellij.java.language.impl.psi.impl.compiled;
 
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 
 /**
  * @deprecated use {@link ClsCustomNavigationPolicy} directly
@@ -10,7 +9,7 @@ import jakarta.annotation.Nonnull;
 @Deprecated
 @SuppressWarnings("DeprecatedIsStillUsed")
 public abstract class ClsCustomNavigationPolicyEx implements ClsCustomNavigationPolicy {
-  public PsiFile getFileNavigationElement(@Nonnull ClsFileImpl file) {
+  public PsiFile getFileNavigationElement(ClsFileImpl file) {
     return (PsiFile)getNavigationElement(file);
   }
 }

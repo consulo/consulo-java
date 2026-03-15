@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring.migration;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-import jakarta.annotation.Nonnull;
 
 import java.net.URL;
 
@@ -34,6 +33,5 @@ public interface PredefinedMigrationProvider {
      * 2. Create new migration map with all settings needed
      * 3. Copy map's file from config/migration to the plugin's resources
      */
-    @Nonnull
     URL getMigrationMap();
 }

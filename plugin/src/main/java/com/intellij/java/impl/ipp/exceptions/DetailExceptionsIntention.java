@@ -24,28 +24,24 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.DetailExceptionsIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class DetailExceptionsIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.detailExceptionsIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new DetailExceptionsPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiJavaToken token = (PsiJavaToken) element;
         PsiElement parent = token.getParent();
         if (parent instanceof PsiCatchSection) {
@@ -55,7 +51,7 @@ public class DetailExceptionsIntention extends Intention {
             return;
         }
         PsiTryStatement tryStatement = (PsiTryStatement) parent;
-        @NonNls StringBuilder newTryStatement = new StringBuilder("try");
+        StringBuilder newTryStatement = new StringBuilder("try");
         Set<PsiType> exceptionsThrown = new HashSet<PsiType>();
         PsiResourceList resourceList = tryStatement.getResourceList();
         if (resourceList != null) {

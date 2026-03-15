@@ -21,8 +21,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.inspection.PairedUnfairLocalInspectionTool;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * User: anna
@@ -30,24 +28,19 @@ import org.jetbrains.annotations.NonNls;
  */
 @ExtensionImpl
 public class UnusedImportLocalInspection extends BaseJavaLocalInspectionTool implements PairedUnfairLocalInspectionTool {
-  @NonNls
   public static final String SHORT_NAME = "UNUSED_IMPORT";
 
   @Override
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesImports();
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionLocalize.unusedImport();
   }
 
   @Override
-  @Nonnull
-  @NonNls
   public String getShortName() {
     return SHORT_NAME;
   }

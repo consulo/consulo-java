@@ -32,14 +32,12 @@ import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.util.collection.ArrayUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 
 @ExtensionImpl
 public class DefaultClassNavigationContributor implements GotoClassOrTypeContributor {
   @Override
-  @Nonnull
   public String[] getNames(Project project, boolean includeNonProjectItems) {
     if (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping) {
       GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
@@ -53,7 +51,6 @@ public class DefaultClassNavigationContributor implements GotoClassOrTypeContrib
   }
 
   @Override
-  @Nonnull
   public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
     GlobalSearchScope scope = includeNonProjectItems ? GlobalSearchScope.allScope(project) : GlobalSearchScope.projectScope(project);
     return filterUnshowable(PsiShortNamesCache.getInstance(project).getClassesByName(name, scope), pattern);
@@ -92,14 +89,14 @@ public class DefaultClassNavigationContributor implements GotoClassOrTypeContrib
   }
 
   @Override
-  public void processNames(@Nonnull Processor<String> processor, @Nonnull SearchScope scope, @Nullable IdFilter filter) {
+  public void processNames(Processor<String> processor, SearchScope scope, @Nullable IdFilter filter) {
     PsiShortNamesCache.getInstance(((ProjectAwareSearchScope) scope).getProject()).processAllClassNames(processor, (GlobalSearchScope) scope, filter);
   }
 
   @Override
-  public void processElementsWithName(@Nonnull String name,
-                                      @Nonnull Processor<NavigationItem> processor,
-                                      @Nonnull FindSymbolParameters parameters) {
+  public void processElementsWithName(String name,
+                                      Processor<NavigationItem> processor,
+                                      FindSymbolParameters parameters) {
     PsiShortNamesCache.getInstance(parameters.getProject()).processClassesWithName(name, processor, (GlobalSearchScope) parameters.getSearchScope(), parameters.getIdFilter());
   }
 }

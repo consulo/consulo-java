@@ -27,7 +27,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.function.Condition;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -62,7 +61,6 @@ class SuperCalls {
         return set;
     }
 
-    @Nonnull
     @RequiredReadAction
     private static LookupElement withQualifiedSuper(final String className, LookupElement item) {
         return PrioritizedLookupElement.withExplicitProximity(

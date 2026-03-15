@@ -17,8 +17,7 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.codeInsight.runner.JavaMainMethodProvider;
 import com.intellij.java.language.psi.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -101,7 +100,7 @@ public class PsiMethodUtil {
      * @param aClass the class to check for a main method.
      * @return true if the class has a main method, false otherwise.
      */
-    public static boolean hasMainInClass(@Nonnull PsiClass aClass) {
+    public static boolean hasMainInClass(PsiClass aClass) {
         return MAIN_CLASS.test(aClass) && hasMainMethod(aClass);
     }
 

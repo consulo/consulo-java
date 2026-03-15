@@ -20,11 +20,9 @@
  */
 package com.intellij.java.debugger.impl.engine.evaluation.expression;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.impl.engine.JVMNameUtil;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
@@ -63,14 +61,13 @@ public class FieldEvaluator implements Evaluator
 		boolean acceptClass(ReferenceType refType);
 	}
 
-	public FieldEvaluator(Evaluator objectEvaluator, TargetClassFilter filter, @NonNls String fieldName)
+	public FieldEvaluator(Evaluator objectEvaluator, TargetClassFilter filter, String fieldName)
 	{
 		myObjectEvaluator = objectEvaluator;
 		myFieldName = fieldName;
 		myTargetClassFilter = filter;
 	}
 
-	@Nonnull
 	public static TargetClassFilter createClassFilter(@Nullable PsiType psiType)
 	{
 		if(psiType == null || psiType instanceof PsiArrayType)

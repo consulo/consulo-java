@@ -21,17 +21,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class MethodWithMultipleLoopsInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.methodWithMultipleLoopsDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     Integer negationCount = (Integer)infos[0];
     return InspectionGadgetsLocalize.methodWithMultipleLoopsProblemDescriptor(negationCount).get();
@@ -45,7 +42,7 @@ public class MethodWithMultipleLoopsInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

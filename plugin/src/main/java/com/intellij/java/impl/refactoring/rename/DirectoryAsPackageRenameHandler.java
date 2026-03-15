@@ -29,7 +29,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -76,7 +75,6 @@ public class DirectoryAsPackageRenameHandler extends DirectoryAsPackageRenameHan
                 return newQName;
             }
 
-            @Nonnull
             @Override
             protected LocalizeValue getCommandName() {
                 return dirsToRename.length == 1

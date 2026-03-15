@@ -13,7 +13,6 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.TestDataPath;
-import jakarta.annotation.Nonnull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,7 +30,6 @@ public abstract class CompletionStyleTest extends LightCodeInsightTestCase{
     return LanguageLevel.JDK_1_6;
   }
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

@@ -8,7 +8,7 @@ import consulo.language.psi.PsiElement;
 import consulo.util.lang.ObjectUtil;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 

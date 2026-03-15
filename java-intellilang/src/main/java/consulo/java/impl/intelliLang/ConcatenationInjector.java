@@ -50,7 +50,6 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.Trinity;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 import java.util.*;
@@ -129,7 +128,7 @@ public class ConcatenationInjector implements ConcatenationAwareInjector {
     }
 
     @Override
-    public void inject(@Nonnull final MultiHostRegistrar registrar, @Nonnull PsiElement... operands) {
+    public void inject(final MultiHostRegistrar registrar, PsiElement... operands) {
         if (operands.length == 0) {
             return;
         }

@@ -33,7 +33,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.headerparser.impl.AbstractHeaderParserImpl;
 import org.osmorc.manifest.lang.psi.Clause;
 import org.osmorc.manifest.lang.psi.HeaderValuePart;
@@ -44,7 +43,7 @@ import org.osmorc.manifest.lang.psi.HeaderValuePart;
 public class BundleActivatorParser extends AbstractHeaderParserImpl{
 
   @Override
-  public PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart) {
+  public PsiReference[] getReferences(HeaderValuePart headerValuePart) {
     if (headerValuePart.getParent() instanceof Clause) {
       final Module module = ModuleUtilCore.findModuleForPsiElement(headerValuePart);
       JavaClassReferenceProvider provider;
@@ -69,7 +68,7 @@ public class BundleActivatorParser extends AbstractHeaderParserImpl{
   }
 
   @Override
-  public boolean isAcceptable(@Nonnull Object o) {
+  public boolean isAcceptable(Object o) {
     return o instanceof PsiClass;
   }
 }

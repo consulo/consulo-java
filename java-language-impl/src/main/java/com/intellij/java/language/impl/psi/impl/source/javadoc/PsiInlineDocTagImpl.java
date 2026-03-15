@@ -30,7 +30,6 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
 public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlineDocTag, Constants {
   private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(DOC_TAG_VALUE_ELEMENT, DOC_METHOD_OR_FIELD_REF);
@@ -78,12 +77,10 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
     return (PsiDocTagValue)findPsiChildByType(TAG_VALUE_BIT_SET);
   }
 
-  @Nonnull
   public PsiElement[] getDataElementsIgnoreWhitespaces() {
     return getChildrenAsPsiElements(VALUE_NO_WHITESPACE_BIT_SET, PsiElement.ARRAY_FACTORY);
   }
 
-  @Nonnull
   @Override
   public String getName() {
     final PsiElement nameElement = getNameElement();
@@ -118,7 +115,7 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitInlineDocTag(this);
     }
@@ -134,7 +131,7 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameElement(), name);
     return this;
   }

@@ -33,8 +33,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -47,7 +46,6 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
         super(false);
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getRefactoringName() {
         return REFACTORING_NAME;
@@ -74,7 +72,7 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
             return;
         }
@@ -222,7 +220,7 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
 
     @Override
     @RequiredUIAccess
-    protected boolean invokeImpl(@Nonnull Project project, PsiLocalVariable localVariable, final Editor editor) {
+    protected boolean invokeImpl(Project project, PsiLocalVariable localVariable, final Editor editor) {
         PsiElement parent = localVariable.getParent();
         if (!(parent instanceof PsiDeclarationStatement)) {
             LocalizeValue message =
@@ -261,7 +259,7 @@ public class IntroduceFieldHandler extends BaseExpressionToFieldHandler implemen
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, PsiElement element, @Nullable Editor editor) {
+    public void invoke(Project project, PsiElement element, @Nullable Editor editor) {
         if (element instanceof PsiExpression) {
             invokeImpl(project, (PsiExpression) element, editor);
         }

@@ -36,8 +36,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.undoRedo.CommandProcessor;
 import consulo.undoRedo.UndoConfirmationPolicy;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.Collection;
@@ -158,7 +157,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
     }
   }
 
-  private static void reformatEnclosingExpressionListAtOffset(@Nonnull PsiFile file, int offset) {
+  private static void reformatEnclosingExpressionListAtOffset(PsiFile file, int offset) {
     PsiElement elementAtOffset = PsiUtilCore.getElementAtOffset(file, offset);
     PsiExpressionList listToReformat = getEnclosingExpressionList(elementAtOffset.getParent());
     if (listToReformat != null) {
@@ -167,7 +166,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
   }
 
   @Nullable
-  private static PsiExpressionList getEnclosingExpressionList(@Nonnull PsiElement element) {
+  private static PsiExpressionList getEnclosingExpressionList(PsiElement element) {
     if (!(element instanceof PsiAnonymousClass)) {
       return null;
     }
@@ -209,7 +208,7 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
     return true;
   }
 
-  static boolean hasConstructorParameters(PsiClass psiClass, @Nonnull PsiElement place) {
+  static boolean hasConstructorParameters(PsiClass psiClass, PsiElement place) {
     PsiResolveHelper resolveHelper = JavaPsiFacade.getInstance(place.getProject()).getResolveHelper();
     boolean hasParams = false;
     for (PsiMethod constructor : psiClass.getConstructors()) {
@@ -320,11 +319,11 @@ public class ConstructorInsertHandler implements InsertHandler<LookupElementDeco
     return false;
   }
 
-  private static void startTemplate(final PsiAnonymousClass aClass, final Editor editor, final Runnable runnable, @Nonnull final PsiTypeElement[] parameters) {
+  private static void startTemplate(final PsiAnonymousClass aClass, final Editor editor, final Runnable runnable, final PsiTypeElement[] parameters) {
     final Project project = aClass.getProject();
     new WriteCommandAction(project, getCommandName(), getCommandName()) {
       @Override
-      protected void run(@Nonnull Result result) throws Throwable {
+      protected void run(Result result) throws Throwable {
         PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(editor.getDocument());
         editor.getCaretModel().moveToOffset(aClass.getTextOffset());
         TemplateBuilder templateBuilder =  TemplateBuilderFactory.getInstance().createTemplateBuilder(aClass);

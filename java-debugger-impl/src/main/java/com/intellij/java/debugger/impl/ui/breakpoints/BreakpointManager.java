@@ -45,8 +45,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.List;
@@ -60,14 +59,14 @@ public class BreakpointManager {
 
     private final Project myProject;
 
-    public BreakpointManager(@Nonnull Project project, @Nonnull DebuggerManagerImpl debuggerManager) {
+    public BreakpointManager(Project project, DebuggerManagerImpl debuggerManager) {
         myProject = project;
 
         debuggerManager.getContextManager().addListener(new DebuggerContextListener() {
             private DebuggerSession myPreviousSession;
 
             @Override
-            public void changeEvent(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event) {
+            public void changeEvent(DebuggerContextImpl newContext, DebuggerSession.Event event) {
                 if (event == DebuggerSession.Event.ATTACHED) {
                     for (XBreakpoint breakpoint : getXBreakpointManager().getAllBreakpoints()) {
                         if (checkAndNotifyPossiblySlowBreakpoint(breakpoint)) {
@@ -111,18 +110,18 @@ public class BreakpointManager {
     }
 
     @Nullable
-    public RunToCursorBreakpoint addRunToCursorBreakpoint(@Nonnull XSourcePosition position, final boolean ignoreBreakpoints) {
+    public RunToCursorBreakpoint addRunToCursorBreakpoint(XSourcePosition position, final boolean ignoreBreakpoints) {
         return RunToCursorBreakpoint.create(myProject, position, ignoreBreakpoints);
     }
 
     @Nullable
-    public StepIntoBreakpoint addStepIntoBreakpoint(@Nonnull BreakpointStepMethodFilter filter) {
+    public StepIntoBreakpoint addStepIntoBreakpoint(BreakpointStepMethodFilter filter) {
         return StepIntoBreakpoint.create(myProject, filter);
     }
 
     @Nullable
     @RequiredUIAccess
-    public FieldBreakpoint addFieldBreakpoint(@Nonnull Document document, int offset) {
+    public FieldBreakpoint addFieldBreakpoint(Document document, int offset) {
         PsiField field = FieldBreakpoint.findField(myProject, document, offset);
         if (field == null) {
             return null;
@@ -194,7 +193,7 @@ public class BreakpointManager {
         return null;
     }
 
-    public static void addBreakpoint(@Nonnull Breakpoint breakpoint) {
+    public static void addBreakpoint(Breakpoint breakpoint) {
         assert breakpoint.myXBreakpoint.getUserData(Breakpoint.DATA_KEY) == breakpoint;
         breakpoint.updateUI();
         checkAndNotifyPossiblySlowBreakpoint(breakpoint.myXBreakpoint);
@@ -208,7 +207,6 @@ public class BreakpointManager {
         ApplicationManager.getApplication().runWriteAction(() -> getXBreakpointManager().removeBreakpoint(breakpoint.myXBreakpoint));
     }
 
-    @Nonnull
     public List<Breakpoint> getBreakpoints() {
         return ReadAction.compute(() -> ContainerUtil.mapNotNull(getXBreakpointManager().getAllBreakpoints(), BreakpointManager::getJavaBreakpoint));
     }
@@ -228,7 +226,7 @@ public class BreakpointManager {
     }
 
     //interaction with RequestManagerImpl
-    public void disableBreakpoints(@Nonnull final DebugProcessImpl debugProcess) {
+    public void disableBreakpoints(final DebugProcessImpl debugProcess) {
         final List<Breakpoint> breakpoints = getBreakpoints();
         if (!breakpoints.isEmpty()) {
             final RequestManagerImpl requestManager = debugProcess.getRequestsManager();
@@ -251,7 +249,7 @@ public class BreakpointManager {
         }
     }
 
-    public void applyThreadFilter(@Nonnull final DebugProcessImpl debugProcess, @Nullable ThreadReference newFilterThread) {
+    public void applyThreadFilter(final DebugProcessImpl debugProcess, @Nullable ThreadReference newFilterThread) {
         final RequestManagerImpl requestManager = debugProcess.getRequestsManager();
         final ThreadReference oldFilterThread = requestManager.getFilterThread();
         if (Comparing.equal(newFilterThread, oldFilterThread)) {
@@ -272,7 +270,7 @@ public class BreakpointManager {
             // important! need to add filter to _existing_ requests, otherwise Requestor->Request mapping will be lost
             // and debugger trees will not be restored to original state
             abstract class FilterSetter<T extends EventRequest> {
-                void applyFilter(@Nonnull final List<T> requests, final ThreadReference thread) {
+                void applyFilter(final List<T> requests, final ThreadReference thread) {
                     for (T request : requests) {
                         try {
                             final boolean wasEnabled = request.isEnabled();
@@ -297,21 +295,21 @@ public class BreakpointManager {
             if (eventRequestManager != null) {
                 new FilterSetter<BreakpointRequest>() {
                     @Override
-                    protected void addFilter(@Nonnull final BreakpointRequest request, final ThreadReference thread) {
+                    protected void addFilter(final BreakpointRequest request, final ThreadReference thread) {
                         request.addThreadFilter(thread);
                     }
                 }.applyFilter(eventRequestManager.breakpointRequests(), newFilterThread);
 
                 new FilterSetter<MethodEntryRequest>() {
                     @Override
-                    protected void addFilter(@Nonnull final MethodEntryRequest request, final ThreadReference thread) {
+                    protected void addFilter(final MethodEntryRequest request, final ThreadReference thread) {
                         request.addThreadFilter(thread);
                     }
                 }.applyFilter(eventRequestManager.methodEntryRequests(), newFilterThread);
 
                 new FilterSetter<MethodExitRequest>() {
                     @Override
-                    protected void addFilter(@Nonnull final MethodExitRequest request, final ThreadReference thread) {
+                    protected void addFilter(final MethodExitRequest request, final ThreadReference thread) {
                         request.addThreadFilter(thread);
                     }
                 }.applyFilter(eventRequestManager.methodExitRequests(), newFilterThread);
@@ -341,14 +339,14 @@ public class BreakpointManager {
         breakpoint.updateUI();
     }
 
-    public void setBreakpointEnabled(@Nonnull final Breakpoint breakpoint, final boolean enabled) {
+    public void setBreakpointEnabled(final Breakpoint breakpoint, final boolean enabled) {
         if (breakpoint.isEnabled() != enabled) {
             breakpoint.setEnabled(enabled);
         }
     }
 
     @Nullable
-    public Breakpoint findMasterBreakpoint(@Nonnull Breakpoint dependentBreakpoint) {
+    public Breakpoint findMasterBreakpoint(Breakpoint dependentBreakpoint) {
         XDependentBreakpointManager dependentBreakpointManager = getXBreakpointManager().getDependentBreakpointManager();
         return getJavaBreakpoint(dependentBreakpointManager.getMasterBreakpoint(dependentBreakpoint.myXBreakpoint));
     }

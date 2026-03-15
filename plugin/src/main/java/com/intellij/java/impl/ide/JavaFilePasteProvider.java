@@ -34,8 +34,7 @@ import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.ui.ex.awt.CopyPasteManager;
 import consulo.undoRedo.CommandProcessor;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -46,7 +45,7 @@ import java.awt.datatransfer.Transferable;
 @ExtensionImpl
 public class JavaFilePasteProvider implements FilePasteProvider {
   @RequiredReadAction
-  public void performPaste(@Nonnull DataContext dataContext) {
+  public void performPaste(DataContext dataContext) {
     final Project project = dataContext.getData(Project.KEY);
     IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null) {
@@ -124,11 +123,11 @@ public class JavaFilePasteProvider implements FilePasteProvider {
     }
   }
 
-  public boolean isPastePossible(@Nonnull DataContext dataContext) {
+  public boolean isPastePossible(DataContext dataContext) {
     return true;
   }
 
-  public boolean isPasteEnabled(@Nonnull DataContext dataContext) {
+  public boolean isPasteEnabled(DataContext dataContext) {
     Project project = dataContext.getData(Project.KEY);
     IdeView ideView = dataContext.getData(IdeView.KEY);
     if (project == null || ideView == null || ideView.getDirectories().length == 0) {

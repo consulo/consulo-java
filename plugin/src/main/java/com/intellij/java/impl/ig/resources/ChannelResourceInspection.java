@@ -25,7 +25,6 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,19 +35,16 @@ public class ChannelResourceInspection extends ResourceInspection {
   public boolean insideTryAllowed = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "ChannelOpenedButNotSafelyClosed";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.channelOpenedNotClosedDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiExpression expression = (PsiExpression)infos[0];
     PsiType type = expression.getType();
@@ -72,7 +68,7 @@ public class ChannelResourceInspection extends ResourceInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isChannelFactoryMethod(expression)) {
         return;

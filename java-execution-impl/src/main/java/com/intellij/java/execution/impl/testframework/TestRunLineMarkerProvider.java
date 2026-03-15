@@ -3,7 +3,6 @@ package com.intellij.java.execution.impl.testframework;
 import com.intellij.java.language.JavaLanguage;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -11,7 +10,6 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class TestRunLineMarkerProvider extends BaseTestRunLineMarkerProvider {
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

@@ -37,14 +37,13 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 public class IntroduceParameterObjectHandler implements RefactoringActionHandler {
     private static final LocalizeValue REFACTORING_NAME = JavaRefactoringLocalize.introduceParameterObject();
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         ScrollingModel scrollingModel = editor.getScrollingModel();
         scrollingModel.scrollToCaret(ScrollType.MAKE_VISIBLE);
         PsiElement element = dataContext.getData(PsiElement.KEY);
@@ -82,7 +81,7 @@ public class IntroduceParameterObjectHandler implements RefactoringActionHandler
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length != 1) {
             return;
         }

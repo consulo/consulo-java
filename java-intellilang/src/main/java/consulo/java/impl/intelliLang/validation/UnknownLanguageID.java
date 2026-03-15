@@ -29,14 +29,11 @@ import consulo.language.inject.advanced.InjectorUtils;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class UnknownLanguageID extends LocalInspectionTool {
 
-  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
@@ -45,7 +42,6 @@ public class UnknownLanguageID extends LocalInspectionTool {
     return true;
   }
 
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
@@ -56,13 +52,11 @@ public class UnknownLanguageID extends LocalInspectionTool {
     return JavaLanguage.INSTANCE;
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Unknown Language ID");
   }
 
-  @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final String annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationClass();
 
@@ -93,8 +87,6 @@ public class UnknownLanguageID extends LocalInspectionTool {
     };
   }
 
-  @Nonnull
-  @NonNls
   public String getShortName() {
     return "UnknownLanguage";
   }

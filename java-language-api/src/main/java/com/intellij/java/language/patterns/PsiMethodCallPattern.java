@@ -21,7 +21,6 @@ import consulo.language.pattern.ElementPattern;
 import consulo.language.util.ProcessingContext;
 import consulo.language.pattern.PatternCondition;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
@@ -34,7 +33,7 @@ public class PsiMethodCallPattern extends PsiExpressionPattern<PsiMethodCallExpr
   public PsiMethodCallPattern withArguments(final ElementPattern<? extends PsiExpression>... arguments) {
     return with(new PatternCondition<PsiMethodCallExpression>("withArguments") {
       @Override
-      public boolean accepts(@Nonnull PsiMethodCallExpression callExpression, ProcessingContext context) {
+      public boolean accepts(PsiMethodCallExpression callExpression, ProcessingContext context) {
         final PsiExpression[] actualArguments = callExpression.getArgumentList().getExpressions();
         if (arguments.length != actualArguments.length) {
           return false;
@@ -52,7 +51,7 @@ public class PsiMethodCallPattern extends PsiExpressionPattern<PsiMethodCallExpr
   public PsiMethodCallPattern withQualifier(final ElementPattern<? extends PsiExpression> qualifier) {
     return with(new PatternCondition<PsiMethodCallExpression>("withQualifier") {
       @Override
-      public boolean accepts(@Nonnull PsiMethodCallExpression psiMethodCallExpression, ProcessingContext context) {
+      public boolean accepts(PsiMethodCallExpression psiMethodCallExpression, ProcessingContext context) {
         return qualifier.accepts(psiMethodCallExpression.getMethodExpression().getQualifierExpression(), context);
       }
     });

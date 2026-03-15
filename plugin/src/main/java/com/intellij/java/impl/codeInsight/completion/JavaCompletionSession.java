@@ -24,8 +24,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
@@ -63,7 +62,6 @@ public class JavaCompletionSession {
     myResult.addElement(AutoCompletionPolicy.NEVER_AUTOCOMPLETE.applyPolicy(lookupElement));
   }
 
-  @Nonnull
 	PrefixMatcher getMatcher() {
     return myResult.getPrefixMatcher();
   }
@@ -80,31 +78,31 @@ public class JavaCompletionSession {
     return null;
   }
 
-  public void registerClass(@Nonnull PsiClass psiClass) {
+  public void registerClass(PsiClass psiClass) {
     ContainerUtil.addIfNotNull(myAddedClasses, getClassName(psiClass));
   }
 
   @Nullable
-  private static String getClassName(@Nonnull PsiClass psiClass) {
+  private static String getClassName(PsiClass psiClass) {
     String name = psiClass.getQualifiedName();
     return name == null ? psiClass.getName() : name;
   }
 
-  public boolean alreadyProcessed(@Nonnull LookupElement element) {
+  public boolean alreadyProcessed(LookupElement element) {
     PsiClass psiClass = extractClass(element);
     return psiClass != null && alreadyProcessed(psiClass);
   }
 
-  public boolean alreadyProcessed(@Nonnull PsiClass object) {
+  public boolean alreadyProcessed(PsiClass object) {
     String name = getClassName(object);
     return name == null || myAddedClasses.contains(name);
   }
 
-  public boolean isKeywordAlreadyProcessed(@Nonnull String keyword) {
+  public boolean isKeywordAlreadyProcessed(String keyword) {
     return myKeywords.contains(keyword);
   }
 
-  void registerKeyword(@Nonnull String keyword) {
+  void registerKeyword(String keyword) {
     myKeywords.add(keyword);
   }
 }

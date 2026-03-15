@@ -29,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.ExternalAnnotationsLineMarkerProvider.getAnnotationOwner;
 
@@ -44,7 +43,7 @@ public class ToggleSourceInferredAnnotations extends BaseIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
         PsiModifierListOwner owner = getAnnotationOwner(leaf);
         if (owner != null) {
@@ -61,7 +60,7 @@ public class ToggleSourceInferredAnnotations extends BaseIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS =
             !JavaCodeInsightSettings.getInstance().SHOW_SOURCE_INFERRED_ANNOTATIONS;
         DaemonCodeAnalyzer.getInstance(project).restart(file);

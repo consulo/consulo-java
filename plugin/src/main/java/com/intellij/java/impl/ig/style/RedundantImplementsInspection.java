@@ -30,7 +30,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -42,19 +41,16 @@ public class RedundantImplementsInspection extends BaseInspection {
     public boolean ignoreCloneable = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "RedundantInterfaceDeclaration";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.redundantImplementsDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.redundantImplementsProblemDescriptor().get();
     }
@@ -73,7 +69,6 @@ public class RedundantImplementsInspection extends BaseInspection {
     }
 
     private static class RedundantImplementsFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.redundantImplementsRemoveQuickfix();
@@ -93,7 +88,7 @@ public class RedundantImplementsInspection extends BaseInspection {
 
     private class RedundantImplementsVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (aClass.isAnnotationType()) {
                 return;
             }

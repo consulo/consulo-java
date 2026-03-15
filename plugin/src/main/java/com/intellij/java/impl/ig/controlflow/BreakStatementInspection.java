@@ -26,17 +26,14 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BreakStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.breakStatementDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.statementProblemDescriptor().get();
     }
@@ -49,7 +46,7 @@ public class BreakStatementInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+        public void visitBreakStatement(PsiBreakStatement statement) {
             super.visitBreakStatement(statement);
             PsiSwitchStatement switchStatement =
                 PsiTreeUtil.getParentOfType(

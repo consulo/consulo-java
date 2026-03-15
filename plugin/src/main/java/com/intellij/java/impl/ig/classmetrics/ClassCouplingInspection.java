@@ -22,7 +22,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -40,21 +39,18 @@ public class ClassCouplingInspection extends ClassMetricInspection {
      */
     public boolean m_includeLibraryClasses = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "OverlyCoupledClass";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overlyCoupledClassDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer totalDependencies = (Integer) infos[0];
         return InspectionGadgetsLocalize.overlyCoupledClassProblemDescriptor(totalDependencies).get();
@@ -125,7 +121,7 @@ public class ClassCouplingInspection extends ClassMetricInspection {
     private class ClassCouplingVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // note: no call to super
             int totalDependencies = calculateTotalDependencies(aClass);
             if (totalDependencies <= getLimit()) {

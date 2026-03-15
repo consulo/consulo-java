@@ -56,8 +56,7 @@ import consulo.ui.layout.VerticalLayout;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -168,7 +167,6 @@ public class ExtractMethodDialog extends DialogWrapper implements AbstractExtrac
     }
 
     @Override
-    @Nonnull
     protected Action[] createActions() {
         if (myHelpId != null) {
             return new Action[]{

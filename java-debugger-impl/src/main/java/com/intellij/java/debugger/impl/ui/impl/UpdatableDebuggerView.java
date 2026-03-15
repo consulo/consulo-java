@@ -20,7 +20,6 @@ import java.awt.BorderLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerContextListener;
 import com.intellij.java.debugger.impl.DebuggerSession;
@@ -51,7 +50,7 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 		final DebuggerContextListener contextListener = new DebuggerContextListener()
 		{
 			@Override
-			public void changeEvent(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
+			public void changeEvent(DebuggerContextImpl newContext, DebuggerSession.Event event)
 			{
 				UpdatableDebuggerView.this.changeEvent(newContext, event);
 			}
@@ -114,7 +113,6 @@ public abstract class UpdatableDebuggerView extends JPanel implements DebuggerVi
 		myDisposables.add(disposable);
 	}
 
-	@Nonnull
 	public DebuggerContextImpl getContext()
 	{
 		return myStateManager.getContext();

@@ -1,4 +1,4 @@
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class Class1 {
   public void f(@Nullable Object o) {

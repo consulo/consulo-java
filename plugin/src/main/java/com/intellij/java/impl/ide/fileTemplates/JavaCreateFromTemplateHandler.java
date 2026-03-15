@@ -41,7 +41,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 
@@ -126,12 +125,11 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
     }
 
     @Override
-    public boolean handlesTemplate(@Nonnull FileTemplate template) {
+    public boolean handlesTemplate(FileTemplate template) {
         FileType fileType = FileTypeManager.getInstance().getFileTypeByExtension(template.getExtension());
         return fileType.equals(JavaFileType.INSTANCE) && !ArrayUtil.contains(template.getName(), JavaTemplateUtil.INTERNAL_FILE_TEMPLATES);
     }
 
-    @Nonnull
     @Override
     @RequiredWriteAction
     public PsiElement createFromTemplate(
@@ -140,7 +138,7 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
         String fileName,
         FileTemplate template,
         String templateText,
-        @Nonnull Map<String, Object> props
+        Map<String, Object> props
     ) throws IncorrectOperationException {
         String extension = template.getExtension();
         PsiElement result = createClassOrInterface(project, directory, templateText, template.isReformatCode(), extension);
@@ -176,9 +174,8 @@ public class JavaCreateFromTemplateHandler implements CreateFromTemplateHandler 
         }
     }
 
-    @Nonnull
     @Override
-    public LocalizeValue commandName(@Nonnull FileTemplate template) {
+    public LocalizeValue commandName(FileTemplate template) {
         return IdeLocalize.commandCreateClassFromTemplate();
     }
 

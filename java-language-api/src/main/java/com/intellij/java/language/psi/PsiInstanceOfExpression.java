@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java <code>instanceof</code> expression.
@@ -28,7 +27,6 @@ public interface PsiInstanceOfExpression extends PsiExpression
 	 *
 	 * @return the checked expression.
 	 */
-	@Nonnull
 	PsiExpression getOperand();
 
 	/**

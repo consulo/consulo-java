@@ -31,8 +31,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Maps;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.BitUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -74,7 +73,6 @@ public final class GuessManagerImpl extends GuessManager {
         myMethodPatternMap.addPattern(new MethodPattern("setElementAt", 2, 0));
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore) {
@@ -112,7 +110,6 @@ public final class GuessManagerImpl extends GuessManager {
         return null;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiType[] guessTypeToCast(PsiExpression expr) {
@@ -122,10 +119,9 @@ public final class GuessManagerImpl extends GuessManager {
         return types.toArray(PsiType.createArray(types.size()));
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
-    public MultiMap<PsiExpression, PsiType> getControlFlowExpressionTypes(@Nonnull PsiExpression forPlace, boolean honorAssignments) {
+    public MultiMap<PsiExpression, PsiType> getControlFlowExpressionTypes(PsiExpression forPlace, boolean honorAssignments) {
         PsiElement scope = DfaPsiUtil.getTopmostBlockInSameClass(forPlace);
         if (scope == null) {
             PsiFile file = forPlace.getContainingFile();
@@ -165,10 +161,10 @@ public final class GuessManagerImpl extends GuessManager {
 
             @Override
             protected void beforeExpressionPush(
-                @Nonnull DfaValue value,
-                @Nonnull PsiExpression expression,
+                DfaValue value,
+                PsiExpression expression,
                 @Nullable TextRange range,
-                @Nonnull DfaMemoryState state
+                DfaMemoryState state
             ) {
                 if (expression == forPlace && range == null) {
                     if (!(value instanceof DfaVariableValue dfaVarValue) || dfaVarValue.isFlushableByCalls()) {
@@ -180,7 +176,7 @@ public final class GuessManagerImpl extends GuessManager {
             }
 
             @Override
-            boolean isInteresting(@Nonnull DfaValue value, @Nonnull PsiExpression expression) {
+            boolean isInteresting(DfaValue value, PsiExpression expression) {
                 return (!(value instanceof DfaVariableValue dfaVarValue) || dfaVarValue.isFlushableByCalls())
                     && ExpressionVariableDescriptor.EXPRESSION_HASHING_STRATEGY.equals(expression, forPlace);
             }
@@ -192,10 +188,8 @@ public final class GuessManagerImpl extends GuessManager {
         return null;
     }
 
-    @Nonnull
     private static DataFlowRunner createRunner(boolean honorAssignments, PsiElement scope) {
         return honorAssignments ? new DataFlowRunner(scope.getProject()) : new DataFlowRunner(scope.getProject()) {
-            @Nonnull
             @Override
             protected DfaMemoryState createMemoryState() {
                 return new AssignmentFilteringMemoryState(getFactory());
@@ -388,10 +382,9 @@ public final class GuessManagerImpl extends GuessManager {
         return null;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
-    public List<PsiType> getControlFlowExpressionTypeConjuncts(@Nonnull PsiExpression expr, boolean honorAssignments) {
+    public List<PsiType> getControlFlowExpressionTypeConjuncts(PsiExpression expr, boolean honorAssignments) {
         if (expr.getType() instanceof PsiPrimitiveType) {
             return Collections.emptyList();
         }
@@ -433,7 +426,6 @@ public final class GuessManagerImpl extends GuessManager {
         return result;
     }
 
-    @Nonnull
     private static GuessTypeVisitor tryGuessingTypeWithoutDfa(PsiExpression place, boolean honorAssignments) {
         List<PsiElement> exprsAndVars = getPotentiallyAffectingElements(place);
         GuessTypeVisitor visitor = new GuessTypeVisitor(place, honorAssignments);
@@ -462,14 +454,13 @@ public final class GuessManagerImpl extends GuessManager {
     private static class GuessTypeVisitor extends JavaElementVisitor {
         private static final CallMatcher OBJECT_GET_CLASS =
             CallMatcher.exactInstanceCall(CommonClassNames.JAVA_LANG_OBJECT, "getClass").parameterCount(0);
-        @Nonnull
         private final PsiExpression myPlace;
         PsiType mySpecificType;
         private boolean myNeedDfa;
         private boolean myDeclared;
         private final boolean myHonorAssignments;
 
-        GuessTypeVisitor(@Nonnull PsiExpression place, boolean honorAssignments) {
+        GuessTypeVisitor(PsiExpression place, boolean honorAssignments) {
             myPlace = place;
             myHonorAssignments = honorAssignments;
         }
@@ -504,7 +495,7 @@ public final class GuessManagerImpl extends GuessManager {
 
         @Override
         @RequiredReadAction
-        public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+        public void visitLocalVariable(PsiLocalVariable variable) {
             if (ExpressionUtils.isReferenceTo(myPlace, variable)) {
                 myDeclared = true;
                 handleAssignment(variable.getInitializer());
@@ -523,7 +514,7 @@ public final class GuessManagerImpl extends GuessManager {
 
         @Override
         @RequiredReadAction
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             if (OBJECT_GET_CLASS.test(call)) {
                 PsiExpression qualifier = ExpressionUtils.getEffectiveQualifier(call.getMethodExpression());
                 if (qualifier != null && ExpressionVariableDescriptor.EXPRESSION_HASHING_STRATEGY.equals(qualifier, myPlace)) {
@@ -578,7 +569,7 @@ public final class GuessManagerImpl extends GuessManager {
             return value;
         }
 
-        boolean isInteresting(@Nonnull DfaValue value, @Nonnull PsiExpression expression) {
+        boolean isInteresting(DfaValue value, PsiExpression expression) {
             return true;
         }
     }
@@ -587,7 +578,7 @@ public final class GuessManagerImpl extends GuessManager {
         private final Map<DfaVariableValue, TypeConstraint> myResult = new HashMap<>();
         private final PsiElement myForPlace;
 
-        private ExpressionTypeInstructionVisitor(@Nonnull PsiElement forPlace) {
+        private ExpressionTypeInstructionVisitor(PsiElement forPlace) {
             myForPlace = PsiUtil.skipParenthesizedExprUp(forPlace);
         }
 
@@ -612,10 +603,10 @@ public final class GuessManagerImpl extends GuessManager {
 
         @Override
         protected void beforeExpressionPush(
-            @Nonnull DfaValue value,
-            @Nonnull PsiExpression expression,
+            DfaValue value,
+            PsiExpression expression,
             @Nullable TextRange range,
-            @Nonnull DfaMemoryState state
+            DfaMemoryState state
         ) {
             if (range == null && myForPlace == expression) {
                 ((DfaMemoryStateImpl)state).forRecordedVariableTypes(

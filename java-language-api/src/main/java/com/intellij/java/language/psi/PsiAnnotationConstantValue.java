@@ -2,11 +2,10 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.annotation.JvmAnnotationConstantValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class PsiAnnotationConstantValue extends PsiAnnotationAttributeValue<PsiExpression> implements JvmAnnotationConstantValue {
-    PsiAnnotationConstantValue(@Nonnull PsiExpression value) {
+    PsiAnnotationConstantValue(PsiExpression value) {
         super(value);
     }
 

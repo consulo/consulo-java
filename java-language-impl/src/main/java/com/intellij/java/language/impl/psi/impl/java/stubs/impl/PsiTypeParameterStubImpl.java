@@ -17,7 +17,6 @@ package com.intellij.java.language.impl.psi.impl.java.stubs.impl;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiAnnotationStub;
@@ -52,7 +51,6 @@ public class PsiTypeParameterStubImpl extends StubBase<PsiTypeParameter> impleme
 	}
 
 	@Override
-	@Nonnull
 	public List<PsiAnnotationStub> getAnnotations()
 	{
 		List<StubElement> children = getChildrenStubs();

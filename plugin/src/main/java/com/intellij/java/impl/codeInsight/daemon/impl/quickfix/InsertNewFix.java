@@ -28,7 +28,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class InsertNewFix implements SyntheticIntentionAction {
   private final PsiMethodCallExpression myMethodCall;
@@ -40,20 +39,19 @@ public class InsertNewFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.insertNewFix();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myMethodCall != null
     && myMethodCall.isValid()
     && myMethodCall.getManager().isInProject(myMethodCall);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(myMethodCall.getContainingFile())) return;
     PsiElementFactory factory = JavaPsiFacade.getInstance(myMethodCall.getProject()).getElementFactory();
     PsiNewExpression newExpression = (PsiNewExpression)factory.createExpressionFromText("new X()",null);

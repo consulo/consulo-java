@@ -25,7 +25,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -33,20 +32,18 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MergeCallSequenceToChainIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class MergeCallSequenceToChainIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.mergeCallSequenceToChainIntentionName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new CallSequencePredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         if (!(element instanceof PsiExpressionStatement)) {
             return;
         }

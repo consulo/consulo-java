@@ -31,8 +31,6 @@ import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -40,7 +38,6 @@ import java.util.HashSet;
 @ExtensionImpl
 public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInspection {
 
-  @NonNls
   private static final Collection<String> regexMethodNames = new HashSet(4);
 
   static {
@@ -51,13 +48,11 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternProblemDescriptor().get();
   }
@@ -74,7 +69,6 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
 
   private static class DynamicRegexReplaceableByCompiledPatternFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.dynamicRegexReplaceableByCompiledPatternQuickfix();
     }
@@ -99,7 +93,7 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
       PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
       PsiExpressionList list = methodCallExpression.getArgumentList();
       PsiExpression[] expressions = list.getExpressions();
-      @NonNls StringBuilder fieldText =
+      StringBuilder fieldText =
           new StringBuilder("private static final java.util.regex.Pattern PATTERN = java.util.regex.Pattern.compile(");
       int expressionsLength = expressions.length;
       if (expressionsLength > 0) {
@@ -110,10 +104,10 @@ public class DynamicRegexReplaceableByCompiledPatternInspection extends BaseInsp
       PsiField newField = factory.createFieldFromText(fieldText.toString(), element);
       PsiElement field = aClass.add(newField);
 
-      @NonNls StringBuilder expressionText = new StringBuilder("PATTERN.");
-      @NonNls String methodName = methodExpression.getReferenceName();
+      StringBuilder expressionText = new StringBuilder("PATTERN.");
+      String methodName = methodExpression.getReferenceName();
       PsiExpression qualifier = methodExpression.getQualifierExpression();
-      @NonNls String qualifierText;
+      String qualifierText;
       if (qualifier == null) {
         qualifierText = "this";
       } else {

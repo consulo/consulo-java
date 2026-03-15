@@ -20,8 +20,7 @@ import com.intellij.java.language.psi.PsiMember;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class DocumentationDelegateProvider {
@@ -55,10 +54,10 @@ public abstract class DocumentationDelegateProvider {
      * @return delegate PsiDocCommentOwner instance.
      */
     @Nullable
-    public abstract PsiDocCommentOwner computeDocumentationDelegate(@Nonnull PsiMember member);
+    public abstract PsiDocCommentOwner computeDocumentationDelegate(PsiMember member);
 
     @Nullable
-    public static PsiDocCommentOwner findDocumentationDelegate(@Nonnull PsiMember method) {
+    public static PsiDocCommentOwner findDocumentationDelegate(PsiMember method) {
         return method.getApplication().getExtensionPoint(DocumentationDelegateProvider.class)
             .computeSafeIfAny(delegator -> delegator.computeDocumentationDelegate(method));
     }

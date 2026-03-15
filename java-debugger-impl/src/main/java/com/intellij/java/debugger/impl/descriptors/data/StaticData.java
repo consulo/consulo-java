@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.descriptors.data;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.impl.ui.impl.watch.StaticDescriptorImpl;
 import consulo.project.Project;
@@ -27,7 +26,7 @@ public final class StaticData extends DescriptorData<StaticDescriptorImpl>{
 
   private final ReferenceType myRefType;
 
-  public StaticData(@Nonnull ReferenceType refType) {
+  public StaticData(ReferenceType refType) {
     myRefType = refType;
   }
 

@@ -38,8 +38,7 @@ import consulo.ui.ex.toolWindow.ToolWindow;
 import consulo.ui.ex.toolWindow.ToolWindowAnchor;
 import consulo.usage.*;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
@@ -82,11 +81,11 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 
   @RequiredUIAccess
   public SlicePanel(
-    @Nonnull final Project project,
+    final Project project,
     boolean dataFlowToThis,
-    @Nonnull SliceNode rootNode,
+    SliceNode rootNode,
     boolean splitByLeafExpressions,
-    @Nonnull final ToolWindow toolWindow
+    final ToolWindow toolWindow
   ) {
     super(new BorderLayout());
     myToolWindow = toolWindow;
@@ -94,7 +93,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
       ToolWindowAnchor myAnchor = toolWindow.getAnchor();
 
       @Override
-      public void toolWindowRegistered(@Nonnull String id) {
+      public void toolWindowRegistered(String id) {
       }
 
       @Override
@@ -179,7 +178,6 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     ToolTipManager.sharedInstance().unregisterComponent(myTree);
   }
 
-  @Nonnull
   private JTree createTree() {
     DefaultMutableTreeNode root = new DefaultMutableTreeNode();
     Tree tree = new Tree(new DefaultTreeModel(root))/* {
@@ -305,7 +303,6 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     }
   }
 
-  @Nonnull
   private List<Navigatable> getNavigatables() {
     TreePath[] paths = myTree.getSelectionPaths();
     if (paths == null) {
@@ -326,7 +323,6 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     return navigatables;
   }
 
-  @Nonnull
   private ActionToolbar createToolbar() {
     DefaultActionGroup actionGroup = new DefaultActionGroup();
     actionGroup.add(new MyRefreshAction(myTree));
@@ -339,12 +335,12 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
     if (isToShowPreviewButton()) {
       actionGroup.add(new ToggleAction(UsageViewBundle.message("preview.usages.action.text"), "preview", AllIcons.Actions.PreviewDetails) {
         @Override
-        public boolean isSelected(@Nonnull AnActionEvent e) {
+        public boolean isSelected(AnActionEvent e) {
           return isPreview();
         }
 
         @Override
-        public void setSelected(@Nonnull AnActionEvent e, boolean state) {
+        public void setSelected(AnActionEvent e, boolean state) {
           setPreview(state);
           layoutPanel();
         }
@@ -383,7 +379,7 @@ public abstract class SlicePanel extends JPanel implements TypeSafeDataProvider,
 
   private class CloseAction extends CloseTabToolbarAction {
     @Override
-    public final void actionPerformed(@Nonnull AnActionEvent e) {
+    public final void actionPerformed(AnActionEvent e) {
       close();
     }
   }

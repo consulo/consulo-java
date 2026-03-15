@@ -20,7 +20,6 @@ import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.siyeh.ig.psiutils.ClassUtils;
-import jakarta.annotation.Nonnull;
 
 public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
@@ -66,7 +65,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitThisExpression(
-    @Nonnull PsiThisExpression expression) {
+    PsiThisExpression expression) {
     if (!referencesStaticallyAccessible) {
       return;
     }
@@ -79,7 +78,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitSuperExpression(
-    @Nonnull PsiSuperExpression expression) {
+    PsiSuperExpression expression) {
     if (!referencesStaticallyAccessible) {
       return;
     }
@@ -105,7 +104,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceElement(
-    @Nonnull PsiJavaCodeReferenceElement reference) {
+    PsiJavaCodeReferenceElement reference) {
     if (!referencesStaticallyAccessible) {
       return;
     }
@@ -130,7 +129,7 @@ public class InnerClassReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @Nonnull PsiReferenceExpression expression) {
+    PsiReferenceExpression expression) {
     if (!referencesStaticallyAccessible) {
       return;
     }

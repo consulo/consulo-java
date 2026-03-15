@@ -28,8 +28,7 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.CustomLineBorder;
 import consulo.ui.ex.awt.OnePixelDivider;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -163,7 +162,6 @@ public class JavaDocFormattingPanel extends OptionTreeWithPreviewPanel {
     }
 
     @Override
-    @Nonnull
     protected final FileType getFileType() {
         return JavaFileType.INSTANCE;
     }

@@ -22,8 +22,7 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author sergey.evdokimov
@@ -33,5 +32,5 @@ public abstract class I18nizeHandlerProvider {
     public static final ExtensionPointName<I18nizeHandlerProvider> EP_NAME = ExtensionPointName.create(I18nizeHandlerProvider.class);
 
     @Nullable
-    public abstract I18nQuickFixHandler getHandler(@Nonnull PsiFile psiFile, @Nonnull Editor editor, @Nonnull TextRange range);
+    public abstract I18nQuickFixHandler getHandler(PsiFile psiFile, Editor editor, TextRange range);
 }

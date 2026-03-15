@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.engine;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.SourcePosition;
 import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
@@ -35,7 +34,6 @@ abstract class RemappedSourcePosition extends SourcePosition
 	}
 
 	@Override
-	@Nonnull
 	public PsiFile getFile()
 	{
 		return myDelegate.getFile();

@@ -27,7 +27,6 @@ import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
-import jakarta.annotation.Nonnull;
 
 public class MoveMultipleElementsViewDescriptor implements UsageViewDescriptor {
     private final PsiElement[] myPsiElements;
@@ -60,7 +59,6 @@ public class MoveMultipleElementsViewDescriptor implements UsageViewDescriptor {
     }
 
     @Override
-    @Nonnull
     public PsiElement[] getElements() {
         return myPsiElements;
     }

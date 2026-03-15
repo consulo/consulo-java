@@ -43,10 +43,7 @@ import consulo.ui.image.Image;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,7 +55,6 @@ import java.util.List;
  */
 @ExtensionImpl
 public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineBreakpointProperties> implements JavaBreakpointType<JavaLineBreakpointProperties> {
-    @Nonnull
     public static JavaLineBreakpointType getInstance() {
         return EXTENSION_POINT_NAME.findExtension(JavaLineBreakpointType.class);
     }
@@ -67,7 +63,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
         super("java-line", DebuggerBundle.message("line.breakpoints.tab.title"));
     }
 
-    protected JavaLineBreakpointType(@NonNls @Nonnull String id, @Nls @Nonnull String title) {
+    protected JavaLineBreakpointType(String id, String title) {
         super(id, title);
     }
 
@@ -92,21 +88,18 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
         return new JavaLineBreakpointProperties();
     }
 
-    @Nonnull
     @Override
-    public JavaLineBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
+    public JavaLineBreakpointProperties createBreakpointProperties(VirtualFile file, int line) {
         return new JavaLineBreakpointProperties();
     }
 
-    @Nonnull
     @Override
     public Breakpoint<JavaLineBreakpointProperties> createJavaBreakpoint(Project project, XBreakpoint breakpoint) {
         return new LineBreakpoint<>(project, breakpoint);
     }
 
-    @Nonnull
     @Override
-    public List<JavaBreakpointVariant> computeVariants(@Nonnull Project project, @Nonnull XSourcePosition position) {
+    public List<JavaBreakpointVariant> computeVariants(Project project, XSourcePosition position) {
         SourcePosition pos = DebuggerUtilsEx.toSourcePosition(position, project);
         if (pos == null) {
             return Collections.emptyList();
@@ -154,7 +147,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
         return res;
     }
 
-    public boolean matchesPosition(@Nonnull LineBreakpoint<?> breakpoint, @Nonnull SourcePosition position) {
+    public boolean matchesPosition(LineBreakpoint<?> breakpoint, SourcePosition position) {
         JavaBreakpointProperties properties = breakpoint.getProperties();
         if (properties instanceof JavaLineBreakpointProperties) {
             if (!(breakpoint instanceof RunToCursorBreakpoint) && ((JavaLineBreakpointProperties) properties).getLambdaOrdinal() == null) {
@@ -170,7 +163,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     }
 
     @Nullable
-    public PsiElement getContainingMethod(@Nonnull LineBreakpoint<?> breakpoint) {
+    public PsiElement getContainingMethod(LineBreakpoint<?> breakpoint) {
         SourcePosition position = breakpoint.getSourcePosition();
         if (position == null) {
             return null;
@@ -190,7 +183,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     }
 
     public class JavaBreakpointVariant extends XLineBreakpointAllVariant {
-        public JavaBreakpointVariant(@Nonnull XSourcePosition position) {
+        public JavaBreakpointVariant(XSourcePosition position) {
             super(position);
         }
     }
@@ -199,7 +192,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
         private final PsiElement myElement;
         private final Integer myLambdaOrdinal;
 
-        public ExactJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal) {
+        public ExactJavaBreakpointVariant(XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal) {
             super(position);
             myElement = element;
             myLambdaOrdinal = lambdaOrdinal;
@@ -223,7 +216,6 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
             return myElement != null ? myElement.getTextRange() : null;
         }
 
-        @Nonnull
         @Override
         public JavaLineBreakpointProperties createProperties() {
             JavaLineBreakpointProperties properties = super.createProperties();
@@ -234,7 +226,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     }
 
     public class LineJavaBreakpointVariant extends ExactJavaBreakpointVariant {
-        public LineJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal) {
+        public LineJavaBreakpointVariant(XSourcePosition position, @Nullable PsiElement element, Integer lambdaOrdinal) {
             super(position, element, lambdaOrdinal);
         }
 
@@ -250,7 +242,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     }
 
     public class LambdaJavaBreakpointVariant extends ExactJavaBreakpointVariant {
-        public LambdaJavaBreakpointVariant(@Nonnull XSourcePosition position, @Nonnull PsiElement element, Integer lambdaOrdinal) {
+        public LambdaJavaBreakpointVariant(XSourcePosition position, PsiElement element, Integer lambdaOrdinal) {
             super(position, element, lambdaOrdinal);
         }
 
@@ -277,7 +269,7 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
     }
 
     @Override
-    public XSourcePosition getSourcePosition(@Nonnull XBreakpoint<JavaLineBreakpointProperties> breakpoint) {
+    public XSourcePosition getSourcePosition(XBreakpoint<JavaLineBreakpointProperties> breakpoint) {
         Integer ordinal = getLambdaOrdinal(breakpoint);
         if (ordinal != null && ordinal > -1) {
             SourcePosition linePosition = createLineSourcePosition((XLineBreakpoint) breakpoint);

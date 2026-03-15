@@ -42,8 +42,7 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -64,9 +63,9 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     private final String myTemplateName;
 
     @Nullable
-    public static CreateClassOrPackageFix createFix(@Nonnull String qualifiedName,
-                                                    @Nonnull GlobalSearchScope scope,
-                                                    @Nonnull PsiElement context,
+    public static CreateClassOrPackageFix createFix(String qualifiedName,
+                                                    GlobalSearchScope scope,
+                                                    PsiElement context,
                                                     @Nullable PsiJavaPackage basePackage,
                                                     @Nullable ClassKind kind,
                                                     @Nullable String superClass,
@@ -94,16 +93,16 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     }
 
     @Nullable
-    public static CreateClassOrPackageFix createFix(@Nonnull String qualifiedName,
-                                                    @Nonnull PsiElement context,
+    public static CreateClassOrPackageFix createFix(String qualifiedName,
+                                                    PsiElement context,
                                                     @Nullable ClassKind kind, String superClass) {
         return createFix(qualifiedName, context.getResolveScope(), context, null, kind, superClass, null);
     }
 
-    private CreateClassOrPackageFix(@Nonnull List<PsiDirectory> writableDirectoryList,
-                                    @Nonnull PsiElement context,
-                                    @Nonnull String presentation,
-                                    @Nonnull String redPart,
+    private CreateClassOrPackageFix(List<PsiDirectory> writableDirectoryList,
+                                    PsiElement context,
+                                    String presentation,
+                                    String redPart,
                                     @Nullable ClassKind kind,
                                     @Nullable String superClass,
                                     @Nullable String templateName) {
@@ -117,7 +116,6 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         if (myClassKind == ClassKind.INTERFACE) {
             return JavaQuickFixLocalize.createInterfaceText(myPresentation);
@@ -133,11 +131,11 @@ public class CreateClassOrPackageFix extends LocalQuickFixAndIntentionActionOnPs
     }
 
     @Override
-    public void invoke(@Nonnull final Project project,
-                       @Nonnull final PsiFile file,
+    public void invoke(final Project project,
+                       final PsiFile file,
                        @Nullable Editor editor,
-                       @Nonnull final PsiElement startElement,
-                       @Nonnull PsiElement endElement) {
+                       final PsiElement startElement,
+                       PsiElement endElement) {
         if (isAvailable(project, null, file)) {
             new WriteCommandAction(project) {
                 @Override

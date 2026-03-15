@@ -33,8 +33,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -45,15 +44,14 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
     public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
     protected WrapObjectWithOptionalOfNullableFix(
-        @Nonnull PsiExpressionList list,
+        PsiExpressionList list,
         int i,
-        @Nonnull PsiType toType,
-        @Nonnull ArgumentFixerActionFactory fixerActionFactory
+        PsiType toType,
+        ArgumentFixerActionFactory fixerActionFactory
     ) {
         super(list, i, toType, fixerActionFactory);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         if (myArgList.getExpressionCount() == 1) {
@@ -66,11 +64,11 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
     }
 
-    public static IntentionAction createFix(@Nullable PsiType type, @Nonnull PsiExpression expression) {
+    public static IntentionAction createFix(@Nullable PsiType type, PsiExpression expression) {
         class MyFix extends LocalQuickFixAndIntentionActionOnPsiElement implements HighPriorityAction {
             protected MyFix(@Nullable PsiElement element) {
                 super(element);
@@ -79,11 +77,11 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
             @RequiredReadAction
             @Override
             public void invoke(
-                @Nonnull Project project,
-                @Nonnull PsiFile file,
+                Project project,
+                PsiFile file,
                 @Nullable Editor editor,
-                @Nonnull PsiElement startElement,
-                @Nonnull PsiElement endElement
+                PsiElement startElement,
+                PsiElement endElement
             ) {
                 startElement.replace(getModifiedExpression((PsiExpression)getStartElement()));
             }
@@ -91,17 +89,16 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
             @Override
             @RequiredReadAction
             public boolean isAvailable(
-                @Nonnull Project project,
-                @Nonnull PsiFile file,
-                @Nonnull PsiElement startElement,
-                @Nonnull PsiElement endElement
+                Project project,
+                PsiFile file,
+                PsiElement startElement,
+                PsiElement endElement
             ) {
                 return BaseIntentionAction.canModify(startElement)
                     && PsiUtil.isLanguageLevel8OrHigher(startElement)
                     && areConvertible(((PsiExpression)startElement).getType(), type);
             }
 
-            @Nonnull
             @Override
             public LocalizeValue getText() {
                 return JavaQuickFixLocalize.wrapWithOptionalSingleParameterText();
@@ -121,9 +118,9 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
 
         @Override
         public boolean areTypesConvertible(
-            @Nonnull PsiType exprType,
-            @Nonnull PsiType parameterType,
-            @Nonnull PsiElement context
+            PsiType exprType,
+            PsiType parameterType,
+            PsiElement context
         ) {
             return parameterType.isConvertibleFrom(exprType) || areConvertible(exprType, parameterType);
         }
@@ -158,7 +155,6 @@ public class WrapObjectWithOptionalOfNullableFix extends MethodArgumentFix imple
         return optionalTypeParameter != null && TypeConversionUtil.isAssignable(optionalTypeParameter, exprType);
     }
 
-    @Nonnull
     @RequiredReadAction
     private static PsiExpression getModifiedExpression(PsiExpression expression) {
         Project project = expression.getProject();

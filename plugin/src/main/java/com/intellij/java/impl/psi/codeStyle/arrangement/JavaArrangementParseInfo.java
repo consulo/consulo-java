@@ -25,8 +25,7 @@ import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -36,45 +35,34 @@ import java.util.*;
  */
 public class JavaArrangementParseInfo {
 
-  @Nonnull
   private final List<JavaElementArrangementEntry> myEntries = new ArrayList<JavaElementArrangementEntry>();
 
-  @Nonnull
   private final Map<Pair<String/* property name */, String/* class name */>, JavaArrangementPropertyInfo> myProperties = new HashMap<Pair<String,
       String>, JavaArrangementPropertyInfo>();
 
-  @Nonnull
   private final List<ArrangementEntryDependencyInfo> myMethodDependencyRoots = new ArrayList<ArrangementEntryDependencyInfo>();
 
-  @Nonnull
   private final Map<PsiMethod /* anchor */, Set<PsiMethod /* dependencies */>> myMethodDependencies = new HashMap<PsiMethod, Set<PsiMethod>>();
 
-  @Nonnull
   private final Map<PsiMethod, JavaElementArrangementEntry> myMethodEntriesMap = new HashMap<PsiMethod, JavaElementArrangementEntry>();
 
-  @Nonnull
   private final Map<PsiClass, List<Pair<PsiMethod/*overridden*/, PsiMethod/*overriding*/>>> myOverriddenMethods = new LinkedHashMap<PsiClass,
       List<Pair<PsiMethod, PsiMethod>>>();
 
-  @Nonnull
   private final Set<PsiMethod> myTmpMethodDependencyRoots = new LinkedHashSet<PsiMethod>();
-  @Nonnull
   private final Set<PsiMethod> myDependentMethods = new HashSet<PsiMethod>();
   private boolean myRebuildMethodDependencies;
 
-  @Nonnull
   private FieldDependenciesManager myFieldDependenciesManager = new FieldDependenciesManager();
 
-  @Nonnull
   public List<JavaElementArrangementEntry> getEntries() {
     return myEntries;
   }
 
-  public void addEntry(@Nonnull JavaElementArrangementEntry entry) {
+  public void addEntry(JavaElementArrangementEntry entry) {
     myEntries.add(entry);
   }
 
-  @Nonnull
   public Collection<JavaArrangementPropertyInfo> getProperties() {
     return myProperties.values();
   }
@@ -84,7 +72,6 @@ public class JavaArrangementParseInfo {
    * {@link ArrangementEntryDependencyInfo#getDependentEntriesInfos() calls another method}, it calls other methods
    * and so forth
    */
-  @Nonnull
   public List<ArrangementEntryDependencyInfo> getMethodDependencyRoots() {
     if (myRebuildMethodDependencies) {
       myMethodDependencyRoots.clear();
@@ -102,7 +89,7 @@ public class JavaArrangementParseInfo {
 
   @Nullable
   private ArrangementEntryDependencyInfo buildMethodDependencyInfo(
-          @Nonnull PsiMethod method, @Nonnull Map<PsiMethod, ArrangementEntryDependencyInfo> cache) {
+          PsiMethod method, Map<PsiMethod, ArrangementEntryDependencyInfo> cache) {
     JavaElementArrangementEntry entry = myMethodEntriesMap.get(method);
     if (entry == null) {
       return null;
@@ -139,16 +126,15 @@ public class JavaArrangementParseInfo {
     return result;
   }
 
-  public void registerGetter(@Nonnull String propertyName, @Nonnull String className, @Nonnull JavaElementArrangementEntry entry) {
+  public void registerGetter(String propertyName, String className, JavaElementArrangementEntry entry) {
     getPropertyInfo(propertyName, className).setGetter(entry);
   }
 
-  public void registerSetter(@Nonnull String propertyName, @Nonnull String className, @Nonnull JavaElementArrangementEntry entry) {
+  public void registerSetter(String propertyName, String className, JavaElementArrangementEntry entry) {
     getPropertyInfo(propertyName, className).setSetter(entry);
   }
 
-  @Nonnull
-  private JavaArrangementPropertyInfo getPropertyInfo(@Nonnull String propertyName, @Nonnull String className) {
+  private JavaArrangementPropertyInfo getPropertyInfo(String propertyName, String className) {
     Pair<String, String> key = Pair.create(propertyName, className);
     JavaArrangementPropertyInfo propertyInfo = myProperties.get(key);
     if (propertyInfo == null) {
@@ -157,15 +143,15 @@ public class JavaArrangementParseInfo {
     return propertyInfo;
   }
 
-  public void onMethodEntryCreated(@Nonnull PsiMethod method, @Nonnull JavaElementArrangementEntry entry) {
+  public void onMethodEntryCreated(PsiMethod method, JavaElementArrangementEntry entry) {
     myMethodEntriesMap.put(method, entry);
   }
 
-  public void onFieldEntryCreated(@Nonnull PsiField field, @Nonnull JavaElementArrangementEntry entry) {
+  public void onFieldEntryCreated(PsiField field, JavaElementArrangementEntry entry) {
     myFieldDependenciesManager.registerFieldAndEntry(field, entry);
   }
 
-  public void onOverriddenMethod(@Nonnull PsiMethod baseMethod, @Nonnull PsiMethod overridingMethod) {
+  public void onOverriddenMethod(PsiMethod baseMethod, PsiMethod overridingMethod) {
     PsiClass clazz = baseMethod.getContainingClass();
     if (clazz == null) {
       return;
@@ -177,7 +163,6 @@ public class JavaArrangementParseInfo {
     methods.add(Pair.create(baseMethod, overridingMethod));
   }
 
-  @Nonnull
   public List<JavaArrangementOverriddenMethodsInfo> getOverriddenMethods() {
     List<JavaArrangementOverriddenMethodsInfo> result = new ArrayList<JavaArrangementOverriddenMethodsInfo>();
     ObjectIntMap<PsiMethod> weights = ObjectMaps.newObjectIntHashMap();
@@ -208,7 +193,7 @@ public class JavaArrangementParseInfo {
    * Is expected to be called when new method dependency is detected. Here given <code>'base method'</code> calls
    * <code>'dependent method'</code>.
    */
-  public void registerMethodCallDependency(@Nonnull PsiMethod caller, @Nonnull PsiMethod callee) {
+  public void registerMethodCallDependency(PsiMethod caller, PsiMethod callee) {
     myTmpMethodDependencyRoots.remove(callee);
     if (!myDependentMethods.contains(caller)) {
       myTmpMethodDependencyRoots.add(caller);
@@ -224,11 +209,10 @@ public class JavaArrangementParseInfo {
     myRebuildMethodDependencies = true;
   }
 
-  public void registerFieldInitializationDependency(@Nonnull PsiField fieldToInitialize, @Nonnull PsiField usedInInitialization) {
+  public void registerFieldInitializationDependency(PsiField fieldToInitialize, PsiField usedInInitialization) {
     myFieldDependenciesManager.registerInitializationDependency(fieldToInitialize, usedInInitialization);
   }
 
-  @Nonnull
   public List<ArrangementEntryDependencyInfo> getFieldDependencyRoots() {
     return myFieldDependenciesManager.getRoots();
   }
@@ -238,11 +222,11 @@ public class JavaArrangementParseInfo {
     private final Map<PsiField, ArrangementEntryDependencyInfo> myFieldInfosMap = new HashMap<>();
 
 
-    public void registerFieldAndEntry(@Nonnull PsiField field, @Nonnull JavaElementArrangementEntry entry) {
+    public void registerFieldAndEntry(PsiField field, JavaElementArrangementEntry entry) {
       myFieldInfosMap.put(field, new ArrangementEntryDependencyInfo(entry));
     }
 
-    public void registerInitializationDependency(@Nonnull PsiField fieldToInitialize, @Nonnull PsiField usedInInitialization) {
+    public void registerInitializationDependency(PsiField fieldToInitialize, PsiField usedInInitialization) {
       Set<PsiField> fields = myFieldDependencies.get(fieldToInitialize);
       if (fields == null) {
         fields = new HashSet<PsiField>();
@@ -251,7 +235,6 @@ public class JavaArrangementParseInfo {
       fields.add(usedInInitialization);
     }
 
-    @Nonnull
     public List<ArrangementEntryDependencyInfo> getRoots() {
       List<ArrangementEntryDependencyInfo> list = ContainerUtil.newArrayList();
 

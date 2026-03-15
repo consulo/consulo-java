@@ -24,7 +24,7 @@ import consulo.ide.localize.IdeLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.pathMacro.Macro;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public final class FilePackageMacro extends Macro {

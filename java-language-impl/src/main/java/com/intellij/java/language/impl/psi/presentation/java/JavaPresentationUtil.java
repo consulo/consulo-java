@@ -33,7 +33,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class JavaPresentationUtil {
   private JavaPresentationUtil() {

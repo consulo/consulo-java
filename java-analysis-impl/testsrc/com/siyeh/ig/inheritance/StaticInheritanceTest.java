@@ -15,7 +15,6 @@
  */
 package com.siyeh.ig.inheritance;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.codeInsight.daemon.quickFix.LightQuickFixTestCase;
 import consulo.language.editor.inspection.LocalInspectionTool;
@@ -25,7 +24,6 @@ import com.intellij.openapi.application.PluginPathManager;
  * User: cdr
  */
 public class StaticInheritanceTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new StaticInheritanceInspection()};
@@ -40,7 +38,6 @@ public class StaticInheritanceTest extends LightQuickFixTestCase {
     return "/com/siyeh/igtest/inheritance/staticInheritance/";
   }
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return PluginPathManager.getPluginHomePath("InspectionGadgets") + "/test";

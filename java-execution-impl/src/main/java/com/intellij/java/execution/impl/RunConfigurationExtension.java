@@ -26,9 +26,8 @@ import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.psi.PsiElement;
 import consulo.process.ExecutionException;
 import consulo.process.cmd.GeneralCommandLine;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /*
  * @author yole
@@ -46,20 +45,20 @@ public abstract class RunConfigurationExtension extends RunConfigurationExtensio
 
     @Override
     protected void patchCommandLine(
-        @Nonnull RunConfigurationBase configuration,
+        RunConfigurationBase configuration,
         RunnerSettings runnerSettings,
-        @Nonnull GeneralCommandLine cmdLine,
-        @Nonnull String runnerId
+        GeneralCommandLine cmdLine,
+        String runnerId
     ) throws ExecutionException {
     }
 
     @Override
-    protected boolean isEnabledFor(@Nonnull RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
+    protected boolean isEnabledFor(RunConfigurationBase applicableConfiguration, @Nullable RunnerSettings runnerSettings) {
         return true;
     }
 
     @Override
-    protected void extendTemplateConfiguration(@Nonnull RunConfigurationBase configuration) {
+    protected void extendTemplateConfiguration(RunConfigurationBase configuration) {
     }
 
     public void cleanUserData(RunConfigurationBase runConfigurationBase) {

@@ -7,8 +7,7 @@ import consulo.language.psi.PsiFile;
 import consulo.util.io.DigestUtil;
 import consulo.util.lang.ThreadLocalCachedValue;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,14 +22,13 @@ import static com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.Pr
  */
 public class BytecodeAnalysisConverter {
   private static final ThreadLocalCachedValue<MessageDigest> DIGEST_CACHE = new ThreadLocalCachedValue<MessageDigest>() {
-    @Nonnull
     @Override
     public MessageDigest create() {
       return DigestUtil.md5();
     }
 
     @Override
-    protected void init(@Nonnull MessageDigest value) {
+    protected void init(MessageDigest value) {
       value.reset();
     }
   };
@@ -44,7 +42,7 @@ public class BytecodeAnalysisConverter {
    * Returns null if conversion is impossible (something is not resolvable).
    */
   @Nullable
-  public static EKey psiKey(@Nonnull PsiMember psiMethod, @Nonnull Direction direction) {
+  public static EKey psiKey(PsiMember psiMethod, Direction direction) {
     PsiClass psiClass = psiMethod.getContainingClass();
     if (psiClass != null) {
       String className = descriptor(psiClass, 0, false);
@@ -68,7 +66,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static String methodSignature(@Nonnull PsiMethod psiMethod, @Nonnull PsiClass psiClass) {
+  private static String methodSignature(PsiMethod psiMethod, PsiClass psiClass) {
     StringBuilder sb = new StringBuilder();
 
     sb.append('(');
@@ -106,7 +104,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static String descriptor(@Nonnull PsiClass psiClass, int dimensions, boolean full) {
+  private static String descriptor(PsiClass psiClass, int dimensions, boolean full) {
     PsiFile containingFile = psiClass.getContainingFile();
     if (!(containingFile instanceof PsiClassOwner)) {
       LOG.debug("containingFile was not resolved for " + psiClass.getQualifiedName());
@@ -143,7 +141,7 @@ public class BytecodeAnalysisConverter {
   }
 
   @Nullable
-  private static String descriptor(@Nonnull PsiType psiType) {
+  private static String descriptor(PsiType psiType) {
     int dimensions = 0;
     psiType = TypeConversionUtil.erasure(psiType);
     if (psiType instanceof PsiArrayType) {
@@ -197,8 +195,7 @@ public class BytecodeAnalysisConverter {
    * @param primaryKey primary stable keys
    * @return corresponding (stable!) keys
    */
-  @Nonnull
-  public static ArrayList<EKey> mkInOutKeys(@Nonnull PsiMethod psiMethod, @Nonnull EKey primaryKey) {
+  public static ArrayList<EKey> mkInOutKeys(PsiMethod psiMethod, EKey primaryKey) {
     PsiParameter[] parameters = psiMethod.getParameterList().getParameters();
     ArrayList<EKey> keys = new ArrayList<>(parameters.length * 2 + 2);
     keys.add(primaryKey);

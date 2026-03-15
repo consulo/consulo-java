@@ -4,7 +4,6 @@
  */
 package com.intellij.codeInsight.completion;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupManager;
@@ -47,13 +46,13 @@ public abstract class CompletionSortingTestCase extends LightFixtureCompletionTe
 	@Override
 	protected abstract String getBasePath();
 
-	protected void checkPreferredItems(int selected, @NonNls String... expected)
+	protected void checkPreferredItems(int selected, String... expected)
 	{
 		invokeCompletion(getTestName(false) + ".java");
 		assertPreferredItems(selected, expected);
 	}
 
-	protected void assertPreferredItems(int selected, @NonNls String... expected)
+	protected void assertPreferredItems(int selected, String... expected)
 	{
 		myFixture.assertPreferredCompletionItems(selected, expected);
 	}

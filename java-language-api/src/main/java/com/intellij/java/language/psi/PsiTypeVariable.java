@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Used in Generify refactoring
@@ -30,7 +29,7 @@ public abstract class PsiTypeVariable extends PsiType {
     public abstract boolean isValidInContext(PsiType type);
 
     @Override
-    public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+    public <A> A accept(PsiTypeVisitor<A> visitor) {
         if (visitor instanceof PsiTypeVisitorEx) {
             return ((PsiTypeVisitorEx<A>) visitor).visitTypeVariable(this);
         }

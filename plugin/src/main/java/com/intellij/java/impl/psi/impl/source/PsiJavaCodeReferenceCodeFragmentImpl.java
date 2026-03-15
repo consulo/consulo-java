@@ -24,8 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.impl.ast.CompositeElement;
 import consulo.logging.Logger;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -36,7 +35,7 @@ public class PsiJavaCodeReferenceCodeFragmentImpl extends PsiCodeFragmentImpl im
 
   public PsiJavaCodeReferenceCodeFragmentImpl(Project project,
                                               boolean isPhysical,
-                                              @NonNls String name,
+                                              String name,
                                               CharSequence text,
                                               boolean isClassesAccepted,
                                               @Nullable PsiElement context) {

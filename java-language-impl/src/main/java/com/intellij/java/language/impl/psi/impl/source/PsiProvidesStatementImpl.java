@@ -22,15 +22,14 @@ import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStatementStub> implements PsiProvidesStatement {
-  public PsiProvidesStatementImpl(@Nonnull PsiProvidesStatementStub stub) {
+  public PsiProvidesStatementImpl(PsiProvidesStatementStub stub) {
     super(stub, JavaStubElementTypes.PROVIDES_STATEMENT);
   }
 
-  public PsiProvidesStatementImpl(@Nonnull ASTNode node) {
+  public PsiProvidesStatementImpl(ASTNode node) {
     super(node);
   }
 
@@ -56,7 +55,7 @@ public class PsiProvidesStatementImpl extends JavaStubPsiElement<PsiProvidesStat
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitProvidesStatement(this);
     } else {

@@ -1,5 +1,4 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class B {
     public void f(@jakarta.annotation.Nonnull String p){}
@@ -23,7 +22,6 @@ public class Y extends B {
 
     @jakarta.annotation.Nullable
     int f;
-    @Nonnull
 	void vf(){}
     void t(@jakarta.annotation.Nonnull double d){}
 }

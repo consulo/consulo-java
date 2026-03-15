@@ -35,8 +35,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiLabeledStatementImpl extends CompositePsiElement implements PsiLabeledStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiLabeledStatementImpl.class);
@@ -46,7 +45,6 @@ public class PsiLabeledStatementImpl extends CompositePsiElement implements PsiL
   }
 
   @Override
-  @Nonnull
   public PsiIdentifier getLabelIdentifier() {
     return (PsiIdentifier)findChildByRoleAsPsiElement(ChildRole.LABEL_NAME);
   }
@@ -93,7 +91,7 @@ public class PsiLabeledStatementImpl extends CompositePsiElement implements PsiL
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitLabeledStatement(this);
     }
@@ -107,7 +105,7 @@ public class PsiLabeledStatementImpl extends CompositePsiElement implements PsiL
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
     if (lastParent != null && lastParent.getParent() != this){
       PsiElement[] children = getChildren();
       for (PsiElement aChildren : children) {
@@ -125,13 +123,12 @@ public class PsiLabeledStatementImpl extends CompositePsiElement implements PsiL
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getLabelIdentifier(), name);
     return this;
   }
 
   @Override
-  @Nonnull
   public SearchScope getUseScope() {
     return new LocalSearchScope(this);
   }

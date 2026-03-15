@@ -22,7 +22,6 @@ import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -32,7 +31,6 @@ public class ConstructorParameterOnFieldRenameRenamerFactory implements Automati
     return element instanceof PsiField;
   }
 
-  @Nonnull
   public LocalizeValue getOptionName() {
     return LocalizeValue.empty();
   }

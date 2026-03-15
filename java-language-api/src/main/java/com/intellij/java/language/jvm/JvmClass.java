@@ -15,10 +15,8 @@
  */
 package com.intellij.java.language.jvm;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 
 public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
@@ -29,7 +27,6 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getSimpleName
 	 */
 	@Nullable
-	@NonNls
 	@Override
 	String getName();
 
@@ -38,10 +35,8 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getCanonicalName
 	 */
 	@Nullable
-	@NonNls
 	String getQualifiedName();
 
-	@Nonnull
 	JvmClassKind getClassKind();
 
 	/**
@@ -59,7 +54,6 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getAnnotatedInterfaces
 	 * @see Class#getGenericInterfaces
 	 */
-	@Nonnull
 	JvmReferenceType[] getInterfaceTypes();
 
 	//
@@ -69,20 +63,17 @@ public interface JvmClass extends JvmTypeParametersOwner, JvmTypeDeclaration
 	 * @see Class#getDeclaredMethods
 	 * @see Class#getDeclaredConstructors
 	 */
-	@Nonnull
 	JvmMethod[] getMethods();
 
 	/**
 	 * @return all (static, private, etc) fields declared by this class but excluding inherited ones
 	 * @see Class#getDeclaredFields
 	 */
-	@Nonnull
 	JvmField[] getFields();
 
 	/**
 	 * @return all (static, private, etc) inner classes declared by this class but excluding inherited ones
 	 * @see Class#getDeclaredClasses
 	 */
-	@Nonnull
 	JvmClass[] getInnerClasses();
 }

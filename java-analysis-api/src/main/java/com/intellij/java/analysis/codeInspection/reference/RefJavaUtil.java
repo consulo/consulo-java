@@ -28,7 +28,7 @@ import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class RefJavaUtil {

@@ -19,10 +19,8 @@ import consulo.java.analysis.localize.JavaAnalysisLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nls;
 
 import java.util.Objects;
 
@@ -48,7 +46,6 @@ public enum SpecialField implements VariableDescriptor {
             return accessor instanceof PsiField && "length".equals(accessor.getName()) && PsiUtil.isArrayClass(accessor.getContainingClass());
         }
 
-        @Nonnull
         @Override
         DfType fromInitializer(PsiExpression initializer) {
             if (initializer instanceof PsiArrayInitializerExpression arrayInitializer) {
@@ -68,7 +65,6 @@ public enum SpecialField implements VariableDescriptor {
         }
     },
     STRING_LENGTH("length", JavaAnalysisLocalize.specialFieldStringLength(), true) {
-        @Nonnull
         @Override
         DfType fromInitializer(PsiExpression initializer) {
             return fromConstant(ExpressionUtils.computeConstantExpression(initializer));
@@ -90,7 +86,6 @@ public enum SpecialField implements VariableDescriptor {
             return containingClass != null && JAVA_LANG_STRING.equals(containingClass.getQualifiedName());
         }
 
-        @Nonnull
         @Override
         public DfType fromConstant(@Nullable Object obj) {
             return obj instanceof String string ? DfTypes.intValue(string.length()) : DfTypes.TOP;
@@ -122,7 +117,6 @@ public enum SpecialField implements VariableDescriptor {
             return accessor instanceof PsiMethod && SIZE_METHODS.methodMatches((PsiMethod)accessor);
         }
 
-        @Nonnull
         @Override
         public DfType fromConstant(@Nullable Object obj) {
             if (obj instanceof PsiField && DfaUtil.isEmptyCollectionConstantField((PsiVariable)obj)) {
@@ -131,9 +125,8 @@ public enum SpecialField implements VariableDescriptor {
             return super.fromConstant(obj);
         }
 
-        @Nonnull
         @Override
-        public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
+        public DfaValue createValue(DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
             if (qualifier instanceof DfaVariableValue var
                 && var.getQualifier() != null
                 && var.getPsiVariable() instanceof PsiMethod method
@@ -160,15 +153,13 @@ public enum SpecialField implements VariableDescriptor {
             return PsiPrimitiveType.getUnboxedType(variableValue.getType());
         }
 
-        @Nonnull
         @Override
         public DfType getDefaultValue(boolean forAccessor) {
             return DfTypes.TOP;
         }
 
-        @Nonnull
         @Override
-        public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
+        public DfaValue createValue(DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
             return qualifier instanceof DfaBoxedValue boxedValue
                 ? boxedValue.getWrappedValue()
                 : super.createValue(factory, qualifier, forAccessor);
@@ -194,7 +185,6 @@ public enum SpecialField implements VariableDescriptor {
                 : type;
         }
 
-        @Nonnull
         @Override
         public DfType getDefaultValue(boolean forAccessor) {
             return (forAccessor ? DfaNullability.NOT_NULL : DfaNullability.NULLABLE).asDfType();
@@ -206,7 +196,7 @@ public enum SpecialField implements VariableDescriptor {
         }
 
         @Override
-        public String getPresentationText(@Nonnull DfType dfType, @Nullable PsiType type) {
+        public String getPresentationText(DfType dfType, @Nullable PsiType type) {
             if (dfType == DfTypes.NULL) {
                 return JavaAnalysisLocalize.dftypePresentationEmptyOptional().get();
             }
@@ -249,8 +239,7 @@ public enum SpecialField implements VariableDescriptor {
     abstract boolean isMyAccessor(PsiMember accessor);
 
     public
-    @Nls
-    String getPresentationText(@Nonnull DfType dfType, @Nullable PsiType type) {
+    String getPresentationText(DfType dfType, @Nullable PsiType type) {
         return getDefaultValue(false).equals(dfType) ? "" : dfType.toString();
     }
 
@@ -283,14 +272,12 @@ public enum SpecialField implements VariableDescriptor {
      * @return a DfaValue which represents this special field
      */
     @Override
-    @Nonnull
-    public final DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier) {
+    public final DfaValue createValue(DfaValueFactory factory, @Nullable DfaValue qualifier) {
         return createValue(factory, qualifier, false);
     }
 
-    @Nonnull
     @Override
-    public DfaValue createValue(@Nonnull DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
+    public DfaValue createValue(DfaValueFactory factory, @Nullable DfaValue qualifier, boolean forAccessor) {
         if (qualifier instanceof DfaVariableValue variableValue) {
             PsiModifierListOwner psiVariable = variableValue.getPsiVariable();
             if (psiVariable instanceof PsiField field
@@ -317,7 +304,6 @@ public enum SpecialField implements VariableDescriptor {
      *                    (may differ from internal representation of value)
      * @return a dfType for the default value
      */
-    @Nonnull
     public DfType getDefaultValue(boolean forAccessor) {
         return DfTypes.intRange(LongRangeSet.indexRange());
     }
@@ -327,12 +313,10 @@ public enum SpecialField implements VariableDescriptor {
         return PsiType.INT;
     }
 
-    @Nonnull
     DfType fromInitializer(PsiExpression initializer) {
         return DfTypes.TOP;
     }
 
-    @Nonnull
     public DfType fromConstant(@Nullable Object obj) {
         return DfTypes.TOP;
     }
@@ -362,8 +346,7 @@ public enum SpecialField implements VariableDescriptor {
      * @param fieldValue dfType of the special field value
      * @return a dfType that represents a value having this special field restricted to the supplied dfType
      */
-    @Nonnull
-    public DfType asDfType(@Nonnull DfType fieldValue) {
+    public DfType asDfType(DfType fieldValue) {
         DfType defaultType = this == OPTIONAL_VALUE ? DfTypes.OBJECT_OR_NULL : getDefaultValue(false);
         DfType clamped = fieldValue.meet(defaultType);
         if (clamped.equals(defaultType)) {
@@ -380,8 +363,7 @@ public enum SpecialField implements VariableDescriptor {
      * @param exactResultType exact PSI type of the result
      * @return a dfType that represents a value having this special field restricted to the supplied dfType
      */
-    @Nonnull
-    public DfType asDfType(@Nonnull DfType fieldValue, @Nullable PsiType exactResultType) {
+    public DfType asDfType(DfType fieldValue, @Nullable PsiType exactResultType) {
         DfType dfType = asDfType(fieldValue);
         if (exactResultType == null) {
             return dfType;
@@ -398,8 +380,7 @@ public enum SpecialField implements VariableDescriptor {
      * @param dfType of the qualifier
      * @return en extracted DfType
      */
-    @Nonnull
-    public DfType getFromQualifier(@Nonnull DfType dfType) {
+    public DfType getFromQualifier(DfType dfType) {
         if (dfType == DfTypes.TOP) {
             return DfTypes.TOP;
         }
@@ -444,7 +425,7 @@ public enum SpecialField implements VariableDescriptor {
      * @return a special field; null if no special field is detected to be related to given qualifier
      */
     @Nullable
-    public static SpecialField fromQualifier(@Nonnull DfaValue value) {
+    public static SpecialField fromQualifier(DfaValue value) {
         DfReferenceType dfType = ObjectUtil.tryCast(value.getDfType(), DfReferenceType.class);
         if (dfType != null && dfType.getSpecialField() != null) {
             return dfType.getSpecialField();
@@ -452,7 +433,6 @@ public enum SpecialField implements VariableDescriptor {
         return fromQualifierType(value.getType());
     }
 
-    @Nonnull
     public String getPresentationName() {
         return myTitleValue.get();
     }

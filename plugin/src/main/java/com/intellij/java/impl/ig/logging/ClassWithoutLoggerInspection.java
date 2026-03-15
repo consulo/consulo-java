@@ -28,9 +28,7 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,7 +41,6 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
   /**
    * @noinspection PublicField
    */
-  @NonNls
   public String loggerNamesString = "java.util.logging.Logger" + ',' +
                                     "org.slf4j.Logger" + ',' +
                                     "org.apache.commons.logging.Log" + ',' +
@@ -60,25 +57,23 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.noLoggerDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.noLoggerProblemDescriptor().get();
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(loggerNamesString, loggerNames);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(Element element) throws WriteExternalException {
     loggerNamesString = formatString(loggerNames);
     super.writeSettings(element);
   }
@@ -102,7 +97,7 @@ public class ClassWithoutLoggerInspection extends BaseInspection {
   private class ClassWithoutLoggerVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       //no recursion to avoid drilldown
       if (aClass.isInterface() || aClass.isEnum() ||
           aClass.isAnnotationType()) {

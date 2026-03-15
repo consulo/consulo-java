@@ -30,8 +30,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -65,7 +64,6 @@ public class GenerateFieldOrPropertyHandler extends GenerateMembersHandlerBase {
         return ClassMember.EMPTY_ARRAY;
     }
 
-    @Nonnull
     @Override
     @RequiredWriteAction
     public List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] members)
@@ -118,7 +116,7 @@ public class GenerateFieldOrPropertyHandler extends GenerateMembersHandlerBase {
     }
 
     @Nullable
-    public PsiMember findExistingMember(@Nonnull PsiClass aClass, @Nonnull PropertyMemberType memberType) {
+    public PsiMember findExistingMember(PsiClass aClass, PropertyMemberType memberType) {
         if (memberType == PropertyMemberType.FIELD) {
             return aClass.findFieldByName(getFieldName(aClass), false);
         }

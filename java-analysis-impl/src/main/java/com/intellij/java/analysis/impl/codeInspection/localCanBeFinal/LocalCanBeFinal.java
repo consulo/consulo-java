@@ -34,8 +34,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -61,7 +60,6 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
         myQuickFix = new AcceptSuggested();
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
@@ -70,8 +68,8 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
     @Override
     @RequiredReadAction
     public ProblemDescriptor[] checkMethod(
-        @Nonnull PsiMethod method,
-        @Nonnull InspectionManager manager,
+        PsiMethod method,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -81,7 +79,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
 
     @Override
     @RequiredReadAction
-    public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkClass(PsiClass aClass, InspectionManager manager, boolean isOnTheFly, Object state) {
         List<ProblemDescriptor> allProblems = null;
         PsiClassInitializer[] initializers = aClass.getInitializers();
         for (PsiClassInitializer initializer : initializers) {
@@ -153,7 +151,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
         body.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
             @RequiredReadAction
-            public void visitCodeBlock(@Nonnull PsiCodeBlock block) {
+            public void visitCodeBlock(PsiCodeBlock block) {
                 super.visitCodeBlock(block);
                 PsiElement anchor = block;
                 if (block.getParent() instanceof PsiSwitchStatement) {
@@ -171,7 +169,7 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
             }
 
             @Override
-            public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+            public void visitForeachStatement(PsiForeachStatement statement) {
                 super.visitForeachStatement(statement);
                 PsiParameter param = statement.getIterationParameter();
                 PsiStatement body = statement.getBody();
@@ -193,12 +191,12 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
                 for (PsiElement child : children) {
                     child.accept(new JavaElementVisitor() {
                         @Override
-                        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+                        public void visitReferenceExpression(PsiReferenceExpression expression) {
                             visitReferenceElement(expression);
                         }
 
                         @Override
-                        public void visitDeclarationStatement(@Nonnull PsiDeclarationStatement statement) {
+                        public void visitDeclarationStatement(PsiDeclarationStatement statement) {
                             PsiElement[] declaredElements = statement.getDeclaredElements();
                             for (PsiElement declaredElement : declaredElements) {
                                 if (declaredElement instanceof PsiVariable) {
@@ -282,33 +280,29 @@ public class LocalCanBeFinal extends BaseJavaBatchLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionLocalCanBeFinalDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesCodeStyleIssues();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }
 
     private static class AcceptSuggested implements LocalQuickFix {
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionCanBeFinalAcceptQuickfix();
         }
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor problem) {
+        public void applyFix(Project project, ProblemDescriptor problem) {
             if (!FileModificationService.getInstance().preparePsiElementForWrite(problem.getPsiElement())) {
                 return;
             }

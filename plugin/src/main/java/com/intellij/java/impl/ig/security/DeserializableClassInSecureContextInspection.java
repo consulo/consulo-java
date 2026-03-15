@@ -28,8 +28,7 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -40,13 +39,11 @@ public class DeserializableClassInSecureContextInspection extends BaseInspection
   public boolean ignoreThrowable = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.deserializableClassInSecureContextDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.deserializableClassInSecureContextProblemDescriptor().get();
   }
@@ -66,7 +63,7 @@ public class DeserializableClassInSecureContextInspection extends BaseInspection
   private class DeserializableClassInSecureContextVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
         return;
       }

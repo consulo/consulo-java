@@ -26,21 +26,18 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class UnnecessaryConstantArrayCreationExpressionInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unnecessaryConstantArrayCreationExpressionDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.unnecessaryConstantArrayCreationExpressionProblemDescriptor().get();
   }
@@ -54,7 +51,6 @@ public class UnnecessaryConstantArrayCreationExpressionInspection
   private static class UnnecessaryConstantArrayCreationExpressionFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.unnecessaryConstantArrayCreationExpressionQuickfix();
     }

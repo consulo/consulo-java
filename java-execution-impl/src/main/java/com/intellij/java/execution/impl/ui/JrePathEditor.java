@@ -25,7 +25,7 @@ import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.PanelWithAnchor;
 import consulo.ui.ex.awt.Wrapper;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;

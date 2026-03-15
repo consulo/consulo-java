@@ -22,7 +22,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -31,18 +30,15 @@ public class SwitchStatementsWithoutDefaultInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean m_ignoreFullyCoveredEnums = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.switchStatementsWithoutDefaultDisplayName();
     }
 
-    @Nonnull
     public String getID() {
         return "SwitchStatementWithoutDefaultBranch";
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.switchStatementsWithoutDefaultProblemDescriptor().get();
     }
@@ -59,7 +55,7 @@ public class SwitchStatementsWithoutDefaultInspection extends BaseInspection {
     private class SwitchStatementsWithoutDefaultVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+        public void visitSwitchStatement(PsiSwitchStatement statement) {
             super.visitSwitchStatement(statement);
             if (switchStatementHasDefault(statement)) {
                 return;

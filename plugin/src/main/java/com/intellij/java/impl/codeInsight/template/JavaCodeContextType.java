@@ -30,8 +30,7 @@ import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiJavaElement;
 import static consulo.language.pattern.PlatformPatterns.psiElement;
@@ -39,12 +38,12 @@ import static consulo.language.pattern.StandardPatterns.instanceOf;
 
 public abstract class JavaCodeContextType extends BaseTemplateContextType {
 
-    protected JavaCodeContextType(@Nonnull String id, @Nonnull LocalizeValue presentableName, @Nullable Class<? extends BaseTemplateContextType> baseContextType) {
+    protected JavaCodeContextType(String id, LocalizeValue presentableName, @Nullable Class<? extends BaseTemplateContextType> baseContextType) {
         super(id, presentableName, baseContextType);
     }
 
     @Override
-    public boolean isInContext(@Nonnull TemplateActionContext templateActionContext) {
+    public boolean isInContext(TemplateActionContext templateActionContext) {
         PsiFile file = templateActionContext.getFile();
         int offset = templateActionContext.getStartOffset();
 
@@ -60,7 +59,7 @@ public abstract class JavaCodeContextType extends BaseTemplateContextType {
     }
 
     @Override
-    public boolean isInContext(@Nonnull PsiFile file, int offset) {
+    public boolean isInContext(PsiFile file, int offset) {
         if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
             PsiElement element = file.findElementAt(offset);
             if (element instanceof PsiWhiteSpace) {
@@ -72,9 +71,8 @@ public abstract class JavaCodeContextType extends BaseTemplateContextType {
         return false;
     }
 
-    protected abstract boolean isInContext(@Nonnull PsiElement element);
+    protected abstract boolean isInContext(PsiElement element);
 
-    @Nonnull
     @Override
     public SyntaxHighlighter createHighlighter() {
         return new JavaFileHighlighter();

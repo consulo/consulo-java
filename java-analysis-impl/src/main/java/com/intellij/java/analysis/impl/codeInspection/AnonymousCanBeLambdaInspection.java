@@ -48,7 +48,6 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -62,13 +61,11 @@ import java.util.function.UnaryOperator;
 public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspectionTool<AnonymousCanBeLambdaInspectionState> {
     public static final Logger LOG = Logger.getInstance(AnonymousCanBeLambdaInspection.class);
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Anonymous type can be replaced with lambda");
@@ -79,28 +76,24 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         return true;
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "Convert2Lambda";
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
     }
 
-    @Nonnull
     @Override
     public AnonymousCanBeLambdaInspectionState createStateProvider() {
         return new AnonymousCanBeLambdaInspectionState();
     }
 
-    @Nonnull
     @Override
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         AnonymousCanBeLambdaInspectionState state
@@ -108,7 +101,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+            public void visitAnonymousClass(PsiAnonymousClass aClass) {
                 super.visitAnonymousClass(aClass);
                 PsiElement parent = aClass.getParent();
                 PsiElement lambdaContext = parent != null ? parent.getParent() : null;
@@ -137,7 +130,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     }
 
     @RequiredReadAction
-    static boolean hasRuntimeAnnotations(PsiMethod method, @Nonnull Set<String> runtimeAnnotationsToIgnore) {
+    static boolean hasRuntimeAnnotations(PsiMethod method, Set<String> runtimeAnnotationsToIgnore) {
         PsiAnnotation[] annotations = method.getModifierList().getAnnotations();
         for (PsiAnnotation annotation : annotations) {
             PsiJavaCodeReferenceElement ref = annotation.getNameReferenceElement();
@@ -214,7 +207,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     public static boolean canBeConvertedToLambda(
         PsiAnonymousClass aClass,
         boolean acceptParameterizedFunctionTypes,
-        @Nonnull Set<String> ignoredRuntimeAnnotations
+        Set<String> ignoredRuntimeAnnotations
     ) {
         return canBeConvertedToLambda(aClass, acceptParameterizedFunctionTypes, true, ignoredRuntimeAnnotations);
     }
@@ -241,7 +234,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         PsiAnonymousClass aClass,
         boolean acceptParameterizedFunctionTypes,
         boolean reportNotAnnotatedInterfaces,
-        @Nonnull Set<String> ignoredRuntimeAnnotations
+        Set<String> ignoredRuntimeAnnotations
     ) {
         if (PsiUtil.getLanguageLevel(aClass).isAtLeast(LanguageLevel.JDK_1_8)) {
             PsiClassType baseClassType = aClass.getBaseClassType();
@@ -263,7 +256,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     }
 
     @RequiredWriteAction
-    public static PsiExpression replaceAnonymousWithLambda(@Nonnull PsiElement anonymousClass, PsiType expectedType) {
+    public static PsiExpression replaceAnonymousWithLambda(PsiElement anonymousClass, PsiType expectedType) {
         PsiNewExpression newArrayExpression = (PsiNewExpression) JavaPsiFacade.getElementFactory(anonymousClass.getProject())
             .createExpressionFromText("new " + expectedType.getCanonicalText() + "[]{" + anonymousClass.getText() + "}", anonymousClass);
         PsiArrayInitializerExpression initializer = newArrayExpression.getArrayInitializer();
@@ -273,7 +266,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 
     @RequiredWriteAction
     public static PsiExpression replacePsiElementWithLambda(
-        @Nonnull PsiElement element,
+        PsiElement element,
         boolean ignoreEqualsMethod,
         boolean forceIgnoreTypeCast
     ) {
@@ -319,7 +312,6 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
      * @return newly-generated lambda expression (possibly with typecast)
      */
     @RequiredWriteAction
-    @Nonnull
     static PsiExpression generateLambdaByMethod(
         PsiAnonymousClass anonymousClass,
         PsiMethod method,
@@ -392,7 +384,6 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         return (PsiExpression) javaCodeStyleManager.shortenClassReferences(typeCast);
     }
 
-    @Nonnull
     @RequiredReadAction
     static Collection<PsiComment> collectCommentsOutsideMethodBody(PsiAnonymousClass anonymousClass, PsiCodeBlock body) {
         Collection<PsiComment> psiComments = PsiTreeUtil.findChildrenOfType(anonymousClass, PsiComment.class);
@@ -413,7 +404,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 
         block.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitVariable(@Nonnull PsiVariable variable) {
+            public void visitVariable(PsiVariable variable) {
                 super.visitVariable(variable);
                 if (!(variable instanceof PsiField)) {
                     variables.add(variable);
@@ -440,7 +431,6 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
     }
 
     private static class ReplaceWithLambdaFix implements LocalQuickFix, HighPriorityAction {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Replace with lambda");
@@ -448,7 +438,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiElement element = descriptor.getPsiElement();
             if (element != null) {
                 replacePsiElementWithLambda(element, false, false);
@@ -483,7 +473,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
             final Map<PsiElement, PsiElement> replacements = new LinkedHashMap<>();
             body.accept(new JavaRecursiveElementWalkingVisitor() {
                 @Override
-                public void visitVariable(@Nonnull PsiVariable variable) {
+                public void visitVariable(PsiVariable variable) {
                     super.visitVariable(variable);
                     String newName = names.get(variable);
                     if (newName != null) {
@@ -574,7 +564,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression methodCallExpression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression methodCallExpression) {
             if (myBodyContainsForbiddenRefs) {
                 return;
             }
@@ -592,7 +582,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         }
 
         @Override
-        public void visitThisExpression(@Nonnull PsiThisExpression expression) {
+        public void visitThisExpression(PsiThisExpression expression) {
             if (myBodyContainsForbiddenRefs) {
                 return;
             }
@@ -603,7 +593,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         }
 
         @Override
-        public void visitSuperExpression(@Nonnull PsiSuperExpression expression) {
+        public void visitSuperExpression(PsiSuperExpression expression) {
             if (myBodyContainsForbiddenRefs) {
                 return;
             }
@@ -614,7 +604,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
         }
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             if (myBodyContainsForbiddenRefs) {
                 return;
             }
@@ -624,7 +614,7 @@ public class AnonymousCanBeLambdaInspection extends BaseJavaBatchLocalInspection
 
         @Override
         @RequiredReadAction
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             if (myBodyContainsForbiddenRefs) {
                 return;
             }

@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven

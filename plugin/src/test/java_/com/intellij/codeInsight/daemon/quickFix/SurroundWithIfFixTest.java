@@ -20,13 +20,11 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
 
 public abstract class SurroundWithIfFixTest extends LightQuickFixTestCase {
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new DataFlowInspection()};

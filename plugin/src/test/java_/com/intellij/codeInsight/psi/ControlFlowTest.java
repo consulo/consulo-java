@@ -12,7 +12,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -27,7 +26,7 @@ import static org.junit.Assert.assertTrue;
  * Date: Nov 25, 2002
  */
 public abstract class ControlFlowTest extends LightCodeInsightTestCase {
-  @NonNls private static final String BASE_PATH = "/psi/controlFlow";
+  private static final String BASE_PATH = "/psi/controlFlow";
 
   private static void doTestFor(File file) throws Exception {
     String contents = StringUtil.convertLineSeparators(FileUtil.loadFile(file));

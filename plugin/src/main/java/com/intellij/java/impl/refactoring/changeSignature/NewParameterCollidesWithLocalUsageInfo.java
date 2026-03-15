@@ -21,7 +21,6 @@ import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -39,7 +38,6 @@ public class NewParameterCollidesWithLocalUsageInfo extends UnresolvableCollisio
         myMethod = method;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDescription() {
         return RefactoringLocalize.thereIsAlreadyA0In1ItWillConflictWithTheNewParameter(

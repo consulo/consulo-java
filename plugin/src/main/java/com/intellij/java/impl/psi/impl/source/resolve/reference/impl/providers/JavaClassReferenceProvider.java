@@ -37,8 +37,7 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -104,30 +103,27 @@ public class JavaClassReferenceProvider extends JavaClassPsiReferenceProvider im
         return null;
     }
 
-    @Nonnull
-    public PsiFile getContextFile(@Nonnull PsiElement element) {
+    public PsiFile getContextFile(PsiElement element) {
         return element.getContainingFile();
     }
 
     @Nullable
-    public PsiClass getContextClass(@Nonnull PsiElement element) {
+    public PsiClass getContextClass(PsiElement element) {
         return null;
     }
 
     @Override
-    @Nonnull
-    public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+    public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
         return getReferencesByElement(element);
     }
 
-    public PsiReference[] getReferencesByElement(@Nonnull PsiElement element) {
+    public PsiReference[] getReferencesByElement(PsiElement element) {
         int offsetInElement = ElementManipulators.getOffsetInElement(element);
         String text = ElementManipulators.getValueText(element);
         return getReferencesByString(text, element, offsetInElement);
     }
 
-    @Nonnull
-    public PsiReference[] getReferencesByString(String str, @Nonnull PsiElement position, int offsetInPosition) {
+    public PsiReference[] getReferencesByString(String str, PsiElement position, int offsetInPosition) {
         if (myAllowEmpty && StringUtil.isEmpty(str)) {
             return PsiReference.EMPTY_ARRAY;
         }

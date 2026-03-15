@@ -27,12 +27,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class EqualityToEqualsFix extends InspectionGadgetsFix {
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.objectComparisonReplaceQuickfix();
   }
@@ -62,7 +59,7 @@ public class EqualityToEqualsFix extends InspectionGadgetsFix {
     if (strippedRhs == null) {
       return;
     }
-    @NonNls String expString;
+    String expString;
     if (ParenthesesUtils.getPrecedence(strippedLhs) >
         ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
       expString = '(' + strippedLhs.getText() + ").equals(" +
@@ -72,7 +69,7 @@ public class EqualityToEqualsFix extends InspectionGadgetsFix {
       expString = strippedLhs.getText() + ".equals(" +
                   strippedRhs.getText() + ')';
     }
-    @NonNls String newExpression;
+    String newExpression;
     if (negated) {
       newExpression = '!' + expString;
     }

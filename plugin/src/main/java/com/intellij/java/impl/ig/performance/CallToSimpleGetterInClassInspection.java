@@ -32,8 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -46,19 +45,16 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
     public boolean onlyReportPrivateGetter = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "CallToSimpleGetterFromWithinClass";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.callToSimpleGetterInClassDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.callToSimpleGetterInClassProblemDescriptor().get();
     }
@@ -81,7 +77,6 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
     }
 
     private static class InlineCallFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.callToSimpleGetterInClassInlineQuickfix();
@@ -145,7 +140,7 @@ public class CallToSimpleGetterInClassInspection extends BaseInspection {
 
     private class CallToSimpleGetterInClassVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+        public void visitMethodCallExpression(PsiMethodCallExpression call) {
             super.visitMethodCallExpression(call);
             PsiClass containingClass = ClassUtils.getContainingClass(call);
             if (containingClass == null) {

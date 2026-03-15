@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -26,7 +25,7 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
 
 
   @Override
-  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(PsiAnonymousClass aClass) {
     // to call to super, to keep this from drilling down
   }
 
@@ -48,21 +47,21 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+  public void visitDoWhileStatement(PsiDoWhileStatement statement) {
     enterScope();
     super.visitDoWhileStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitForStatement(@Nonnull PsiForStatement statement) {
+  public void visitForStatement(PsiForStatement statement) {
     enterScope();
     super.visitForStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+  public void visitIfStatement(PsiIfStatement statement) {
     boolean isAlreadyCounted = false;
     if (statement.getParent() instanceof PsiIfStatement) {
       PsiIfStatement parent = (PsiIfStatement)statement.getParent();
@@ -82,28 +81,28 @@ class NestingDepthVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
+  public void visitSynchronizedStatement(PsiSynchronizedStatement statement) {
     enterScope();
     super.visitSynchronizedStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+  public void visitTryStatement(PsiTryStatement statement) {
     enterScope();
     super.visitTryStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+  public void visitSwitchStatement(PsiSwitchStatement statement) {
     enterScope();
     super.visitSwitchStatement(statement);
     exitScope();
   }
 
   @Override
-  public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+  public void visitWhileStatement(PsiWhileStatement statement) {
     enterScope();
     super.visitWhileStatement(statement);
     exitScope();

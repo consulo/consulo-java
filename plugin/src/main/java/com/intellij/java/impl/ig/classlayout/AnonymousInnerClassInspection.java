@@ -25,17 +25,14 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnonymousInnerClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.anonymousInnerClassDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.anonymousInnerClassProblemDescriptor().get();
     }
@@ -56,12 +53,12 @@ public class AnonymousInnerClassInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             //no call to super here, to avoid double counting
         }
 
         @Override
-        public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+        public void visitAnonymousClass(PsiAnonymousClass aClass) {
             super.visitAnonymousClass(aClass);
             if (aClass instanceof PsiEnumConstantInitializer) {
                 return;

@@ -34,8 +34,7 @@ import consulo.language.parser.PsiBuilder;
 import consulo.language.util.FlyweightCapableTreeStructure;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -52,7 +51,6 @@ public interface JavaElementType {
       myFactory = factory;
     }
 
-    @Nonnull
     @Override
     public ASTNode createCompositeNode() {
       return myFactory.get();
@@ -187,14 +185,13 @@ public interface JavaElementType {
       return new PsiCodeBlockImpl(text);
     }
 
-    @Nonnull
     @Override
     public ASTNode createCompositeNode() {
       return new PsiCodeBlockImpl(null);
     }
 
     @Override
-    public ASTNode parseContents(@Nonnull final ASTNode chameleon) {
+    public ASTNode parseContents(final ASTNode chameleon) {
       final PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
       JavaParser.INSTANCE.getStatementParser().parseCodeBlockDeep(builder, true);
       return builder.getTreeBuilt().getFirstChildNode();
@@ -225,10 +222,10 @@ public interface JavaElementType {
      * @param rightBrace - right brace element type
      * @return true if `text` passes the checks
      */
-    public static boolean hasProperBraceBalance(@Nonnull CharSequence text,
-                                                @Nonnull Lexer lexer,
-                                                @Nonnull IElementType leftBrace,
-                                                @Nonnull IElementType rightBrace) {
+    public static boolean hasProperBraceBalance(CharSequence text,
+                                                Lexer lexer,
+                                                IElementType leftBrace,
+                                                IElementType rightBrace) {
       lexer.start(text);
 
       if (lexer.getTokenType() != leftBrace) {
@@ -317,7 +314,7 @@ public interface JavaElementType {
 
     @Nullable
     @Override
-    public ASTNode parseContents(@Nonnull final ASTNode chameleon) {
+    public ASTNode parseContents(final ASTNode chameleon) {
       return JavaParserUtil.parseFragment(chameleon, myParser);
     }
   }
@@ -327,7 +324,6 @@ public interface JavaElementType {
       super("DUMMY_ELEMENT", JavaLanguage.INSTANCE);
     }
 
-    @Nonnull
     @Override
     public ASTNode createCompositeNode() {
       return new CompositePsiElement(this) {

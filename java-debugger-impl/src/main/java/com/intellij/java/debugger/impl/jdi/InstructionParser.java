@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.jdi;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * "Code" attribute parsing extracted from ASM4 library and adopted to finding operations with local variables

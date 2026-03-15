@@ -27,7 +27,6 @@ package org.osmorc.manifest.lang.psi.impl;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.stub.IStubElementType;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.psi.Directive;
 import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
 
@@ -35,11 +34,11 @@ import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class DirectiveImpl extends AbstractAssignmentExpression implements Directive {
-  public DirectiveImpl(AssignmentExpressionStub stub, @Nonnull IStubElementType nodeType) {
+  public DirectiveImpl(AssignmentExpressionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public DirectiveImpl(@Nonnull ASTNode node) {
+  public DirectiveImpl(ASTNode node) {
     super(node);
   }
 }

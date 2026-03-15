@@ -18,8 +18,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
@@ -263,11 +262,11 @@ public class SuspiciousMethodCallUtil {
     @Nullable
     @RequiredReadAction
     public static String getSuspiciousMethodCallMessage(
-        @Nonnull PsiMethodCallExpression methodCall,
+        PsiMethodCallExpression methodCall,
         PsiExpression arg,
         PsiType argType,
         boolean reportConvertibleMethodCalls,
-        @Nonnull List<PatternMethod> patternMethods,
+        List<PatternMethod> patternMethods,
         int idx
     ) {
         PsiReferenceExpression methodExpression = methodCall.getMethodExpression();
@@ -287,7 +286,7 @@ public class SuspiciousMethodCallUtil {
         PsiReferenceExpression methodExpression,
         PsiType argType,
         boolean reportConvertibleMethodCalls,
-        @Nonnull List<PatternMethod> patternMethods,
+        List<PatternMethod> patternMethods,
         int argIdx
     ) {
         PsiExpression qualifier = methodExpression.getQualifierExpression();

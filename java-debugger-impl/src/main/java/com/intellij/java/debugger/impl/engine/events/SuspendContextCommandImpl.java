@@ -21,8 +21,7 @@ import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import consulo.logging.Logger;
 import consulo.util.collection.Stack;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Performs contextAction when evaluation is available in suspend context
@@ -44,7 +43,7 @@ public abstract class SuspendContextCommandImpl extends DebuggerCommandImpl {
     throw new AbstractMethodError();
   }
 
-  public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
+  public void contextAction(SuspendContextImpl suspendContext) throws Exception {
     //noinspection deprecation
     contextAction();
   }

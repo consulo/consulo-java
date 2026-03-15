@@ -23,13 +23,11 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.collection.ArrayFactory;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl implements PsiImportStaticStatement {
   public static final PsiImportStaticStatementImpl[] EMPTY_ARRAY = new PsiImportStaticStatementImpl[0];
   public static final ArrayFactory<PsiImportStaticStatementImpl> ARRAY_FACTORY = new ArrayFactory<PsiImportStaticStatementImpl>() {
-    @Nonnull
     @Override
     public PsiImportStaticStatementImpl[] create(final int count) {
       return count == 0 ? EMPTY_ARRAY : new PsiImportStaticStatementImpl[count];
@@ -91,7 +89,7 @@ public class PsiImportStaticStatementImpl extends PsiImportStatementBaseImpl imp
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitImportStaticStatement(this);
     } else {

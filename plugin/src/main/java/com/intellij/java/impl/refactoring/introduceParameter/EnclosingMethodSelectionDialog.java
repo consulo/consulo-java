@@ -31,7 +31,6 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.ScrollPaneFactory;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,7 +61,6 @@ public class EnclosingMethodSelectionDialog extends DialogWrapper {
     }
   }
 
-  @Nonnull
   protected Action[] createActions() {
     return new Action[]{getOKAction(), getCancelAction()/*, getHelpAction()*/};
   }

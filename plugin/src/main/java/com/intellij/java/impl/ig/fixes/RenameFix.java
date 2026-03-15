@@ -28,8 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.concurrent.AsyncResult;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class RenameFix extends InspectionGadgetsFix {
     private final String m_targetName;
@@ -40,19 +38,18 @@ public class RenameFix extends InspectionGadgetsFix {
         m_targetName = null;
     }
 
-    public RenameFix(@NonNls String targetName) {
+    public RenameFix(String targetName) {
         m_targetName = targetName;
     }
 
 
-    public RenameFix(@NonNls String targetName, boolean searchInStrings, boolean searchInNonJavaFiles) {
+    public RenameFix(String targetName, boolean searchInStrings, boolean searchInNonJavaFiles) {
         m_targetName = targetName;
         m_searchInStrings = searchInStrings;
         m_searchInNonJavaFiles = searchInNonJavaFiles;
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
         return m_targetName == null
             ? InspectionGadgetsLocalize.renameQuickfix()

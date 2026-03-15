@@ -21,8 +21,7 @@ import consulo.xml.psi.xml.XmlAttribute;
 import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.psi.xml.XmlText;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -50,20 +49,20 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
   public static final String SUPER_ACCEPTED = "super accepted";
 
   @Override
-  public void collectAllAccepted(@Nonnull Set<String> set) {
+  public void collectAllAccepted(Set<String> set) {
     set.add(NEW_AS_CONSTRUCTOR);
     set.add(THIS_ACCEPTED);
     set.add(SUPER_ACCEPTED);
   }
 
   @Override
-  public void collectDefinitionSearchFlags(@Nonnull Set<String> set) {
+  public void collectDefinitionSearchFlags(Set<String> set) {
     set.add(THIS_ACCEPTED);
     set.add(SUPER_ACCEPTED);
   }
 
   @Override
-  public void collectReferenceSearchFlags(@Nonnull Set<String> set) {
+  public void collectReferenceSearchFlags(Set<String> set) {
     set.add(NEW_AS_CONSTRUCTOR);
   }
 
@@ -124,7 +123,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
   }
 
   @Override
-  public boolean includeSelfInGotoImplementation(@Nonnull PsiElement element) {
+  public boolean includeSelfInGotoImplementation(PsiElement element) {
     if (element instanceof PsiModifierListOwner && ((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.ABSTRACT)) {
       return false;
     }
@@ -150,7 +149,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
 
   @Nullable
   @Override
-  public Collection<PsiElement> getTargetCandidates(@Nonnull PsiReference reference) {
+  public Collection<PsiElement> getTargetCandidates(PsiReference reference) {
     PsiElement parent = reference.getElement().getParent();
     if (parent instanceof PsiCallExpression) {
       PsiCallExpression callExpr = (PsiCallExpression) parent;
@@ -190,9 +189,9 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
   @Override
   @RequiredReadAction
   public PsiElement modifyReferenceOrReferencedElement(@Nullable PsiElement refElement,
-                                                       @Nonnull PsiFile file,
-                                                       @Nonnull Editor editor,
-                                                       @Nonnull Set<String> flags,
+                                                       PsiFile file,
+                                                       Editor editor,
+                                                       Set<String> flags,
                                                        int offset) {
     PsiReference ref = null;
     if (refElement == null) {
@@ -253,7 +252,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
 
   @Nullable
   @Override
-  public PsiElement modifyTargetElement(@Nonnull PsiElement element, @Nonnull Set<String> flags) {
+  public PsiElement modifyTargetElement(PsiElement element, Set<String> flags) {
     if (element instanceof PsiKeyword) {
       if (element.getParent() instanceof PsiThisExpression) {
         if (!flags.contains(THIS_ACCEPTED)) {
@@ -303,7 +302,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
 
   @Nullable
   @Override
-  public PsiElement adjustReference(@Nonnull PsiReference ref) {
+  public PsiElement adjustReference(PsiReference ref) {
     PsiElement parent = ref.getElement().getParent();
     if (parent instanceof PsiMethodCallExpression) {
       return parent;
@@ -313,7 +312,7 @@ public class JavaTargetElementUtilEx implements TargetElementUtilExtender {
 
   @Nullable
   @Override
-  public PsiElement getNamedElement(@Nonnull PsiElement element) {
+  public PsiElement getNamedElement(PsiElement element) {
     PsiElement parent = element.getParent();
     if (element instanceof PsiIdentifier) {
       if (parent instanceof PsiClass && element.equals(((PsiClass) parent).getNameIdentifier())) {

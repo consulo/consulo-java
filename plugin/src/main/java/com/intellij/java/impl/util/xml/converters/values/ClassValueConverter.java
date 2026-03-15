@@ -34,10 +34,8 @@ import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.Converter;
 import consulo.xml.util.xml.CustomReferenceConverter;
 import consulo.xml.util.xml.GenericDomValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class ClassValueConverter extends Converter<PsiClass> implements CustomReferenceConverter {
@@ -46,7 +44,7 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
     return ServiceManager.getService(ClassValueConverter.class);
   }
 
-  public PsiClass fromString(@Nullable @NonNls String s, ConvertContext context) {
+  public PsiClass fromString(@Nullable String s, ConvertContext context) {
     if (s == null) return null;
     Module module = context.getModule();
     PsiFile psiFile = context.getFile();
@@ -58,7 +56,6 @@ public abstract class ClassValueConverter extends Converter<PsiClass> implements
     return psiClass == null ? null : psiClass.getQualifiedName();
   }
 
-  @Nonnull
   public abstract PsiReference[] createReferences(GenericDomValue genericDomValue, PsiElement element, ConvertContext context);
 
   public static GlobalSearchScope getScope(Project project, @Nullable Module module, @Nullable PsiFile psiFile) {

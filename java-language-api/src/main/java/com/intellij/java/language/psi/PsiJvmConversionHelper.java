@@ -27,8 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 import consulo.logging.attachment.AttachmentFactory;
 import consulo.logging.attachment.RuntimeExceptionWithAttachments;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.EnumMap;
@@ -60,18 +59,16 @@ class PsiJvmConversionHelper {
     MODIFIERS = Collections.unmodifiableMap(modifiers);
   }
 
-  @Nonnull
-  static PsiAnnotation[] getListAnnotations(@Nonnull PsiModifierListOwner modifierListOwner) {
+  static PsiAnnotation[] getListAnnotations(PsiModifierListOwner modifierListOwner) {
     PsiModifierList list = modifierListOwner.getModifierList();
     return list == null ? PsiAnnotation.EMPTY_ARRAY : list.getAnnotations();
   }
 
-  static boolean hasListModifier(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull JvmModifier modifier) {
+  static boolean hasListModifier(PsiModifierListOwner modifierListOwner, JvmModifier modifier) {
     return modifierListOwner.hasModifierProperty(MODIFIERS.get(modifier));
   }
 
-  @Nonnull
-  static JvmClassKind getJvmClassKind(@Nonnull PsiClass psiClass) {
+  static JvmClassKind getJvmClassKind(PsiClass psiClass) {
     if (psiClass.isAnnotationType()) {
       return JvmClassKind.ANNOTATION;
     }
@@ -85,7 +82,7 @@ class PsiJvmConversionHelper {
   }
 
   @Nullable
-  static JvmReferenceType getClassSuperType(@Nonnull PsiClass psiClass) {
+  static JvmReferenceType getClassSuperType(PsiClass psiClass) {
     if (psiClass.isInterface()) {
       return null;
     }
@@ -112,8 +109,7 @@ class PsiJvmConversionHelper {
     return extendsTypes[0];
   }
 
-  @Nonnull
-  static JvmReferenceType[] getClassInterfaces(@Nonnull PsiClass psiClass) {
+  static JvmReferenceType[] getClassInterfaces(PsiClass psiClass) {
     if (psiClass instanceof PsiAnonymousClass) {
       PsiClassType baseClassType = ((PsiAnonymousClass) psiClass).getBaseClassType();
       PsiClass baseClass = baseClassType.resolve();
@@ -133,24 +129,23 @@ class PsiJvmConversionHelper {
 
 
   @Nullable
-  static PsiAnnotation getListAnnotation(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String fqn) {
+  static PsiAnnotation getListAnnotation(PsiModifierListOwner modifierListOwner, String fqn) {
     PsiModifierList list = modifierListOwner.getModifierList();
     return list == null ? null : list.findAnnotation(fqn);
   }
 
-  static boolean hasListAnnotation(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String fqn) {
+  static boolean hasListAnnotation(PsiModifierListOwner modifierListOwner, String fqn) {
     PsiModifierList list = modifierListOwner.getModifierList();
     return list != null && list.hasAnnotation(fqn);
   }
 
-  @Nonnull
-  static String getAnnotationAttributeName(@Nonnull PsiNameValuePair pair) {
+  static String getAnnotationAttributeName(PsiNameValuePair pair) {
     String name = pair.getName();
     return name == null ? PsiAnnotation.DEFAULT_REFERENCED_METHOD_NAME : name;
   }
 
   @Nullable
-  static JvmAnnotationAttributeValue getAnnotationAttributeValue(@Nonnull PsiNameValuePair pair) {
+  static JvmAnnotationAttributeValue getAnnotationAttributeValue(PsiNameValuePair pair) {
     return getAnnotationAttributeValue(pair.getValue());
   }
 
@@ -185,16 +180,15 @@ class PsiJvmConversionHelper {
   static class PsiJvmSubstitutor implements JvmSubstitutor {
 
     private final
-    @Nonnull
     PsiSubstitutor mySubstitutor;
 
-    PsiJvmSubstitutor(@Nonnull PsiSubstitutor substitutor) {
+    PsiJvmSubstitutor(PsiSubstitutor substitutor) {
       mySubstitutor = substitutor;
     }
 
     @Nullable
     @Override
-    public JvmType substitute(@Nonnull JvmTypeParameter typeParameter) {
+    public JvmType substitute(JvmTypeParameter typeParameter) {
       if (!(typeParameter instanceof PsiTypeParameter)) {
         return null;
       }

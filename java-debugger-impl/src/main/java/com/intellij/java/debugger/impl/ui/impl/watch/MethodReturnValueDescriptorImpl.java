@@ -26,7 +26,6 @@ import consulo.internal.com.sun.jdi.Method;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: lex
@@ -37,7 +36,7 @@ public class MethodReturnValueDescriptorImpl extends ValueDescriptorImpl {
     private final Method myMethod;
     private final Value myValue;
 
-    public MethodReturnValueDescriptorImpl(Project project, @Nonnull Method method, Value value) {
+    public MethodReturnValueDescriptorImpl(Project project, Method method, Value value) {
         super(project);
         myMethod = method;
         myValue = value;
@@ -48,7 +47,6 @@ public class MethodReturnValueDescriptorImpl extends ValueDescriptorImpl {
         return myValue;
     }
 
-    @Nonnull
     public Method getMethod() {
         return myMethod;
     }

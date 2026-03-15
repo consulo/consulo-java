@@ -37,8 +37,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +48,12 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
 
   // subExpressionValue == Boolean.TRUE or Boolean.FALSE if subExpression evaluates to boolean constant and needs to be replaced
   //   otherwise subExpressionValue= null and we starting to simplify expression without any further knowledge
-  public SimplifyBooleanExpressionFix(@Nonnull PsiExpression subExpression, Boolean subExpressionValue) {
+  public SimplifyBooleanExpressionFix(PsiExpression subExpression, Boolean subExpressionValue) {
     super(subExpression);
     mySubExpressionValue = subExpressionValue;
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     PsiExpression expression = getSubExpression();
     return JavaQuickFixLocalize.simplifyBooleanExpressionText(expression.getText(), mySubExpressionValue);
@@ -73,7 +70,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public void invoke(final Project project, PsiFile file, PsiElement startElement, PsiElement endElement) {
     if (!isAvailable()) return;
     final PsiExpression expression = getSubExpression();
     LOG.assertTrue(expression.isValid());
@@ -199,7 +196,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
     simplifyIfStatement(newExpression);
   }
 
-  public static boolean canBeSimplified(@Nonnull PsiExpression expression) {
+  public static boolean canBeSimplified(PsiExpression expression) {
     if (!(expression instanceof PsiConditionalExpression) && !PsiType.BOOLEAN.equals(expression.getType()))
       return false;
 
@@ -244,7 +241,7 @@ public class SimplifyBooleanExpressionFix extends LocalQuickFixOnPsiElement {
       falseExpression = createResult ? createExpression(psiManager, Boolean.toString(false)) : null;
     }
 
-    private static PsiExpression createExpression(final PsiManager psiManager, @NonNls String text) {
+    private static PsiExpression createExpression(final PsiManager psiManager, String text) {
       try {
         return JavaPsiFacade.getInstance(psiManager.getProject()).getElementFactory().createExpressionFromText(text, null);
       } catch (IncorrectOperationException e) {

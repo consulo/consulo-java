@@ -28,24 +28,21 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MakeMethodVarargsIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class MakeMethodVarargsIntention extends Intention {
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.makeMethodVarargsIntentionName();
     }
 
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new MakeMethodVarargsPredicate();
     }
 
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         makeMethodVarargs(element);
         makeMethodCallsVarargs(element);

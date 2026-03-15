@@ -39,8 +39,7 @@ import consulo.project.Project;
 import consulo.util.concurrent.Obsolescent;
 import consulo.util.lang.Pair;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author egor
@@ -55,12 +54,12 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator {
   }
 
   @Override
-  public void evaluate(@Nonnull final String expression, @Nonnull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition) {
+  public void evaluate(final String expression, final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition) {
     evaluate(XExpression.fromText(expression), callback, expressionPosition);
   }
 
   @Override
-  public void evaluate(@Nonnull final XExpression expression, @Nonnull final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition) {
+  public void evaluate(final XExpression expression, final XEvaluationCallback callback, @Nullable XSourcePosition expressionPosition) {
     myDebugProcess.getManagerThread().schedule(new DebuggerContextCommandImpl(myDebugProcess.getDebuggerContext(), myStackFrame.getStackFrameProxy().threadProxy()) {
       @Override
       public Priority getPriority() {
@@ -130,7 +129,7 @@ public class JavaDebuggerEvaluator extends XDebuggerEvaluator {
   }
 
   @Override
-  public EvaluationMode getEvaluationMode(@Nonnull String text, int startOffset, int endOffset, @Nullable PsiFile psiFile) {
+  public EvaluationMode getEvaluationMode(String text, int startOffset, int endOffset, @Nullable PsiFile psiFile) {
     if (psiFile != null) {
       PsiElement[] range = JavaCodeInsightUtilCore.findStatementsInRange(psiFile, startOffset, endOffset);
       return range.length > 1 ? EvaluationMode.CODE_FRAGMENT : EvaluationMode.EXPRESSION;

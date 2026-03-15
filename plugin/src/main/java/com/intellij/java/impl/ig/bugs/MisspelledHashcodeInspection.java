@@ -25,18 +25,14 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MisspelledHashcodeInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.misspelledHashcodeDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.misspelledHashcodeProblemDescriptor().get();
   }
@@ -53,9 +49,9 @@ public class MisspelledHashcodeInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       //note: no call to super
-      @NonNls String methodName = method.getName();
+      String methodName = method.getName();
       if (!"hashcode".equals(methodName)) {
         return;
       }

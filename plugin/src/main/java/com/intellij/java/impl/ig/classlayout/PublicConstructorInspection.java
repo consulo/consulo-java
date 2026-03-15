@@ -37,21 +37,18 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.concurrent.AsyncResult;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class PublicConstructorInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.publicConstructorDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return (Boolean) infos[0]
@@ -71,7 +68,6 @@ public class PublicConstructorInspection extends BaseInspection {
     }
 
     private class ReplaceConstructorWithFactoryMethodFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.publicConstructorQuickfix();
@@ -98,7 +94,7 @@ public class PublicConstructorInspection extends BaseInspection {
     private static class PublicConstructorVisitor extends BaseInspectionVisitor {
         @Override
         @RequiredReadAction
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (!method.isConstructor()) {
                 return;
@@ -121,7 +117,7 @@ public class PublicConstructorInspection extends BaseInspection {
 
         @Override
         @RequiredReadAction
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             super.visitClass(aClass);
             if (aClass.isInterface() || aClass.isEnum()) {
                 return;

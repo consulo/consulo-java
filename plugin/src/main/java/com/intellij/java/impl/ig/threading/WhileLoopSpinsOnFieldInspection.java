@@ -26,8 +26,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -38,13 +37,11 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   public boolean ignoreNonEmtpyLoops = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.whileLoopSpinsOnFieldDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.whileLoopSpinsOnFieldProblemDescriptor().get();
   }
@@ -64,7 +61,7 @@ public class WhileLoopSpinsOnFieldInspection extends BaseInspection {
   private class WhileLoopSpinsOnFieldVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+    public void visitWhileStatement(PsiWhileStatement statement) {
       super.visitWhileStatement(statement);
       PsiStatement body = statement.getBody();
       if (ignoreNonEmtpyLoops && !statementIsEmpty(body)) {

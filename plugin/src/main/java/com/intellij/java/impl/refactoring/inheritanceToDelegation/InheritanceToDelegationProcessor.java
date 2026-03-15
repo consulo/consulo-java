@@ -54,8 +54,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.*;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -148,13 +147,11 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
         return result;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new InheritanceToDelegationViewDescriptor(myClass);
     }
 
-    @Nonnull
     @Override
     protected UsageInfo[] findUsages() {
         List<UsageInfo> usages = new ArrayList<>();
@@ -191,7 +188,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
         List<UsageInfo> oldUsages = new ArrayList<>();
         addAll(oldUsages, usagesIn);
@@ -939,7 +936,6 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
         return null;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {
@@ -1034,7 +1030,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
         }
 
         @Override
-        public void visitThisExpression(@Nonnull PsiThisExpression expression) {
+        public void visitThisExpression(PsiThisExpression expression) {
             ClassInstanceScanner.processNonArrayExpression(myInstanceVisitor, expression, null);
         }
     }
@@ -1048,7 +1044,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (!myOverriddenMethods.contains(method)) {
                 super.visitMethod(method);
             }
@@ -1160,7 +1156,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
         }
 
         @Override
-        public void visitThisExpression(@Nonnull final PsiThisExpression expression) {
+        public void visitThisExpression(final PsiThisExpression expression) {
             class Visitor implements ClassInstanceScanner.ClassInstanceReferenceVisitor {
                 @Override
                 public void visitQualifier(PsiReferenceExpression qualified, PsiExpression instanceRef, PsiElement referencedInstance) {

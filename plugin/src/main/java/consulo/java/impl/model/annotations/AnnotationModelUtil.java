@@ -4,9 +4,8 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.UsedInPlugin;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,6 @@ public class AnnotationModelUtil {
     }
   }
 
-  @Nonnull
   public static AnnotationGenericValue<String> getStringValue(PsiAnnotation annotation, String name, String defaultValue) {
     PsiAnnotationMemberValue attributeValue = annotation.findAttributeValue(name);
     String value = defaultValue;
@@ -50,7 +48,6 @@ public class AnnotationModelUtil {
 
   @RequiredReadAction
   @SuppressWarnings("unchecked")
-  @Nonnull
   public static <T> List<AnnotationGenericValue<T>> getEnumArrayValue(PsiAnnotation annotation, String name, Class<T> c) {
     List<AnnotationGenericValue<T>> values = new ArrayList<>();
 
@@ -79,7 +76,6 @@ public class AnnotationModelUtil {
     return values;
   }
 
-  @Nonnull
   public static AnnotationGenericValue<Boolean> getBooleanValue(PsiAnnotation annotation, String name, boolean defaultValue) {
     PsiAnnotationMemberValue attributeValue = annotation.findAttributeValue(name);
     boolean value = defaultValue;

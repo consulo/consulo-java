@@ -25,12 +25,10 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DollarSignInNameInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.dollarSignInNameDisplayName();
   }
@@ -39,7 +37,6 @@ public class DollarSignInNameInspection extends BaseInspection {
     return new RenameFix();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.dollarSignInNameProblemDescriptor().get();
   }
@@ -55,7 +52,7 @@ public class DollarSignInNameInspection extends BaseInspection {
   private static class DollarSignInNameVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(PsiVariable variable) {
       super.visitVariable(variable);
       String name = variable.getName();
       if (name == null) {
@@ -68,7 +65,7 @@ public class DollarSignInNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       String name = method.getName();
       if (name.indexOf((int)'$') < 0) {
@@ -78,7 +75,7 @@ public class DollarSignInNameInspection extends BaseInspection {
     }
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       //note: no call to super, to avoid drill-down
       String name = aClass.getName();
       if (name == null) {

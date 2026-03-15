@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.search.searches.DeepestSuperMethodsSearchExecutor;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +31,7 @@ import java.util.function.Supplier;
 @ExtensionImpl
 public class MethodDeepestSuperSearcher implements DeepestSuperMethodsSearchExecutor {
     @Override
-    public boolean execute(@Nonnull PsiMethod method, @Nonnull Predicate<? super PsiMethod> consumer) {
+    public boolean execute(PsiMethod method, Predicate<? super PsiMethod> consumer) {
         return processDeepestSuperMethods(method, consumer);
     }
 

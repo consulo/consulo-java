@@ -35,7 +35,7 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -263,8 +263,7 @@ public abstract class DestinationFolderComboBox extends ComboboxWithBrowseButton
     }
   }
 
-  @Nullable
-  private static DirectoryChooser.ItemWrapper chooseSelection(VirtualFile initialTargetDirectorySourceRoot,
+  private static DirectoryChooser.@Nullable ItemWrapper chooseSelection(VirtualFile initialTargetDirectorySourceRoot,
                                                               ProjectFileIndex fileIndex,
                                                               ArrayList<DirectoryChooser.ItemWrapper> items,
                                                               DirectoryChooser.ItemWrapper initial,

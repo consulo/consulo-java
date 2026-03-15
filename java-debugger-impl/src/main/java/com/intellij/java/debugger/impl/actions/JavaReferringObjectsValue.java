@@ -35,8 +35,7 @@ import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -46,8 +45,8 @@ public class JavaReferringObjectsValue extends JavaValue {
 
     private JavaReferringObjectsValue(
         @Nullable JavaValue parent,
-        @Nonnull ValueDescriptorImpl valueDescriptor,
-        @Nonnull EvaluationContextImpl evaluationContext,
+        ValueDescriptorImpl valueDescriptor,
+        EvaluationContextImpl evaluationContext,
         NodeManagerImpl nodeManager,
         boolean isField
     ) {
@@ -55,7 +54,7 @@ public class JavaReferringObjectsValue extends JavaValue {
         myIsField = isField;
     }
 
-    public JavaReferringObjectsValue(@Nonnull JavaValue javaValue, boolean isField) {
+    public JavaReferringObjectsValue(JavaValue javaValue, boolean isField) {
         super(null, javaValue.getDescriptor(), javaValue.getEvaluationContext(), javaValue.getNodeManager(), false);
         myIsField = isField;
     }
@@ -66,7 +65,7 @@ public class JavaReferringObjectsValue extends JavaValue {
     }
 
     @Override
-    public void computeChildren(@Nonnull XCompositeNode node) {
+    public void computeChildren(XCompositeNode node) {
         scheduleCommand(getEvaluationContext(), node, new SuspendContextCommandImpl(getEvaluationContext().getSuspendContext()) {
             @Override
             public Priority getPriority() {
@@ -74,7 +73,7 @@ public class JavaReferringObjectsValue extends JavaValue {
             }
 
             @Override
-            public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
+            public void contextAction(SuspendContextImpl suspendContext) throws Exception {
                 XValueChildrenList children = new XValueChildrenList();
 
                 Value value = getDescriptor().getValue();
@@ -132,7 +131,7 @@ public class JavaReferringObjectsValue extends JavaValue {
     }
 
     @Override
-    public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place) {
+    public void computePresentation(XValueNode node, XValuePlace place) {
         if (!myIsField) {
             super.computePresentation(node, place);
         }
@@ -142,11 +141,10 @@ public class JavaReferringObjectsValue extends JavaValue {
                     @Override
                     public void applyPresentation(
                         @Nullable Image icon,
-                        @Nonnull XValuePresentation valuePresenter,
+                        XValuePresentation valuePresenter,
                         boolean hasChildren
                     ) {
                         node.setPresentation(icon, new XValuePresentation() {
-                                @Nonnull
                                 @Override
                                 public String getSeparator() {
                                     return " in ";
@@ -159,7 +157,7 @@ public class JavaReferringObjectsValue extends JavaValue {
                                 }
 
                                 @Override
-                                public void renderValue(@Nonnull XValueTextRenderer renderer) {
+                                public void renderValue(XValueTextRenderer renderer) {
                                     valuePresenter.renderValue(renderer);
                                 }
                             },
@@ -168,7 +166,7 @@ public class JavaReferringObjectsValue extends JavaValue {
                     }
 
                     @Override
-                    public void setFullValueEvaluator(@Nonnull XFullValueEvaluator fullValueEvaluator) {
+                    public void setFullValueEvaluator(XFullValueEvaluator fullValueEvaluator) {
                     }
 
                     @Nullable

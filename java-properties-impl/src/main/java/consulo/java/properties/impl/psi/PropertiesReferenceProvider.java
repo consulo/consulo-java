@@ -33,7 +33,6 @@ import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,19 +53,17 @@ public class PropertiesReferenceProvider extends PsiReferenceProviderByType {
     myDefaultSoft = defaultSoft;
   }
 
-  @Nonnull
   @Override
   public ReferenceProviderType getReferenceProviderType() {
     return CommonReferenceProviderTypes.PROPERTIES_FILE_KEY_PROVIDER;
   }
 
   @Override
-  public boolean acceptsTarget(@Nonnull PsiElement target) {
+  public boolean acceptsTarget(PsiElement target) {
     return target instanceof IProperty;
   }
 
-  @Nonnull
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull final ProcessingContext context) {
+  public PsiReference[] getReferencesByElement(PsiElement element, final ProcessingContext context) {
     Object value = null;
     String bundleName = null;
     boolean propertyRefWithPrefix = false;

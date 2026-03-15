@@ -27,8 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class MakeFieldFinalFix extends InspectionGadgetsFix {
 
@@ -47,12 +46,10 @@ public class MakeFieldFinalFix extends InspectionGadgetsFix {
     return new MakeFieldFinalFix(name);
   }
 
-  @Nonnull
   public static InspectionGadgetsFix buildFixUnconditional(PsiField field) {
     return new MakeFieldFinalFix(field.getName());
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.makeFieldFinalQuickfix(fieldName);
   }

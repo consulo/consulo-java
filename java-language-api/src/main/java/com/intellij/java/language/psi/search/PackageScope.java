@@ -31,7 +31,6 @@ import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 public class PackageScope extends GlobalSearchScope {
@@ -43,7 +42,7 @@ public class PackageScope extends GlobalSearchScope {
   protected final String myPackageQualifiedName;
   protected final String myPackageQNamePrefix;
 
-  public PackageScope(@Nonnull PsiJavaPackage aPackage, boolean includeSubpackages, final boolean includeLibraries) {
+  public PackageScope(PsiJavaPackage aPackage, boolean includeSubpackages, final boolean includeLibraries) {
     super(aPackage.getProject());
     myPackage = aPackage;
     myIncludeSubpackages = includeSubpackages;
@@ -82,7 +81,7 @@ public class PackageScope extends GlobalSearchScope {
   }
 
   @Override
-  public boolean isSearchInModuleContent(@Nonnull Module aModule) {
+  public boolean isSearchInModuleContent(Module aModule) {
     return true;
   }
 
@@ -97,11 +96,11 @@ public class PackageScope extends GlobalSearchScope {
         ", includeSubpackages = " + myIncludeSubpackages;
   }
 
-  public static GlobalSearchScope packageScope(@Nonnull PsiJavaPackage aPackage, boolean includeSubpackages) {
+  public static GlobalSearchScope packageScope(PsiJavaPackage aPackage, boolean includeSubpackages) {
     return new PackageScope(aPackage, includeSubpackages, true);
   }
 
-  public static GlobalSearchScope packageScopeWithoutLibraries(@Nonnull PsiJavaPackage aPackage, boolean includeSubpackages) {
+  public static GlobalSearchScope packageScopeWithoutLibraries(PsiJavaPackage aPackage, boolean includeSubpackages) {
     return new PackageScope(aPackage, includeSubpackages, false);
   }
 }

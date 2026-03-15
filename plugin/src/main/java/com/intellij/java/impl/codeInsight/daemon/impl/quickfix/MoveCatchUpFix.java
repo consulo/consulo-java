@@ -28,7 +28,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class MoveCatchUpFix implements SyntheticIntentionAction {
     private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.DeleteCatchFix");
@@ -36,19 +35,18 @@ public class MoveCatchUpFix implements SyntheticIntentionAction {
     private final PsiCatchSection myCatchSection;
     private final PsiCatchSection myMoveBeforeSection;
 
-    public MoveCatchUpFix(@Nonnull PsiCatchSection catchSection, @Nonnull PsiCatchSection moveBeforeSection) {
+    public MoveCatchUpFix(PsiCatchSection catchSection, PsiCatchSection moveBeforeSection) {
         this.myCatchSection = catchSection;
         myMoveBeforeSection = moveBeforeSection;
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.moveCatchUpText(JavaHighlightUtil.formatType(myCatchSection.getCatchType()), JavaHighlightUtil.formatType(myMoveBeforeSection.getCatchType()));
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return myCatchSection.isValid()
             && myCatchSection.getManager().isInProject(myCatchSection)
             && myMoveBeforeSection.isValid()
@@ -62,7 +60,7 @@ public class MoveCatchUpFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(myCatchSection.getContainingFile())) {
             return;
         }

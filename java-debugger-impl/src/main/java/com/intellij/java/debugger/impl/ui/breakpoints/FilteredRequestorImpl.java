@@ -35,10 +35,8 @@ import consulo.internal.com.sun.jdi.event.LocatableEvent;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.xml.serializer.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,17 +63,13 @@ public class FilteredRequestorImpl implements JDOMExternalizable, FilteredReques
 	public boolean INSTANCE_FILTERS_ENABLED = false;
 	private InstanceFilter[] myInstanceFilters = InstanceFilter.EMPTY_ARRAY;
 
-	@NonNls
 	private static final String FILTER_OPTION_NAME = "filter";
-	@NonNls
 	private static final String EXCLUSION_FILTER_OPTION_NAME = "exclusion_filter";
-	@NonNls
 	private static final String INSTANCE_ID_OPTION_NAME = "instance_id";
-	@NonNls
 	private static final String CONDITION_OPTION_NAME = "CONDITION";
 	protected final Project myProject;
 
-	public FilteredRequestorImpl(@Nonnull Project project)
+	public FilteredRequestorImpl(Project project)
 	{
 		myProject = project;
 		myCondition = new TextWithImportsImpl(CodeFragmentKind.EXPRESSION, "");

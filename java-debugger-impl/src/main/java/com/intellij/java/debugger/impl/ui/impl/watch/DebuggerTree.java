@@ -63,8 +63,7 @@ import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.TreeModelEvent;
@@ -158,7 +157,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
     }
 
     @Override
-    public Object getData(@Nonnull Key dataId) {
+    public Object getData(Key dataId) {
         if (DATA_KEY == dataId) {
             return this;
         }
@@ -562,7 +561,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
         }
 
         @Override
-        public void threadAction(@Nonnull SuspendContextImpl suspendContext) {
+        public void threadAction(SuspendContextImpl suspendContext) {
             final DebuggerTreeNodeImpl node = getNode();
             ValueDescriptorImpl descriptor = (ValueDescriptorImpl) node.getDescriptor();
             try {
@@ -611,7 +610,7 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
         }
 
         @Override
-        public void addChildren(@Nonnull XValueChildrenList children, boolean last) {
+        public void addChildren(XValueChildrenList children, boolean last) {
         }
 
         @Override
@@ -623,11 +622,11 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
         }
 
         @Override
-        public void setErrorMessage(@Nonnull LocalizeValue errorMessage, @Nullable XDebuggerTreeNodeHyperlink link) {
+        public void setErrorMessage(LocalizeValue errorMessage, @Nullable XDebuggerTreeNodeHyperlink link) {
         }
 
         @Override
-        public void setMessage(@Nonnull LocalizeValue message, @Nullable Image icon, @Nonnull SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link) {
+        public void setMessage(LocalizeValue message, @Nullable Image icon, SimpleTextAttributes attributes, @Nullable XDebuggerTreeNodeHyperlink link) {
         }
 
         @Override

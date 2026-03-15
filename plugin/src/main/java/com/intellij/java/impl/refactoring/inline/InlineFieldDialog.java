@@ -28,7 +28,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
     private final PsiReferenceExpression myReferenceExpression;
@@ -48,26 +47,22 @@ public class InlineFieldDialog extends InlineOptionsWithSearchSettingsDialog {
         init();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getNameLabelText() {
         String fieldText = PsiFormatUtil.formatVariable(myField, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE, PsiSubstitutor.EMPTY);
         return RefactoringLocalize.inlineFieldFieldNameLabel(fieldText);
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getBorderTitle() {
         return RefactoringLocalize.inlineFieldBorderTitle();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getInlineThisText() {
         return RefactoringLocalize.thisReferenceOnlyAndKeepTheField();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getInlineAllText() {
         String occurrencesString =

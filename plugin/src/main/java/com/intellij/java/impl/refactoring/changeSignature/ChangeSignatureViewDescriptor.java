@@ -28,7 +28,6 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.usage.localize.UsageLocalize;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 public class ChangeSignatureViewDescriptor implements UsageViewDescriptor {
 
@@ -41,7 +40,6 @@ public class ChangeSignatureViewDescriptor implements UsageViewDescriptor {
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myMethod};
   }

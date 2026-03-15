@@ -12,7 +12,6 @@ import consulo.execution.debug.stream.trace.impl.TraceExpressionBuilderBase;
 import consulo.execution.debug.stream.wrapper.StreamChain;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Supplier;
 
@@ -24,16 +23,15 @@ public class JavaTraceExpressionBuilder extends TraceExpressionBuilderBase {
 
     private final Project project;
 
-    public JavaTraceExpressionBuilder(@Nonnull Project project,
-                                      @Nonnull HandlerFactory handlerFactory,
-                                      @Nonnull Dsl dsl) {
+    public JavaTraceExpressionBuilder(Project project,
+                                      HandlerFactory handlerFactory,
+                                      Dsl dsl) {
         super(dsl, handlerFactory);
         this.project = project;
     }
 
-    @Nonnull
     @Override
-    public String createTraceExpression(@Nonnull StreamChain chain) {
+    public String createTraceExpression(StreamChain chain) {
         String codeBlock = super.createTraceExpression(chain);
         PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
 

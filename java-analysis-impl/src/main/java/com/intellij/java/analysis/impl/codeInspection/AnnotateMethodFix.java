@@ -33,7 +33,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,24 +46,21 @@ public class AnnotateMethodFix implements LocalQuickFix {
   private final String myAnnotation;
   private final String[] myAnnotationsToRemove;
 
-  public AnnotateMethodFix(@Nonnull String fqn, @Nonnull String... annotationsToRemove) {
+  public AnnotateMethodFix(String fqn, String... annotationsToRemove) {
     myAnnotation = fqn;
     myAnnotationsToRemove = annotationsToRemove;
     LOG.assertTrue(annotateSelf() || annotateOverriddenMethods(), "annotate method quick fix should not do nothing");
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return LocalizeValue.join(getFamilyName(), LocalizeValue.space(), LocalizeValue.of(getPreposition()), LocalizeValue.of(" \'@"), LocalizeValue.of(ClassUtil.extractClassName(myAnnotation)), LocalizeValue.of("\'"));
   }
 
-  @Nonnull
   protected String getPreposition() {
     return "with";
   }
 
-  @Nonnull
   private LocalizeValue getFamilyName() {
     if (annotateSelf()) {
       if (annotateOverriddenMethods()) {
@@ -83,7 +79,7 @@ public class AnnotateMethodFix implements LocalQuickFix {
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     final PsiElement psiElement = descriptor.getPsiElement();
 
     PsiMethod method = PsiTreeUtil.getParentOfType(psiElement, PsiMethod.class);
@@ -126,7 +122,7 @@ public class AnnotateMethodFix implements LocalQuickFix {
     return true;
   }
 
-  private void annotateMethod(@Nonnull PsiMethod method) {
+  private void annotateMethod(PsiMethod method) {
     AddAnnotationPsiFix fix = new AddAnnotationPsiFix(myAnnotation, method, PsiNameValuePair.EMPTY_ARRAY, myAnnotationsToRemove);
     fix.invoke(method.getProject(), method.getContainingFile(), method, method);
   }

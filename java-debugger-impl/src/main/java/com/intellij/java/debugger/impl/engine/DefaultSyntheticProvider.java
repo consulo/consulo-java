@@ -20,7 +20,6 @@ import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.internal.com.sun.jdi.TypeComponent;
 import consulo.internal.com.sun.jdi.VirtualMachine;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Nikolay.Tropin
@@ -28,7 +27,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl(id = "default")
 public class DefaultSyntheticProvider implements SyntheticTypeComponentProvider {
     @Override
-    public boolean isSynthetic(@Nonnull TypeComponent typeComponent) {
+    public boolean isSynthetic(TypeComponent typeComponent) {
         if (DebuggerUtilsEx.isLambdaClassName(typeComponent.declaringType().name())) {
             return true;
         }

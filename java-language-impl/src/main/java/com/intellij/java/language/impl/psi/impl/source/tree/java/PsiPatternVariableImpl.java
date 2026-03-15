@@ -15,8 +15,7 @@ import consulo.language.psi.scope.LocalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPatternVariable, Constants {
@@ -25,19 +24,18 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
   }
 
   @Override
-  public PsiIdentifier setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiIdentifier setName(String name) throws IncorrectOperationException {
     PsiIdentifier identifier = getNameIdentifier();
     return (PsiIdentifier) PsiImplUtil.setName(identifier, name);
   }
 
   @Override
-  @Nonnull
   public PsiIdentifier getNameIdentifier() {
     return Objects.requireNonNull(PsiTreeUtil.getChildOfType(this, PsiIdentifier.class));
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitPatternVariable(this);
     } else {
@@ -45,7 +43,6 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
     }
   }
 
-  @Nonnull
   @Override
   public PsiPattern getPattern() {
     return (PsiPattern) getParent();
@@ -61,13 +58,11 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
     return null;
   }
 
-  @Nonnull
   @Override
   public PsiType getType() {
     return JavaSharedImplUtil.getType(getTypeElement(), getNameIdentifier());
   }
 
-  @Nonnull
   @Override
   public PsiElement getDeclarationScope() {
     PsiElement parent = getPattern().getParent();
@@ -116,7 +111,6 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
     return false;
   }
 
-  @Nonnull
   @Override
   public PsiTypeElement getTypeElement() {
     return Objects.requireNonNull(PsiTreeUtil.getChildOfType(this, PsiTypeElement.class));
@@ -133,7 +127,6 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
     return false;
   }
 
-  @Nonnull
   @Override
   public String getName() {
     PsiIdentifier identifier = getNameIdentifier();
@@ -152,12 +145,11 @@ public class PsiPatternVariableImpl extends CompositePsiElement implements PsiPa
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     final PsiModifierList modifierList = getModifierList();
     return modifierList != null && modifierList.hasModifierProperty(name);
   }
 
-  @Nonnull
   @Override
   public SearchScope getUseScope() {
     return new LocalSearchScope(getDeclarationScope());

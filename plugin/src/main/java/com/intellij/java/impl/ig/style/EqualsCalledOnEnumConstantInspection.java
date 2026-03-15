@@ -29,20 +29,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.equalsCalledOnEnumConstantDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.equalsCalledOnEnumConstantProblemDescriptor().get();
   }
@@ -60,7 +56,6 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
   private static class EqualsCalledOnEnumValueFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.equalsCalledOnEnumConstantQuickfix();
     }
@@ -136,7 +131,7 @@ public class EqualsCalledOnEnumConstantInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;

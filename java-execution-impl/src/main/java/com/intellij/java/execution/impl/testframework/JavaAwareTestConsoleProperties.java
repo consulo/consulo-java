@@ -32,8 +32,7 @@ import consulo.execution.executor.Executor;
 import consulo.execution.test.sm.runner.SMTRunnerConsoleProperties;
 import consulo.navigation.Navigatable;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.tree.TreeSelectionModel;
 import java.util.Collection;
 import java.util.Iterator;
@@ -67,13 +66,13 @@ public abstract class JavaAwareTestConsoleProperties<T extends ModuleBasedConfig
 
   @Nullable
   @Override
-  public Navigatable getErrorNavigatable(@Nonnull Location<?> location, @Nonnull String stacktrace) {
+  public Navigatable getErrorNavigatable(Location<?> location, String stacktrace) {
     //navigate to the first stack trace
     return getStackTraceErrorNavigatable(location, stacktrace);
   }
 
   @Nullable
-  public static Navigatable getStackTraceErrorNavigatable(@Nonnull Location<?> location, @Nonnull String stacktrace) {
+  public static Navigatable getStackTraceErrorNavigatable(Location<?> location, String stacktrace) {
     final PsiLocation<?> psiLocation = location.toPsiLocation();
     final PsiClass containingClass = psiLocation.getParentElement(PsiClass.class);
     if (containingClass == null) {

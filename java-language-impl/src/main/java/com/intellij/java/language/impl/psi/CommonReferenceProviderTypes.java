@@ -20,7 +20,6 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.ReferenceProviderType;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -42,9 +41,7 @@ public abstract class CommonReferenceProviderTypes {
 
   public static final ReferenceProviderType PROPERTIES_FILE_KEY_PROVIDER = new ReferenceProviderType("Properties File Key Provider");
 
-  @Nonnull
   public abstract JavaClassPsiReferenceProvider getClassReferenceProvider();
 
-  @Nonnull
   public abstract JavaClassPsiReferenceProvider getSoftClassReferenceProvider();
 }

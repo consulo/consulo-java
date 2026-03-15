@@ -40,8 +40,7 @@ import consulo.ui.Label;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import javax.swing.*;
@@ -131,7 +130,7 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
     }
 
     static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Image> {
-        public IconPopupEvaluator(@Nonnull LocalizeValue linkText, @Nonnull EvaluationContextImpl evaluationContext) {
+        public IconPopupEvaluator(LocalizeValue linkText, EvaluationContextImpl evaluationContext) {
             super(linkText, evaluationContext);
         }
 

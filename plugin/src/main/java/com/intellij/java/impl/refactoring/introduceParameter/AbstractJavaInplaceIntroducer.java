@@ -27,8 +27,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
@@ -117,7 +116,7 @@ public abstract class AbstractJavaInplaceIntroducer extends AbstractInplaceIntro
   }
 
   @Override
-  protected void saveSettings(@Nonnull PsiVariable psiVariable) {
+  protected void saveSettings(PsiVariable psiVariable) {
     TypeSelectorManagerImpl.typeSelected(psiVariable.getType(), getType());//myDefaultType.getType());
     myTypeSelectorManager = null;
   }

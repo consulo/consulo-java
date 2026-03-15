@@ -22,22 +22,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThrownExceptionsPerMethodInspection extends MethodMetricInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.thrownExceptionsPerMethodDisplayName();
     }
 
-    @Nonnull
     public String getID() {
         return "MethodWithTooExceptionsDeclared";
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer exceptionCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.thrownExceptionsPerMethodProblemDescriptor(exceptionCount).get();
@@ -57,7 +53,7 @@ public class ThrownExceptionsPerMethodInspection extends MethodMetricInspection 
 
     private class ThrownExceptionsPerMethodVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             // note: no call to super
             if (method.getNameIdentifier() == null) {
                 return;

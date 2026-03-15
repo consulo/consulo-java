@@ -22,7 +22,6 @@ import consulo.language.Language;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.WhiteSpaceFormattingStrategyAdapter;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -30,11 +29,10 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavadocWhiteSpaceFormattingStrategy extends WhiteSpaceFormattingStrategyAdapter {
   @Override
-  public boolean containsWhitespacesOnly(@Nonnull ASTNode node) {
+  public boolean containsWhitespacesOnly(ASTNode node) {
     return node.getElementType() == JavaDocTokenType.DOC_COMMENT_DATA && node.textContains('\n') && node.getText().trim().length() == 0;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

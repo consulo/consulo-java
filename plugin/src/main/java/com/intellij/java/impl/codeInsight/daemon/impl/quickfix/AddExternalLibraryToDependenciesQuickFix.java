@@ -28,8 +28,7 @@ import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.layer.orderEntry.DependencyScope;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
@@ -41,9 +40,9 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix {
     private final String myQualifiedClassName;
 
     public AddExternalLibraryToDependenciesQuickFix(
-        @Nonnull Module currentModule,
-        @Nonnull ExternalLibraryDescriptor libraryDescriptor,
-        @Nonnull PsiReference reference,
+        Module currentModule,
+        ExternalLibraryDescriptor libraryDescriptor,
+        PsiReference reference,
         @Nullable String qualifiedClassName
     ) {
         super(reference);
@@ -52,19 +51,18 @@ class AddExternalLibraryToDependenciesQuickFix extends AddOrderEntryFix {
         myQualifiedClassName = qualifiedClassName;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return LocalizeValue.localizeTODO("Add '" + myLibraryDescriptor.getPresentableName() + "' to classpath");
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return !project.isDisposed() && !myCurrentModule.isDisposed();
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         DependencyScope scope = suggestScopeByLocation(myCurrentModule, myReference.getElement());
         JavaProjectModelModificationService.getInstance(project)
             .addDependency(myCurrentModule, myLibraryDescriptor, scope)

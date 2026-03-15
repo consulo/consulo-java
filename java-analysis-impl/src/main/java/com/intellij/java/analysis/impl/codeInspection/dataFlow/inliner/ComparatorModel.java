@@ -22,8 +22,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
 import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COMPARATOR;
@@ -135,7 +134,6 @@ abstract class ComparatorModel {
         }
     }
 
-    @Nonnull
     @RequiredReadAction
     static ComparatorModel from(@Nullable PsiExpression expression) {
         expression = PsiUtil.skipParenthesizedExprDown(expression);

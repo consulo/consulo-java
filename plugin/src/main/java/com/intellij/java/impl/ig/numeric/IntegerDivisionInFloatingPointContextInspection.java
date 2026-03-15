@@ -24,8 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +35,6 @@ public class IntegerDivisionInFloatingPointContextInspection
   /**
    * @noinspection StaticCollection
    */
-  @NonNls
   private static final Set<String> s_integralTypes = new HashSet<String>(10);
 
   static {
@@ -54,13 +51,11 @@ public class IntegerDivisionInFloatingPointContextInspection
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.integerDivisionInFloatingPointContextDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.integerDivisionInFloatingPointContextProblemDescriptor().get();
   }
@@ -75,7 +70,7 @@ public class IntegerDivisionInFloatingPointContextInspection
 
     @Override
     public void visitBinaryExpression(
-      @Nonnull PsiBinaryExpression expression) {
+      PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       IElementType tokenType = expression.getOperationTokenType();
       if (!tokenType.equals(JavaTokenType.DIV)) {

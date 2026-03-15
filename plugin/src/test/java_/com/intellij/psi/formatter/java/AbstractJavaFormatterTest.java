@@ -25,9 +25,7 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import consulo.ide.impl.idea.codeInsight.actions.ReformatCodeProcessor;
 import com.intellij.java.language.impl.JavaFileType;
@@ -57,8 +55,7 @@ import consulo.ide.impl.idea.util.text.LineReader;
  */
 public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
 
-  @Nonnull
-  public static String shiftIndentInside(@Nonnull String initial, int i, boolean shiftEmptyLines) throws IOException {
+  public static String shiftIndentInside(String initial, int i, boolean shiftEmptyLines) throws IOException {
     StringBuilder result = new StringBuilder(initial.length());
     LineReader reader = new LineReader(new ByteArrayInputStream(initial.getBytes()));
     boolean first = true;
@@ -124,11 +121,11 @@ public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
     doTest(getTestName(false) + ".java", getTestName(false) + "_after.java");
   }
 
-  public void doTest(@NonNls String fileNameBefore, @NonNls String fileNameAfter) throws Exception {
+  public void doTest(String fileNameBefore, String fileNameAfter) throws Exception {
     doTextTest(Action.REFORMAT, loadFile(fileNameBefore), loadFile(fileNameAfter));
   }
 
-  public void doTextTest(@NonNls String text, @NonNls String textAfter) throws IncorrectOperationException {
+  public void doTextTest(String text, String textAfter) throws IncorrectOperationException {
     doTextTest(Action.REFORMAT, text, textAfter);
   }
 
@@ -195,7 +192,7 @@ public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
 
   }
 
-  public void doMethodTest(@NonNls String before, @NonNls String after) throws Exception {
+  public void doMethodTest(String before, String after) throws Exception {
     doTextTest(
       Action.REFORMAT,
       "class Foo{\n" + "    void foo() {\n" + before + '\n' + "    }\n" + "}",
@@ -203,7 +200,7 @@ public abstract class AbstractJavaFormatterTest extends LightIdeaTestCase {
     );
   }
 
-  public void doClassTest(@NonNls String before, @NonNls String after) throws Exception {
+  public void doClassTest(String before, String after) throws Exception {
     doTextTest(
       Action.REFORMAT,
       "class Foo{\n" + before + '\n' + "}",

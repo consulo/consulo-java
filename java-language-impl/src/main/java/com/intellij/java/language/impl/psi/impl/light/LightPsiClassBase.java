@@ -33,28 +33,26 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 
 public abstract class LightPsiClassBase extends LightElement implements PsiClass, SyntheticElement {
 
-  private final @Nonnull String myName;
+  private final String myName;
 
-  public LightPsiClassBase(@Nonnull PsiElement context, @Nonnull String name) {
+  public LightPsiClassBase(PsiElement context, String name) {
     this(context.getManager(), context.getLanguage(), name);
   }
 
-  public LightPsiClassBase(@Nonnull PsiManager manager, @Nonnull Language language, @Nonnull String name) {
+  public LightPsiClassBase(PsiManager manager, Language language, String name) {
     super(manager, language);
     myName = name;
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitClass(this);
     }
@@ -63,7 +61,6 @@ public abstract class LightPsiClassBase extends LightElement implements PsiClass
     }
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return myName;
@@ -105,13 +102,11 @@ public abstract class LightPsiClassBase extends LightElement implements PsiClass
   }
 
   @Override
-  @Nonnull
   public PsiClassType[] getExtendsListTypes() {
     return PsiClassImplUtil.getExtendsListTypes(this);
   }
 
   @Override
-  @Nonnull
   public PsiClassType[] getImplementsListTypes() {
     return PsiClassImplUtil.getImplementsListTypes(this);
   }
@@ -123,78 +118,67 @@ public abstract class LightPsiClassBase extends LightElement implements PsiClass
   }
 
   @Override
-  @Nonnull
   public PsiClass[] getInterfaces() {
     return PsiClassImplUtil.getInterfaces(this);
   }
 
   @Override
-  @Nonnull
   public PsiClass[] getSupers() {
     return PsiClassImplUtil.getSupers(this);
   }
 
   @Override
-  @Nonnull
   public PsiClassType[] getSuperTypes() {
     return PsiClassImplUtil.getSuperTypes(this);
   }
 
   @Override
-  @Nonnull
   public PsiMethod[] getConstructors() {
     return PsiImplUtil.getConstructors(this);
   }
 
   @Override
-  @Nonnull
   public PsiField[] getAllFields() {
     return PsiClassImplUtil.getAllFields(this);
   }
 
   @Override
-  @Nonnull
   public PsiMethod[] getAllMethods() {
     return PsiClassImplUtil.getAllMethods(this);
   }
 
   @Override
-  @Nonnull
   public PsiClass[] getAllInnerClasses() {
     return PsiClassImplUtil.getAllInnerClasses(this);
   }
 
   @Nullable
   @Override
-  public PsiField findFieldByName(@NonNls String name, boolean checkBases) {
+  public PsiField findFieldByName(String name, boolean checkBases) {
     return PsiClassImplUtil.findFieldByName(this, name, checkBases);
   }
 
   @Nullable
   @Override
-  public PsiMethod findMethodBySignature(@Nonnull PsiMethod patternMethod, boolean checkBases) {
+  public PsiMethod findMethodBySignature(PsiMethod patternMethod, boolean checkBases) {
     return PsiClassImplUtil.findMethodBySignature(this, patternMethod, checkBases);
   }
 
   @Override
-  @Nonnull
-  public PsiMethod[] findMethodsBySignature(@Nonnull PsiMethod patternMethod, boolean checkBases) {
+  public PsiMethod[] findMethodsBySignature(PsiMethod patternMethod, boolean checkBases) {
     return PsiClassImplUtil.findMethodsBySignature(this, patternMethod, checkBases);
   }
 
   @Override
-  @Nonnull
-  public PsiMethod[] findMethodsByName(@NonNls String name, boolean checkBases) {
+  public PsiMethod[] findMethodsByName(String name, boolean checkBases) {
     return PsiClassImplUtil.findMethodsByName(this, name, checkBases);
   }
 
-  @Nonnull
   @Override
-  public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(@NonNls @Nonnull String name, boolean checkBases) {
+  public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases) {
     return PsiClassImplUtil.findMethodsAndTheirSubstitutorsByName(this, name, checkBases);
   }
 
-  @Nonnull
   @Override
   public List<Pair<PsiMethod, PsiSubstitutor>> getAllMethodsAndTheirSubstitutors() {
     return PsiClassImplUtil.getAllWithSubstitutorsByMap(this, PsiClassImplUtil.MemberType.METHOD);
@@ -202,7 +186,7 @@ public abstract class LightPsiClassBase extends LightElement implements PsiClass
 
   @Nullable
   @Override
-  public PsiClass findInnerClassByName(@NonNls String name, boolean checkBases) {
+  public PsiClass findInnerClassByName(String name, boolean checkBases) {
     return PsiClassImplUtil.findInnerByName(this, name, checkBases);
   }
 
@@ -225,23 +209,22 @@ public abstract class LightPsiClassBase extends LightElement implements PsiClass
   }
 
   @Override
-  public boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep) {
+  public boolean isInheritor(PsiClass baseClass, boolean checkDeep) {
     return InheritanceImplUtil.isInheritor(this, baseClass, checkDeep);
   }
 
   @Override
-  public boolean isInheritorDeep(@Nonnull PsiClass baseClass, @Nullable PsiClass classToByPass) {
+  public boolean isInheritorDeep(PsiClass baseClass, @Nullable PsiClass classToByPass) {
     return InheritanceImplUtil.isInheritorDeep(this, baseClass, classToByPass);
   }
 
-  @Nonnull
   @Override
   public Collection<HierarchicalMethodSignature> getVisibleSignatures() {
     return PsiSuperMethodImplUtil.getVisibleSignatures(this);
   }
 
   @Override
-  public PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Cannot rename light class");
   }
 
@@ -262,25 +245,23 @@ public abstract class LightPsiClassBase extends LightElement implements PsiClass
   }
 
   @Override
-  @Nonnull
   public PsiTypeParameter [] getTypeParameters() {
     return PsiImplUtil.getTypeParameters(this);
   }
 
-  @Nonnull
   @Override
   public abstract PsiModifierList getModifierList();
 
   @Override
-  public boolean hasModifierProperty(@PsiModifier.ModifierConstant @NonNls @Nonnull String name) {
+  public boolean hasModifierProperty(@PsiModifier.ModifierConstant String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     return PsiClassImplUtil.processDeclarationsInClass(
       this, processor, state, null, lastParent, place, PsiUtil.getLanguageLevel(place), false
     );

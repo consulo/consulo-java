@@ -29,25 +29,21 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "ConstantOnLeftSideOfComparison";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.constantOnLhsOfComparisonDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.constantOnLhsOfComparisonProblemDescriptor().get();
   }
@@ -64,7 +60,6 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
 
   private static class SwapComparisonFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.flipComparisonQuickfix();
     }
@@ -90,7 +85,7 @@ public class ConstantOnLHSOfComparisonInspection extends BaseInspection {
   private static class ConstantOnLHSOfComparisonVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isComparison(expression)) {
         return;

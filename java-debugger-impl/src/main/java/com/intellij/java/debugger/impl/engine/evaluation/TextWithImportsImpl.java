@@ -32,8 +32,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class TextWithImportsImpl implements TextWithImports {
 
@@ -44,7 +43,7 @@ public final class TextWithImportsImpl implements TextWithImports {
 
   private static final char SEPARATOR = 13;
 
-  public TextWithImportsImpl(@Nonnull PsiElement expression) {
+  public TextWithImportsImpl(PsiElement expression) {
     myKind = CodeFragmentKind.EXPRESSION;
     final String text = expression.getText();
     PsiFile containingFile = expression.getContainingFile();
@@ -60,14 +59,14 @@ public final class TextWithImportsImpl implements TextWithImports {
     }
   }
 
-  public TextWithImportsImpl(CodeFragmentKind kind, @Nonnull String text, @Nonnull String imports, @Nullable FileType fileType) {
+  public TextWithImportsImpl(CodeFragmentKind kind, String text, String imports, @Nullable FileType fileType) {
     myKind = kind;
     myText = text;
     myImports = imports;
     myFileType = fileType;
   }
 
-  public TextWithImportsImpl(CodeFragmentKind kind, @Nonnull String text) {
+  public TextWithImportsImpl(CodeFragmentKind kind, String text) {
     myKind = kind;
     Trinity<String, String, FileType> trinity = parseExternalForm(text);
     myText = trinity.first;
@@ -92,7 +91,6 @@ public final class TextWithImportsImpl implements TextWithImports {
 
   @Override
   public
-  @Nonnull
   String getImports() {
     return myImports;
   }

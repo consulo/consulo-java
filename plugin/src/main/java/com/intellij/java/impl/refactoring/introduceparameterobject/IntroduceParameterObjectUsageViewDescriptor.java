@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 class IntroduceParameterObjectUsageViewDescriptor extends UsageViewDescriptorAdapter {
     private final PsiMethod method;
@@ -28,7 +27,6 @@ class IntroduceParameterObjectUsageViewDescriptor extends UsageViewDescriptorAda
         this.method = method;
     }
 
-    @Nonnull
     @Override
     public PsiElement[] getElements() {
         return new PsiElement[]{method};

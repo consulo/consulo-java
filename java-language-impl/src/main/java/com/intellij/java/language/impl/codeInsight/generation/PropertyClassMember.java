@@ -18,7 +18,7 @@ package com.intellij.java.language.impl.codeInsight.generation;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna

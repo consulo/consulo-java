@@ -37,8 +37,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class AddTypeCastFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final PsiType myType;
@@ -49,25 +48,24 @@ public class AddTypeCastFix extends LocalQuickFixAndIntentionActionOnPsiElement 
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.addTypecastText(myType.getCanonicalText());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project,
-                             @Nonnull PsiFile file,
-                             @Nonnull PsiElement startElement,
-                             @Nonnull PsiElement endElement) {
+  public boolean isAvailable(Project project,
+                             PsiFile file,
+                             PsiElement startElement,
+                             PsiElement endElement) {
     return myType.isValid() && startElement.isValid() && startElement.getManager().isInProject(startElement);
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
-                     @Nonnull PsiFile file,
+  public void invoke(Project project,
+                     PsiFile file,
                      @Nullable Editor editor,
-                     @Nonnull PsiElement startElement,
-                     @Nonnull PsiElement endElement) {
+                     PsiElement startElement,
+                     PsiElement endElement) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     addTypeCast(project, (PsiExpression)startElement, myType);
   }

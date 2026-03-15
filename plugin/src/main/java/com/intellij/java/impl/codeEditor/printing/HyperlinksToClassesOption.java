@@ -32,8 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Map;
@@ -56,7 +55,6 @@ public class HyperlinksToClassesOption extends PrintOption {
     return null;
   }
 
-  @Nonnull
   @Override
   public UnnamedConfigurable createConfigurable() {
     return new HyperlinksToClassesConfigurable();

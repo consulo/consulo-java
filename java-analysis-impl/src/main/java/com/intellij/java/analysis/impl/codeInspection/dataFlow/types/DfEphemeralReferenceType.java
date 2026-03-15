@@ -3,7 +3,6 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 
-import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -17,39 +16,39 @@ import java.util.Set;
  * @see DfaMemoryState#isEphemeral()
  */
 public class DfEphemeralReferenceType implements DfReferenceType {
-  private final @Nonnull
+  private final 
   TypeConstraint myTypeConstraint;
 
-  DfEphemeralReferenceType(@Nonnull TypeConstraint constraint) {
+  DfEphemeralReferenceType(TypeConstraint constraint) {
     myTypeConstraint = constraint;
   }
 
   @Override
-  public @Nonnull
+  public 
   DfaNullability getNullability() {
     return DfaNullability.NOT_NULL;
   }
 
   @Override
-  public @Nonnull
+  public 
   TypeConstraint getConstraint() {
     return myTypeConstraint;
   }
 
   @Override
-  public @Nonnull
+  public 
   DfReferenceType dropNullability() {
     return this;
   }
 
   @Override
-  public @Nonnull
+  public 
   DfReferenceType dropTypeConstraint() {
     return DfTypes.NOT_NULL_OBJECT;
   }
 
   @Override
-  public boolean isSuperType(@Nonnull DfType other) {
+  public boolean isSuperType(DfType other) {
     if (other == DfTypes.BOTTOM) return true;
     if (other instanceof DfEphemeralReferenceType) {
       return myTypeConstraint.isSuperConstraintOf(((DfEphemeralReferenceType)other).myTypeConstraint);
@@ -58,8 +57,8 @@ public class DfEphemeralReferenceType implements DfReferenceType {
   }
 
   @Override
-  public @Nonnull
-  DfType join(@Nonnull DfType other) {
+  public 
+  DfType join(DfType other) {
     if (other == DfTypes.BOTTOM) return this;
     if (other == DfTypes.TOP || !(other instanceof DfReferenceType)) return DfTypes.TOP;
     TypeConstraint otherConstraint = ((DfReferenceType)other).getConstraint();
@@ -76,8 +75,8 @@ public class DfEphemeralReferenceType implements DfReferenceType {
   }
 
   @Override
-  public @Nonnull
-  DfType meet(@Nonnull DfType other) {
+  public 
+  DfType meet(DfType other) {
     if (other == DfTypes.TOP) return this;
     if (other == DfTypes.BOTTOM) return other;
     if (other instanceof DfEphemeralReferenceType ||

@@ -19,7 +19,6 @@ import com.intellij.java.language.impl.JavaClassFileType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.WritingAccessProvider;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -30,14 +29,13 @@ import java.util.Collections;
 @ExtensionImpl
 public class ClsElementWritingAccessProvider extends WritingAccessProvider {
 
-  @Nonnull
   @Override
   public Collection<VirtualFile> requestWriting(VirtualFile... files) {
     return Collections.emptyList();
   }
 
   @Override
-  public boolean isPotentiallyWritable(@Nonnull VirtualFile file) {
+  public boolean isPotentiallyWritable(VirtualFile file) {
     // TODO make library class files readonly not by their file type but by location in library roots
     return file.getFileType() != JavaClassFileType.INSTANCE;
   }

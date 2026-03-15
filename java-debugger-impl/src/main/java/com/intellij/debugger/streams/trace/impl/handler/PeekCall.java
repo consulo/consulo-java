@@ -8,7 +8,6 @@ import consulo.execution.debug.stream.wrapper.CallArgument;
 import consulo.execution.debug.stream.wrapper.IntermediateStreamCall;
 import consulo.execution.debug.stream.wrapper.StreamCallType;
 import consulo.execution.debug.stream.wrapper.impl.CallArgumentImpl;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -20,43 +19,43 @@ public class PeekCall implements IntermediateStreamCall {
   private final List<CallArgument> myLambda;
   private final GenericType myElementType;
 
-  public PeekCall(@Nonnull String lambda, @Nonnull GenericType elementType) {
+  public PeekCall(String lambda, GenericType elementType) {
     myLambda = Collections.singletonList(new CallArgumentImpl(CommonClassNames.JAVA_LANG_OBJECT, lambda));
     myElementType = elementType;
   }
 
   @Override
-  public @Nonnull String getName() {
+  public String getName() {
     return "peek";
   }
 
   @Override
-  public @Nonnull String getGenericArguments() {
+  public String getGenericArguments() {
     return "";
   }
 
   @Override
-  public @Nonnull List<CallArgument> getArguments() {
+  public List<CallArgument> getArguments() {
     return myLambda;
   }
 
   @Override
-  public @Nonnull TextRange getTextRange() {
+  public TextRange getTextRange() {
     return TextRange.EMPTY_RANGE;
   }
 
   @Override
-  public @Nonnull StreamCallType getType() {
+  public StreamCallType getType() {
     return StreamCallType.INTERMEDIATE;
   }
 
   @Override
-  public @Nonnull GenericType getTypeAfter() {
+  public GenericType getTypeAfter() {
     return myElementType;
   }
 
   @Override
-  public @Nonnull GenericType getTypeBefore() {
+  public GenericType getTypeBefore() {
     return myElementType;
   }
 }

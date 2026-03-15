@@ -31,8 +31,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -51,11 +49,10 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
   private JPanel myShmemPanel;
   private JPanel mySocketPanel;
   private ConfigurationArgumentsHelpArea myHelpArea;
-  @NonNls private ConfigurationArgumentsHelpArea myJDK13HelpArea;
+  private ConfigurationArgumentsHelpArea myJDK13HelpArea;
   private ConfigurationArgumentsHelpArea myJDK14HelpArea;
   private LabeledComponent<JComboBox> myModule;
   private String myHostName = "";
-  @NonNls
   protected static final String LOCALHOST = "localhost";
   private final ConfigurationModuleSelector myModuleSelector;
 
@@ -129,7 +126,7 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent(), "<whole project>");
   }
 
-  public void applyEditorTo(@Nonnull final RemoteConfiguration configuration) throws ConfigurationException {
+  public void applyEditorTo(final RemoteConfiguration configuration) throws ConfigurationException {
     configuration.HOST = (myHostField.isEditable() ? myHostField.getText() : myHostName).trim();
     if (configuration.HOST != null && configuration.HOST.isEmpty()) {
       configuration.HOST = null;
@@ -173,7 +170,6 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     myModuleSelector.reset(configuration);
   }
 
-  @Nonnull
   public JComponent createEditor() {
     return myPanel;
   }

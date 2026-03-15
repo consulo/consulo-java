@@ -30,7 +30,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -38,14 +37,12 @@ import javax.swing.*;
 public class ListenerMayUseAdapterInspection extends BaseInspection {
     public boolean checkForEmptyMethods = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.listenerMayUseAdapterDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         PsiClass aClass = (PsiClass) infos[0];
         String className = aClass.getName();
@@ -69,11 +66,10 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
     private static class ListenerMayUseAdapterFix extends InspectionGadgetsFix {
         private final PsiClass adapterClass;
 
-        ListenerMayUseAdapterFix(@Nonnull PsiClass adapterClass) {
+        ListenerMayUseAdapterFix(PsiClass adapterClass) {
             this.adapterClass = adapterClass;
         }
 
-        @Nonnull
         @RequiredReadAction
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.listenerMayUseAdapterQuickfix(adapterClass.getName());
@@ -155,8 +151,8 @@ public class ListenerMayUseAdapterInspection extends BaseInspection {
         }
 
         private void checkReference(
-            @Nonnull PsiClass aClass,
-            @Nonnull PsiJavaCodeReferenceElement implementsReference
+            PsiClass aClass,
+            PsiJavaCodeReferenceElement implementsReference
         ) {
             PsiElement target = implementsReference.resolve();
             if (!(target instanceof PsiClass)) {

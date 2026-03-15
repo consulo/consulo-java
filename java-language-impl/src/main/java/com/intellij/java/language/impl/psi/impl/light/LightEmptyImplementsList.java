@@ -25,7 +25,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.impl.psi.LightElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -45,7 +44,7 @@ public class LightEmptyImplementsList extends LightElement implements PsiReferen
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceList(this);
     } else {
@@ -59,13 +58,11 @@ public class LightEmptyImplementsList extends LightElement implements PsiReferen
   }
 
   @Override
-  @Nonnull
   public PsiJavaCodeReferenceElement[] getReferenceElements() {
     return PsiJavaCodeReferenceElement.EMPTY_ARRAY;
   }
 
   @Override
-  @Nonnull
   public PsiClassType[] getReferencedTypes() {
     return PsiClassType.EMPTY_ARRAY;
   }

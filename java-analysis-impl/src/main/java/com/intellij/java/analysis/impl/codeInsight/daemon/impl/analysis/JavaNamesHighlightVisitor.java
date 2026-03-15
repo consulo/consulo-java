@@ -14,7 +14,6 @@ import consulo.language.editor.rawHighlight.HighlightInfoHolder;
 import consulo.language.editor.rawHighlight.HighlightVisitor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 
 public class JavaNamesHighlightVisitor extends JavaElementVisitor implements HighlightVisitor, DumbAware {
   private HighlightInfoHolder myHolder;
@@ -23,12 +22,12 @@ public class JavaNamesHighlightVisitor extends JavaElementVisitor implements Hig
   private boolean shouldHighlightSoftKeywords;
 
   @Override
-  public void visit(@Nonnull PsiElement element) {
+  public void visit(PsiElement element) {
     element.accept(this);
   }
 
   @Override
-  public boolean analyze(@Nonnull PsiFile file, boolean updateWholeFile, @Nonnull HighlightInfoHolder holder, @Nonnull Runnable highlight) {
+  public boolean analyze(PsiFile file, boolean updateWholeFile, HighlightInfoHolder holder, Runnable highlight) {
     try {
       prepare(holder, file);
       highlight.run();
@@ -42,7 +41,7 @@ public class JavaNamesHighlightVisitor extends JavaElementVisitor implements Hig
   }
 
   @RequiredReadAction
-  private void prepare(@Nonnull HighlightInfoHolder holder, @Nonnull PsiFile file) {
+  private void prepare(HighlightInfoHolder holder, PsiFile file) {
     myHolder = holder;
     myFile = file;
     myLanguageLevel = PsiUtil.getLanguageLevel(file);
@@ -50,7 +49,7 @@ public class JavaNamesHighlightVisitor extends JavaElementVisitor implements Hig
   }
 
   @Override
-  public void visitKeyword(@Nonnull PsiKeyword keyword) {
+  public void visitKeyword(PsiKeyword keyword) {
     if (shouldHighlightSoftKeywords &&
       (JavaLexer.isSoftKeyword(keyword.getNode().getChars(),
                                myLanguageLevel) || JavaTokenType.NON_SEALED_KEYWORD == keyword.getTokenType())) {

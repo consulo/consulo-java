@@ -46,8 +46,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -140,7 +139,7 @@ public class ChangedConstantsDependencyProcessor {
     final Ref<CacheCorruptedException> exRef = new Ref<CacheCorruptedException>(null);
     processIdentifiers(psiSearchHelper, new PsiElementProcessor<PsiIdentifier>() {
       @Override
-      public synchronized boolean execute(@Nonnull PsiIdentifier identifier) {
+      public synchronized boolean execute(PsiIdentifier identifier) {
         try {
           final PsiElement parent = identifier.getParent();
           if (parent instanceof PsiReferenceExpression) {
@@ -178,9 +177,9 @@ public class ChangedConstantsDependencyProcessor {
   }
 
   private static boolean processIdentifiers(PsiSearchHelper helper,
-                                            @Nonnull final PsiElementProcessor<PsiIdentifier> processor,
-                                            @Nonnull final String identifier,
-                                            @Nonnull SearchScope searchScope,
+                                            final PsiElementProcessor<PsiIdentifier> processor,
+                                            final String identifier,
+                                            SearchScope searchScope,
                                             short searchContext) {
     TextOccurenceProcessor processor1 = new TextOccurenceProcessor() {
       public boolean execute(PsiElement element, int offsetInElement) {

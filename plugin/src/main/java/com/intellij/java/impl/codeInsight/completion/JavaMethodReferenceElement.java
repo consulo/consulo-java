@@ -12,7 +12,6 @@ import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.editor.completion.lookup.LookupItem;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
@@ -25,13 +24,11 @@ class JavaMethodReferenceElement extends LookupElement {
     myRefPlace = refPlace;
   }
 
-  @Nonnull
   @Override
   public Object getObject() {
     return myMethod;
   }
 
-  @Nonnull
   @Override
   public String getLookupString() {
     return myMethod.isConstructor() ? "new" : myMethod.getName();
@@ -44,7 +41,7 @@ class JavaMethodReferenceElement extends LookupElement {
   }
 
   @Override
-  public void handleInsert(@Nonnull InsertionContext context) {
+  public void handleInsert(InsertionContext context) {
     if (!(myRefPlace instanceof PsiMethodReferenceExpression)) {
       PsiClass containingClass = Objects.requireNonNull(myMethod.getContainingClass());
       String qualifiedName = Objects.requireNonNull(containingClass.getQualifiedName());

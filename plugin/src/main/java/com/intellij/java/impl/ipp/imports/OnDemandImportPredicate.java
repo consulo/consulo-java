@@ -20,11 +20,10 @@ import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import jakarta.annotation.Nonnull;
 
 class OnDemandImportPredicate implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@Nonnull PsiElement element) {
+  public boolean satisfiedBy(PsiElement element) {
     // doesn't work for import static yet.
     if (!(element instanceof PsiImportStatement)) {
       return false;

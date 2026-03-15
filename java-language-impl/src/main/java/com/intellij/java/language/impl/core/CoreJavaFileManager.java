@@ -25,8 +25,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,7 +52,7 @@ public class CoreJavaFileManager implements JavaFileManager {
   }
 
   @Override
-  public PsiJavaPackage findPackage(@Nonnull String packageName) {
+  public PsiJavaPackage findPackage(String packageName) {
     throw new UnsupportedOperationException();
     /*final List<VirtualFile> files = findDirectoriesByPackageName(packageName);
     if (files.size() > 0) {
@@ -88,7 +87,7 @@ public class CoreJavaFileManager implements JavaFileManager {
   }   */
 
   @Override
-  public PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass findClass(String qName, GlobalSearchScope scope) {
     for (VirtualFile root : roots()) {
       final PsiClass psiClass = findClassInClasspathRoot(qName, root, myPsiManager);
       if (psiClass != null) {
@@ -183,7 +182,7 @@ public class CoreJavaFileManager implements JavaFileManager {
   }
 
   @Override
-  public PsiClass[] findClasses(@Nonnull String qName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass[] findClasses(String qName, GlobalSearchScope scope) {
     List<PsiClass> result = new ArrayList<PsiClass>();
     for (VirtualFile file : roots()) {
       final PsiClass psiClass = findClassInClasspathRoot(qName, file, myPsiManager);
@@ -199,9 +198,8 @@ public class CoreJavaFileManager implements JavaFileManager {
     return Collections.emptyList();
   }
 
-  @Nonnull
   @Override
-  public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public Collection<PsiJavaModule> findModules(String moduleName, GlobalSearchScope scope) {
     return Collections.emptySet();
   }
 

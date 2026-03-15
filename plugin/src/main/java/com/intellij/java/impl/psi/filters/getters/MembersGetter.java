@@ -34,8 +34,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -51,7 +50,7 @@ public abstract class MembersGetter {
   private final List<PsiMethod> myPlaceMethods = new ArrayList<>();
   protected final PsiElement myPlace;
 
-  protected MembersGetter(StaticMemberProcessor processor, @Nonnull PsiElement place) {
+  protected MembersGetter(StaticMemberProcessor processor, PsiElement place) {
     myPlace = place;
     processor.processMembersOfRegisteredClasses(PrefixMatcher.ALWAYS_TRUE, (member, psiClass) -> myImportedStatically.add(member));
 

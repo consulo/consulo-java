@@ -28,7 +28,6 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +41,12 @@ public class AddReturnFix implements SyntheticIntentionAction {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.addReturnStatementText();
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return myMethod != null
             && myMethod.isValid()
             && myMethod.getManager().isInProject(myMethod)
@@ -58,7 +56,7 @@ public class AddReturnFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) {
             return;
         }

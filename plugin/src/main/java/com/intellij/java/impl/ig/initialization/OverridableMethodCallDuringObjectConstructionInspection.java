@@ -32,24 +32,20 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OverridableMethodCallDuringObjectConstructionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overridableMethodCallInConstructorDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.overridableMethodCallInConstructorProblemDescriptor().get();
     }
 
     @Override
-    @Nonnull
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) infos[0];
         PsiClass callClass = ClassUtils.getContainingClass(methodCallExpression);
@@ -75,7 +71,6 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
             this.methodName = methodName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.makeMethodFinalFixName(methodName);
@@ -103,7 +98,7 @@ public class OverridableMethodCallDuringObjectConstructionInspection extends Bas
     private static class OverridableMethodCallInConstructorVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             if (!MethodCallUtils.isCallDuringObjectConstruction(expression)) {
                 return;

@@ -20,7 +20,7 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;

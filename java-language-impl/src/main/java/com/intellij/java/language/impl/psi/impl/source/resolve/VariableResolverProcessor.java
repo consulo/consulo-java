@@ -19,7 +19,6 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ik, dsl
@@ -31,7 +30,7 @@ public class VariableResolverProcessor extends ConflictFilterProcessor implement
   private final PsiClass myAccessClass;
   private PsiElement myCurrentFileContext;
 
-  public VariableResolverProcessor(@Nonnull PsiJavaCodeReferenceElement place, @Nonnull PsiFile placeFile) {
+  public VariableResolverProcessor(PsiJavaCodeReferenceElement place, PsiFile placeFile) {
     super(place.getReferenceName(), ourFilter, new PsiConflictResolver[]{new JavaVariableConflictResolver()}, new SmartList<>(), place, placeFile);
 
     PsiClass access = null;
@@ -76,7 +75,7 @@ public class VariableResolverProcessor extends ConflictFilterProcessor implement
   }
 
   @Override
-  public final void handleEvent(@Nonnull PsiScopeProcessor.Event event, Object associated) {
+  public final void handleEvent(PsiScopeProcessor.Event event, Object associated) {
     super.handleEvent(event, associated);
     if (event == JavaScopeProcessorEvent.START_STATIC) {
       myStaticScopeFlag = true;
@@ -86,7 +85,7 @@ public class VariableResolverProcessor extends ConflictFilterProcessor implement
   }
 
   @Override
-  public void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor) {
+  public void add(PsiElement element, PsiSubstitutor substitutor) {
     final boolean staticProblem = myStaticScopeFlag &&
         !((PsiModifierListOwner) element).hasModifierProperty(PsiModifier.STATIC) &&
         (element instanceof PsiField || !(element instanceof PsiVariable && PsiUtil.isCompileTimeConstant((PsiVariable) element)));
@@ -95,12 +94,12 @@ public class VariableResolverProcessor extends ConflictFilterProcessor implement
 
 
   @Override
-  public boolean shouldProcess(@Nonnull DeclarationKind kind) {
+  public boolean shouldProcess(DeclarationKind kind) {
     return kind == DeclarationKind.VARIABLE || kind == DeclarationKind.FIELD || kind == DeclarationKind.ENUM_CONST;
   }
 
   @Override
-  public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
+  public boolean execute(PsiElement element, ResolveState state) {
     if (!(element instanceof PsiField) && (myName == null || PsiUtil.checkName(element, myName, myPlace))) {
       super.execute(element, state);
       return myResults.isEmpty();
@@ -110,7 +109,7 @@ public class VariableResolverProcessor extends ConflictFilterProcessor implement
   }
 
   @Override
-  public <T> T getHint(@Nonnull Key<T> hintKey) {
+  public <T> T getHint(Key<T> hintKey) {
     if (hintKey == ElementClassHint.KEY) {
       //noinspection unchecked
       return (T) this;

@@ -33,7 +33,6 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class CreateRendererAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public void update(@Nonnull AnActionEvent e) {
+    public void update(AnActionEvent e) {
         List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
         if (values.size() != 1) {
             e.getPresentation().setEnabledAndVisible(false);
@@ -54,7 +53,7 @@ public class CreateRendererAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public void actionPerformed(@Nonnull AnActionEvent event) {
+    public void actionPerformed(AnActionEvent event) {
         DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(event.getDataContext());
         List<JavaValue> values = ViewAsGroup.getSelectedValues(event);
         if (values.size() != 1) {
@@ -82,7 +81,6 @@ public class CreateRendererAction extends AnAction {
                         JavaDebuggerLocalize.userRenderersConfigurableDisplayName(),
                         "reference.idesettings.debugger.typerenderers"
                     ) {
-                        @Nonnull
                         @Override
                         protected NodeRendererSettings getSettings() {
                             return NodeRendererSettings.getInstance();

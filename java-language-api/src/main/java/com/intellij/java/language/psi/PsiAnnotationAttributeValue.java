@@ -2,12 +2,11 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.annotation.JvmAnnotationAttributeValue;
-import jakarta.annotation.Nonnull;
 
 abstract class PsiAnnotationAttributeValue<T extends PsiAnnotationMemberValue> implements JvmAnnotationAttributeValue {
     protected final T myElement;
 
-    protected PsiAnnotationAttributeValue(@Nonnull T value) {
+    protected PsiAnnotationAttributeValue(T value) {
         myElement = value;
     }
 }

@@ -31,19 +31,15 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
-import jakarta.annotation.Nonnull;
 
 public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix {
-    @Nonnull
     private LocalizeValue myText = LocalizeValue.empty();
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myText;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return getText();
@@ -51,7 +47,7 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
 
     @Override
     @RequiredUIAccess
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         if (element == null) {
             return;
@@ -67,7 +63,7 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (file != null && file.isValid()) {
             myText = JavaQuickFixLocalize.generifyText(file.getName());
             return PsiManager.getInstance(project).isInProject(file);
@@ -80,7 +76,7 @@ public class GenerifyFileFix implements SyntheticIntentionAction, LocalQuickFix 
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }

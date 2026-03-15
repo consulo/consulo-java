@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.impl.psi.scope.PsiConflictResolver;
 import consulo.language.psi.PsiUtilCore;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class DuplicateConflictResolver implements PsiConflictResolver
 	}
 
 	@Override
-	public CandidateInfo resolveConflict(@Nonnull List<CandidateInfo> conflicts)
+	public CandidateInfo resolveConflict(List<CandidateInfo> conflicts)
 	{
 		if(conflicts.size() == 1)
 		{

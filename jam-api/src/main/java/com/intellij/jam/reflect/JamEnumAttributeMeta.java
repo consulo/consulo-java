@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiAnnotationMemberValue;
 import consulo.language.psi.PsiElementRef;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Function;
 
@@ -60,7 +59,6 @@ public abstract class JamEnumAttributeMeta<T extends Enum<T>, JamType> extends J
       super(attrName, modelEnum);
     }
 
-    @Nonnull
     public List<JamEnumAttributeElement<T>> getJam(PsiElementRef<PsiAnnotation> anno) {
       return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, JamEnumAttributeElement<T>>() {
         public JamEnumAttributeElement<T> apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
@@ -75,12 +73,10 @@ public abstract class JamEnumAttributeMeta<T extends Enum<T>, JamType> extends J
       super(attrName, modelEnum);
     }
 
-    @Nonnull
     public JamEnumAttributeElement<T> getJam(PsiElementRef<PsiAnnotation> anno) {
       return new JamEnumAttributeElement<T>(anno, getAttributeLink().getAttributeName(), myModelEnum);
     }
 
-    @Nonnull
     public JamEnumAttributeElement<T> getJam(PsiElementRef<PsiAnnotation> anno, final T defaultValue) {
       return new JamEnumAttributeElement<T>(anno, getAttributeLink().getAttributeName(), myModelEnum) {
         @Override

@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -40,20 +39,17 @@ public class StringConstructorInspection extends BaseInspection {
      */
     public boolean ignoreSubstringArguments = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringConstructorDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "RedundantStringConstructorCall";
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringConstructorProblemDescriptor().get();
     }
@@ -90,7 +86,6 @@ public class StringConstructorInspection extends BaseInspection {
                 : InspectionGadgetsLocalize.stringConstructorReplaceArgQuickfix();
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return myName;
@@ -115,7 +110,7 @@ public class StringConstructorInspection extends BaseInspection {
 
     private class StringConstructorVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             PsiType type = expression.getType();
             if (!TypeUtils.isJavaLangString(type)) {

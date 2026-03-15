@@ -24,7 +24,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -32,13 +31,11 @@ import java.util.Set;
 public class PlaceholderCountMatchesArgumentCountInspection extends BaseInspection {
     private static final Set<String> loggingMethodNames = ContainerUtilRt.newHashSet("trace", "debug", "info", "warn", "error");
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.placeholderCountMatchesArgumentCountDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         int argumentCount = (Integer) infos[0];

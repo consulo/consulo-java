@@ -34,8 +34,7 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -81,7 +80,6 @@ public class PackageReference extends PsiReferenceBase<PsiElement> {
     return null;
   }
 
-  @Nonnull
   public Object[] getVariants() {
     final PsiJavaPackage psiPackage = getPsiPackage();
     if (psiPackage == null) {

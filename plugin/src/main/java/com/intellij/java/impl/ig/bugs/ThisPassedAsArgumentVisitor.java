@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.bugs;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
 
@@ -27,14 +26,14 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   public ThisPassedAsArgumentVisitor() {}
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (!passed) {
       super.visitElement(element);
     }
   }
 
   @Override
-  public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+  public void visitMethodCallExpression(PsiMethodCallExpression call) {
     if (passed) {
       return;
     }
@@ -50,7 +49,7 @@ class ThisPassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitNewExpression(@Nonnull PsiNewExpression newExpression) {
+  public void visitNewExpression(PsiNewExpression newExpression) {
     if (passed) {
       return;
     }

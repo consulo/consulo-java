@@ -29,7 +29,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -39,13 +38,11 @@ import jakarta.annotation.Nonnull;
 public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(ExplicitTypeCanBeDiamondInspection.class);
 
-  @Nonnull
   @Override
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Explicit type can be replaced with <>");
@@ -56,15 +53,13 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
     return true;
   }
 
-  @Nonnull
   @Override
   public String getShortName() {
     return "Convert2Diamond";
   }
 
-  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -84,14 +79,13 @@ public class ExplicitTypeCanBeDiamondInspection extends BaseJavaLocalInspectionT
   }
 
   private static class ReplaceWithDiamondFix implements LocalQuickFix, HighPriorityAction {
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return LocalizeValue.localizeTODO("Replace with <>");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
       PsiDiamondTypeUtil.replaceExplicitWithDiamond(descriptor.getPsiElement());
     }
   }

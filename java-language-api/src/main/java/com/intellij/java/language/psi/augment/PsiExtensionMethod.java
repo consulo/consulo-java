@@ -3,8 +3,7 @@ package com.intellij.java.language.psi.augment;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiParameter;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An extension instance method that delegates to another method.
@@ -15,7 +14,6 @@ public interface PsiExtensionMethod extends PsiMethod
 	/**
 	 * @return a target method
 	 */
-	@Nonnull
 	PsiMethod getTargetMethod();
 
 	/**

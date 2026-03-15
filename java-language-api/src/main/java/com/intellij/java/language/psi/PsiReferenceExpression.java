@@ -18,8 +18,7 @@ package com.intellij.java.language.psi;
 import consulo.language.util.IncorrectOperationException;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a reference in Java code used as part of an expression.
@@ -43,7 +42,7 @@ public interface PsiReferenceExpression extends PsiExpression, PsiJavaCodeRefere
    * @return the element corresponding to this element in the PSI tree after the modification.
    * @throws IncorrectOperationException if the modification failed for some reason.
    */
-  PsiElement bindToElementViaStaticImport(@Nonnull PsiClass qualifierClass) throws IncorrectOperationException ;
+  PsiElement bindToElementViaStaticImport(PsiClass qualifierClass) throws IncorrectOperationException ;
 
   void setQualifierExpression(@Nullable PsiExpression newQualifier) throws IncorrectOperationException;
 }

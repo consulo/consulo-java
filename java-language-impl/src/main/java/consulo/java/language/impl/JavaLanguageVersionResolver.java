@@ -14,8 +14,7 @@ import consulo.module.Module;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author VISTALL
@@ -24,9 +23,8 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class JavaLanguageVersionResolver implements LanguageVersionResolver {
   @RequiredReadAction
-  @Nonnull
   @Override
-  public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable PsiElement element) {
+  public LanguageVersion getLanguageVersion(Language language, @Nullable PsiElement element) {
     if (element == null) {
       return LanguageLevel.HIGHEST.toLangVersion();
     } else {
@@ -42,10 +40,9 @@ public class JavaLanguageVersionResolver implements LanguageVersionResolver {
     }
   }
 
-  @Nonnull
   @RequiredReadAction
   @Override
-  public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile) {
+  public LanguageVersion getLanguageVersion(Language language, @Nullable Project project, @Nullable VirtualFile virtualFile) {
     if (project == null || virtualFile == null) {
       return LanguageLevel.HIGHEST.toLangVersion();
     }
@@ -60,7 +57,6 @@ public class JavaLanguageVersionResolver implements LanguageVersionResolver {
     return extension.getLanguageLevel().toLangVersion();
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

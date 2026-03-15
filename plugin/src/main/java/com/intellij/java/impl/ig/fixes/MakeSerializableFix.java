@@ -25,11 +25,9 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class MakeSerializableFix extends InspectionGadgetsFix {
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.makeClassSerializableQuickfix();
   }

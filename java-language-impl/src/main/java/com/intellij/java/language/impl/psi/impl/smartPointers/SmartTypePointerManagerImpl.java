@@ -26,8 +26,7 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -52,8 +51,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     }
 
     @Override
-    @Nonnull
-    public SmartTypePointer createSmartTypePointer(@Nonnull PsiType type) {
+    public SmartTypePointer createSmartTypePointer(PsiType type) {
         SmartTypePointer pointer = type.accept(new SmartTypeCreatingVisitor());
         return pointer != null ? pointer : NULL_POINTER;
     }
@@ -61,7 +59,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     private static class SimpleTypePointer implements SmartTypePointer {
         private final PsiType myType;
 
-        private SimpleTypePointer(@Nonnull PsiType type) {
+        private SimpleTypePointer(PsiType type) {
             myType = type;
         }
 
@@ -74,7 +72,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     private static class ArrayTypePointer extends TypePointerBase<PsiArrayType> {
         private final SmartTypePointer myComponentTypePointer;
 
-        public ArrayTypePointer(@Nonnull PsiArrayType type, @Nonnull SmartTypePointer componentTypePointer) {
+        public ArrayTypePointer(PsiArrayType type, SmartTypePointer componentTypePointer) {
             super(type);
             myComponentTypePointer = componentTypePointer;
         }
@@ -92,7 +90,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
         private final SmartTypePointer myBoundPointer;
         private final boolean myIsExtending;
 
-        public WildcardTypePointer(@Nonnull PsiWildcardType type, @Nullable SmartTypePointer boundPointer) {
+        public WildcardTypePointer(PsiWildcardType type, @Nullable SmartTypePointer boundPointer) {
             super(type);
             myManager = type.getManager();
             myBoundPointer = boundPointer;
@@ -122,11 +120,11 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
         private final SmartPsiElementPointer<?>[] myAnnotations;
 
         ClassTypePointer(
-            @Nonnull PsiClassType type,
-            @Nonnull SmartPsiElementPointer<?> aClass,
-            @Nonnull LanguageLevel languageLevel,
-            @Nonnull Map<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer> map,
-            @Nonnull SmartPsiElementPointer<?>[] annotations
+            PsiClassType type,
+            SmartPsiElementPointer<?> aClass,
+            LanguageLevel languageLevel,
+            Map<SmartPsiElementPointer<PsiTypeParameter>, SmartTypePointer> map,
+            SmartPsiElementPointer<?>[] annotations
         ) {
             super(type);
             myClass = aClass;
@@ -168,7 +166,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
     private class DisjunctionTypePointer extends TypePointerBase<PsiDisjunctionType> {
         private final List<SmartTypePointer> myPointers;
 
-        private DisjunctionTypePointer(@Nonnull PsiDisjunctionType type) {
+        private DisjunctionTypePointer(PsiDisjunctionType type) {
             super(type);
             myPointers = ContainerUtil.map(type.getDisjunctions(), SmartTypePointerManagerImpl.this::createSmartTypePointer);
         }
@@ -250,8 +248,7 @@ public class SmartTypePointerManagerImpl extends SmartTypePointerManager {
         }
     }
 
-    @Nonnull
-    private SmartTypePointer createClassReferenceTypePointer(@Nonnull PsiClassType classType) {
+    private SmartTypePointer createClassReferenceTypePointer(PsiClassType classType) {
         for (ClassTypePointerFactory factory : ClassTypePointerFactory.EP_NAME.getExtensions()) {
             SmartTypePointer pointer = factory.createClassTypePointer(classType, myProject);
             if (pointer != null) {

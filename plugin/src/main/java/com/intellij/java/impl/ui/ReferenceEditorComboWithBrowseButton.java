@@ -29,7 +29,6 @@ import consulo.language.editor.ui.awt.EditorComboBox;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.awt.TextAccessor;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -40,14 +39,14 @@ import java.util.List;
 public class ReferenceEditorComboWithBrowseButton extends ComponentWithBrowseButton<EditorComboBox> implements TextAccessor {
   public ReferenceEditorComboWithBrowseButton(ActionListener browseActionListener,
                                               String text,
-                                              @Nonnull Project project,
+                                              Project project,
                                               boolean toAcceptClasses, String recentsKey) {
     this(browseActionListener, text, project, toAcceptClasses, JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE, recentsKey);
   }
 
   public ReferenceEditorComboWithBrowseButton(ActionListener browseActionListener,
                                               String text,
-                                              @Nonnull Project project,
+                                              Project project,
                                               boolean toAcceptClasses,
                                               JavaCodeFragment.VisibilityChecker visibilityChecker, String recentsKey) {
     super(new EditorComboBox(createDocument(StringUtil.isEmpty(text) ? "" : text, project, toAcceptClasses, visibilityChecker), project, JavaFileType.INSTANCE),

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaElementVisitor;
 import consulo.language.psi.PsiElement;
@@ -39,7 +38,7 @@ class ClsPackageStatementImpl extends ClsElementImpl implements PsiPackageStatem
 		myPackageName = null;
 	}
 
-	public ClsPackageStatementImpl(@Nonnull ClsFileImpl file, String packageName)
+	public ClsPackageStatementImpl(ClsFileImpl file, String packageName)
 	{
 		myFile = file;
 		myPackageName = packageName;
@@ -64,7 +63,6 @@ class ClsPackageStatementImpl extends ClsElementImpl implements PsiPackageStatem
 	}
 
 	@Override
-	@Nonnull
 	public PsiElement[] getChildren()
 	{
 		throw new UnsupportedOperationException("Method not implemented");
@@ -77,7 +75,7 @@ class ClsPackageStatementImpl extends ClsElementImpl implements PsiPackageStatem
 	}
 
 	@Override
-	public void appendMirrorText(final int indentLevel, @Nonnull final StringBuilder buffer)
+	public void appendMirrorText(final int indentLevel, final StringBuilder buffer)
 	{
 		if(myPackageName != null)
 		{
@@ -86,13 +84,13 @@ class ClsPackageStatementImpl extends ClsElementImpl implements PsiPackageStatem
 	}
 
 	@Override
-	public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException
+	public void setMirror(TreeElement element) throws InvalidMirrorException
 	{
 		setMirrorCheckingType(element, JavaElementType.PACKAGE_STATEMENT);
 	}
 
 	@Override
-	public void accept(@Nonnull PsiElementVisitor visitor)
+	public void accept(PsiElementVisitor visitor)
 	{
 		if(visitor instanceof JavaElementVisitor)
 		{

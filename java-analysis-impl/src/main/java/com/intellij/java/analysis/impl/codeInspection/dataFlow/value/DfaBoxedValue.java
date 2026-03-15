@@ -8,33 +8,28 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
 import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 public final class DfaBoxedValue extends DfaValue
 {
 	private final
-	@Nonnull
 	DfaVariableValue myWrappedValue;
 	private final
 	@Nullable
 	PsiType myType;
 
-	private DfaBoxedValue(@Nonnull DfaVariableValue valueToWrap, @Nonnull DfaValueFactory factory, @Nullable PsiType type)
+	private DfaBoxedValue(DfaVariableValue valueToWrap, DfaValueFactory factory, @Nullable PsiType type)
 	{
 		super(factory);
 		myWrappedValue = valueToWrap;
 		myType = type;
 	}
 
-	@NonNls
 	public String toString()
 	{
 		return "Boxed " + myWrappedValue.toString();
 	}
 
-	@Nonnull
 	public DfaVariableValue getWrappedValue()
 	{
 		return myWrappedValue;
@@ -47,7 +42,6 @@ public final class DfaBoxedValue extends DfaValue
 		return myType;
 	}
 
-	@Nonnull
 	@Override
 	public DfType getDfType()
 	{

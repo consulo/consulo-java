@@ -27,8 +27,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import javax.swing.*;
@@ -62,7 +61,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         PsiMethod method = getTargetMethod(editor, file);
         if (method != null) {
             boolean hasContract = JavaMethodContractUtil.findContractAnnotation(method) != null;
@@ -76,7 +75,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         final PsiMethod method = getTargetMethod(editor, file);
         assert method != null;
         PsiAnnotation existingAnno = AnnotationUtil.findAnnotationInHierarchy(method, Collections.singleton(Contract.class.getName()));
@@ -90,7 +89,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
         DialogBuilder builder = createDialog(project, contractText, pureCB, mutatesText);
         DocumentAdapter validator = new DocumentAdapter() {
             @Override
-            protected void textChanged(@Nonnull DocumentEvent e) {
+            protected void textChanged(DocumentEvent e) {
                 String contractError = getContractErrorMessage(contractText.getText(), method);
                 if (contractError != null) {
                     builder.setOkActionEnabled(false);
@@ -128,7 +127,7 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
     }
 
     private static DialogBuilder createDialog(
-        @Nonnull Project project,
+        Project project,
         JBTextField contractText,
         JCheckBox pureCB,
         JBTextField mutatesText
@@ -202,7 +201,6 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
         DaemonCodeAnalyzer.getInstance(project).restart();
     }
 
-    @Nonnull
     private static LocalizeValue getMutatesErrorMessage(String mutates, PsiMethod method) {
         return StringUtil.isEmpty(mutates) ? LocalizeValue.empty() : MutationSignature.checkSignature(mutates, method);
     }

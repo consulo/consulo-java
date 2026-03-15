@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author mike
@@ -30,7 +29,7 @@ import org.jetbrains.annotations.NonNls;
 class ExceptionTagInfo implements JavadocTagInfo {
   private final String myName;
 
-  public ExceptionTagInfo(@NonNls String name) {
+  public ExceptionTagInfo(String name) {
     myName = name;
   }
 

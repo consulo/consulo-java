@@ -29,20 +29,16 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class BooleanConstructorInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "BooleanConstructorCall";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.booleanConstructorDisplayName();
   }
@@ -53,7 +49,6 @@ public class BooleanConstructorInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.booleanConstructorProblemDescriptor().get();
   }
@@ -74,7 +69,6 @@ public class BooleanConstructorInspection extends BaseInspection {
     private static final String FALSE = '\"' + PsiKeyword.FALSE + '\"';
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.booleanConstructorSimplifyQuickfix();
     }
@@ -93,7 +87,7 @@ public class BooleanConstructorInspection extends BaseInspection {
       PsiExpression argument = arguments[0];
       String text = argument.getText();
       LanguageLevel languageLevel = PsiUtil.getLanguageLevel(expression);
-      @NonNls String newExpression;
+      String newExpression;
       if (PsiKeyword.TRUE.equals(text) || TRUE.equalsIgnoreCase(text)) {
         newExpression = "java.lang.Boolean.TRUE";
       }
@@ -127,7 +121,6 @@ public class BooleanConstructorInspection extends BaseInspection {
       replaceExpression(expression, newExpression);
     }
 
-    @NonNls
     private static String buildText(PsiExpression argument, boolean useValueOf) {
       String text = argument.getText();
       PsiType argumentType = argument.getType();
@@ -148,7 +141,7 @@ public class BooleanConstructorInspection extends BaseInspection {
   private static class BooleanConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       PsiType type = expression.getType();
       if (type == null || !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {

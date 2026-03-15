@@ -24,7 +24,7 @@ import consulo.language.editor.completion.lookup.LookupActionProvider;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementAction;
 import consulo.project.Project;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 

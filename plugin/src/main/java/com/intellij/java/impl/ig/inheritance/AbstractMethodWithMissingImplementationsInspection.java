@@ -29,21 +29,18 @@ import consulo.content.scope.SearchScope;
 import consulo.language.psi.PsiManager;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
 
 @ExtensionImpl
 public class AbstractMethodWithMissingImplementationsInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.abstractMethodWithMissingImplementationsDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.abstractMethodWithMissingImplementationsProblemDescriptor().get();
     }
@@ -78,7 +75,7 @@ public class AbstractMethodWithMissingImplementationsInspection extends BaseInsp
             }
         }
 
-        private static boolean hasMatchingImplementation(@Nonnull PsiClass aClass, @Nonnull PsiMethod method) {
+        private static boolean hasMatchingImplementation(PsiClass aClass, PsiMethod method) {
             PsiMethod overridingMethod = findOverridingMethod(aClass, method);
             if (overridingMethod == null || overridingMethod.hasModifierProperty(PsiModifier.STATIC)) {
                 return false;
@@ -99,7 +96,7 @@ public class AbstractMethodWithMissingImplementationsInspection extends BaseInsp
          */
         @Nullable
         private static PsiMethod findOverridingMethod(
-            PsiClass aClass, @Nonnull PsiMethod method
+            PsiClass aClass, PsiMethod method
         ) {
             PsiClass superClass = method.getContainingClass();
             if (aClass.equals(superClass)) {

@@ -41,10 +41,9 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -57,14 +56,13 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
 
   private static final Logger LOG = Logger.getInstance(TestDiscoveryExtension.class);
 
-  @Nonnull
   @Override
   public String getSerializationId() {
     return "testDiscovery";
   }
 
   @Override
-  protected void attachToProcess(@Nonnull final RunConfigurationBase configuration, @Nonnull final ProcessHandler handler, @Nullable RunnerSettings runnerSettings) {
+  protected void attachToProcess(final RunConfigurationBase configuration, final ProcessHandler handler, @Nullable RunnerSettings runnerSettings) {
     if (runnerSettings == null && isApplicableFor(configuration)) {
       final String frameworkPrefix = ((JavaTestConfigurationBase) configuration).getFrameworkPrefix();
       final String moduleName = ((JavaTestConfigurationBase) configuration).getConfigurationModule().getModuleName();
@@ -76,7 +74,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
         private List<String> myCompletedMethodNames = new ArrayList<>();
 
         @Override
-        public void onTestFinished(@Nonnull SMTestProxy test) {
+        public void onTestFinished(SMTestProxy test) {
           final SMTestProxy.SMRootTestProxy root = test.getRoot();
           if ((root == null || root.getHandler() == handler)) {
             final String fullTestName = test.getLocationUrl();
@@ -93,7 +91,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
         }
 
         @Override
-        public void onTestingFinished(@Nonnull SMTestProxy.SMRootTestProxy testsRoot) {
+        public void onTestingFinished(SMTestProxy.SMRootTestProxy testsRoot) {
           if (testsRoot.getHandler() == handler) {
             processTracesAlarm.cancelAllRequests();
             processTracesAlarm.addRequest(() ->
@@ -121,7 +119,6 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
     params.getVMParametersList().addProperty(ProjectData.TRACE_DIR, getTracesDirectory(configuration));
   }
 
-  @Nonnull
   private static String getTracesDirectory(RunConfigurationBase configuration) {
     return baseTestDiscoveryPathForProject(configuration.getProject()) + File.separator + configuration.getUniqueID();
   }
@@ -134,20 +131,19 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
   }
 
   @Override
-  public void readExternal(@Nonnull final RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException {
+  public void readExternal(final RunConfigurationBase runConfiguration, Element element) throws InvalidDataException {
   }
 
   @Override
-  public void writeExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws WriteExternalException {
+  public void writeExternal(RunConfigurationBase runConfiguration, Element element) throws WriteExternalException {
     throw new WriteExternalException();
   }
 
   @Override
-  protected boolean isApplicableFor(@Nonnull final RunConfigurationBase configuration) {
+  protected boolean isApplicableFor(final RunConfigurationBase configuration) {
     return configuration instanceof JavaTestConfigurationBase && TESTDISCOVERY_ENABLED;
   }
 
-  @Nonnull
   public static Path baseTestDiscoveryPathForProject(Project project) {
     return ProjectUtil.getProjectCachePath(project, "testDiscovery", true);
   }

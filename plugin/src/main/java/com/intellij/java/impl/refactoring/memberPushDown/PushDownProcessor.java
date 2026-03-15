@@ -52,7 +52,6 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -76,19 +75,16 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
         myJavaDocPolicy = javaDocPolicy;
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return JavaPushDownHandler.REFACTORING_NAME;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new PushDownUsageViewDescriptor(myClass);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -102,7 +98,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
         PushDownConflicts pushDownConflicts = new PushDownConflicts(myClass, myMemberInfos);
         pushDownConflicts.checkSourceClassConflicts();
@@ -172,7 +168,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         try {
             encodeRefs();
             if (myCreateClassDlg != null) { //usages.length == 0
@@ -215,7 +211,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
 
                 @Override
                 @RequiredReadAction
-                public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+                public void visitNewExpression(PsiNewExpression expression) {
                     PsiJavaCodeReferenceElement classReference = expression.getClassReference();
                     if (classReference != null) {
                         encodeRef(classReference, movedMembers, expression);
@@ -225,7 +221,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
 
                 @Override
                 @RequiredReadAction
-                public void visitTypeElement(@Nonnull PsiTypeElement type) {
+                public void visitTypeElement(PsiTypeElement type) {
                     PsiJavaCodeReferenceElement referenceElement = type.getInnermostComponentReferenceElement();
                     if (referenceElement != null) {
                         encodeRef(referenceElement, movedMembers, type);
@@ -287,7 +283,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
 
             @Override
             @RequiredReadAction
-            public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            public void visitNewExpression(PsiNewExpression expression) {
                 PsiJavaCodeReferenceElement classReference = expression.getClassReference();
                 if (classReference != null) {
                     decodeRef(classReference, factory, targetClass, expression);
@@ -297,7 +293,7 @@ public class PushDownProcessor extends BaseRefactoringProcessor {
 
             @Override
             @RequiredReadAction
-            public void visitTypeElement(@Nonnull PsiTypeElement type) {
+            public void visitTypeElement(PsiTypeElement type) {
                 PsiJavaCodeReferenceElement referenceElement = type.getInnermostComponentReferenceElement();
                 if (referenceElement != null) {
                     decodeRef(referenceElement, factory, targetClass, type);

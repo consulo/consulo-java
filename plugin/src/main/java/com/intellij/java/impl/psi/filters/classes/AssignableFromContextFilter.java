@@ -7,7 +7,6 @@ import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.reflect.ReflectionUtil;
-import jakarta.annotation.Nonnull;
 
 import java.lang.ref.SoftReference;
 
@@ -34,7 +33,7 @@ public class AssignableFromContextFilter implements ElementFilter {
     return checkInheritance(curClass, candidate);
   }
 
-  protected boolean checkInheritance(@Nonnull PsiClass curClass, @Nonnull PsiClass candidate) {
+  protected boolean checkInheritance(PsiClass curClass, PsiClass candidate) {
     String qualifiedName = curClass.getQualifiedName();
     return qualifiedName != null && (qualifiedName.equals(candidate.getQualifiedName()) || candidate.isInheritor(curClass, true));
   }

@@ -23,18 +23,15 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonSynchronizedMethodOverridesSynchronizedMethodInspection
   extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.nonSynchronizedMethodOverridesSynchronizedMethodDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.nonSynchronizedMethodOverridesSynchronizedMethodProblemDescriptor().get();
   }

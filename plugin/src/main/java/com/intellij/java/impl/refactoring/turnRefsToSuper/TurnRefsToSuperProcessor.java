@@ -38,7 +38,6 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,8 +52,8 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
     @RequiredReadAction
     public TurnRefsToSuperProcessor(
         Project project,
-        @Nonnull PsiClass aClass,
-        @Nonnull PsiClass aSuper,
+        PsiClass aClass,
+        PsiClass aSuper,
         boolean replaceInstanceOf
     ) {
         super(project, replaceInstanceOf, aSuper.getName());
@@ -62,7 +61,6 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
         mySuper = aSuper;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {
@@ -72,18 +70,16 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
         );
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new RefsToSuperViewDescriptor(myClass, mySuper);
     }
 
-    private void setClasses(@Nonnull PsiClass aClass, @Nonnull PsiClass aSuper) {
+    private void setClasses(PsiClass aClass, PsiClass aSuper) {
         myClass = aClass;
         mySuper = aSuper;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -104,7 +100,7 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         if (!myProject.getApplication().isUnitTestMode() && refUsages.get().length == 0) {
             LocalizeValue message = RefactoringLocalize.noUsagesCanBeReplaced(myClass.getQualifiedName(), mySuper.getQualifiedName());
             Messages.showInfoMessage(myProject, message.get(), TurnRefsToSuperHandler.REFACTORING_NAME.get());
@@ -122,7 +118,7 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         try {
             PsiClass aSuper = mySuper;
             processTurnToSuperRefs(usages, aSuper);
@@ -179,9 +175,8 @@ public class TurnRefsToSuperProcessor extends TurnRefsToSuperProcessorBase {
         return myReplaceInstanceOf;
     }
 
-    @Nonnull
     @Override
-    protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull UsageViewDescriptor descriptor) {
+    protected Collection<? extends PsiElement> getElementsToWrite(UsageViewDescriptor descriptor) {
         return Collections.emptyList(); // neither myClass nor mySuper are subject to change, it's just references that are going to change
     }
 }

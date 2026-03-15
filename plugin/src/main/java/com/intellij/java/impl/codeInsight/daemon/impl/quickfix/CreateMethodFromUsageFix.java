@@ -42,8 +42,7 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +57,7 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
 
     private final SmartPsiElementPointer myMethodCall;
 
-    public CreateMethodFromUsageFix(@Nonnull PsiMethodCallExpression methodCall) {
+    public CreateMethodFromUsageFix(PsiMethodCallExpression methodCall) {
         myMethodCall = SmartPointerManager.getInstance(methodCall.getProject()).createSmartPsiElementPointer(methodCall);
     }
 
@@ -128,7 +127,6 @@ public class CreateMethodFromUsageFix extends CreateFromUsageBaseFix {
     }
 
     @Override
-    @Nonnull
     protected List<PsiClass> getTargetClasses(PsiElement element) {
         List<PsiClass> targets = super.getTargetClasses(element);
         ArrayList<PsiClass> result = new ArrayList<PsiClass>();

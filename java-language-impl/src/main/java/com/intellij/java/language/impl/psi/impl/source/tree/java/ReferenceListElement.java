@@ -25,7 +25,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenType;
 import consulo.language.impl.ast.*;
 import consulo.language.util.CharTable;
-import jakarta.annotation.Nonnull;
 
 public class ReferenceListElement extends CompositeElement {
   private final IElementType myKeyword;
@@ -86,7 +85,7 @@ public class ReferenceListElement extends CompositeElement {
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (child.getElementType() == JavaElementType.JAVA_CODE_REFERENCE) {
       ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
       if (next != null && next.getElementType() == mySeparator) {

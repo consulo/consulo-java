@@ -25,7 +25,6 @@ import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.project.ui.view.tree.ViewSettings;
 import consulo.ui.ex.tree.PresentationData;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -40,7 +39,6 @@ public class MethodSmartPointerNode extends BaseSmartPointerPsiNode<SmartPsiElem
   }
 
   @Override
-  @Nonnull
   public Collection<AbstractTreeNode> getChildrenImpl() {
     return Collections.emptyList();
   }

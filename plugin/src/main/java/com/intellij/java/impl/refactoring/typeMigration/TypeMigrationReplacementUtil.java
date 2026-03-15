@@ -27,8 +27,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -135,7 +134,7 @@ public class TypeMigrationReplacementUtil
 		return expression;
 	}
 
-	static PsiType revalidateType(@Nonnull PsiType migrationType, @Nonnull Project project)
+	static PsiType revalidateType(PsiType migrationType, Project project)
 	{
 		if(!migrationType.isValid())
 		{

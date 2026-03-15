@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.java.impl.refactoring.introduceField.IntroduceConstantHandlerImpl;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -133,7 +132,7 @@ public abstract class InplaceIntroduceConstantTest extends AbstractJavaInplaceIn
 
   public static class MyIntroduceConstantHandler extends IntroduceConstantHandlerImpl implements MyIntroduceHandler {
     @Override
-    public boolean invokeImpl(Project project, @Nonnull PsiExpression selectedExpr, Editor editor) {
+    public boolean invokeImpl(Project project, PsiExpression selectedExpr, Editor editor) {
       return super.invokeImpl(project, selectedExpr, editor);
     }
 

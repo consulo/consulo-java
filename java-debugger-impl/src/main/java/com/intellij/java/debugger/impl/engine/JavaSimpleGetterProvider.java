@@ -21,7 +21,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Nikolay.Tropin
@@ -29,7 +28,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaSimpleGetterProvider implements SimplePropertyGetterProvider {
   @Override
-  public boolean isInsideSimpleGetter(@Nonnull PsiElement element) {
+  public boolean isInsideSimpleGetter(PsiElement element) {
     PsiMethod method = PsiTreeUtil.getParentOfType(element, PsiMethod.class);
     if (method == null) {
       return false;

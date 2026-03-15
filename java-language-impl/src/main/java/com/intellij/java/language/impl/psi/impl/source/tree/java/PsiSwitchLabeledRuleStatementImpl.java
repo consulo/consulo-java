@@ -9,8 +9,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiSwitchLabeledRuleStatementImpl extends PsiSwitchLabelStatementBaseImpl implements PsiSwitchLabeledRuleStatement {
   private static final TokenSet BODY_STATEMENTS =
@@ -26,7 +25,7 @@ public class PsiSwitchLabeledRuleStatementImpl extends PsiSwitchLabelStatementBa
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitSwitchLabeledRuleStatement(this);
     }
@@ -41,10 +40,10 @@ public class PsiSwitchLabeledRuleStatementImpl extends PsiSwitchLabelStatementBa
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     if (!super.processDeclarations(processor, state, lastParent, place)) return false;
 
     // Do not resolve variables that don't come from the body of this {@link PsiSwitchLabeledRuleStatement}
@@ -73,14 +72,14 @@ public class PsiSwitchLabeledRuleStatementImpl extends PsiSwitchLabelStatementBa
     return firstPatternVariableSecondNull(first, second) || firstPatternVariableSecondNull(second, first);
   }
 
-  private static boolean firstPatternVariableSecondNull(PsiElement first, @Nonnull PsiElement second) {
+  private static boolean firstPatternVariableSecondNull(PsiElement first, PsiElement second) {
     return first instanceof PsiTypeTestPattern &&
       second.getNode().getFirstChildNode().getElementType() == JavaTokenType.NULL_KEYWORD;
   }
 
   private static
   @Nullable
-  PsiElement stripParensIfNecessary(@Nonnull PsiCaseLabelElement element) {
+  PsiElement stripParensIfNecessary(PsiCaseLabelElement element) {
     return element instanceof PsiExpression
       ? PsiUtil.skipParenthesizedExprDown((PsiExpression)element)
       : element;

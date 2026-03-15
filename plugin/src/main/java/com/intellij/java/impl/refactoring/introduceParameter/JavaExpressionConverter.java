@@ -21,7 +21,6 @@ import consulo.language.Language;
 import consulo.project.Project;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Maxim.Medvedev
@@ -33,7 +32,6 @@ public class JavaExpressionConverter implements ExpressionConverter {
     return JavaPsiFacade.getElementFactory(project).createExpressionFromText(expression.getText(), expression);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

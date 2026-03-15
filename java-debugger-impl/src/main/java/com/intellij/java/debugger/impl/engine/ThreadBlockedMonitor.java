@@ -31,9 +31,8 @@ import consulo.logging.Logger;
 import consulo.project.ui.notification.Notification;
 import consulo.project.ui.notification.NotificationType;
 import consulo.project.ui.notification.event.NotificationListener;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.event.HyperlinkEvent;
 import java.util.Collection;
 import java.util.HashSet;
@@ -97,13 +96,13 @@ public class ThreadBlockedMonitor
 		}
 	}
 
-	private static void onThreadBlocked(@Nonnull final ThreadReference blockedThread, @Nonnull final ThreadReference blockingThread, final DebugProcessImpl process)
+	private static void onThreadBlocked(final ThreadReference blockedThread, final ThreadReference blockingThread, final DebugProcessImpl process)
 	{
 		XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(DebuggerBundle.message("status.thread.blocked.by", blockedThread.name(), blockingThread.name()), DebuggerBundle.message("status" + ""
 				+ ".thread" + ".blocked.by.resume", blockingThread.name()), NotificationType.INFORMATION, new NotificationListener()
 		{
 			@Override
-			public void hyperlinkUpdate(@Nonnull Notification notification, @Nonnull HyperlinkEvent event)
+			public void hyperlinkUpdate(Notification notification, HyperlinkEvent event)
 			{
 				if(event.getEventType() == HyperlinkEvent.EventType.ACTIVATED)
 				{

@@ -15,8 +15,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Array;
 import java.text.CharacterIterator;
@@ -47,7 +46,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
   private final StubElement<?> myParent;
   private final int myAccess;
   private final String myShortName;
-  private final @Nonnull FirstPassData myFirstPassData;
+  private final FirstPassData myFirstPassData;
   private final boolean myAnonymousInner;
   private final boolean myLocalClassInner;
   private String myInternalName;
@@ -180,7 +179,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     return result;
   }
 
-  private static void newReferenceList(@Nonnull JavaClassReferenceListElementType type,
+  private static void newReferenceList(JavaClassReferenceListElementType type,
                                        StubElement<?> parent,
                                        @Nullable List<TypeInfo> types) {
     new PsiClassReferenceListStubImpl(type, parent, types == null ? TypeInfo.EMPTY_ARRAY : types.toArray(TypeInfo.EMPTY_ARRAY));
@@ -523,13 +522,13 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
   }
 
   private static final class FieldAnnotationCollectingVisitor extends FieldVisitor {
-    private final @Nonnull PsiModifierListStub myModList;
-    private final @Nonnull FirstPassData myFirstPassData;
-    private final @Nonnull ClsTypeAnnotationCollector myAnnoBuilder;
+    private final PsiModifierListStub myModList;
+    private final FirstPassData myFirstPassData;
+    private final ClsTypeAnnotationCollector myAnnoBuilder;
 
-    private FieldAnnotationCollectingVisitor(@Nonnull PsiFieldStub stub,
-                                             @Nonnull PsiModifierListStub modList,
-                                             @Nonnull FirstPassData firstPassData) {
+    private FieldAnnotationCollectingVisitor(PsiFieldStub stub,
+                                             PsiModifierListStub modList,
+                                             FirstPassData firstPassData) {
       super(Opcodes.API_VERSION);
       myModList = modList;
       myFirstPassData = firstPassData;
@@ -555,13 +554,13 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
   }
 
   private static final class RecordComponentAnnotationCollectingVisitor extends RecordComponentVisitor {
-    private final @Nonnull PsiModifierListStub myModList;
-    private final @Nonnull FirstPassData myFirstPassData;
-    private final @Nonnull ClsTypeAnnotationCollector myAnnoBuilder;
+    private final PsiModifierListStub myModList;
+    private final FirstPassData myFirstPassData;
+    private final ClsTypeAnnotationCollector myAnnoBuilder;
 
-    private RecordComponentAnnotationCollectingVisitor(@Nonnull PsiRecordComponentStub stub,
-                                                       @Nonnull PsiModifierListStub modList,
-                                                       @Nonnull FirstPassData firstPassData) {
+    private RecordComponentAnnotationCollectingVisitor(PsiRecordComponentStub stub,
+                                                       PsiModifierListStub modList,
+                                                       FirstPassData firstPassData) {
       super(Opcodes.API_VERSION);
       myModList = modList;
       myFirstPassData = firstPassData;
@@ -588,12 +587,12 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
 
   private static final class MethodAnnotationCollectingVisitor extends MethodVisitor {
     private final PsiMethodStub myOwner;
-    private final @Nonnull MethodInfo myMethodInfo;
-    private final @Nonnull PsiModifierListStub myModList;
+    private final MethodInfo myMethodInfo;
+    private final PsiModifierListStub myModList;
     private final PsiParameterStubImpl[] myParamStubs;
     private final int myParamCount;
     private final int myLocalVarIgnoreCount;
-    private final @Nonnull FirstPassData myFirstPassData;
+    private final FirstPassData myFirstPassData;
     private int myParamIgnoreCount;
     private int myParamNameIndex;
     private int myUsedParamSize;
@@ -601,12 +600,12 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     private Map<TypeInfo, ClsTypeAnnotationCollector> myAnnoBuilders;
 
     private MethodAnnotationCollectingVisitor(PsiMethodStub owner,
-                                              @Nonnull MethodInfo methodInfo,
-                                              @Nonnull PsiModifierListStub modList,
+                                              MethodInfo methodInfo,
+                                              PsiModifierListStub modList,
                                               PsiParameterStubImpl[] paramStubs,
                                               int paramIgnoreCount,
                                               int localVarIgnoreCount,
-                                              @Nonnull FirstPassData firstPassData) {
+                                              FirstPassData firstPassData) {
       super(Opcodes.API_VERSION);
       myOwner = owner;
       myMethodInfo = methodInfo;
@@ -706,7 +705,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
       }
     }
 
-    private void setParameterName(@Nonnull String name, int paramIndex) {
+    private void setParameterName(String name, int paramIndex) {
       if (ClsParsingUtil.isJavaIdentifier(name, LanguageLevel.HIGHEST)) {
         myParamStubs[paramIndex].setName(name);
       }
@@ -788,7 +787,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     return null;
   }
 
-  static String toJavaType(Type type, @Nonnull SignatureParsing.TypeInfoProvider mapping) {
+  static String toJavaType(Type type, SignatureParsing.TypeInfoProvider mapping) {
     int dimensions = 0;
     if (type.getSort() == Type.ARRAY) {
       dimensions = type.getDimensions();
@@ -799,7 +798,7 @@ public class StubBuildingVisitor<T> extends ClassVisitor {
     return text;
   }
 
-  private static TypeInfo toTypeInfo(Type type, @Nonnull FirstPassData mapping) {
+  private static TypeInfo toTypeInfo(Type type, FirstPassData mapping) {
     int dimensions = 0;
     if (type.getSort() == Type.ARRAY) {
       dimensions = type.getDimensions();

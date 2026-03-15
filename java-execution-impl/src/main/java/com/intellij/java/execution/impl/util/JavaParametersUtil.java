@@ -44,8 +44,7 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import org.intellij.lang.annotations.MagicConstant;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
@@ -109,7 +108,7 @@ public class JavaParametersUtil {
    * @return null if class not found
    */
   @Nullable
-  public static Boolean isClassInProductionSources(@Nonnull String mainClassName, @Nonnull Module module) {
+  public static Boolean isClassInProductionSources(String mainClassName, Module module) {
     final PsiClass psiClass = JavaExecutionUtil.findMainClass(module, mainClassName);
     if (psiClass == null) {
       return null;
@@ -150,8 +149,8 @@ public class JavaParametersUtil {
     configureModule(module, parameters, classPathType, alternativeJreName);
   }
 
-  public static void configureModule(@Nonnull Module module,
-                                     @Nonnull OwnJavaParameters parameters,
+  public static void configureModule(Module module,
+                                     OwnJavaParameters parameters,
                                      @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType,
                                      @Nullable String alternativeJreName) throws CantRunException {
     parameters.configureByModule(module, classPathType, createModuleJdk(module, (classPathType & OwnJavaParameters.TESTS_ONLY) == 0, alternativeJreName));
@@ -180,7 +179,7 @@ public class JavaParametersUtil {
     return jdk;
   }
 
-  private static Sdk createAlternativeJdk(@Nonnull String jreHome) throws CantRunException {
+  private static Sdk createAlternativeJdk(String jreHome) throws CantRunException {
     final Sdk configuredJdk = SdkTable.getInstance().findSdk(jreHome);
     if (configuredJdk != null) {
       return configuredJdk;
@@ -194,7 +193,7 @@ public class JavaParametersUtil {
     return javaSdk.createJdk(ObjectUtil.notNull(javaSdk.getVersionString(jreHome), ""), jreHome);
   }
 
-  public static void checkAlternativeJRE(@Nonnull CommonJavaRunConfigurationParameters configuration) throws RuntimeConfigurationWarning {
+  public static void checkAlternativeJRE(CommonJavaRunConfigurationParameters configuration) throws RuntimeConfigurationWarning {
     if (configuration.isAlternativeJrePathEnabled()) {
       checkAlternativeJRE(configuration.getAlternativeJrePath());
     }

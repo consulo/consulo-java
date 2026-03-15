@@ -31,7 +31,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +42,12 @@ public class ChangeToCStyleCommentIntention extends Intention {
     private static final Class<PsiWhiteSpace>[] WHITESPACE_CLASS =
         new Class[]{PsiWhiteSpace.class};
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.changeToCStyleCommentIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new EndOfLineCommentPredicate();
     }
@@ -140,7 +137,7 @@ public class ChangeToCStyleCommentIntention extends Intention {
         return JavaTokenType.END_OF_LINE_COMMENT.equals(tokenType);
     }
 
-    private static String getCommentContents(@Nonnull PsiComment comment) {
+    private static String getCommentContents(PsiComment comment) {
         String text = comment.getText();
         return StringUtil.replace(text.substring(2), "*/", "* /").trim();
     }

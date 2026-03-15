@@ -24,17 +24,14 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BusyWaitInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.busyWaitDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.busyWaitProblemDescriptor().get();
   }
@@ -47,7 +44,7 @@ public class BusyWaitInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isCallToMethod(expression, "java.lang.Thread",
                                           PsiType.VOID, "sleep", PsiType.LONG) &&

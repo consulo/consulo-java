@@ -24,10 +24,8 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.meta.MetaDataService;
 import consulo.language.psi.meta.PsiMetaData;
 import consulo.navigation.Navigatable;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -38,7 +36,7 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
   private final ClsAnnotationParameterListImpl myParameterList;
 
   @SuppressWarnings("AbstractMethodCallInConstructor")
-  ClsAnnotationValueImpl(@Nonnull ClsElementImpl parent) {
+  ClsAnnotationValueImpl(ClsElementImpl parent) {
     myParent = parent;
     myReferenceElement = createReference();
     myParameterList = createParameterList();
@@ -49,13 +47,13 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
   protected abstract ClsJavaCodeReferenceElementImpl createReference();
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append("@").append(myReferenceElement.getCanonicalText());
     myParameterList.appendMirrorText(indentLevel, buffer);
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
 
     PsiAnnotation mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -64,7 +62,6 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     return new PsiElement[]{
         myReferenceElement,
@@ -78,7 +75,7 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitAnnotation(this);
     } else {
@@ -87,7 +84,6 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
   }
 
   @Override
-  @Nonnull
   public PsiAnnotationParameterList getParameterList() {
     return myParameterList;
   }
@@ -110,12 +106,12 @@ abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnot
 
   @Override
   @Nullable
-  public PsiAnnotationMemberValue findDeclaredAttributeValue(@NonNls final String attributeName) {
+  public PsiAnnotationMemberValue findDeclaredAttributeValue(final String attributeName) {
     return PsiImplUtil.findDeclaredAttributeValue(this, attributeName);
   }
 
   @Override
-  public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(@NonNls String attributeName, T value) {
+  public <T extends PsiAnnotationMemberValue> T setDeclaredAttributeValue(String attributeName, T value) {
     throw cannotModifyException(this);
   }
 

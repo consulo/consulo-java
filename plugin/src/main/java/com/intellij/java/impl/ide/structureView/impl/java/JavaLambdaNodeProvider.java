@@ -16,7 +16,6 @@ import consulo.language.psi.SyntaxTraverser;
 import consulo.platform.Platform;
 import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.action.Shortcut;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,9 +24,8 @@ public class JavaLambdaNodeProvider implements FileStructureNodeProvider<JavaLam
   public static final String ID = "SHOW_LAMBDA";
   public static final String JAVA_LAMBDA_PROPERTY_NAME = "java.lambda.provider";
 
-  @Nonnull
   @Override
-  public List<JavaLambdaTreeElement> provideNodes(@Nonnull TreeElement node) {
+  public List<JavaLambdaTreeElement> provideNodes(TreeElement node) {
     if (!(node instanceof PsiTreeElementBase)) {
       return Collections.emptyList();
     }
@@ -40,31 +38,26 @@ public class JavaLambdaNodeProvider implements FileStructureNodeProvider<JavaLam
         .toList();
   }
 
-  @Nonnull
   @Override
   public String getCheckBoxText() {
     return JavaCodeInsightBundle.message("file.structure.toggle.show.collapse.show.lambdas");
   }
 
-  @Nonnull
   @Override
   public Shortcut[] getShortcut() {
     return new Shortcut[]{KeyboardShortcut.fromString(Platform.current().os().isMac() ? "meta L" : "control L")};
   }
 
-  @Nonnull
   @Override
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(getCheckBoxText(), null, AllIcons.Nodes.Lambda);
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return ID;
   }
 
-  @Nonnull
   @Override
   public String getSerializePropertyName() {
     return JAVA_LAMBDA_PROPERTY_NAME;

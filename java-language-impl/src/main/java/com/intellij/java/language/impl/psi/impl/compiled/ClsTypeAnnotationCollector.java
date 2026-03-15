@@ -6,16 +6,15 @@ import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import consulo.internal.org.objectweb.asm.AnnotationVisitor;
 import consulo.internal.org.objectweb.asm.TypePath;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
 class ClsTypeAnnotationCollector extends TypeAnnotationContainer.Collector {
-  private final @Nonnull FirstPassData myFirstPassData;
+  private final FirstPassData myFirstPassData;
 
-  ClsTypeAnnotationCollector(@Nonnull TypeInfo info, @Nonnull FirstPassData classInfo) {
+  ClsTypeAnnotationCollector(TypeInfo info, FirstPassData classInfo) {
     super(info);
     myFirstPassData = classInfo;
   }

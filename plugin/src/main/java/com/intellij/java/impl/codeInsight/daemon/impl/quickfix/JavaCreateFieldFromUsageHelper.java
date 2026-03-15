@@ -30,7 +30,6 @@ import consulo.language.editor.template.TemplateBuilder;
 import consulo.language.editor.template.TemplateBuilderFactory;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Max Medvedev
@@ -72,7 +71,7 @@ public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelpe
   }
 
   @Override
-  public PsiField insertFieldImpl(@Nonnull PsiClass targetClass, @Nonnull PsiField field, @Nonnull PsiElement place) {
+  public PsiField insertFieldImpl(PsiClass targetClass, PsiField field, PsiElement place) {
     PsiMember enclosingContext = null;
     PsiClass parentClass;
     do {
@@ -84,7 +83,6 @@ public class JavaCreateFieldFromUsageHelper implements CreateFieldFromUsageHelpe
     return BaseExpressionToFieldHandler.ConvertToFieldRunnable.appendField(targetClass, field, enclosingContext, null);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

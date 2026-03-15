@@ -30,18 +30,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UtilityClassWithPublicConstructorInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.utilityClassWithPublicConstructorDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.utilityClassWithPublicConstructorProblemDescriptor().get();
     }
@@ -67,7 +64,6 @@ public class UtilityClassWithPublicConstructorInspection extends BaseInspection 
             m_multipleConstructors = multipleConstructors;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.utilityClassWithPublicConstructorMakeQuickfix(m_multipleConstructors ? 1 : 2);
@@ -99,7 +95,7 @@ public class UtilityClassWithPublicConstructorInspection extends BaseInspection 
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so that it doesn't drill down to inner classes
             if (!UtilityClassUtil.isUtilityClass(aClass)) {
                 return;

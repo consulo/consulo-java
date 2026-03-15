@@ -25,7 +25,6 @@ import consulo.language.editor.inspection.ProblemsHolder;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.java.generate.GenerateToStringContext;
 import org.jetbrains.java.generate.GenerateToStringUtils;
 
@@ -38,30 +37,27 @@ import org.jetbrains.java.generate.GenerateToStringUtils;
 @ExtensionImpl
 public class ClassHasNoToStringMethodInspection extends AbstractToStringInspection {
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Class does not override 'toString()' method");
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "ClassHasNoToStringMethod";
     }
 
-    @Nonnull
     @Override
     public PsiElementVisitor buildVisitor(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
-        @Nonnull LocalInspectionToolSession session,
-        @Nonnull Object state
+        LocalInspectionToolSession session,
+        Object state
     ) {
         ClassHasNoToStringMethodInspectionState inspectionState = (ClassHasNoToStringMethodInspectionState) state;
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitClass(@Nonnull PsiClass clazz) {
+            public void visitClass(PsiClass clazz) {
                 if (AbstractToStringInspection.log.isDebugEnabled()) {
                     AbstractToStringInspection.log.debug("checkClass: clazz=" + clazz);
                 }

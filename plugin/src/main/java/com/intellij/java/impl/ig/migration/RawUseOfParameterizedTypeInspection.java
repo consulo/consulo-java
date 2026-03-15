@@ -27,8 +27,7 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -44,14 +43,12 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreUncompilable = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.rawUseOfParameterizedTypeDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.rawUseOfParameterizedTypeProblemDescriptor().get();
     }
@@ -88,7 +85,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
     private class RawUseOfParameterizedTypeVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             if (!hasNeededLanguageLevel(expression)) {
                 return;
             }
@@ -101,7 +98,7 @@ public class RawUseOfParameterizedTypeInspection extends BaseInspection {
         }
 
         @Override
-        public void visitTypeElement(@Nonnull PsiTypeElement typeElement) {
+        public void visitTypeElement(PsiTypeElement typeElement) {
             if (!hasNeededLanguageLevel(typeElement)) {
                 return;
             }

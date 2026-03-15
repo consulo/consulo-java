@@ -40,8 +40,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: lex
@@ -73,7 +72,7 @@ public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder {
                 private SurroundWithCastWorker myWorker;
 
                 @Override
-                public void run(@Nonnull ProgressIndicator indicator) {
+                public void run(ProgressIndicator indicator) {
                     myWorker = new SurroundWithCastWorker(editor, expr, debuggerContext, indicator);
 
                     debuggerContext.getDebugProcess().getManagerThread().invokeAndWait(myWorker);
@@ -111,7 +110,7 @@ public class JavaWithRuntimeCastSurrounder extends JavaExpressionSurrounder {
                 project,
                 () -> new WriteCommandAction(project, CodeInsightLocalize.commandNameSurroundWithRuntimeCast().get()) {
                     @Override
-                    protected void run(@Nonnull Result result) throws Throwable {
+                    protected void run(Result result) throws Throwable {
                         try {
                             PsiElementFactory factory = JavaPsiFacade.getInstance(myElement.getProject()).getElementFactory();
                             PsiParenthesizedExpression parenth =

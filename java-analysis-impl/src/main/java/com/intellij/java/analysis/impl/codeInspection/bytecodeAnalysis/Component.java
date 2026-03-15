@@ -1,7 +1,6 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -12,17 +11,15 @@ import java.util.Set;
 final class Component
 {
 	static final Component[] EMPTY_ARRAY = new Component[0];
-	@Nonnull
 	Value value;
-	@Nonnull
 	final EKey[] ids;
 
-	Component(@Nonnull Value value, @Nonnull Set<EKey> ids)
+	Component(Value value, Set<EKey> ids)
 	{
 		this(value, ids.toArray(new EKey[0]));
 	}
 
-	Component(@Nonnull Value value, @Nonnull EKey[] ids)
+	Component(Value value, EKey[] ids)
 	{
 		this.value = value;
 		this.ids = ids;
@@ -47,7 +44,7 @@ final class Component
 		return 31 * value.hashCode() + Arrays.hashCode(ids);
 	}
 
-	public boolean remove(@Nonnull EKey id)
+	public boolean remove(EKey id)
 	{
 		boolean removed = false;
 		for(int i = 0; i < ids.length; i++)
@@ -71,7 +68,6 @@ final class Component
 		return true;
 	}
 
-	@Nonnull
 	public Component copy()
 	{
 		return new Component(value, ids.clone());

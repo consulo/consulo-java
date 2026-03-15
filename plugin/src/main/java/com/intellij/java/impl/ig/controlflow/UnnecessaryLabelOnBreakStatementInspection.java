@@ -27,17 +27,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnnecessaryLabelOnBreakStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryLabelOnBreakStatementDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryLabelOnBreakStatementProblemDescriptor().get();
     }
@@ -51,7 +48,6 @@ public class UnnecessaryLabelOnBreakStatementInspection extends BaseInspection {
     }
 
     private static class UnnecessaryLabelOnBreakStatementFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryLabelRemoveQuickfix();
@@ -74,7 +70,7 @@ public class UnnecessaryLabelOnBreakStatementInspection extends BaseInspection {
 
     private static class UnnecessaryLabelOnBreakStatementVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+        public void visitBreakStatement(PsiBreakStatement statement) {
             PsiIdentifier labelIdentifier = statement.getLabelIdentifier();
             if (labelIdentifier == null) {
                 return;

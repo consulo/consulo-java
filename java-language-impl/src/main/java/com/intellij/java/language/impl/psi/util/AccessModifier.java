@@ -9,8 +9,7 @@ import consulo.language.psi.PsiBundle;
 import consulo.util.collection.ContainerUtil;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,18 +26,16 @@ public enum AccessModifier {
   private static final List<AccessModifier> PUBLIC_PACKAGE = List.of(PUBLIC, PACKAGE_LOCAL);
   private static final List<AccessModifier> PUBLIC_PRIVATE = List.of(PUBLIC, PRIVATE);
 
-  @Nonnull
   @PsiModifier.ModifierConstant
   private final String myModifier;
 
-  AccessModifier(@PsiModifier.ModifierConstant @Nonnull String modifier) {
+  AccessModifier(@PsiModifier.ModifierConstant String modifier) {
     myModifier = modifier;
   }
 
   /**
    * @return a {@link PsiModifier} string constant which corresponds to this access modifier.
    */
-  @Nonnull
   @PsiModifier.ModifierConstant
   public String toPsiModifier() {
     return myModifier;
@@ -50,7 +47,7 @@ public enum AccessModifier {
    * @param owner element to check (e.g. class member)
    * @return true if it has current modifier
    */
-  public boolean hasModifier(@Nonnull PsiModifierListOwner owner) {
+  public boolean hasModifier(PsiModifierListOwner owner) {
     return owner.hasModifierProperty(toPsiModifier());
   }
 
@@ -94,7 +91,7 @@ public enum AccessModifier {
     }
   }
 
-  public static AccessModifier fromModifierList(@Nonnull PsiModifierList modifierList) {
+  public static AccessModifier fromModifierList(PsiModifierList modifierList) {
     if (modifierList.hasModifierProperty(PsiModifier.PRIVATE)) {
       return PRIVATE;
     }
@@ -107,7 +104,7 @@ public enum AccessModifier {
     return PUBLIC;
   }
 
-  public boolean isWeaker(@Nonnull AccessModifier other) {
+  public boolean isWeaker(AccessModifier other) {
     return compareTo(other) < 0;
   }
 
@@ -116,7 +113,6 @@ public enum AccessModifier {
     return PsiBundle.visibilityPresentation(toPsiModifier());
   }
 
-  @Nonnull
   public static List<AccessModifier> getAvailableModifiers(PsiMember member) {
     if (member == null) {
       return Collections.emptyList();
@@ -170,7 +166,6 @@ public enum AccessModifier {
     return Collections.emptyList();
   }
 
-  @Nonnull
   private static AccessModifier getMinAccess(PsiMethod method) {
     if (method.isConstructor() || method.hasModifierProperty(PsiModifier.STATIC)) {
       return PRIVATE;

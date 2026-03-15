@@ -34,9 +34,7 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,7 +47,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
   /**
    * @noinspection PublicField
    */
-  @NonNls public String questionString = "is,can,has,should,could,will,shall,check,contains,equals,startsWith,endsWith";
+  public String questionString = "is,can,has,should,could,will,shall,check,contains,equals,startsWith,endsWith";
 
   @SuppressWarnings({"PublicField"})
   public boolean ignoreBooleanMethods = false;
@@ -64,25 +62,23 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.nonBooleanMethodNameMustNotStartWithQuestionDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.nonBooleanMethodNameMustNotStartWithQuestionProblemDescriptor().get();
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(Element element) throws InvalidDataException {
     super.readSettings(element);
     parseString(questionString, questionList);
   }
 
   @Override
-  public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+  public void writeSettings(Element element) throws WriteExternalException {
     questionString = formatString(questionList);
     super.writeSettings(element);
   }
@@ -125,7 +121,7 @@ public class NonBooleanMethodNameMayNotStartWithQuestionInspection extends BaseI
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       super.visitMethod(method);
       PsiType returnType = method.getReturnType();
       if (returnType == null || returnType.equals(PsiType.BOOLEAN)) {

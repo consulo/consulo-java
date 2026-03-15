@@ -26,15 +26,13 @@ import consulo.language.codeStyle.CustomCodeStyleSettings;
 import consulo.language.codeStyle.setting.CodeStyleSettingsProvider;
 import consulo.language.codeStyle.ui.setting.CodeStyleAbstractConfigurable;
 import consulo.language.codeStyle.ui.setting.CodeStyleAbstractPanel;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Rustam Vishnyakov
  */
 @ExtensionImpl
 public class JavaCodeStyleSettingsProvider extends CodeStyleSettingsProvider {
-    @Nonnull
     @Override
     public Configurable createSettingsPage(CodeStyleSettings settings, CodeStyleSettings originalSettings) {
         return new CodeStyleAbstractConfigurable(settings, originalSettings, JavaLanguageLocalize.javaLanguageDisplayName()) {

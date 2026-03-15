@@ -13,7 +13,6 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.Splitter;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,11 +25,11 @@ public class NullableNotNullDialog extends DialogWrapper {
   private final AnnotationsPanel myNotNullPanel;
   private final boolean myShowInstrumentationOptions;
 
-  public NullableNotNullDialog(@Nonnull Project project) {
+  public NullableNotNullDialog(Project project) {
     this(project, false);
   }
 
-  private NullableNotNullDialog(@Nonnull Project project, boolean showInstrumentationOptions) {
+  private NullableNotNullDialog(Project project, boolean showInstrumentationOptions) {
     super(project, true);
     myProject = project;
     myShowInstrumentationOptions = showInstrumentationOptions;
@@ -61,7 +60,6 @@ public class NullableNotNullDialog extends DialogWrapper {
     setTitle(JavaBundle.message("nullable.notnull.configuration.dialog.title"));
   }
 
-  @Nonnull
   public static Button createConfigureAnnotationsButton() {
     Button button = Button.create(LocalizeValue.localizeTODO("Configure annotations"));
     button.addClickListener(clickEvent -> showDialog(TargetAWT.to(clickEvent.getComponent()), false));
@@ -69,7 +67,7 @@ public class NullableNotNullDialog extends DialogWrapper {
   }
 
   @RequiredUIAccess
-  public static void showDialogWithInstrumentationOptions(@Nonnull Component context) {
+  public static void showDialogWithInstrumentationOptions(Component context) {
     showDialog(context, true);
   }
 

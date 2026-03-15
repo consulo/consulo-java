@@ -23,7 +23,6 @@ import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -32,7 +31,6 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceForEachLoopWithOptimizedIndexedForLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceForEachLoopWithOptimizedIndexedForLoopIntention extends ReplaceForEachLoopWithIndexedForLoopIntention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceForEachLoopWithOptimizedIndexedForLoopIntentionName();

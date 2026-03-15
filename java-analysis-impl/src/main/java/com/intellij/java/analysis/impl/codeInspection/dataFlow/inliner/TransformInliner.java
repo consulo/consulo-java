@@ -6,7 +6,6 @@ import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.ig.callMatcher.CallMatcher;
-import jakarta.annotation.Nonnull;
 
 public class TransformInliner implements CallInliner {
     private static final CallMatcher TRANSFORM_METHODS = CallMatcher.anyOf(
@@ -28,7 +27,7 @@ public class TransformInliner implements CallInliner {
     );
 
     @Override
-    public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+    public boolean tryInlineCall(CFGBuilder builder, PsiMethodCallExpression call) {
         if (TRANSFORM_METHODS.test(call)) {
             PsiExpression qualifier = call.getMethodExpression().getQualifierExpression();
             if (qualifier != null) {

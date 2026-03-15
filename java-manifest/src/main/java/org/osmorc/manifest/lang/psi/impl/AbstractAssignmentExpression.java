@@ -24,7 +24,6 @@
  */
 package org.osmorc.manifest.lang.psi.impl;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
@@ -44,11 +43,11 @@ import org.osmorc.manifest.lang.psi.stub.AssignmentExpressionStub;
  */
 public abstract class AbstractAssignmentExpression extends ManifestElementBase<AssignmentExpressionStub> implements AssignmentExpression {
 
-  protected AbstractAssignmentExpression(AssignmentExpressionStub stub, @Nonnull IStubElementType nodeType) {
+  protected AbstractAssignmentExpression(AssignmentExpressionStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
-  public AbstractAssignmentExpression(@Nonnull ASTNode node) {
+  public AbstractAssignmentExpression(ASTNode node) {
     super(node);
   }
 
@@ -67,7 +66,7 @@ public abstract class AbstractAssignmentExpression extends ManifestElementBase<A
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiFile fromText = PsiFileFactory.getInstance(getProject())
       .createFileFromText("DUMMY.MF", ManifestFileType.INSTANCE, String.format("Dummy: dummy;%s:=%s\n", name, getValue()));
 
@@ -80,7 +79,7 @@ public abstract class AbstractAssignmentExpression extends ManifestElementBase<A
   }
 
   @Override
-  public void setValue(@Nonnull String value) {
+  public void setValue(String value) {
     final String oldValue = getValue();
     String dummyTemplate;
     if(oldValue.endsWith("\n")) {

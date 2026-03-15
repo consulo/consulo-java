@@ -17,7 +17,6 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -26,22 +25,20 @@ public class JavaRecordComponentElementType extends JavaStubElementType<PsiRecor
     super("RECORD_COMPONENT");
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new CompositeElement(this);
   }
 
   @Override
-  public void serialize(@Nonnull PsiRecordComponentStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiRecordComponentStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     TypeInfo.writeTYPE(dataStream, stub.getType());
     dataStream.writeByte(((PsiRecordComponentStubImpl)stub).getFlags());
   }
 
-  @Nonnull
   @Override
-  public PsiRecordComponentStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiRecordComponentStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     String name = dataStream.readNameString();
     TypeInfo type = TypeInfo.readTYPE(dataStream);
     byte flags = dataStream.readByte();
@@ -49,24 +46,23 @@ public class JavaRecordComponentElementType extends JavaStubElementType<PsiRecor
   }
 
   @Override
-  public void indexStub(@Nonnull PsiRecordComponentStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiRecordComponentStub stub, IndexSink sink) {
 
   }
 
   @Override
-  public PsiRecordComponent createPsi(@Nonnull PsiRecordComponentStub stub) {
+  public PsiRecordComponent createPsi(PsiRecordComponentStub stub) {
     return getPsiFactory(stub).createRecordComponent(stub);
   }
 
 
   @Override
-  public PsiRecordComponent createPsi(@Nonnull ASTNode node) {
+  public PsiRecordComponent createPsi(ASTNode node) {
     return new PsiRecordComponentImpl(node);
   }
 
-  @Nonnull
   @Override
-  public PsiRecordComponentStub createStub(@Nonnull LighterAST tree, @Nonnull LighterASTNode node, @Nonnull StubElement parentStub) {
+  public PsiRecordComponentStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub) {
     TypeInfo typeInfo = TypeInfo.create(tree, node, parentStub);
     LighterASTNode id = LightTreeUtil.requiredChildOfType(tree, node, JavaTokenType.IDENTIFIER);
     String name = RecordUtil.intern(tree.getCharTable(), id);

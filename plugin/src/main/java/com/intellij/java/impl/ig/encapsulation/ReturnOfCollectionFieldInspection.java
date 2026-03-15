@@ -33,10 +33,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -47,14 +45,12 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
      */
     public boolean ignorePrivateMethods = true;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ReturnOfCollectionOrArrayField";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.returnOfCollectionArrayFieldDisplayName();
@@ -68,7 +64,6 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiField field = (PsiField) infos[0];
         PsiType type = field.getType();
@@ -131,12 +126,11 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
         private final String myReplacementText;
         private final String myQualifiedClassName;
 
-        ReturnOfCollectionFieldFix(@NonNls String replacementText, String qualifiedClassName) {
+        ReturnOfCollectionFieldFix(String replacementText, String qualifiedClassName) {
             myReplacementText = replacementText;
             myQualifiedClassName = qualifiedClassName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.returnOfCollectionFieldQuickfix(myReplacementText);
@@ -208,7 +202,7 @@ public class ReturnOfCollectionFieldInspection extends BaseInspection {
     private class ReturnOfCollectionFieldVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+        public void visitReturnStatement(PsiReturnStatement statement) {
             super.visitReturnStatement(statement);
             PsiExpression returnValue = statement.getReturnValue();
             if (returnValue == null) {

@@ -16,7 +16,6 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
@@ -37,7 +36,6 @@ public abstract class Suppress15InspectionsTest extends LightQuickFixTestCase {
     enableInspectionTool(new GlobalInspectionToolWrapper(new UnusedParametersInspection()));
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

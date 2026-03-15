@@ -27,7 +27,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
 * User: anna
@@ -41,19 +40,18 @@ class QualifyWithThisFix implements SyntheticIntentionAction {
     myExpression = expression;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Qualify with " + myContainingClass.getName() + ".this");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return true;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     final PsiThisExpression thisExpression =
       RefactoringChangeUtil.createThisExpression(PsiManager.getInstance(project), myContainingClass);
     ((PsiReferenceExpression)myExpression).setQualifierExpression(thisExpression);

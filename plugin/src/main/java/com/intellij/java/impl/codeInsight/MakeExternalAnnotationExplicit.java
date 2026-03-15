@@ -40,7 +40,6 @@ import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,7 +53,7 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
     PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     if (owner != null && owner.getLanguage().isKindOf(JavaLanguage.INSTANCE) && isWritable(owner) && ModuleUtilCore.findModuleForPsiElement(file) != null && PsiUtil.getLanguageLevel(file)
@@ -76,7 +75,7 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement leaf = file.findElementAt(editor.getCaretModel().getOffset());
     PsiModifierListOwner owner = ExternalAnnotationsLineMarkerProvider.getAnnotationOwner(leaf);
     assert owner != null;
@@ -114,8 +113,7 @@ public class MakeExternalAnnotationExplicit extends BaseIntentionAction {
     return Collections.singletonList(file);
   }
 
-  @Nonnull
-  private PsiAnnotation[] getAnnotations(@Nonnull Project project, PsiModifierListOwner owner) {
+  private PsiAnnotation[] getAnnotations(Project project, PsiModifierListOwner owner) {
     PsiAnnotation[] annotations = ExternalAnnotationsManager.getInstance(project).findExternalAnnotations(owner);
     if (annotations == null) {
       return PsiAnnotation.EMPTY_ARRAY;

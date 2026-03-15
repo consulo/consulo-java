@@ -7,7 +7,6 @@ import consulo.fileEditor.FileEditorProvider;
 import consulo.fileEditor.FileEditorState;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 import org.osmorc.manifest.lang.ManifestFileType;
 
@@ -20,38 +19,34 @@ public abstract class ManifestEditorProvider implements FileEditorProvider {
   public static final String EDITOR_ID = ManifestEditorProvider.class.getName();
 
   @Override
-  public boolean accept(@Nonnull Project project, @Nonnull VirtualFile file) {
+  public boolean accept(Project project, VirtualFile file) {
     return file.getFileType() instanceof ManifestFileType;
   }
 
-  @Nonnull
   @Override
-  public FileEditor createEditor(@Nonnull Project project, @Nonnull VirtualFile file) {
+  public FileEditor createEditor(Project project, VirtualFile file) {
     return new ManifestEditor(project, file);
   }
 
   @Override
-  public void disposeEditor(@Nonnull FileEditor editor) {
+  public void disposeEditor(FileEditor editor) {
     Disposer.dispose(editor);
   }
 
-  @Nonnull
   @Override
-  public FileEditorState readState(@Nonnull Element sourceElement, @Nonnull Project project, @Nonnull VirtualFile file) {
+  public FileEditorState readState(Element sourceElement, Project project, VirtualFile file) {
     return FileEditorState.INSTANCE;
   }
 
   @Override
-  public void writeState(@Nonnull FileEditorState state, @Nonnull Project project, @Nonnull Element targetElement) {
+  public void writeState(FileEditorState state, Project project, Element targetElement) {
   }
 
-  @Nonnull
   @Override
   public String getEditorTypeId() {
     return EDITOR_ID;
   }
 
-  @Nonnull
   @Override
   public FileEditorPolicy getPolicy() {
     return FileEditorPolicy.PLACE_BEFORE_DEFAULT_EDITOR;

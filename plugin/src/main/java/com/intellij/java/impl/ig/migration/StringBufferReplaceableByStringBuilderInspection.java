@@ -30,9 +30,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,19 +45,16 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "StringBufferMayBeStringBuilder";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringBufferReplaceableByStringBuilderDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringBufferReplaceableByStringBuilderProblemDescriptor().get();
     }
@@ -80,7 +75,7 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
         else if (expression instanceof PsiMethodCallExpression) {
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
             PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!"append".equals(methodName)) {
                 return null;
             }
@@ -91,7 +86,6 @@ public class StringBufferReplaceableByStringBuilderInspection extends BaseInspec
     }
 
     private static class StringBufferMayBeStringBuilderFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.stringBufferReplaceableByStringBuilderReplaceQuickfix();

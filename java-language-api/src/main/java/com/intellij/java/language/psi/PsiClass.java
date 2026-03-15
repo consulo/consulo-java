@@ -26,9 +26,7 @@ import consulo.language.psi.PsiTarget;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayFactory;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -45,7 +43,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
   /**
    * The empty array of PSI classes which can be reused to avoid unnecessary allocations.
    */
-  @Nonnull
   PsiClass[] EMPTY_ARRAY = new PsiClass[0];
 
   ArrayFactory<PsiClass> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiClass[count];
@@ -109,7 +106,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of extended class types, or an empty list for anonymous classes.
    */
-  @Nonnull
   PsiClassType[] getExtendsListTypes();
 
   /**
@@ -118,7 +114,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @return the list of extended class types, or an empty list for anonymous classes,
    * enums and annotation types
    */
-  @Nonnull
   PsiClassType[] getImplementsListTypes();
 
   /**
@@ -136,7 +131,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the array of explicitly permitted classes.
    */
-  @Nonnull
   default PsiClassType[] getPermitsListTypes() {
     PsiReferenceList permitsList = getPermitsList();
     if (permitsList != null) {
@@ -159,7 +153,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of interfaces.
    */
-  @Nonnull
   PsiClass[] getInterfaces();
 
   /**
@@ -168,7 +161,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @return the list of classes or interfaces. May return zero elements when jdk is
    * not configured, so no java.lang.Object is found
    */
-  @Nonnull
   PsiClass[] getSupers();
 
   /**
@@ -179,7 +171,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * For the class with no explicit extends list, the returned list always contains at least one element for the java.lang.Object type.
    * If psiClass is java.lang.Object, returned list is empty.
    */
-  @Nonnull
   PsiClassType[] getSuperTypes();
 
   /**
@@ -187,7 +178,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of fields.
    */
-  @Nonnull
   PsiField[] getFields();
 
   /**
@@ -195,7 +185,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of methods.
    */
-  @Nonnull
   PsiMethod[] getMethods();
 
   /**
@@ -203,7 +192,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of constructors,
    */
-  @Nonnull
   PsiMethod[] getConstructors();
 
   /**
@@ -211,7 +199,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of inner classes.
    */
-  @Nonnull
   PsiClass[] getInnerClasses();
 
   /**
@@ -219,7 +206,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of class initializers.
    */
-  @Nonnull
   PsiClassInitializer[] getInitializers();
 
   /**
@@ -227,7 +213,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of fields.
    */
-  @Nonnull
   PsiField[] getAllFields();
 
   /**
@@ -235,7 +220,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of methods.
    */
-  @Nonnull
   PsiMethod[] getAllMethods();
 
   /**
@@ -243,7 +227,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of inner classes.
    */
-  @Nonnull
   PsiClass[] getAllInnerClasses();
 
   /**
@@ -254,7 +237,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @return the field instance, or null if the field cannot be found.
    */
   @Nullable
-  PsiField findFieldByName(@NonNls String name, boolean checkBases);
+  PsiField findFieldByName(String name, boolean checkBases);
 
   /**
    * Searches the class (and optionally its superclasses) for the method with
@@ -276,7 +259,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @param checkBases    if true, the method is also searched in the base classes of the class.
    * @return the found methods, or an empty array if no methods are found.
    */
-  @Nonnull
   PsiMethod[] findMethodsBySignature(PsiMethod patternMethod, boolean checkBases);
 
   /**
@@ -286,8 +268,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @param checkBases if true, the methods are also searched in the base classes of the class.
    * @return the found methods, or an empty array if no methods are found.
    */
-  @Nonnull
-  PsiMethod[] findMethodsByName(@NonNls String name, boolean checkBases);
+  PsiMethod[] findMethodsByName(String name, boolean checkBases);
 
   /**
    * Searches the class (and optionally its superclasses) for the methods with the specified name
@@ -297,8 +278,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @param checkBases if true, the methods are also searched in the base classes of the class.
    * @return the found methods and their substitutors, or an empty list if no methods are found.
    */
-  @Nonnull
-  List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(@NonNls String name, boolean checkBases);
+  List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases);
 
   /**
    * Returns the list of methods in the class and all its superclasses, along with their
@@ -306,7 +286,6 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *
    * @return the list of methods and their substitutors
    */
-  @Nonnull
   List<Pair<PsiMethod, PsiSubstitutor>> getAllMethodsAndTheirSubstitutors();
 
   /**
@@ -317,7 +296,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @return the inner class instance, or null if the inner class cannot be found.
    */
   @Nullable
-  PsiClass findInnerClassByName(@NonNls String name, boolean checkBases);
+  PsiClass findInnerClassByName(String name, boolean checkBases);
 
   /**
    * Returns the token representing the opening curly brace of the class.
@@ -364,7 +343,7 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    *                  searched in the entire inheritance chain
    * @return true if the class is an inheritor, false otherwise
    */
-  boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep);
+  boolean isInheritor(PsiClass baseClass, boolean checkDeep);
 
   /**
    * Checks if this class is a deep inheritor of the specified base class possibly bypassing a class
@@ -396,13 +375,11 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
    * @return the collection of signatures.
    * @since 5.1
    */
-  @Nonnull
   Collection<HierarchicalMethodSignature> getVisibleSignatures();
 
   @Override
-  PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException;
+  PsiElement setName(String name) throws IncorrectOperationException;
 
-  @Nonnull
   @Override
   default JvmClassKind getClassKind() {
     return getJvmClassKind(this);
@@ -414,13 +391,11 @@ public interface PsiClass extends PsiNameIdentifierOwner, PsiModifierListOwner, 
     return getClassSuperType(this);
   }
 
-  @Nonnull
   @Override
   default JvmReferenceType[] getInterfaceTypes() {
     return getClassInterfaces(this);
   }
 
-  @Nonnull
   default PsiRecordComponent[] getRecordComponents() {
     return PsiRecordComponent.EMPTY_ARRAY;
   }

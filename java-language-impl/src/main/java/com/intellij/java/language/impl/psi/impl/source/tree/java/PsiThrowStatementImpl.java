@@ -27,7 +27,6 @@ import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.ChildRoleBase;
-import jakarta.annotation.Nonnull;
 
 public class PsiThrowStatementImpl extends CompositePsiElement implements PsiThrowStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiThrowStatementImpl.class);
@@ -80,7 +79,7 @@ public class PsiThrowStatementImpl extends CompositePsiElement implements PsiThr
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitThrowStatement(this);
     }

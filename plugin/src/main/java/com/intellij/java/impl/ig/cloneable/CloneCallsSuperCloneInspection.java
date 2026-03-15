@@ -24,25 +24,21 @@ import com.siyeh.ig.psiutils.CloneUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class CloneCallsSuperCloneInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "CloneDoesntCallSuperClone";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.cloneDoesntCallSuperCloneDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.cloneDoesntCallSuperCloneProblemDescriptor().get();
@@ -61,7 +57,7 @@ public class CloneCallsSuperCloneInspection extends BaseInspection {
     private static class NoExplicitCloneCallsVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //note: no call to super;
             if (!CloneUtils.isClone(method)) {
                 return;

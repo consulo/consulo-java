@@ -30,7 +30,7 @@ import consulo.language.editor.inspection.reference.RefManagerExtension;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class JavaInspectionExtensionsFactory extends InspectionExtensionsFactory {

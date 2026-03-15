@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.jvm;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents an element which has modifiers and annotations.
@@ -28,5 +27,5 @@ public interface JvmModifiersOwner extends JvmAnnotatedElement
 	 * @param modifier the modifier to check
 	 * @return true if the element has the modifier, false otherwise
 	 */
-	boolean hasModifier(@Nonnull JvmModifier modifier);
+	boolean hasModifier(JvmModifier modifier);
 }

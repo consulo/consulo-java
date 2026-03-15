@@ -17,8 +17,7 @@
 package com.intellij.java.impl.util.descriptors;
 
 import consulo.util.xml.serializer.JDOMExternalizable;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -28,11 +27,11 @@ import java.util.Collection;
 public interface ConfigFileInfoSet extends JDOMExternalizable {
   void addConfigFile(ConfigFileInfo descriptor);
 
-  void addConfigFile(ConfigFileMetaData metaData, @NonNls String url);
+  void addConfigFile(ConfigFileMetaData metaData, String url);
 
   void removeConfigFile(ConfigFileInfo descriptor);
 
-  void replaceConfigFile(ConfigFileMetaData metaData, @NonNls String newUrl);
+  void replaceConfigFile(ConfigFileMetaData metaData, String newUrl);
 
   void removeConfigFiles(ConfigFileMetaData... metaData);
 

@@ -23,23 +23,19 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class UnsecureRandomNumberGenerationInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unsecureRandomNumberGenerationDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
-    @NonNls String text = ((PsiElement)infos[0]).getText();
+    String text = ((PsiElement)infos[0]).getText();
     if ("random".equals(text)) {
       return InspectionGadgetsLocalize.unsecureRandomNumberGenerationProblemDescriptor1().get();
     }
@@ -61,7 +57,7 @@ public class UnsecureRandomNumberGenerationInspection
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression expression) {
+      PsiNewExpression expression) {
       super.visitNewExpression(expression);
       PsiJavaCodeReferenceElement reference =
         expression.getClassReference();
@@ -85,11 +81,11 @@ public class UnsecureRandomNumberGenerationInspection
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!"random".equals(methodName)) {
         return;

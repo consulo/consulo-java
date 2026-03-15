@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.portability.mediatype;
 
-import org.jetbrains.annotations.NonNls;
 
 public enum AudioMediaType {
   THIRTYTWO_KADPCM("audio/32kadpcm"),
@@ -112,7 +111,7 @@ public enum AudioMediaType {
 
   private final String contentType;
 
-  AudioMediaType(@NonNls String contentType) {
+  AudioMediaType(String contentType) {
     this.contentType = contentType;
   }
 

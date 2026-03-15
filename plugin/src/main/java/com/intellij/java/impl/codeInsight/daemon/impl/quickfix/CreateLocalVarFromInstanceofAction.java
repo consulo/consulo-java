@@ -51,8 +51,7 @@ import consulo.project.Project;
 import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.IdeActions;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -72,7 +71,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         PsiInstanceOfExpression instanceOfExpression = getInstanceOfExpressionAtCaret(editor, file);
         if (instanceOfExpression == null) {
             return false;
@@ -233,7 +232,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+    public void invoke(final Project project, final Editor editor, final PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -288,7 +287,7 @@ public class CreateLocalVarFromInstanceofAction extends BaseIntentionAction {
     }
 
     @Nullable
-    protected static PsiStatement getExpressionStatementInside(PsiFile file, Editor editor, @Nonnull PsiExpression operand) {
+    protected static PsiStatement getExpressionStatementInside(PsiFile file, Editor editor, PsiExpression operand) {
         PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset());
 
         PsiBlockStatement blockStatement = PsiTreeUtil.getParentOfType(elementAt, PsiBlockStatement.class);

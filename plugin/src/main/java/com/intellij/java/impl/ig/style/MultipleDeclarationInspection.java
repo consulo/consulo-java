@@ -25,7 +25,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -36,19 +35,16 @@ public class MultipleDeclarationInspection extends BaseInspection {
     public boolean ignoreForLoopDeclarations = true;
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.multipleDeclarationDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "MultipleVariablesInDeclaration";
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.multipleDeclarationProblemDescriptor().get();
     }
@@ -99,7 +95,7 @@ public class MultipleDeclarationInspection extends BaseInspection {
         }
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             super.visitField(field);
             if (childrenContainTypeElement(field)) {
                 return;

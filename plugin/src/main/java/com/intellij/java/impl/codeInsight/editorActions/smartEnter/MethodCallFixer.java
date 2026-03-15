@@ -30,7 +30,7 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.CharArrayUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class MethodCallFixer implements Fixer
 {

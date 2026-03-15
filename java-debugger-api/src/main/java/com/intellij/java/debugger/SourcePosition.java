@@ -31,8 +31,7 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -50,7 +49,6 @@ public abstract class SourcePosition implements Navigatable {
         return PsiUtilCore.getVirtualFile(getFile());
     }
 
-    @Nonnull
     public abstract PsiFile getFile();
 
     public abstract PsiElement getElementAt();
@@ -65,7 +63,6 @@ public abstract class SourcePosition implements Navigatable {
     public abstract Editor openEditor(boolean requestFocus);
 
     private abstract static class SourcePositionCache extends SourcePosition {
-        @Nonnull
         private final PsiFile myFile;
         private long myModificationStamp = -1L;
 
@@ -73,13 +70,12 @@ public abstract class SourcePosition implements Navigatable {
         private Integer myLine;
         private Integer myOffset;
 
-        public SourcePositionCache(@Nonnull PsiFile file) {
+        public SourcePositionCache(PsiFile file) {
             myFile = file;
             updateData();
         }
 
         @Override
-        @Nonnull
         public PsiFile getFile() {
             return myFile;
         }
@@ -259,7 +255,7 @@ public abstract class SourcePosition implements Navigatable {
         }
     }
 
-    public static SourcePosition createFromLineComputable(@Nonnull final PsiFile file, final Supplier<Integer> line) {
+    public static SourcePosition createFromLineComputable(final PsiFile file, final Supplier<Integer> line) {
         return new SourcePositionCache(file) {
             @Override
             protected int calcLine() {
@@ -268,7 +264,7 @@ public abstract class SourcePosition implements Navigatable {
         };
     }
 
-    public static SourcePosition createFromLine(@Nonnull final PsiFile file, final int line) {
+    public static SourcePosition createFromLine(final PsiFile file, final int line) {
         return new SourcePositionCache(file) {
             @Override
             protected int calcLine() {
@@ -277,7 +273,7 @@ public abstract class SourcePosition implements Navigatable {
         };
     }
 
-    public static SourcePosition createFromOffset(@Nonnull final PsiFile file, final int offset) {
+    public static SourcePosition createFromOffset(final PsiFile file, final int offset) {
         return new SourcePositionCache(file) {
 
             @Override

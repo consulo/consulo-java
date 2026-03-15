@@ -24,7 +24,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -35,7 +34,6 @@ public class ReplaceWithSubtypeUsageInfo extends FixableUsageInfo {
     private final PsiTypeElement myTypeElement;
     private final PsiClassType myTargetClassType;
     private final PsiType myOriginalType;
-    @Nonnull
     private LocalizeValue myConflict;
 
     @RequiredReadAction

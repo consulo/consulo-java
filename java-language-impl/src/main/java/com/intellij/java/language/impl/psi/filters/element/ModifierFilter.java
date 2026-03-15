@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ClassFilter;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -84,7 +83,7 @@ public class ModifierFilter extends ClassFilter{
   }
 
   public String toString(){
-    @NonNls String ret = "modifiers(";
+    String ret = "modifiers(";
     Iterator<ModifierRestriction> iter = myModifierRestrictions.iterator();
     while(iter.hasNext()){
       final ModifierRestriction rest = iter.next();

@@ -13,8 +13,7 @@ import consulo.util.collection.MultiMap;
 import one.util.streamex.LongStreamEx;
 import one.util.streamex.StreamEx;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 /**
@@ -26,7 +25,7 @@ final class StateMerger {
   private final Map<DfaMemoryState, Map<DfaVariableValue, DfaMemoryStateImpl>> myCopyCache = new IdentityHashMap<>();
 
   @Nullable
-  List<DfaMemoryStateImpl> mergeByFacts(@Nonnull List<DfaMemoryStateImpl> states) {
+  List<DfaMemoryStateImpl> mergeByFacts(List<DfaMemoryStateImpl> states) {
     MultiMap<Fact, DfaMemoryStateImpl> statesByFact = createFactToStateMap(states);
     Set<Fact> facts = statesByFact.keySet();
 
@@ -77,8 +76,7 @@ final class StateMerger {
   }
 
   private
-  @Nonnull
-  MultiMap<Fact, DfaMemoryStateImpl> createFactToStateMap(@Nonnull List<DfaMemoryStateImpl> states) {
+  MultiMap<Fact, DfaMemoryStateImpl> createFactToStateMap(List<DfaMemoryStateImpl> states) {
     MultiMap<Fact, DfaMemoryStateImpl> statesByFact = MultiMap.createLinked();
     Map<DfaTypeValue, Map<DfaVariableValue, Set<DfaMemoryStateImpl>>> constantVars = new HashMap<>();
     for (DfaMemoryStateImpl state : states) {
@@ -140,10 +138,9 @@ final class StateMerger {
   }
 
   private
-  @Nonnull
-  MultiMap<CompactFactSet, DfaMemoryStateImpl> mapByUnrelatedFacts(@Nonnull Fact fact,
-                                                                   @Nonnull Collection<DfaMemoryStateImpl> states,
-                                                                   @Nonnull Set<Fact> interestingFacts) {
+  MultiMap<CompactFactSet, DfaMemoryStateImpl> mapByUnrelatedFacts(Fact fact,
+                                                                   Collection<DfaMemoryStateImpl> states,
+                                                                   Set<Fact> interestingFacts) {
     MultiMap<CompactFactSet, DfaMemoryStateImpl> statesByUnrelatedFacts = MultiMap.createLinked();
     for (DfaMemoryStateImpl state : states) {
       statesByUnrelatedFacts.putValue(getUnrelatedFacts(fact, state, interestingFacts), state);
@@ -152,10 +149,9 @@ final class StateMerger {
   }
 
   private
-  @Nonnull
-  CompactFactSet getUnrelatedFacts(final @Nonnull Fact fact,
-                                   @Nonnull DfaMemoryStateImpl state,
-                                   @Nonnull Set<Fact> interestingFacts) {
+  CompactFactSet getUnrelatedFacts(final Fact fact,
+                                   DfaMemoryStateImpl state,
+                                   Set<Fact> interestingFacts) {
     final ArrayList<Fact> result = new ArrayList<>();
     for (Fact other : getFacts(state)) {
       if (!fact.invalidatesFact(other) && interestingFacts.contains(other)) {
@@ -183,7 +179,6 @@ final class StateMerger {
   }
 
   private static
-  @Nonnull
   Map<DfaVariableValue, Set<LongRangeSet>> createRangeMap(List<DfaMemoryStateImpl> states) {
     Map<DfaVariableValue, Set<LongRangeSet>> ranges = new LinkedHashMap<>();
     for (DfaMemoryStateImpl state : states) {
@@ -220,8 +215,7 @@ final class StateMerger {
   }
 
   private
-  @Nonnull
-  DfaMemoryStateImpl copyWithoutVar(@Nonnull DfaMemoryStateImpl state, @Nonnull DfaVariableValue var) {
+  DfaMemoryStateImpl copyWithoutVar(DfaMemoryStateImpl state, DfaVariableValue var) {
     Map<DfaVariableValue, DfaMemoryStateImpl> map = myCopyCache.computeIfAbsent(state, k -> new IdentityHashMap<>());
     DfaMemoryStateImpl copy = map.get(var);
     if (copy == null) {
@@ -234,13 +228,11 @@ final class StateMerger {
   }
 
   private
-  @Nonnull
-  Set<Fact> getFacts(@Nonnull DfaMemoryStateImpl state) {
+  Set<Fact> getFacts(DfaMemoryStateImpl state) {
     return myFacts.computeIfAbsent(state, StateMerger::doGetFacts);
   }
 
   private static
-  @Nonnull
   Set<Fact> doGetFacts(DfaMemoryStateImpl state) {
     Set<Fact> result = new LinkedHashSet<>();
 
@@ -328,11 +320,10 @@ final class StateMerger {
   abstract static class Fact {
     final boolean myPositive;
     final
-    @Nonnull
     DfaVariableValue myVar;
     private final int myHash;
 
-    protected Fact(boolean positive, @Nonnull DfaVariableValue var, int hash) {
+    protected Fact(boolean positive, DfaVariableValue var, int hash) {
       myPositive = positive;
       myVar = var;
       myHash = hash;
@@ -356,16 +347,15 @@ final class StateMerger {
     }
 
     abstract
-    @Nonnull
     Fact getPositiveCounterpart();
 
     DfaTypeValue comparedToConstant() {
       return null;
     }
 
-    abstract boolean invalidatesFact(@Nonnull Fact another);
+    abstract boolean invalidatesFact(Fact another);
 
-    abstract void removeFromState(@Nonnull DfaMemoryStateImpl state);
+    abstract void removeFromState(DfaMemoryStateImpl state);
 
     void restoreCommonState(DfaMemoryStateImpl stripped, Collection<DfaMemoryStateImpl> merged) {
       DfType commonType = StreamEx.of(merged).map(s -> s.getDfType(myVar)).foldLeft(DfTypes.BOTTOM, DfType::join);
@@ -373,8 +363,7 @@ final class StateMerger {
     }
 
     static
-    @Nonnull
-    EqualityFact createEqualityFact(@Nonnull DfaVariableValue var, @Nonnull DfaValue val) {
+    EqualityFact createEqualityFact(DfaVariableValue var, DfaValue val) {
       if (val instanceof DfaVariableValue && val.getID() < var.getID()) {
         return new EqualityFact((DfaVariableValue) val, true, var);
       }
@@ -396,10 +385,9 @@ final class StateMerger {
 
   static final class EqualityFact extends Fact {
     private final
-    @Nonnull
     DfaValue myArg;
 
-    private EqualityFact(@Nonnull DfaVariableValue var, boolean positive, @Nonnull DfaValue arg) {
+    private EqualityFact(DfaVariableValue var, boolean positive, DfaValue arg) {
       super(positive, var, (var.hashCode() * 31 + arg.hashCode()) * 31 + (positive ? 1 : 0));
       myArg = arg;
     }
@@ -433,13 +421,12 @@ final class StateMerger {
     }
 
     @Override
-    @Nonnull
     EqualityFact getPositiveCounterpart() {
       return new EqualityFact(myVar, true, myArg);
     }
 
     @Override
-    boolean invalidatesFact(@Nonnull Fact another) {
+    boolean invalidatesFact(Fact another) {
       if (!(another instanceof EqualityFact)) {
         return false;
       }
@@ -447,7 +434,7 @@ final class StateMerger {
     }
 
     @Override
-    void removeFromState(@Nonnull DfaMemoryStateImpl state) {
+    void removeFromState(DfaMemoryStateImpl state) {
       DfType dfType = state.getDfType(myVar);
       if (dfType instanceof DfConstantType ||
           dfType instanceof DfAntiConstantType && ((DfAntiConstantType<?>) dfType).getNotValues().size() == 1) {
@@ -463,10 +450,9 @@ final class StateMerger {
 
   static final class InstanceofFact extends Fact {
     private final
-    @Nonnull
     DfaTypeValue myType;
 
-    private InstanceofFact(@Nonnull DfaVariableValue var, boolean positive, @Nonnull DfaTypeValue type) {
+    private InstanceofFact(DfaVariableValue var, boolean positive, DfaTypeValue type) {
       super(positive, var, (var.hashCode() * 31 + type.hashCode()) * 31 + (positive ? 1 : 0));
       myType = type;
     }
@@ -495,20 +481,19 @@ final class StateMerger {
     }
 
     @Override
-    @Nonnull
     Fact getPositiveCounterpart() {
       return new InstanceofFact(myVar, true, myType);
     }
 
     @Override
-    boolean invalidatesFact(@Nonnull Fact another) {
+    boolean invalidatesFact(Fact another) {
       return another instanceof InstanceofFact &&
           myType == ((InstanceofFact) another).myType &&
           myVar == another.myVar;
     }
 
     @Override
-    void removeFromState(@Nonnull DfaMemoryStateImpl state) {
+    void removeFromState(DfaMemoryStateImpl state) {
       DfType type = state.getDfType(myVar);
       if (type instanceof DfReferenceType) {
         state.recordVariableType(myVar, ((DfReferenceType) type).withoutType(TypeConstraint.fromDfType(myType.getDfType())));
@@ -518,12 +503,11 @@ final class StateMerger {
 
   private static final class Replacements {
     private final
-    @Nonnull
     List<DfaMemoryStateImpl> myAllStates;
     private final Set<DfaMemoryStateImpl> myRemovedStates = new HashSet<>();
     private final List<DfaMemoryStateImpl> myMerged = new ArrayList<>();
 
-    private Replacements(@Nonnull List<DfaMemoryStateImpl> allStates) {
+    private Replacements(List<DfaMemoryStateImpl> allStates) {
       myAllStates = allStates;
     }
 
@@ -546,7 +530,7 @@ final class StateMerger {
       return null;
     }
 
-    private void stripAndMerge(@Nonnull Collection<DfaMemoryStateImpl> group, @Nonnull Fact fact) {
+    private void stripAndMerge(Collection<DfaMemoryStateImpl> group, Fact fact) {
       if (group.size() <= 1) {
         return;
       }

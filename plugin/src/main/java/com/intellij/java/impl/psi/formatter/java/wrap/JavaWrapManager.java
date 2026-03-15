@@ -25,7 +25,7 @@ import com.intellij.java.impl.psi.formatter.java.AbstractJavaBlock;
 import com.intellij.java.impl.psi.formatter.java.wrap.impl.JavaChildBlockWrapFactory;
 import com.intellij.java.impl.psi.formatter.java.wrap.impl.JavaChildWrapArranger;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Defines common contract for {@link Wrap wraps} manipulation during java {@link Block blocks} processing.

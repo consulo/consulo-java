@@ -16,7 +16,6 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
@@ -25,7 +24,6 @@ public class ConfigFileUtil {
   private ConfigFileUtil() {
   }
 
-  @Nonnull
   public static ConfigFileVersion getVersionByName(ConfigFileMetaData metaData, String name) {
     for (ConfigFileVersion version : metaData.getVersions()) {
       if (name.equals(version.getName())) {

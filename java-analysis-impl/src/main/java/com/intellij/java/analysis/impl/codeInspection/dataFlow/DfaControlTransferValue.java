@@ -21,7 +21,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import consulo.util.collection.FList;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -30,10 +29,9 @@ import java.util.List;
 public class DfaControlTransferValue extends DfaValue
 {
 	private TransferTarget myTarget;
-	@Nonnull
 	private FList<Trap> myTraps;
 
-	public DfaControlTransferValue(DfaValueFactory factory, TransferTarget target, @Nonnull FList<Trap> traps)
+	public DfaControlTransferValue(DfaValueFactory factory, TransferTarget target, FList<Trap> traps)
 	{
 		super(factory);
 		myTarget = target;
@@ -50,7 +48,6 @@ public class DfaControlTransferValue extends DfaValue
 		return myTarget;
 	}
 
-	@Nonnull
 	public FList<Trap> getTraps()
 	{
 		return myTraps;

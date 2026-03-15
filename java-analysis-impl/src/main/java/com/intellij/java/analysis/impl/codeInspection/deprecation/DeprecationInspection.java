@@ -33,8 +33,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -48,9 +47,8 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
     public static final LocalizeValue DISPLAY_NAME = DeprecationUtil.DEPRECATION_DISPLAY_NAME;
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         DeprecationInspectionState state
@@ -64,25 +62,21 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
         );
     }
 
-    @Nonnull
     @Override
     public InspectionToolState<? extends DeprecationInspectionState> createStateProvider() {
         return new DeprecationInspectionState();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return DISPLAY_NAME;
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return SHORT_NAME;
     }
 
-    @Nonnull
     @Override
     public String getID() {
         return ID;
@@ -93,7 +87,6 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
         return true;
     }
 
-    @Nonnull
     @Override
     public ProblemHighlightType getControllableHighlightType() {
         return ProblemHighlightType.LIKE_DEPRECATED;
@@ -155,7 +148,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
         @Override
         @RequiredReadAction
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             visitReferenceElement(expression);
         }
 
@@ -203,7 +196,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
         @Override
         @RequiredReadAction
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             MethodSignatureBackedByPsiMethod methodSignature = MethodSignatureBackedByPsiMethod.create(method, PsiSubstitutor.EMPTY);
             if (!method.isConstructor()) {
                 List<MethodSignatureBackedByPsiMethod> superMethodSignatures = method.findSuperMethodSignaturesIncludingStatic(true);
@@ -249,7 +242,7 @@ public class DeprecationInspection extends BaseJavaBatchLocalInspectionTool<Depr
 
         @Override
         @RequiredReadAction
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (aClass instanceof PsiTypeParameter) {
                 return;
             }

@@ -32,8 +32,7 @@ import consulo.properties.localize.PropertiesLocalize;
 import consulo.util.collection.BidirectionalMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -44,26 +43,22 @@ import java.util.*;
 public class InconsistentResourceBundleInspection extends GlobalSimpleInspectionTool {
     private static final Key<Set<ResourceBundle>> VISITED_BUNDLES_KEY = Key.create("VISITED_BUNDLES_KEY");
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return PropertiesLocalize.propertiesFilesInspectionGroupDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inconsistentResourceBundleDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "InconsistentResourceBundle";
     }
 
     @Override
-    @Nonnull
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;
     }
@@ -74,7 +69,6 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
         return PropertiesLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public InspectionToolState<?> createStateProvider() {
         return new InconsistentResourceBundleInspectionState();
@@ -82,10 +76,10 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 
     @Override
     public void inspectionStarted(
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-        @Nonnull Object state
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        Object state
     ) {
         globalContext.putUserData(VISITED_BUNDLES_KEY, new HashSet<>());
     }
@@ -93,12 +87,12 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
     @Override
     @RequiredReadAction
     public void checkFile(
-        @Nonnull PsiFile file,
-        @Nonnull InspectionManager manager,
-        @Nonnull ProblemsHolder problemsHolder,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
-        @Nonnull Object state
+        PsiFile file,
+        InspectionManager manager,
+        ProblemsHolder problemsHolder,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor problemDescriptionsProcessor,
+        Object state
     ) {
         Set<ResourceBundle> visitedBundles = globalContext.getUserData(VISITED_BUNDLES_KEY);
         InconsistentResourceBundleInspectionState inspectionState = (InconsistentResourceBundleInspectionState) state;
@@ -107,9 +101,9 @@ public class InconsistentResourceBundleInspection extends GlobalSimpleInspection
 
     @RequiredReadAction
     private void checkFile(
-        @Nonnull PsiFile file,
-        @Nonnull InspectionManager manager,
-        @Nonnull Set<ResourceBundle> visitedBundles,
+        PsiFile file,
+        InspectionManager manager,
+        Set<ResourceBundle> visitedBundles,
         RefManager refManager,
         ProblemDescriptionsProcessor processor,
         InconsistentResourceBundleInspectionState state

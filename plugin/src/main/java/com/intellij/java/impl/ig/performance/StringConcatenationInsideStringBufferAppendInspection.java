@@ -31,11 +31,9 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class StringConcatenationInsideStringBufferAppendInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringConcatenationInsideStringBufferAppendDisplayName();
@@ -47,7 +45,6 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
     }
 
     @Override
-    @Nonnull
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
         PsiClass aClass = (PsiClass) infos[0];
@@ -66,7 +63,6 @@ public class StringConcatenationInsideStringBufferAppendInspection extends BaseI
     }
 
     private static class ReplaceWithChainedAppendFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.stringConcatenationInsideStringBufferAppendReplaceQuickfix();

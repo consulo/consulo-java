@@ -20,7 +20,6 @@ import com.intellij.jam.JamElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementRef;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
 
 /**
@@ -28,15 +27,13 @@ import java.util.function.Function;
  */
 public abstract class JamInstantiator<Psi extends PsiElement, Jam extends JamElement> {
 
-  @Nonnull
-  public abstract Jam instantiate(@Nonnull PsiElementRef<Psi> ref);
+  public abstract Jam instantiate(PsiElementRef<Psi> ref);
 
   public static <Psi extends PsiElement, Jam extends JamElement> JamInstantiator<Psi, Jam> proxied(final Class<Jam> jamClass) {
     final Function<PsiElementRef,Jam> function = JamClassGenerator.getInstance().generateJamElementFactory(jamClass);
     return new JamInstantiator<Psi, Jam>() {
-      @Nonnull
       @Override
-      public Jam instantiate(@Nonnull PsiElementRef<Psi> psiPsiRef) {
+      public Jam instantiate(PsiElementRef<Psi> psiPsiRef) {
         return function.apply(psiPsiRef);
       }
     };

@@ -28,7 +28,6 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.ToggleAction;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 
 /**
  * from kotlin
@@ -58,13 +57,13 @@ public class ForceOnDemandRenderersAction extends ToggleAction implements DumbAw
     }
 
     @Override
-    public boolean isSelected(@Nonnull AnActionEvent e) {
+    public boolean isSelected(AnActionEvent e) {
         return RENDERERS_ONDEMAND_FORCED.get(getSessionData(e), false);
     }
 
     @Override
     @RequiredUIAccess
-    public void setSelected(@Nonnull AnActionEvent e, boolean state) {
+    public void setSelected(AnActionEvent e, boolean state) {
         RENDERERS_ONDEMAND_FORCED.set(getSessionData(e), state);
         NodeRendererSettings.getInstance().fireRenderersChanged();
     }

@@ -42,8 +42,6 @@ import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
 import consulo.project.localize.ProjectLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -59,11 +57,11 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
     @Override
     @RequiredReadAction
     public void runInspection(
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor problemProcessor,
-        @Nonnull Object state
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor problemProcessor,
+        Object state
     ) {
         final Set<Module> modules = new HashSet<>();
         scope.accept(new PsiElementVisitor() {
@@ -109,20 +107,16 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesModularizationIssues();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Inconsistent language level settings");
     }
 
     @Override
-    @NonNls
-    @Nonnull
     public String getShortName() {
         return "InconsistentLanguageLevel";
     }
@@ -135,14 +129,13 @@ public abstract class InconsistentLanguageLevelInspection extends GlobalInspecti
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Open module " + myModule.getName() + " settings");
         }
 
         @RequiredUIAccess
         @Override
-        public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
+        public void applyFix(Project project, CommonProblemDescriptor descriptor) {
             if (!myModule.isDisposed()) {
                 ShowSettingsUtil.getInstance().showProjectStructureDialog(
                     project,

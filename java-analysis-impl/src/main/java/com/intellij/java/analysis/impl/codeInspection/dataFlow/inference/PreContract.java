@@ -20,8 +20,7 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodCon
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiMethod;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -30,7 +29,6 @@ import java.util.function.Supplier;
  */
 interface PreContract
 {
-	@Nonnull
 	List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body);
 
 	@Nullable

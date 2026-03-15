@@ -20,7 +20,6 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * Provides quick fixes for "Unused declaration" inspection
@@ -32,6 +31,5 @@ import jakarta.annotation.Nonnull;
 public interface UnusedDeclarationFixProvider {
     ExtensionPointName<UnusedDeclarationFixProvider> EP_NAME = ExtensionPointName.create(UnusedDeclarationFixProvider.class);
 
-    @Nonnull
     IntentionAction[] getQuickFixes(PsiElement unusedElement);
 }

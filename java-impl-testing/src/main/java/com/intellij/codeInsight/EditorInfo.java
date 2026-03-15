@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.application.ApplicationManager;
 import consulo.document.Document;
 import consulo.codeEditor.Editor;
@@ -28,9 +27,9 @@ import consulo.util.lang.StringUtil;
  * @author cdr
  */
 public class EditorInfo {
-  @NonNls public static final String CARET_MARKER = "<caret>";
-  @NonNls public static final String SELECTION_START_MARKER = "<selection>";
-  @NonNls public static final String SELECTION_END_MARKER = "</selection>";
+  public static final String CARET_MARKER = "<caret>";
+  public static final String SELECTION_START_MARKER = "<selection>";
+  public static final String SELECTION_END_MARKER = "</selection>";
 
   String newFileText = null;
   public RangeMarker caretMarker = null;

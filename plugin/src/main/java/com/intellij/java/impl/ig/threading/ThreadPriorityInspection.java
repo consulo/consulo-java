@@ -22,23 +22,18 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ThreadPriorityInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "CallToThreadSetPriority";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.threadPriorityDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.threadPriorityProblemDescriptor().get();
   }
@@ -52,7 +47,7 @@ public class ThreadPriorityInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression methodCallExpression) {
+      PsiMethodCallExpression methodCallExpression) {
       super.visitMethodCallExpression(methodCallExpression);
       if (!isThreadSetPriority(methodCallExpression)) {
         return;
@@ -64,11 +59,11 @@ public class ThreadPriorityInspection extends BaseInspection {
     }
 
     private static boolean isThreadSetPriority(
-      @Nonnull PsiMethodCallExpression methodCallExpression) {
+      PsiMethodCallExpression methodCallExpression) {
       PsiReferenceExpression methodExpression =
         methodCallExpression.getMethodExpression();
       String methodName = methodExpression.getReferenceName();
-      @NonNls String setPriority = "setPriority";
+      String setPriority = "setPriority";
       if (!setPriority.equals(methodName)) {
         return false;
       }
@@ -85,7 +80,7 @@ public class ThreadPriorityInspection extends BaseInspection {
     }
 
     private static boolean hasNormalPriorityArgument(
-      @Nonnull PsiMethodCallExpression methodCallExpression) {
+      PsiMethodCallExpression methodCallExpression) {
       PsiExpressionList argumentList =
         methodCallExpression.getArgumentList();
       PsiExpression[] expressions = argumentList.getExpressions();
@@ -99,7 +94,7 @@ public class ThreadPriorityInspection extends BaseInspection {
       PsiReferenceExpression referenceExpression =
         (PsiReferenceExpression)expression;
       String referenceName = referenceExpression.getReferenceName();
-      @NonNls String normPriority = "NORM_PRIORITY";
+      String normPriority = "NORM_PRIORITY";
       if (!normPriority.equals(referenceName)) {
         return false;
       }

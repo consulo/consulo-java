@@ -1,7 +1,6 @@
 package com.intellij.unscramble;
 
 import junit.framework.TestCase;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author cdr
@@ -109,7 +108,7 @@ public abstract class NormalizeTextTest extends TestCase {
            "at org.apache.velocity.Template.merge(Template.java:256)");
   }
 
-  private static void doTest(@NonNls String stackTrace, @NonNls String expected) {
+  private static void doTest(String stackTrace, String expected) {
     String normalized = UnscrambleDialog.normalizeText(stackTrace);
     assertEquals(expected, normalized);
   }

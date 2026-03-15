@@ -14,7 +14,6 @@ import consulo.process.event.ProcessEvent;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
 import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TSimpleServer;
@@ -35,7 +34,6 @@ import java.util.concurrent.Future;
 public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInterface.Iface {
   private final TSimpleServer myServer;
 
-  @Nonnull
   private final CompileContext myCompileContext;
 
   private final BackendCompilerWrapper.ClassParsingHandler myClassParsingHandler;

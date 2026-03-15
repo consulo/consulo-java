@@ -32,14 +32,13 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.InsertLiteralUnderscoresAction", categories = {"Java", "Numbers"}, fileExtensions = "java")
 public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionAction {
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!PsiUtil.isLanguageLevel7OrHigher(element)) return false;
 
     PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
@@ -58,7 +57,7 @@ public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionActio
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     PsiLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(element, PsiLiteralExpression.class, false);
     if (literalExpression == null) return;
 
@@ -71,7 +70,6 @@ public class InsertLiteralUnderscoresAction extends PsiElementBaseIntentionActio
     literalExpression.replace(replacement);
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionInsertLiteralUnderscores();

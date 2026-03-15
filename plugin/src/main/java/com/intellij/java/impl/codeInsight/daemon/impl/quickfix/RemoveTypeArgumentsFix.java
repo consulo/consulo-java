@@ -27,8 +27,7 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna
@@ -41,7 +40,6 @@ public class RemoveTypeArgumentsFix extends LocalQuickFixAndIntentionActionOnPsi
         super(element);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return LocalizeValue.localizeTODO("Remove type arguments");
@@ -49,21 +47,21 @@ public class RemoveTypeArgumentsFix extends LocalQuickFixAndIntentionActionOnPsi
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         return startElement instanceof PsiVariable && startElement.isValid() && ((PsiVariable) startElement).getTypeElement() != null;
     }
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiVariable psiVariable = (PsiVariable) startElement;
         PsiTypeElement typeElement = psiVariable.getTypeElement();

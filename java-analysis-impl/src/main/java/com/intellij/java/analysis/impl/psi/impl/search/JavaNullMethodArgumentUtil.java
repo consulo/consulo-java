@@ -29,8 +29,7 @@ import consulo.language.psi.stub.FileBasedIndex;
 import consulo.logging.Logger;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -38,7 +37,7 @@ import java.util.Collections;
 public class JavaNullMethodArgumentUtil {
   private static final Logger LOG = Logger.getInstance(JavaNullMethodArgumentUtil.class);
 
-  public static boolean hasNullArgument(@Nonnull PsiMethod method, final int argumentIdx) {
+  public static boolean hasNullArgument(PsiMethod method, final int argumentIdx) {
     final boolean[] result = {false};
     searchNullArgument(method, argumentIdx, expression ->
     {
@@ -48,7 +47,7 @@ public class JavaNullMethodArgumentUtil {
     return result[0];
   }
 
-  public static void searchNullArgument(@Nonnull PsiMethod method, final int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor) {
+  public static void searchNullArgument(PsiMethod method, final int argumentIdx, Processor<PsiExpression> nullArgumentProcessor) {
     final PsiParameter parameter = method.getParameterList().getParameters()[argumentIdx];
     if (parameter.getType() instanceof PsiEllipsisType) {
       return;
@@ -65,7 +64,7 @@ public class JavaNullMethodArgumentUtil {
     }
   }
 
-  private static void processCallsWithNullArguments(@Nonnull PsiMethod method, int argumentIdx, @Nonnull Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles) {
+  private static void processCallsWithNullArguments(PsiMethod method, int argumentIdx, Processor<PsiExpression> nullArgumentProcessor, Collection<VirtualFile> candidateFiles) {
     if (candidateFiles.isEmpty()) {
       return;
     }
@@ -99,8 +98,7 @@ public class JavaNullMethodArgumentUtil {
     return null;
   }
 
-  @Nonnull
-  private static Collection<VirtualFile> getFilesWithPotentialNullPassingCalls(@Nonnull PsiMethod method, int parameterIndex) {
+  private static Collection<VirtualFile> getFilesWithPotentialNullPassingCalls(PsiMethod method, int parameterIndex) {
     final FileBasedIndex fileBasedIndex = FileBasedIndex.getInstance();
     final CommonProcessors.CollectProcessor<VirtualFile> collector = new CommonProcessors.CollectProcessor<>(new ArrayList<>());
     GlobalSearchScope searchScope = GlobalSearchScopeUtil.toGlobalSearchScope(method.getUseScope(), method.getProject());

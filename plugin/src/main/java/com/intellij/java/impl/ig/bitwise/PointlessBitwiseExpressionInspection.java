@@ -31,7 +31,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Set;
@@ -54,13 +53,11 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
      */
     public boolean m_ignoreExpressionsContainingConstants = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.pointlessBitwiseExpressionDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
@@ -162,7 +159,6 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
     }
 
     private class PointlessBitwiseFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.pointlessBitwiseExpressionSimplifyQuickfix();
@@ -180,7 +176,7 @@ public class PointlessBitwiseExpressionInspection extends BaseInspection {
     private class PointlessBitwiseVisitor extends BaseInspectionVisitor {
         @Override
         @SuppressWarnings("SimplifiableIfStatement")
-        public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
+        public void visitPolyadicExpression(PsiPolyadicExpression expression) {
             super.visitPolyadicExpression(expression);
             IElementType sign = expression.getOperationTokenType();
             if (!BITWISE_TOKENS.contains(sign)) {

@@ -30,7 +30,6 @@ import consulo.language.psi.path.FileReference;
 import consulo.language.psi.path.FileReferenceSet;
 import consulo.language.util.ProcessingContext;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -47,14 +46,12 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
     myEndingSlashNotAllowed = endingSlashNotAllowed;
   }
 
-  @Nonnull
   public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, boolean soft) {
     return getReferencesByElement(element, text, offset, soft, Module.EMPTY_ARRAY);
   }
 
-  @Nonnull
   public PsiReference[] getReferencesByElement(PsiElement element, String text, int offset, final boolean soft,
-                                               final @Nonnull Module... forModules) {
+                                               final Module... forModules) {
     return new FileReferenceSet(text, element, offset, this, true, myEndingSlashNotAllowed) {
       @Override
       protected boolean isSoft() {
@@ -78,7 +75,6 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
       }
 
       @Override
-      @Nonnull
       public Collection<PsiFileSystemItem> computeDefaultContexts() {
         Set<PsiFileSystemItem> systemItems = new HashSet<PsiFileSystemItem>();
         if (forModules.length > 0) {
@@ -109,7 +105,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
   }
 
   @Override
-  public boolean acceptsTarget(@Nonnull PsiElement target) {
+  public boolean acceptsTarget(PsiElement target) {
     return target instanceof PsiFileSystemItem;
   }
 
@@ -122,8 +118,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
   }
 
   @Override
-  @Nonnull
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+  public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
     String text = null;
     if (element instanceof PsiLiteralExpression) {
       Object value = ((PsiLiteralExpression) element).getValue();
@@ -140,7 +135,6 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
     return getReferencesByElement(element, text, 1, true);
   }
 
-  @Nonnull
   public static Collection<PsiFileSystemItem> getRoots(Module thisModule, boolean includingClasses) {
     if (thisModule == null) {
       return Collections.emptyList();

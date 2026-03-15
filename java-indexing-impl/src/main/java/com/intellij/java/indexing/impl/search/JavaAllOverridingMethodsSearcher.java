@@ -29,7 +29,6 @@ import consulo.content.scope.SearchScope;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -41,8 +40,8 @@ import java.util.function.Supplier;
 public class JavaAllOverridingMethodsSearcher implements AllOverridingMethodsSearchExecutor {
     @Override
     public boolean execute(
-        @Nonnull AllOverridingMethodsSearch.SearchParameters p,
-        @Nonnull Predicate<? super Pair<PsiMethod, PsiMethod>> consumer
+        AllOverridingMethodsSearch.SearchParameters p,
+        Predicate<? super Pair<PsiMethod, PsiMethod>> consumer
     ) {
         PsiClass psiClass = p.getPsiClass();
 

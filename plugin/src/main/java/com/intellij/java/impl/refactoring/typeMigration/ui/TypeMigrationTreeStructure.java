@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring.typeMigration.ui;
 import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeStructureBase;
 import consulo.project.ui.view.tree.TreeStructureProvider;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +41,6 @@ public class TypeMigrationTreeStructure extends AbstractTreeStructureBase {
     return Collections.emptyList();
   }
 
-  @Nonnull
 	@Override
   public Object getRootElement() {
     return myRoot;

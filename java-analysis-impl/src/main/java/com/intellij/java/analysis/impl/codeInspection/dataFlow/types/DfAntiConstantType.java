@@ -2,7 +2,6 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import one.util.streamex.StreamEx;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -12,17 +11,16 @@ import java.util.Set;
  * Represents a type that maintains a set of constants that excluded from this type
  */
 public abstract class DfAntiConstantType<T> implements DfType {
-  final @Nonnull
+  final 
   Set<T> myNotValues;
   
-  DfAntiConstantType(@Nonnull Set<T> notValues) {
+  DfAntiConstantType(Set<T> notValues) {
     myNotValues = notValues;
   }
 
   /**
    * @return set of excluded constants
    */
-  @Nonnull
   public Set<T> getNotValues() {
     return Collections.unmodifiableSet(myNotValues);
   }

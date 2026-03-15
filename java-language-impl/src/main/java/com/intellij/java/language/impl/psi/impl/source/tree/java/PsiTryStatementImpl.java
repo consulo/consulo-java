@@ -30,7 +30,6 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -55,7 +54,6 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  @Nonnull
   public PsiCodeBlock[] getCatchBlocks() {
     ASTNode tryBlock = SourceTreeToPsiMap.psiElementToTree(getTryBlock());
     if (tryBlock != null) {
@@ -72,7 +70,6 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  @Nonnull
   public PsiParameter[] getCatchBlockParameters() {
     PsiParameter[] catchParameters = myCachedCatchParameters;
     if (catchParameters == null) {
@@ -91,7 +88,6 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  @Nonnull
   public PsiCatchSection[] getCatchSections() {
     return getChildrenAsPsiElements(CATCH_SECTION_BIT_SET, PsiCatchSection.ARRAY_FACTORY);
   }
@@ -162,7 +158,7 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitTryStatement(this);
     }
@@ -172,10 +168,10 @@ public class PsiTryStatementImpl extends CompositePsiElement implements PsiTrySt
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull final PsiScopeProcessor processor,
-                                     @Nonnull final ResolveState state,
+  public boolean processDeclarations(final PsiScopeProcessor processor,
+                                     final ResolveState state,
                                      final PsiElement lastParent,
-                                     @Nonnull final PsiElement place) {
+                                     final PsiElement place) {
     final PsiResourceList resourceList = getResourceList();
     if (resourceList != null && lastParent instanceof PsiCodeBlock && lastParent == getTryBlock()) {
       return PsiImplUtil.processDeclarationsInResourceList(resourceList, processor, state, lastParent);

@@ -15,10 +15,9 @@
  */
 package com.intellij.java.impl.refactoring.migration;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.project.Project;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class MigrationManager
 {
@@ -47,7 +46,7 @@ public class MigrationManager
 	}
 
 	@Nullable
-	public MigrationMap findMigrationMap(@Nonnull String name)
+	public MigrationMap findMigrationMap(String name)
 	{
 		return myMigrationMapSet.findMigrationMap(name);
 	}

@@ -11,8 +11,7 @@ import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import org.osmorc.manifest.lang.ManifestLanguage;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author VISTALL
@@ -21,9 +20,8 @@ import jakarta.annotation.Nullable;
 @ExtensionImpl
 public class ManifestLanguageVersionResolver implements LanguageVersionResolver {
   @RequiredReadAction
-  @Nonnull
   @Override
-  public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable PsiElement element) {
+  public LanguageVersion getLanguageVersion(Language language, @Nullable PsiElement element) {
     if (element == null) {
       return ManifestLanguageVersion.Manifest;
     }
@@ -35,16 +33,14 @@ public class ManifestLanguageVersionResolver implements LanguageVersionResolver 
   }
 
   @RequiredReadAction
-  @Nonnull
   @Override
-  public LanguageVersion getLanguageVersion(@Nonnull Language language, @Nullable Project project, @Nullable VirtualFile virtualFile) {
+  public LanguageVersion getLanguageVersion(Language language, @Nullable Project project, @Nullable VirtualFile virtualFile) {
     if (virtualFile == null) {
       return ManifestLanguageVersion.Manifest;
     }
     return virtualFile.getFileType() == BndFileType.INSTANCE ? ManifestLanguageVersion.Bnd : ManifestLanguageVersion.Manifest;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return ManifestLanguage.INSTANCE;

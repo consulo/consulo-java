@@ -30,28 +30,26 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class DeleteCatchFix implements SyntheticIntentionAction {
   private final PsiParameter myCatchParameter;
 
-  public DeleteCatchFix(@Nonnull PsiParameter myCatchParameter) {
+  public DeleteCatchFix(PsiParameter myCatchParameter) {
     this.myCatchParameter = myCatchParameter;
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.deleteCatchText(JavaHighlightUtil.formatType(myCatchParameter.getType()));
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myCatchParameter.isValid() && PsiManager.getInstance(project).isInProject(myCatchParameter.getContainingFile());
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myCatchParameter.getContainingFile())) return;
 
     PsiTryStatement tryStatement = ((PsiCatchSection)myCatchParameter.getDeclarationScope()).getTryStatement();

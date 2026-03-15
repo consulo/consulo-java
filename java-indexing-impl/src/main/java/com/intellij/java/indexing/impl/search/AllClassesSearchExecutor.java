@@ -36,7 +36,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.project.DumbService;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -45,8 +44,8 @@ import java.util.function.Predicate;
 public class AllClassesSearchExecutor implements com.intellij.java.indexing.search.searches.AllClassesSearchExecutor {
     @Override
     public boolean execute(
-        @Nonnull AllClassesSearch.SearchParameters queryParameters,
-        @Nonnull Predicate<? super PsiClass> consumer
+        AllClassesSearch.SearchParameters queryParameters,
+        Predicate<? super PsiClass> consumer
     ) {
         SearchScope scope = queryParameters.getScope();
 
@@ -64,9 +63,9 @@ public class AllClassesSearchExecutor implements com.intellij.java.indexing.sear
     }
 
     private static boolean processAllClassesInGlobalScope(
-        @Nonnull GlobalSearchScope scope,
-        @Nonnull AllClassesSearch.SearchParameters parameters,
-        @Nonnull Predicate<? super PsiClass> processor
+        GlobalSearchScope scope,
+        AllClassesSearch.SearchParameters parameters,
+        Predicate<? super PsiClass> processor
     ) {
         Set<String> names = new HashSet<>(10000);
         processClassNames(
@@ -129,8 +128,8 @@ public class AllClassesSearchExecutor implements com.intellij.java.indexing.sear
     }
 
     private static boolean processScopeRootForAllClasses(
-        @Nonnull PsiElement scopeRoot,
-        @Nonnull Predicate<? super PsiClass> processor
+        PsiElement scopeRoot,
+        Predicate<? super PsiClass> processor
     ) {
         boolean[] stopped = {false};
 
@@ -144,7 +143,7 @@ public class AllClassesSearchExecutor implements com.intellij.java.indexing.sear
             }
 
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 stopped[0] = !processor.test(aClass);
                 super.visitClass(aClass);
             }
@@ -158,7 +157,7 @@ public class AllClassesSearchExecutor implements com.intellij.java.indexing.sear
             }
 
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 stopped[0] = !processor.test(aClass);
                 super.visitClass(aClass);
             }

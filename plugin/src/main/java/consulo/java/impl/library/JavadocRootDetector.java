@@ -22,7 +22,6 @@ import consulo.content.library.ui.RootDetector;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.virtualFileSystem.util.VirtualFileVisitor;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -34,9 +33,8 @@ public class JavadocRootDetector extends RootDetector {
         super(DocumentationOrderRootType.getInstance(), false, "JavaDocs");
     }
 
-    @Nonnull
     @Override
-    public Collection<VirtualFile> detectRoots(@Nonnull VirtualFile rootCandidate, @Nonnull ProgressIndicator progressIndicator) {
+    public Collection<VirtualFile> detectRoots(VirtualFile rootCandidate, ProgressIndicator progressIndicator) {
         List<VirtualFile> result = new ArrayList<VirtualFile>();
         collectJavadocRoots(rootCandidate, result, progressIndicator);
         return result;
@@ -45,7 +43,7 @@ public class JavadocRootDetector extends RootDetector {
     private static void collectJavadocRoots(VirtualFile file, final List<VirtualFile> result, final ProgressIndicator progressIndicator) {
         VirtualFileUtil.visitChildrenRecursively(file, new VirtualFileVisitor() {
             @Override
-            public boolean visitFile(@Nonnull VirtualFile file) {
+            public boolean visitFile(VirtualFile file) {
                 progressIndicator.checkCanceled();
                 if (file.isDirectory() && file.findChild("allclasses-frame.html") != null && file.findChild("allclasses-noframe.html") != null) {
                     result.add(file);

@@ -41,8 +41,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -54,11 +52,11 @@ import java.util.Set;
  */
 public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implements HighPriorityAction, SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(CreatePropertyFromUsageFix.class);
-  @NonNls private static final String FIELD_VARIABLE = "FIELD_NAME_VARIABLE";
-  @NonNls private static final String TYPE_VARIABLE = "FIELD_TYPE_VARIABLE";
-  @NonNls private static final String GET_PREFIX = "get";
-  @NonNls private static final String IS_PREFIX = "is";
-  @NonNls private static final String SET_PREFIX = "set";
+  private static final String FIELD_VARIABLE = "FIELD_NAME_VARIABLE";
+  private static final String TYPE_VARIABLE = "FIELD_TYPE_VARIABLE";
+  private static final String GET_PREFIX = "get";
+  private static final String IS_PREFIX = "is";
+  private static final String SET_PREFIX = "set";
 
   public CreatePropertyFromUsageFix(PsiMethodCallExpression methodCall) {
     myMethodCall = methodCall;
@@ -159,7 +157,6 @@ public class CreatePropertyFromUsageFix extends CreateFromUsageBaseFix implement
   }
 
   @Override
-  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     List<PsiClass> all = super.getTargetClasses(element);
     if (all.isEmpty()) return all;

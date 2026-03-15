@@ -28,7 +28,6 @@ import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -41,14 +40,13 @@ public class JavaSuperClassNameOccurenceIndex extends StringStubIndexExtension<P
     return ourInstance;
   }
 
-  @Nonnull
   @Override
   public StubIndexKey<String, PsiReferenceList> getKey() {
     return JavaStubIndexKeys.SUPER_CLASSES;
   }
 
   @Override
-  public Collection<PsiReferenceList> get(final String s, final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiReferenceList> get(final String s, final Project project, final ProjectAwareSearchScope scope) {
     return super.get(s, project, new JavaSourceFilterScope(scope));
   }
 

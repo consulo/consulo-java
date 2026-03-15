@@ -26,23 +26,20 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ExtractWhileLoopConditionToIfStatementIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ExtractWhileLoopConditionToIfStatementIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.extractWhileLoopConditionToIfStatementIntentionName();
     }
 
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new WhileLoopPredicate();
     }
 
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiWhileStatement whileStatement =
             (PsiWhileStatement) element.getParent();

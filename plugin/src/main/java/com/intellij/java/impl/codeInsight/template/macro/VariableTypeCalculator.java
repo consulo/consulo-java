@@ -21,8 +21,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Max Medvedev
@@ -32,13 +31,12 @@ public abstract class VariableTypeCalculator {
     public static final ExtensionPointName<VariableTypeCalculator> EP_NAME = ExtensionPointName.create(VariableTypeCalculator.class);
 
     @Nullable
-    public abstract PsiType inferVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place);
+    public abstract PsiType inferVarTypeAt(PsiVariable var, PsiElement place);
 
     /**
      * @return inferred type of variable in the context of place
      */
-    @Nonnull
-    public static PsiType getVarTypeAt(@Nonnull PsiVariable var, @Nonnull PsiElement place) {
+    public static PsiType getVarTypeAt(PsiVariable var, PsiElement place) {
         PsiType varType = var.getApplication().getExtensionPoint(VariableTypeCalculator.class)
             .computeSafeIfAny(calculator -> calculator.inferVarTypeAt(var, place));
         return varType != null ? varType : var.getType();

@@ -33,7 +33,6 @@ import consulo.annotation.DeprecationInfo;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.module.extension.JavaModuleExtension;
 
-import jakarta.annotation.Nonnull;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -58,7 +57,6 @@ public abstract class DefaultJreSelector
 			this.productionOnly = productionOnly;
 		}
 
-		@Nonnull
 		@Override
 		public Pair<String, String> getNameAndDescription()
 		{
@@ -126,31 +124,26 @@ public abstract class DefaultJreSelector
 		}
 	}
 
-	@Nonnull
 	public static DefaultJreSelector fromModuleDependencies(ModulesComboBox modulesCombobox, boolean productionOnly)
 	{
 		return new SdkFromModuleDependencies<>(modulesCombobox, ModulesComboBox::getSelectedModule, () -> productionOnly);
 	}
 
-	@Nonnull
 	public static DefaultJreSelector fromModuleDependencies(ModuleDescriptionsComboBox modulesCombobox, boolean productionOnly)
 	{
 		return new SdkFromModuleDependencies<>(modulesCombobox, ModuleDescriptionsComboBox::getSelectedModule, () -> productionOnly);
 	}
 
-	@Nonnull
 	public static DefaultJreSelector fromSourceRootsDependencies(ModulesComboBox modulesCombobox, EditorTextFieldWithBrowseButton classSelector)
 	{
 		return new SdkFromSourceRootDependencies<>(modulesCombobox, ModulesComboBox::getSelectedModule, classSelector);
 	}
 
-	@Nonnull
 	public static DefaultJreSelector fromSourceRootsDependencies(ModuleDescriptionsComboBox modulesCombobox, EditorTextFieldWithBrowseButton classSelector)
 	{
 		return new SdkFromSourceRootDependencies<>(modulesCombobox, ModuleDescriptionsComboBox::getSelectedModule, classSelector);
 	}
 
-	@Nonnull
 	public abstract Pair<String, String> getNameAndDescription();
 
 	public String getDescriptionString()

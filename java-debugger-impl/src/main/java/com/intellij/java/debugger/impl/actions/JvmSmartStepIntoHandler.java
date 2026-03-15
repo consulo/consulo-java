@@ -32,8 +32,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListPopup;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +45,6 @@ import java.util.List;
 public abstract class JvmSmartStepIntoHandler {
     public static final ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME = ExtensionPointName.create(JvmSmartStepIntoHandler.class);
 
-    @Nonnull
     public abstract List<SmartStepTarget> findSmartStepTargets(SourcePosition position);
 
     public abstract boolean isAvailable(SourcePosition position);

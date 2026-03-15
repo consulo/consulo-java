@@ -30,7 +30,7 @@ import consulo.component.ProcessCanceledException;
 import consulo.language.editor.hint.HintManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author lex

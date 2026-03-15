@@ -29,22 +29,18 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @ExtensionImpl
 public class ClassNewInstanceInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classNewInstanceDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.classNewInstanceProblemDescriptor().get();
     }
@@ -55,7 +51,6 @@ public class ClassNewInstanceInspection extends BaseInspection {
     }
 
     private static class ClassNewInstanceFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.classNewInstanceQuickfix();
@@ -96,7 +91,7 @@ public class ClassNewInstanceInspection extends BaseInspection {
                 );
             }
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
-            @NonNls String newExpression = qualifier.getText() + ".getConstructor().newInstance()";
+            String newExpression = qualifier.getText() + ".getConstructor().newInstance()";
             replaceExpression(methodCallExpression, newExpression);
         }
 
@@ -158,7 +153,7 @@ public class ClassNewInstanceInspection extends BaseInspection {
             PsiMethodCallExpression expression
         ) {
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!"newInstance".equals(methodName)) {
                 return;
             }

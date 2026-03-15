@@ -53,10 +53,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.EmptyRunnable;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -71,19 +69,16 @@ import static consulo.java.impl.intelliLang.config.MethodParameterInjection.*;
  */
 @ExtensionImpl
 public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSupport {
-    @NonNls
     public static final String JAVA_SUPPORT_ID = "java";
 
     private static boolean isMine(final PsiLanguageInjectionHost psiElement) {
         return PsiUtilEx.isStringOrCharacterLiteral(psiElement);
     }
 
-    @Nonnull
     public String getId() {
         return JAVA_SUPPORT_ID;
     }
 
-    @Nonnull
     public Class[] getPatternClasses() {
         return new Class[]{PsiJavaPatterns.class};
     }
@@ -227,7 +222,7 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
 
     public static boolean doAddLanguageAnnotation(final Project project,
                                                   final PsiModifierListOwner modifierListOwner,
-                                                  @Nonnull PsiLanguageInjectionHost host,
+                                                  PsiLanguageInjectionHost host,
                                                   final String languageId) {
         if (modifierListOwner.getModifierList() == null || !PsiUtil.isLanguageLevel5OrHigher(modifierListOwner)) {
             return false;
@@ -271,10 +266,10 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
         return true;
     }
 
-    public static boolean doInjectInJavaMethod(@Nonnull final Project project,
+    public static boolean doInjectInJavaMethod(final Project project,
                                                @Nullable final PsiMethod psiMethod,
                                                final int parameterIndex,
-                                               @Nonnull PsiLanguageInjectionHost host, @Nonnull final String languageId) {
+                                               PsiLanguageInjectionHost host, final String languageId) {
         if (psiMethod == null) {
             return false;
         }

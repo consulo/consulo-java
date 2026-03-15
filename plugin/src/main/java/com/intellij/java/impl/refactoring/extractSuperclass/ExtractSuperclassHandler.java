@@ -46,7 +46,6 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;
@@ -64,7 +63,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
     private Project myProject;
 
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         int offset = editor.getCaretModel().getOffset();
         PsiElement element = file.findElementAt(offset);
@@ -85,7 +84,7 @@ public class ExtractSuperclassHandler implements RefactoringActionHandler, Extra
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length != 1) {
             return;
         }

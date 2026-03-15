@@ -16,8 +16,7 @@
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmTypeParametersOwner;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a PSI element (class, interface, method or constructor) which can own a type
@@ -47,7 +46,6 @@ public interface PsiTypeParameterListOwner extends PsiMember, JvmTypeParametersO
 	 *
 	 * @return the array of type parameters, or an empty array if the element has no type parameters.
 	 */
-	@Nonnull
 	@Override
 	PsiTypeParameter[] getTypeParameters();
 }

@@ -34,7 +34,6 @@ import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.FileAttribute;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -50,7 +49,6 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
     }
 
     @Override
-    @Nonnull
     public Key<LanguageLevel> getFileDataKey() {
         return LanguageLevel.KEY;
     }
@@ -61,13 +59,12 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
     }
 
     @Override
-    @Nonnull
     public LanguageLevel getDefaultValue() {
         return LanguageLevel.HIGHEST;
     }
 
     @Override
-    public LanguageLevel getImmediateValue(@Nonnull Project project, VirtualFile file) {
+    public LanguageLevel getImmediateValue(Project project, VirtualFile file) {
         if (file == null) {
             return null;
         }
@@ -79,7 +76,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
     }
 
     @Override
-    public LanguageLevel getImmediateValue(@Nonnull Module module) {
+    public LanguageLevel getImmediateValue(Module module) {
         ModuleRootManager moduleRootManager = ModuleRootManager.getInstance(module);
 
         final JavaModuleExtension extension = moduleRootManager.getExtension(JavaModuleExtension.class);
@@ -87,7 +84,7 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
     }
 
     @Override
-    public boolean acceptsDirectory(@Nonnull VirtualFile file, @Nonnull Project project) {
+    public boolean acceptsDirectory(VirtualFile file, Project project) {
         return ProjectFileIndex.getInstance(project).isInSourceContent(file);
     }
 
@@ -95,9 +92,9 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
 
     @Override
     public void persistAttribute(
-        @Nonnull Project project,
-        @Nonnull VirtualFile fileOrDir,
-        @Nonnull LanguageLevel level
+        Project project,
+        VirtualFile fileOrDir,
+        LanguageLevel level
     ) throws IOException {
         final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
         if (iStream != null) {
@@ -124,20 +121,19 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
     }
 
     @Override
-    public void afterRootsChanged(@Nonnull Project project) {
+    public void afterRootsChanged(Project project) {
     }
 
     @Override
-    public boolean acceptsFile(@Nonnull VirtualFile file, @Nonnull Project project) {
+    public boolean acceptsFile(VirtualFile file, Project project) {
         return false;
     }
 
-    @Nonnull
     public LocalizeValue getInconsistencyLanguageLevelMessage(
-        @Nonnull LocalizeValue message,
-        @Nonnull PsiElement element,
-        @Nonnull LanguageLevel level,
-        @Nonnull PsiFile file
+        LocalizeValue message,
+        PsiElement element,
+        LanguageLevel level,
+        PsiFile file
     ) {
         return LocalizeValue.empty();
     }

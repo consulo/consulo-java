@@ -43,8 +43,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,11 +53,11 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   private static final Logger LOG = Logger.getInstance(PsiMethodReferenceExpressionImpl.class);
   private static final MethodReferenceResolver RESOLVER = new MethodReferenceResolver();
 
-  public PsiMethodReferenceExpressionImpl(@Nonnull FunctionalExpressionStub<PsiMethodReferenceExpression> stub) {
+  public PsiMethodReferenceExpressionImpl(FunctionalExpressionStub<PsiMethodReferenceExpression> stub) {
     super(stub, JavaStubElementTypes.METHOD_REFERENCE);
   }
 
-  public PsiMethodReferenceExpressionImpl(@Nonnull ASTNode node) {
+  public PsiMethodReferenceExpressionImpl(ASTNode node) {
     super(node);
   }
 
@@ -255,7 +254,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   }
 
   @Override
-  public void processVariants(@Nonnull final PsiScopeProcessor processor) {
+  public void processVariants(final PsiScopeProcessor processor) {
     final FilterScopeProcessor proc = new FilterScopeProcessor(ElementClassFilter.METHOD, processor);
     PsiScopesUtil.resolveAndWalk(proc, this, null, true);
   }
@@ -278,7 +277,6 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
     }
   }
 
-  @Nonnull
   @Override
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     return PsiImplUtil.multiResolveImpl(this, incompleteCode, RESOLVER);
@@ -306,7 +304,6 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
     return null;
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText() {
     return getText();
@@ -335,7 +332,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   }
 
   @Override
-  public void accept(@Nonnull final PsiElementVisitor visitor) {
+  public void accept(final PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitMethodReferenceExpression(this);
     }
@@ -345,7 +342,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     CheckUtil.checkWritable(this);
 
     if (isReferenceTo(element) || !isPhysical()) {
@@ -464,7 +461,7 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
   }
 
   @Override
-  public PsiElement bindToElementViaStaticImport(@Nonnull final PsiClass qualifierClass) throws IncorrectOperationException {
+  public PsiElement bindToElementViaStaticImport(final PsiClass qualifierClass) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 
@@ -488,7 +485,6 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
     return this;
   }
 
-  @Nonnull
   @Override
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     final JavaResolveResult[] results = multiResolve(incompleteCode);
@@ -506,7 +502,6 @@ public class PsiMethodReferenceExpressionImpl extends JavaStubPsiElement<Functio
     return PsiTreeUtil.getChildOfType(this, PsiReferenceParameterList.class);
   }
 
-  @Nonnull
   @Override
   public PsiType[] getTypeParameters() {
     final PsiReferenceParameterList parameterList = getParameterList();

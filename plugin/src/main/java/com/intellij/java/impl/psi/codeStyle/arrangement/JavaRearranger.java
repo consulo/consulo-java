@@ -41,8 +41,7 @@ import consulo.language.psi.PsiElement;
 import consulo.ui.color.ColorValue;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
@@ -62,20 +61,14 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     ArrangementStandardSettingsAware, ArrangementColorsAware {
 
   // Type
-  @Nonnull
   private static final Set<ArrangementSettingsToken> SUPPORTED_TYPES = ContainerUtilRt.newLinkedHashSet(FIELD, CONSTRUCTOR, METHOD, CLASS,
       INTERFACE, ENUM);
   // Modifier
-  @Nonnull
   private static final Set<ArrangementSettingsToken> SUPPORTED_MODIFIERS = ContainerUtilRt.newLinkedHashSet(PUBLIC, PROTECTED, PACKAGE_PRIVATE,
       PRIVATE, STATIC, FINAL, ABSTRACT, SYNCHRONIZED, TRANSIENT, VOLATILE);
-  @Nonnull
   private static final List<ArrangementSettingsToken> SUPPORTED_ORDERS = ContainerUtilRt.newArrayList(KEEP, BY_NAME);
-  @Nonnull
   private static final ArrangementSettingsToken NO_TYPE = new ArrangementSettingsToken("NO_TYPE", "NO_TYPE");
-  @Nonnull
   private static final Map<ArrangementSettingsToken, Set<ArrangementSettingsToken>> MODIFIERS_BY_TYPE = ContainerUtilRt.newHashMap();
-  @Nonnull
   private static final Collection<Set<ArrangementSettingsToken>> MUTEXES = ContainerUtilRt.newArrayList();
 
   static {
@@ -139,14 +132,13 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
 
   private static final DefaultArrangementSettingsSerializer SETTINGS_SERIALIZER = new DefaultArrangementSettingsSerializer(DEFAULT_SETTINGS);
 
-  @Nonnull
-  private static Set<ArrangementSettingsToken> concat(@Nonnull Set<ArrangementSettingsToken> base, ArrangementSettingsToken... modifiers) {
+  private static Set<ArrangementSettingsToken> concat(Set<ArrangementSettingsToken> base, ArrangementSettingsToken... modifiers) {
     Set<ArrangementSettingsToken> result = ContainerUtilRt.newHashSet(base);
     Collections.addAll(result, modifiers);
     return result;
   }
 
-  private static void setupGettersAndSetters(@Nonnull JavaArrangementParseInfo info) {
+  private static void setupGettersAndSetters(JavaArrangementParseInfo info) {
     Collection<JavaArrangementPropertyInfo> properties = info.getProperties();
     for (JavaArrangementPropertyInfo propertyInfo : properties) {
       JavaElementArrangementEntry getter = propertyInfo.getGetter();
@@ -157,7 +149,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     }
   }
 
-  private static void setupUtilityMethods(@Nonnull JavaArrangementParseInfo info, @Nonnull ArrangementSettingsToken orderType) {
+  private static void setupUtilityMethods(JavaArrangementParseInfo info, ArrangementSettingsToken orderType) {
     if (DEPTH_FIRST.equals(orderType)) {
       for (ArrangementEntryDependencyInfo rootInfo : info.getMethodDependencyRoots()) {
         setupDepthFirstDependency(rootInfo);
@@ -171,7 +163,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     }
   }
 
-  private static void setupDepthFirstDependency(@Nonnull ArrangementEntryDependencyInfo info) {
+  private static void setupDepthFirstDependency(ArrangementEntryDependencyInfo info) {
     for (ArrangementEntryDependencyInfo dependencyInfo : info.getDependentEntriesInfos()) {
       setupDepthFirstDependency(dependencyInfo);
       JavaElementArrangementEntry dependentEntry = dependencyInfo.getAnchorEntry();
@@ -181,7 +173,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     }
   }
 
-  private static void setupBreadthFirstDependency(@Nonnull ArrangementEntryDependencyInfo info) {
+  private static void setupBreadthFirstDependency(ArrangementEntryDependencyInfo info) {
     Deque<ArrangementEntryDependencyInfo> toProcess = new ArrayDeque<ArrangementEntryDependencyInfo>();
     toProcess.add(info);
     JavaElementArrangementEntry prev = info.getAnchorEntry();
@@ -213,11 +205,11 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   @Nullable
   @Override
   public Pair<JavaElementArrangementEntry, List<JavaElementArrangementEntry>> parseWithNew(
-      @Nonnull PsiElement root,
+      PsiElement root,
       @Nullable Document document,
-      @Nonnull Collection<TextRange> ranges,
-      @Nonnull PsiElement element,
-      @Nonnull ArrangementSettings settings) {
+      Collection<TextRange> ranges,
+      PsiElement element,
+      ArrangementSettings settings) {
     JavaArrangementParseInfo existingEntriesInfo = new JavaArrangementParseInfo();
     root.accept(new JavaArrangementVisitor(existingEntriesInfo, document, ranges, settings));
 
@@ -229,13 +221,12 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     return Pair.create(newEntryInfo.getEntries().get(0), existingEntriesInfo.getEntries());
   }
 
-  @Nonnull
   @Override
   public List<JavaElementArrangementEntry> parse(
-      @Nonnull PsiElement root,
+      PsiElement root,
       @Nullable Document document,
-      @Nonnull Collection<TextRange> ranges,
-      @Nonnull ArrangementSettings settings) {
+      Collection<TextRange> ranges,
+      ArrangementSettings settings) {
     // Following entries are subject to arrangement: class, interface, field, method.
     JavaArrangementParseInfo parseInfo = new JavaArrangementParseInfo();
     root.accept(new JavaArrangementVisitor(parseInfo, document, ranges, settings));
@@ -253,7 +244,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   }
 
 
-  public void setupFieldInitializationDependencies(@Nonnull List<ArrangementEntryDependencyInfo> list) {
+  public void setupFieldInitializationDependencies(List<ArrangementEntryDependencyInfo> list) {
     for (ArrangementEntryDependencyInfo info : list) {
       JavaElementArrangementEntry anchorField = info.getAnchorEntry();
       for (ArrangementEntryDependencyInfo fieldUsedInInitialization : info.getDependentEntriesInfos()) {
@@ -265,10 +256,10 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
 
   @Override
   public int getBlankLines(
-      @Nonnull CodeStyleSettings settings,
+      CodeStyleSettings settings,
       @Nullable JavaElementArrangementEntry parent,
       @Nullable JavaElementArrangementEntry previous,
-      @Nonnull JavaElementArrangementEntry target) {
+      JavaElementArrangementEntry target) {
     if (previous == null) {
       return -1;
     }
@@ -293,13 +284,11 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     }
   }
 
-  @Nonnull
   @Override
   public ArrangementSettingsSerializer getSerializer() {
     return SETTINGS_SERIALIZER;
   }
 
-  @Nonnull
   @Override
   public StdArrangementSettings getDefaultSettings() {
     return DEFAULT_SETTINGS;
@@ -322,7 +311,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   }
 
   @Override
-  public boolean isEnabled(@Nonnull ArrangementSettingsToken token, @Nullable ArrangementMatchCondition current) {
+  public boolean isEnabled(ArrangementSettingsToken token, @Nullable ArrangementMatchCondition current) {
     if (SUPPORTED_TYPES.contains(token) || SUPPORTED_ORDERS.contains(token) || StdArrangementTokens.Regexp.NAME.equals(token)) {
       return true;
     }
@@ -337,19 +326,17 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
     return modifiers != null && modifiers.contains(token);
   }
 
-  @Nonnull
   @Override
-  public ArrangementEntryMatcher buildMatcher(@Nonnull ArrangementMatchCondition condition) throws IllegalArgumentException {
+  public ArrangementEntryMatcher buildMatcher(ArrangementMatchCondition condition) throws IllegalArgumentException {
     throw new IllegalArgumentException("Can't build a matcher for condition " + condition);
   }
 
-  @Nonnull
   @Override
   public Collection<Set<ArrangementSettingsToken>> getMutexes() {
     return MUTEXES;
   }
 
-  private static void and(@Nonnull List<StdArrangementMatchRule> matchRules, @Nonnull ArrangementSettingsToken... conditions) {
+  private static void and(List<StdArrangementMatchRule> matchRules, ArrangementSettingsToken... conditions) {
     if (conditions.length == 1) {
       matchRules.add(new StdArrangementMatchRule(new StdArrangementEntryMatcher(new ArrangementAtomMatchCondition(conditions[0],
           conditions[0]))));
@@ -365,7 +352,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
 
   @Nullable
   @Override
-  public TextAttributes getTextAttributes(@Nonnull EditorColorsScheme scheme, @Nonnull ArrangementSettingsToken token, boolean selected) {
+  public TextAttributes getTextAttributes(EditorColorsScheme scheme, ArrangementSettingsToken token, boolean selected) {
     if (selected) {
       TextAttributes attributes = new TextAttributes();
       attributes.setForegroundColor(scheme.getColor(EditorColors.SELECTION_FOREGROUND_COLOR));
@@ -380,7 +367,7 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
   }
 
   @Nullable
-  private static TextAttributes getAttributes(@Nonnull EditorColorsScheme scheme, @Nonnull TextAttributesKey... keys) {
+  private static TextAttributes getAttributes(EditorColorsScheme scheme, TextAttributesKey... keys) {
     TextAttributes result = null;
     for (TextAttributesKey key : keys) {
       TextAttributes attributes = scheme.getAttributes(key);
@@ -419,11 +406,10 @@ public class JavaRearranger implements Rearranger<JavaElementArrangementEntry>, 
 
   @Nullable
   @Override
-  public Color getBorderColor(@Nonnull EditorColorsScheme scheme, boolean selected) {
+  public Color getBorderColor(EditorColorsScheme scheme, boolean selected) {
     return null;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

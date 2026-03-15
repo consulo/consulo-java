@@ -52,8 +52,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -83,7 +82,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
   }
 
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext matchingContext, @Nonnull CompletionResultSet result) {
+  public void addCompletions(CompletionParameters parameters, ProcessingContext matchingContext, CompletionResultSet result) {
     ExpectedTypeInfo[] infos = JavaSmartCompletionContributor.getExpectedTypes(parameters);
 
     List<ExpectedTypeInfo> infoCollection = Arrays.asList(infos);
@@ -198,7 +197,7 @@ public class JavaInheritorsGetter implements CompletionProvider {
     return LookupElementDecorator.withInsertHandler(item, myConstructorInsertHandler);
   }
 
-  private static boolean areInferredTypesApplicable(@Nonnull PsiType[] types, PsiElement position) {
+  private static boolean areInferredTypesApplicable(PsiType[] types, PsiElement position) {
     PsiNewExpression newExpression = PsiTreeUtil.getParentOfType(position, PsiNewExpression.class, false);
     if (!PsiUtil.isLanguageLevel8OrHigher(position)) {
       return newExpression != null && PsiTypesUtil.getExpectedTypeByParent(newExpression) != null;

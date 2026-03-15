@@ -23,8 +23,7 @@ import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaFileStub;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.annotation.access.RequiredReadAction;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiJavaFileImpl extends PsiJavaFileBaseImpl
 {
@@ -48,7 +47,6 @@ public class PsiJavaFileImpl extends PsiJavaFileBaseImpl
 	}
 
 	@Override
-	@Nonnull
 	public FileType getFileType()
 	{
 		return JavaFileType.INSTANCE;

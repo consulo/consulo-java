@@ -36,8 +36,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 /**
  * @author anna
@@ -47,13 +45,11 @@ import org.jetbrains.annotations.Nls;
 public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalInspectionTool {
   public static final Logger LOG = Logger.getInstance(PossibleHeapPollutionVarargsInspection.class);
 
-  @Nonnull
   @Override
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Possible heap pollution from parameterized vararg type");
@@ -64,21 +60,18 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
     return true;
   }
 
-  @Nonnull
   @Override
   public String getShortName() {
     return "SafeVarargsDetector";
   }
 
-  @Nonnull
   @Override
   public String getID() {
     return "unchecked";
   }
 
-  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -104,14 +97,13 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
   }
 
   private static class AnnotateAsSafeVarargsQuickFix implements LocalQuickFix {
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return LocalizeValue.localizeTODO("Annotate as @SafeVarargs");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
       PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
         PsiMethod psiMethod = (PsiMethod) psiElement.getParent();
@@ -123,14 +115,13 @@ public class PossibleHeapPollutionVarargsInspection extends BaseJavaBatchLocalIn
   }
 
   private static class MakeFinalAndAnnotateQuickFix implements LocalQuickFix {
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return LocalizeValue.localizeTODO("Make final and annotate as @SafeVarargs");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
       PsiElement psiElement = descriptor.getPsiElement();
       if (psiElement instanceof PsiIdentifier) {
         PsiMethod psiMethod = (PsiMethod) psiElement.getParent();

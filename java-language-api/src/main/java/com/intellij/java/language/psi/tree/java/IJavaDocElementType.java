@@ -17,10 +17,9 @@ package com.intellij.java.language.psi.tree.java;
 
 import com.intellij.java.language.JavaLanguage;
 import consulo.language.ast.IElementType;
-import org.jetbrains.annotations.NonNls;
 
 public class IJavaDocElementType extends IElementType {
-  public IJavaDocElementType(@NonNls final String debugName) {
+  public IJavaDocElementType(final String debugName) {
     super(debugName, JavaLanguage.INSTANCE);
   }
 }

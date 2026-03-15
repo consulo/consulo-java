@@ -31,26 +31,24 @@ import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool implements BatchSuppressableTool
 {
 	@Override
-	public boolean queryExternalUsagesRequests(@Nonnull InspectionManager manager,
-											   @Nonnull GlobalInspectionContext globalContext,
-											   @Nonnull ProblemDescriptionsProcessor problemDescriptionsProcessor,
+	public boolean queryExternalUsagesRequests(InspectionManager manager,
+											   GlobalInspectionContext globalContext,
+											   ProblemDescriptionsProcessor problemDescriptionsProcessor,
 											   Object state)
 	{
 		return queryExternalUsagesRequests(globalContext.getRefManager(), globalContext.getExtension(GlobalJavaInspectionContext.CONTEXT), problemDescriptionsProcessor);
 	}
 
-	protected boolean queryExternalUsagesRequests(@Nonnull RefManager manager, @Nonnull GlobalJavaInspectionContext globalContext, @Nonnull ProblemDescriptionsProcessor processor)
+	protected boolean queryExternalUsagesRequests(RefManager manager, GlobalJavaInspectionContext globalContext, ProblemDescriptionsProcessor processor)
 	{
 		return false;
 	}
 
-	@Nonnull
 	@Override
 	public SuppressQuickFix[] getBatchSuppressActions(@Nullable PsiElement element)
 	{
@@ -58,12 +56,11 @@ public abstract class GlobalJavaBatchInspectionTool extends GlobalInspectionTool
 	}
 
 	@Override
-	public boolean isSuppressedFor(@Nonnull PsiElement element)
+	public boolean isSuppressedFor(PsiElement element)
 	{
 		return BatchSuppressManager.getInstance().isSuppressedFor(element, getShortName());
 	}
 
-	@Nonnull
 	@Override
 	public HighlightDisplayLevel getDefaultLevel()
 	{

@@ -30,9 +30,7 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -47,7 +45,6 @@ public class UnusedCatchParameterInspection extends BaseInspection {
      */
     public boolean m_ignoreTestCases = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unusedCatchParameterDisplayName();
@@ -68,7 +65,6 @@ public class UnusedCatchParameterInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         boolean namedIgnoreButUsed = (Boolean) infos[0];
         return namedIgnoreButUsed
@@ -94,7 +90,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
     private class UnusedCatchParameterVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             super.visitTryStatement(statement);
             if (m_ignoreTestCases && TestUtils.isInTestCode(statement)) {
                 return;
@@ -110,7 +106,7 @@ public class UnusedCatchParameterInspection extends BaseInspection {
             if (parameter == null) {
                 return;
             }
-            @NonNls String parameterName = parameter.getName();
+            String parameterName = parameter.getName();
             boolean namedIgnore = parameterName.contains("ignore");
             PsiCodeBlock block = section.getCatchBlock();
             if (block == null) {

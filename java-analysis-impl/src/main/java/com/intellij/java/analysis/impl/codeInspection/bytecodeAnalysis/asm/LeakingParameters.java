@@ -8,7 +8,6 @@ import consulo.internal.org.objectweb.asm.tree.analysis.Analyzer;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
 import consulo.internal.org.objectweb.asm.tree.analysis.Value;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author lambdamix
@@ -26,7 +25,6 @@ public class LeakingParameters
 		this.nullableParameters = nullableParameters;
 	}
 
-	@Nonnull
 	public static LeakingParameters build(String className, MethodNode methodNode, boolean jsr) throws AnalyzerException
 	{
 		Frame<ParamsValue>[] frames = jsr ? new Analyzer<>(new ParametersUsage(methodNode)).analyze(className, methodNode)
@@ -59,7 +57,6 @@ public class LeakingParameters
 		return new LeakingParameters(frames, notNullParameters, nullableParameters);
 	}
 
-	@Nonnull
 	public static LeakingParameters buildFast(String className, MethodNode methodNode, boolean jsr) throws AnalyzerException
 	{
 		IParametersUsage parametersUsage = new IParametersUsage(methodNode);

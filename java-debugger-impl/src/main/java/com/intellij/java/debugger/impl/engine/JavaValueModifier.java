@@ -45,7 +45,6 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /*
  * Class SetValueAction
@@ -100,10 +99,10 @@ public abstract class JavaValueModifier extends XValueModifier {
         );
     }
 
-    protected abstract void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback);
+    protected abstract void setValueImpl(String expression, XModificationCallback callback);
 
     @Override
-    public void setValue(@Nonnull String expression, @Nonnull XModificationCallback callback) {
+    public void setValue(String expression, XModificationCallback callback) {
         final NodeDescriptorImpl descriptor = myJavaValue.getDescriptor();
         if (!((ValueDescriptorImpl) descriptor).canSetValue()) {
             return;
@@ -189,7 +188,7 @@ public abstract class JavaValueModifier extends XValueModifier {
         }
     }
 
-    protected void set(@Nonnull final String expression, final XModificationCallback callback, final DebuggerContextImpl debuggerContext, final SetValueRunnable setValueRunnable) {
+    protected void set(final String expression, final XModificationCallback callback, final DebuggerContextImpl debuggerContext, final SetValueRunnable setValueRunnable) {
         final EvaluationContextImpl evaluationContext = myJavaValue.getEvaluationContext();
 
         SuspendContextCommandImpl askSetAction = new DebuggerContextCommandImpl(debuggerContext) {
@@ -199,7 +198,7 @@ public abstract class JavaValueModifier extends XValueModifier {
             }
 
             @Override
-            public void threadAction(@Nonnull SuspendContextImpl suspendContext) {
+            public void threadAction(SuspendContextImpl suspendContext) {
                 ExpressionEvaluator evaluator;
                 try {
                     Project project = evaluationContext.getProject();
@@ -235,7 +234,7 @@ public abstract class JavaValueModifier extends XValueModifier {
 
         new Task.Backgroundable(debuggerContext.getProject(), JavaDebuggerLocalize.titleEvaluating(), true) {
             @Override
-            public void run(@Nonnull ProgressIndicator progressIndicator) {
+            public void run(ProgressIndicator progressIndicator) {
                 evaluationContext.getDebugProcess().getManagerThread().invokeAndWait(askSetAction);
             }
 

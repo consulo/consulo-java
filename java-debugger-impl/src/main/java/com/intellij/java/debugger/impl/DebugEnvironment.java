@@ -20,8 +20,7 @@ import consulo.content.bundle.Sdk;
 import consulo.execution.ExecutionResult;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.process.ExecutionException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface DebugEnvironment {
     int LOCAL_START_TIMEOUT = 30000;
@@ -29,7 +28,6 @@ public interface DebugEnvironment {
     @Nullable
     ExecutionResult createExecutionResult() throws ExecutionException;
 
-    @Nonnull
     GlobalSearchScope getSearchScope();
 
     @Nullable

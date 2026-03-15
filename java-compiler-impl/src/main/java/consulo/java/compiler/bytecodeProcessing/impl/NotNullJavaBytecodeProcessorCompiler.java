@@ -36,7 +36,7 @@ import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.module.Module;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;

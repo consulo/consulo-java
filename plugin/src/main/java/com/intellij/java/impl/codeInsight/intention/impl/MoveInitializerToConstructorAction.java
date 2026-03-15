@@ -28,7 +28,6 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,20 +39,17 @@ import java.util.Collection;
 @IntentionMetaData(ignoreId = "java.MoveInitializerToConstructorAction", categories = {"Java", "Declaration"}, fileExtensions = "java")
 public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMethodAction {
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionMoveInitializerToConstructor();
   }
 
-  @Nonnull
   @Override
   protected Collection<String> getUnsuitableModifiers() {
     return Arrays.asList(PsiModifier.STATIC);
   }
 
-  @Nonnull
   @Override
-  protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
+  protected Collection<PsiMethod> getOrCreateMethods(Project project, Editor editor, PsiFile file, PsiClass aClass) {
     Collection<PsiMethod> constructors = Arrays.asList(aClass.getConstructors());
     if (constructors.isEmpty()) {
       return createConstructor(project, editor, file, aClass);
@@ -62,18 +58,16 @@ public class MoveInitializerToConstructorAction extends BaseMoveInitializerToMet
     return removeChainedConstructors(constructors);
   }
 
-  @Nonnull
-  private static Collection<PsiMethod> removeChainedConstructors(@Nonnull Collection<PsiMethod> constructors) {
+  private static Collection<PsiMethod> removeChainedConstructors(Collection<PsiMethod> constructors) {
     constructors.removeIf(constructor -> !JavaHighlightUtil.getChainedConstructors(constructor).isEmpty());
     return constructors;
   }
 
-  @Nonnull
   private static Collection<PsiMethod> createConstructor(
-    @Nonnull Project project,
-    @Nonnull Editor editor,
+    Project project,
+    Editor editor,
     PsiFile file,
-    @Nonnull PsiClass aClass
+    PsiClass aClass
   ) {
     IntentionAction addDefaultConstructorFix = QuickFixFactory.getInstance().createAddDefaultConstructorFix(aClass);
     int offset = editor.getCaretModel().getOffset();

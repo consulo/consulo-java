@@ -47,8 +47,7 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +59,7 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
     private static final Logger LOG = Logger.getInstance(RenameJavaVariableProcessor.class);
 
     @Override
-    public boolean canProcessElement(@Nonnull PsiElement element) {
+    public boolean canProcessElement(PsiElement element) {
         return element instanceof PsiVariable;
     }
 

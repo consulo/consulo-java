@@ -30,8 +30,7 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.psi.PsiUtilCore;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -42,11 +41,10 @@ import java.util.Set;
  * @author peter
  */
 public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement> {
-  @Nonnull
   private final Collection<ExpectedTypeInfo> myExpectedTypeInfos;
   private PsiElement myPosition;
 
-  public SmartCompletionDecorator(LookupElement item, @Nonnull Collection<ExpectedTypeInfo> expectedTypeInfos) {
+  public SmartCompletionDecorator(LookupElement item, Collection<ExpectedTypeInfo> expectedTypeInfos) {
     super(item);
     myExpectedTypeInfos = expectedTypeInfos;
   }
@@ -197,7 +195,7 @@ public class SmartCompletionDecorator extends TailTypeDecorator<LookupElement> {
     return false;
   }
 
-  public static PsiSubstitutor calculateMethodReturnTypeSubstitutor(@Nonnull PsiMethod method, @Nonnull PsiType expected) {
+  public static PsiSubstitutor calculateMethodReturnTypeSubstitutor(PsiMethod method, PsiType expected) {
     PsiType returnType = method.getReturnType();
     if (returnType == null) {
       return PsiSubstitutor.EMPTY;

@@ -17,14 +17,12 @@ package com.intellij.codeInsight.completion;
 
 import com.intellij.JavaTestUtil;
 import consulo.language.editor.CodeInsightSettings;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ik
  * Date: 21.01.2003
  */
 public abstract class DotCompletionTest extends LightCompletionTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath() + "/codeInsight/completion/dot/";

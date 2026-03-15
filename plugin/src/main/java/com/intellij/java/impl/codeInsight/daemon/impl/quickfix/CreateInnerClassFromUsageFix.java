@@ -35,7 +35,6 @@ import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -59,7 +58,7 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiJavaCodeReferenceElement element = getRefElement();
     assert element != null;
     String superClassName = getSuperClassName(element);
@@ -74,11 +73,10 @@ public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix im
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return super.isAvailable(project, editor, file) && getPossibleTargets(getRefElement()).length > 0;
   }
 
-  @Nonnull
   private static PsiClass[] getPossibleTargets(PsiJavaCodeReferenceElement element) {
     List<PsiClass> result = new ArrayList<PsiClass>();
     PsiElement run = element;

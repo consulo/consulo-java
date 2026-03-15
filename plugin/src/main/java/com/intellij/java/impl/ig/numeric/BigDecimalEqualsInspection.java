@@ -28,19 +28,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class BigDecimalEqualsInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.bigDecimalEqualsDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.bigDecimalEqualsProblemDescriptor().get();
   }
@@ -51,7 +48,6 @@ public class BigDecimalEqualsInspection extends BaseInspection {
   }
 
   private static class BigDecimalEqualsFix extends InspectionGadgetsFix {
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.bigDecimalEqualsReplaceQuickfix();
     }
@@ -83,7 +79,7 @@ public class BigDecimalEqualsInspection extends BaseInspection {
   private static class BigDecimalEqualsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!MethodCallUtils.isEqualsCall(expression)) {
         return;

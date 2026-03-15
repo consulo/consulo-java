@@ -19,7 +19,6 @@ import consulo.annotation.component.ActionImpl;
 import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.action.CodeInsightAction;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -32,7 +31,6 @@ public class SliceBackwardAction extends CodeInsightAction {
         super(JavaLocalize.actionSliceBackwardText(), JavaLocalize.actionSliceBackwardDescription());
     }
 
-    @Nonnull
     @Override
     protected CodeInsightActionHandler getHandler() {
         return myHandler;

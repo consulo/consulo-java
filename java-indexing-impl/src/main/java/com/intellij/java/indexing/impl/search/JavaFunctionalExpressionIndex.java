@@ -35,7 +35,6 @@ import consulo.language.psi.stub.FileContent;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -47,19 +46,16 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
   private static final String THIS_REF_NAME = "this";
   private static final String SUPER_REF_NAME = "super";
 
-  @Nonnull
   @Override
   public ID<String, Collection<IndexHolder>> getName() {
     return JAVA_FUNCTIONAL_EXPRESSION_INDEX_ID;
   }
 
-  @Nonnull
   @Override
   public DataIndexer<String, Collection<IndexHolder>, FileContent> getIndexer() {
     return new DataIndexer<String, Collection<IndexHolder>, FileContent>() {
-      @Nonnull
       @Override
-      public Map<String, Collection<IndexHolder>> map(@Nonnull FileContent inputData) {
+      public Map<String, Collection<IndexHolder>> map(FileContent inputData) {
         if (!JavaStubElementTypes.JAVA_FILE.shouldBuildStubFor(inputData.getFile())) {
           return Collections.emptyMap();
         }
@@ -133,18 +129,16 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
     };
   }
 
-  @Nonnull
   @Override
   public KeyDescriptor<String> getKeyDescriptor() {
     return EnumeratorStringDescriptor.INSTANCE;
   }
 
-  @Nonnull
   @Override
   public DataExternalizer<Collection<IndexHolder>> getValueExternalizer() {
     return new DataExternalizer<Collection<IndexHolder>>() {
       @Override
-      public void save(@Nonnull DataOutput out, Collection<IndexHolder> holders) throws IOException {
+      public void save(DataOutput out, Collection<IndexHolder> holders) throws IOException {
         DataInputOutputUtil.writeINT(out, holders.size());
         for (IndexHolder holder : holders) {
           DataInputOutputUtil.writeINT(out, holder.getLambdaParamsNumber());
@@ -154,7 +148,7 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
       }
 
       @Override
-      public Collection<IndexHolder> read(@Nonnull DataInput in) throws IOException {
+      public Collection<IndexHolder> read(DataInput in) throws IOException {
         int l = DataInputOutputUtil.readINT(in);
         final Collection<IndexHolder> holders = new HashSet<IndexHolder>(l);
         while (l-- > 0) {
@@ -165,7 +159,6 @@ public class JavaFunctionalExpressionIndex extends FileBasedIndexExtension<Strin
     };
   }
 
-  @Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return new DefaultFileTypeSpecificInputFilter(JavaFileType.INSTANCE);

@@ -24,8 +24,6 @@ import consulo.module.content.ProjectRootManager;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -40,8 +38,7 @@ public class FindClassUtil {
    * @param qualifiedName the full-qualified name of the class to find.
    * @return the modules that contain the given class in dependencies or libraries.
    */
-  @Nonnull
-  public static Collection<Module> findModulesWithClass(@Nonnull Project project, @NonNls @Nonnull String qualifiedName) {
+  public static Collection<Module> findModulesWithClass(Project project, String qualifiedName) {
     GlobalSearchScope allScope = GlobalSearchScope.allScope(project);
     JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
     PsiClass[] possibleClasses = facade.findClasses(qualifiedName, allScope);

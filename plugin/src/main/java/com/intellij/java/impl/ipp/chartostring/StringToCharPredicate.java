@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
-import org.jetbrains.annotations.NonNls;
 
 class StringToCharPredicate implements PsiElementPredicate {
 
@@ -117,7 +116,7 @@ class StringToCharPredicate implements PsiElementPredicate {
       String className = type.getCanonicalText();
       if (CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) ||
           CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
-        @NonNls String methodName =
+        String methodName =
           methodExpression.getReferenceName();
         if (!"append".equals(methodName) &&
             !"insert".equals(methodName)) {
@@ -127,7 +126,7 @@ class StringToCharPredicate implements PsiElementPredicate {
         return method != null;
       }
       else if (CommonClassNames.JAVA_LANG_STRING.equals(className)) {
-        @NonNls String methodName = methodExpression.getReferenceName();
+        String methodName = methodExpression.getReferenceName();
         if (!"indexOf".equals(methodName) &&
             !"lastIndexOf".equals(methodName) &&
             !"replace".equals(methodName)) {

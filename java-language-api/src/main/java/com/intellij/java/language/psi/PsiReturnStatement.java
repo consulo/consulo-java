@@ -16,8 +16,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java <code>return</code> statement.
@@ -28,7 +27,6 @@ public interface PsiReturnStatement extends PsiStatement
 
 	public static ArrayFactory<PsiReturnStatement> ARRAY_FACTORY = new ArrayFactory<PsiReturnStatement>()
 	{
-		@Nonnull
 		@Override
 		public PsiReturnStatement[] create(int count)
 		{

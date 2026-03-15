@@ -25,25 +25,22 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.RemoveUnnecessaryParenthesesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class RemoveUnnecessaryParenthesesIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.removeUnnecessaryParenthesesIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new UnnecessaryParenthesesPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         if (element instanceof PsiParameterList) {
             stripLambdaParameterParentheses((PsiParameterList) element);
             return;

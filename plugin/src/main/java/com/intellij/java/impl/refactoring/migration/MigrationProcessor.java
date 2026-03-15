@@ -37,7 +37,6 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +62,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    @Nonnull
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new MigrationUsagesViewDescriptor(myMigrationMap, false);
     }
 
@@ -87,11 +85,10 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    protected void refreshElements(@Nonnull PsiElement[] elements) {
+    protected void refreshElements(PsiElement[] elements) {
         myPsiMigration = startMigration(myProject);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -134,7 +131,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         if (refUsages.get().length == 0) {
             Messages.showInfoMessage(
                 myProject,
@@ -148,7 +145,7 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         finishFindMigration();
         PsiMigration psiMigration = PsiMigrationManager.getInstance(myProject).startMigration();
         LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());
@@ -194,7 +191,6 @@ public class MigrationProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    @Nonnull
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.migrationTitle();
     }

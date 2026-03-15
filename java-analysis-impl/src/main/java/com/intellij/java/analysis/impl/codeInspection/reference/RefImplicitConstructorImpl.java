@@ -23,8 +23,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.application.ReadAction;
 import consulo.java.analysis.impl.localize.JavaInspectionsLocalize;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author max
@@ -46,7 +45,6 @@ public class RefImplicitConstructorImpl extends RefMethodImpl implements RefImpl
         return ((RefClassImpl) getOwnerClass()).isSuspicious();
     }
 
-    @Nonnull
     @Override
     public String getName() {
         return JavaInspectionsLocalize.inspectionReferenceImplicitConstructorName(getOwnerClass().getName()).get();

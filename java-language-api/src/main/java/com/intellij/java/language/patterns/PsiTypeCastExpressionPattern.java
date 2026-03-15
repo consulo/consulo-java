@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiTypeCastExpression;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
@@ -33,7 +32,7 @@ public class PsiTypeCastExpressionPattern extends PsiExpressionPattern<PsiTypeCa
   public PsiTypeCastExpressionPattern withOperand(final ElementPattern<? extends PsiExpression> operand) {
     return with(new PatternCondition<PsiTypeCastExpression>("withOperand") {
       @Override
-      public boolean accepts(@Nonnull PsiTypeCastExpression psiTypeCastExpression, ProcessingContext context) {
+      public boolean accepts(PsiTypeCastExpression psiTypeCastExpression, ProcessingContext context) {
         return operand.accepts(psiTypeCastExpression.getOperand(), context);
       }
     });

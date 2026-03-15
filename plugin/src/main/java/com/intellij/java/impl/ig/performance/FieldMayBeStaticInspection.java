@@ -26,12 +26,10 @@ import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FieldMayBeStaticInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.fieldMayBeStaticDisplayName();
   }
@@ -40,7 +38,6 @@ public class FieldMayBeStaticInspection extends BaseInspection {
     return new FieldMayBeStaticVisitor();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.fieldMayBeStaticProblemDescriptor().get();
   }
@@ -52,7 +49,7 @@ public class FieldMayBeStaticInspection extends BaseInspection {
   private static class FieldMayBeStaticVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       if (field.hasModifierProperty(PsiModifier.STATIC)) {
         return;
       }

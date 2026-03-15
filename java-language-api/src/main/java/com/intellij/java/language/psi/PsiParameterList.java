@@ -17,8 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the list of parameters of a Java method.
@@ -31,7 +30,6 @@ public interface PsiParameterList extends PsiElement {
    *
    * @return the array of parameters.
    */
-  @Nonnull
   PsiParameter[] getParameters();
 
   /**

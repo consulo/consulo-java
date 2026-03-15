@@ -22,8 +22,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author max
@@ -39,13 +38,13 @@ public class CommentFormatter {
    * @deprecated Use {@link ##CommentFormatter(PsiFile)} instead.
    */
   @Deprecated
-  public CommentFormatter(@Nonnull Project project) {
+  public CommentFormatter(Project project) {
     mySettings = CodeStyle.getSettings(project);
     myParser = new JDParser(mySettings);
     myProject = project;
   }
 
-  public CommentFormatter(@Nonnull PsiFile file) {
+  public CommentFormatter(PsiFile file) {
     mySettings = CodeStyle.getSettings(file);
     myParser = new JDParser(mySettings);
     myProject = file.getProject();
@@ -113,7 +112,7 @@ public class CommentFormatter {
     return text.substring(0, idx);
   }
 
-  private int getIndentSpecial(@Nonnull PsiElement element) {
+  private int getIndentSpecial(PsiElement element) {
     if (!(element instanceof PsiMember)) {
       return 0;
     }
@@ -137,8 +136,7 @@ public class CommentFormatter {
   /**
    * Used while formatting Javadoc. We need precise element indentation after formatting to wrap comments correctly.
    */
-  @Nonnull
-  public String getIndent(@Nonnull PsiElement element) {
+  public String getIndent(PsiElement element) {
     return StringUtil.repeatSymbol(' ', getIndentSpecial(element));
   }
 }

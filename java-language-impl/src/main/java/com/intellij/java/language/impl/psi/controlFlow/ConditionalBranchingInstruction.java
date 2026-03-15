@@ -17,8 +17,7 @@ package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.logging.Logger;
 import com.intellij.java.language.psi.PsiExpression;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Author: msk
@@ -28,7 +27,7 @@ public abstract class ConditionalBranchingInstruction extends BranchingInstructi
 	protected static final Logger LOG = Logger.getInstance(ConditionalGoToInstruction.class);
 	public final PsiExpression expression;
 
-	ConditionalBranchingInstruction(int offset, @Nullable PsiExpression expression, @Nonnull Role role)
+	ConditionalBranchingInstruction(int offset, @Nullable PsiExpression expression, Role role)
 	{
 		super(offset, role);
 		this.expression = expression;
@@ -56,7 +55,7 @@ public abstract class ConditionalBranchingInstruction extends BranchingInstructi
 	}
 
 	@Override
-	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
 	{
 		visitor.visitConditionalBranchingInstruction(this, offset, nextOffset);
 	}

@@ -26,9 +26,8 @@ import consulo.internal.com.sun.jdi.Method;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.Range;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -111,7 +110,7 @@ public class LambdaMethodFilter implements BreakpointStepMethodFilter
 		return !StringUtil.isEmpty(name) && name.startsWith(LAMBDA_METHOD_PREFIX);
 	}
 
-	public static int getLambdaOrdinal(@Nonnull String name)
+	public static int getLambdaOrdinal(String name)
 	{
 		int pos = name.lastIndexOf('$');
 		if(pos > -1)

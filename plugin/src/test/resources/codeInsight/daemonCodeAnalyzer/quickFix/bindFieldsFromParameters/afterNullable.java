@@ -1,6 +1,6 @@
 // "Bind Constructor Parameters to Fields" "true"
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class TestBefore {
 

@@ -27,18 +27,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassWithoutConstructorInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classWithoutConstructorDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.classWithoutConstructorProblemDescriptor().get();
     }
@@ -49,7 +46,6 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
     }
 
     private static class ClassWithoutConstructorFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.classWithoutConstructorCreateQuickfix();
         }
@@ -94,7 +90,7 @@ public class ClassWithoutConstructorInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so it doesn't drill down
             if (aClass.isInterface() || aClass.isEnum() ||
                 aClass.isAnnotationType() /*|| JspPsiUtil.isInJspFile(aClass)*/) {

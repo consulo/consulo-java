@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import consulo.ui.ex.action.IdeActions;
 import com.intellij.java.language.LanguageLevel;
@@ -277,7 +276,6 @@ public abstract class CompleteStatementTest extends EditorActionTestCase {
     return IdeActions.ACTION_EDITOR_COMPLETE_STATEMENT;
   }
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

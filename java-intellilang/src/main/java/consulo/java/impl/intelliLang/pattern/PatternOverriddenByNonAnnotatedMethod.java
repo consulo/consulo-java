@@ -32,9 +32,7 @@ import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -47,7 +45,6 @@ public class PatternOverriddenByNonAnnotatedMethod extends LocalInspectionTool {
     return JavaLanguage.INSTANCE;
   }
 
-  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
@@ -57,18 +54,15 @@ public class PatternOverriddenByNonAnnotatedMethod extends LocalInspectionTool {
     return true;
   }
 
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return PatternValidator.PATTERN_VALIDATION;
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Non-annotated Method overrides @Pattern Method");
   }
 
-  @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final Pair<String, ? extends Set<String>> annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getPatternAnnotationPair();
 
@@ -93,8 +87,6 @@ public class PatternOverriddenByNonAnnotatedMethod extends LocalInspectionTool {
     };
   }
 
-  @Nonnull
-  @NonNls
   public String getShortName() {
     return "PatternOverriddenByNonAnnotatedMethod";
   }

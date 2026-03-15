@@ -25,8 +25,7 @@ import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author max
@@ -36,7 +35,7 @@ public class JavaSourceFilterScope extends DelegatingGlobalSearchScope {
   private final ProjectFileIndex myIndex;
   private final boolean myIncludeVersions;
 
-  public JavaSourceFilterScope(@Nonnull ProjectAwareSearchScope delegate) {
+  public JavaSourceFilterScope(ProjectAwareSearchScope delegate) {
     this((GlobalSearchScope) delegate, false);
   }
 
@@ -45,7 +44,7 @@ public class JavaSourceFilterScope extends DelegatingGlobalSearchScope {
    * (i.e. *.class files located under META-INF/versions/ directory).
    * Setting {@code includeVersions} parameter to {@code true} allows such files to pass the filter.
    */
-  public JavaSourceFilterScope(@Nonnull GlobalSearchScope delegate, boolean includeVersions) {
+  public JavaSourceFilterScope(GlobalSearchScope delegate, boolean includeVersions) {
     super(delegate);
     Project project = getProject();
     myIndex = project == null ? null : ProjectRootManager.getInstance(project).getFileIndex();
@@ -53,7 +52,7 @@ public class JavaSourceFilterScope extends DelegatingGlobalSearchScope {
   }
 
   @Override
-  public boolean contains(@Nonnull VirtualFile file) {
+  public boolean contains(VirtualFile file) {
     if (!super.contains(file)) {
       return false;
     }

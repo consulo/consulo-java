@@ -17,7 +17,6 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import java.io.IOException;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.LighterAST;
@@ -43,19 +42,18 @@ public class JavaTypeParameterElementType extends JavaStubElementType<PsiTypePar
     super("TYPE_PARAMETER");
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new TypeParameterElement();
   }
 
   @Override
-  public PsiTypeParameter createPsi(@Nonnull final PsiTypeParameterStub stub) {
+  public PsiTypeParameter createPsi(final PsiTypeParameterStub stub) {
     return getPsiFactory(stub).createTypeParameter(stub);
   }
 
   @Override
-  public PsiTypeParameter createPsi(@Nonnull final ASTNode node) {
+  public PsiTypeParameter createPsi(final ASTNode node) {
     return new PsiTypeParameterImpl(node);
   }
 
@@ -67,19 +65,18 @@ public class JavaTypeParameterElementType extends JavaStubElementType<PsiTypePar
   }
 
   @Override
-  public void serialize(@Nonnull final PsiTypeParameterStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(final PsiTypeParameterStub stub, final StubOutputStream dataStream) throws IOException {
     String name = stub.getName();
     dataStream.writeName(name);
   }
 
-  @Nonnull
   @Override
-  public PsiTypeParameterStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiTypeParameterStub deserialize(final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     String name = StringRef.toString(dataStream.readName());
     return new PsiTypeParameterStubImpl(parentStub, name);
   }
 
   @Override
-  public void indexStub(@Nonnull final PsiTypeParameterStub stub, @Nonnull final IndexSink sink) {
+  public void indexStub(final PsiTypeParameterStub stub, final IndexSink sink) {
   }
 }

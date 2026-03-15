@@ -23,18 +23,14 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.waitWhileHoldingTwoLocksDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.waitWhileHoldingTwoLocksProblemDescriptor().get();
   }
@@ -67,14 +63,14 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-          @Nonnull PsiMethodCallExpression expression) {
+          PsiMethodCallExpression expression) {
           super.visitMethodCallExpression(expression);
           if (m_numLocksHeld < 2) {
             return;
           }
           PsiReferenceExpression methodExpression =
             expression.getMethodExpression();
-          @NonNls String methodName =
+          String methodName =
             methodExpression.getReferenceName();
           if (!HardcodedMethodConstants.WAIT.equals(methodName)) {
             return;
@@ -106,7 +102,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
           if (method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
             m_numLocksHeld++;
           }
@@ -118,7 +114,7 @@ public class WaitWhileHoldingTwoLocksInspection extends BaseInspection {
 
         @Override
         public void visitSynchronizedStatement(
-          @Nonnull PsiSynchronizedStatement synchronizedStatement) {
+          PsiSynchronizedStatement synchronizedStatement) {
           m_numLocksHeld++;
           super.visitSynchronizedStatement(synchronizedStatement);
           m_numLocksHeld--;

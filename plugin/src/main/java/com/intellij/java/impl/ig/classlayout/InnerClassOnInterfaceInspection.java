@@ -26,7 +26,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -38,14 +37,12 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
      */
     public boolean m_ignoreInnerInterfaces = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "InnerClassOfInterface";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.innerClassOnInterfaceDisplayName();
@@ -56,7 +53,6 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
         return new SingleCheckboxOptionsPanel(message.get(), this, "m_ignoreInnerInterfaces");
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiClass parentInterface = (PsiClass) infos[0];
         String interfaceName = parentInterface.getName();
@@ -78,7 +74,7 @@ public class InnerClassOnInterfaceInspection extends BaseInspection {
     private class InnerClassOnInterfaceVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so that it doesn't drill down to inner classes
             if (!aClass.isInterface() || aClass.isAnnotationType()) {
                 return;

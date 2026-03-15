@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ClassUtil;
-import org.jetbrains.annotations.NonNls;
 
 class ConvertIntegerToHexPredicate implements PsiElementPredicate {
 
@@ -32,7 +31,7 @@ class ConvertIntegerToHexPredicate implements PsiElementPredicate {
     PsiLiteralExpression expression = (PsiLiteralExpression)element;
     PsiType type = expression.getType();
     if (PsiType.INT.equals(type) || PsiType.LONG.equals(type)) {
-      @NonNls String text = expression.getText();
+      String text = expression.getText();
       return !(text.startsWith("0x") || text.startsWith("0X"));
     }
     if (PsiType.DOUBLE.equals(type) || PsiType.FLOAT.equals(type)) {
@@ -42,7 +41,7 @@ class ConvertIntegerToHexPredicate implements PsiElementPredicate {
       if (!PsiUtil.isLanguageLevel5OrHigher(expression)) {
         return false;
       }
-      @NonNls String text = expression.getText();
+      String text = expression.getText();
       if (text == null) {
         return false;
       }

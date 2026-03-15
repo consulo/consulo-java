@@ -21,7 +21,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -57,7 +56,7 @@ public class ClassCellRenderer extends ListCellRendererWrapper<PsiClass>
 		}
 	}
 
-	private static String getClassText(@Nonnull PsiClass aClass)
+	private static String getClassText(PsiClass aClass)
 	{
 		String qualifiedName = aClass.getQualifiedName();
 		if(qualifiedName != null)

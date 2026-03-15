@@ -54,8 +54,7 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +73,6 @@ public class AlternativeSourceNotificationProvider implements EditorNotification
         myProject = project;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return "java-debugger-alternative-source";
@@ -84,9 +82,9 @@ public class AlternativeSourceNotificationProvider implements EditorNotification
     @Nullable
     @Override
     public EditorNotificationBuilder buildNotification(
-        @Nonnull VirtualFile file,
-        @Nonnull FileEditor fileEditor,
-        @Nonnull Supplier<EditorNotificationBuilder> builderFactory
+        VirtualFile file,
+        FileEditor fileEditor,
+        Supplier<EditorNotificationBuilder> builderFactory
     ) {
         if (!DebuggerSettings.getInstance().SHOW_ALTERNATIVE_SOURCE) {
             return null;
@@ -181,7 +179,6 @@ public class AlternativeSourceNotificationProvider implements EditorNotification
                     return ModuleManager.getInstance(project).getModuleIcon(module);
                 }
 
-                @Nonnull
                 @Override
                 public String getTextFor(PsiClass value) {
                     Module module = ModuleUtilCore.findModuleForPsiElement(value);

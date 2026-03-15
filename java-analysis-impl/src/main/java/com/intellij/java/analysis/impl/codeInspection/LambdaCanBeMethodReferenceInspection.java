@@ -45,10 +45,8 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Condition;
 import consulo.util.lang.function.Conditions;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.Map;
 
@@ -59,20 +57,16 @@ import java.util.Map;
 public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInspectionTool {
   private static final Logger LOG = Logger.getInstance(LambdaCanBeMethodReferenceInspection.class);
 
-  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getGroupDisplayName() {
     return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
   }
 
-  @Nls
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Lambda can be replaced with method reference");
@@ -83,15 +77,13 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     return true;
   }
 
-  @Nonnull
   @Override
   public String getShortName() {
     return "Convert2MethodRef";
   }
 
-  @Nonnull
   @Override
-  public PsiElementVisitor buildVisitorImpl(@Nonnull final ProblemsHolder holder,
+  public PsiElementVisitor buildVisitorImpl(final ProblemsHolder holder,
                                             boolean isOnTheFly,
                                             LocalInspectionToolSession session,
                                             Object state) {
@@ -305,8 +297,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     }
   }
 
-  @Nonnull
-  public static PsiExpression replaceLambdaWithMethodReference(@Nonnull PsiLambdaExpression lambda) {
+  public static PsiExpression replaceLambdaWithMethodReference(PsiLambdaExpression lambda) {
     PsiElement body = LambdaUtil.extractSingleExpressionFromBody(lambda.getBody());
     final PsiExpression candidate = canBeMethodReferenceProblem(body, lambda.getParameterList().getParameters(), lambda.getFunctionalInterfaceType(), lambda);
     return tryConvertToMethodReference(lambda, candidate);
@@ -330,7 +321,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
   }
 
   @Nullable
-  private static PsiMethod getNonAmbiguousReceiver(PsiVariable[] parameters, @Nonnull PsiMethod psiMethod) {
+  private static PsiMethod getNonAmbiguousReceiver(PsiVariable[] parameters, PsiMethod psiMethod) {
     String methodName = psiMethod.getName();
     PsiClass containingClass = psiMethod.getContainingClass();
     if (containingClass == null) {
@@ -367,7 +358,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
         TypeConversionUtil.areTypesConvertible(nonReceiverCandidateParams[0].getType(), receiverType);
   }
 
-  private static boolean isSoleParameter(@Nonnull PsiVariable[] parameters, @Nullable PsiExpression expression) {
+  private static boolean isSoleParameter(PsiVariable[] parameters, @Nullable PsiExpression expression) {
     return parameters.length == 1 &&
         expression instanceof PsiReferenceExpression &&
         parameters[0] == ((PsiReferenceExpression) expression).resolve();
@@ -505,7 +496,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
   }
 
   @Nullable
-  private static String composeReceiverQualifierText(PsiVariable[] parameters, PsiMethod psiMethod, PsiClass containingClass, @Nonnull PsiExpression qualifierExpression) {
+  private static String composeReceiverQualifierText(PsiVariable[] parameters, PsiMethod psiMethod, PsiClass containingClass, PsiExpression qualifierExpression) {
     if (psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
       return null;
     }
@@ -555,14 +546,13 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
       mySuffix = suffix;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return LocalizeValue.localizeTODO("Replace lambda with method reference" + mySuffix);
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
       PsiElement element = descriptor.getPsiElement();
       if (element instanceof PsiLambdaExpression) {
         element = LambdaUtil.extractSingleExpressionFromBody(((PsiLambdaExpression) element).getBody());
@@ -575,8 +565,7 @@ public class LambdaCanBeMethodReferenceInspection extends BaseJavaBatchLocalInsp
     }
   }
 
-  @Nonnull
-  static PsiExpression tryConvertToMethodReference(@Nonnull PsiLambdaExpression lambda, PsiElement body) {
+  static PsiExpression tryConvertToMethodReference(PsiLambdaExpression lambda, PsiElement body) {
     Project project = lambda.getProject();
     PsiType functionalInterfaceType = lambda.getFunctionalInterfaceType();
     if (functionalInterfaceType == null || !functionalInterfaceType.isValid()) {

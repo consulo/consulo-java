@@ -41,7 +41,6 @@ import consulo.usage.rule.UsageGroupingRule;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.status.FileStatus;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -49,7 +48,7 @@ import jakarta.annotation.Nonnull;
 public class ClassGroupingRule implements UsageGroupingRule {
   @RequiredReadAction
   @Override
-  public UsageGroup groupUsage(@Nonnull Usage usage) {
+  public UsageGroup groupUsage(Usage usage) {
     if (!(usage instanceof PsiElementUsage)) {
       return null;
     }
@@ -113,7 +112,7 @@ public class ClassGroupingRule implements UsageGroupingRule {
     private final Image myIcon;
 
     @RequiredReadAction
-    public ClassUsageGroup(@Nonnull PsiClass aClass) {
+    public ClassUsageGroup(PsiClass aClass) {
       myQName = aClass.getQualifiedName();
       myText = createText(aClass);
       myClassPointer = SmartPointerManager.getInstance(aClass.getProject()).createSmartPsiElementPointer(aClass);
@@ -141,7 +140,6 @@ public class ClassGroupingRule implements UsageGroupingRule {
     }
 
     @Override
-    @Nonnull
     public String getText(UsageView view) {
       return myText;
     }

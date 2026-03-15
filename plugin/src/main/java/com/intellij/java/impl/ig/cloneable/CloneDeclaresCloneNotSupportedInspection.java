@@ -33,26 +33,22 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "CloneDoesntDeclareCloneNotSupportedException";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionProblemDescriptor().get();
     }
@@ -68,7 +64,6 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
     }
 
     private static class CloneDeclaresCloneNotSupportedInspectionFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.cloneDoesntDeclareClonenotsupportedexceptionDeclareQuickfix();
@@ -90,7 +85,7 @@ public class CloneDeclaresCloneNotSupportedInspection extends BaseInspection {
     private static class CloneDeclaresCloneNotSupportedExceptionVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (!CloneUtils.isClone(method)) {
                 return;
             }

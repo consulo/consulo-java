@@ -1,6 +1,5 @@
 package com.intellij.java.impl.codeInspection.inheritance.search;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 
@@ -9,11 +8,10 @@ import com.intellij.java.language.psi.PsiClass;
  */
 public class InheritorsStatisticsSearchResult {
 
-  @Nonnull
   private final PsiClass myClass;
   private final int myPercent;
 
-  InheritorsStatisticsSearchResult(@Nonnull PsiClass aClass, int percent) {
+  InheritorsStatisticsSearchResult(PsiClass aClass, int percent) {
     myClass = aClass;
     myPercent = percent;
   }

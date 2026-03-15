@@ -79,8 +79,7 @@ import consulo.util.io.ClassPathUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -116,24 +115,19 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         super(environment);
     }
 
-    @Nonnull
     protected abstract String getFrameworkName();
 
-    @Nonnull
     protected abstract String getFrameworkId();
 
     protected abstract void passTempFile(ParametersList parametersList, String tempFilePath);
 
-    @Nonnull
     protected abstract T getConfiguration();
 
     @Nullable
     protected abstract TestSearchScope getScope();
 
-    @Nonnull
     protected abstract String getForkMode();
 
-    @Nonnull
     protected abstract ProcessHandler createHandler(Executor executor) throws ExecutionException;
 
     public SearchForTestsTask createSearchingForTestsTask() {
@@ -158,9 +152,8 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         return commandLine;
     }
 
-    @Nonnull
     @Override
-    public ExecutionResult execute(@Nonnull Executor executor, @Nonnull ProgramRunner runner) throws ExecutionException {
+    public ExecutionResult execute(Executor executor, ProgramRunner runner) throws ExecutionException {
         RunnerSettings runnerSettings = getRunnerSettings();
 
         SMTRunnerConsoleProperties testConsoleProperties = getConfiguration().createTestConsoleProperties(executor);
@@ -184,7 +177,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         }
         handler.addProcessListener(new ProcessAdapter() {
             @Override
-            public void startNotified(@Nonnull ProcessEvent event) {
+            public void startNotified(ProcessEvent event) {
                 if (getConfiguration().isSaveOutputToFile()) {
                     File file = OutputFileUtil.getOutputFile(getConfiguration());
                     root.setOutputFilePath(file != null ? file.getAbsolutePath() : null);
@@ -192,7 +185,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
             }
 
             @Override
-            public void processTerminated(@Nonnull ProcessEvent event) {
+            public void processTerminated(ProcessEvent event) {
                 Runnable runnable = () ->
                 {
                     root.flushOutputFile();

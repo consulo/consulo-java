@@ -18,8 +18,7 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -53,9 +52,9 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     @Nullable
     @Override
     public String getDirCoverageInformationString(
-        @Nonnull PsiDirectory directory,
-        @Nonnull CoverageSuitesBundle currentSuite,
-        @Nonnull CoverageDataManager coverageDataManager
+        PsiDirectory directory,
+        CoverageSuitesBundle currentSuite,
+        CoverageDataManager coverageDataManager
     ) {
         PsiJavaPackage psiPackage = JavaDirectoryService.getInstance().getPackage(directory);
         if (psiPackage == null) {
@@ -78,9 +77,9 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     @Nullable
     @Override
     public String getFileCoverageInformationString(
-        @Nonnull PsiFile file,
-        @Nonnull CoverageSuitesBundle currentSuite,
-        @Nonnull CoverageDataManager manager
+        PsiFile file,
+        CoverageSuitesBundle currentSuite,
+        CoverageDataManager manager
     ) {
         // N/A here we work with java classes
         return null;
@@ -98,7 +97,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     }
 
     @Override
-    protected Runnable createRenewRequest(@Nonnull CoverageSuitesBundle suite, @Nonnull CoverageDataManager dataManager) {
+    protected Runnable createRenewRequest(CoverageSuitesBundle suite, CoverageDataManager dataManager) {
         Project project = getProject();
         List<PsiJavaPackage> packages = new ArrayList<>();
         List<PsiClass> classes = new ArrayList<>();
@@ -200,7 +199,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     public String getPackageCoverageInformationString(
         PsiPackage psiPackage,
         @Nullable Module module,
-        @Nonnull CoverageDataManager coverageDataManager
+        CoverageDataManager coverageDataManager
     ) {
         return getPackageCoverageInformationString(psiPackage, module, coverageDataManager, false);
     }
@@ -216,7 +215,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     public String getPackageCoverageInformationString(
         PsiPackage psiPackage,
         @Nullable Module module,
-        @Nonnull CoverageDataManager coverageDataManager,
+        CoverageDataManager coverageDataManager,
         boolean flatten
     ) {
         if (psiPackage == null) {
@@ -240,12 +239,12 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
         return getCoverageInformationString(info, subCoverageActive);
     }
 
-    public PackageAnnotator.PackageCoverageInfo getPackageCoverageInfo(@Nonnull PsiPackage psiPackage, boolean flattenPackages) {
+    public PackageAnnotator.PackageCoverageInfo getPackageCoverageInfo(PsiPackage psiPackage, boolean flattenPackages) {
         String qualifiedName = psiPackage.getQualifiedName();
         return flattenPackages ? myFlattenPackageCoverageInfos.get(qualifiedName) : myPackageCoverageInfos.get(qualifiedName);
     }
 
-    public String getPackageClassPercentage(@Nonnull PsiPackage psiPackage, boolean flatten) {
+    public String getPackageClassPercentage(PsiPackage psiPackage, boolean flatten) {
         PackageAnnotator.PackageCoverageInfo packageCoverageInfo = getPackageCoverageInfo(psiPackage, flatten);
         if (packageCoverageInfo == null) {
             return null;
@@ -337,8 +336,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
             (int) ((double) (info.fullyCoveredLineCount + info.partiallyCoveredLineCount) / info.totalLineCount * 100) + "% lines covered";
     }
 
-    @Nullable
-    public PackageAnnotator.ClassCoverageInfo getClassCoverageInfo(String classFQName) {
+    public PackageAnnotator.@Nullable ClassCoverageInfo getClassCoverageInfo(String classFQName) {
         return myClassCoverageInfos.get(classFQName);
     }
 }

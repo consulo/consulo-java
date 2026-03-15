@@ -26,26 +26,22 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertToNestedIfIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class ExpandBooleanIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.expandBooleanIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ExpandBooleanPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiStatement containingStatement = PsiTreeUtil.getParentOfType(element, PsiStatement.class);
         if (containingStatement == null) {
             return;
@@ -72,7 +68,7 @@ public class ExpandBooleanIntention extends Intention {
             else {
                 conditionText = rhsText;
             }
-            @NonNls String statement = "if(" + conditionText + ") " + lhsText + " = true; else " + lhsText + " = false;";
+            String statement = "if(" + conditionText + ") " + lhsText + " = true; else " + lhsText + " = false;";
             replaceStatement(statement, containingStatement);
         }
         else if (ExpandBooleanPredicate.isBooleanReturn(containingStatement)) {
@@ -85,7 +81,7 @@ public class ExpandBooleanIntention extends Intention {
                 return;
             }
             String valueText = returnValue.getText();
-            @NonNls String statement = "if(" + valueText + ") return true; else return false;";
+            String statement = "if(" + valueText + ") return true; else return false;";
             replaceStatement(statement, containingStatement);
         }
         else if (ExpandBooleanPredicate.isBooleanDeclaration(containingStatement)) {
@@ -100,7 +96,7 @@ public class ExpandBooleanIntention extends Intention {
                 return;
             }
             String name = variable.getName();
-            @NonNls String newStatementText = "if(" + initializer.getText() + ") " + name + "=true; else " + name + "=false;";
+            String newStatementText = "if(" + initializer.getText() + ") " + name + "=true; else " + name + "=false;";
             PsiElementFactory factory = JavaPsiFacade.getElementFactory(containingStatement.getProject());
             PsiStatement newStatement = factory.createStatementFromText(newStatementText, containingStatement);
             declarationStatement.getParent().addAfter(newStatement, declarationStatement);

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.engine.events;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.SuspendManager;
 import com.intellij.java.debugger.impl.engine.SuspendManagerUtil;
@@ -23,7 +22,7 @@ import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import consulo.logging.Logger;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class DebuggerContextCommandImpl extends SuspendContextCommandImpl
 {
@@ -33,12 +32,12 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 	private final ThreadReferenceProxyImpl myCustomThread; // thread to perform command in
 	private SuspendContextImpl myCustomSuspendContext;
 
-	protected DebuggerContextCommandImpl(@Nonnull DebuggerContextImpl debuggerContext)
+	protected DebuggerContextCommandImpl(DebuggerContextImpl debuggerContext)
 	{
 		this(debuggerContext, null);
 	}
 
-	protected DebuggerContextCommandImpl(@Nonnull DebuggerContextImpl debuggerContext, @Nullable ThreadReferenceProxyImpl customThread)
+	protected DebuggerContextCommandImpl(DebuggerContextImpl debuggerContext, @Nullable ThreadReferenceProxyImpl customThread)
 	{
 		super(debuggerContext.getSuspendContext());
 		myDebuggerContext = debuggerContext;
@@ -72,7 +71,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 	}
 
 	@Override
-	public final void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception
+	public final void contextAction(SuspendContextImpl suspendContext) throws Exception
 	{
 		SuspendManager suspendManager = myDebuggerContext.getDebugProcess().getSuspendManager();
 		boolean isSuspendedByContext;
@@ -118,7 +117,7 @@ public abstract class DebuggerContextCommandImpl extends SuspendContextCommandIm
 		throw new AbstractMethodError();
 	}
 
-	public void threadAction(@Nonnull SuspendContextImpl suspendContext)
+	public void threadAction(SuspendContextImpl suspendContext)
 	{
 		//noinspection deprecation
 		threadAction();

@@ -22,9 +22,7 @@ import consulo.language.statistician.StatisticsInfo;
 import consulo.language.statistician.StatisticsManager;
 import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -33,7 +31,6 @@ import java.util.ArrayList;
  */
 public abstract class JavaStatisticsManager {
   private static final Logger LOG = Logger.getInstance(JavaStatisticsManager.class);
-  @NonNls
   public static final String CLASS_PREFIX = "class#";
 
   private static StatisticsInfo createVariableUseInfo(String name, VariableKind variableKind,
@@ -45,7 +42,7 @@ public abstract class JavaStatisticsManager {
   }
 
   private static String getVariableNameUseKey1(String propertyName, String canonicalTypeText) {
-    @NonNls StringBuilder buffer = new StringBuilder();
+    StringBuilder buffer = new StringBuilder();
     buffer.append("variableName#");
     if (propertyName != null) {
       buffer.append(propertyName);
@@ -81,7 +78,7 @@ public abstract class JavaStatisticsManager {
   public static String getName(String key2) {
     int startIndex = key2.indexOf("#");
     LOG.assertTrue(startIndex >= 0);
-    @NonNls String s = key2.substring(0, startIndex);
+    String s = key2.substring(0, startIndex);
     if (!"variableName".equals(s)) return null;
     int index = key2.indexOf("#", startIndex + 1);
     LOG.assertTrue(index >= 0);
@@ -101,18 +98,15 @@ public abstract class JavaStatisticsManager {
     return key2.substring(index + 1);
   }
 
-  @NonNls
-  @Nonnull
   public static String getMemberUseKey1(@Nullable PsiType qualifierType) {
     qualifierType = TypeConversionUtil.erasure(qualifierType);
     return "member#" + (qualifierType == null ? "" : qualifierType.getCanonicalText());
   }
 
-  @NonNls
   public static String getMemberUseKey2(PsiMember member) {
     if (member instanceof PsiMethod) {
       PsiMethod method = (PsiMethod)member;
-      @NonNls StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new StringBuilder();
       buffer.append("method#");
       buffer.append(method.getName());
       for (PsiParameter parm : method.getParameterList().getParameters()) {

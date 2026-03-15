@@ -20,8 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.language.ast.ASTNode;
 import consulo.application.ApplicationManager;
@@ -61,7 +60,6 @@ public class JavadocHelper
 			= new Pair<JavadocParameterInfo, List<JavadocParameterInfo>>(null, Collections.<JavadocParameterInfo>emptyList());
 	private static final JavadocHelper INSTANCE = new JavadocHelper();
 
-	@Nonnull
 	public static JavadocHelper getInstance()
 	{
 		return INSTANCE;
@@ -75,7 +73,7 @@ public class JavadocHelper
 	 * @param project  target project
 	 */
 	@SuppressWarnings("MethodMayBeStatic")
-	public void navigate(@Nonnull LogicalPosition position, @Nonnull Editor editor, @Nonnull final Project project)
+	public void navigate(LogicalPosition position, Editor editor, final Project project)
 	{
 		final Document document = editor.getDocument();
 		CaretModel caretModel = editor.getCaretModel();
@@ -107,10 +105,9 @@ public class JavadocHelper
 	 * @return logical position that points to the desired parameter description start location
 	 */
 	@SuppressWarnings("MethodMayBeStatic")
-	@Nonnull
-	public LogicalPosition calculateDescriptionStartPosition(@Nonnull PsiFile psiFile,
-															 @Nonnull Collection<JavadocParameterInfo> data,
-															 @Nonnull JavadocHelper.JavadocParameterInfo anchor)
+	public LogicalPosition calculateDescriptionStartPosition(PsiFile psiFile,
+															 Collection<JavadocParameterInfo> data,
+															 JavadocHelper.JavadocParameterInfo anchor)
 	{
 		int descriptionStartColumn = -1;
 		int parameterNameEndColumn = -1;
@@ -151,8 +148,7 @@ public class JavadocHelper
 	 * adjacent lines if any
 	 */
 	@SuppressWarnings("MethodMayBeStatic")
-	@Nonnull
-	public Pair<JavadocParameterInfo, List<JavadocParameterInfo>> parse(@Nonnull PsiFile psiFile, @Nonnull Editor editor, int offset)
+	public Pair<JavadocParameterInfo, List<JavadocParameterInfo>> parse(PsiFile psiFile, Editor editor, int offset)
 	{
 		List<JavadocParameterInfo> result = new ArrayList<JavadocParameterInfo>();
 		PsiElement elementAtCaret = psiFile.findElementAt(offset);
@@ -218,7 +214,7 @@ public class JavadocHelper
 	}
 
 	@Nullable
-	private static JavadocParameterInfo parse(@Nonnull PsiElement element, @Nonnull Editor editor)
+	private static JavadocParameterInfo parse(PsiElement element, Editor editor)
 	{
 		PsiDocTag tag = PsiTreeUtil.getParentOfType(element, PsiDocTag.class, false);
 		if(tag == null || !PARAM_TEXT.equals(tag.getName()))
@@ -276,7 +272,6 @@ public class JavadocHelper
 		 *    *&#47;
 		 * </pre>
 		 */
-		@Nonnull
 		public final LogicalPosition parameterNameEndPosition;
 		@Nullable
 		public final LogicalPosition parameterDescriptionStartPosition;
@@ -285,7 +280,7 @@ public class JavadocHelper
 		 */
 		public final int lastLine;
 
-		public JavadocParameterInfo(@Nonnull LogicalPosition parameterNameEndPosition,
+		public JavadocParameterInfo(LogicalPosition parameterNameEndPosition,
 									LogicalPosition parameterDescriptionStartPosition,
 									int lastLine)
 		{

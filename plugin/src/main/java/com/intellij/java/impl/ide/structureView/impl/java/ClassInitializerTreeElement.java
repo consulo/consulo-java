@@ -25,7 +25,6 @@ import consulo.language.editor.structureView.PsiTreeElementBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -62,7 +61,6 @@ public class ClassInitializerTreeElement extends PsiTreeElementBase<PsiClassInit
   }
 
   @Override
-  @Nonnull
   public Collection<StructureViewTreeElement> getChildrenBase() {
     return Collections.emptyList();
   }

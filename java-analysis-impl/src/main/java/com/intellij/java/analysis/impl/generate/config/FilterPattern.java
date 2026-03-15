@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiModifier;
 import com.intellij.java.language.psi.PsiType;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 
 import java.util.Collections;
@@ -94,7 +93,7 @@ public class FilterPattern
 		return false;
 	}
 
-	public boolean methodMatches(@Nonnull PsiMethod method)
+	public boolean methodMatches(PsiMethod method)
 	{
 		final String methodName = method.getName();
 		final Pattern methodNamePattern = getMethodNamePattern();

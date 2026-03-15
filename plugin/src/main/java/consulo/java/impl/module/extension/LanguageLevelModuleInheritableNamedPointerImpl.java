@@ -23,7 +23,6 @@ import consulo.module.Module;
 import consulo.module.content.layer.ModuleRootLayer;
 import consulo.module.content.layer.extension.ModuleInheritableNamedPointerImpl;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -32,13 +31,13 @@ import jakarta.annotation.Nonnull;
 public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheritableNamedPointerImpl<LanguageLevel> {
   private final String myExtensionId;
 
-  public LanguageLevelModuleInheritableNamedPointerImpl(@Nonnull ModuleRootLayer layer, @Nonnull String id) {
+  public LanguageLevelModuleInheritableNamedPointerImpl(ModuleRootLayer layer, String id) {
     super(layer, "language-level");
     myExtensionId = id;
   }
 
   @Override
-  public String getItemNameFromModule(@Nonnull Module module) {
+  public String getItemNameFromModule(Module module) {
     JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
     if (extension != null) {
       return extension.getLanguageLevel().getName();
@@ -47,7 +46,7 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
   }
 
   @Override
-  public LanguageLevel getItemFromModule(@Nonnull Module module) {
+  public LanguageLevel getItemFromModule(Module module) {
     JavaModuleExtension extension = (JavaModuleExtension) ModuleUtilCore.getExtension(module, myExtensionId);
     if (extension != null) {
       return extension.getLanguageLevel();
@@ -55,9 +54,8 @@ public class LanguageLevelModuleInheritableNamedPointerImpl extends ModuleInheri
     return null;
   }
 
-  @Nonnull
   @Override
-  public NamedPointer<LanguageLevel> getPointer(@Nonnull ModuleRootLayer layer, @Nonnull String name) {
+  public NamedPointer<LanguageLevel> getPointer(ModuleRootLayer layer, String name) {
     return LanguageLevel.valueOf(name);
   }
 }

@@ -45,7 +45,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,15 +67,14 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
         mySettings = settings;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new MakeMethodOrClassStaticViewDescriptor(myMember);
     }
 
     @Override
     @RequiredUIAccess
-    protected final boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected final boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usagesIn = refUsages.get();
         if (myPrepareSuccessfulSwingThreadCallback != null) {
             MultiMap<PsiElement, LocalizeValue> conflicts = getConflictDescriptions(usagesIn);
@@ -216,7 +214,6 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
         }
     }
 
-    @Nonnull
     @Override
     protected UsageInfo[] findUsages() {
         List<UsageInfo> result = new ArrayList<>();
@@ -293,7 +290,6 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
         return false;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {

@@ -41,8 +41,7 @@ import consulo.ui.ex.awt.ReplacePromptDialog;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,15 +56,15 @@ public class DuplicatesImpl {
     }
 
     @RequiredUIAccess
-    public static void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull MatchProvider provider) {
+    public static void invoke(Project project, Editor editor, MatchProvider provider) {
         invoke(project, editor, provider, true);
     }
 
     @RequiredUIAccess
     public static void invoke(
-        @Nonnull Project project,
-        @Nonnull Editor editor,
-        @Nonnull MatchProvider provider,
+        Project project,
+        Editor editor,
+        MatchProvider provider,
         boolean skipPromptWhenOne
     ) {
         List<Match> duplicates = provider.getDuplicates();
@@ -136,7 +135,7 @@ public class DuplicatesImpl {
         final Project project,
         final MatchProvider provider,
         final Match match,
-        @Nonnull Editor editor,
+        Editor editor,
         final int idx,
         final int size,
         SimpleReference<Boolean> showAll,
@@ -184,7 +183,7 @@ public class DuplicatesImpl {
 
         new WriteCommandAction(project, MethodDuplicatesHandler.REFACTORING_NAME.get(), MethodDuplicatesHandler.REFACTORING_NAME.get()) {
             @Override
-            protected void run(@Nonnull Result result) throws Throwable {
+            protected void run(Result result) throws Throwable {
                 try {
                     provider.processMatch(match);
                 }
@@ -239,7 +238,7 @@ public class DuplicatesImpl {
     }
 
     @RequiredUIAccess
-    public static void processDuplicates(@Nonnull MatchProvider provider, @Nonnull Project project, @Nonnull Editor editor) {
+    public static void processDuplicates(MatchProvider provider, Project project, Editor editor) {
         Boolean hasDuplicates = provider.hasDuplicates();
         if (hasDuplicates == null || hasDuplicates) {
             List<Match> duplicates = provider.getDuplicates();

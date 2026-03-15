@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.BaseScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -45,7 +44,7 @@ public class AddAllMembersProcessor extends BaseScopeProcessor {
     myPsiClass = psiClass;
   }
 
-  public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+  public boolean execute(PsiElement element, ResolveState state) {
     PsiMember member = (PsiMember)element;
     if (!isInteresting(element)) return true;
     if (myPsiClass.isInterface() && isObjectMember(element)) return true;

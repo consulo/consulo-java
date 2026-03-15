@@ -1,7 +1,6 @@
-import jakarta.annotation.Nonnull;
 
 public class Npe {
-   Object foo(@Nonnull Object o) {
+   Object foo(Object o) {
      if (o == null) {
        // Should not get there.
      }

@@ -28,7 +28,6 @@ import consulo.language.psi.search.SearchRequestCollector;
 import consulo.language.psi.search.UsageSearchContext;
 import consulo.project.util.query.QueryExecutorBase;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;
 
@@ -43,8 +42,8 @@ public class SimpleAccessorReferenceSearcher extends QueryExecutorBase<PsiRefere
 
     @Override
     public void processQuery(
-        @Nonnull ReferencesSearch.SearchParameters queryParameters,
-        @Nonnull Predicate<? super PsiReference> consumer
+        ReferencesSearch.SearchParameters queryParameters,
+        Predicate<? super PsiReference> consumer
     ) {
         if (queryParameters.getElementToSearch() instanceof PsiMethod method) {
             addPropertyAccessUsages(method, queryParameters.getEffectiveSearchScope(), queryParameters.getOptimizer());

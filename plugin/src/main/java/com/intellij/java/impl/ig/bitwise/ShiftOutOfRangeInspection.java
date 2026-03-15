@@ -30,17 +30,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ShiftOutOfRangeInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.shiftOperationByInappropriateConstantDisplayName();
     }
 
-    @Nonnull
     @Override
     public String buildErrorString(Object... infos) {
         Integer value = (Integer) infos[0];
@@ -68,7 +65,6 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
             this.isLong = isLong;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             int newValue = isLong ? value & 0b111111 : value & 0b11111;
@@ -108,7 +104,7 @@ public class ShiftOutOfRangeInspection extends BaseInspection {
 
     private static class ShiftOutOfRange extends BaseInspectionVisitor {
         @Override
-        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+        public void visitBinaryExpression(PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
             PsiJavaToken sign = expression.getOperationSign();
             IElementType tokenType = sign.getTokenType();

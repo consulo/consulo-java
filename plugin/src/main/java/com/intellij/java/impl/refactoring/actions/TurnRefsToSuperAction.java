@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-import jakarta.annotation.Nonnull;
 
 @ActionImpl(id = "TurnRefsToSuper")
 public class TurnRefsToSuperAction extends BaseRefactoringAction {
@@ -41,12 +40,12 @@ public class TurnRefsToSuperAction extends BaseRefactoringAction {
 
     @Override
     @RequiredReadAction
-    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    public boolean isEnabledOnElements(PsiElement[] elements) {
         return elements.length == 1 && elements[0] instanceof PsiClass psiClass && psiClass.getLanguage() == JavaLanguage.INSTANCE;
     }
 
     @Override
-    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+    public RefactoringActionHandler getHandler(DataContext dataContext) {
         return new TurnRefsToSuperHandler();
     }
 }

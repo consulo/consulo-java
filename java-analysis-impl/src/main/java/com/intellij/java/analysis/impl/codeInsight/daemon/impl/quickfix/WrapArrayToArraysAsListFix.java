@@ -23,8 +23,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Batkovich
@@ -32,14 +31,13 @@ import jakarta.annotation.Nullable;
 public class WrapArrayToArraysAsListFix extends MethodArgumentFix {
   public static final ArgumentFixerActionFactory REGISTAR = new MyFixerActionFactory();
 
-  protected WrapArrayToArraysAsListFix(final @Nonnull PsiExpressionList list,
+  protected WrapArrayToArraysAsListFix(final PsiExpressionList list,
                                        final int i,
-                                       final @Nonnull PsiType toType,
-                                       final @Nonnull ArgumentFixerActionFactory fixerActionFactory) {
+                                       final PsiType toType,
+                                       final ArgumentFixerActionFactory fixerActionFactory) {
     super(list, i, toType, fixerActionFactory);
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     if (myArgList.getExpressions().length == 1) {

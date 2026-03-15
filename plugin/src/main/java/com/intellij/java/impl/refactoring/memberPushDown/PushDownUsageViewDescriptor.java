@@ -20,7 +20,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
-import jakarta.annotation.Nonnull;
 
 class PushDownUsageViewDescriptor implements UsageViewDescriptor {
   private final PsiClass myClass;
@@ -34,7 +33,6 @@ class PushDownUsageViewDescriptor implements UsageViewDescriptor {
     return myProcessedElementsHeader;
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[]{myClass};
   }

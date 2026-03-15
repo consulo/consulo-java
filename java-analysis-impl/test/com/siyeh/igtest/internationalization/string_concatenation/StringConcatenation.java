@@ -1,6 +1,5 @@
 package com.siyeh.igtest.internationalization.string_concatenation;
 
-import org.jetbrains.annotations.NonNls;
 
 public class StringConcatenation
 {
@@ -16,13 +15,12 @@ public class StringConcatenation
     }
 
     public void boom() {
-        @NonNls
         String string = "asdf" + " asdfasd";
         string += "asdfasd";
         boom("asdf" + "boom");
     }
 
-    private void boom(@NonNls String s) {
+    private void boom(String s) {
     }
 }
 

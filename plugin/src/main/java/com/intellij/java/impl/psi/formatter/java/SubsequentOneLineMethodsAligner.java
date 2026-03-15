@@ -20,7 +20,6 @@ import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.AlignmentStrategy;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class SubsequentOneLineMethodsAligner extends ChildAlignmentStrategyProvider {
@@ -32,7 +31,7 @@ public class SubsequentOneLineMethodsAligner extends ChildAlignmentStrategyProvi
   }
 
   @Override
-  public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child) {
+  public AlignmentStrategy getNextChildStrategy(ASTNode child) {
     IElementType childType = child.getElementType();
 
     if (childType != JavaElementType.METHOD || child.textContains('\n')) {

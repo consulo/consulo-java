@@ -37,19 +37,17 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SimplifyBooleanExpressionAction", categories = {"Java", "Boolean"}, fileExtensions = "java")
 public class SimplifyBooleanExpressionAction implements IntentionAction{
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.simplifyBooleanExpressionFamily();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiExpression expression = getExpressionToSimplify(editor, file);
     return expression != null && SimplifyBooleanExpressionFix.canBeSimplified(expression);
   }
@@ -68,7 +66,7 @@ public class SimplifyBooleanExpressionAction implements IntentionAction{
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiExpression expression = getExpressionToSimplify(editor, file);
     SimplifyBooleanExpressionFix.simplifyExpression(expression);

@@ -13,15 +13,13 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiTypeTestPatternImpl extends CompositePsiElement implements PsiTypeTestPattern, Constants {
   public PsiTypeTestPatternImpl() {
     super(TYPE_TEST_PATTERN);
   }
 
-  @Nonnull
   @Override
   public PsiTypeElement getCheckType() {
     for (PsiElement child = getFirstChild(); child != null; child = child.getNextSibling()) {
@@ -43,7 +41,7 @@ public class PsiTypeTestPatternImpl extends CompositePsiElement implements PsiTy
 
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitTypeTestPattern(this);
     } else {
@@ -52,8 +50,8 @@ public class PsiTypeTestPatternImpl extends CompositePsiElement implements PsiTy
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent,
+                                     PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
 
     PsiPatternVariable variable = getPatternVariable();

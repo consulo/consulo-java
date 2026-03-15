@@ -7,7 +7,6 @@ import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Optional;
 import java.util.OptionalDouble;
@@ -37,7 +36,6 @@ public class OptionalUtil {
   public static final CallMatcher JDK_OPTIONAL_WRAP_METHOD =
       CallMatcher.staticCall(JAVA_UTIL_OPTIONAL, "of", "ofNullable").parameterCount(1);
 
-  @Nonnull
   @Contract(pure = true)
   public static String getOptionalClass(String type) {
     switch (type) {

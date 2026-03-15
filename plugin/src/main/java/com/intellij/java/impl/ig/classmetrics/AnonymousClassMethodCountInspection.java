@@ -24,21 +24,18 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class AnonymousClassMethodCountInspection extends ClassMetricInspection {
     private static final int DEFAULT_METHOD_COUNT_LIMIT = 1;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "AnonymousInnerClassWithTooManyMethods";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsDisplayName();
@@ -65,7 +62,6 @@ public class AnonymousClassMethodCountInspection extends ClassMetricInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer count = (Integer) infos[0];
         return InspectionGadgetsLocalize.anonymousInnerClassWithTooManyMethodsProblemDescriptor(count).get();
@@ -80,13 +76,13 @@ public class AnonymousClassMethodCountInspection extends ClassMetricInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass psiClass) {
+        public void visitClass(PsiClass psiClass) {
             // no call to super, to prevent double counting
         }
 
         @Override
         public void visitAnonymousClass(
-            @Nonnull PsiAnonymousClass aClass
+            PsiAnonymousClass aClass
         ) {
             if (aClass instanceof PsiEnumConstantInitializer) {
                 return;

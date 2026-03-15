@@ -5,25 +5,22 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaMemoryState;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.SpecialField;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
-import jakarta.annotation.Nonnull;
 
 /**
  * Instruction to push a field qualified by the value on the stack
  */
 public class UnwrapSpecialFieldInstruction extends EvalInstruction
 {
-	@Nonnull
 	private final SpecialField mySpecialField;
 
-	public UnwrapSpecialFieldInstruction(@Nonnull SpecialField specialField)
+	public UnwrapSpecialFieldInstruction(SpecialField specialField)
 	{
 		super(null, 1);
 		mySpecialField = specialField;
 	}
 
 	@Override
-	@Nonnull
-	public DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue  ... arguments)
+	public DfaValue eval(DfaValueFactory factory, DfaMemoryState state, DfaValue  ... arguments)
 	{
 		return mySpecialField.createValue(factory, arguments[0]);
 	}

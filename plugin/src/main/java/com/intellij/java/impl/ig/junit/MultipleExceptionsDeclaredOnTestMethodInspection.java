@@ -31,20 +31,16 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 
 @ExtensionImpl
 public class MultipleExceptionsDeclaredOnTestMethodInspection
   extends BaseInspection {
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodProblemDescriptor().get();
@@ -56,7 +52,6 @@ public class MultipleExceptionsDeclaredOnTestMethodInspection
   }
 
   private static class MultipleExceptionsDeclaredOnTestMethodFix extends InspectionGadgetsFix {
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.multipleExceptionsDeclaredOnTestMethodQuickfix();
     }

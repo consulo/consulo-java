@@ -31,9 +31,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -44,12 +42,10 @@ public class ObsoleteCollectionInspection extends BaseInspection {
     public boolean ignoreRequiredObsoleteCollectionTypes = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "UseOfObsoleteCollectionType";
     }
 
-    @Nonnull
     @Override
     @Deprecated(forRemoval = true)
     public LocalizeValue getDisplayName() {
@@ -57,7 +53,6 @@ public class ObsoleteCollectionInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.useObsoleteCollectionTypeProblemDescriptor().get();
     }
@@ -78,7 +73,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             super.visitVariable(variable);
             PsiType type = variable.getType();
             if (!isObsoleteCollectionType(type)) {
@@ -121,7 +116,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
 
         @Override
         public void visitNewExpression(
-            @Nonnull PsiNewExpression newExpression
+            PsiNewExpression newExpression
         ) {
             super.visitNewExpression(newExpression);
             PsiType type = newExpression.getType();
@@ -144,7 +139,7 @@ public class ObsoleteCollectionInspection extends BaseInspection {
                 return false;
             }
             PsiClassType classType = (PsiClassType) deepComponentType;
-            @NonNls String className = classType.getClassName();
+            String className = classType.getClassName();
             if (!"Vector".equals(className) && !"Hashtable".equals(className)) {
                 return false;
             }

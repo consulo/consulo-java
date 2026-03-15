@@ -27,7 +27,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class AddMethodBodyFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(AddMethodBodyFix.class);
@@ -39,13 +38,12 @@ public class AddMethodBodyFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.addMethodBodyText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myMethod != null
         && myMethod.isValid()
         && myMethod.getBody() == null
@@ -54,7 +52,7 @@ public class AddMethodBodyFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) return;
 
     try {

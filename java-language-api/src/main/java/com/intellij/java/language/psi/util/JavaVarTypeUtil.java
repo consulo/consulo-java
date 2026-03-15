@@ -20,18 +20,17 @@ import com.intellij.java.language.psi.impl.source.resolve.graphInference.PsiPoly
 import consulo.application.util.RecursionManager;
 import consulo.language.psi.PsiManager;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Set;
 
 public class JavaVarTypeUtil {
-  public static PsiType getUpwardProjection(@Nonnull PsiType t) {
+  public static PsiType getUpwardProjection(PsiType t) {
     return t.accept(new UpwardProjectionTypeVisitor());
   }
 
-  public static PsiType getDownwardProjection(@Nonnull PsiType type) {
+  public static PsiType getDownwardProjection(PsiType type) {
     return type.accept(new DownwardProjectionTypeVisitor());
   }
 

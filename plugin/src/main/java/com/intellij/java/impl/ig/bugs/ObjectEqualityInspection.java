@@ -33,8 +33,7 @@ import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -56,14 +55,12 @@ public class ObjectEqualityInspection extends BaseInspection {
      */
     public boolean m_ignorePrivateConstructors = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.objectComparisonDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.objectComparisonProblemDescription().get();
     }
@@ -93,7 +90,7 @@ public class ObjectEqualityInspection extends BaseInspection {
     private class ObjectEqualityVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+        public void visitBinaryExpression(PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
             if (!ComparisonUtils.isEqualityComparison(expression)) {
                 return;

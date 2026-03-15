@@ -1,4 +1,4 @@
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class Test {
   void bar(@jakarta.annotation.Nullable String str) {

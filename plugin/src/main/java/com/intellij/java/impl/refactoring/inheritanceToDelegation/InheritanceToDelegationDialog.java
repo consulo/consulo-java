@@ -35,9 +35,7 @@ import consulo.language.editor.refactoring.ui.NameSuggestionsField;
 import consulo.language.editor.refactoring.ui.RefactoringDialog;
 import com.intellij.java.impl.refactoring.util.classMembers.InterfaceMemberDependencyGraph;
 import com.intellij.java.impl.refactoring.util.classMembers.MemberInfo;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -88,7 +86,6 @@ public class InheritanceToDelegationDialog extends RefactoringDialog {
     super.dispose();
   }
 
-  @Nonnull
   public String getFieldName() {
     return myFieldNameField.getEnteredName();
   }
@@ -269,7 +266,7 @@ public class InheritanceToDelegationDialog extends RefactoringDialog {
       JavaCodeStyleManager.getInstance(psiManager.getProject()).suggestVariableName(VariableKind.FIELD, null, null, superType);
     myFieldNameField.setSuggestions(suggestedNameInfo.names);
     myInnerClassNameField.getComponent().setEnabled(InheritanceToDelegationUtil.isInnerClassNeeded(myClass, targetClass));
-    @NonNls String suggestion = "My" + targetClass.getName();
+    String suggestion = "My" + targetClass.getName();
     myInnerClassNameField.setSuggestions(new String[]{suggestion});
 
     myDataChangedListener = new NameSuggestionsField.DataChanged() {
@@ -319,7 +316,7 @@ public class InheritanceToDelegationDialog extends RefactoringDialog {
       return null;
     }
 
-    public int checkForProblems(@Nonnull MemberInfo member) {
+    public int checkForProblems(MemberInfo member) {
       return OK;
     }
 

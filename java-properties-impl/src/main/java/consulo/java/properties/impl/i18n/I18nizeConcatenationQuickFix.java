@@ -30,9 +30,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -41,7 +39,7 @@ import java.util.Map;
 
 public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.i18n.I18nizeConcatenationQuickFix");
-  @NonNls private static final String PARAMETERS_OPTION_KEY = "PARAMETERS";
+  private static final String PARAMETERS_OPTION_KEY = "PARAMETERS";
 
   @Override
   public void checkApplicability(final PsiFile psiFile, final Editor editor) throws IncorrectOperationException {
@@ -60,7 +58,6 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return CodeInsightLocalize.quickfixI18nConcatentation();
   }
@@ -68,8 +65,8 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   @Override
   @RequiredReadAction
   protected PsiElement doReplacementInJava(
-    @Nonnull final PsiFile psiFile,
-    @Nonnull final Editor editor,
+    final PsiFile psiFile,
+    final Editor editor,
     @Nullable PsiLiteralExpression literalExpression,
     String i18nizedText
   ) throws IncorrectOperationException {
@@ -143,7 +140,7 @@ public class I18nizeConcatenationQuickFix extends I18nizeQuickFix{
   }
 
   @Nullable
-  private static PsiPolyadicExpression getEnclosingLiteralConcatenation(@Nonnull PsiFile file, @Nonnull Editor editor) {
+  private static PsiPolyadicExpression getEnclosingLiteralConcatenation(PsiFile file, Editor editor) {
     final PsiElement elementAt = file.findElementAt(editor.getCaretModel().getOffset());
     return getEnclosingLiteralConcatenation(elementAt);
   }

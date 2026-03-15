@@ -22,9 +22,8 @@ import consulo.application.util.ParameterizedCachedValue;
 import consulo.application.util.ParameterizedCachedValueProvider;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +35,7 @@ public class JavaAnonymousClassesHelper {
   public static final AnonClassProvider ANON_CLASS_PROVIDER = new AnonClassProvider();
 
   @Nullable
-  public static String getName(@Nonnull PsiAnonymousClass cls) {
+  public static String getName(PsiAnonymousClass cls) {
     final PsiClass upper = PsiTreeUtil.getParentOfType(cls, PsiClass.class);
     if (upper == null) {
       return null;

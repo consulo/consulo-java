@@ -38,8 +38,7 @@ import consulo.ui.ex.SimpleColoredText;
 import consulo.ui.ex.awt.EditorColorsUtil;
 import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.MutableTreeNode;
@@ -250,14 +249,12 @@ public class DebuggerTreeNodeImpl extends TreeBuilderNode implements DebuggerTre
         myProperties.put(key, data);
     }
 
-    @Nonnull
     public static DebuggerTreeNodeImpl createNodeNoUpdate(DebuggerTree tree, NodeDescriptor descriptor) {
         DebuggerTreeNodeImpl node = new DebuggerTreeNodeImpl(tree, descriptor);
         node.updateCaches();
         return node;
     }
 
-    @Nonnull
     protected static DebuggerTreeNodeImpl createNode(DebuggerTree tree, NodeDescriptorImpl descriptor, EvaluationContextImpl evaluationContext) {
         final DebuggerTreeNodeImpl node = new DebuggerTreeNodeImpl(tree, descriptor);
         descriptor.updateRepresentationNoNotify(evaluationContext, new DescriptorLabelListener() {

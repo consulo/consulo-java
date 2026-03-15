@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.codeInsight.generation;
 
 import consulo.language.editor.generation.ClassMember;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter

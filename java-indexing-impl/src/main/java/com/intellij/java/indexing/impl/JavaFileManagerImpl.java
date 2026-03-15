@@ -53,11 +53,10 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileWithId;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -91,7 +90,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
 
   @Nullable
   @Override
-  public PsiJavaPackage findPackage(@Nonnull String qualifiedName) {
+  public PsiJavaPackage findPackage(String qualifiedName) {
     return (PsiJavaPackage)myPackageManager.findPackage(qualifiedName, JavaModuleExtension.class);
   }
 
@@ -100,9 +99,8 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
     myDisposed = true;
   }
 
-  @Nonnull
   @Override
-  public PsiClass[] findClasses(@Nonnull String qName, @Nonnull final GlobalSearchScope scope) {
+  public PsiClass[] findClasses(String qName, final GlobalSearchScope scope) {
     List<Pair<PsiClass, VirtualFile>> result = doFindClasses(qName, scope);
 
     int count = result.size();
@@ -118,8 +116,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
     return result.stream().map(p -> p.getFirst()).toArray(PsiClass[]::new);
   }
 
-  @Nonnull
-  private List<Pair<PsiClass, VirtualFile>> doFindClasses(@Nonnull String qName, @Nonnull final GlobalSearchScope scope) {
+  private List<Pair<PsiClass, VirtualFile>> doFindClasses(String qName, final GlobalSearchScope scope) {
     final Collection<PsiClass> classes = JavaFullClassNameIndex.getInstance().get(qName.hashCode(), myProject, scope);
     if (classes.isEmpty()) {
       return Collections.emptyList();
@@ -156,7 +153,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
 
   @Override
   @Nullable
-  public PsiClass findClass(@Nonnull String qName, @Nonnull GlobalSearchScope scope) {
+  public PsiClass findClass(String qName, GlobalSearchScope scope) {
     LOG.assertTrue(!myDisposed);
     VirtualFile bestFile = null;
     PsiClass bestClass = null;
@@ -175,7 +172,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
     return bestClass;
   }
 
-  private boolean hasAcceptablePackage(@Nonnull VirtualFile vFile) {
+  private boolean hasAcceptablePackage(VirtualFile vFile) {
     if (vFile.getFileType() == JavaClassFileType.INSTANCE) {
       // See IDEADEV-5626
       final VirtualFile root = ProjectRootManager.getInstance(myProject).getFileIndex().getClassRootForFile(vFile);
@@ -192,7 +189,6 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
     return true;
   }
 
-  @Nonnull
   @Override
   public Collection<String> getNonTrivialPackagePrefixes() {
     Set<String> names = myNontrivialPackagePrefixes;
@@ -214,9 +210,8 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
     return names;
   }
 
-  @Nonnull
   @Override
-  public Collection<PsiJavaModule> findModules(@Nonnull String moduleName, @Nonnull GlobalSearchScope scope) {
+  public Collection<PsiJavaModule> findModules(String moduleName, GlobalSearchScope scope) {
     GlobalSearchScope excludingScope = new LibSrcExcludingScope(scope);
 
     List<PsiJavaModule> results = new ArrayList<>(JavaModuleNameIndex.getInstance().get(moduleName, myManager.getProject(), excludingScope));
@@ -275,13 +270,13 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
   private static class LibSrcExcludingScope extends DelegatingGlobalSearchScope {
     private final ProjectFileIndex myIndex;
 
-    LibSrcExcludingScope(@Nonnull GlobalSearchScope baseScope) {
+    LibSrcExcludingScope(GlobalSearchScope baseScope) {
       super(baseScope);
       myIndex = ProjectFileIndex.getInstance(Objects.requireNonNull(baseScope.getProject()));
     }
 
     @Override
-    public boolean contains(@Nonnull VirtualFile file) {
+    public boolean contains(VirtualFile file) {
       return super.contains(file) && (!myIndex.isInLibrarySource(file) || myIndex.isInLibraryClasses(file));
     }
   }

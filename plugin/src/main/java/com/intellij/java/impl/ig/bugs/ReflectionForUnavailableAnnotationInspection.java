@@ -22,19 +22,15 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ReflectionForUnavailableAnnotationInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.reflectionForUnavailableAnnotationDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.reflectionForUnavailableAnnotationProblemDescriptor().get();
     }
@@ -52,10 +48,10 @@ public class ReflectionForUnavailableAnnotationInspection extends BaseInspection
     private static class ReflectionForUnavailableAnnotationVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!"isAnnotationPresent".equals(methodName) && !"getAnnotation".equals(methodName)) {
                 return;
             }
@@ -95,7 +91,7 @@ public class ReflectionForUnavailableAnnotationInspection extends BaseInspection
             PsiAnnotationParameterList parameters = retentionAnnotation.getParameterList();
             PsiNameValuePair[] attributes = parameters.getAttributes();
             for (PsiNameValuePair attribute : attributes) {
-                @NonNls String name = attribute.getName();
+                String name = attribute.getName();
                 if (name != null && !"value".equals(name)) {
                     continue;
                 }
@@ -103,7 +99,7 @@ public class ReflectionForUnavailableAnnotationInspection extends BaseInspection
                 if (value == null) {
                     continue;
                 }
-                @NonNls String text = value.getText();
+                String text = value.getText();
                 if (!text.contains("RUNTIME")) {
                     registerError(arg);
                     return;

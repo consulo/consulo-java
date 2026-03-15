@@ -28,7 +28,6 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -116,7 +115,7 @@ public class BraceEnforcer extends JavaRecursiveElementVisitor {
     }
   }
 
-  private void replaceWithBlock(@Nonnull PsiStatement statement, PsiStatement blockCandidate) {
+  private void replaceWithBlock(PsiStatement statement, PsiStatement blockCandidate) {
     if (!statement.isValid()) {
       LOG.assertTrue(false);
     }

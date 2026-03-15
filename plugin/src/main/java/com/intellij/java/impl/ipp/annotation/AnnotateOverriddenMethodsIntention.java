@@ -33,26 +33,22 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AnnotateOverriddenMethodsIntention", fileExtensions = "java", categories = {"Java", "Annotations"})
 public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.annotateOverriddenMethodsIntentionFamilyName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new AnnotateOverriddenMethodsPredicate();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         PsiAnnotation annotation = (PsiAnnotation) element;
@@ -70,7 +66,7 @@ public class AnnotateOverriddenMethodsIntention extends MutablyNamedIntention {
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiAnnotation annotation = (PsiAnnotation) element;
         String annotationName = annotation.getQualifiedName();

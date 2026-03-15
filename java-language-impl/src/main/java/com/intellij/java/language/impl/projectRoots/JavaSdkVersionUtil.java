@@ -23,21 +23,20 @@ import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.ModuleUtilCore;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
  * Date: 3/28/12
  */
 public class JavaSdkVersionUtil {
-  public static boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion minVersion) {
+  public static boolean isAtLeast(PsiElement element, JavaSdkVersion minVersion) {
     JavaSdkVersion version = getJavaSdkVersion(element);
     return version == null || version.isAtLeast(minVersion);
   }
 
   @RequiredReadAction
-  public static JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
+  public static JavaSdkVersion getJavaSdkVersion(PsiElement element) {
     final Sdk sdk = ModuleUtilCore.getSdk(element, JavaModuleExtension.class);
     return getJavaSdkVersion(sdk);
   }

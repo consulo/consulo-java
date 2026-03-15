@@ -9,7 +9,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFac
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiParameter;
-import jakarta.annotation.Nonnull;
 
 /**
  * A memory state that may ignore type constraint known from assignment.
@@ -32,7 +31,7 @@ public class AssignmentFilteringMemoryState extends DfaMemoryStateImpl
 	}
 
 	@Override
-	protected DfType filterDfTypeOnAssignment(DfaVariableValue var, @Nonnull DfType dfType)
+	protected DfType filterDfTypeOnAssignment(DfaVariableValue var, DfType dfType)
 	{
 		if(ControlFlowAnalyzer.isTempVariable(var) || (!(dfType instanceof DfReferenceType)) ||
 				var.getPsiVariable() instanceof PsiParameter && var.getPsiVariable().getParent().getParent() instanceof PsiLambdaExpression)

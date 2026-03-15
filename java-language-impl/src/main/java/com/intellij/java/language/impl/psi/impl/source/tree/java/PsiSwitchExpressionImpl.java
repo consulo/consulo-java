@@ -15,7 +15,6 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -109,7 +108,7 @@ public class PsiSwitchExpressionImpl extends PsiSwitchBlockImpl implements PsiSw
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitSwitchExpression(this);
     } else {
@@ -118,7 +117,7 @@ public class PsiSwitchExpressionImpl extends PsiSwitchBlockImpl implements PsiSw
   }
 
   @Override
-  public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement) {
+  public void replaceChildInternal(ASTNode child, TreeElement newElement) {
     super.replaceChildInternal(child, JavaSourceUtil.addParenthToReplacedChild(child, newElement, getManager()));
   }
 

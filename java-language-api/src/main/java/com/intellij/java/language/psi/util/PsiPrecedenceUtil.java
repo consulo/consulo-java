@@ -5,7 +5,6 @@ import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -56,7 +55,7 @@ public class PsiPrecedenceUtil {
         S_BINARY_OPERATOR_PRECEDENCE.put(JavaTokenType.NE, EQUALITY_PRECEDENCE);
     }
 
-    public static boolean isCommutativeOperator(@Nonnull IElementType token) {
+    public static boolean isCommutativeOperator(IElementType token) {
         return token == JavaTokenType.PLUS || token == JavaTokenType.ASTERISK ||
             token == JavaTokenType.EQEQ || token == JavaTokenType.NE ||
             token == JavaTokenType.AND || token == JavaTokenType.OR || token == JavaTokenType.XOR;
@@ -153,7 +152,7 @@ public class PsiPrecedenceUtil {
         return -1;
     }
 
-    public static int getPrecedenceForOperator(@Nonnull IElementType operator) {
+    public static int getPrecedenceForOperator(IElementType operator) {
         Integer precedence = S_BINARY_OPERATOR_PRECEDENCE.get(operator);
         if (precedence == null) {
             throw new IllegalArgumentException("unknown operator: " + operator);

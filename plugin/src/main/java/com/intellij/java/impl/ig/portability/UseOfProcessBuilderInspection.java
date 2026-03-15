@@ -24,18 +24,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class UseOfProcessBuilderInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.useProcessbuilderClassDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.useProcessbuilderClassProblemDescriptor().get();
   }
@@ -47,7 +43,7 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
   private static class ProcessBuilderVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(PsiVariable variable) {
       super.visitVariable(variable);
       PsiType type = variable.getType();
       String typeString = type.getCanonicalText();
@@ -63,13 +59,13 @@ public class UseOfProcessBuilderInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression newExpression) {
+      PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       PsiType type = newExpression.getType();
       if (type == null) {
         return;
       }
-      @NonNls String typeString = type.getCanonicalText();
+      String typeString = type.getCanonicalText();
       if (!"java.lang.ProcessBuilder".equals(typeString)) {
         return;
       }

@@ -1,6 +1,5 @@
 package com.intellij.psi.impl.file.impl;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.event.PsiTreeChangeEvent;
 import consulo.language.psi.event.PsiTreeChangeListener;
@@ -16,62 +15,62 @@ class EventsTestListener implements PsiTreeChangeListener {
   }
 
   @Override
-  public void beforeChildAddition(@Nonnull PsiTreeChangeEvent event) {
+  public void beforeChildAddition(PsiTreeChangeEvent event) {
     myBuffer.append("beforeChildAddition\n");
   }
 
   @Override
-  public void beforeChildRemoval(@Nonnull PsiTreeChangeEvent event) {
+  public void beforeChildRemoval(PsiTreeChangeEvent event) {
     myBuffer.append("beforeChildRemoval\n");
   }
 
   @Override
-  public void beforeChildReplacement(@Nonnull PsiTreeChangeEvent event) {
+  public void beforeChildReplacement(PsiTreeChangeEvent event) {
     myBuffer.append("beforeChildReplacement\n");
   }
 
   @Override
-  public void beforeChildMovement(@Nonnull PsiTreeChangeEvent event) {
+  public void beforeChildMovement(PsiTreeChangeEvent event) {
     myBuffer.append("beforeChildMovement\n");
   }
 
   @Override
-  public void beforeChildrenChange(@Nonnull PsiTreeChangeEvent event) {
+  public void beforeChildrenChange(PsiTreeChangeEvent event) {
     myBuffer.append("beforeChildrenChange\n");
   }
 
   @Override
-  public void beforePropertyChange(@Nonnull PsiTreeChangeEvent event) {
+  public void beforePropertyChange(PsiTreeChangeEvent event) {
     myBuffer.append("beforePropertyChange\n");
   }
 
   @Override
-  public void childAdded(@Nonnull PsiTreeChangeEvent event) {
+  public void childAdded(PsiTreeChangeEvent event) {
     myBuffer.append("childAdded\n");
   }
 
   @Override
-  public void childRemoved(@Nonnull PsiTreeChangeEvent event) {
+  public void childRemoved(PsiTreeChangeEvent event) {
     myBuffer.append("childRemoved\n");
   }
 
   @Override
-  public void childReplaced(@Nonnull PsiTreeChangeEvent event) {
+  public void childReplaced(PsiTreeChangeEvent event) {
     myBuffer.append("childReplaced\n");
   }
 
   @Override
-  public void childrenChanged(@Nonnull PsiTreeChangeEvent event) {
+  public void childrenChanged(PsiTreeChangeEvent event) {
     myBuffer.append("childrenChanged\n");
   }
 
   @Override
-  public void childMoved(@Nonnull PsiTreeChangeEvent event) {
+  public void childMoved(PsiTreeChangeEvent event) {
     myBuffer.append("childMoved\n");
   }
 
   @Override
-  public void propertyChanged(@Nonnull PsiTreeChangeEvent event) {
+  public void propertyChanged(PsiTreeChangeEvent event) {
     myBuffer.append("propertyChanged\n");
   }
 }

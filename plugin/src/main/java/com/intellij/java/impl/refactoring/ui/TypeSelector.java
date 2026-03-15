@@ -21,9 +21,8 @@ import consulo.util.lang.Comparing;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.SmartTypePointer;
 import com.intellij.java.language.psi.SmartTypePointerManager;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.awt.event.ItemListener;
 
@@ -133,7 +132,7 @@ public class TypeSelector {
     }
   }
 
-  public void selectType(@Nonnull PsiType type) {
+  public void selectType(PsiType type) {
     if (myComponent instanceof JComboBox) {
       ((JComboBox)myComponent).setSelectedItem(new PsiTypeItem(type, myProject));
     }

@@ -29,8 +29,7 @@ import consulo.project.Project;
 import consulo.project.util.query.DumbAwareSearchParameters;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -49,8 +48,8 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
     private final SearchRequestCollector myOptimizer;
     private final boolean isSharedOptimizer;
 
-    public SearchParameters(@Nonnull PsiMethod method,
-                            @Nonnull SearchScope scope,
+    public SearchParameters(PsiMethod method,
+                            SearchScope scope,
                             boolean strictSignatureSearch,
                             @Nullable SearchRequestCollector optimizer) {
       myMethod = method;
@@ -61,16 +60,14 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
       myProject = PsiUtilCore.getProjectInReadAction(method);
     }
 
-    public SearchParameters(@Nonnull PsiMethod method, @Nonnull SearchScope scope, final boolean strict) {
+    public SearchParameters(PsiMethod method, SearchScope scope, final boolean strict) {
       this(method, scope, strict, null);
     }
 
-    @Nonnull
     public Project getProject() {
       return myProject;
     }
 
-    @Nonnull
     public PsiMethod getMethod() {
       return myMethod;
     }
@@ -97,12 +94,10 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
      * #getEffectiveSearchScope()}.
      */
     @Deprecated
-    @Nonnull
     public SearchScope getScope() {
       return getScopeDeterminedByUser();
     }
 
-    @Nonnull
     public SearchScope getEffectiveSearchScope() {
       SearchScope accessScope = PsiSearchHelper.getInstance(myMethod.getProject()).getUseScope(myMethod);
       return myScope.intersectWith(accessScope);
@@ -113,7 +108,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
     super(MethodReferencesSearchExecutor.class);
   }
 
-  public static Query<PsiReference> search(@Nonnull PsiMethod method,
+  public static Query<PsiReference> search(PsiMethod method,
                                            SearchScope scope,
                                            final boolean strictSignatureSearch) {
     return search(new SearchParameters(method, scope, strictSignatureSearch));
@@ -122,7 +117,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
   public static void searchOptimized(final PsiMethod method,
                                      SearchScope scope,
                                      final boolean strictSignatureSearch,
-                                     @Nonnull SearchRequestCollector collector,
+                                     SearchRequestCollector collector,
                                      final Predicate<PsiReference> processor) {
     searchOptimized(method, scope, strictSignatureSearch, collector, false, (psiReference, collector1) -> processor.test(psiReference));
   }
@@ -159,7 +154,7 @@ public class MethodReferencesSearch extends ExtensibleQueryFactory<PsiReference,
     return search(method, true);
   }
 
-  private static UniqueResultsQuery<PsiReference, ReferenceDescriptor> uniqueResults(@Nonnull Query<PsiReference>
+  private static UniqueResultsQuery<PsiReference, ReferenceDescriptor> uniqueResults(Query<PsiReference>
                                                                                          composite) {
     return new UniqueResultsQuery<PsiReference, ReferenceDescriptor>(composite, ContainerUtil.<ReferenceDescriptor>canonicalStrategy(), ReferenceDescriptor.MAPPER);
   }

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.portability.mediatype;
 
-import org.jetbrains.annotations.NonNls;
 
 public enum ApplicationMediaType {
   ACTIVEMESSAGE("application/activemessage"),
@@ -551,7 +550,7 @@ public enum ApplicationMediaType {
 
   private final String contentType;
 
-  ApplicationMediaType(@NonNls String contentType) {
+  ApplicationMediaType(String contentType) {
     this.contentType = contentType;
   }
 

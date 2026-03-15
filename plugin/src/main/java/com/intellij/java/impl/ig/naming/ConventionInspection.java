@@ -24,9 +24,7 @@ import consulo.ide.impl.idea.util.ui.RegExInputVerifier;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.xml.serializer.InvalidDataException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -59,7 +57,6 @@ public abstract class ConventionInspection extends BaseInspection {
   public int m_maxLength = getDefaultMaxLength();
   protected Pattern m_regexPattern = Pattern.compile(m_regex);
 
-  @NonNls
   protected abstract String getDefaultRegex();
 
   protected abstract int getDefaultMinLength();
@@ -94,7 +91,7 @@ public abstract class ConventionInspection extends BaseInspection {
   }
 
   @Override
-  public void readSettings(@Nonnull Element element) throws InvalidDataException {
+  public void readSettings(Element element) throws InvalidDataException {
     super.readSettings(element);
     m_regexPattern = Pattern.compile(m_regex);
   }

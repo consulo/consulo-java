@@ -19,11 +19,10 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import jakarta.annotation.Nonnull;
 
 class MakeMethodVarargsPredicate implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@Nonnull PsiElement element) {
+  public boolean satisfiedBy(PsiElement element) {
     if (!(element instanceof PsiParameterList)) {
       return false;
     }

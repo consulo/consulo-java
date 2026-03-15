@@ -33,8 +33,7 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.function.Condition;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -106,7 +105,7 @@ public class JUnitUtil {
       "org.junit.internal.runners.JUnit4ClassRunner"
   };
 
-  public static boolean isSuiteMethod(@Nonnull PsiMethod psiMethod) {
+  public static boolean isSuiteMethod(PsiMethod psiMethod) {
     if (!psiMethod.hasModifierProperty(PsiModifier.PUBLIC)) {
       return false;
     }
@@ -198,7 +197,7 @@ public class JUnitUtil {
     return isTestClass(psiClass, true, true);
   }
 
-  public static boolean isTestClass(@Nonnull PsiClass psiClass, boolean checkAbstract, boolean checkForTestCaseInheritance) {
+  public static boolean isTestClass(PsiClass psiClass, boolean checkAbstract, boolean checkForTestCaseInheritance) {
     if (psiClass.getQualifiedName() == null) {
       return false;
     }
@@ -237,7 +236,7 @@ public class JUnitUtil {
     );
   }
 
-  private static boolean hasTestOrSuiteMethods(@Nonnull PsiClass psiClass) {
+  private static boolean hasTestOrSuiteMethods(PsiClass psiClass) {
     for (final PsiMethod method : psiClass.getAllMethods()) {
       if (isSuiteMethod(method)) {
         return true;
@@ -303,7 +302,7 @@ public class JUnitUtil {
   }
 
   @RequiredReadAction
-  public static boolean isJUnit5TestClass(@Nonnull final PsiClass psiClass, boolean checkAbstract) {
+  public static boolean isJUnit5TestClass(final PsiClass psiClass, boolean checkAbstract) {
     final PsiModifierList modifierList = psiClass.getModifierList();
     if (modifierList == null) {
       return false;
@@ -349,7 +348,7 @@ public class JUnitUtil {
     return false;
   }
 
-  public static boolean isJUnit5(@Nonnull PsiElement element) {
+  public static boolean isJUnit5(PsiElement element) {
     return isJUnit5(element.getResolveScope(), element.getProject());
   }
 
@@ -424,7 +423,7 @@ public class JUnitUtil {
     return JavaPsiFacade.getInstance(project).findClass(TEST_CASE_CLASS, scope);
   }
 
-  public static boolean isTestMethodOrConfig(@Nonnull PsiMethod psiMethod) {
+  public static boolean isTestMethodOrConfig(PsiMethod psiMethod) {
     final PsiClass containingClass = psiMethod.getContainingClass();
     if (containingClass == null) {
       return false;
@@ -537,7 +536,7 @@ public class JUnitUtil {
     return JavaPsiFacade.getInstance(project).findClass(qualifiedName, scope);
   }
 
-  public static PsiJavaPackage getContainingPackage(@Nonnull PsiClass psiClass) {
+  public static PsiJavaPackage getContainingPackage(PsiClass psiClass) {
     PsiDirectory directory = psiClass.getContainingFile().getContainingDirectory();
     return directory == null ? null : JavaDirectoryService.getInstance().getPackage(directory);
   }

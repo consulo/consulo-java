@@ -15,7 +15,6 @@
  */
 package com.intellij.java.execution.configurations;
 
-import org.jetbrains.annotations.NonNls;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -25,8 +24,8 @@ public class RemoteConnection {
   private boolean myServerMode;
   private String myHostName;
   private String myAddress;
-  @NonNls public static final String ONTHROW = ",onthrow=<FQ exception class name>";
-  @NonNls public static final String ONUNCAUGHT = ",onuncaught=<y/n>";
+  public static final String ONTHROW = ",onthrow=<FQ exception class name>";
+  public static final String ONUNCAUGHT = ",onuncaught=<y/n>";
 
   public RemoteConnection(boolean useSockets, String hostName, String address, boolean serverMode) {
     myUseSockets = useSockets;

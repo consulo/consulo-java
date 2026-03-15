@@ -26,7 +26,7 @@ import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.util.dataholder.Key;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 

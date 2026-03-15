@@ -36,7 +36,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +55,7 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction imple
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (!myClass.isValid() || !myClass.getManager().isInProject(myClass)) {
             return false;
         }
@@ -65,7 +64,7 @@ public class CreateConstructorMatchingSuperFix extends BaseIntentionAction imple
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) {
             return;
         }

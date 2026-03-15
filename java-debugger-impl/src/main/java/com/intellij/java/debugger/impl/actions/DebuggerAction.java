@@ -35,8 +35,7 @@ import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CommonShortcuts;
 import consulo.ui.ex.awt.event.DoubleClickListener;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -52,7 +51,7 @@ import java.util.List;
 public abstract class DebuggerAction extends AnAction {
     private static final DebuggerTreeNodeImpl[] EMPTY_TREE_NODE_ARRAY = new DebuggerTreeNodeImpl[0];
 
-    protected DebuggerAction(@Nonnull LocalizeValue text) {
+    protected DebuggerAction(LocalizeValue text) {
         super(text);
     }
 
@@ -162,7 +161,7 @@ public abstract class DebuggerAction extends AnAction {
         });
     }
 
-    public static void refreshViews(@Nonnull XValueNode node) {
+    public static void refreshViews(XValueNode node) {
         XValueTree tree = node.getTree();
         if (tree != null) {
             refreshViews(tree.getSession());

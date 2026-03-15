@@ -25,7 +25,6 @@ import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
@@ -78,7 +77,6 @@ public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<
     }
 
     @Override
-    @Nonnull
     public JComponent createEditor() {
         return myPanel;
     }

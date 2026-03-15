@@ -24,22 +24,18 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThreadDumpStackInspection extends BaseInspection {
-    @Nonnull
     public String getID() {
         return "CallToThreadDumpStack";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.dumpstackCallDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.dumpstackCallProblemDescriptor().get();
     }
@@ -50,7 +46,7 @@ public class ThreadDumpStackInspection extends BaseInspection {
 
     private static class ThreadDumpStackVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             String methodName = MethodCallUtils.getMethodName(expression);
             if (!HardcodedMethodConstants.DUMP_STACKTRACE.equals(methodName)) {

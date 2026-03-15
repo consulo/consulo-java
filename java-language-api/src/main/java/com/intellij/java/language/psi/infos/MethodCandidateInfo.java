@@ -30,8 +30,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.collection.Maps;
 import consulo.util.lang.ThreeState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.util.Map;
@@ -57,7 +56,7 @@ public class MethodCandidateInfo extends CandidateInfo {
 
     @RequiredReadAction
     public MethodCandidateInfo(
-        @Nonnull PsiElement candidate,
+        PsiElement candidate,
         PsiSubstitutor substitutor,
         boolean accessProblem,
         boolean staticsProblem,
@@ -80,15 +79,15 @@ public class MethodCandidateInfo extends CandidateInfo {
     }
 
     public MethodCandidateInfo(
-        @Nonnull PsiElement candidate,
-        @Nonnull PsiSubstitutor substitutor,
+        PsiElement candidate,
+        PsiSubstitutor substitutor,
         boolean accessProblem,
         boolean staticsProblem,
         PsiElement argumentList,
         PsiElement currFileContext,
         @Nullable PsiType[] argumentTypes,
         PsiType[] typeArguments,
-        @Nonnull LanguageLevel languageLevel
+        LanguageLevel languageLevel
     ) {
         super(candidate, substitutor, accessProblem, staticsProblem, currFileContext);
         myArgumentList = argumentList;
@@ -313,7 +312,6 @@ public class MethodCandidateInfo extends CandidateInfo {
         }
     }
 
-    @Nonnull
     public PsiSubstitutor getSiteSubstitutor() {
         PsiSubstitutor incompleteSubstitutor = super.getSubstitutor();
         if (myTypeArguments != null) {
@@ -326,13 +324,11 @@ public class MethodCandidateInfo extends CandidateInfo {
         return incompleteSubstitutor;
     }
 
-    @Nonnull
     @Override
     public PsiSubstitutor getSubstitutor() {
         return getSubstitutor(true);
     }
 
-    @Nonnull
     public PsiSubstitutor getSubstitutor(boolean includeReturnConstraint) {
         PsiSubstitutor substitutor = myCalcedSubstitutor;
         if (substitutor == null || !includeReturnConstraint && myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_8) || isOverloadCheck()) {
@@ -399,14 +395,12 @@ public class MethodCandidateInfo extends CandidateInfo {
         return super.isValidResult() && isApplicable();
     }
 
-    @Nonnull
     @Override
     public PsiMethod getElement() {
         return (PsiMethod) super.getElement();
     }
 
-    @Nonnull
-    public PsiSubstitutor inferTypeArguments(@Nonnull ParameterTypeInferencePolicy policy, boolean includeReturnConstraint) {
+    public PsiSubstitutor inferTypeArguments(ParameterTypeInferencePolicy policy, boolean includeReturnConstraint) {
         return inferTypeArguments(
             policy,
             myArgumentList instanceof PsiExpressionList ? ((PsiExpressionList) myArgumentList).getExpressions() : PsiExpression.EMPTY_ARRAY,
@@ -414,7 +408,7 @@ public class MethodCandidateInfo extends CandidateInfo {
         );
     }
 
-    public PsiSubstitutor inferSubstitutorFromArgs(@Nonnull ParameterTypeInferencePolicy policy, PsiExpression[] arguments) {
+    public PsiSubstitutor inferSubstitutorFromArgs(ParameterTypeInferencePolicy policy, PsiExpression[] arguments) {
         if (myTypeArguments == null) {
             return inferTypeArguments(policy, arguments, true);
         }
@@ -426,10 +420,9 @@ public class MethodCandidateInfo extends CandidateInfo {
     /**
      * If iterated through all candidates, should be called under {@link #ourOverloadGuard} guard so results won't be cached on the top level call
      */
-    @Nonnull
     public PsiSubstitutor inferTypeArguments(
-        @Nonnull ParameterTypeInferencePolicy policy,
-        @Nonnull PsiExpression[] arguments,
+        ParameterTypeInferencePolicy policy,
+        PsiExpression[] arguments,
         boolean includeReturnConstraint
     ) {
         return computeForOverloadedCandidate(

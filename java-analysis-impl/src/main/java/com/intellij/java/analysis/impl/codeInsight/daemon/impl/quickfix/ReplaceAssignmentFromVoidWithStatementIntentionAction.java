@@ -24,9 +24,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 
 public class ReplaceAssignmentFromVoidWithStatementIntentionAction implements SyntheticIntentionAction {
   private final PsiElement myParent;
@@ -37,19 +35,18 @@ public class ReplaceAssignmentFromVoidWithStatementIntentionAction implements Sy
     myLExpr = lExpr;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Remove left side of assignment");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return true;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }

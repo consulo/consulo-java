@@ -15,7 +15,6 @@
  */
 package com.intellij.java.compiler.impl.cache;
 
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Eugene Zhuravlev
@@ -27,7 +26,7 @@ public interface RetentionPolicies {
    */
   int SOURCE = 0x1;
 
-  @NonNls String SOURCE_STR = "SOURCE";
+  String SOURCE_STR = "SOURCE";
 
   /**
    * Annotations are to be recorded in the class file by the compiler
@@ -36,7 +35,7 @@ public interface RetentionPolicies {
    */
   int CLASS = 0x2;
 
-  @NonNls String CLASS_STR = "CLASS";
+  String CLASS_STR = "CLASS";
 
   /**
    * Annotations are to be recorded in the class file by the compiler and
@@ -44,7 +43,7 @@ public interface RetentionPolicies {
    */
   int RUNTIME = 0x4;
 
-  @NonNls String RUNTIME_STR = "RUNTIME";
+  String RUNTIME_STR = "RUNTIME";
 
   int ALL = SOURCE | CLASS | RUNTIME;
 }

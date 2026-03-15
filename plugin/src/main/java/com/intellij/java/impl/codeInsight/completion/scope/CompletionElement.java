@@ -22,8 +22,7 @@ import consulo.language.psi.PsiPackage;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by IntelliJ IDEA.
@@ -42,14 +41,13 @@ public class CompletionElement {
     this(element, substitutor, "");
   }
 
-  public CompletionElement(Object element, PsiSubstitutor substitutor, @Nonnull String qualifierText) {
+  public CompletionElement(Object element, PsiSubstitutor substitutor, String qualifierText) {
     myElement = element;
     mySubstitutor = substitutor;
     myQualifierText = qualifierText;
     myEqualityObject = getUniqueId();
   }
 
-  @Nonnull
   public String getQualifierText() {
     return myQualifierText;
   }
@@ -105,7 +103,7 @@ public class CompletionElement {
     return myEqualityObject != null ? myEqualityObject.hashCode() : 0;
   }
 
-  public boolean isMoreSpecificThan(@Nonnull CompletionElement prev) {
+  public boolean isMoreSpecificThan(CompletionElement prev) {
     Object prevElement = prev.getElement();
     if (!(prevElement instanceof PsiMethod && myElement instanceof PsiMethod)) {
       return false;

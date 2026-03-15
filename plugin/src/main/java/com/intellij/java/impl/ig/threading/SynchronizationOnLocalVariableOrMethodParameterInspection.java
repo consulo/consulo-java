@@ -23,7 +23,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SynchronizationOnLocalVariableOrMethodParameterInspection extends BaseInspection {
@@ -33,7 +32,6 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
   @SuppressWarnings({"PublicField"})
   public boolean reportMethodParameters = true;
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.synchronizationOnLocalVariableOrMethodParameterDisplayName();
   }
@@ -42,7 +40,6 @@ public class SynchronizationOnLocalVariableOrMethodParameterInspection extends B
     return true;
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     Boolean localVariable = (Boolean)infos[0];
     return localVariable

@@ -22,11 +22,9 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class EmptyTryBlockInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.emptyTryBlockDisplayName();
@@ -36,7 +34,6 @@ public class EmptyTryBlockInspection extends BaseInspection {
         return true;
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.emptyTryBlockProblemDescriptor().get();
     }
@@ -49,7 +46,7 @@ public class EmptyTryBlockInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             super.visitTryStatement(statement);
             /*if (JspPsiUtil.isInJspFile(statement.getContainingFile())) {
                 return;

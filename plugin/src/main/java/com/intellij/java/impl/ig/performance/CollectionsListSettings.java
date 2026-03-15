@@ -23,9 +23,7 @@ import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.collection.SmartList;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.*;
@@ -34,7 +32,6 @@ import java.util.*;
  * @author Dmitry Batkovich
  */
 public abstract class CollectionsListSettings {
-    @NonNls
     public static final SortedSet<String> DEFAULT_COLLECTION_LIST;
 
     static {
@@ -61,7 +58,7 @@ public abstract class CollectionsListSettings {
         myCollectionClassesRequiringCapacity = new SmartList<>(getDefaultSettings());
     }
 
-    public void readSettings(@Nonnull Element node) throws InvalidDataException {
+    public void readSettings(Element node) throws InvalidDataException {
         myCollectionClassesRequiringCapacity.clear();
         myCollectionClassesRequiringCapacity.addAll(getDefaultSettings());
         for (Element classElement : node.getChildren("cls")) {
@@ -75,7 +72,7 @@ public abstract class CollectionsListSettings {
         }
     }
 
-    public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+    public void writeSettings(Element node) throws WriteExternalException {
         Collection<String> defaultToRemoveSettings = new HashSet<>(getDefaultSettings());
         defaultToRemoveSettings.removeAll(myCollectionClassesRequiringCapacity);
 

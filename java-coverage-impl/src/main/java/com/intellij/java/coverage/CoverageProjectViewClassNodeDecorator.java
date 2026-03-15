@@ -14,7 +14,7 @@ import consulo.project.ui.view.tree.PackageElement;
 import consulo.project.ui.view.tree.ProjectViewNode;
 import consulo.ui.ex.tree.PresentationData;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 /**

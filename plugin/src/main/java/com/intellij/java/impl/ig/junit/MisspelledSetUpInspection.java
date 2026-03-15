@@ -25,20 +25,16 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class MisspelledSetUpInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.misspelledSetUpDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.misspelledSetUpProblemDescriptor().get();
   }
@@ -61,10 +57,10 @@ public class MisspelledSetUpInspection extends BaseInspection {
   private static class MisspelledSetUpVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       //note: no call to super
       PsiClass aClass = method.getContainingClass();
-      @NonNls String methodName = method.getName();
+      String methodName = method.getName();
       if (!"setup".equals(methodName)) {
         return;
       }

@@ -10,18 +10,15 @@ import consulo.codeEditor.Editor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import junit.framework.Assert;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author ven
  */
 @TestDataPath("$CONTENT_ROOT/testData")
 public abstract class IntroduceConstantTest extends LightCodeInsightTestCase {
-  @NonNls private static final String BASE_PATH = "/refactoring/introduceConstant/";
+  private static final String BASE_PATH = "/refactoring/introduceConstant/";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

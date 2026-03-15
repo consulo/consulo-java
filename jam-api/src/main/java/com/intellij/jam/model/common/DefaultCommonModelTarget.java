@@ -21,7 +21,6 @@ import consulo.language.pom.PomRenameableTarget;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.xml.util.xml.ElementPresentationManager;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Gregory.Shrago
@@ -29,7 +28,7 @@ import jakarta.annotation.Nonnull;
 public class DefaultCommonModelTarget extends DelegatePsiTarget implements PomRenameableTarget<Object>, CommonModelTarget {
   private final CommonModelElement.PsiBase myElement;
 
-  public DefaultCommonModelTarget(@Nonnull CommonModelElement.PsiBase element) {
+  public DefaultCommonModelTarget(CommonModelElement.PsiBase element) {
     super(element.getPsiElement());
     myElement = element;
   }
@@ -42,7 +41,7 @@ public class DefaultCommonModelTarget extends DelegatePsiTarget implements PomRe
     return getNavigationElement().isWritable();
   }
 
-  public Object setName(@Nonnull final String newName) {
+  public Object setName(final String newName) {
     final PsiElement element = getNavigationElement();
     if (element instanceof PomRenameableTarget) {
       return ((PomRenameableTarget)element).setName(newName);

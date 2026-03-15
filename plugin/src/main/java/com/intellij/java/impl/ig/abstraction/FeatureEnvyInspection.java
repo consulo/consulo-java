@@ -27,8 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiNamedElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.Set;
@@ -40,13 +39,11 @@ public class FeatureEnvyInspection extends BaseInspection {
   public boolean ignoreTestCases = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.featureEnvyDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiNamedElement element = (PsiNamedElement)infos[0];
     String className = element.getName();
@@ -69,7 +66,7 @@ public class FeatureEnvyInspection extends BaseInspection {
   private class FeatureEnvyVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       if (ignoreTestCases) {
         PsiClass containingClass = method.getContainingClass();
         if (containingClass != null &&

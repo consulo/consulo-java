@@ -35,8 +35,7 @@ import consulo.util.lang.Comparing;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @Singleton
 @ServiceAPI(value = ComponentScope.PROJECT, lazy = false)
@@ -53,7 +52,7 @@ public class DebuggerPanelsManager {
 
         myProject.getMessageBus().connect(myProject).subscribe(RunContentWithExecutorListener.class, new RunContentWithExecutorListener() {
             @Override
-            public void contentSelected(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor) {
+            public void contentSelected(@Nullable RunContentDescriptor descriptor, Executor executor) {
                 if (executor == DefaultDebugExecutor.getDebugExecutorInstance()) {
                     DebuggerSession session = descriptor == null ? null : getSession(myProject, descriptor);
                     if (session != null) {
@@ -74,7 +73,7 @@ public class DebuggerPanelsManager {
             }
 
             @Override
-            public void contentRemoved(@Nullable RunContentDescriptor descriptor, @Nonnull Executor executor) {
+            public void contentRemoved(@Nullable RunContentDescriptor descriptor, Executor executor) {
             }
         });
     }
@@ -85,7 +84,7 @@ public class DebuggerPanelsManager {
 
     @Nullable
     public RunContentDescriptor attachVirtualMachine(
-        @Nonnull ExecutionEnvironment environment,
+        ExecutionEnvironment environment,
         RunProfileState state,
         RemoteConnection remoteConnection,
         boolean pollConnection
@@ -118,8 +117,7 @@ public class DebuggerPanelsManager {
                 environment.getReuseContent(),
                 new XDebugProcessStarter() {
                     @Override
-                    @Nonnull
-                    public XDebugProcess start(@Nonnull XDebugSession session) {
+                    public XDebugProcess start(XDebugSession session) {
                         return JavaDebugProcess.create(session, debuggerSession);
                     }
                 }

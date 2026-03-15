@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents the class body attached to a constant in a Java enum type.
@@ -29,6 +28,5 @@ public interface PsiEnumConstantInitializer extends PsiAnonymousClass {
    *
    * @return the enum constant instance.
    */
-  @Nonnull
   PsiEnumConstant getEnumConstant();
 }

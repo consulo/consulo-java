@@ -24,7 +24,6 @@ import consulo.language.psi.stub.LexerBasedIdIndexer;
 import consulo.language.psi.stub.OccurrenceConsumer;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaIdIndexer extends LexerBasedIdIndexer {
@@ -38,7 +37,6 @@ public class JavaIdIndexer extends LexerBasedIdIndexer {
     return new JavaFilterLexer(javaLexer, consumer);
   }
 
-  @Nonnull
   @Override
   public FileType getFileType() {
     return JavaFileType.INSTANCE;

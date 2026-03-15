@@ -28,7 +28,6 @@ import consulo.language.inject.advanced.Configuration;
 import consulo.language.pattern.PatternCondition;
 import consulo.language.psi.*;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nonnull;
 
 /**
  * Provides references to RegExp enums for completion.
@@ -36,17 +35,16 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class RegExpLanguageReferenceProvider extends PsiReferenceContributor {
   @Override
-  public void registerReferenceProviders(@Nonnull PsiReferenceRegistrar registrar) {
+  public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
     final Configuration configuration = Configuration.getInstance();
     registrar.registerReferenceProvider(PsiJavaPatterns.literalExpression().with(new PatternCondition<PsiLiteralExpression>("isStringLiteral") {
       @Override
-      public boolean accepts(@Nonnull final PsiLiteralExpression expression, final ProcessingContext context) {
+      public boolean accepts(final PsiLiteralExpression expression, final ProcessingContext context) {
         return PsiUtilEx.isStringOrCharacterLiteral(expression);
       }
     }), new PsiReferenceProvider() {
-      @Nonnull
       @Override
-      public PsiReference[] getReferencesByElement(@Nonnull PsiElement psiElement, @Nonnull ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(PsiElement psiElement, ProcessingContext context) {
         final PsiLiteralExpression expression = (PsiLiteralExpression)psiElement;
         final PsiModifierListOwner owner =
           AnnotationUtilEx.getAnnotatedElementFor(expression, AnnotationUtilEx.LookupType.PREFER_DECLARATION);
@@ -65,7 +63,6 @@ public class RegExpLanguageReferenceProvider extends PsiReferenceContributor {
     });
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

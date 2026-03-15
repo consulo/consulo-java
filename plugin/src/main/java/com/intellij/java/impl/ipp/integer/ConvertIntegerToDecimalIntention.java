@@ -21,19 +21,16 @@ import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertIntegerToDecimalIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertIntegerToDecimalIntention extends ConvertNumberIntentionBase {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.convertIntegerToDecimalIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ConvertIntegerToDecimalPredicate();
     }

@@ -12,8 +12,7 @@ import consulo.language.ast.TokenType;
 import consulo.language.parser.PsiBuilder;
 import consulo.language.parser.WhitespacesBinders;
 import consulo.util.lang.BitUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.function.Function;
@@ -71,12 +70,11 @@ public class ExpressionParser {
 
   private final JavaParser myParser;
 
-  public ExpressionParser(@Nonnull JavaParser javaParser) {
+  public ExpressionParser(JavaParser javaParser) {
     myParser = javaParser;
   }
 
-  @Nullable
-  public PsiBuilder.Marker parse(@Nonnull PsiBuilder builder) {
+  public PsiBuilder.@Nullable Marker parse(PsiBuilder builder) {
     return parseAssignment(builder, 0);
   }
 
@@ -84,8 +82,7 @@ public class ExpressionParser {
     return parseAssignment(builder, FORBID_LAMBDA_MASK);
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseAssignment(final PsiBuilder builder, int mode) {
+  private PsiBuilder.@Nullable Marker parseAssignment(final PsiBuilder builder, int mode) {
     final PsiBuilder.Marker left = parseConditional(builder, mode);
     if (left == null) {
       return null;
@@ -108,13 +105,11 @@ public class ExpressionParser {
     return left;
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseConditional(final PsiBuilder builder) {
+  public PsiBuilder.@Nullable Marker parseConditional(final PsiBuilder builder) {
     return parseConditional(builder, 0);
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseConditional(final PsiBuilder builder, int mode) {
+  public PsiBuilder.@Nullable Marker parseConditional(final PsiBuilder builder, int mode) {
     final PsiBuilder.Marker condition = parseExpression(builder, ExprType.CONDITIONAL_OR, mode);
     if (condition == null) {
       return null;
@@ -151,8 +146,7 @@ public class ExpressionParser {
     return ternary;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseExpression(final PsiBuilder builder, final ExprType type, int mode) {
+  private PsiBuilder.@Nullable Marker parseExpression(final PsiBuilder builder, final ExprType type, int mode) {
     switch (type) {
       case CONDITIONAL_OR:
         return parseBinary(builder, ExprType.CONDITIONAL_AND, CONDITIONAL_OR_OPS, mode);
@@ -196,8 +190,7 @@ public class ExpressionParser {
     }
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseBinary(final PsiBuilder builder, final ExprType type, final TokenSet ops, int mode) {
+  private PsiBuilder.@Nullable Marker parseBinary(final PsiBuilder builder, final ExprType type, final TokenSet ops, int mode) {
     PsiBuilder.Marker result = parseExpression(builder, type, mode);
     if (result == null) {
       return null;
@@ -234,8 +227,7 @@ public class ExpressionParser {
     return result;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseRelational(final PsiBuilder builder, final int mode) {
+  private PsiBuilder.@Nullable Marker parseRelational(final PsiBuilder builder, final int mode) {
     PsiBuilder.Marker left = parseExpression(builder, ExprType.SHIFT, mode);
     if (left == null) return null;
 
@@ -284,8 +276,7 @@ public class ExpressionParser {
     return left;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseUnary(final PsiBuilder builder, int mode) {
+  private PsiBuilder.@Nullable Marker parseUnary(final PsiBuilder builder, int mode) {
     final IElementType tokenType = builder.getTokenType();
 
     if (PREFIX_OPS.contains(tokenType)) {
@@ -334,8 +325,7 @@ public class ExpressionParser {
     }
   }
 
-  @Nullable
-  private PsiBuilder.Marker parsePostfix(final PsiBuilder builder, int mode) {
+  private PsiBuilder.@Nullable Marker parsePostfix(final PsiBuilder builder, int mode) {
     PsiBuilder.Marker operand = parsePrimary(builder, null, -1, mode);
     if (operand == null) {
       return null;
@@ -357,8 +347,7 @@ public class ExpressionParser {
     P4
   }
 
-  @Nullable
-  private PsiBuilder.Marker parsePrimary(PsiBuilder builder, @Nullable BreakPoint breakPoint, int breakOffset, int mode) {
+  private PsiBuilder.@Nullable Marker parsePrimary(PsiBuilder builder, @Nullable BreakPoint breakPoint, int breakOffset, int mode) {
     PsiBuilder.Marker startMarker = builder.mark();
 
     PsiBuilder.Marker expr = parsePrimaryExpressionStart(builder, mode);
@@ -517,8 +506,7 @@ public class ExpressionParser {
     }
   }
 
-  @Nullable
-  private PsiBuilder.Marker parsePrimaryExpressionStart(final PsiBuilder builder, int mode) {
+  private PsiBuilder.@Nullable Marker parsePrimaryExpressionStart(final PsiBuilder builder, int mode) {
     IElementType tokenType = builder.getTokenType();
 
     if (LITERALS.contains(tokenType)) {
@@ -646,16 +634,14 @@ public class ExpressionParser {
     return null;
   }
 
-  @Nonnull
   private PsiBuilder.Marker parseArrayInitializer(PsiBuilder builder) {
     return parseArrayInitializer(builder, JavaElementType.ARRAY_INITIALIZER_EXPRESSION, this::parse, "expected.expression");
   }
 
-  @Nonnull
-  public PsiBuilder.Marker parseArrayInitializer(@Nonnull PsiBuilder builder,
-                                                 @Nonnull IElementType type,
-                                                 @Nonnull Function<? super PsiBuilder, PsiBuilder.Marker> elementParser,
-                                                 @Nonnull @PropertyKey(resourceBundle = BUNDLE) String missingElementKey) {
+  public PsiBuilder.Marker parseArrayInitializer(PsiBuilder builder,
+                                                 IElementType type,
+                                                 Function<? super PsiBuilder, PsiBuilder.Marker> elementParser,
+                                                 @PropertyKey(resourceBundle = BUNDLE) String missingElementKey) {
     PsiBuilder.Marker arrayInit = builder.mark();
     builder.advanceLexer();
 
@@ -696,8 +682,7 @@ public class ExpressionParser {
     return arrayInit;
   }
 
-  @Nonnull
-  private PsiBuilder.Marker parseNew(PsiBuilder builder, @Nullable PsiBuilder.Marker start) {
+  private PsiBuilder.Marker parseNew(PsiBuilder builder, PsiBuilder.@Nullable Marker start) {
     PsiBuilder.Marker newExpr = (start != null ? start.precede() : builder.mark());
     builder.advanceLexer();
 
@@ -780,8 +765,7 @@ public class ExpressionParser {
     return newExpr;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseClassAccessOrMethodReference(PsiBuilder builder) {
+  private PsiBuilder.@Nullable Marker parseClassAccessOrMethodReference(PsiBuilder builder) {
     PsiBuilder.Marker expr = builder.mark();
 
     boolean primitive = ElementType.PRIMITIVE_TYPE_BIT_SET.contains(builder.getTokenType());
@@ -797,8 +781,7 @@ public class ExpressionParser {
     return result;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseClassAccessOrMethodReference(PsiBuilder builder, PsiBuilder.Marker expr, boolean optionalClassKeyword) {
+  private PsiBuilder.@Nullable Marker parseClassAccessOrMethodReference(PsiBuilder builder, PsiBuilder.Marker expr, boolean optionalClassKeyword) {
     IElementType tokenType = builder.getTokenType();
     if (tokenType == JavaTokenType.DOT) {
       return parseClassObjectAccess(builder, expr, optionalClassKeyword);
@@ -809,8 +792,7 @@ public class ExpressionParser {
     return null;
   }
 
-  @Nullable
-  private static PsiBuilder.Marker parseClassObjectAccess(PsiBuilder builder, PsiBuilder.Marker expr, boolean optionalClassKeyword) {
+  private static PsiBuilder.@Nullable Marker parseClassObjectAccess(PsiBuilder builder, PsiBuilder.Marker expr, boolean optionalClassKeyword) {
     final PsiBuilder.Marker mark = builder.mark();
     builder.advanceLexer();
 
@@ -829,7 +811,6 @@ public class ExpressionParser {
     return expr;
   }
 
-  @Nonnull
   private PsiBuilder.Marker parseMethodReference(final PsiBuilder builder, final PsiBuilder.Marker start) {
     builder.advanceLexer();
 
@@ -843,8 +824,7 @@ public class ExpressionParser {
     return start;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseLambdaAfterParenth(final PsiBuilder builder) {
+  private PsiBuilder.@Nullable Marker parseLambdaAfterParenth(final PsiBuilder builder) {
     final boolean isLambda;
     final boolean isTyped;
 
@@ -892,8 +872,7 @@ public class ExpressionParser {
     return isLambda ? parseLambdaExpression(builder, isTyped) : null;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseLambdaExpression(final PsiBuilder builder, final boolean typed) {
+  private PsiBuilder.@Nullable Marker parseLambdaExpression(final PsiBuilder builder, final boolean typed) {
     final PsiBuilder.Marker start = builder.mark();
 
     myParser.getDeclarationParser().parseLambdaParameterList(builder, typed);
@@ -918,7 +897,6 @@ public class ExpressionParser {
     return start;
   }
 
-  @Nonnull
   public PsiBuilder.Marker parseArgumentList(final PsiBuilder builder) {
     final PsiBuilder.Marker list = builder.mark();
     builder.advanceLexer();

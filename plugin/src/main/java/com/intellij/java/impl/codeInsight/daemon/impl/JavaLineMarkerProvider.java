@@ -57,7 +57,6 @@ import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 import java.util.*;
@@ -104,7 +103,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
 
     @RequiredReadAction
     @Override
-    public LineMarkerInfo<?> getLineMarkerInfo(@Nonnull PsiElement element) {
+    public LineMarkerInfo<?> getLineMarkerInfo(PsiElement element) {
         PsiElement parent = element.getParent();
         if (element instanceof PsiIdentifier && parent instanceof PsiMethod) {
             if (!myOverridingOption.isEnabled() && !myImplementingOption.isEnabled()) {
@@ -187,15 +186,14 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         return null;
     }
 
-    @Nonnull
     @RequiredReadAction
-    private static LineMarkerInfo createSuperMethodLineMarkerInfo(@Nonnull PsiElement name, @Nonnull Image icon) {
+    private static LineMarkerInfo createSuperMethodLineMarkerInfo(PsiElement name, Image icon) {
         ArrowUpLineMarkerInfo info = new ArrowUpLineMarkerInfo(name, icon, MarkerType.OVERRIDING_METHOD);
         return NavigateAction.setNavigateAction(info, "Go to super method", IdeActions.ACTION_GOTO_SUPER);
     }
 
     @RequiredReadAction
-    private static int getCategory(@Nonnull PsiElement element, @Nonnull CharSequence documentChars) {
+    private static int getCategory(PsiElement element, CharSequence documentChars) {
         if (element instanceof PsiField || element instanceof PsiTypeParameter) {
             return 1;
         }
@@ -217,7 +215,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
 
     @Override
     @RequiredReadAction
-    public void collectSlowLineMarkers(@Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result) {
+    public void collectSlowLineMarkers(List<PsiElement> elements, Collection<LineMarkerInfo> result) {
         myApplication.assertReadAccessAllowed();
 
         List<Supplier<List<LineMarkerInfo<PsiElement>>>> tasks = new ArrayList<>();
@@ -283,8 +281,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         }
     }
 
-    @Nonnull
-    private static List<LineMarkerInfo<PsiElement>> collectSiblingInheritedMethods(@Nonnull Collection<? extends PsiMethod> methods) {
+    private static List<LineMarkerInfo<PsiElement>> collectSiblingInheritedMethods(Collection<? extends PsiMethod> methods) {
         Map<PsiMethod, FindSuperElementsHelper.SiblingInfo> map = FindSuperElementsHelper.getSiblingInheritanceInfos(methods);
         return ContainerUtil.map(
             map.keySet(),
@@ -304,9 +301,8 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         );
     }
 
-    @Nonnull
     @RequiredReadAction
-    private static PsiElement getMethodRange(@Nonnull PsiMethod method) {
+    private static PsiElement getMethodRange(PsiMethod method) {
         PsiElement range;
         if (method.isPhysical()) {
             range = method.getNameIdentifier();
@@ -323,9 +319,8 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         return range;
     }
 
-    @Nonnull
     @RequiredReadAction
-    protected List<LineMarkerInfo<PsiElement>> collectInheritingClasses(@Nonnull PsiClass aClass) {
+    protected List<LineMarkerInfo<PsiElement>> collectInheritingClasses(PsiClass aClass) {
         if (aClass.isFinal()) {
             return Collections.emptyList();
         }
@@ -371,11 +366,10 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         return Collections.emptyList();
     }
 
-    @Nonnull
     @RequiredReadAction
     private List<LineMarkerInfo<PsiElement>> collectOverridingMethods(
-        @Nonnull Set<PsiMethod> methodSet,
-        @Nonnull PsiClass containingClass
+        Set<PsiMethod> methodSet,
+        PsiClass containingClass
     ) {
         if (!myOverriddenOption.isEnabled() && !myImplementedOption.isEnabled()) {
             return Collections.emptyList();
@@ -450,7 +444,6 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         };
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;
@@ -458,7 +451,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
 
     private static class ArrowUpLineMarkerInfo extends MergeableLineMarkerInfo<PsiElement> {
         @RequiredReadAction
-        private ArrowUpLineMarkerInfo(@Nonnull PsiElement element, @Nonnull Image icon, @Nonnull MarkerType markerType) {
+        private ArrowUpLineMarkerInfo(PsiElement element, Image icon, MarkerType markerType) {
             super(
                 element,
                 element.getTextRange(),
@@ -471,7 +464,7 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
         }
 
         @Override
-        public boolean canMergeWith(@Nonnull MergeableLineMarkerInfo<?> info) {
+        public boolean canMergeWith(MergeableLineMarkerInfo<?> info) {
             if (!(info instanceof ArrowUpLineMarkerInfo)) {
                 return false;
             }
@@ -480,15 +473,13 @@ public class JavaLineMarkerProvider extends LineMarkerProviderDescriptor {
             return otherElement != null && myElement != null;
         }
 
-        @Nonnull
         @Override
-        public Image getCommonIcon(@Nonnull List<MergeableLineMarkerInfo> infos) {
+        public Image getCommonIcon(List<MergeableLineMarkerInfo> infos) {
             return myIcon;
         }
 
-        @Nonnull
         @Override
-        public Function<? super PsiElement, String> getCommonTooltip(@Nonnull List<MergeableLineMarkerInfo> infos) {
+        public Function<? super PsiElement, String> getCommonTooltip(List<MergeableLineMarkerInfo> infos) {
             return element -> "Multiple method overrides";
         }
 

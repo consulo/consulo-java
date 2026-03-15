@@ -32,7 +32,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiExpressionListImpl extends CompositePsiElement implements PsiExpressionList {
   private static final Logger LOG = Logger.getInstance(PsiExpressionListImpl.class);
@@ -42,7 +41,6 @@ public class PsiExpressionListImpl extends CompositePsiElement implements PsiExp
   }
 
   @Override
-  @Nonnull
   public PsiExpression[] getExpressions() {
     return getChildrenAsPsiElements(ElementType.EXPRESSION_BIT_SET, PsiExpression.ARRAY_FACTORY);
   }
@@ -58,7 +56,6 @@ public class PsiExpressionListImpl extends CompositePsiElement implements PsiExp
   }
 
   @Override
-  @Nonnull
   public PsiType[] getExpressionTypes() {
     PsiExpression[] expressions = getExpressions();
     PsiType[] types = PsiType.createArray(expressions.length);
@@ -90,7 +87,7 @@ public class PsiExpressionListImpl extends CompositePsiElement implements PsiExp
   }
 
   @Override
-  public int getChildRole(@Nonnull ASTNode child) {
+  public int getChildRole(ASTNode child) {
     LOG.assertTrue(child.getTreeParent() == this);
     IElementType i = child.getElementType();
     if (i == JavaTokenType.COMMA) {
@@ -143,7 +140,7 @@ public class PsiExpressionListImpl extends CompositePsiElement implements PsiExp
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
       JavaSourceUtil.deleteSeparatingComma(this, child);
     }
@@ -152,7 +149,7 @@ public class PsiExpressionListImpl extends CompositePsiElement implements PsiExp
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitExpressionList(this);
     } else {

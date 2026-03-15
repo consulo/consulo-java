@@ -5,11 +5,10 @@ import consulo.language.impl.psi.DelegatePsiTarget;
 import consulo.language.pom.PomRenameableTarget;
 import consulo.language.psi.PsiNamedElement;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class AliasingPsiTarget extends DelegatePsiTarget implements PomRenameableTarget<AliasingPsiTarget> {
-  public AliasingPsiTarget(@Nonnull PsiNamedElement element) {
+  public AliasingPsiTarget(PsiNamedElement element) {
     super(element);
   }
 
@@ -19,28 +18,25 @@ public class AliasingPsiTarget extends DelegatePsiTarget implements PomRenameabl
   }
 
   @Override
-  public AliasingPsiTarget setName(@Nonnull String newName) {
+  public AliasingPsiTarget setName(String newName) {
     return setAliasName(newName);
   }
 
   @Override
-  @Nonnull
   public String getName() {
     return StringUtil.notNullize(getNameAlias(StringUtil.notNullize(((PsiNamedElement) getNavigationElement()).getName())));
   }
 
-  @Nonnull
-  public AliasingPsiTarget setAliasName(@Nonnull String newAliasName) {
+  public AliasingPsiTarget setAliasName(String newAliasName) {
     return this;
   }
 
   @Nullable
-  public String getNameAlias(@Nonnull String delegatePsiTargetName) {
+  public String getNameAlias(String delegatePsiTargetName) {
     return delegatePsiTargetName;
   }
 
-  @Nonnull
-  public String getTargetName(@Nonnull String aliasName) {
+  public String getTargetName(String aliasName) {
     return aliasName;
   }
 }

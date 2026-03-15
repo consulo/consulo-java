@@ -44,8 +44,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -218,8 +217,8 @@ public class AnnotationsHighlightUtil {
 
     @RequiredReadAction
     public static HighlightInfo.Builder checkDuplicateAnnotations(
-        @Nonnull PsiAnnotation annotationToCheck,
-        @Nonnull LanguageLevel languageLevel
+        PsiAnnotation annotationToCheck,
+        LanguageLevel languageLevel
     ) {
         PsiAnnotationOwner owner = annotationToCheck.getOwner();
         if (owner == null) {
@@ -306,7 +305,7 @@ public class AnnotationsHighlightUtil {
     }
 
     @RequiredReadAction
-    private static boolean isAnnotationRepeatedTwice(@Nonnull PsiAnnotationOwner owner, @Nullable String qualifiedName) {
+    private static boolean isAnnotationRepeatedTwice(PsiAnnotationOwner owner, @Nullable String qualifiedName) {
         int count = 0;
         for (PsiAnnotation annotation : owner.getAnnotations()) {
             PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
@@ -322,9 +321,8 @@ public class AnnotationsHighlightUtil {
         return false;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkMissingAttributes(PsiAnnotation annotation) {
+    public static HighlightInfo.@Nullable Builder checkMissingAttributes(PsiAnnotation annotation) {
         PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
         if (nameRef == null) {
             return null;
@@ -373,9 +371,8 @@ public class AnnotationsHighlightUtil {
         return null;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkConstantExpression(PsiExpression expression) {
+    public static HighlightInfo.@Nullable Builder checkConstantExpression(PsiExpression expression) {
         PsiElement parent = expression.getParent();
         if (PsiUtil.isAnnotationMethod(parent) || parent instanceof PsiNameValuePair || parent instanceof PsiArrayInitializerMemberValue) {
             if (!PsiUtil.isConstantExpression(expression)) {
@@ -388,9 +385,8 @@ public class AnnotationsHighlightUtil {
         return null;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkValidAnnotationType(PsiType type, PsiTypeElement typeElement) {
+    public static HighlightInfo.@Nullable Builder checkValidAnnotationType(PsiType type, PsiTypeElement typeElement) {
         if (type != null && type.accept(AnnotationReturnTypeVisitor.INSTANCE)) {
             return null;
         }
@@ -406,12 +402,11 @@ public class AnnotationsHighlightUtil {
         psiElement().withParent(PsiAnnotationMethod.class).afterLeaf(PsiKeyword.DEFAULT)
     );
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkApplicability(
-        @Nonnull PsiAnnotation annotation,
-        @Nonnull LanguageLevel level,
-        @Nonnull PsiFile file
+    public static HighlightInfo.@Nullable Builder checkApplicability(
+        PsiAnnotation annotation,
+        LanguageLevel level,
+        PsiFile file
     ) {
         if (ANY_ANNOTATION_ALLOWED.accepts(annotation)) {
             return null;
@@ -491,9 +486,8 @@ public class AnnotationsHighlightUtil {
             .registerFix(new DeleteAnnotationAction(annotation));
     }
 
-    @Nullable
     @RequiredReadAction
-    private static HighlightInfo.Builder checkReferenceTarget(PsiAnnotation annotation, @Nullable PsiJavaCodeReferenceElement ref) {
+    private static HighlightInfo.@Nullable Builder checkReferenceTarget(PsiAnnotation annotation, @Nullable PsiJavaCodeReferenceElement ref) {
         if (ref == null) {
             return null;
         }
@@ -524,9 +518,8 @@ public class AnnotationsHighlightUtil {
         return ref;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkAnnotationType(PsiAnnotation annotation) {
+    public static HighlightInfo.@Nullable Builder checkAnnotationType(PsiAnnotation annotation) {
         PsiJavaCodeReferenceElement nameRefElem = annotation.getNameReferenceElement();
         if (nameRefElem != null && (!(nameRefElem.resolve() instanceof PsiClass annotationClass) || !annotationClass.isAnnotationType())) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
@@ -536,9 +529,8 @@ public class AnnotationsHighlightUtil {
         return null;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkCyclicMemberType(PsiTypeElement typeElement, PsiClass aClass) {
+    public static HighlightInfo.@Nullable Builder checkCyclicMemberType(PsiTypeElement typeElement, PsiClass aClass) {
         LOG.assertTrue(aClass.isAnnotationType());
         PsiType type = typeElement.getType();
         Set<PsiClass> checked = new HashSet<>();
@@ -550,7 +542,7 @@ public class AnnotationsHighlightUtil {
         return null;
     }
 
-    private static boolean cyclicDependencies(PsiClass aClass, PsiType type, @Nonnull Set<PsiClass> checked, @Nonnull PsiManager manager) {
+    private static boolean cyclicDependencies(PsiClass aClass, PsiType type, Set<PsiClass> checked, PsiManager manager) {
         PsiClass resolvedClass = PsiUtil.resolveClassInType(type);
         if (resolvedClass != null && resolvedClass.isAnnotationType()) {
             if (aClass == resolvedClass) {
@@ -569,9 +561,8 @@ public class AnnotationsHighlightUtil {
         return false;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkClashesWithSuperMethods(@Nonnull PsiAnnotationMethod psiMethod) {
+    public static HighlightInfo.@Nullable Builder checkClashesWithSuperMethods(PsiAnnotationMethod psiMethod) {
         PsiIdentifier nameIdentifier = psiMethod.getNameIdentifier();
         if (nameIdentifier != null) {
             PsiMethod[] methods = psiMethod.findDeepestSuperMethods();
@@ -630,9 +621,8 @@ public class AnnotationsHighlightUtil {
         return null;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkTargetAnnotationDuplicates(PsiAnnotation annotation) {
+    public static HighlightInfo.@Nullable Builder checkTargetAnnotationDuplicates(PsiAnnotation annotation) {
         PsiJavaCodeReferenceElement nameRef = annotation.getNameReferenceElement();
         if (nameRef == null) {
             return null;
@@ -665,9 +655,8 @@ public class AnnotationsHighlightUtil {
         return null;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkFunctionalInterface(@Nonnull PsiAnnotation annotation, @Nonnull LanguageLevel languageLevel) {
+    public static HighlightInfo.@Nullable Builder checkFunctionalInterface(PsiAnnotation annotation, LanguageLevel languageLevel) {
         if (languageLevel.isAtLeast(LanguageLevel.JDK_1_8)
             && CommonClassNames.JAVA_LANG_FUNCTIONAL_INTERFACE.equals(annotation.getQualifiedName())
             && annotation.getOwner() instanceof PsiModifierList modifierList
@@ -685,9 +674,8 @@ public class AnnotationsHighlightUtil {
         return null;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo.Builder checkRepeatableAnnotation(PsiAnnotation annotation) {
+    public static HighlightInfo.@Nullable Builder checkRepeatableAnnotation(PsiAnnotation annotation) {
         String qualifiedName = annotation.getQualifiedName();
         if (!CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE.equals(qualifiedName)) {
             return null;
@@ -706,9 +694,8 @@ public class AnnotationsHighlightUtil {
         return null;
     }
 
-    @Nonnull
     @RequiredReadAction
-    private static LocalizeValue doCheckRepeatableAnnotation(@Nonnull PsiAnnotation annotation) {
+    private static LocalizeValue doCheckRepeatableAnnotation(PsiAnnotation annotation) {
         if (!(annotation.getOwner() instanceof PsiModifierList modifierList)) {
             return LocalizeValue.empty();
         }
@@ -753,7 +740,7 @@ public class AnnotationsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    private static PsiClass getRepeatableContainer(@Nonnull PsiAnnotation annotation) {
+    private static PsiClass getRepeatableContainer(PsiAnnotation annotation) {
         if (!(PsiImplUtil.findAttributeValue(annotation, null) instanceof PsiClassObjectAccessExpression containerRef)) {
             return null;
         }
@@ -843,7 +830,7 @@ public class AnnotationsHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static RetentionPolicy getRetentionPolicy(@Nonnull PsiClass annotation) {
+    public static RetentionPolicy getRetentionPolicy(PsiClass annotation) {
         PsiModifierList modifierList = annotation.getModifierList();
         if (modifierList != null) {
             PsiAnnotation retentionAnno = modifierList.findAnnotation(CommonClassNames.JAVA_LANG_ANNOTATION_RETENTION);
@@ -912,20 +899,19 @@ public class AnnotationsHighlightUtil {
             myAnnotation = annotation;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getText() {
             return LocalizeValue.localizeTODO("Remove");
         }
 
         @Override
-        public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        public boolean isAvailable(Project project, Editor editor, PsiFile file) {
             return true;
         }
 
         @Override
         @RequiredWriteAction
-        public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+        public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
             myAnnotation.delete();
         }
 

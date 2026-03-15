@@ -41,7 +41,6 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -84,9 +83,8 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
         return result;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         if (myConstructor != null) {
             return new ReplaceConstructorWithFactoryViewDescriptor(myConstructor);
         }
@@ -97,7 +95,6 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
 
     private List<PsiElement> myNonNewConstructorUsages;
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -147,7 +144,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
 
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
@@ -203,7 +200,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         try {
             PsiReferenceExpression classReferenceExpression =
                 myFactory.createReferenceExpression(myTargetClass);
@@ -310,7 +307,6 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
         return VisibilityUtil.getVisibilityModifier(modifierList);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {

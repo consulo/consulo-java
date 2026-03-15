@@ -49,8 +49,7 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -61,7 +60,7 @@ import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_FILE;
 
 public class ModuleHighlightUtil {
     @Nullable
-    public static PsiJavaModule getModuleDescriptor(@Nonnull PsiFileSystemItem fsItem) {
+    public static PsiJavaModule getModuleDescriptor(PsiFileSystemItem fsItem) {
         VirtualFile file = fsItem.getVirtualFile();
         if (file == null) {
             return null;
@@ -72,8 +71,8 @@ public class ModuleHighlightUtil {
 
     @RequiredReadAction
     public static HighlightInfo checkPackageStatement(
-        @Nonnull PsiPackageStatement statement,
-        @Nonnull PsiFile file,
+        PsiPackageStatement statement,
+        PsiFile file,
         @Nullable PsiJavaModule module
     ) {
         if (PsiUtil.isModuleFile(file)) {
@@ -102,7 +101,7 @@ public class ModuleHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkFileName(@Nonnull PsiJavaModule element, @Nonnull PsiFile file) {
+    public static HighlightInfo checkFileName(PsiJavaModule element, PsiFile file) {
         if (!MODULE_INFO_FILE.equals(file.getName())) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(range(element))
@@ -116,7 +115,7 @@ public class ModuleHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkFileDuplicates(@Nonnull PsiJavaModule element, @Nonnull PsiFile file) {
+    public static HighlightInfo checkFileDuplicates(PsiJavaModule element, PsiFile file) {
         Module module = findModule(file);
         if (module != null) {
             Project project = file.getProject();
@@ -138,9 +137,8 @@ public class ModuleHighlightUtil {
         return null;
     }
 
-    @Nonnull
     @RequiredReadAction
-    public static List<HighlightInfo> checkDuplicateStatements(@Nonnull PsiJavaModule module) {
+    public static List<HighlightInfo> checkDuplicateStatements(PsiJavaModule module) {
         List<HighlightInfo> results = new ArrayList<>();
 
         checkDuplicateRefs(
@@ -185,7 +183,7 @@ public class ModuleHighlightUtil {
     private static <T extends PsiElement> void checkDuplicateRefs(
         Iterable<T> statements,
         @RequiredReadAction Function<T, Optional<String>> ref,
-        @Nonnull Function<Object, LocalizeValue> descriptionTemplate,
+        Function<Object, LocalizeValue> descriptionTemplate,
         List<HighlightInfo> results
     ) {
         Set<String> filter = new HashSet<>();
@@ -206,9 +204,8 @@ public class ModuleHighlightUtil {
         }
     }
 
-    @Nonnull
     @RequiredReadAction
-    public static List<HighlightInfo> checkUnusedServices(@Nonnull PsiJavaModule module) {
+    public static List<HighlightInfo> checkUnusedServices(PsiJavaModule module) {
         List<HighlightInfo> results = new ArrayList<>();
 
         Set<String> exports = JBIterable.from(module.getExports())
@@ -246,7 +243,7 @@ public class ModuleHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkFileLocation(@Nonnull PsiJavaModule element, @Nonnull PsiFile file) {
+    public static HighlightInfo checkFileLocation(PsiJavaModule element, PsiFile file) {
         VirtualFile vFile = file.getVirtualFile();
         if (vFile != null) {
             VirtualFile root = ProjectFileIndex.getInstance(file.getProject()).getSourceRootForFile(vFile);
@@ -264,7 +261,7 @@ public class ModuleHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkModuleReference(@Nullable PsiJavaModuleReferenceElement refElement, @Nonnull PsiJavaModule container) {
+    public static HighlightInfo checkModuleReference(@Nullable PsiJavaModuleReferenceElement refElement, PsiJavaModule container) {
         if (refElement != null) {
             PsiPolyVariantReference ref = refElement.getReference();
             assert ref != null : refElement.getParent();
@@ -298,7 +295,7 @@ public class ModuleHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkHostModuleStrength(@Nonnull PsiPackageAccessibilityStatement statement) {
+    public static HighlightInfo checkHostModuleStrength(PsiPackageAccessibilityStatement statement) {
         if (statement.getRole() == Role.OPENS && statement.getParent() instanceof PsiJavaModule javaModule
             && javaModule.hasModifierProperty(PsiModifier.OPEN)) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
@@ -314,7 +311,7 @@ public class ModuleHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkPackageReference(@Nonnull PsiPackageAccessibilityStatement statement) {
+    public static HighlightInfo checkPackageReference(PsiPackageAccessibilityStatement statement) {
         PsiJavaCodeReferenceElement refElement = statement.getPackageReference();
         if (refElement != null) {
             PsiElement target = refElement.resolve();
@@ -341,9 +338,8 @@ public class ModuleHighlightUtil {
         return null;
     }
 
-    @Nonnull
     @RequiredReadAction
-    public static List<HighlightInfo> checkPackageAccessTargets(@Nonnull PsiPackageAccessibilityStatement statement) {
+    public static List<HighlightInfo> checkPackageAccessTargets(PsiPackageAccessibilityStatement statement) {
         List<HighlightInfo> results = new ArrayList<>();
 
         Set<String> targets = new HashSet<>();
@@ -396,9 +392,8 @@ public class ModuleHighlightUtil {
         return null;
     }
 
-    @Nonnull
     @RequiredReadAction
-    public static List<HighlightInfo> checkServiceImplementations(@Nonnull PsiProvidesStatement statement) {
+    public static List<HighlightInfo> checkServiceImplementations(PsiProvidesStatement statement) {
         PsiReferenceList implRefList = statement.getImplementationList();
         if (implRefList == null) {
             return Collections.emptyList();
@@ -484,9 +479,9 @@ public class ModuleHighlightUtil {
     @Nullable
     @RequiredReadAction
     public static HighlightInfo checkPackageAccessibility(
-        @Nonnull PsiJavaCodeReferenceElement ref,
-        @Nonnull PsiElement target,
-        @Nonnull PsiJavaModule refModule
+        PsiJavaCodeReferenceElement ref,
+        PsiElement target,
+        PsiJavaModule refModule
     ) {
         if (PsiTreeUtil.getParentOfType(ref, PsiDocComment.class) == null) {
             Module module = findModule(refModule);
@@ -554,7 +549,7 @@ public class ModuleHighlightUtil {
 
     @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkClashingReads(@Nonnull PsiJavaModule module) {
+    public static HighlightInfo checkClashingReads(PsiJavaModule module) {
         Trinity<String, PsiJavaModule, PsiJavaModule> conflict = JavaModuleGraphUtil.findConflict(module);
         if (conflict != null) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)

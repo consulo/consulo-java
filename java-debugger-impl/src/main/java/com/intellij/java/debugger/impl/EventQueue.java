@@ -16,7 +16,6 @@
 package com.intellij.java.debugger.impl;
 
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -45,7 +44,7 @@ public class EventQueue<E> {
     }
   }
 
-  public boolean pushBack(@Nonnull E event, int priority) {
+  public boolean pushBack(E event, int priority) {
     if (LOG.isDebugEnabled()) {
       LOG.debug("pushBack event " + event);
     }
@@ -63,7 +62,7 @@ public class EventQueue<E> {
     return true;
   }
 
-  public boolean put(@Nonnull E event, int priority) {
+  public boolean put(E event, int priority) {
     if (LOG.isDebugEnabled()) {
       LOG.debug("put event " + event);
     }
@@ -132,7 +131,6 @@ public class EventQueue<E> {
     return myCurrentEvent;
   }
 
-  @Nonnull
   public List<E> clearQueue() {
     final List<E> allEvents = new ArrayList<E>();
     for (int i = 0; i < myEvents.length; i++) {

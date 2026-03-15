@@ -18,21 +18,19 @@ package com.siyeh.ig.psiutils;
 import com.intellij.java.language.psi.*;
 import com.siyeh.HardcodedMethodConstants;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 class ArrayContentsAccessedVisitor extends JavaRecursiveElementVisitor {
 
   private boolean accessed = false;
   private final PsiVariable variable;
 
-  public ArrayContentsAccessedVisitor(@Nonnull PsiVariable variable) {
+  public ArrayContentsAccessedVisitor(PsiVariable variable) {
     this.variable = variable;
   }
 
   @Override
   public void visitForeachStatement(
-    @Nonnull PsiForeachStatement statement) {
+    PsiForeachStatement statement) {
     if (accessed) {
       return;
     }
@@ -84,7 +82,7 @@ class ArrayContentsAccessedVisitor extends JavaRecursiveElementVisitor {
       return;
     }
     super.visitReferenceExpression(expression);
-    @NonNls final String referenceName = expression.getReferenceName();
+    final String referenceName = expression.getReferenceName();
     if (!"length".equals(referenceName)) {
       return;
     }

@@ -1,6 +1,5 @@
 package com.intellij.codeInsight.completion;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.JavaLanguage;
@@ -41,8 +40,7 @@ public abstract class WordCompletionTest extends CompletionTestCase {
   public void testNoWordCompletionForNonSoftReference() throws Throwable {
     PsiReferenceProvider softProvider = new PsiReferenceProvider() {
       @Override
-      @Nonnull
-      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element, true) {
           @Override
           public PsiElement resolve() {
@@ -50,7 +48,6 @@ public abstract class WordCompletionTest extends CompletionTestCase {
           }
 
           @Override
-          @Nonnull
           public Object[] getVariants() {
             return new Object[]{"MySoftVariant"};
           }
@@ -59,8 +56,7 @@ public abstract class WordCompletionTest extends CompletionTestCase {
     };
     PsiReferenceProvider hardProvider = new PsiReferenceProvider() {
       @Override
-      @Nonnull
-      public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element, false) {
           @Override
           public PsiElement resolve() {
@@ -68,7 +64,6 @@ public abstract class WordCompletionTest extends CompletionTestCase {
           }
 
           @Override
-          @Nonnull
           public Object[] getVariants() {
             return new Object[]{"MyHardVariant"};
           }

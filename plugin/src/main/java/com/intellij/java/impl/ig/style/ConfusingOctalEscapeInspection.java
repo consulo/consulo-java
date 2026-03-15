@@ -22,25 +22,21 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConfusingOctalEscapeInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "ConfusingOctalEscapeSequence";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.confusingOctalEscapeSequenceDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.confusingOctalEscapeSequenceProblemDescriptor().get();
   }
@@ -53,7 +49,7 @@ public class ConfusingOctalEscapeInspection extends BaseInspection {
   private static class ConfusingOctalEscapeVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+    public void visitLiteralExpression(PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       if (!ExpressionUtils.hasStringType(expression)) {
         return;

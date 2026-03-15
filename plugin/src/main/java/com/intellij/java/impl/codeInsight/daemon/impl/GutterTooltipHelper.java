@@ -14,8 +14,7 @@ import consulo.ui.ex.keymap.util.KeymapUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -40,9 +39,8 @@ public final class GutterTooltipHelper {
    * @param skipFirstMember {@code true} to skip a method (or field) name in the link to element
    * @param actionId        an action identifier to generate context help or {@code null} if not applicable
    */
-  @Nonnull
-  public static <E extends PsiElement> String getTooltipText(@Nonnull Collection<E> elements,
-                                                             @Nonnull String prefix,
+  public static <E extends PsiElement> String getTooltipText(Collection<E> elements,
+                                                             String prefix,
                                                              boolean skipFirstMember,
                                                              @Nullable String actionId) {
     String firstDivider = getElementDivider(true, true, elements.size());
@@ -71,19 +69,17 @@ public final class GutterTooltipHelper {
    * @param skipFirstMemberOfElement a function that returns {@code true} to skip a method (or field) name for the current element
    * @param actionId                 an action identifier to generate context help or {@code null} if not applicable
    */
-  @Nonnull
-  public static <E extends PsiElement> String getTooltipText(@Nonnull Collection<? extends E> elements,
-                                                             @Nonnull Function<? super E, String> elementToPrefix,
-                                                             @Nonnull Predicate<? super E> skipFirstMemberOfElement,
+  public static <E extends PsiElement> String getTooltipText(Collection<? extends E> elements,
+                                                             Function<? super E, String> elementToPrefix,
+                                                             Predicate<? super E> skipFirstMemberOfElement,
                                                              @Nullable String actionId) {
     return getTooltipText(null, elements, elementToPrefix, skipFirstMemberOfElement, actionId);
   }
 
-  @Nonnull
   private static <E extends PsiElement> String getTooltipText(@Nullable String prefix,
-                                                              @Nonnull Collection<? extends E> elements,
-                                                              @Nonnull Function<? super E, String> elementToPrefix,
-                                                              @Nonnull Predicate<? super E> skipFirstMemberOfElement,
+                                                              Collection<? extends E> elements,
+                                                              Function<? super E, String> elementToPrefix,
+                                                              Predicate<? super E> skipFirstMemberOfElement,
                                                               @Nullable String actionId) {
     StringBuilder sb = new StringBuilder("<html><body><p>");
     if (prefix != null) {
@@ -101,7 +97,7 @@ public final class GutterTooltipHelper {
     return sb.toString();
   }
 
-  private static void appendElement(@Nonnull StringBuilder sb, @Nonnull PsiElement element, boolean skip) {
+  private static void appendElement(StringBuilder sb, PsiElement element, boolean skip) {
     boolean useSingleLink = true;
     String packageName = null;
     boolean addedSingleLink = useSingleLink && appendLink(sb, element);
@@ -152,7 +148,7 @@ public final class GutterTooltipHelper {
     appendPackageName(sb, packageName);
   }
 
-  private static void appendPackageName(@Nonnull StringBuilder sb, @Nullable String name) {
+  private static void appendPackageName(StringBuilder sb, @Nullable String name) {
     if (StringUtil.isEmpty(name)) {
       return; // no package name
     }
@@ -160,7 +156,7 @@ public final class GutterTooltipHelper {
     sb.append("'><code>(").append(name).append(")</code></font>");
   }
 
-  private static void appendContextHelp(@Nonnull StringBuilder sb, @Nullable String actionId) {
+  private static void appendContextHelp(StringBuilder sb, @Nullable String actionId) {
     if (actionId == null) {
       return; // action id is not set
     }
@@ -177,7 +173,7 @@ public final class GutterTooltipHelper {
     sb.append("'>Press ").append(text).append(" to navigate</font>");
   }
 
-  private static boolean appendLink(@Nonnull StringBuilder sb, @Nonnull PsiElement element) {
+  private static boolean appendLink(StringBuilder sb, PsiElement element) {
     try {
       String name = getQualifiedName(element);
       if (!StringUtil.isEmpty(name)) {
@@ -200,7 +196,7 @@ public final class GutterTooltipHelper {
   }
 
   @Nullable
-  private static String getQualifiedName(@Nonnull PsiElement element) {
+  private static String getQualifiedName(PsiElement element) {
     PsiClass psiClass = element instanceof PsiClass ? (PsiClass) element : getStubOrPsiParentOfType(element, PsiClass.class);
     if (psiClass instanceof PsiAnonymousClass) {
       return null;
@@ -209,7 +205,7 @@ public final class GutterTooltipHelper {
   }
 
   @Nullable
-  private static PsiElement getContainingElement(@Nonnull PsiElement element) {
+  private static PsiElement getContainingElement(PsiElement element) {
     PsiMember member = getStubOrPsiParentOfType(element, PsiMember.class);
     if (member == null && element instanceof PsiMember) {
       member = ((PsiMember) element).getContainingClass();
@@ -218,7 +214,7 @@ public final class GutterTooltipHelper {
   }
 
   @Nullable
-  private static String getPresentableName(@Nonnull PsiElement element) {
+  private static String getPresentableName(PsiElement element) {
     if (element instanceof PsiEnumConstantInitializer) {
       PsiEnumConstantInitializer initializer = (PsiEnumConstantInitializer) element;
       return initializer.getEnumConstant().getName();

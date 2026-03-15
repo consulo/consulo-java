@@ -25,8 +25,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
@@ -94,7 +93,6 @@ public class AnnotationTargetUtil {
     };
     private static final TargetType[] MODULE_TARGETS = {TargetType.MODULE};
 
-    @Nonnull
     public static TargetType[] getTargetsForLocation(@Nullable PsiAnnotationOwner owner) {
         if (owner == null) {
             return TargetType.EMPTY_ARRAY;
@@ -188,7 +186,7 @@ public class AnnotationTargetUtil {
 
     @Nullable
     @RequiredReadAction
-    private static TargetType translateTargetRef(@Nonnull PsiReference reference) {
+    private static TargetType translateTargetRef(PsiReference reference) {
         PsiElement field = reference.resolve();
         if (field instanceof PsiEnumConstant enumConst) {
             String name = enumConst.getName();
@@ -206,7 +204,7 @@ public class AnnotationTargetUtil {
      * Returns {@code true} if the annotation resolves to a class having {@link TargetType#TYPE_USE} in it's targets.
      */
     @RequiredReadAction
-    public static boolean isTypeAnnotation(@Nonnull PsiAnnotation element) {
+    public static boolean isTypeAnnotation(PsiAnnotation element) {
         return findAnnotationTarget(element, TargetType.TYPE_USE) == TargetType.TYPE_USE;
     }
 
@@ -216,7 +214,7 @@ public class AnnotationTargetUtil {
      */
     @Nullable
     @RequiredReadAction
-    public static TargetType findAnnotationTarget(@Nonnull PsiAnnotation annotation, @Nonnull TargetType... types) {
+    public static TargetType findAnnotationTarget(PsiAnnotation annotation, TargetType... types) {
         if (types.length != 0) {
             PsiJavaCodeReferenceElement ref = annotation.getNameReferenceElement();
             if (ref != null && ref.resolve() instanceof PsiClass annotationType) {
@@ -233,7 +231,7 @@ public class AnnotationTargetUtil {
      */
     @Nullable
     @RequiredReadAction
-    public static TargetType findAnnotationTarget(@Nonnull PsiClass annotationType, @Nonnull TargetType... types) {
+    public static TargetType findAnnotationTarget(PsiClass annotationType, TargetType... types) {
         if (types.length != 0) {
             Set<TargetType> targets = getAnnotationTargets(annotationType);
             if (targets != null) {
@@ -254,7 +252,7 @@ public class AnnotationTargetUtil {
      */
     @Nullable
     @RequiredReadAction
-    public static Set<TargetType> getAnnotationTargets(@Nonnull PsiClass annotationType) {
+    public static Set<TargetType> getAnnotationTargets(PsiClass annotationType) {
         if (!annotationType.isAnnotationType()) {
             return null;
         }
@@ -278,7 +276,7 @@ public class AnnotationTargetUtil {
      */
     @Nullable
     @RequiredReadAction
-    public static PsiAnnotationOwner getTarget(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String annotation) {
+    public static PsiAnnotationOwner getTarget(PsiModifierListOwner modifierListOwner, String annotation) {
         PsiModifierList list = modifierListOwner.getModifierList();
         if (list == null) {
             return null;
@@ -298,7 +296,7 @@ public class AnnotationTargetUtil {
      * and the caller should be prepared for {@link IndexNotReadyException}.
      */
     @Contract(pure = true)
-    public static @Nullable PsiAnnotationOwner getTarget(@Nonnull PsiModifierListOwner modifierListOwner, boolean existsTypeUseTarget) {
+    public static @Nullable PsiAnnotationOwner getTarget(PsiModifierListOwner modifierListOwner, boolean existsTypeUseTarget) {
         PsiModifierList list = modifierListOwner.getModifierList();
         if (list == null) {
             return null;
@@ -325,7 +323,7 @@ public class AnnotationTargetUtil {
      * @param modifierList the place where type appears
      */
     @RequiredWriteAction
-    public static PsiType keepStrictlyTypeUseAnnotations(@Nullable PsiModifierList modifierList, @Nonnull PsiType type) {
+    public static PsiType keepStrictlyTypeUseAnnotations(@Nullable PsiModifierList modifierList, PsiType type) {
         if (modifierList == null) {
             return type;
         }

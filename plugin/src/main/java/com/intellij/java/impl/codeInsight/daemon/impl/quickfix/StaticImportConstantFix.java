@@ -30,25 +30,22 @@ import consulo.language.psi.SmartPsiElementPointer;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
 public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> implements SyntheticIntentionAction {
   private final SmartPsiElementPointer<PsiJavaCodeReferenceElement> myRef;
 
-  public StaticImportConstantFix(@Nonnull PsiJavaCodeReferenceElement referenceElement) {
+  public StaticImportConstantFix(PsiJavaCodeReferenceElement referenceElement) {
     myRef = SmartPointerManager.getInstance(referenceElement.getProject()).createSmartPsiElementPointer(referenceElement);
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getBaseText() {
     return LocalizeValue.localizeTODO("Import static constant");
   }
 
-  @Nonnull
   @Override
   protected String getMemberPresentableText(PsiField field) {
     return PsiFormatUtil.formatVariable(field,
@@ -56,7 +53,6 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> imp
                                         PsiSubstitutor.EMPTY);
   }
 
-  @Nonnull
   @Override
   protected List<PsiField> getMembersToImport(boolean applicableOnly) {
     Project project = myRef.getProject();
@@ -80,12 +76,10 @@ public class StaticImportConstantFix extends StaticImportMemberFix<PsiField> imp
     return processor.getMembersToImport(applicableOnly);
   }
 
-  @Nonnull
   protected StaticImportMethodQuestionAction<PsiField> createQuestionAction(List<PsiField> methodsToImport,
-                                                                            @Nonnull Project project,
+                                                                            Project project,
                                                                             Editor editor) {
     return new StaticImportMethodQuestionAction<PsiField>(project, editor, methodsToImport, myRef) {
-      @Nonnull
       @Override
       protected String getPopupTitle() {
         return JavaQuickFixBundle.message("field.to.import.chooser.title");

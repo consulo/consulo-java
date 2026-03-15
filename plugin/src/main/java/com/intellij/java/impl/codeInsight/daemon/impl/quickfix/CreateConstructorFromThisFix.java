@@ -25,7 +25,6 @@ import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +43,6 @@ public class CreateConstructorFromThisFix extends CreateConstructorFromThisOrSup
   }
 
   @Override
-  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     PsiElement e = element;
     do {

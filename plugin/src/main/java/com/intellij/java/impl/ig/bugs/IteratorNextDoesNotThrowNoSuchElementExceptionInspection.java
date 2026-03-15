@@ -26,28 +26,24 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import java.util.Set;
 
 @ExtensionImpl
 public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "IteratorNextCanNotThrowNoSuchElementException";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.iteratorNextDoesNotThrowNosuchelementexceptionDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.iteratorNextDoesNotThrowNosuchelementexceptionProblemDescriptor().get();
     }
@@ -61,7 +57,7 @@ public class IteratorNextDoesNotThrowNoSuchElementExceptionInspection extends Ba
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             // note: no call to super
             if (!MethodUtils.methodMatches(method, CommonClassNames.JAVA_UTIL_ITERATOR, null, HardcodedMethodConstants.NEXT)) {
                 return;

@@ -41,8 +41,7 @@ import consulo.logging.Logger;
 import consulo.util.lang.Range;
 import org.intellij.lang.annotations.MagicConstant;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class RequestHint {
     public static final int STOP = 0;
@@ -75,7 +74,7 @@ public class RequestHint {
     public RequestHint(
         ThreadReferenceProxyImpl stepThread,
         SuspendContextImpl suspendContext,
-        @Nonnull MethodFilter methodFilter
+        MethodFilter methodFilter
     ) {
         this(stepThread, suspendContext, StepRequest.STEP_LINE, StepRequest.STEP_INTO, methodFilter);
     }
@@ -131,7 +130,6 @@ public class RequestHint {
                 }
 
                 @Override
-                @Nonnull
                 public DebugProcess getDebugProcess() {
                     return suspendContext.getDebugProcess();
                 }

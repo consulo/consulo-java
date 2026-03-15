@@ -33,7 +33,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -45,7 +44,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@Nonnull PsiElement element, @Nonnull Document copyDocument, int newOffset) {
+  public boolean isApplicable(PsiElement element, Document copyDocument, int newOffset) {
     if (!PsiUtil.isLanguageLevel7OrHigher(element)) return false;
 
     PsiExpression initializer = JavaPostfixTemplatesUtils.getTopmostExpression(element);
@@ -64,7 +63,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
+  public void expand(PsiElement context, Editor editor) {
     PsiExpression expression = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     assert expression != null;
 
@@ -100,8 +99,7 @@ public class TryWithResourcesPostfixTemplate extends PostfixTemplate {
     manager.startTemplate(editor, template);
   }
 
-  @Nonnull
-  private static Collection<PsiClassType> getUnhandled(@Nonnull PsiExpression expression) {
+  private static Collection<PsiClassType> getUnhandled(PsiExpression expression) {
     assert expression.getType() != null;
     PsiMethod methodCloser = PsiUtil.getResourceCloserMethodForType((PsiClassType)expression.getType());
     PsiSubstitutor substitutor = PsiUtil.resolveGenericsClassInType(expression.getType()).getSubstitutor();

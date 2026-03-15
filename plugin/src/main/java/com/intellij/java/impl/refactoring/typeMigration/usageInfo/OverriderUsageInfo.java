@@ -17,7 +17,6 @@ package com.intellij.java.impl.refactoring.typeMigration.usageInfo;
 
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -26,7 +25,7 @@ public class OverriderUsageInfo extends TypeMigrationUsageInfo
 {
 	private final PsiMethod myBaseMethod;
 
-	public OverriderUsageInfo(@Nonnull PsiElement element, PsiMethod baseMethod)
+	public OverriderUsageInfo(PsiElement element, PsiMethod baseMethod)
 	{
 		super(element);
 		myBaseMethod = baseMethod;

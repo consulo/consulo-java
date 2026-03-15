@@ -26,12 +26,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 class ConvertOctalLiteralToDecimalFix
   extends InspectionGadgetsFix {
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.convertOctalLiteralToDecimalLiteralQuickfix();
   }

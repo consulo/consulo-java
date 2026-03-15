@@ -1,5 +1,4 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class Test {
   @jakarta.annotation.Nonnull
@@ -36,7 +35,6 @@ class Test {
   final String myFoo10;
 
   final String myFoo11 = "";
-  @Nonnull
   final String myFoo12;
   @jakarta.annotation.Nullable
   final String myFoo13 = null;
@@ -44,7 +42,7 @@ class Test {
   /**
    * {@link #myFoo6}
    */
-  Test(@Nonnull String param, @jakarta.annotation.Nullable String paramNullable, String simpleParam) {
+  Test(String param, @jakarta.annotation.Nullable String paramNullable, String simpleParam) {
     myFoo5 = "";
     myFoo6 = null;
     myFoo7 = param;

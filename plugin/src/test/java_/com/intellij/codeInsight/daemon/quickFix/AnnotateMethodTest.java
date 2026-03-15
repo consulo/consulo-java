@@ -1,7 +1,5 @@
 package com.intellij.codeInsight.daemon.quickFix;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.analysis.impl.codeInspection.AnnotateMethodFix;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.nullable.NullableStuffInspection;
@@ -16,7 +14,6 @@ public abstract class AnnotateMethodTest extends LightQuickFix15TestCase {
     return "/codeInsight/daemonCodeAnalyzer/quickFix/annotateMethod";
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new NullableStuffInspection(){
@@ -25,7 +22,7 @@ public abstract class AnnotateMethodTest extends LightQuickFix15TestCase {
         return new AnnotateMethodFix(defaultNotNull, annotationsToRemove){
          // @Override
           public int shouldAnnotateBaseMethod(PsiMethod method, PsiMethod superMethod, Project project) {
-            @NonNls String name = method.getName();
+            String name = method.getName();
             int ret = name.startsWith("annotateBase") ? 0  // yes, annotate all
                                                       : name.startsWith("dontAnnotateBase") ? 1 // do not annotate base
                                                                                             : 2; //abort

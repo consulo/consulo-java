@@ -1,6 +1,5 @@
 package consulo.java.language.impl.util;
 
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.Contract;
  */
 public class ArrayUtil2 {
   @Contract(pure = true)
-  public static int max(@Nonnull int[] values) {
+  public static int max(int[] values) {
     int max = Integer.MIN_VALUE;
     for (int value : values) {
       if (value > max)
@@ -19,7 +18,7 @@ public class ArrayUtil2 {
   }
 
   @Contract(pure = true)
-  public static double max(@Nonnull double[] values) {
+  public static double max(double[] values) {
     double max = Double.NEGATIVE_INFINITY;
     for (double value : values) {
       if (value > max)

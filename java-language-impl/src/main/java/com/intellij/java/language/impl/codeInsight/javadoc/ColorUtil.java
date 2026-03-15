@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -31,7 +30,7 @@ public class ColorUtil {
   private ColorUtil() {
   }
 
-  public static String generatePreviewHtml(@Nonnull final Color color) {
+  public static String generatePreviewHtml(final Color color) {
     return String.format("<div style=\"padding: 1px; width: 52px; height: 32px; background-color: #555555;\"><div style=\"width: 50px; height: 30px; background-color: #%s;\">&nbsp;</div></div>", consulo.ui.ex.awt.util.ColorUtil.toHex(color));
   }
 

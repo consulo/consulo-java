@@ -21,7 +21,6 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
-import jakarta.annotation.Nonnull;
 
 class RefsToSuperViewDescriptor implements UsageViewDescriptor {
   private final PsiClass myClass;
@@ -35,7 +34,6 @@ class RefsToSuperViewDescriptor implements UsageViewDescriptor {
     mySuper = anInterface;
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myClass, mySuper};
   }

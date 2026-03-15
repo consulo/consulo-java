@@ -27,8 +27,7 @@ import consulo.project.Project;
 import consulo.util.collection.FList;
 import consulo.util.collection.FactoryMap;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
@@ -38,12 +37,9 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiParameter;
 import static consulo.language.pattern.StandardPatterns.or;
 
 public class DfaValueFactory {
-    @Nonnull
     private final List<DfaValue> myValues = new ArrayList<>();
     private final boolean myUnknownMembersAreNullable;
-    @Nonnull
     private final FieldChecker myFieldChecker;
-    @Nonnull
     private final Project myProject;
     @Nullable
     private DfaVariableValue myAssertionDisabled;
@@ -53,7 +49,7 @@ public class DfaValueFactory {
      * @param context                   an item to analyze (code-block, expression, class)
      * @param unknownMembersAreNullable if true, unknown (non-annotated members) are assumed to be nullable
      */
-    public DfaValueFactory(@Nonnull Project project, @Nullable PsiElement context, boolean unknownMembersAreNullable) {
+    public DfaValueFactory(Project project, @Nullable PsiElement context, boolean unknownMembersAreNullable) {
         myProject = project;
         myFieldChecker = new FieldChecker(context);
         myUnknownMembersAreNullable = unknownMembersAreNullable;
@@ -73,8 +69,7 @@ public class DfaValueFactory {
         or(psiMember(), psiParameter().withSuperParent(2, psiMember()));
 
 
-    @Nonnull
-    public Nullability suggestNullabilityForNonAnnotatedMember(@Nonnull PsiModifierListOwner member) {
+    public Nullability suggestNullabilityForNonAnnotatedMember(PsiModifierListOwner member) {
         if (myUnknownMembersAreNullable &&
             MEMBER_OR_METHOD_PARAMETER.accepts(member) &&
             AnnotationUtil.getSuperAnnotationOwners(member).isEmpty()) {
@@ -84,8 +79,7 @@ public class DfaValueFactory {
         return Nullability.UNKNOWN;
     }
 
-    @Nonnull
-    public DfaTypeValue getObjectType(@Nullable PsiType type, @Nonnull Nullability nullability) {
+    public DfaTypeValue getObjectType(@Nullable PsiType type, Nullability nullability) {
         return fromDfType(DfTypes.typedObject(type, nullability));
     }
 
@@ -95,7 +89,7 @@ public class DfaValueFactory {
         return myAssertionDisabled;
     }
 
-    void setAssertionDisabled(@Nonnull DfaVariableValue value) {
+    void setAssertionDisabled(DfaVariableValue value) {
         assert myAssertionDisabled == null;
         myAssertionDisabled = value;
     }
@@ -116,12 +110,10 @@ public class DfaValueFactory {
         return myExpressionFactory.getExpressionDfaValue(psiExpression);
     }
 
-    @Nonnull
     public DfaTypeValue getInt(int value) {
         return fromDfType(DfTypes.intValue(value));
     }
 
-    @Nonnull
     public DfaTypeValue getUnknown() {
         return fromDfType(DfTypes.TOP);
     }
@@ -131,12 +123,10 @@ public class DfaValueFactory {
      * sometimes pushed on the stack as control flow implementation detail.
      * It's never assigned to the variable or merged with any other value.
      */
-    @Nonnull
     public DfaValue getSentinel() {
         return mySentinelValue;
     }
 
-    @Nonnull
     public DfaTypeValue getBoolean(boolean value) {
         return fromDfType(DfTypes.booleanValue(value));
     }
@@ -144,7 +134,6 @@ public class DfaValueFactory {
     /**
      * @return a null value
      */
-    @Nonnull
     public DfaTypeValue getNull() {
         return fromDfType(DfTypes.NULL);
     }
@@ -166,7 +155,7 @@ public class DfaValueFactory {
      * @param type type of the constant
      * @return a DfaTypeValue whose type is DfConstantType that corresponds to given constant.
      */
-    public DfaTypeValue getConstant(Object value, @Nonnull PsiType type) {
+    public DfaTypeValue getConstant(Object value, PsiType type) {
         return fromDfType(DfTypes.constant(value, type));
     }
 
@@ -204,7 +193,6 @@ public class DfaValueFactory {
         return getConstant(value, type);
     }
 
-    @Nonnull
     public Project getProject() {
         return myProject;
     }
@@ -223,8 +211,7 @@ public class DfaValueFactory {
         return "TRUE".equals(name) ? Boolean.TRUE : "FALSE".equals(name) ? Boolean.FALSE : null;
     }
 
-    @Nonnull
-    public DfaTypeValue fromDfType(@Nonnull DfType dfType) {
+    public DfaTypeValue fromDfType(DfType dfType) {
         return myTypeValueFactory.create(dfType);
     }
 
@@ -232,7 +219,6 @@ public class DfaValueFactory {
         return Collections.unmodifiableCollection(myValues);
     }
 
-    @Nonnull
     public DfaControlTransferValue controlTransfer(TransferTarget kind, FList<Trap> traps) {
         return myControlTransfers.get(Pair.create(kind, traps));
     }
@@ -252,29 +238,24 @@ public class DfaValueFactory {
         }
     };
 
-    @Nonnull
     public DfaVariableValue.Factory getVarFactory() {
         return myVarFactory;
     }
 
-    @Nonnull
     public DfaBoxedValue.Factory getBoxedFactory() {
         return myBoxedFactory;
     }
 
-    @Nonnull
     public DfaExpressionFactory getExpressionFactory() {
         return myExpressionFactory;
     }
 
-    @Nonnull
     public DfaBinOpValue.Factory getBinOpFactory() {
         return myBinOpFactory;
     }
 
-    @Nonnull
     @RequiredReadAction
-    public DfaValue createCommonValue(@Nonnull PsiExpression[] expressions, PsiType targetType) {
+    public DfaValue createCommonValue(PsiExpression[] expressions, PsiType targetType) {
         DfaValue loopElement = null;
         for (PsiExpression expression : expressions) {
             DfaValue expressionValue = createValue(expression);
@@ -298,7 +279,7 @@ public class DfaValueFactory {
         final boolean mySuperCtorsCallMethods;
 
         @RequiredReadAction
-        ClassInitializationInfo(@Nonnull PsiClass psiClass) {
+        ClassInitializationInfo(PsiClass psiClass) {
             // Indirect instantiation via other class is still possible, but hopefully unlikely
             boolean canInstantiateItself = false;
             for (PsiElement child = psiClass.getFirstChild(); child != null; child = child.getNextSibling()) {
@@ -318,7 +299,7 @@ public class DfaValueFactory {
         }
 
         @RequiredReadAction
-        private static boolean canCallMethodsInConstructors(@Nonnull PsiClass aClass, boolean virtual) {
+        private static boolean canCallMethodsInConstructors(PsiClass aClass, boolean virtual) {
             boolean inByteCode = false;
             if (aClass instanceof PsiCompiledElement) {
                 inByteCode = true;

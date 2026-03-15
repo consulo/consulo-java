@@ -24,8 +24,7 @@ import consulo.language.psi.path.CustomizableReferenceProvider;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ArrayUtil;
 import consulo.xml.lang.xml.XMLLanguage;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,33 +46,31 @@ public class JavaClassReferenceSet {
   private final int myStartInElement;
   private final JavaClassReferenceProvider myProvider;
 
-  public JavaClassReferenceSet(@Nonnull String str, @Nonnull PsiElement element, int startInElement, boolean isStatic, @Nonnull JavaClassReferenceProvider provider) {
+  public JavaClassReferenceSet(String str, PsiElement element, int startInElement, boolean isStatic, JavaClassReferenceProvider provider) {
     this(str, element, startInElement, isStatic, provider, null);
   }
 
-  private JavaClassReferenceSet(@Nonnull String str,
-                                @Nonnull PsiElement element,
+  private JavaClassReferenceSet(String str,
+                                PsiElement element,
                                 int startInElement,
                                 boolean isStatic,
-                                @Nonnull JavaClassReferenceProvider provider,
+                                JavaClassReferenceProvider provider,
                                 JavaClassReferenceSet context) {
     myStartInElement = startInElement;
     myProvider = provider;
     reparse(str, element, isStatic, context);
   }
 
-  @Nonnull
   public JavaClassReferenceProvider getProvider() {
     return myProvider;
   }
 
-  @Nonnull
   public TextRange getRangeInElement() {
     PsiReference[] references = getReferences();
     return new TextRange(references[0].getRangeInElement().getStartOffset(), references[references.length - 1].getRangeInElement().getEndOffset());
   }
 
-  private void reparse(@Nonnull String str, @Nonnull PsiElement element, boolean isStaticImport, JavaClassReferenceSet context) {
+  private void reparse(String str, PsiElement element, boolean isStaticImport, JavaClassReferenceSet context) {
     myElement = element;
     myContext = context;
     List<JavaClassReference> referencesList = new ArrayList<JavaClassReference>();
@@ -194,8 +191,7 @@ public class JavaClassReferenceSet {
     myReferences = referencesList.toArray(new JavaClassReference[referencesList.size()]);
   }
 
-  @Nonnull
-  protected JavaClassReference createReference(int referenceIndex, @Nonnull String subreferenceText, @Nonnull TextRange textRange, boolean staticImport) {
+  protected JavaClassReference createReference(int referenceIndex, String subreferenceText, TextRange textRange, boolean staticImport) {
     return new JavaClassReference(this, textRange, referenceIndex, subreferenceText, staticImport);
   }
 
@@ -208,7 +204,7 @@ public class JavaClassReferenceSet {
     return isAllowDollarInNames() ? c == DOLLAR : c == DOT;
   }
 
-  public void reparse(@Nonnull PsiElement element, @Nonnull TextRange range) {
+  public void reparse(PsiElement element, TextRange range) {
     String text = range.substring(element.getText());
     reparse(text, element, false, myContext);
   }
@@ -217,7 +213,6 @@ public class JavaClassReferenceSet {
     return myReferences[index];
   }
 
-  @Nonnull
   public JavaClassReference[] getAllReferences() {
     JavaClassReference[] result = myReferences;
     if (myNestedGenericParameterReferences != null) {
@@ -240,12 +235,10 @@ public class JavaClassReferenceSet {
     return myProvider.isSoft();
   }
 
-  @Nonnull
   public PsiElement getElement() {
     return myElement;
   }
 
-  @Nonnull
   public PsiReference[] getReferences() {
     return myReferences;
   }
@@ -255,8 +248,7 @@ public class JavaClassReferenceSet {
     return myProvider.getOptions();
   }
 
-  @Nonnull
-  public LocalizeValue buildUnresolvedMessage(@Nonnull String referenceText, int index) {
+  public LocalizeValue buildUnresolvedMessage(String referenceText, int index) {
     if (canReferencePackage(index)) {
       return LocalizeValue.localizeTODO(JavaErrorBundle.message("error.cannot.resolve.class.or.package", referenceText));
     }

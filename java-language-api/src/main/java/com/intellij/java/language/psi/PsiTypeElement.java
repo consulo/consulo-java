@@ -18,8 +18,7 @@ package com.intellij.java.language.psi;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayFactory;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the occurrence of a type in Java source code, for example, as a return
@@ -45,7 +44,6 @@ public interface PsiTypeElement extends PsiElement, PsiAnnotationOwner {
    * @see PsiParameter#getType()
    * @see PsiVariable#getType()
    */
-  @Nonnull
   PsiType getType();
 
   /**

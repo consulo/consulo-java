@@ -25,26 +25,21 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SafeLockInspection extends BaseInspection { // todo extend ResourceInspection?
 
   @Override
-  @Nonnull
   public String getID() {
     return "LockAcquiredButNotSafelyReleased";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.safeLockDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiExpression expression = (PsiExpression)infos[0];
     PsiType type = expression.getType();
@@ -62,7 +57,7 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isLockAcquireMethod(expression)) {
         return;
@@ -88,7 +83,7 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
           (PsiMethodCallExpression)qualifierExpression;
         PsiReferenceExpression methodExpression1 =
           methodCallExpression.getMethodExpression();
-        @NonNls String methodName =
+        String methodName =
           methodExpression1.getReferenceName();
         if ("readLock".equals(methodName)) {
           type = LockType.READ;
@@ -156,7 +151,7 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
       PsiMethodCallExpression expression) {
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!"lock".equals(methodName) &&
           !"lockInterruptibly".equals(methodName)) {
@@ -178,14 +173,14 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
     private final PsiVariable variable;
     private final LockType type;
 
-    private UnlockVisitor(@Nonnull PsiVariable variable,
-                          @Nonnull LockType type) {
+    private UnlockVisitor(PsiVariable variable,
+                          LockType type) {
       this.variable = variable;
       this.type = type;
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
       if (!containsUnlock) {
         super.visitElement(element);
       }
@@ -193,14 +188,14 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression call) {
+      PsiMethodCallExpression call) {
       if (containsUnlock) {
         return;
       }
       super.visitMethodCallExpression(call);
       PsiReferenceExpression methodExpression =
         call.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!"unlock".equals(methodName)) {
         return;
@@ -222,7 +217,7 @@ public class SafeLockInspection extends BaseInspection { // todo extend Resource
           (PsiMethodCallExpression)qualifier;
         PsiReferenceExpression methodExpression1 =
           methodCallExpression.getMethodExpression();
-        @NonNls String methodName1 =
+        String methodName1 =
           methodExpression1.getReferenceName();
         if (type == LockType.READ && "readLock".equals(methodName1) ||
             type == LockType.WRITE &&

@@ -41,7 +41,6 @@ import consulo.ui.ex.awt.util.TableUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -410,9 +409,9 @@ public class EncapsulateFieldsDialog extends RefactoringDialog implements Encaps
     }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
     );
     // make SPACE check/uncheck selected rows
-    @NonNls InputMap inputMap = myTable.getInputMap();
+    InputMap inputMap = myTable.getInputMap();
     inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), "enable_disable");
-    @NonNls ActionMap actionMap = myTable.getActionMap();
+    ActionMap actionMap = myTable.getActionMap();
     actionMap.put("enable_disable", new AbstractAction() {
       public void actionPerformed(ActionEvent e) {
         if (myTable.isEditing()) return;

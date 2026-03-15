@@ -34,8 +34,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -201,7 +200,7 @@ public final class Match {
     }
   }
 
-  boolean putDeclarationCorrespondence(PsiElement patternDeclaration, @Nonnull PsiElement matchDeclaration) {
+  boolean putDeclarationCorrespondence(PsiElement patternDeclaration, PsiElement matchDeclaration) {
     PsiElement originalValue = myDeclarationCorrespondence.get(patternDeclaration);
     if (originalValue == null) {
       myDeclarationCorrespondence.put(patternDeclaration, matchDeclaration);

@@ -32,9 +32,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,7 +49,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
   private AdvancedSettingsPanel myPanel;
   private final Project myProject;
 
-  public AdvancedSettingsUI(@Nonnull final Project project, Configuration configuration) {
+  public AdvancedSettingsUI(final Project project, Configuration configuration) {
     myProject = project;
     myConfiguration = configuration.getAdvancedConfiguration();
   }
@@ -83,7 +81,6 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
     myPanel = null;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Advanced");
@@ -94,7 +91,6 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
     return "reference.settings.injection.advanced";
   }
 
-  @Nonnull
   @Override
   public String getId() {
     return "IntelliLang.Advanced";
@@ -240,7 +236,6 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
       return false;
     }
 
-    @Nonnull
     private Configuration.InstrumentationType getInstrumentation() {
       if (myNoInstrumentation.isSelected()) {
         return Configuration.InstrumentationType.NONE;
@@ -267,7 +262,6 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
       myConfiguration.setSourceModificationAllowed(mySourceModificationAllowedCheckBox.isSelected());
     }
 
-    @Nonnull
     private Configuration.DfaOption getDfaOption() {
       if (myDfaOff.isSelected()) {
         return Configuration.DfaOption.OFF;
@@ -298,7 +292,7 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
       mySourceModificationAllowedCheckBox.setSelected(myConfiguration.isSourceModificationAllowed());
     }
 
-    private void setDfaOption(@Nonnull final Configuration.DfaOption dfaOption) {
+    private void setDfaOption(final Configuration.DfaOption dfaOption) {
       switch (dfaOption) {
         case OFF:
           myDfaOff.setSelected(true);

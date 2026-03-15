@@ -16,8 +16,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -36,7 +35,6 @@ public class PsiCaseLabelElementListImpl extends CompositePsiElement implements 
   }
 
   @Override
-  @Nonnull
   public PsiCaseLabelElement[] getElements() {
     PsiCaseLabelElement[] elements = myElements;
     if (elements == null) {
@@ -57,7 +55,7 @@ public class PsiCaseLabelElementListImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitCaseLabelElementList(this);
     }
@@ -86,7 +84,7 @@ public class PsiCaseLabelElementListImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (ElementType.JAVA_CASE_LABEL_ELEMENT_BIT_SET.contains(child.getElementType())) {
       JavaSourceUtil.deleteSeparatingComma(this, child);
     }
@@ -100,10 +98,10 @@ public class PsiCaseLabelElementListImpl extends CompositePsiElement implements 
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     if (oneOfElements(place)) return true;
 
     for (PsiCaseLabelElement label : getElements()) {
@@ -113,7 +111,7 @@ public class PsiCaseLabelElementListImpl extends CompositePsiElement implements 
     return true;
   }
 
-  private boolean oneOfElements(@Nonnull PsiElement place) {
+  private boolean oneOfElements(PsiElement place) {
     return Arrays.stream(getElements())
                  .map(PsiCaseLabelElementListImpl::skipParenthesis)
                  .anyMatch(Predicate.isEqual(place));

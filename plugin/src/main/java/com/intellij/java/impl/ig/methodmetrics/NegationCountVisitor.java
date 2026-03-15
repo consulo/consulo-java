@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.methodmetrics;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
@@ -30,7 +29,7 @@ class NegationCountVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+  public void visitBinaryExpression(PsiBinaryExpression expression) {
     super.visitBinaryExpression(expression);
     IElementType tokenType = expression.getOperationTokenType();
     if (tokenType.equals(JavaTokenType.NE)) {
@@ -39,12 +38,12 @@ class NegationCountVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+  public void visitAnonymousClass(PsiAnonymousClass aClass) {
     // no call to super, to keep it from drilling into anonymous classes
   }
 
   @Override
-  public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+  public void visitPrefixExpression(PsiPrefixExpression expression) {
     super.visitPrefixExpression(expression);
     if (expression.getOperationTokenType().equals(JavaTokenType.EXCL)) {
       m_count++;

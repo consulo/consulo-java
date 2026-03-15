@@ -24,7 +24,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -36,21 +35,18 @@ public class StaticVariableUninitializedUseInspection extends BaseInspection {
      */
     public boolean m_ignorePrimitives = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "StaticVariableUsedBeforeInitialization";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.staticVariableUsedBeforeInitializationDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.staticVariableUsedBeforeInitializationProblemDescriptor().get();
     }
@@ -70,7 +66,7 @@ public class StaticVariableUninitializedUseInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             if (!field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }

@@ -37,7 +37,6 @@ import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -47,11 +46,11 @@ import java.util.function.Predicate;
 import static com.intellij.java.impl.codeInsight.completion.BasicExpressionCompletionContributor.createKeywordLookupItem;
 
 class JavaModuleCompletion {
-  static boolean isModuleFile(@Nonnull PsiFile file) {
+  static boolean isModuleFile(PsiFile file) {
     return PsiJavaModule.MODULE_INFO_FILE.equals(file.getName()) && PsiUtil.isLanguageLevel9OrHigher(file);
   }
 
-  static void addVariants(@Nonnull PsiElement position, @Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet resultSet) {
+  static void addVariants(PsiElement position, CompletionParameters parameters, CompletionResultSet resultSet) {
     Consumer<LookupElement> result = element ->
     {
       if (element.getLookupString().startsWith(resultSet.getPrefixMatcher().getPrefix())) {

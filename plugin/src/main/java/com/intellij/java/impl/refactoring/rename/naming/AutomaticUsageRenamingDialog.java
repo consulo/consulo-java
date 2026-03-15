@@ -29,7 +29,7 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awt.util.TableUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;

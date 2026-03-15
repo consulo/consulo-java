@@ -6,30 +6,29 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface ClsCustomNavigationPolicy {
     ExtensionPointName<ClsCustomNavigationPolicy> EP_NAME = ExtensionPointName.create(ClsCustomNavigationPolicy.class);
 
     @Nullable
-    default PsiElement getNavigationElement(@SuppressWarnings("unused") @Nonnull ClsFileImpl clsFile) {
+    default PsiElement getNavigationElement(@SuppressWarnings("unused") ClsFileImpl clsFile) {
         return null;
     }
 
     @Nullable
-    default PsiElement getNavigationElement(@SuppressWarnings("unused") @Nonnull ClsClassImpl clsClass) {
+    default PsiElement getNavigationElement(@SuppressWarnings("unused") ClsClassImpl clsClass) {
         return null;
     }
 
     @Nullable
-    default PsiElement getNavigationElement(@SuppressWarnings("unused") @Nonnull ClsMethodImpl clsMethod) {
+    default PsiElement getNavigationElement(@SuppressWarnings("unused") ClsMethodImpl clsMethod) {
         return null;
     }
 
     @Nullable
-    default PsiElement getNavigationElement(@SuppressWarnings("unused") @Nonnull ClsFieldImpl clsField) {
+    default PsiElement getNavigationElement(@SuppressWarnings("unused") ClsFieldImpl clsField) {
         return null;
     }
 }

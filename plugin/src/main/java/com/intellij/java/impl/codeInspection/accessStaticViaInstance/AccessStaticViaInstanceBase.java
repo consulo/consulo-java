@@ -30,29 +30,23 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiPackage;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 
 public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInspectionTool {
-  @NonNls public static final String ACCESS_STATIC_VIA_INSTANCE = "AccessStaticViaInstance";
+  public static final String ACCESS_STATIC_VIA_INSTANCE = "AccessStaticViaInstance";
 
-  @Nonnull
   @Override
   public LocalizeValue getGroupDisplayName() {
     return LocalizeValue.empty();
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionLocalize.accessStaticViaInstance();
   }
 
   @Override
-  @Nonnull
-  @NonNls
   public String getShortName() {
     return ACCESS_STATIC_VIA_INSTANCE;
   }
@@ -68,9 +62,8 @@ public abstract class AccessStaticViaInstanceBase extends BaseJavaBatchLocalInsp
   }
 
   @Override
-  @Nonnull
   public PsiElementVisitor buildVisitorImpl(
-    @Nonnull final ProblemsHolder holder,
+    final ProblemsHolder holder,
     final boolean isOnTheFly,
     LocalInspectionToolSession session,
     Object state

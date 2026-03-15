@@ -32,8 +32,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -42,14 +41,12 @@ public class UnnecessaryThisInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreAssignments = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryThisDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryThisProblemDescriptor().get();
     }
@@ -67,7 +64,6 @@ public class UnnecessaryThisInspection extends BaseInspection {
     }
 
     private static class UnnecessaryThisFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryThisRemoveQuickfix();
         }
@@ -91,7 +87,7 @@ public class UnnecessaryThisInspection extends BaseInspection {
 
     private class UnnecessaryThisVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             super.visitReferenceExpression(expression);
             PsiReferenceParameterList parameterList = expression.getParameterList();
             if (parameterList == null) {

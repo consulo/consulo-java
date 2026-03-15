@@ -25,8 +25,7 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -37,12 +36,11 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
   private final PsiType myType;
   private final String myPresentableText;
 
-  public PsiTypeCanonicalLookupElement(@Nonnull PsiType type) {
+  public PsiTypeCanonicalLookupElement(PsiType type) {
     myType = type;
     myPresentableText = myType.getPresentableText();
   }
 
-  @Nonnull
   @Override
   public Object getObject() {
     PsiClass psiClass = getPsiClass();
@@ -67,7 +65,6 @@ public class PsiTypeCanonicalLookupElement extends LookupElement {
   }
 
   @Override
-  @Nonnull
   public String getLookupString() {
     return myPresentableText;
   }

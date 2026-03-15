@@ -30,8 +30,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiMultiReference;
 import consulo.util.lang.ThreeState;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 
@@ -40,10 +39,9 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
  */
 @ExtensionImpl(id = "javadoc", order = "before javaComments")
 public class JavadocCompletionConfidence extends CompletionConfidence {
-    @Nonnull
     @Override
     @RequiredReadAction
-    public ThreeState shouldSkipAutopopup(@Nonnull PsiElement contextElement, @Nonnull PsiFile psiFile, int offset) {
+    public ThreeState shouldSkipAutopopup(PsiElement contextElement, PsiFile psiFile, int offset) {
         if (psiElement().inside(PsiDocTag.class).accepts(contextElement)) {
             if (findJavaReference(psiFile, offset - 1) != null) {
                 return ThreeState.NO;
@@ -72,7 +70,6 @@ public class JavadocCompletionConfidence extends CompletionConfidence {
         return reference instanceof PsiJavaReference javaRef ? javaRef : null;
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

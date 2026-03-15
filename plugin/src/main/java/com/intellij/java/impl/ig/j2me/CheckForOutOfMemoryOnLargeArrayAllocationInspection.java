@@ -24,7 +24,6 @@ import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -34,13 +33,11 @@ public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection extend
      */
     public int m_limit = 64;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.largeArrayAllocationNoOutofmemoryerrorProblemDescriptor().get();
     }
@@ -56,7 +53,7 @@ public abstract class CheckForOutOfMemoryOnLargeArrayAllocationInspection extend
 
     private class CheckForOutOfMemoryOnLargeArrayAllocationVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             PsiType type = expression.getType();
             if (!(type instanceof PsiArrayType)) {

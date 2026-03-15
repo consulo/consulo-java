@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiAnonymousClass;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole

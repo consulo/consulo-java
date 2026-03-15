@@ -33,7 +33,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -43,19 +42,16 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
     public boolean ignoreSwitchBranches = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "UnnecessaryCodeBlock";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryCodeBlockDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryBlockStatementProblemDescriptor().get();
     }
@@ -77,7 +73,6 @@ public class UnnecessaryBlockStatementInspection extends BaseInspection {
     }
 
     private static class UnnecessaryBlockFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryCodeBlockUnwrapQuickfix();

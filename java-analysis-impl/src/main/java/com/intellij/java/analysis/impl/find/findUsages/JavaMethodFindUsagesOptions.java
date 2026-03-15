@@ -2,7 +2,6 @@ package com.intellij.java.analysis.impl.find.findUsages;
 
 import consulo.find.FindBundle;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 
@@ -16,7 +15,7 @@ public class JavaMethodFindUsagesOptions extends JavaFindUsagesOptions {
   public boolean isIncludeInherited = false;
   public boolean isIncludeOverloadUsages = false;
 
-  public JavaMethodFindUsagesOptions(@Nonnull Project project) {
+  public JavaMethodFindUsagesOptions(Project project) {
     super(project);
     isSearchForTextOccurrences = false;
   }

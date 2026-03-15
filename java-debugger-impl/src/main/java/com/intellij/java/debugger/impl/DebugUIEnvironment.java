@@ -20,7 +20,7 @@ import consulo.execution.ui.RunContentDescriptor;
 import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author michael.golubev

@@ -48,8 +48,7 @@ import consulo.ui.ex.keymap.Keymap;
 import consulo.ui.ex.keymap.KeymapManager;
 import consulo.ui.ex.keymap.util.KeymapUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -77,7 +76,7 @@ public class JavaVariableInplaceIntroducer extends InplaceVariableIntroducer<Psi
   public JavaVariableInplaceIntroducer(Project project,
                                        TypeExpression expression,
                                        Editor editor,
-                                       @Nonnull PsiVariable elementToRename,
+                                       PsiVariable elementToRename,
                                        boolean cantChangeFinalModifier,
                                        boolean hasTypeSuggestion,
                                        RangeMarker exprMarker,

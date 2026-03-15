@@ -7,7 +7,6 @@ import consulo.fileEditor.structureView.StructureViewTreeElement;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -29,7 +28,6 @@ public class JavaClassTreeElement extends JavaClassTreeElementBase<PsiClass> {
   }
 
   @Override
-  @Nonnull
   public Collection<StructureViewTreeElement> getChildrenBase() {
     return getClassChildren(getElement());
   }
@@ -68,7 +66,7 @@ public class JavaClassTreeElement extends JavaClassTreeElementBase<PsiClass> {
     return children;
   }
 
-  static LinkedHashSet<PsiElement> getOwnChildren(@Nonnull PsiClass aClass) {
+  static LinkedHashSet<PsiElement> getOwnChildren(PsiClass aClass) {
     LinkedHashSet<PsiElement> members = new LinkedHashSet<>();
     addPhysicalElements(aClass.getFields(), members, aClass);
     addPhysicalElements(aClass.getMethods(), members, aClass);
@@ -77,9 +75,9 @@ public class JavaClassTreeElement extends JavaClassTreeElementBase<PsiClass> {
     return members;
   }
 
-  private static void addPhysicalElements(@Nonnull PsiMember[] elements,
-                                          @Nonnull Collection<? super PsiElement> to,
-                                          @Nonnull PsiClass aClass) {
+  private static void addPhysicalElements(PsiMember[] elements,
+                                          Collection<? super PsiElement> to,
+                                          PsiClass aClass) {
     for (PsiMember element : elements) {
       PsiElement mirror = PsiImplUtil.handleMirror(element);
       if (mirror instanceof LightElement) {

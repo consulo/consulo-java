@@ -20,11 +20,10 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface SimplePropertyGetterProvider {
     ExtensionPointName<SimplePropertyGetterProvider> EP_NAME = ExtensionPointName.create(SimplePropertyGetterProvider.class);
 
-    boolean isInsideSimpleGetter(@Nonnull PsiElement element);
+    boolean isInsideSimpleGetter(PsiElement element);
 }

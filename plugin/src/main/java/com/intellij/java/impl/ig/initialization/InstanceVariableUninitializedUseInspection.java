@@ -32,7 +32,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 import org.jdom.Element;
 
@@ -58,33 +57,30 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
         parseString(annotationNamesString, annotationNames);
     }
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "InstanceVariableUsedBeforeInitialized";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.instanceVariableUsedBeforeInitializedDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.instanceVariableUsedBeforeInitializedProblemDescriptor().get();
     }
 
     @Override
-    public void readSettings(@Nonnull Element element) throws InvalidDataException {
+    public void readSettings(Element element) throws InvalidDataException {
         super.readSettings(element);
         parseString(annotationNamesString, annotationNames);
     }
 
     @Override
-    public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+    public void writeSettings(Element element) throws WriteExternalException {
         annotationNamesString = formatString(annotationNames);
         super.writeSettings(element);
     }
@@ -116,7 +112,6 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
         return panel;
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         PsiField field = (PsiField) infos[0];
@@ -131,7 +126,7 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
     private class InstanceVariableInitializationVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             if (field.hasModifierProperty(PsiModifier.STATIC)) {
                 return;
             }
@@ -170,7 +165,7 @@ public class InstanceVariableUninitializedUseInspection extends BaseInspection {
             }
         }
 
-        private boolean isInitializedInInitializer(@Nonnull PsiField field, UninitializedReadCollector uninitializedReadsCollector) {
+        private boolean isInitializedInInitializer(PsiField field, UninitializedReadCollector uninitializedReadsCollector) {
             PsiClass aClass = field.getContainingClass();
             if (aClass == null) {
                 return false;

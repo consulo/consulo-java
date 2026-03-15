@@ -28,7 +28,6 @@ import consulo.project.ui.view.tree.*;
 import consulo.ui.ex.tree.PresentationData;
 import consulo.ui.image.Image;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,7 +40,6 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
         super(project, value, viewSettings);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public final Collection<AbstractTreeNode> getChildren() {
@@ -53,7 +51,6 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
         return getChildrenImpl();
     }
 
-    @Nonnull
     protected abstract Collection<AbstractTreeNode> getChildrenImpl();
 
     protected boolean isMarkReadOnly() {
@@ -121,7 +118,7 @@ public abstract class BaseSmartPointerPsiNode<Type extends SmartPsiElementPointe
     }
 
     @Override
-    public boolean contains(@Nonnull VirtualFile file) {
+    public boolean contains(VirtualFile file) {
         if (getPsiElement() == null) {
             return false;
         }

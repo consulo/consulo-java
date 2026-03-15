@@ -27,8 +27,7 @@ import consulo.language.psi.PsiInvalidElementAccessException;
 import consulo.language.psi.stub.gist.GistManager;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Objects;
@@ -81,7 +80,6 @@ class MethodData {
     return bodyEnd;
   }
 
-  @Nonnull
   public Supplier<PsiCodeBlock> methodBody(PsiMethodImpl method) {
     return () -> {
       PsiMethodStub stub = method.getStub();

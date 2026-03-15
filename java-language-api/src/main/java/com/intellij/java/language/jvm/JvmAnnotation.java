@@ -3,9 +3,7 @@ package com.intellij.java.language.jvm;
 
 import com.intellij.java.language.jvm.annotation.JvmAnnotationAttribute;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -17,7 +15,6 @@ public interface JvmAnnotation {
    * @return the class name, or null if the annotation is unresolved.
    */
   @Nullable
-  @NonNls
   String getQualifiedName();
 
   /**
@@ -26,7 +23,7 @@ public interface JvmAnnotation {
    *
    * @return {@code true} if this annotation has an attribute with the specified name, otherwise {@code false}
    */
-  default boolean hasAttribute(@NonNls @Nonnull String attributeName) {
+  default boolean hasAttribute(String attributeName) {
     return findAttribute(attributeName) != null;
   }
 
@@ -37,10 +34,9 @@ public interface JvmAnnotation {
    * @return attribute if this annotation has an attribute with specified name, otherwise {@code null}
    */
   @Nullable
-  default JvmAnnotationAttribute findAttribute(@NonNls @Nonnull String attributeName) {
+  default JvmAnnotationAttribute findAttribute(String attributeName) {
     return ContainerUtil.find(getAttributes(), attribute -> attributeName.equals(attribute.getAttributeName()));
   }
 
-  @Nonnull
   List<JvmAnnotationAttribute> getAttributes();
 }

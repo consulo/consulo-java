@@ -19,14 +19,13 @@ import consulo.internal.com.sun.jdi.InvocationException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class EvaluateException extends Exception {
     private static final Logger LOG = Logger.getInstance(EvaluateException.class);
     private ObjectReference myTargetException;
 
-    public EvaluateException(@Nonnull LocalizeValue message) {
+    public EvaluateException(LocalizeValue message) {
         this(message.get());
     }
 
@@ -37,7 +36,7 @@ public class EvaluateException extends Exception {
         }
     }
 
-    public EvaluateException(@Nonnull LocalizeValue msg, Throwable th) {
+    public EvaluateException(LocalizeValue msg, Throwable th) {
         this(msg.get(), th);
     }
 

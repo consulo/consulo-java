@@ -31,18 +31,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ForeachStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.extendedForStatementDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.extendedForStatementProblemDescriptor().get();
     }
@@ -52,7 +48,6 @@ public class ForeachStatementInspection extends BaseInspection {
     }
 
     private static class ForEachFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.extendedForStatementReplaceQuickfix();
@@ -67,7 +62,7 @@ public class ForeachStatementInspection extends BaseInspection {
             if (iteratedValue == null) {
                 return;
             }
-            @NonNls StringBuilder newStatement = new StringBuilder();
+            StringBuilder newStatement = new StringBuilder();
             PsiParameter iterationParameter = statement.getIterationParameter();
             JavaCodeStyleSettings codeStyleSettings =
                 CodeStyleSettingsManager.getSettings(project).getCustomSettings(JavaCodeStyleSettings.class);
@@ -84,7 +79,7 @@ public class ForeachStatementInspection extends BaseInspection {
                 newStatement.append(" = ").append(iteratedValue.getText()).append('[').append(index).append("];");
             }
             else {
-                @NonNls StringBuilder methodCall = new StringBuilder();
+                StringBuilder methodCall = new StringBuilder();
                 if (ParenthesesUtils.getPrecedence(iteratedValue) > ParenthesesUtils.METHOD_CALL_PRECEDENCE) {
                     methodCall.append('(').append(iteratedValue.getText()).append(')');
                 }
@@ -146,7 +141,7 @@ public class ForeachStatementInspection extends BaseInspection {
     private static class ForeachStatementVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+        public void visitForeachStatement(PsiForeachStatement statement) {
             super.visitForeachStatement(statement);
             PsiExpression iteratedValue = statement.getIteratedValue();
             if (iteratedValue == null || !InheritanceUtil.isInheritor(iteratedValue.getType(), CommonClassNames.JAVA_LANG_ITERABLE)) {

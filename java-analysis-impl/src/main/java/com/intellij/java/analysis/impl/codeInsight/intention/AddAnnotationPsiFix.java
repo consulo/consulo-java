@@ -29,8 +29,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.lang.annotation.RetentionPolicy;
@@ -49,19 +48,19 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
 
     @RequiredReadAction
     public AddAnnotationPsiFix(
-        @Nonnull String fqn,
-        @Nonnull PsiModifierListOwner modifierListOwner,
-        @Nonnull String... annotationsToRemove
+        String fqn,
+        PsiModifierListOwner modifierListOwner,
+        String... annotationsToRemove
     ) {
         this(fqn, modifierListOwner, PsiNameValuePair.EMPTY_ARRAY, annotationsToRemove);
     }
 
     @RequiredReadAction
     public AddAnnotationPsiFix(
-        @Nonnull String fqn,
-        @Nonnull PsiModifierListOwner modifierListOwner,
-        @Nonnull PsiNameValuePair[] values,
-        @Nonnull String... annotationsToRemove
+        String fqn,
+        PsiModifierListOwner modifierListOwner,
+        PsiNameValuePair[] values,
+        String... annotationsToRemove
     ) {
         super(modifierListOwner);
         myAnnotation = fqn;
@@ -124,7 +123,6 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         return null;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myText;
@@ -133,16 +131,16 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     @Override
     @RequiredReadAction
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         return isAvailable((PsiModifierListOwner)startElement, myAnnotation);
     }
 
     @RequiredReadAction
-    public static boolean isAvailable(@Nonnull PsiModifierListOwner modifierListOwner, @Nonnull String annotationFQN) {
+    public static boolean isAvailable(PsiModifierListOwner modifierListOwner, String annotationFQN) {
         if (!modifierListOwner.isValid()) {
             return false;
         }
@@ -178,10 +176,10 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     @Override
     @RequiredUIAccess
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiModifierListOwner myModifierListOwner = (PsiModifierListOwner)startElement;
 
@@ -229,9 +227,8 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         }
     }
 
-    @Nonnull
     @RequiredReadAction
-    private ExternalAnnotationsManager.AnnotationPlace choosePlace(@Nonnull PsiModifierListOwner modifierListOwner) {
+    private ExternalAnnotationsManager.AnnotationPlace choosePlace(PsiModifierListOwner modifierListOwner) {
         Project project = modifierListOwner.getProject();
         ExternalAnnotationsManager annotationsManager = ExternalAnnotationsManager.getInstance(project);
         PsiClass aClass = JavaPsiFacade.getInstance(project).findClass(myAnnotation, modifierListOwner.getResolveScope());
@@ -277,9 +274,9 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     @Nullable
     @RequiredWriteAction
     public static PsiAnnotation addPhysicalAnnotationIfAbsent(
-        @Nonnull String fqn,
-        @Nonnull PsiNameValuePair[] pairs,
-        @Nonnull PsiAnnotationOwner owner
+        String fqn,
+        PsiNameValuePair[] pairs,
+        PsiAnnotationOwner owner
     ) {
         if (owner.hasAnnotation(fqn)) {
             return null;
@@ -364,7 +361,7 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
     }
 
     @RequiredWriteAction
-    public static void removePhysicalAnnotations(@Nonnull PsiModifierListOwner owner, @Nonnull String... fqns) {
+    public static void removePhysicalAnnotations(PsiModifierListOwner owner, String... fqns) {
         for (String fqn : fqns) {
             PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, true, fqn);
             if (annotation != null && !AnnotationUtil.isInferredAnnotation(annotation)) {
@@ -373,12 +370,11 @@ public class AddAnnotationPsiFix extends LocalQuickFixOnPsiElement {
         }
     }
 
-    @Nonnull
     protected String[] getAnnotationsToRemove() {
         return myAnnotationsToRemove;
     }
 
-    public static boolean isNullabilityAnnotationApplicable(@Nonnull PsiModifierListOwner owner) {
+    public static boolean isNullabilityAnnotationApplicable(PsiModifierListOwner owner) {
         if (owner instanceof PsiMethod method) {
             PsiType returnType = method.getReturnType();
             return returnType != null && !(returnType instanceof PsiPrimitiveType);

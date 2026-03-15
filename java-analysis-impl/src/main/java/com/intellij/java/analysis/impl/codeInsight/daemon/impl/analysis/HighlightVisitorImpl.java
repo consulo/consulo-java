@@ -57,8 +57,7 @@ import consulo.util.collection.MostlySingularMultiMap;
 import consulo.util.collection.primitive.objects.ObjectIntMap;
 import consulo.util.collection.primitive.objects.ObjectMaps;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import java.util.*;
@@ -108,12 +107,11 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     private final Set<PsiClass> myOverrideEquivalentMethodsVisitedClasses = new HashSet<>();
 
     @Inject
-    public HighlightVisitorImpl(@Nonnull PsiResolveHelper resolveHelper) {
+    public HighlightVisitorImpl(PsiResolveHelper resolveHelper) {
         myResolveHelper = resolveHelper;
     }
 
-    @Nonnull
-    private MostlySingularMultiMap<MethodSignature, PsiMethod> getDuplicateMethods(@Nonnull PsiClass aClass) {
+    private MostlySingularMultiMap<MethodSignature, PsiMethod> getDuplicateMethods(PsiClass aClass) {
         MostlySingularMultiMap<MethodSignature, PsiMethod> signatures = myDuplicateMethods.get(aClass);
         if (signatures == null) {
             signatures = new MostlySingularMultiMap<>();
@@ -131,12 +129,12 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Override
-    public void visit(@Nonnull PsiElement element) {
+    public void visit(PsiElement element) {
         element.accept(this);
     }
 
     @RequiredReadAction
-    private void registerReferencesFromInjectedFragments(@Nonnull PsiElement element) {
+    private void registerReferencesFromInjectedFragments(PsiElement element) {
         InjectedLanguageManager manager = InjectedLanguageManager.getInstance(myFile.getProject());
         manager.enumerateEx(element, myFile, false, (injectedPsi, places) -> injectedPsi.accept(REGISTER_REFERENCES_VISITOR));
     }
@@ -144,10 +142,10 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     @Override
     @RequiredReadAction
     public boolean analyze(
-        @Nonnull PsiFile file,
+        PsiFile file,
         boolean updateWholeFile,
-        @Nonnull HighlightInfoHolder holder,
-        @Nonnull Runnable highlight
+        HighlightInfoHolder holder,
+        Runnable highlight
     ) {
         try {
             prepare(holder, file);
@@ -204,7 +202,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @RequiredReadAction
-    protected void prepareToRunAsInspection(@Nonnull HighlightInfoHolder holder) {
+    protected void prepareToRunAsInspection(HighlightInfoHolder holder) {
         prepare(holder, holder.getContextFile());
     }
 
@@ -240,7 +238,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Nullable
     @RequiredReadAction
-    public static JavaResolveResult resolveJavaReference(@Nonnull PsiReference reference) {
+    public static JavaResolveResult resolveJavaReference(PsiReference reference) {
         if (reference instanceof PsiJavaReference javaRef) {
             return javaRef.advancedResolve(false);
         }
@@ -257,7 +255,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitAnnotation(@Nonnull PsiAnnotation annotation) {
+    public void visitAnnotation(PsiAnnotation annotation) {
         super.visitAnnotation(annotation);
         if (!myHolder.hasErrorResults()) {
             add(checkFeature(annotation, JavaFeature.ANNOTATIONS));
@@ -339,7 +337,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitArrayInitializerExpression(@Nonnull PsiArrayInitializerExpression expression) {
+    public void visitArrayInitializerExpression(PsiArrayInitializerExpression expression) {
         super.visitArrayInitializerExpression(expression);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkArrayInitializerApplicable(expression));
@@ -351,7 +349,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
+    public void visitAssignmentExpression(PsiAssignmentExpression assignment) {
         if (!myHolder.hasErrorResults()) {
             add(HighlightUtil.checkAssignmentCompatibleTypes(assignment));
         }
@@ -365,7 +363,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression expression) {
+    public void visitPolyadicExpression(PsiPolyadicExpression expression) {
         super.visitPolyadicExpression(expression);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkPolyadicOperatorApplicable(expression));
@@ -374,7 +372,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+    public void visitLambdaExpression(PsiLambdaExpression expression) {
         add(checkFeature(expression, JavaFeature.LAMBDA_EXPRESSIONS));
         PsiElement parent = PsiUtil.skipParenthesizedExprUp(expression.getParent());
         if (parent instanceof PsiExpressionStatement) {
@@ -456,7 +454,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+    public void visitBreakStatement(PsiBreakStatement statement) {
         super.visitBreakStatement(statement);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkLabelDefined(statement.getLabelIdentifier(), statement.findExitedStatement()));
@@ -468,7 +466,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
         super.visitClass(aClass);
         if (aClass instanceof PsiSyntheticClass) {
             return;
@@ -504,7 +502,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
+    public void visitClassInitializer(PsiClassInitializer initializer) {
         super.visitClassInitializer(initializer);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightControlFlowUtil.checkInitializerCompleteNormally(initializer));
@@ -519,7 +517,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitClassObjectAccessExpression(@Nonnull PsiClassObjectAccessExpression expression) {
+    public void visitClassObjectAccessExpression(PsiClassObjectAccessExpression expression) {
         super.visitClassObjectAccessExpression(expression);
         if (!myHolder.hasErrorResults()) {
             add(GenericsHighlightUtil.checkClassObjectAccessExpression(expression));
@@ -540,7 +538,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
+    public void visitContinueStatement(PsiContinueStatement statement) {
         super.visitContinueStatement(statement);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkLabelDefined(statement.getLabelIdentifier(), statement.findContinuedStatement()));
@@ -552,7 +550,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitJavaToken(@Nonnull PsiJavaToken token) {
+    public void visitJavaToken(PsiJavaToken token) {
         super.visitJavaToken(token);
         if (!myHolder.hasErrorResults()
             && token.getTokenType() == JavaTokenType.RBRACE
@@ -581,7 +579,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitDocComment(@Nonnull PsiDocComment comment) {
+    public void visitDocComment(PsiDocComment comment) {
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkUnclosedComment(comment));
         }
@@ -608,7 +606,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitEnumConstant(@Nonnull PsiEnumConstant enumConstant) {
+    public void visitEnumConstant(PsiEnumConstant enumConstant) {
         super.visitEnumConstant(enumConstant);
         if (!myHolder.hasErrorResults()) {
             GenericsHighlightUtil.checkEnumConstantForConstructorProblems(enumConstant, myHolder, myJavaSdkVersion);
@@ -623,7 +621,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitEnumConstantInitializer(@Nonnull PsiEnumConstantInitializer enumConstantInitializer) {
+    public void visitEnumConstantInitializer(PsiEnumConstantInitializer enumConstantInitializer) {
         super.visitEnumConstantInitializer(enumConstantInitializer);
         if (!myHolder.hasErrorResults()) {
             TextRange textRange = HighlightNamesUtil.getClassDeclarationTextRange(enumConstantInitializer);
@@ -633,7 +631,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitExpression(@Nonnull PsiExpression expression) {
+    public void visitExpression(PsiExpression expression) {
         ProgressManager.checkCanceled(); // visitLiteralExpression is invoked very often in array initializers
 
         super.visitExpression(expression);
@@ -687,7 +685,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitExpressionList(@Nonnull PsiExpressionList list) {
+    public void visitExpressionList(PsiExpressionList list) {
         super.visitExpressionList(list);
         if (list.getParent() instanceof PsiMethodCallExpression expression) {
             if (expression.getArgumentList() == list) {
@@ -726,7 +724,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
         super.visitField(field);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightControlFlowUtil.checkFinalFieldInitialized(field));
@@ -735,19 +733,19 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitForStatement(@Nonnull PsiForStatement statement) {
+    public void visitForStatement(PsiForStatement statement) {
         myHolder.add(HighlightUtil.checkForStatement(statement));
     }
 
     @Override
     @RequiredReadAction
-    public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+    public void visitForeachStatement(PsiForeachStatement statement) {
         add(checkFeature(statement, JavaFeature.FOR_EACH));
     }
 
     @Override
     @RequiredReadAction
-    public void visitImportStaticStatement(@Nonnull PsiImportStaticStatement statement) {
+    public void visitImportStaticStatement(PsiImportStaticStatement statement) {
         add(checkFeature(statement, JavaFeature.STATIC_IMPORTS));
         if (!myHolder.hasErrorResults()) {
             myHolder.add(ImportsHighlightUtil.checkStaticOnDemandImportResolvesToClass(statement));
@@ -822,7 +820,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitImportStatement(@Nonnull PsiImportStatement statement) {
+    public void visitImportStatement(PsiImportStatement statement) {
         if (!myHolder.hasErrorResults()) {
             add(HighlightUtil.checkSingleImportClassConflict(statement, mySingleImportedClasses, myFile));
         }
@@ -830,7 +828,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitImportStaticReferenceElement(@Nonnull PsiImportStaticReferenceElement ref) {
+    public void visitImportStaticReferenceElement(PsiImportStaticReferenceElement ref) {
         String refName = ref.getReferenceName();
         JavaResolveResult[] results = ref.multiResolve(false);
 
@@ -918,7 +916,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression expression) {
+    public void visitInstanceOfExpression(PsiInstanceOfExpression expression) {
         super.visitInstanceOfExpression(expression);
         if (!myHolder.hasErrorResults()) {
             add(HighlightUtil.checkInstanceOfApplicable(expression));
@@ -930,7 +928,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitKeyword(@Nonnull PsiKeyword keyword) {
+    public void visitKeyword(PsiKeyword keyword) {
         super.visitKeyword(keyword);
         PsiElement parent = keyword.getParent();
         String text = keyword.getText();
@@ -962,7 +960,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitLabeledStatement(@Nonnull PsiLabeledStatement statement) {
+    public void visitLabeledStatement(PsiLabeledStatement statement) {
         super.visitLabeledStatement(statement);
         if (!myHolder.hasErrorResults()) {
             add(HighlightUtil.checkLabelWithoutStatement(statement));
@@ -974,7 +972,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+    public void visitLiteralExpression(PsiLiteralExpression expression) {
         super.visitLiteralExpression(expression);
         if (myHolder.hasErrorResults()) {
             return;
@@ -995,7 +993,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
         super.visitMethod(method);
         if (!myHolder.hasErrorResults()) {
             add(HighlightControlFlowUtil.checkUnreachableStatement(method.getBody()));
@@ -1047,7 +1045,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @RequiredReadAction
-    private void highlightReferencedMethodOrClassName(@Nonnull PsiJavaCodeReferenceElement element, PsiElement resolved) {
+    private void highlightReferencedMethodOrClassName(PsiJavaCodeReferenceElement element, PsiElement resolved) {
         PsiElement parent = element.getParent();
         TextAttributesScheme colorsScheme = myHolder.getColorsScheme();
         if (parent instanceof PsiMethodCallExpression methodCall) {
@@ -1091,7 +1089,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
         if (!myHolder.hasErrorResults()) {
             add(GenericsHighlightUtil.checkEnumSuperConstructorCall(expression));
         }
@@ -1121,7 +1119,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitModifierList(@Nonnull PsiModifierList list) {
+    public void visitModifierList(PsiModifierList list) {
         super.visitModifierList(list);
         PsiElement parent = list.getParent();
         if (parent instanceof PsiMethod method) {
@@ -1218,7 +1216,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitNameValuePair(@Nonnull PsiNameValuePair pair) {
+    public void visitNameValuePair(PsiNameValuePair pair) {
         myHolder.add(AnnotationsHighlightUtil.checkNameValuePair(pair));
         if (!myHolder.hasErrorResults()) {
             PsiIdentifier nameId = pair.getNameIdentifier();
@@ -1275,7 +1273,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitPackageStatement(@Nonnull PsiPackageStatement statement) {
+    public void visitPackageStatement(PsiPackageStatement statement) {
         super.visitPackageStatement(statement);
         myHolder.add(AnnotationsHighlightUtil.checkPackageAnnotationContainingFile(statement, myFile));
         if (myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_9)) {
@@ -1287,7 +1285,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitParameter(@Nonnull PsiParameter parameter) {
+    public void visitParameter(PsiParameter parameter) {
         super.visitParameter(parameter);
 
         PsiElement parent = parameter.getParent();
@@ -1322,7 +1320,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitParameterList(@Nonnull PsiParameterList list) {
+    public void visitParameterList(PsiParameterList list) {
         super.visitParameterList(list);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkAnnotationMethodParameters(list));
@@ -1331,7 +1329,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression) {
+    public void visitPostfixExpression(PsiPostfixExpression expression) {
         super.visitPostfixExpression(expression);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkUnaryOperatorApplicable(expression.getOperationSign(), expression.getOperand()));
@@ -1340,7 +1338,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+    public void visitPrefixExpression(PsiPrefixExpression expression) {
         super.visitPrefixExpression(expression);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkUnaryOperatorApplicable(expression.getOperationSign(), expression.getOperand()));
@@ -1348,7 +1346,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @RequiredReadAction
-    private void registerConstructorCall(@Nonnull PsiConstructorCall constructorCall) {
+    private void registerConstructorCall(PsiConstructorCall constructorCall) {
         if (myRefCountHolder != null) {
             if (constructorCall.resolveMethodGenerics().getElement() instanceof PsiNamedElement namedElem) {
                 myRefCountHolder.registerLocallyReferenced(namedElem);
@@ -1358,7 +1356,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement ref) {
+    public void visitReferenceElement(PsiJavaCodeReferenceElement ref) {
         JavaResolveResult result = doVisitReferenceElement(ref);
         if (result != null) {
             PsiElement resolved = result.getElement();
@@ -1372,7 +1370,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @RequiredReadAction
-    private JavaResolveResult doVisitReferenceElement(@Nonnull PsiJavaCodeReferenceElement ref) {
+    private JavaResolveResult doVisitReferenceElement(PsiJavaCodeReferenceElement ref) {
         JavaResolveResult result = resolveOptimised(ref);
         if (result == null) {
             return null;
@@ -1517,7 +1515,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Nullable
-    private JavaResolveResult resolveOptimised(@Nonnull PsiJavaCodeReferenceElement ref) {
+    private JavaResolveResult resolveOptimised(PsiJavaCodeReferenceElement ref) {
         try {
             if (ref instanceof PsiReferenceExpressionImpl) {
                 PsiReferenceExpressionImpl.OurGenericsResolver resolver = PsiReferenceExpressionImpl.OurGenericsResolver.INSTANCE;
@@ -1534,7 +1532,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     }
 
     @Nullable
-    private JavaResolveResult[] resolveOptimised(@Nonnull PsiReferenceExpression expression) {
+    private JavaResolveResult[] resolveOptimised(PsiReferenceExpression expression) {
         try {
             if (expression instanceof PsiReferenceExpressionImpl) {
                 PsiReferenceExpressionImpl.OurGenericsResolver resolver = PsiReferenceExpressionImpl.OurGenericsResolver.INSTANCE;
@@ -1551,7 +1549,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(PsiReferenceExpression expression) {
         JavaResolveResult resultForIncompleteCode = doVisitReferenceElement(expression);
 
         if (!myHolder.hasErrorResults()) {
@@ -1672,7 +1670,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
+    public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
         add(checkFeature(expression, JavaFeature.METHOD_REFERENCES));
         PsiElement parent = PsiUtil.skipParenthesizedExprUp(expression.getParent());
         if (parent instanceof PsiExpressionStatement) {
@@ -1853,7 +1851,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     // It is a compile-time error if any class or interface mentioned by either U or the function type of U
     // is not accessible from the class or interface in which the method reference expression appears.
     @RequiredReadAction
-    private void checkFunctionalInterfaceTypeAccessible(@Nonnull PsiFunctionalExpression expression, PsiType functionalInterfaceType) {
+    private void checkFunctionalInterfaceTypeAccessible(PsiFunctionalExpression expression, PsiType functionalInterfaceType) {
         PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(functionalInterfaceType);
         PsiClass psiClass = resolveResult.getElement();
         if (psiClass != null) {
@@ -1922,7 +1920,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+    public void visitReturnStatement(PsiReturnStatement statement) {
         try {
             add(HighlightUtil.checkReturnStatementType(statement));
         }
@@ -1932,7 +1930,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitStatement(@Nonnull PsiStatement statement) {
+    public void visitStatement(PsiStatement statement) {
         super.visitStatement(statement);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkNotAStatement(statement));
@@ -1941,7 +1939,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitSuperExpression(@Nonnull PsiSuperExpression expr) {
+    public void visitSuperExpression(PsiSuperExpression expr) {
         myHolder.add(HighlightUtil.checkThisOrSuperExpressionInIllegalContext(expr, expr.getQualifier(), myLanguageLevel));
         if (!myHolder.hasErrorResults()) {
             visitExpression(expr);
@@ -1950,7 +1948,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitSwitchLabelStatement(@Nonnull PsiSwitchLabelStatement statement) {
+    public void visitSwitchLabelStatement(PsiSwitchLabelStatement statement) {
         super.visitSwitchLabelStatement(statement);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkCaseStatement(statement));
@@ -1959,7 +1957,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitSwitchLabeledRuleStatement(@Nonnull PsiSwitchLabeledRuleStatement statement) {
+    public void visitSwitchLabeledRuleStatement(PsiSwitchLabeledRuleStatement statement) {
         super.visitSwitchLabeledRuleStatement(statement);
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkCaseStatement(statement));
@@ -1969,7 +1967,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(PsiSwitchStatement statement) {
         super.visitSwitchStatement(statement);
         checkSwitchBlock(statement);
     }
@@ -2003,7 +2001,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitThrowStatement(@Nonnull PsiThrowStatement statement) {
+    public void visitThrowStatement(PsiThrowStatement statement) {
         add(HighlightUtil.checkUnhandledExceptions(statement, null));
         if (!myHolder.hasErrorResults()) {
             visitStatement(statement);
@@ -2012,7 +2010,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+    public void visitTryStatement(PsiTryStatement statement) {
         super.visitTryStatement(statement);
         if (!myHolder.hasErrorResults()) {
             Set<PsiClassType> thrownTypes = HighlightUtil.collectUnhandledExceptions(statement);
@@ -2030,7 +2028,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitResourceList(@Nonnull PsiResourceList resourceList) {
+    public void visitResourceList(PsiResourceList resourceList) {
         super.visitResourceList(resourceList);
         if (!myHolder.hasErrorResults()) {
             add(checkFeature(resourceList, JavaFeature.TRY_WITH_RESOURCES));
@@ -2039,7 +2037,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitResourceVariable(@Nonnull PsiResourceVariable resource) {
+    public void visitResourceVariable(PsiResourceVariable resource) {
         super.visitResourceVariable(resource);
         if (!myHolder.hasErrorResults()) {
             add(HighlightUtil.checkTryResourceIsAutoCloseable(resource));
@@ -2051,7 +2049,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitResourceExpression(@Nonnull PsiResourceExpression resource) {
+    public void visitResourceExpression(PsiResourceExpression resource) {
         super.visitResourceExpression(resource);
         if (!myHolder.hasErrorResults()) {
             add(checkFeature(resource, JavaFeature.REFS_AS_RESOURCE));
@@ -2069,7 +2067,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitTypeElement(@Nonnull PsiTypeElement type) {
+    public void visitTypeElement(PsiTypeElement type) {
         if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightUtil.checkIllegalType(type));
         }
@@ -2083,7 +2081,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression typeCast) {
+    public void visitTypeCastExpression(PsiTypeCastExpression typeCast) {
         super.visitTypeCastExpression(typeCast);
         try {
             if (!myHolder.hasErrorResults()) {
@@ -2111,7 +2109,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(PsiVariable variable) {
         super.visitVariable(variable);
         try {
             if (!myHolder.hasErrorResults()) {
@@ -2122,7 +2120,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         }
     }
 
-    private boolean isReassigned(@Nonnull PsiVariable variable) {
+    private boolean isReassigned(PsiVariable variable) {
         try {
             boolean reassigned;
             if (variable instanceof PsiParameter) {
@@ -2141,7 +2139,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression) {
+    public void visitConditionalExpression(PsiConditionalExpression expression) {
         super.visitConditionalExpression(expression);
         if (myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_8) && PsiPolyExpressionUtil.isPolyExpression(expression)) {
             PsiExpression thenExpression = expression.getThenExpression();
@@ -2166,7 +2164,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitReceiverParameter(@Nonnull PsiReceiverParameter parameter) {
+    public void visitReceiverParameter(PsiReceiverParameter parameter) {
         super.visitReceiverParameter(parameter);
         if (!myHolder.hasErrorResults()) {
             add(checkFeature(parameter, JavaFeature.RECEIVERS));
@@ -2181,7 +2179,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitModule(@Nonnull PsiJavaModule module) {
+    public void visitModule(PsiJavaModule module) {
         super.visitModule(module);
         if (!myHolder.hasErrorResults()) {
             add(checkFeature(module, JavaFeature.MODULES));
@@ -2208,7 +2206,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitRequiresStatement(@Nonnull PsiRequiresStatement statement) {
+    public void visitRequiresStatement(PsiRequiresStatement statement) {
         super.visitRequiresStatement(statement);
         if (myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_9)) {
             PsiJavaModule container = (PsiJavaModule)statement.getParent();
@@ -2221,7 +2219,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitPackageAccessibilityStatement(@Nonnull PsiPackageAccessibilityStatement statement) {
+    public void visitPackageAccessibilityStatement(PsiPackageAccessibilityStatement statement) {
         super.visitPackageAccessibilityStatement(statement);
         if (myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_9)) {
             if (!myHolder.hasErrorResults()) {
@@ -2238,7 +2236,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitUsesStatement(@Nonnull PsiUsesStatement statement) {
+    public void visitUsesStatement(PsiUsesStatement statement) {
         super.visitUsesStatement(statement);
         if (myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_9)) {
             if (!myHolder.hasErrorResults()) {
@@ -2249,7 +2247,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
 
     @Override
     @RequiredReadAction
-    public void visitProvidesStatement(@Nonnull PsiProvidesStatement statement) {
+    public void visitProvidesStatement(PsiProvidesStatement statement) {
         super.visitProvidesStatement(statement);
         if (myLanguageLevel.isAtLeast(LanguageLevel.JDK_1_9)) {
             if (!myHolder.hasErrorResults()) {
@@ -2258,9 +2256,8 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         }
     }
 
-    @Nullable
     @RequiredReadAction
-    private HighlightInfo.Builder checkFeature(@Nonnull PsiElement element, @Nonnull JavaFeature feature) {
+    private HighlightInfo.@Nullable Builder checkFeature(PsiElement element, JavaFeature feature) {
         return HighlightUtil.checkFeature(element, feature, myLanguageLevel, myFile);
     }
 

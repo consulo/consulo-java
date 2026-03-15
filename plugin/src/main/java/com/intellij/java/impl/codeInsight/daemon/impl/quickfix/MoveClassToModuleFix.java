@@ -49,9 +49,7 @@ import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -98,7 +96,6 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         if (myModules.size() == 1) {
             PsiClass aClass = myModules.keySet().iterator().next();
@@ -109,12 +106,12 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return !myModules.isEmpty();
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+    public void invoke(final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
         if (myModules.size() == 1) {
             moveClass(project, editor, file, myModules.keySet().iterator().next());
         }
@@ -179,7 +176,7 @@ public class MoveClassToModuleFix implements SyntheticIntentionAction {
 
     public static void registerFixes(Consumer<IntentionAction> consumer, PsiJavaCodeReferenceElement reference) {
         PsiElement psiElement = reference.getElement();
-        @NonNls String referenceName = reference.getRangeInElement().substring(psiElement.getText());
+        String referenceName = reference.getRangeInElement().substring(psiElement.getText());
         Project project = psiElement.getProject();
         PsiFile containingFile = psiElement.getContainingFile();
         if (containingFile == null) {

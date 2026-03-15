@@ -29,20 +29,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class ImplicitArrayToStringInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.implicitArrayToStringDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         if ((Boolean) infos[1]) {
             return InspectionGadgetsLocalize.explicitArrayToStringProblemDescriptor().get();
@@ -85,7 +81,6 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
             this.removeToString = removeToString;
         }
 
-        @Nonnull
         public LocalizeValue getName() {
             String expressionText;
             if (deepString) {
@@ -124,7 +119,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
             else {
                 expressionText = expression.getText();
             }
-            @NonNls String newExpressionText;
+            String newExpressionText;
             if (deepString) {
                 newExpressionText =
                     "java.util.Arrays.deepToString(" + expressionText + ')';
@@ -253,7 +248,7 @@ public class ImplicitArrayToStringInspection extends BaseInspection {
                     (PsiMethodCallExpression) grandParent;
                 PsiReferenceExpression methodExpression =
                     methodCallExpression.getMethodExpression();
-                @NonNls String methodName =
+                String methodName =
                     methodExpression.getReferenceName();
                 PsiMethod method =
                     methodCallExpression.resolveMethod();

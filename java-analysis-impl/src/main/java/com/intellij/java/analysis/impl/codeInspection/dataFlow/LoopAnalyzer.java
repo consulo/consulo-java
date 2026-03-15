@@ -11,18 +11,16 @@ import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 import java.util.function.IntConsumer;
 
 class LoopAnalyzer {
   private static class MyGraph implements Graph<Instruction> {
-    @Nonnull
     private final ControlFlow myFlow;
     private final Instruction[] myInstructions;
     private final IntObjectMap<int[]> myIns = IntMaps.newIntObjectHashMap();
 
-    private MyGraph(@Nonnull ControlFlow flow) {
+    private MyGraph(ControlFlow flow) {
       myFlow = flow;
       myInstructions = flow.getInstructions();
       for (Instruction instruction : myInstructions) {
@@ -40,20 +38,17 @@ class LoopAnalyzer {
       }
     }
 
-    @Nonnull
     @Override
     public Collection<Instruction> getNodes() {
       return Arrays.asList(myFlow.getInstructions());
     }
 
-    @Nonnull
     @Override
     public Iterator<Instruction> getIn(Instruction n) {
       int[] ins = myIns.get(n.getIndex());
       return indicesToInstructions(ins);
     }
 
-    @Nonnull
     @Override
     public Iterator<Instruction> getOut(Instruction instruction) {
       int fromIndex = instruction.getIndex();
@@ -61,7 +56,6 @@ class LoopAnalyzer {
       return indicesToInstructions(next);
     }
 
-    @Nonnull
     private Iterator<Instruction> indicesToInstructions(int[] next) {
       if (next == null) {
         return Collections.emptyIterator();
@@ -99,7 +93,6 @@ class LoopAnalyzer {
     return loop;
   }
 
-  @Nonnull
   static int[] getSuccessorIndices(int i, Instruction[] myInstructions) {
     Instruction instruction = myInstructions[i];
     if (instruction instanceof GotoInstruction) {

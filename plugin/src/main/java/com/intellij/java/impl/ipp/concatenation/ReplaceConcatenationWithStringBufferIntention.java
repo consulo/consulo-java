@@ -27,8 +27,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceConcatenationWithStringBufferIntention", fileExtensions = "java", categories = {"Java", "Strings"})
@@ -44,27 +42,25 @@ public class ReplaceConcatenationWithStringBufferIntention extends MutablyNamedI
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.replaceConcatenationWithStringBufferIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new SimpleStringConcatenationPredicate(true);
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiPolyadicExpression expression = (PsiPolyadicExpression) element;
         PsiElement parent = expression.getParent();
         while (ConcatenationUtils.isConcatenation(parent)) {
             expression = (PsiPolyadicExpression) parent;
             parent = expression.getParent();
         }
-        @NonNls StringBuilder newExpression = new StringBuilder();
+        StringBuilder newExpression = new StringBuilder();
         if (isPartOfStringBufferAppend(expression)) {
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) parent.getParent();
             assert methodCallExpression != null;
@@ -109,11 +105,11 @@ public class ReplaceConcatenationWithStringBufferIntention extends MutablyNamedI
         if (!CommonClassNames.JAVA_LANG_STRING_BUFFER.equals(className) && !CommonClassNames.JAVA_LANG_STRING_BUILDER.equals(className)) {
             return false;
         }
-        @NonNls String methodName = methodExpression.getReferenceName();
+        String methodName = methodExpression.getReferenceName();
         return "append".equals(methodName);
     }
 
-    private static void turnExpressionIntoChainedAppends(PsiExpression expression, @NonNls StringBuilder result) {
+    private static void turnExpressionIntoChainedAppends(PsiExpression expression, StringBuilder result) {
         if (expression instanceof PsiPolyadicExpression) {
             PsiPolyadicExpression concatenation = (PsiPolyadicExpression) expression;
             PsiType type = concatenation.getType();

@@ -27,17 +27,15 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 public class EnableOptimizeImportsOnTheFlyFix implements SyntheticIntentionAction, LowPriorityAction{
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.enableOptimizeImportsOnTheFly();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return file.getManager().isInProject(file)
            && file instanceof PsiJavaFile
            && !CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY
@@ -45,7 +43,7 @@ public class EnableOptimizeImportsOnTheFlyFix implements SyntheticIntentionActio
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY = true;
     DaemonCodeAnalyzer.getInstance(project).restart();
   }

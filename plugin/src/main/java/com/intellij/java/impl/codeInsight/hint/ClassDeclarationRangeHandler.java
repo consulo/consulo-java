@@ -20,19 +20,16 @@ import consulo.language.editor.hint.DeclarationRangeHandler;
 import com.intellij.java.language.psi.*;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassDeclarationRangeHandler implements DeclarationRangeHandler {
-  @Nonnull
   @Override
   public Class getElementClass() {
     return PsiClass.class;
   }
 
   @Override
-  @Nonnull
-  public TextRange getDeclarationRange(@Nonnull PsiElement container) {
+  public TextRange getDeclarationRange(PsiElement container) {
     PsiClass aClass = (PsiClass) container;
     if (aClass instanceof PsiAnonymousClass) {
       PsiConstructorCall call = (PsiConstructorCall) aClass.getParent();

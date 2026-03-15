@@ -21,16 +21,13 @@ import consulo.language.psi.PsiBundle;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NonNls;
 
 public class PsiFormatUtil extends PsiFormatUtilBase {
   @MagicConstant(flags = {SHOW_TYPE_PARAMETER_EXTENDS})
   public @interface FormatTypeParameterOptions {}
 
-  @Nonnull
   public static String formatTypeParameters(PsiTypeParameterListOwner owner, @FormatTypeParameterOptions int options){
     StringBuilder builder = new StringBuilder();
     formatTypeParameters(owner.getTypeParameters(), builder, options);
@@ -84,7 +81,7 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
   private static void formatVariable(PsiVariable variable,
                                      @FormatVariableOptions int options,
                                      PsiSubstitutor substitutor,
-                                     @Nonnull StringBuilder buffer){
+                                     StringBuilder buffer){
     if ((options & SHOW_MODIFIERS) != 0 && (options & MODIFIERS_AFTER) == 0){
       formatModifiers(variable, options,buffer);
     }
@@ -252,8 +249,7 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
   @MagicConstant(flags = {SHOW_MODIFIERS, SHOW_NAME, SHOW_ANONYMOUS_CLASS_VERBOSE, SHOW_FQ_NAME, MODIFIERS_AFTER, SHOW_EXTENDS_IMPLEMENTS, SHOW_REDUNDANT_MODIFIERS, JAVADOC_MODIFIERS_ONLY, SHOW_TYPE_PARAMETERS, SHOW_TYPE_PARAMETER_EXTENDS})
   public @interface FormatClassOptions {}
 
-  @Nonnull
-  public static String formatClass(@Nonnull PsiClass aClass, @FormatClassOptions int options){
+  public static String formatClass(PsiClass aClass, @FormatClassOptions int options){
     StringBuilder buffer = new StringBuilder();
     if ((options & SHOW_MODIFIERS) != 0 && (options & MODIFIERS_AFTER) == 0){
       formatModifiers(aClass, options,buffer);
@@ -407,7 +403,7 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
     return buffer.toString();
   }
 
-  public static String formatType(PsiType type, int options, @Nonnull PsiSubstitutor substitutor){
+  public static String formatType(PsiType type, int options, PsiSubstitutor substitutor){
     type = substitutor.substitute(type);
     if ((options & SHOW_RAW_TYPE) != 0) {
       type = TypeConversionUtil.erasure(type);
@@ -482,7 +478,7 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
     return builder.toString();
   }
 
-  public static String getPackageDisplayName(@Nonnull final PsiClass psiClass) {
+  public static String getPackageDisplayName(final PsiClass psiClass) {
     if (psiClass instanceof PsiTypeParameter) {
       PsiTypeParameterListOwner owner = ((PsiTypeParameter)psiClass).getOwner();
       String ownerName = null;
@@ -497,7 +493,7 @@ public class PsiFormatUtil extends PsiFormatUtilBase {
       return ownerName == null ? "type parameter" : "type parameter of " + ownerName;
     }
 
-    @NonNls String packageName = psiClass.getQualifiedName();
+    String packageName = psiClass.getQualifiedName();
     packageName = packageName == null || packageName.lastIndexOf('.') <= 0 ? "" : packageName.substring(0, packageName.lastIndexOf('.'));
     if (packageName.isEmpty()) {
       packageName = "default package";

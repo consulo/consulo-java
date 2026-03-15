@@ -22,7 +22,6 @@ import consulo.language.codeStyle.CodeStyleSettings;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.ui.ex.awt.IntegerField;
 
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -85,7 +84,7 @@ public class JavaIndentOptionsEditor extends SmartIndentOptionsEditor {
     }
 
     @Override
-    public void reset(@Nonnull CodeStyleSettings settings, @Nonnull CommonCodeStyleSettings.IndentOptions options) {
+    public void reset(CodeStyleSettings settings, CommonCodeStyleSettings.IndentOptions options) {
         super.reset(settings, options);
         myLabelIndent.setValue(options.LABEL_INDENT_SIZE);
         myLabelIndentAbsolute.setSelected(options.LABEL_INDENT_ABSOLUTE);

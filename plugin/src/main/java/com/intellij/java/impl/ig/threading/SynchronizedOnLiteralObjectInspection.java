@@ -25,8 +25,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -36,13 +35,11 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   @SuppressWarnings("PublicField") public boolean warnOnAllPossiblyLiterals = false;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.synchronizedOnLiteralObjectName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     String typeText = ((PsiType)infos[0]).getPresentableText();
     int message = (Integer)infos[1];
@@ -73,7 +70,7 @@ public class SynchronizedOnLiteralObjectInspection extends BaseInspection {
   private class SynchronizeOnLiteralVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitSynchronizedStatement(@Nonnull PsiSynchronizedStatement statement) {
+    public void visitSynchronizedStatement(PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {

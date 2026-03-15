@@ -26,15 +26,13 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @ExtensionImpl
 public class UnnecessaryTemporaryOnConversionToStringInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionToStringDisplayName();
@@ -46,7 +44,6 @@ public class UnnecessaryTemporaryOnConversionToStringInspection extends BaseInsp
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         String replacementString = calculateReplacementExpression((PsiMethodCallExpression) infos[0]);
         return InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringProblemDescriptor(replacementString).get();
@@ -86,14 +83,12 @@ public class UnnecessaryTemporaryOnConversionToStringInspection extends BaseInsp
     }
 
     private static class UnnecessaryTemporaryObjectFix extends InspectionGadgetsFix {
-        @Nonnull
         private final LocalizeValue myName;
 
-        private UnnecessaryTemporaryObjectFix(@Nonnull LocalizeValue name) {
+        private UnnecessaryTemporaryObjectFix(LocalizeValue name) {
             myName = name;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return myName;
@@ -133,7 +128,7 @@ public class UnnecessaryTemporaryOnConversionToStringInspection extends BaseInsp
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

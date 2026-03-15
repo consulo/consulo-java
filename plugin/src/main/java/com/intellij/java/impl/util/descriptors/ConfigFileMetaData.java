@@ -16,8 +16,7 @@
 
 package com.intellij.java.impl.util.descriptors;
 
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 import consulo.logging.Logger;
 
 import java.util.Arrays;
@@ -38,9 +37,9 @@ public class ConfigFileMetaData {
   private final boolean myUnique;
 
   public ConfigFileMetaData(String title,
-                            @NonNls String id,
-                            @NonNls String fileName,
-                            @NonNls String directoryPath,
+                            String id,
+                            String fileName,
+                            String directoryPath,
                             ConfigFileVersion[] versions,
                             @Nullable ConfigFileVersion defaultVersion,
                             boolean optional,
@@ -60,8 +59,8 @@ public class ConfigFileMetaData {
   }
 
   public ConfigFileMetaData(String title,
-                            @NonNls String fileName,
-                            @NonNls String directoryPath,
+                            String fileName,
+                            String directoryPath,
                             ConfigFileVersion[] versions,
                             ConfigFileVersion defaultVersion,
                             boolean optional,

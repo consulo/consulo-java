@@ -37,7 +37,6 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -51,7 +50,7 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
     private static final int COPY_TO_FINAL = 2;
     private static final Key<Map<PsiVariable, Boolean>>[] VARS = new Key[]{Key.create("VARS_TO_MAKE_FINAL"), Key.create("VARS_TO_TRANSFORM"), Key.create("???")};
 
-    public VariableAccessFromInnerClassFix(@Nonnull PsiVariable variable, @Nonnull PsiElement element) {
+    public VariableAccessFromInnerClassFix(PsiVariable variable, PsiElement element) {
         myVariable = variable;
         myContext = element;
         myFixType = getQuickFixType(variable);
@@ -63,7 +62,6 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         switch (myFixType) {
             case MAKE_FINAL: {
@@ -84,7 +82,7 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return myContext.isValid() &&
             myContext.getManager().isInProject(myContext) &&
             myVariable.isValid() &&
@@ -98,7 +96,7 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().preparePsiElementsForWrite(myContext, myVariable)) {
             return;
         }
@@ -129,7 +127,6 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
         }
     }
 
-    @Nonnull
     private Collection<PsiVariable> getVariablesToFix() {
         Map<PsiVariable, Boolean> vars = myContext.getUserData(VARS[myFixType]);
         if (vars == null) {
@@ -142,7 +139,6 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
                 return finalVars.put(psiVariable, Boolean.TRUE) == null;
             }
 
-            @Nonnull
             @Override
             public Iterator<PsiVariable> iterator() {
                 return finalVars.keySet().iterator();
@@ -296,7 +292,7 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
         });
     }
 
-    private static int getQuickFixType(@Nonnull PsiVariable variable) {
+    private static int getQuickFixType(PsiVariable variable) {
         PsiElement outerCodeBlock = PsiUtil.getVariableCodeBlock(variable, null);
         if (outerCodeBlock == null) {
             return -1;
@@ -328,7 +324,7 @@ public class VariableAccessFromInnerClassFix implements SyntheticIntentionAction
         return type;
     }
 
-    private static boolean canBeFinal(@Nonnull PsiVariable variable, @Nonnull List<PsiReferenceExpression> references) {
+    private static boolean canBeFinal(PsiVariable variable, List<PsiReferenceExpression> references) {
         // if there is at least one assignment to this variable, it cannot be final
         Map<PsiElement, Collection<PsiReferenceExpression>> uninitializedVarProblems = new HashMap<PsiElement, Collection<PsiReferenceExpression>>();
         Map<PsiElement, Collection<ControlFlowUtil.VariableInfo>> finalVarProblems = new HashMap<PsiElement, Collection<ControlFlowUtil.VariableInfo>>();

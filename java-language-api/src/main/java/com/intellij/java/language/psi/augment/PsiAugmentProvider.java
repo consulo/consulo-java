@@ -23,8 +23,7 @@ import consulo.project.Project;
 import consulo.util.collection.SmartList;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -63,10 +62,9 @@ public abstract class PsiAugmentProvider {
         "unchecked",
         "rawtypes"
     })
-    @Nonnull
     protected <Psi extends PsiElement> List<Psi> getAugments(
-        @Nonnull PsiElement element,
-        @Nonnull Class<Psi> type,
+        PsiElement element,
+        Class<Psi> type,
         @Nullable String nameHint
     ) {
         if (nameHint == null) {
@@ -94,9 +92,9 @@ public abstract class PsiAugmentProvider {
      * @param context  context where extension methods should be applicable
      */
     protected List<PsiExtensionMethod> getExtensionMethods(
-        @Nonnull PsiClass aClass,
-        @Nonnull String nameHint,
-        @Nonnull PsiElement context
+        PsiClass aClass,
+        String nameHint,
+        PsiElement context
     ) {
         return Collections.emptyList();
     }
@@ -106,8 +104,7 @@ public abstract class PsiAugmentProvider {
      */
     @SuppressWarnings("unused")
     @Deprecated
-    @Nonnull
-    protected <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element, @Nonnull Class<Psi> type) {
+    protected <Psi extends PsiElement> List<Psi> getAugments(PsiElement element, Class<Psi> type) {
         return Collections.emptyList();
     }
 
@@ -116,7 +113,7 @@ public abstract class PsiAugmentProvider {
      * (e.g. inferred from a variable initializer).
      */
     @Nullable
-    protected PsiType inferType(@Nonnull PsiTypeElement typeElement) {
+    protected PsiType inferType(PsiTypeElement typeElement) {
         return null;
     }
 
@@ -124,15 +121,14 @@ public abstract class PsiAugmentProvider {
      * @return whether this extension might infer the type for the given PSI,
      * preferably checked in a lightweight way without actually inferring the type.
      */
-    protected boolean canInferType(@Nonnull PsiTypeElement typeElement) {
+    protected boolean canInferType(PsiTypeElement typeElement) {
         return inferType(typeElement) != null;
     }
 
     /**
      * Intercepts {@link PsiModifierList#hasModifierProperty(String)}, so that plugins can add imaginary modifiers or hide existing ones.
      */
-    @Nonnull
-    protected Set<String> transformModifiers(@Nonnull PsiModifierList modifierList, @Nonnull Set<String> modifiers) {
+    protected Set<String> transformModifiers(PsiModifierList modifierList, Set<String> modifiers) {
         return modifiers;
     }
 
@@ -141,7 +137,7 @@ public abstract class PsiAugmentProvider {
      * @return true if this field initializer can be changed due to extra-linguistic extensions
      * (e.g., it's annotated via some annotation and annotation processor will transform the field to be non-constant)
      */
-    protected boolean fieldInitializerMightBeChanged(@Nonnull PsiField field) {
+    protected boolean fieldInitializerMightBeChanged(PsiField field) {
         return false;
     }
 
@@ -152,15 +148,13 @@ public abstract class PsiAugmentProvider {
     /**
      * @deprecated use {@link #collectAugments(PsiElement, Class, String)}
      */
-    @Nonnull
     @Deprecated
-    public static <Psi extends PsiElement> List<Psi> collectAugments(@Nonnull PsiElement element, @Nonnull Class<? extends Psi> type) {
+    public static <Psi extends PsiElement> List<Psi> collectAugments(PsiElement element, Class<? extends Psi> type) {
         return collectAugments(element, type, null);
     }
 
-    @Nonnull
     public static <Psi extends PsiElement> List<Psi> collectAugments(
-        @Nonnull PsiElement element, @Nonnull Class<? extends Psi> type,
+        PsiElement element, Class<? extends Psi> type,
         @Nullable String nameHint
     ) {
         List<Psi> result = new SmartList<>();
@@ -190,8 +184,7 @@ public abstract class PsiAugmentProvider {
         return result;
     }
 
-    @Nonnull
-    public static List<PsiExtensionMethod> collectExtensionMethods(PsiClass aClass, @Nonnull String nameHint, PsiElement context) {
+    public static List<PsiExtensionMethod> collectExtensionMethods(PsiClass aClass, String nameHint, PsiElement context) {
         List<PsiExtensionMethod> extensionMethods = new SmartList<>();
         forEach(aClass.getProject(), provider -> {
             List<PsiExtensionMethod> methods = provider.getExtensionMethods(aClass, nameHint, context);
@@ -213,7 +206,7 @@ public abstract class PsiAugmentProvider {
     }
 
     @Nullable
-    public static PsiType getInferredType(@Nonnull PsiTypeElement typeElement) {
+    public static PsiType getInferredType(PsiTypeElement typeElement) {
         SimpleReference<PsiType> result = SimpleReference.create();
 
         forEach(
@@ -242,7 +235,7 @@ public abstract class PsiAugmentProvider {
         return result.get();
     }
 
-    public static boolean isInferredType(@Nonnull PsiTypeElement typeElement) {
+    public static boolean isInferredType(PsiTypeElement typeElement) {
         AtomicBoolean result = new AtomicBoolean();
 
         forEach(typeElement.getProject(), provider -> {
@@ -261,7 +254,7 @@ public abstract class PsiAugmentProvider {
      * @return true if we can trust the field initializer;
      * false if any of providers reported that the initializer might be changed
      */
-    public static boolean canTrustFieldInitializer(@Nonnull PsiField field) {
+    public static boolean canTrustFieldInitializer(PsiField field) {
         AtomicBoolean result = new AtomicBoolean(true);
 
         forEach(field.getProject(), provider -> {
@@ -275,11 +268,10 @@ public abstract class PsiAugmentProvider {
         return result.get();
     }
 
-    @Nonnull
     public static Set<String> transformModifierProperties(
-        @Nonnull PsiModifierList modifierList,
-        @Nonnull Project project,
-        @Nonnull Set<String> modifiers
+        PsiModifierList modifierList,
+        Project project,
+        Set<String> modifiers
     ) {
         SimpleReference<Set<String>> result = SimpleReference.create(modifiers);
 

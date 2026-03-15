@@ -45,8 +45,7 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -69,7 +68,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor {
 
   @RequiredReadAction
   @Override
-  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result) {
+  public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
     if (parameters.getCompletionType() != CompletionType.BASIC && parameters.getCompletionType() != CompletionType.SMART) {
       return;
     }
@@ -112,7 +111,7 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static void completeComponentName(Set<LookupElement> set, @Nonnull PsiRecordComponent var, PrefixMatcher matcher) {
+  private static void completeComponentName(Set<LookupElement> set, PsiRecordComponent var, PrefixMatcher matcher) {
     FeatureUsageTracker.getInstance().triggerFeatureUsed("editing.completion.variable.name");
 
     Project project = var.getProject();
@@ -474,7 +473,6 @@ public class JavaMemberNameCompletionContributor extends CompletionContributor {
     });
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

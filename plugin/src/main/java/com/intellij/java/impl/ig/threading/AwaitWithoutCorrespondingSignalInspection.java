@@ -25,17 +25,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AwaitWithoutCorrespondingSignalInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.awaitWithoutCorrespondingSignalDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.awaitWithoutCorrespondingSignalProblemDescriptor().get();
   }
@@ -47,7 +44,7 @@ public class AwaitWithoutCorrespondingSignalInspection extends BaseInspection {
   private static class AwaitWithoutCorrespondingSignalVisitor extends BaseInspectionVisitor {
     @Override
     @RequiredReadAction
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!ThreadingUtils.isAwaitCall(expression)) {
         return;

@@ -3,7 +3,7 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
 import org.jetbrains.annotations.Contract;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents implicitly declared class from <a href="https://openjdk.org/jeps/463">JEP 463</a>.

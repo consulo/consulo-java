@@ -5,11 +5,10 @@ import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
-import jakarta.annotation.Nonnull;
 
 public class InstanceJavaValue extends JavaValue {
-    public InstanceJavaValue(@Nonnull ValueDescriptorImpl valueDescriptor,
-                             @Nonnull EvaluationContextImpl evaluationContext,
+    public InstanceJavaValue(ValueDescriptorImpl valueDescriptor,
+                             EvaluationContextImpl evaluationContext,
                              NodeManagerImpl nodeManager) {
         super(null, valueDescriptor, evaluationContext, nodeManager, false);
     }

@@ -27,8 +27,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,13 +43,11 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection extends BaseIn
     @SuppressWarnings("PublicField")
     public boolean reportParameters = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryFinalOnLocalVariableOrParameterDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
@@ -125,7 +122,7 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection extends BaseIn
 
     private class UnnecessaryFinalOnLocalVariableOrParameterVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitDeclarationStatement(@Nonnull PsiDeclarationStatement statement) {
+        public void visitDeclarationStatement(PsiDeclarationStatement statement) {
             super.visitDeclarationStatement(statement);
             if (!reportLocalVariables) {
                 return;
@@ -154,7 +151,7 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection extends BaseIn
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (!reportParameters) {
                 return;
@@ -191,7 +188,7 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection extends BaseIn
         }
 
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             super.visitTryStatement(statement);
             if (onlyWarnOnAbstractMethods || !reportParameters) {
                 return;
@@ -213,7 +210,7 @@ public class UnnecessaryFinalOnLocalVariableOrParameterInspection extends BaseIn
         }
 
         @Override
-        public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+        public void visitForeachStatement(PsiForeachStatement statement) {
             super.visitForeachStatement(statement);
             if (onlyWarnOnAbstractMethods || !reportParameters) {
                 return;

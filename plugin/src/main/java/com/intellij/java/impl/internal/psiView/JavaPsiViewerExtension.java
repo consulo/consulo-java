@@ -21,13 +21,11 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Konstantin Bulenkov
  */
 public abstract class JavaPsiViewerExtension implements PsiViewerExtension {
-  @Nonnull
   public FileType getDefaultFileType() {
     return JavaFileType.INSTANCE;
   }

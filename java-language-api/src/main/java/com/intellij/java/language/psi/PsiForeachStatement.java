@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java enhanced {@code for}   statement.
@@ -26,6 +25,5 @@ public interface PsiForeachStatement extends PsiForeachStatementBase {
    *
    * @return the iteration parameter instance.
    */
-  @Nonnull
   PsiParameter getIterationParameter();
 }

@@ -36,8 +36,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,14 +48,13 @@ import java.util.List;
 @IntentionMetaData(ignoreId = "java.ConcatenationToMessageFormatAction", categories = {"Java", "I18N"}, fileExtensions = "java")
 public class ConcatenationToMessageFormatAction implements IntentionAction {
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionReplaceConcatenationWithFormattedOutputText();
   }
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     PsiElement element = findElementAtCaret(editor, file);
     PsiPolyadicExpression concatenation = getEnclosingLiteralConcatenation(element);
@@ -137,7 +135,7 @@ public class ConcatenationToMessageFormatAction implements IntentionAction {
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (PsiUtil.getLanguageLevel(file).compareTo(LanguageLevel.JDK_1_4) < 0) return false;
     PsiElement element = findElementAtCaret(editor, file);
     PsiPolyadicExpression binaryExpression = getEnclosingLiteralConcatenation(element);

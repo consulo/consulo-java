@@ -31,7 +31,6 @@ import consulo.language.psi.PsiReference;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class RenameWrongRefHandler implements RenameHandler {
@@ -44,7 +43,6 @@ public class RenameWrongRefHandler implements RenameHandler {
         return !(editor == null || file == null || project == null) && isAvailable(project, editor, file);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getActionTitleValue() {
         return LocalizeValue.localizeTODO("Rename Wrong Reference...");
@@ -65,7 +63,7 @@ public class RenameWrongRefHandler implements RenameHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
+    public void invoke(final Project project, final Editor editor, final PsiFile file, DataContext dataContext) {
         final PsiReferenceExpression reference = (PsiReferenceExpression) file.findReferenceAt(editor.getCaretModel().getOffset());
         new WriteCommandAction(project) {
             @Override
@@ -76,6 +74,6 @@ public class RenameWrongRefHandler implements RenameHandler {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
     }
 }

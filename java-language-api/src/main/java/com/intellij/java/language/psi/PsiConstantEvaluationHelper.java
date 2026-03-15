@@ -18,7 +18,7 @@ package com.intellij.java.language.psi;
 import com.intellij.java.language.psi.util.ConstantEvaluationOverflowException;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.concurrent.ConcurrentMap;
 
 /**

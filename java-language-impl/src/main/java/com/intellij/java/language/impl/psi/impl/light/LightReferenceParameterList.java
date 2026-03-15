@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.impl.psi.LightElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -66,7 +65,7 @@ public class LightReferenceParameterList extends LightElement implements PsiRefe
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceParameterList(this);
     } else {
@@ -85,13 +84,11 @@ public class LightReferenceParameterList extends LightElement implements PsiRefe
   }
 
   @Override
-  @Nonnull
   public PsiTypeElement[] getTypeParameterElements() {
     return myTypeElements;
   }
 
   @Override
-  @Nonnull
   public PsiType[] getTypeArguments() {
     return PsiImplUtil.typesByTypeElements(myTypeElements);
   }

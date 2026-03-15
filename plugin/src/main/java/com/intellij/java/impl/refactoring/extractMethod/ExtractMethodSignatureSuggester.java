@@ -54,7 +54,7 @@ import consulo.util.collection.Maps;
 import consulo.util.collection.Sets;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;

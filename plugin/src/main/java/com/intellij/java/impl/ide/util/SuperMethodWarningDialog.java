@@ -26,7 +26,6 @@ import consulo.ui.ex.awt.JBLabel;
 import consulo.ui.ex.awt.LocalizeAction;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -37,7 +36,6 @@ class SuperMethodWarningDialog extends DialogWrapper {
     public static final int NO_EXIT_CODE = NEXT_USER_EXIT_CODE + 1;
     private final String myName;
     private final String[] myClassNames;
-    @Nonnull
     private final LocalizeValue myActionString;
     private final boolean myIsSuperAbstract;
     private final boolean myIsParentInterface;
@@ -46,7 +44,7 @@ class SuperMethodWarningDialog extends DialogWrapper {
     public SuperMethodWarningDialog(
         Project project,
         String name,
-        @Nonnull LocalizeValue actionString,
+        LocalizeValue actionString,
         boolean isSuperAbstract,
         boolean isParentInterface,
         boolean isContainedInInterface,
@@ -65,7 +63,6 @@ class SuperMethodWarningDialog extends DialogWrapper {
         init();
     }
 
-    @Nonnull
     @Override
     protected Action[] createActions() {
         return new Action[]{getOKAction(), new NoAction(), getCancelAction()};

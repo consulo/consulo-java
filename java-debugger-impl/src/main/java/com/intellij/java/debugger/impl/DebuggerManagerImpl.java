@@ -60,8 +60,7 @@ import consulo.util.collection.Lists;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -127,7 +126,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
     }
 
     @Override
-    public String getVMClassQualifiedName(@Nonnull PsiClass aClass) {
+    public String getVMClassQualifiedName(PsiClass aClass) {
         for (NameMapper nameMapper : myNameMappers) {
             String qName = nameMapper.getQualifiedName(aClass);
             if (qName != null) {
@@ -143,7 +142,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         myBreakpointManager = new BreakpointManager(myProject, this);
     }
 
-    @Nonnull
     private DebuggerManagerListener listener() {
         return myProject.getMessageBus().syncPublisher(DebuggerManagerListener.class);
     }
@@ -156,7 +154,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         return getSessions().stream().filter(debuggerSession -> process == debuggerSession.getProcess()).findFirst().orElse(null);
     }
 
-    @Nonnull
     @Override
     public Collection<DebuggerSession> getSessions() {
         synchronized (mySessions) {
@@ -176,7 +173,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
     @Override
     @Nullable
     @RequiredUIAccess
-    public DebuggerSession attachVirtualMachine(@Nonnull DebugEnvironment environment) throws ExecutionException {
+    public DebuggerSession attachVirtualMachine(DebugEnvironment environment) throws ExecutionException {
         UIAccess.assertIsUIThread();
         DebugProcessEvents debugProcess = new DebugProcessEvents(myProject);
         DebuggerSession session = DebuggerSession.create(environment.getSessionName(), debugProcess, environment);
@@ -319,19 +316,16 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         return DebuggerManagerThreadImpl.isManagerThread();
     }
 
-    @Nonnull
     @Override
     public BreakpointManager getBreakpointManager() {
         return myBreakpointManager;
     }
 
-    @Nonnull
     @Override
     public DebuggerContextImpl getContext() {
         return getContextManager().getContext();
     }
 
-    @Nonnull
     @Override
     public DebuggerStateManager getContextManager() {
         return myDebuggerStateManager;
@@ -502,7 +496,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
     private static class MyDebuggerStateManager extends DebuggerStateManager {
         private DebuggerSession myDebuggerSession;
 
-        @Nonnull
         @Override
         public DebuggerContextImpl getContext() {
             return myDebuggerSession == null ? DebuggerContextImpl.EMPTY_CONTEXT : myDebuggerSession.getContextManager().getContext();
@@ -511,7 +504,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         @Override
         @RequiredUIAccess
         public void setState(
-            @Nonnull DebuggerContextImpl context,
+            DebuggerContextImpl context,
             DebuggerSession.State state,
             DebuggerSession.Event event,
             LocalizeValue description

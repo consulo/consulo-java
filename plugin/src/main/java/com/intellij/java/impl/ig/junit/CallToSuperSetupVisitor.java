@@ -17,15 +17,13 @@ package com.intellij.java.impl.ig.junit;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 class CallToSuperSetupVisitor extends JavaRecursiveElementVisitor {
 
   private boolean callToSuperSetupFound = false;
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (!callToSuperSetupFound) {
       super.visitElement(element);
     }
@@ -33,14 +31,14 @@ class CallToSuperSetupVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitMethodCallExpression(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     if (callToSuperSetupFound) {
       return;
     }
     super.visitMethodCallExpression(expression);
     PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"setUp".equals(methodName)) {
       return;
     }

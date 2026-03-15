@@ -28,8 +28,7 @@ import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.GenericDomValue;
 import consulo.xml.util.xml.ResolvingConverter;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -45,11 +44,10 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     myDomMethodClass = domMethodClass;
   }
 
-  @Nonnull
   protected abstract Collection<PsiClass> getPsiClasses(ParentType parent, ConvertContext context);
 
   @Nullable
-  protected abstract AbstractMethodParams getMethodParams(@Nonnull ParentType parent);
+  protected abstract AbstractMethodParams getMethodParams(ParentType parent);
 
   public void bindReference(GenericDomValue<PsiMethod> genericValue, ConvertContext context, PsiElement element) {
     assert element instanceof PsiMethod : "PsiMethod expected";
@@ -73,14 +71,13 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     ).get();
   }
 
-  @Nonnull
   protected final ParentType getParent(ConvertContext context) {
     ParentType parent = context.getInvocationElement().getParentOfType(myDomMethodClass, true);
     assert parent != null: "Can't get parent of type " + myDomMethodClass + " for " + context.getInvocationElement();
     return parent;
   }
 
-  public boolean isReferenceTo(@Nonnull PsiElement element, String stringValue, PsiMethod resolveResult,
+  public boolean isReferenceTo(PsiElement element, String stringValue, PsiMethod resolveResult,
                                ConvertContext context) {
     if (super.isReferenceTo(element, stringValue, resolveResult, context)) return true;
 
@@ -109,7 +106,6 @@ public abstract class AbstractMethodResolveConverter<ParentType extends DomEleme
     }
   }
 
-  @Nonnull
   public Collection<? extends PsiMethod> getVariants(ConvertContext context) {
     LinkedHashSet<PsiMethod> methodList = new LinkedHashSet<>();
     Processor<PsiMethod> processor = CommonProcessors.notNullProcessor(new CommonProcessors.CollectProcessor<>(methodList));

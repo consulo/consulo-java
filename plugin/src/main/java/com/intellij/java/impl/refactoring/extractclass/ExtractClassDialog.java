@@ -49,8 +49,7 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -201,12 +200,10 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
         }
     }
 
-    @Nonnull
     public String getPackageName() {
         return packageTextField.getText().trim();
     }
 
-    @Nonnull
     public String getClassName() {
         return classNameField.getText().trim();
     }
@@ -321,7 +318,7 @@ class ExtractClassDialog extends RefactoringDialog implements MemberInfoChangeLi
         table.setMemberInfoModel(new DelegatingMemberInfoModel<>(table.getMemberInfoModel()) {
 
             @Override
-            public int checkForProblems(@Nonnull MemberInfo member) {
+            public int checkForProblems(MemberInfo member) {
                 PsiMember cause = getCause(member);
                 if (member.isChecked() && cause != null) {
                     return ERROR;

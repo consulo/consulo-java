@@ -24,8 +24,7 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.scope.GlobalSearchScope;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -39,10 +38,10 @@ public class JavaClassSupersImpl extends JavaClassSupers
 {
 	@Override
 	@Nullable
-	public PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass,
-												   @Nonnull PsiClass derivedClass,
-												   @Nonnull GlobalSearchScope scope,
-												   @Nonnull PsiSubstitutor derivedSubstitutor)
+	public PsiSubstitutor getSuperClassSubstitutor(PsiClass superClass,
+												   PsiClass derivedClass,
+												   GlobalSearchScope scope,
+												   PsiSubstitutor derivedSubstitutor)
 	{
 		if(InheritanceImplUtil.hasObjectQualifiedName(superClass))
 		{
@@ -86,10 +85,10 @@ public class JavaClassSupersImpl extends JavaClassSupers
 	}
 
 	@Nullable
-	private static PsiSubstitutor getSuperSubstitutorWithCaching(@Nonnull PsiClass superClass,
-																 @Nonnull PsiClass derivedClass,
-																 @Nonnull GlobalSearchScope resolveScope,
-																 @Nonnull PsiSubstitutor derivedSubstitutor)
+	private static PsiSubstitutor getSuperSubstitutorWithCaching(PsiClass superClass,
+																 PsiClass derivedClass,
+																 GlobalSearchScope resolveScope,
+																 PsiSubstitutor derivedSubstitutor)
 	{
 		PsiSubstitutor substitutor = ScopedClassHierarchy.getSuperClassSubstitutor(derivedClass, resolveScope, superClass);
 		if(substitutor == null)
@@ -104,13 +103,11 @@ public class JavaClassSupersImpl extends JavaClassSupers
 		return composeSubstitutors(derivedSubstitutor, substitutor, superClass);
 	}
 
-	@Nonnull
-	static PsiSubstitutor createRawSubstitutor(@Nonnull PsiClass superClass)
+	static PsiSubstitutor createRawSubstitutor(PsiClass superClass)
 	{
 		return JavaPsiFacade.getElementFactory(superClass.getProject()).createRawSubstitutor(superClass);
 	}
 
-	@Nonnull
 	private static PsiSubstitutor composeSubstitutors(PsiSubstitutor outer, PsiSubstitutor inner, PsiClass onClass)
 	{
 		PsiSubstitutor answer = PsiSubstitutor.EMPTY;

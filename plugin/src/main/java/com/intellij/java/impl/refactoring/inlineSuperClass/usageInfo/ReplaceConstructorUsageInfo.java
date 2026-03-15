@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -32,7 +31,6 @@ import jakarta.annotation.Nonnull;
  */
 public class ReplaceConstructorUsageInfo extends FixableUsageInfo {
     private final PsiType myNewType;
-    @Nonnull
     private LocalizeValue myConflict;
     private static final LocalizeValue CONSTRUCTOR_MATCHING_SUPER_NOT_FOUND =
         LocalizeValue.localizeTODO("Constructor matching super not found");
@@ -99,7 +97,7 @@ public class ReplaceConstructorUsageInfo extends FixableUsageInfo {
         }
     }
 
-    private void appendConflict(@Nonnull LocalizeValue conflict) {
+    private void appendConflict(LocalizeValue conflict) {
         myConflict = myConflict.isEmpty() ? conflict : LocalizeValue.join(myConflict, LocalizeValue.of("\n"), conflict);
     }
 

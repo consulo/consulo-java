@@ -16,7 +16,7 @@
 package com.intellij.java.debugger.engine;
 
 import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by IntelliJ IDEA.

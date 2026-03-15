@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.performance;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
@@ -63,7 +62,7 @@ class MethodReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitReferenceExpression(
-    @Nonnull PsiReferenceExpression expression) {
+    PsiReferenceExpression expression) {
     super.visitReferenceExpression(expression);
     PsiElement qualifier = expression.getQualifierExpression();
     if (qualifier != null && !(qualifier instanceof PsiThisExpression) &&
@@ -85,7 +84,7 @@ class MethodReferenceVisitor extends JavaRecursiveElementVisitor {
 
   @Override
   public void visitThisExpression(
-    @Nonnull PsiThisExpression expression) {
+    PsiThisExpression expression) {
     super.visitThisExpression(expression);
     m_referencesStaticallyAccessible = false;
   }

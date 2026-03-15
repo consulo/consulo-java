@@ -1,6 +1,6 @@
 // "Annotate overridden methods as '@NotNull'" "true"
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class XEM {
      <caret>@jakarta.annotation.Nonnull

@@ -54,8 +54,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -141,15 +140,14 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         existingClass = JavaPsiFacade.getInstance(myProject).findClass(qualifiedName, scope);
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usageInfos) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usageInfos) {
         return new IntroduceParameterObjectUsageViewDescriptor(method);
     }
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         if (myUseExistingClass) {
             if (existingClass == null) {
@@ -197,7 +195,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
     @Override
     @RequiredReadAction
-    public void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+    public void findUsages(List<FixableUsageInfo> usages) {
         if (myUseExistingClass && existingClass != null) {
             myExistingClassCompatibleConstructor = existingClassIsCompatible(existingClass, parameters);
         }
@@ -288,7 +286,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
+    protected void performRefactoring(UsageInfo[] usageInfos) {
         PsiClass psiClass = buildClass();
         if (psiClass != null) {
             fixJavadocForConstructor(psiClass);
@@ -404,7 +402,6 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
         }
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {
@@ -560,7 +557,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
 
         @Override
         @RequiredReadAction
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
+        public void visitAssignmentExpression(PsiAssignmentExpression assignment) {
             super.visitAssignmentExpression(assignment);
             if (assignment.getLExpression() instanceof PsiReferenceExpression lhs
                 && assignment.getRExpression() instanceof PsiReferenceExpression rhs) {

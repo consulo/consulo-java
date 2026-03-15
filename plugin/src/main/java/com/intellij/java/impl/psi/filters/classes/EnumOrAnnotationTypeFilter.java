@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.psi.filters.classes;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
@@ -36,7 +35,6 @@ public class EnumOrAnnotationTypeFilter implements ElementFilter{
     return false;
   }
 
-  @NonNls
   public String toString(){
     return "enum or annotation type";
   }

@@ -23,7 +23,6 @@ import consulo.internal.org.objectweb.asm.tree.JumpInsnNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Set;
@@ -46,7 +45,6 @@ class NullableInAnalysis extends Analysis<PResult>
 		this.pending = pending;
 	}
 
-	@Nonnull
 	Equation mkEquation(PResult result)
 	{
 		if(NPE == result)
@@ -72,7 +70,6 @@ class NullableInAnalysis extends Analysis<PResult>
 	private boolean top;
 
 	@Override
-	@Nonnull
 	protected Equation analyze() throws AnalyzerException
 	{
 		pendingPush(createStartState());

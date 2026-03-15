@@ -25,7 +25,6 @@ import consulo.internal.org.objectweb.asm.tree.MethodNode;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
 import consulo.internal.org.objectweb.asm.tree.analysis.Frame;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +96,6 @@ abstract class Analysis<Res>
 		return true;
 	}
 
-	@Nonnull
 	protected abstract Equation analyze() throws AnalyzerException;
 
 	final Frame<BasicValue> createStartFrame()
@@ -137,7 +135,6 @@ abstract class Analysis<Res>
 		return frame;
 	}
 
-	@Nonnull
 	static Frame<BasicValue> createCatchFrame(Frame<? extends BasicValue> frame)
 	{
 		Frame<BasicValue> catchFrame = new Frame<>(frame);

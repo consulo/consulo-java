@@ -23,10 +23,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.util.collection.Maps;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public class PsiSuperMethodUtil
@@ -59,7 +57,7 @@ public class PsiSuperMethodUtil
 				if(firstChild instanceof PsiMethodCallExpression)
 				{
 					PsiReferenceExpression methodExpr = ((PsiMethodCallExpression) firstChild).getMethodExpression();
-					@NonNls final String text = methodExpr.getText();
+					final String text = methodExpr.getText();
 					if(text.equals("super"))
 					{
 						PsiElement superConstructor = methodExpr.resolve();
@@ -94,7 +92,7 @@ public class PsiSuperMethodUtil
 		return null;
 	}
 
-	public static boolean isSuperMethod(@Nonnull PsiMethod method, @Nonnull PsiMethod superMethod)
+	public static boolean isSuperMethod(PsiMethod method, PsiMethod superMethod)
 	{
 		HierarchicalMethodSignature signature = method.getHierarchicalMethodSignature();
 		List<HierarchicalMethodSignature> superSignatures = signature.getSuperSignatures();
@@ -111,8 +109,7 @@ public class PsiSuperMethodUtil
 		return false;
 	}
 
-	@Nonnull
-	public static PsiSubstitutor obtainFinalSubstitutor(@Nonnull PsiClass superClass, @Nonnull PsiSubstitutor superSubstitutor, @Nonnull PsiSubstitutor derivedSubstitutor, boolean inRawContext)
+	public static PsiSubstitutor obtainFinalSubstitutor(PsiClass superClass, PsiSubstitutor superSubstitutor, PsiSubstitutor derivedSubstitutor, boolean inRawContext)
 	{
 		if(inRawContext)
 		{
@@ -135,8 +132,7 @@ public class PsiSuperMethodUtil
 		return map == null ? PsiSubstitutor.EMPTY : JavaPsiFacade.getInstance(superClass.getProject()).getElementFactory().createSubstitutor(map);
 	}
 
-	@Nonnull
-	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(@Nonnull PsiClass aClass)
+	public static Map<MethodSignature, Set<PsiMethod>> collectOverrideEquivalents(PsiClass aClass)
 	{
 		final Map<MethodSignature, Set<PsiMethod>> overrideEquivalent = Maps.newHashMap(MethodSignatureUtil.METHOD_PARAMETERS_ERASURE_EQUALITY);
 		final GlobalSearchScope resolveScope = aClass.getResolveScope();

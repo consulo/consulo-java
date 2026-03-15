@@ -18,9 +18,7 @@ package com.intellij.java.language.psi.javadoc;
 
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface PsiDocTag extends PsiElement, PsiNamedElement{
   PsiDocTag[] EMPTY_ARRAY = new PsiDocTag[0];
@@ -28,7 +26,7 @@ public interface PsiDocTag extends PsiElement, PsiNamedElement{
   PsiDocComment getContainingComment();
   PsiElement getNameElement();
   @Override
-  @NonNls @Nonnull
+  
   String getName();
   PsiElement[] getDataElements();
   @Nullable PsiDocTagValue getValueElement();

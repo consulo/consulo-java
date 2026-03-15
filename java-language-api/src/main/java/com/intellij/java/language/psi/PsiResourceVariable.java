@@ -16,7 +16,6 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a resource variable of try-with-resources statement (automatic resource management) introduced in JDK 7.
@@ -26,6 +25,5 @@ import jakarta.annotation.Nonnull;
  */
 public interface PsiResourceVariable extends PsiLocalVariable, PsiResourceListElement
 {
-	@Nonnull
 	PsiElement[] getDeclarationScope();
 }

@@ -18,10 +18,9 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.quickfix.RenameElementFix;
 import consulo.language.psi.PsiNamedElement;
 
-import jakarta.annotation.Nonnull;
 
 public class RenameToIgnoredFix extends RenameElementFix {
-  public RenameToIgnoredFix(@Nonnull PsiNamedElement element) {
+  public RenameToIgnoredFix(PsiNamedElement element) {
     super(element, "ignored");
   }
 }

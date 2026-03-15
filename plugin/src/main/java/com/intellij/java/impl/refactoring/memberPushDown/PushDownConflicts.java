@@ -31,7 +31,6 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -85,7 +84,7 @@ public class PushDownConflicts {
                 checkMemberPlacementInTargetClassConflict(targetClass, movedMember);
                 movedMember.accept(new JavaRecursiveElementWalkingVisitor() {
                     @Override
-                    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+                    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
                         super.visitMethodCallExpression(expression);
                         if (expression.getMethodExpression().getQualifierExpression() instanceof PsiSuperExpression) {
                             PsiMethod resolvedMethod = expression.resolveMethod();

@@ -29,7 +29,6 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.FieldPanel;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -131,7 +130,6 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 		DebuggerUIUtil.focusEditorOnCheck(myClassFiltersCheckBox, myClassFiltersField.getTextField());
 	}
 
-	@Nonnull
 	@Override
 	public JComponent getComponent()
 	{
@@ -139,7 +137,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 	}
 
 	@Override
-	public boolean isVisibleOnPopup(@Nonnull B breakpoint)
+	public boolean isVisibleOnPopup(B breakpoint)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties != null)
@@ -150,7 +148,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 	}
 
 	@Override
-	public void saveTo(@Nonnull B breakpoint)
+	public void saveTo(B breakpoint)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties == null)
@@ -198,7 +196,7 @@ public class JavaBreakpointFiltersPanel<T extends JavaBreakpointProperties, B ex
 	}
 
 	@Override
-	public void loadFrom(@Nonnull B breakpoint)
+	public void loadFrom(B breakpoint)
 	{
 		JavaBreakpointProperties properties = breakpoint.getProperties();
 		if(properties != null)

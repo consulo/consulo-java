@@ -26,21 +26,17 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MergeParallelIfsIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class MergeParallelIfsIntention extends Intention {
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.mergeParallelIfsIntentionName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new MergeParallelIfsPredicate();
     }
@@ -73,7 +69,7 @@ public class MergeParallelIfsIntention extends Intention {
         }
         PsiStatement firstThenBranch = firstStatement.getThenBranch();
         PsiStatement secondThenBranch = secondStatement.getThenBranch();
-        @NonNls String statement = "if(" + conditionText + ')' +
+        String statement = "if(" + conditionText + ')' +
             printStatementsInSequence(firstThenBranch,
                 secondThenBranch);
         PsiStatement firstElseBranch = firstStatement.getElseBranch();

@@ -23,7 +23,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -32,14 +31,12 @@ public class MethodReturnOfConcreteClassInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreAbstractClasses = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.methodReturnConcreteClassDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.methodReturnConcreteClassProblemDescriptor().get();
     }
@@ -57,7 +54,7 @@ public class MethodReturnOfConcreteClassInspection extends BaseInspection {
 
     private class MethodReturnOfConcreteClassVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (method.isConstructor()) {
                 return;

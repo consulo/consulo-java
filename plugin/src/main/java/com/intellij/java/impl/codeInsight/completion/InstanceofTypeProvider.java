@@ -29,7 +29,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,7 +44,7 @@ class InstanceofTypeProvider implements CompletionProvider {
 
   @RequiredReadAction
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull final CompletionResultSet result) {
+  public void addCompletions(CompletionParameters parameters, ProcessingContext context, final CompletionResultSet result) {
     PsiElement position = parameters.getPosition();
     PsiType[] leftTypes = InstanceOfLeftPartTypeGetter.getLeftTypes(position);
     final Set<PsiClassType> expectedClassTypes = new LinkedHashSet<PsiClassType>();

@@ -12,7 +12,6 @@ import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
 import consulo.ui.util.LabeledBuilder;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Supplier;
 
@@ -27,22 +26,19 @@ public class NewDebuggerLaunchingConfigurable extends SimpleConfigurableByProper
         mySettingsSupplier = settingsSupplier;
     }
 
-    @Nonnull
     @Override
     public String getId() {
         return "reference.idesettings.debugger.launching";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.javaLanguageDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredUIAccess
-    protected Component createLayout(@Nonnull PropertyBuilder propertyBuilder, @Nonnull Disposable disposable) {
+    protected Component createLayout(PropertyBuilder propertyBuilder, Disposable disposable) {
         DebuggerSettings settings = mySettingsSupplier.get();
 
         VerticalLayout layout = VerticalLayout.create();

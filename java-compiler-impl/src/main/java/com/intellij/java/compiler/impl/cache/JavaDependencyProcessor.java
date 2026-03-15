@@ -37,7 +37,6 @@ import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
 import consulo.util.collection.primitive.ints.IntSet;
 import consulo.util.collection.primitive.ints.IntSets;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -422,7 +421,7 @@ class JavaDependencyProcessor {
     return false;
   }
 
-  private void markAnnotationDependenciesRecursively(final Dependency[] dependencies, final @NonNls String reason, final IntSet visitedAnnotations)
+  private void markAnnotationDependenciesRecursively(final Dependency[] dependencies, final String reason, final IntSet visitedAnnotations)
       throws CacheCorruptedException {
     final Cache oldCache = myJavaDependencyCache.getCache();
     for (Dependency dependency : dependencies) {
@@ -536,7 +535,7 @@ class JavaDependencyProcessor {
     return oldAnnotations;
   }
 
-  private void markAll(Dependency[] backDependencies, @NonNls String reason) throws CacheCorruptedException {
+  private void markAll(Dependency[] backDependencies, String reason) throws CacheCorruptedException {
     for (Dependency backDependency : backDependencies) {
       if (myJavaDependencyCache.markTargetClassInfo(backDependency)) {
         if (LOG.isDebugEnabled()) {
@@ -1062,7 +1061,6 @@ class JavaDependencyProcessor {
 
   @SuppressWarnings({"HardCodedStringLiteral"})
   private
-  @NonNls
   String getMethodText(MethodInfo methodInfo) throws CacheCorruptedException {
     final SymbolTable symbolTable = myJavaDependencyCache.getSymbolTable();
     StringBuilder text = new StringBuilder(16);
@@ -1244,7 +1242,6 @@ class JavaDependencyProcessor {
   }
 
   private static
-  @NonNls
   String signatureToSourceTypeName(String signature) {
     try {
       switch (signature.charAt(0)) {

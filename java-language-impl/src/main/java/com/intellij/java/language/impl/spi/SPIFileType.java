@@ -26,8 +26,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -44,7 +43,7 @@ public class SPIFileType extends LanguageFileType implements FileTypeIdentifiabl
 	}
 
 	@Override
-	public boolean isMyFileType(@Nonnull VirtualFile file)
+	public boolean isMyFileType(VirtualFile file)
 	{
 		VirtualFile parent = file.getParent();
 		if(parent != null && Objects.equals("services", parent.getNameSequence()))
@@ -59,21 +58,18 @@ public class SPIFileType extends LanguageFileType implements FileTypeIdentifiabl
 		return false;
 	}
 
-	@Nonnull
 	@Override
 	public String getId()
 	{
 		return "JAVA-SPI";
 	}
 
-	@Nonnull
 	@Override
 	public LocalizeValue getDescription()
 	{
 		return LocalizeValue.localizeTODO("Service Provider Interface");
 	}
 
-	@Nonnull
 	@Override
 	public Image getIcon()
 	{
@@ -82,7 +78,7 @@ public class SPIFileType extends LanguageFileType implements FileTypeIdentifiabl
 
 	@Nullable
 	@Override
-	public String getCharset(@Nonnull VirtualFile file, byte[] content)
+	public String getCharset(VirtualFile file, byte[] content)
 	{
 		return CharsetToolkit.UTF8;
 	}

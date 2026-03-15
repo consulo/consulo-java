@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.light;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.Language;
 import com.intellij.java.language.JavaLanguage;
@@ -28,22 +27,20 @@ import consulo.language.psi.PsiElement;
 public class LightClass extends AbstractLightClass {
   private final PsiClass myDelegate;
 
-  public LightClass(@Nonnull PsiClass delegate) {
+  public LightClass(PsiClass delegate) {
     this(delegate, JavaLanguage.INSTANCE);
   }
 
-  public LightClass(@Nonnull PsiClass delegate, final Language language) {
+  public LightClass(PsiClass delegate, final Language language) {
     super(delegate.getManager(), language);
     myDelegate = delegate;
   }
 
-  @Nonnull
   @Override
   public PsiClass getDelegate() {
     return myDelegate;
   }
 
-  @Nonnull
   @Override
   public PsiElement copy() {
     return new LightClass(this);

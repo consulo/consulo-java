@@ -8,10 +8,8 @@ import consulo.module.extension.ModuleExtensionHelper;
 import consulo.project.Project;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -26,19 +24,18 @@ public class JavaStacktraceAnalyzer implements StacktraceAnalyzer {
   private static final Pattern STACKTRACE_LINE =
       Pattern.compile("[\t]*at [[_a-zA-Z0-9]+\\.]+[_a-zA-Z$0-9]+\\.[a-zA-Z0-9_]+\\([A-Za-z0-9_]+\\.java:[\\d]+\\)+[ [~]*\\[[a-zA-Z0-9\\.\\:/]\\]]*");
 
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("JVM");
   }
 
   @Override
-  public boolean isPreferredForProject(@Nonnull Project project) {
+  public boolean isPreferredForProject(Project project) {
     return ModuleExtensionHelper.getInstance(project).hasModuleExtension(JavaModuleExtension.class);
   }
 
   @Override
-  public boolean isStacktrace(@Nonnull String stacktrace) {
+  public boolean isStacktrace(String stacktrace) {
     stacktrace = normalizeText(stacktrace);
     int linesCount = 0;
     for (String line : stacktrace.split("\n")) {
@@ -57,7 +54,7 @@ public class JavaStacktraceAnalyzer implements StacktraceAnalyzer {
     return false;
   }
 
-  public static String normalizeText(@NonNls String text) {
+  public static String normalizeText(String text) {
     StringBuilder builder = new StringBuilder(text.length());
 
     text = text.replaceAll("(\\S[ \\t\\x0B\\f\\r]+)(at\\s+)", "$1\n$2");
@@ -134,7 +131,7 @@ public class JavaStacktraceAnalyzer implements StacktraceAnalyzer {
 
   @Nullable
   @Override
-  public String parseAsException(@Nonnull String stacktrace) {
+  public String parseAsException(String stacktrace) {
     return StringUtil.nullize(getExceptionName(stacktrace));
   }
 

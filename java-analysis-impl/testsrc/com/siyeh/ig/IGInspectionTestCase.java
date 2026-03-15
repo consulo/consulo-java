@@ -19,7 +19,6 @@ import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
 import com.intellij.openapi.application.PluginPathManager;
 import com.intellij.testFramework.InspectionTestCase;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Alexey
@@ -31,7 +30,7 @@ public abstract class IGInspectionTestCase extends InspectionTestCase {
   }
 
   @Override
-  public void doTest(@NonNls final String folderName, final LocalInspectionTool tool) {
+  public void doTest(final String folderName, final LocalInspectionTool tool) {
     super.doTest(folderName, new LocalInspectionToolWrapper(tool), "java 1.5");
   }
 }

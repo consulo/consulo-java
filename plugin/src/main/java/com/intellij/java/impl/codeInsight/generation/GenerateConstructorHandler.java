@@ -42,8 +42,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -182,7 +181,6 @@ public class GenerateConstructorHandler extends GenerateMembersHandlerBase {
         return preselection;
     }
 
-    @Nonnull
     @Override
     @RequiredWriteAction
     protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] members)

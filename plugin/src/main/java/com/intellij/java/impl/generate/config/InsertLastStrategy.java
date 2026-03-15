@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.generate.config;
 
-import jakarta.annotation.Nonnull;
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import consulo.codeEditor.Editor;
 import com.intellij.java.language.psi.PsiClass;
@@ -39,7 +38,7 @@ public class InsertLastStrategy implements InsertNewMethodStrategy
 	}
 
 	@Override
-	public PsiMethod insertNewMethod(PsiClass clazz, @Nonnull PsiMethod newMethod, Editor editor)
+	public PsiMethod insertNewMethod(PsiClass clazz, PsiMethod newMethod, Editor editor)
 	{
 
 		// if main method exists and is the last then add toString just before main method

@@ -31,11 +31,9 @@ import consulo.application.util.query.Query;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 import java.util.regex.Matcher;
@@ -115,8 +113,8 @@ public class MethodUtils {
    * @return true, if the specified method matches the specified constraints,
    * false otherwise
    */
-  public static boolean methodMatches(@Nonnull PsiMethod method,
-                                      @NonNls @Nullable String containingClassName,
+  public static boolean methodMatches(PsiMethod method,
+                                      @Nullable String containingClassName,
                                       @Nullable PsiType returnType,
                                       @Nullable Pattern methodNamePattern,
                                       @Nullable PsiType... parameterTypes) {
@@ -142,10 +140,10 @@ public class MethodUtils {
    * @return true, if the specified method matches the specified constraints,
    * false otherwise
    */
-  public static boolean methodMatches(@Nonnull PsiMethod method,
-                                      @NonNls @Nullable String containingClassName,
+  public static boolean methodMatches(PsiMethod method,
+                                      @Nullable String containingClassName,
                                       @Nullable PsiType returnType,
-                                      @NonNls @Nullable String methodName,
+                                      @Nullable String methodName,
                                       @Nullable PsiType... parameterTypes) {
     final String name = method.getName();
     if (methodName != null && !methodName.equals(name)) {
@@ -154,7 +152,7 @@ public class MethodUtils {
     return methodMatches(method, containingClassName, returnType, parameterTypes);
   }
 
-  private static boolean methodMatches(@Nonnull PsiMethod method, @NonNls @Nullable String containingClassName, @Nullable PsiType returnType, @Nullable PsiType... parameterTypes) {
+  private static boolean methodMatches(PsiMethod method, @Nullable String containingClassName, @Nullable PsiType returnType, @Nullable PsiType... parameterTypes) {
     if (parameterTypes != null) {
       final PsiParameterList parameterList = method.getParameterList();
       if (parameterList.getParametersCount() != parameterTypes.length) {
@@ -186,11 +184,11 @@ public class MethodUtils {
     return true;
   }
 
-  public static boolean simpleMethodMatches(@Nonnull PsiMethod method,
-                                            @NonNls @Nullable String containingClassName,
-                                            @NonNls @Nullable String returnTypeString,
-                                            @NonNls @Nullable String methodName,
-                                            @NonNls @Nullable String... parameterTypeStrings) {
+  public static boolean simpleMethodMatches(PsiMethod method,
+                                            @Nullable String containingClassName,
+                                            @Nullable String returnTypeString,
+                                            @Nullable String methodName,
+                                            @Nullable String... parameterTypeStrings) {
     final Project project = method.getProject();
     final JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);
     final PsiElementFactory factory = psiFacade.getElementFactory();
@@ -218,12 +216,12 @@ public class MethodUtils {
     }
   }
 
-  public static boolean hasSuper(@Nonnull PsiMethod method) {
+  public static boolean hasSuper(PsiMethod method) {
     return getSuper(method) != null;
   }
 
   @Nullable
-  public static PsiMethod getSuper(@Nonnull PsiMethod method) {
+  public static PsiMethod getSuper(PsiMethod method) {
     final MethodSignatureBackedByPsiMethod signature = getSuperMethodSignature(method);
     if (signature == null) {
       return null;
@@ -232,7 +230,7 @@ public class MethodUtils {
   }
 
   @Nullable
-  public static MethodSignatureBackedByPsiMethod getSuperMethodSignature(@Nonnull PsiMethod method) {
+  public static MethodSignatureBackedByPsiMethod getSuperMethodSignature(PsiMethod method) {
     if (method.isConstructor() || method.hasModifierProperty(PsiModifier.STATIC) || method.hasModifierProperty(PsiModifier.PRIVATE)) {
       return null;
     }
@@ -332,7 +330,7 @@ public class MethodUtils {
     return true;
   }
 
-  public static boolean hasInThrows(@Nonnull PsiMethod method, @Nonnull String... exceptions) {
+  public static boolean hasInThrows(PsiMethod method, String... exceptions) {
     if (exceptions.length == 0) {
       throw new IllegalArgumentException("no exceptions specified");
     }
@@ -382,8 +380,7 @@ public class MethodUtils {
    * @param specificType a specific type (class type or intersection type)
    * @return more specific method, or base class method if more specific method cannot be found
    */
-  @Nonnull
-  public static PsiMethod findSpecificMethod(@Nonnull PsiMethod method, @Nullable PsiType specificType) {
+  public static PsiMethod findSpecificMethod(PsiMethod method, @Nullable PsiType specificType) {
     PsiClass qualifierClass = method.getContainingClass();
     if (qualifierClass == null)
       return method;

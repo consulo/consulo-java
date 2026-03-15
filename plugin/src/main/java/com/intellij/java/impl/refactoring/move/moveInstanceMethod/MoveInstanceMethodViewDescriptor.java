@@ -16,7 +16,6 @@
 package com.intellij.java.impl.refactoring.move.moveInstanceMethod;
 
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
@@ -43,7 +42,6 @@ public class MoveInstanceMethodViewDescriptor extends UsageViewDescriptorAdapter
     myTargetClass = targetClass;
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[] {myMethod, myTargetVariable, myTargetClass};
   }

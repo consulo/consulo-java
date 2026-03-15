@@ -28,7 +28,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipCommutativeMethodCallIntention", fileExtensions = "java", categories = {"Java", "Other"})
@@ -50,14 +49,12 @@ public class FlipCommutativeMethodCallIntention extends MutablyNamedIntention {
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.flipCommutativeMethodCallIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new FlipCommutativeMethodCallPredicate();
     }

@@ -26,7 +26,6 @@
 package org.osmorc.manifest.lang.psi.impl;
 
 import consulo.language.impl.psi.LeafPsiElement;
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.ManifestTokenType;
 import org.osmorc.manifest.lang.psi.ManifestToken;
 
@@ -44,7 +43,7 @@ public class ManifestTokenImpl extends LeafPsiElement implements ManifestToken {
     return (ManifestTokenType)getElementType();
   }
 
-  public ManifestToken replaceToken(@Nonnull String text) {
+  public ManifestToken replaceToken(String text) {
     return (ManifestToken)replaceWithText(text);
   }
 

@@ -8,8 +8,7 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.application.util.JavaVersion;
 import consulo.ide.ServiceManager;
 import consulo.platform.CpuArchitecture;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
@@ -24,9 +23,9 @@ public abstract class OwnJdkVersionDetector {
     }
 
     @Nullable
-    public abstract JdkVersionInfo detectJdkVersionInfo(@Nonnull String homePath);
+    public abstract JdkVersionInfo detectJdkVersionInfo(String homePath);
 
-    public static String formatVersionString(@Nonnull JavaVersion version) {
+    public static String formatVersionString(JavaVersion version) {
         return "java version \"" + version + '"';
     }
 }

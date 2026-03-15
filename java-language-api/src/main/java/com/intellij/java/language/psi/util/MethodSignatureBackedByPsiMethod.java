@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi.util;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiInvalidElementAccessException;
@@ -27,11 +26,11 @@ public class MethodSignatureBackedByPsiMethod extends MethodSignatureBase {
   private final PsiMethod myMethod;
   private final boolean myIsRaw;
 
-  protected MethodSignatureBackedByPsiMethod(@Nonnull PsiMethod method,
-                                             @Nonnull PsiSubstitutor substitutor,
+  protected MethodSignatureBackedByPsiMethod(PsiMethod method,
+                                             PsiSubstitutor substitutor,
                                              boolean isRaw,
-                                             @Nonnull PsiType[] parameterTypes,
-                                             @Nonnull PsiTypeParameter[] methodTypeParameters) {
+                                             PsiType[] parameterTypes,
+                                             PsiTypeParameter[] methodTypeParameters) {
     super(substitutor, parameterTypes, methodTypeParameters);
     myIsRaw = isRaw;
     if (!method.isValid()) {
@@ -40,7 +39,6 @@ public class MethodSignatureBackedByPsiMethod extends MethodSignatureBase {
     myMethod = method;
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return myMethod.getName();
@@ -64,16 +62,15 @@ public class MethodSignatureBackedByPsiMethod extends MethodSignatureBase {
     return super.equals(o);
   }
 
-  @Nonnull
   public PsiMethod getMethod() {
     return myMethod;
   }
 
-  public static MethodSignatureBackedByPsiMethod create(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor) {
+  public static MethodSignatureBackedByPsiMethod create(PsiMethod method, PsiSubstitutor substitutor) {
     return create(method, substitutor, PsiUtil.isRawSubstitutor(method, substitutor));
   }
 
-  public static MethodSignatureBackedByPsiMethod create(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor, boolean isRaw) {
+  public static MethodSignatureBackedByPsiMethod create(PsiMethod method, PsiSubstitutor substitutor, boolean isRaw) {
     PsiTypeParameter[] methodTypeParameters = method.getTypeParameters();
     if (isRaw) {
       substitutor = JavaPsiFacade.getInstance(method.getProject()).getElementFactory().createRawSubstitutor(substitutor, methodTypeParameters);

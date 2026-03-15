@@ -20,7 +20,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Extension point for providing custom jre to be shown at run configuration control.
@@ -34,6 +33,5 @@ import jakarta.annotation.Nonnull;
 public interface JreProvider {
     ExtensionPointName<JreProvider> EP_NAME = ExtensionPointName.create(JreProvider.class);
 
-    @Nonnull
     String getJrePath();
 }

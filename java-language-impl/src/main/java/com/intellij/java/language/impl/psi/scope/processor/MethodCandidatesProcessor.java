@@ -28,7 +28,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.util.collection.SmartList;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -38,23 +37,23 @@ import java.util.List;
 public class MethodCandidatesProcessor extends MethodsProcessor {
   protected boolean myHasAccessibleStaticCorrectCandidate;
 
-  public MethodCandidatesProcessor(@Nonnull PsiElement place, PsiFile placeFile, @Nonnull PsiConflictResolver[] resolvers, @Nonnull List<CandidateInfo> container) {
+  public MethodCandidatesProcessor(PsiElement place, PsiFile placeFile, PsiConflictResolver[] resolvers, List<CandidateInfo> container) {
     super(resolvers, container, place, placeFile);
   }
 
-  public MethodCandidatesProcessor(@Nonnull PsiElement place, PsiFile placeFile) {
+  public MethodCandidatesProcessor(PsiElement place, PsiFile placeFile) {
     super(new PsiConflictResolver[]{DuplicateConflictResolver.INSTANCE}, new SmartList<CandidateInfo>(), place, placeFile);
   }
 
   @Override
-  public void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor) {
+  public void add(PsiElement element, PsiSubstitutor substitutor) {
     if (element instanceof PsiMethod) {
       final PsiMethod method = (PsiMethod) element;
       addMethod(method, substitutor, isInStaticScope() && !method.hasModifierProperty(PsiModifier.STATIC));
     }
   }
 
-  public void addMethod(@Nonnull PsiMethod method, final PsiSubstitutor substitutor, boolean staticProblem) {
+  public void addMethod(PsiMethod method, final PsiSubstitutor substitutor, boolean staticProblem) {
     final boolean isAccessible = JavaResolveUtil.isAccessible(method, getContainingClass(method), method.getModifierList(), myPlace, myAccessClass, myCurrentFileContext, myPlaceFile) &&
         !isShadowed(method);
     if (isAccepted(method) && !(isInterfaceStaticMethodAccessibleThroughInheritance(method) && ImportsUtil.hasStaticImportOn(myPlace, method, true))) {
@@ -94,7 +93,7 @@ public class MethodCandidatesProcessor extends MethodsProcessor {
     return false;
   }
 
-  protected MethodCandidateInfo createCandidateInfo(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor, final boolean staticProblem, final boolean accessible, final boolean varargs) {
+  protected MethodCandidateInfo createCandidateInfo(PsiMethod method, PsiSubstitutor substitutor, final boolean staticProblem, final boolean accessible, final boolean varargs) {
     final PsiExpressionList argumentList = getArgumentList();
     return new MethodCandidateInfo(method, substitutor, !accessible, staticProblem, argumentList, myCurrentFileContext, null, getTypeArguments(), getLanguageLevel()) {
 

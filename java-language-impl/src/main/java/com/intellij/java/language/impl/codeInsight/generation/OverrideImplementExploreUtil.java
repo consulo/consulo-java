@@ -12,37 +12,31 @@ import consulo.application.Application;
 import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
 public class OverrideImplementExploreUtil {
   private static final Logger LOG = Logger.getInstance(OverrideImplementExploreUtil.class);
 
-  @Nonnull
   public static Collection<CandidateInfo> getMethodsToOverrideImplement(PsiClass aClass, boolean toImplement) {
     return getMapToOverrideImplement(aClass, toImplement).values();
   }
 
-  @Nonnull
-  public static Collection<MethodSignature> getMethodSignaturesToImplement(@Nonnull PsiClass aClass) {
+  public static Collection<MethodSignature> getMethodSignaturesToImplement(PsiClass aClass) {
     return getMapToOverrideImplement(aClass, true).keySet();
   }
 
-  @Nonnull
-  public static Collection<MethodSignature> getMethodSignaturesToOverride(@Nonnull PsiClass aClass) {
+  public static Collection<MethodSignature> getMethodSignaturesToOverride(PsiClass aClass) {
     if (aClass.isAnnotationType()) {
       return Collections.emptySet();
     }
     return getMapToOverrideImplement(aClass, false).keySet();
   }
 
-  @Nonnull
   public static Map<MethodSignature, CandidateInfo> getMapToOverrideImplement(PsiClass aClass, boolean toImplement) {
     return getMapToOverrideImplement(aClass, toImplement, true);
   }
 
-  @Nonnull
   public static Map<MethodSignature, CandidateInfo> getMapToOverrideImplement(PsiClass aClass, boolean toImplement, boolean skipImplemented) {
     Map<MethodSignature, PsiMethod> abstracts = new LinkedHashMap<MethodSignature, PsiMethod>();
     Map<MethodSignature, PsiMethod> finals = new LinkedHashMap<MethodSignature, PsiMethod>();

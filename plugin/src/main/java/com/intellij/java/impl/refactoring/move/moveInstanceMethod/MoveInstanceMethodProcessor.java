@@ -50,7 +50,6 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -93,15 +92,14 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
         myNewVisibility = newVisibility;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new MoveInstanceMethodViewDescriptor(myMethod, myTargetVariable, myTargetClass);
     }
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         Set<PsiMember> members = new HashSet<>();
@@ -160,7 +158,6 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
         return showConflicts(conflicts, usages);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -189,7 +186,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
         if (body != null) {
             body.accept(new JavaRecursiveElementWalkingVisitor() {
                 @Override
-                public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+                public void visitNewExpression(PsiNewExpression expression) {
                     if (MoveInstanceMembersUtil.getClassReferencedByThis(expression) != null) {
                         usages.add(new InternalUsageInfo(expression));
                     }
@@ -236,7 +233,6 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
         myTargetClass = (PsiClass) elements[2];
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.moveInstanceMethodCommand();
@@ -248,7 +244,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, myTargetClass)) {
             return;
         }
@@ -442,7 +438,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
                 final Map<PsiElement, PsiElement> replaceMap = new HashMap<>();
                 body.accept(new JavaRecursiveElementVisitor() {
                     @Override
-                    public void visitThisExpression(@Nonnull PsiThisExpression expression) {
+                    public void visitThisExpression(PsiThisExpression expression) {
                         PsiClass classReferencedByThis = MoveInstanceMembersUtil.getClassReferencedByThis(expression);
                         if (classReferencedByThis != null && !PsiTreeUtil.isAncestor(myMethod, classReferencedByThis, false)) {
                             PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
@@ -509,7 +505,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
 
                     @Override
                     @RequiredWriteAction
-                    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+                    public void visitNewExpression(PsiNewExpression expression) {
                         try {
                             PsiExpression qualifier = expression.getQualifier();
                             if (qualifier instanceof PsiReferenceExpression qRefExpr && qRefExpr.isReferenceTo(myTargetVariable)) {
@@ -537,7 +533,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
 
                     @Override
                     @RequiredWriteAction
-                    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+                    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
                         correctMethodCall(expression, true);
                         super.visitMethodCallExpression(expression);
                     }
@@ -589,7 +585,7 @@ public class MoveInstanceMethodProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    private String getParameterNameToCreate(@Nonnull PsiClass aClass) {
+    private String getParameterNameToCreate(PsiClass aClass) {
         return myOldClassParameterNames.get(aClass);
     }
 }

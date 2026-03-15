@@ -3,8 +3,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes.BOTTOM;
 
@@ -15,19 +14,16 @@ public interface DfReferenceType extends DfType {
   /**
    * @return nullability of this type
    */
-  @Nonnull
   DfaNullability getNullability();
 
   /**
    * @return type constraint of this type
    */
-  @Nonnull
   TypeConstraint getConstraint();
 
   /**
    * @return mutability of all the objects referred by this type
    */
-  @Nonnull
   default Mutability getMutability() {
     return Mutability.UNKNOWN;
   }
@@ -50,7 +46,6 @@ public interface DfReferenceType extends DfType {
   /**
    * @return type of special field; {@link DfTypes#BOTTOM} if {@link #getSpecialField()} returns null
    */
-  @Nonnull
   default DfType getSpecialFieldType() {
     return BOTTOM;
   }
@@ -58,7 +53,6 @@ public interface DfReferenceType extends DfType {
   /**
    * @return this type without type constraint, or simply this type if it's a constant
    */
-  @Nonnull
   default DfReferenceType dropTypeConstraint() {
     return this;
   }
@@ -66,7 +60,6 @@ public interface DfReferenceType extends DfType {
   /**
    * @return this type without locality flag, or simply this type if it's a constant
    */
-  @Nonnull
   default DfReferenceType dropLocality() {
     return this;
   }
@@ -74,13 +67,11 @@ public interface DfReferenceType extends DfType {
   /**
    * @return this type without nullability knowledge, or simply this type if it's a constant
    */
-  @Nonnull
   DfReferenceType dropNullability();
 
   /**
    * @return this type without mutability knowledge, or simply this type if it's a constant
    */
-  @Nonnull
   default DfReferenceType dropMutability() {
     return this;
   }
@@ -105,8 +96,7 @@ public interface DfReferenceType extends DfType {
    * @param type type to drop
    * @return this type dropping any relation to the supplied type
    */
-  @Nonnull
-  default DfType withoutType(@Nonnull TypeConstraint type) {
+  default DfType withoutType(TypeConstraint type) {
     TypeConstraint constraint = getConstraint();
     if (constraint.equals(type)) {
       return dropTypeConstraint();

@@ -11,26 +11,23 @@ import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.DumbService;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
 public final class LightRecordMethod extends LightMethod implements LightRecordMember {
-  @Nonnull
   private final
   PsiRecordComponent myRecordComponent;
 
-  public LightRecordMethod(@Nonnull PsiManager manager,
-                           @Nonnull PsiMethod method,
-                           @Nonnull PsiClass containingClass,
-                           @Nonnull PsiRecordComponent component) {
+  public LightRecordMethod(PsiManager manager,
+                           PsiMethod method,
+                           PsiClass containingClass,
+                           PsiRecordComponent component) {
     super(manager, method, containingClass);
     myRecordComponent = component;
   }
 
   @Override
-  @Nonnull
   public PsiRecordComponent getRecordComponent() {
     return myRecordComponent;
   }
@@ -40,7 +37,6 @@ public final class LightRecordMethod extends LightMethod implements LightRecordM
     return myRecordComponent.getTextOffset();
   }
 
-  @Nonnull
   @Override
   public PsiElement getNavigationElement() {
     return myRecordComponent.getNavigationElement();
@@ -73,7 +69,6 @@ public final class LightRecordMethod extends LightMethod implements LightRecordM
   }
 
   @Override
-  @Nonnull
   public PsiAnnotation[] getAnnotations() {
     PsiType returnType = getReturnType();
     if (returnType == null) {
@@ -83,14 +78,14 @@ public final class LightRecordMethod extends LightMethod implements LightRecordM
   }
 
   @Override
-  public boolean hasAnnotation(@Nonnull String fqn) {
+  public boolean hasAnnotation(String fqn) {
     PsiType returnType = getReturnType();
     return returnType != null && returnType.hasAnnotation(fqn);
   }
 
   @Override
   @Nullable
-  public PsiAnnotation getAnnotation(@Nonnull String fqn) {
+  public PsiAnnotation getAnnotation(String fqn) {
     PsiType returnType = getReturnType();
     if (returnType == null) {
       return null;
@@ -109,7 +104,7 @@ public final class LightRecordMethod extends LightMethod implements LightRecordM
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     return myRecordComponent.setName(name);
   }
 

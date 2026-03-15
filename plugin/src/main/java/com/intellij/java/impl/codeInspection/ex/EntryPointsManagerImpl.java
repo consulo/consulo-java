@@ -42,7 +42,6 @@ import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,7 +90,6 @@ public class EntryPointsManagerImpl extends EntryPointsManagerBase implements Pe
     return createConfigureAnnotationsButton();
   }
 
-  @Nonnull
   public static Button createConfigureAnnotationsButton() {
     Button configureAnnotations = Button.create(LocalizeValue.localizeTODO("Configure annotations..."));
     configureAnnotations.addClickListener(e -> getInstance(ProjectUtil.guessCurrentProject((JComponent)TargetAWT.to(configureAnnotations))).configureAnnotations());

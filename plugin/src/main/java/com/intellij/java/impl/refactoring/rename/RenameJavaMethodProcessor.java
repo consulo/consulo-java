@@ -49,8 +49,7 @@ import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -60,7 +59,7 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
     private static final Logger LOG = Logger.getInstance(RenameJavaMethodProcessor.class);
 
     @Override
-    public boolean canProcessElement(@Nonnull PsiElement element) {
+    public boolean canProcessElement(PsiElement element) {
         return element instanceof PsiMethod;
     }
 
@@ -167,7 +166,6 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
         }
     }
 
-    @Nonnull
     @Override
     public Collection<PsiReference> findReferences(PsiElement element) {
         GlobalSearchScope projectScope = GlobalSearchScope.projectScope(element.getProject());
@@ -196,7 +194,6 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
                 final PsiMethod methodInBaseClass = containingClass.findMethodBySignature(patternMethod, true);
                 if (methodInBaseClass != null && methodInBaseClass.getContainingClass() != containingClass && methodInBaseClass.isFinal()) {
                     result.add(new UnresolvableCollisionUsageInfo(methodInBaseClass, methodToRename) {
-                        @Nonnull
                         @Override
                         public LocalizeValue getDescription() {
                             return LocalizeValue.localizeTODO(
@@ -237,7 +234,6 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
                         final PsiMember resolveResultElement = (PsiMember) resolveResult.getElement();
                         if (resolveResult.isValidResult() && resolveResultElement != null) {
                             result.add(new UnresolvableCollisionUsageInfo(refExpr, methodToRename) {
-                                @Nonnull
                                 @Override
                                 public LocalizeValue getDescription() {
                                     return LocalizeValue.localizeTODO(
@@ -352,9 +348,9 @@ public class RenameJavaMethodProcessor extends RenameJavaMemberProcessor {
     @Override
     @RequiredUIAccess
     public void substituteElementToRename(
-        @Nonnull PsiElement element,
-        @Nonnull Editor editor,
-        @Nonnull Consumer<PsiElement> renameCallback
+        PsiElement element,
+        Editor editor,
+        Consumer<PsiElement> renameCallback
     ) {
         PsiMethod psiMethod = (PsiMethod) element;
         if (psiMethod.isConstructor()) {

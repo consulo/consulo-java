@@ -30,8 +30,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna
@@ -39,14 +38,12 @@ import jakarta.annotation.Nullable;
  */
 @ExtensionImpl
 public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionVariableAssignedToItselfDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "SillyAssignment";
     }
@@ -57,9 +54,8 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -67,18 +63,18 @@ public class SillyAssignmentInspection extends BaseJavaLocalInspectionTool {
         return new JavaElementVisitor() {
 
             @Override
-            public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+            public void visitAssignmentExpression(PsiAssignmentExpression expression) {
                 checkSillyAssignment(expression, holder);
             }
 
             @Override
-            public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+            public void visitReferenceExpression(PsiReferenceExpression expression) {
                 visitElement(expression);
             }
 
             @Override
             @RequiredReadAction
-            public void visitVariable(@Nonnull PsiVariable variable) {
+            public void visitVariable(PsiVariable variable) {
                 PsiExpression initializer = PsiUtil.deparenthesizeExpression(variable.getInitializer());
                 if (initializer instanceof PsiAssignmentExpression assignmentExpression) {
                     PsiExpression lExpr = PsiUtil.deparenthesizeExpression(assignmentExpression.getLExpression());

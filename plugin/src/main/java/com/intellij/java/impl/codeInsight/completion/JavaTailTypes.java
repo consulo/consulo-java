@@ -5,12 +5,11 @@ package com.intellij.java.impl.codeInsight.completion;
 import consulo.language.editor.completion.lookup.CharTailType;
 import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.TailType;
-import jakarta.annotation.Nonnull;
 
 public class JavaTailTypes {
   private static final TailType HUMBLE_SPACE_BEFORE_WORD = new CharTailType(' ', false) {
     @Override
-    public boolean isApplicable(@Nonnull InsertionContext context) {
+    public boolean isApplicable(InsertionContext context) {
       CharSequence text = context.getDocument().getCharsSequence();
       int tail = context.getTailOffset();
       if (text.length() > tail + 1 && text.charAt(tail) == ' ') {

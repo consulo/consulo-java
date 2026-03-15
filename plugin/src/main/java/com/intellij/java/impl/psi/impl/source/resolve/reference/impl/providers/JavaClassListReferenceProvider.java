@@ -26,7 +26,6 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.xml.psi.xml.XmlTag;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,8 +42,7 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
   }
 
   @Override
-  @Nonnull
-  public PsiReference[] getReferencesByString(String str, @Nonnull final PsiElement position, int offsetInPosition){
+  public PsiReference[] getReferencesByString(String str, final PsiElement position, int offsetInPosition){
     if (position instanceof XmlTag && ((XmlTag)position).getValue().getTextElements().length == 0) {
       return PsiReference.EMPTY_ARRAY; 
     }
@@ -61,7 +59,6 @@ public class JavaClassListReferenceProvider extends JavaClassReferenceProvider {
     }
 
     NotNullLazyValue<Set<String>> topLevelPackages = new NotNullLazyValue<Set<String>>() {
-      @Nonnull
       @Override
       protected Set<String> compute() {
         Set<String> knownTopLevelPackages = new HashSet<String>();

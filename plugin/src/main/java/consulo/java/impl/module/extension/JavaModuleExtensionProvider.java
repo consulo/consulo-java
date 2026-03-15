@@ -9,7 +9,6 @@ import consulo.module.extension.ModuleExtension;
 import consulo.module.extension.MutableModuleExtension;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -17,33 +16,28 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class JavaModuleExtensionProvider implements ModuleExtensionProvider<JavaModuleExtensionImpl> {
-  @Nonnull
   @Override
   public String getId() {
     return "java";
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("Java");
   }
 
-  @Nonnull
   @Override
   public Image getIcon() {
     return JavaPsiImplIconGroup.java();
   }
 
-  @Nonnull
   @Override
-  public ModuleExtension<JavaModuleExtensionImpl> createImmutableExtension(@Nonnull ModuleRootLayer moduleRootLayer) {
+  public ModuleExtension<JavaModuleExtensionImpl> createImmutableExtension(ModuleRootLayer moduleRootLayer) {
     return new JavaModuleExtensionImpl(getId(), moduleRootLayer);
   }
 
-  @Nonnull
   @Override
-  public MutableModuleExtension<JavaModuleExtensionImpl> createMutableExtension(@Nonnull ModuleRootLayer moduleRootLayer) {
+  public MutableModuleExtension<JavaModuleExtensionImpl> createMutableExtension(ModuleRootLayer moduleRootLayer) {
     return new JavaMutableModuleExtensionImpl(getId(), moduleRootLayer);
   }
 }

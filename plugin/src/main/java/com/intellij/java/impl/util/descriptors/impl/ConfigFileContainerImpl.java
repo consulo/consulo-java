@@ -28,7 +28,7 @@ import consulo.virtualFileSystem.event.VirtualFileAdapter;
 import consulo.virtualFileSystem.event.VirtualFileMoveEvent;
 import consulo.virtualFileSystem.event.VirtualFilePropertyEvent;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;

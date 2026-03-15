@@ -22,8 +22,7 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.module.Module;
 import consulo.util.lang.ThreeState;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
@@ -35,13 +34,13 @@ public abstract class ExternalLibraryResolver {
 
     @Nullable
     public abstract ExternalClassResolveResult resolveClass(
-        @Nonnull String shortClassName,
-        @Nonnull ThreeState isAnnotation,
-        @Nonnull Module contextModule
+        String shortClassName,
+        ThreeState isAnnotation,
+        Module contextModule
     );
 
     @Nullable
-    public ExternalLibraryDescriptor resolvePackage(@Nonnull String packageName) {
+    public ExternalLibraryDescriptor resolvePackage(String packageName) {
         return null;
     }
 

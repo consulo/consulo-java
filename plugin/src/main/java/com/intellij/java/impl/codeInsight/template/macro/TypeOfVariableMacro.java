@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TypeOfVariableMacro extends Macro {
@@ -43,13 +42,12 @@ public class TypeOfVariableMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "A";
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     if (params.length == 0) return null;
 
     Project project = context.getProject();
@@ -72,7 +70,7 @@ public class TypeOfVariableMacro extends Macro {
   }
 
   @Override
-  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);
   }
 

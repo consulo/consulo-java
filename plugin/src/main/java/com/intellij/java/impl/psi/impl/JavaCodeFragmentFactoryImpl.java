@@ -24,11 +24,10 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @Singleton
 @ServiceImpl
@@ -40,43 +39,38 @@ public class JavaCodeFragmentFactoryImpl extends JavaCodeFragmentFactory {
     myProject = project;
   }
 
-  @Nonnull
   @Override
-  public PsiExpressionCodeFragment createExpressionCodeFragment(@Nonnull String text,
+  public PsiExpressionCodeFragment createExpressionCodeFragment(String text,
                                                                 @Nullable PsiElement context,
                                                                 @Nullable PsiType expectedType,
                                                                 boolean isPhysical) {
     return new PsiExpressionCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, expectedType, context);
   }
 
-  @Nonnull
   @Override
-  public JavaCodeFragment createCodeBlockCodeFragment(@Nonnull String text,
+  public JavaCodeFragment createCodeBlockCodeFragment(String text,
                                                       @Nullable PsiElement context,
                                                       boolean isPhysical) {
     return new PsiCodeFragmentImpl(myProject, JavaElementType.STATEMENTS, isPhysical, "fragment.java", text, context);
   }
 
-  @Nonnull
   @Override
-  public PsiTypeCodeFragment createTypeCodeFragment(@Nonnull String text,
+  public PsiTypeCodeFragment createTypeCodeFragment(String text,
                                                     @Nullable PsiElement context,
                                                     boolean isPhysical) {
     return createTypeCodeFragment(text, context, isPhysical, 0);
   }
 
-  @Nonnull
   @Override
-  public PsiTypeCodeFragment createTypeCodeFragment(@Nonnull String text,
+  public PsiTypeCodeFragment createTypeCodeFragment(String text,
                                                     @Nullable PsiElement context,
                                                     boolean isPhysical,
                                                     int flags) {
     return new PsiTypeCodeFragmentImpl(myProject, isPhysical, "fragment.java", text, flags, context);
   }
 
-  @Nonnull
   @Override
-  public PsiJavaCodeReferenceCodeFragment createReferenceCodeFragment(@Nonnull String text,
+  public PsiJavaCodeReferenceCodeFragment createReferenceCodeFragment(String text,
                                                                       @Nullable PsiElement context,
                                                                       boolean isPhysical,
                                                                       boolean isClassesAccepted) {

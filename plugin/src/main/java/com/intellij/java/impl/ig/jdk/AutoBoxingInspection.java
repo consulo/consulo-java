@@ -31,9 +31,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -70,7 +68,6 @@ public class AutoBoxingInspection extends BaseInspection {
         convertableBoxedClassNames.add(CommonClassNames.JAVA_LANG_SHORT);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.autoBoxingDisplayName();
@@ -82,7 +79,6 @@ public class AutoBoxingInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.autoBoxingProblemDescriptor().get();
     }
@@ -105,7 +101,6 @@ public class AutoBoxingInspection extends BaseInspection {
     }
 
     private static class AutoBoxingFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.autoBoxingMakeBoxingExplicitQuickfix();
@@ -138,8 +133,8 @@ public class AutoBoxingInspection extends BaseInspection {
             if (strippedExpression == null) {
                 return;
             }
-            @NonNls String expressionText = strippedExpression.getText();
-            @NonNls String newExpression;
+            String expressionText = strippedExpression.getText();
+            String newExpression;
             if ("true".equals(expressionText)) {
                 newExpression = "java.lang.Boolean.TRUE";
             }
@@ -298,7 +293,7 @@ public class AutoBoxingInspection extends BaseInspection {
             checkExpression(expression);
         }
 
-        private void checkExpression(@Nonnull PsiExpression expression) {
+        private void checkExpression(PsiExpression expression) {
             if (expression.getParent() instanceof PsiParenthesizedExpression) {
                 return;
             }
@@ -349,7 +344,7 @@ public class AutoBoxingInspection extends BaseInspection {
             }
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) grandParent;
             PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            @NonNls String methodName = methodExpression.getReferenceName();
+            String methodName = methodExpression.getReferenceName();
             if (!"put".equals(methodName) && !"set".equals(methodName) && !"add".equals(methodName)) {
                 return false;
             }

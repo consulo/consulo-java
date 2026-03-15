@@ -24,7 +24,6 @@
  */
 package org.osmorc.manifest.lang.headerparser;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.annotation.AnnotationHolder;
 import consulo.language.psi.PsiReference;
@@ -34,7 +33,7 @@ import org.osmorc.manifest.lang.psi.HeaderValuePart;
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public interface HeaderParser{
-  PsiReference[] getReferences(@Nonnull HeaderValuePart headerValuePart);
+  PsiReference[] getReferences(HeaderValuePart headerValuePart);
 
   /**
    * The value of the given header value. Complex headers will probably have several header values. This method is
@@ -42,9 +41,9 @@ public interface HeaderParser{
    *
    * @return The converted value.
    */
-  Object getValue(@Nonnull HeaderValuePart headerValuePart);
+  Object getValue(HeaderValuePart headerValuePart);
 
-  boolean isAcceptable(@Nonnull Object o);
+  boolean isAcceptable(Object o);
 
   /**
    * Simple headers don't have clauses, attributes and directives. Semicolons and commas don't have any special meaning

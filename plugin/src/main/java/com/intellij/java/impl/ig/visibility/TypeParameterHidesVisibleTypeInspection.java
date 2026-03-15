@@ -24,12 +24,10 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.typeParameterHidesVisibleTypeDisplayName();
   }
@@ -42,7 +40,6 @@ public class TypeParameterHidesVisibleTypeInspection extends BaseInspection {
     return true;
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiClass aClass = (PsiClass)infos[0];
     return InspectionGadgetsLocalize.typeParameterHidesVisibleTypeProblemDescriptor(aClass.getQualifiedName()).get();

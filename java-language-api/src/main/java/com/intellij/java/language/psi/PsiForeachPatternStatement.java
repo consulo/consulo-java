@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java  {@code for} statement with a pattern.
@@ -24,6 +23,5 @@ public interface PsiForeachPatternStatement extends PsiForeachStatementBase {
   /**
    * @return pattern used in the foreach, e. g. {@code for (Rec(var x): recs) }
    */
-  @Nonnull
   PsiPattern getIterationPattern();
 }

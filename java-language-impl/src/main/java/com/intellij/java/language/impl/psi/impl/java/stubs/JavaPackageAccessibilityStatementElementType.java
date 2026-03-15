@@ -33,26 +33,24 @@ import consulo.language.psi.stub.StubOutputStream;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
 public class JavaPackageAccessibilityStatementElementType extends JavaStubElementType<PsiPackageAccessibilityStatementStub, PsiPackageAccessibilityStatement> {
-  public JavaPackageAccessibilityStatementElementType(@Nonnull String debugName) {
+  public JavaPackageAccessibilityStatementElementType(String debugName) {
     super(debugName);
   }
 
   @Override
-  public PsiPackageAccessibilityStatement createPsi(@Nonnull PsiPackageAccessibilityStatementStub stub) {
+  public PsiPackageAccessibilityStatement createPsi(PsiPackageAccessibilityStatementStub stub) {
     return getPsiFactory(stub).createPackageAccessibilityStatement(stub);
   }
 
   @Override
-  public PsiPackageAccessibilityStatement createPsi(@Nonnull ASTNode node) {
+  public PsiPackageAccessibilityStatement createPsi(ASTNode node) {
     return new PsiPackageAccessibilityStatementImpl(node);
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new PackageAccessibilityStatementElement(this);
@@ -76,25 +74,23 @@ public class JavaPackageAccessibilityStatementElementType extends JavaStubElemen
   }
 
   @Override
-  public void serialize(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiPackageAccessibilityStatementStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getPackageName());
     dataStream.writeUTFFast(StringUtil.join(stub.getTargets(), "/"));
   }
 
-  @Nonnull
   @Override
-  public PsiPackageAccessibilityStatementStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiPackageAccessibilityStatementStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     String packageName = StringRef.toString(dataStream.readName());
     List<String> targets = StringUtil.split(dataStream.readUTFFast(), "/");
     return new PsiPackageAccessibilityStatementStubImpl(parentStub, this, packageName, targets);
   }
 
   @Override
-  public void indexStub(@Nonnull PsiPackageAccessibilityStatementStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiPackageAccessibilityStatementStub stub, IndexSink sink) {
   }
 
-  @Nonnull
-  public static PsiPackageAccessibilityStatement.Role typeToRole(@Nonnull IElementType type) {
+  public static PsiPackageAccessibilityStatement.Role typeToRole(IElementType type) {
     if (type == JavaElementType.EXPORTS_STATEMENT) {
       return PsiPackageAccessibilityStatement.Role.EXPORTS;
     }

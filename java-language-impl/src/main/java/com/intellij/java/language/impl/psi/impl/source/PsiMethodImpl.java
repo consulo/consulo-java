@@ -48,7 +48,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.ref.SoftReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Map;
@@ -106,25 +105,21 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findSuperMethods() {
         return PsiSuperMethodImplUtil.findSuperMethods(this);
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findSuperMethods(boolean checkAccess) {
         return PsiSuperMethodImplUtil.findSuperMethods(this, checkAccess);
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findSuperMethods(PsiClass parentClass) {
         return PsiSuperMethodImplUtil.findSuperMethods(this, parentClass);
     }
 
     @Override
-    @Nonnull
     public List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess) {
         return PsiSuperMethodImplUtil.findSuperMethodSignaturesIncludingStatic(this, checkAccess);
     }
@@ -134,13 +129,11 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
         return PsiSuperMethodImplUtil.findDeepestSuperMethod(this);
     }
 
-    @Nonnull
     @Override
     public PsiMethod[] findDeepestSuperMethods() {
         return PsiSuperMethodImplUtil.findDeepestSuperMethods(this);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public String getName() {
@@ -157,7 +150,6 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
         return name != null ? name : "<unnamed>";
     }
 
-    @Nonnull
     @Override
     public HierarchicalMethodSignature getHierarchicalMethodSignature() {
         return PsiSuperMethodImplUtil.getHierarchicalMethodSignature(this);
@@ -165,7 +157,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
 
     @Override
     @RequiredWriteAction
-    public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+    public PsiElement setName(String name) throws IncorrectOperationException {
         PsiIdentifier identifier = getNameIdentifier();
         if (identifier == null) {
             throw new IncorrectOperationException("Empty name: " + this);
@@ -193,7 +185,6 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
         return PsiImplUtil.hasTypeParameters(this);
     }
 
-    @Nonnull
     @Override
     public PsiTypeParameter[] getTypeParameters() {
         return PsiImplUtil.getTypeParameters(this);
@@ -221,18 +212,16 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
         return typeElement != null ? JavaSharedImplUtil.getType(typeElement, getParameterList()) : null;
     }
 
-    @Nonnull
     @Override
     public PsiModifierList getModifierList() {
         return getRequiredStubOrPsiChild(JavaStubElementTypes.MODIFIER_LIST);
     }
 
     @Override
-    public boolean hasModifierProperty(@Nonnull String name) {
+    public boolean hasModifierProperty(String name) {
         return getModifierList().hasModifierProperty(name);
     }
 
-    @Nonnull
     @Override
     public PsiParameterList getParameterList() {
         PsiParameterList list = getStubOrPsiChild(JavaStubElementTypes.PARAMETER_LIST);
@@ -263,7 +252,6 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
         return list;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiReferenceList getThrowsList() {
@@ -288,7 +276,6 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
         return (PsiCodeBlock)getNode().findChildByRoleAsPsiElement(ChildRole.METHOD_BODY);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public CompositeElement getNode() {
@@ -338,7 +325,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor javaElementVisitor) {
             javaElementVisitor.visitMethod(this);
         }
@@ -355,17 +342,16 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
 
     @Override
     public boolean processDeclarations(
-        @Nonnull PsiScopeProcessor processor,
-        @Nonnull ResolveState state,
+        PsiScopeProcessor processor,
+        ResolveState state,
         PsiElement lastParent,
-        @Nonnull PsiElement place
+        PsiElement place
     ) {
         return PsiImplUtil.processDeclarationsInMethod(this, processor, state, lastParent, place);
     }
 
     @Override
-    @Nonnull
-    public MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor) {
+    public MethodSignature getSignature(PsiSubstitutor substitutor) {
         if (substitutor == PsiSubstitutor.EMPTY) {
             return LanguageCachedValueUtil.getCachedValue(
                 this,
@@ -404,14 +390,13 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
     }
 
     @Override
-    @Nonnull
     public SearchScope getUseScope() {
         return Application.get().runReadAction((Supplier<SearchScope>)() -> PsiImplUtil.getMemberUseScope(this));
     }
 
     @Override
     @RequiredReadAction
-    public void putInfo(@Nonnull Map<String, String> info) {
+    public void putInfo(Map<String, String> info) {
         info.put("methodName", getName());
     }
 }

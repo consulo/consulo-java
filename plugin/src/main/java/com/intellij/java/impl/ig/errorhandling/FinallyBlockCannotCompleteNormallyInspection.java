@@ -25,25 +25,21 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class FinallyBlockCannotCompleteNormallyInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "finally";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.finallyBlockCannotCompleteNormallyDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.finallyBlockCannotCompleteNormallyProblemDescriptor().get();
     }
@@ -60,7 +56,7 @@ public class FinallyBlockCannotCompleteNormallyInspection extends BaseInspection
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             super.visitTryStatement(statement);
             PsiCodeBlock finallyBlock = statement.getFinallyBlock();
             if (finallyBlock == null) {

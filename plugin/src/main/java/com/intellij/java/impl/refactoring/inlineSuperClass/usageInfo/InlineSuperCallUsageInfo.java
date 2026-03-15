@@ -30,7 +30,6 @@ import consulo.localize.LocalizeValue;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -99,7 +98,7 @@ public class InlineSuperCallUsageInfo extends FixableUsageInfo {
                     new UsageInfo[]{new UsageInfo(methodCallExpression.getMethodExpression())},
                     new ReferencedElementsCollector() {
                         @Override
-                        protected void checkAddMember(@Nonnull PsiMember member) {
+                        protected void checkAddMember(PsiMember member) {
                             if (!PsiTreeUtil.isAncestor(superConstructor.getContainingClass(), member, false)) {
                                 super.checkAddMember(member);
                             }

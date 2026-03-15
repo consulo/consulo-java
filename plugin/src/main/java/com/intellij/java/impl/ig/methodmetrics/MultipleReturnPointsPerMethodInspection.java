@@ -26,7 +26,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,13 +41,11 @@ public class MultipleReturnPointsPerMethodInspection
   public boolean ignoreEqualsMethod = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "MethodWithMultipleReturnPoints";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.multipleReturnPointsPerMethodDisplayName();
   }
@@ -64,7 +61,6 @@ public class MultipleReturnPointsPerMethodInspection
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     Integer returnPointCount = (Integer)infos[0];
     return InspectionGadgetsLocalize.multipleReturnPointsPerMethodProblemDescriptor(returnPointCount).get();
@@ -114,7 +110,7 @@ public class MultipleReturnPointsPerMethodInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

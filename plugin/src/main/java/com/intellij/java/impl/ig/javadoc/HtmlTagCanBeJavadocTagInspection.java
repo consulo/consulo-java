@@ -33,18 +33,14 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.htmlTagCanBeJavadocTagDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.htmlTagCanBeJavadocTagProblemDescriptor().get();
@@ -63,7 +59,6 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
             this.startIndex = startIndex;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.htmlTagCanBeJavadocTagQuickfix();
@@ -76,7 +71,7 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
             if (comment == null) {
                 return;
             }
-            @NonNls StringBuilder newCommentText = new StringBuilder();
+            StringBuilder newCommentText = new StringBuilder();
             buildNewCommentText(comment, element, false, newCommentText);
             PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
             PsiDocComment newComment = factory.createDocCommentFromText(newCommentText.toString());
@@ -85,7 +80,7 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
 
         private boolean buildNewCommentText(
             PsiElement element, PsiElement elementToReplace, boolean missingEndTag,
-            @NonNls StringBuilder newCommentText
+            StringBuilder newCommentText
         ) {
             PsiElement[] children = element.getChildren();
             if (children.length != 0) {
@@ -94,7 +89,7 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
                 }
                 return missingEndTag;
             }
-            @NonNls String text = element.getText();
+            String text = element.getText();
             if (element != elementToReplace) {
                 if (missingEndTag) {
                     int endIndex = text.indexOf("</code>");
@@ -147,7 +142,7 @@ public class HtmlTagCanBeJavadocTagInspection extends BaseInspection {
             if (!JavaDocTokenType.DOC_COMMENT_DATA.equals(tokenType)) {
                 return;
             }
-            @NonNls String text = token.getText();
+            String text = token.getText();
             int startIndex = 0;
             while (true) {
                 startIndex = text.indexOf("<code>", startIndex);

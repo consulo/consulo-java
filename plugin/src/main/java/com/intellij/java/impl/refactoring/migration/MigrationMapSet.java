@@ -24,8 +24,7 @@ import consulo.util.io.FileUtil;
 import consulo.util.jdom.JDOMUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -73,7 +72,7 @@ public class MigrationMapSet {
     }
 
     @Nullable
-    public MigrationMap findMigrationMap(@Nonnull String name) {
+    public MigrationMap findMigrationMap(String name) {
         if (myMaps == null) {
             loadMaps();
         }

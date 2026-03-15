@@ -14,9 +14,8 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes.rangeClamped;
 
@@ -36,10 +35,9 @@ public class PrimitiveConversionInstruction extends EvalInstruction
 
 	@Override
 	public
-	@Nonnull
-	DfaValue eval(@Nonnull DfaValueFactory factory,
-				  @Nonnull DfaMemoryState state,
-				  @Nonnull DfaValue... arguments)
+	DfaValue eval(DfaValueFactory factory,
+				  DfaMemoryState state,
+				  DfaValue... arguments)
 	{
 		DfaValue value = arguments[0];
 		PsiPrimitiveType type = myTargetType;

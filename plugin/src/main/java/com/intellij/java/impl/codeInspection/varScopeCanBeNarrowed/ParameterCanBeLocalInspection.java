@@ -34,8 +34,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -47,20 +46,17 @@ import java.util.function.Function;
 public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
     public static final String SHORT_NAME = "ParameterCanBeLocal";
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesClassStructure();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionParameterCanBeLocalDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }
@@ -68,8 +64,8 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
     @Override
     @RequiredReadAction
     public ProblemDescriptor[] checkMethod(
-        @Nonnull PsiMethod method,
-        @Nonnull InspectionManager manager,
+        PsiMethod method,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -89,7 +85,6 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
         return result.toArray(new ProblemDescriptor[result.size()]);
     }
 
-    @Nonnull
     private static List<PsiParameter> filterFinal(PsiParameter[] parameters) {
         List<PsiParameter> result = new ArrayList<>(parameters.length);
         for (PsiParameter parameter : parameters) {
@@ -100,11 +95,10 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
         return result;
     }
 
-    @Nonnull
     @RequiredReadAction
     private static ProblemDescriptor createProblem(
-        @Nonnull InspectionManager manager,
-        @Nonnull PsiIdentifier identifier,
+        InspectionManager manager,
+        PsiIdentifier identifier,
         boolean isOnTheFly
     ) {
         return manager.newProblemDescriptor(InspectionLocalize.inspectionParameterCanBeLocalProblemDescriptor())
@@ -116,7 +110,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
     }
 
     @RequiredReadAction
-    private static Collection<PsiParameter> getWriteBeforeRead(@Nonnull Collection<PsiParameter> parameters, @Nonnull PsiCodeBlock body) {
+    private static Collection<PsiParameter> getWriteBeforeRead(Collection<PsiParameter> parameters, PsiCodeBlock body) {
         ControlFlow controlFlow = getControlFlow(body);
         if (controlFlow == null) {
             return Collections.emptyList();
@@ -133,7 +127,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
         return result;
     }
 
-    private static Set<PsiParameter> filterParameters(@Nonnull ControlFlow controlFlow, @Nonnull Collection<PsiParameter> parameters) {
+    private static Set<PsiParameter> filterParameters(ControlFlow controlFlow, Collection<PsiParameter> parameters) {
         Set<PsiVariable> usedVars = new HashSet<>(ControlFlowUtil.getUsedVariables(controlFlow, 0, controlFlow.getSize()));
 
         Set<PsiParameter> result = new HashSet<>();
@@ -163,19 +157,19 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
     public static class ConvertParameterToLocalQuickFix extends BaseConvertToLocalQuickFix<PsiParameter> {
         @Override
         @RequiredReadAction
-        protected PsiParameter getVariable(@Nonnull ProblemDescriptor descriptor) {
+        protected PsiParameter getVariable(ProblemDescriptor descriptor) {
             return (PsiParameter) descriptor.getPsiElement().getParent();
         }
 
         @Override
         @RequiredUIAccess
         protected PsiElement applyChanges(
-            @Nonnull final Project project,
-            @Nonnull final String localName,
+            final Project project,
+            final String localName,
             @Nullable final PsiExpression initializer,
-            @Nonnull final PsiParameter parameter,
-            @Nonnull final Collection<PsiReference> references,
-            @Nonnull final Function<PsiDeclarationStatement, PsiElement> action
+            final PsiParameter parameter,
+            final Collection<PsiReference> references,
+            final Function<PsiDeclarationStatement, PsiElement> action
         ) {
             if (parameter.getDeclarationScope() instanceof PsiMethod method) {
                 PsiParameter[] parameters = method.getParameterList().getParameters();
@@ -201,7 +195,7 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
                 ) {
                     @Override
                     @RequiredReadAction
-                    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+                    protected void performRefactoring(UsageInfo[] usages) {
                         PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
                         PsiElement newDeclaration = moveDeclaration(elementFactory, localName, parameter, initializer, action, references);
                         super.performRefactoring(usages);
@@ -213,9 +207,8 @@ public class ParameterCanBeLocalInspection extends BaseJavaLocalInspectionTool {
             return null;
         }
 
-        @Nonnull
         @Override
-        protected String suggestLocalName(@Nonnull Project project, @Nonnull PsiParameter parameter, @Nonnull PsiCodeBlock scope) {
+        protected String suggestLocalName(Project project, PsiParameter parameter, PsiCodeBlock scope) {
             return parameter.getName();
         }
     }

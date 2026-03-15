@@ -22,7 +22,6 @@ import consulo.language.psi.PsiElement;
 import consulo.usage.UsageViewBundle;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.localize.UsageLocalize;
-import jakarta.annotation.Nonnull;
 
 class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
   private final PsiField[] myFields;
@@ -40,7 +39,6 @@ class EncapsulateFieldsViewDescriptor implements UsageViewDescriptor {
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getElements() {
     return myFields;
   }

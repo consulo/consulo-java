@@ -24,7 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik

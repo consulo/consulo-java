@@ -27,7 +27,6 @@ import consulo.index.io.PersistentEnumerator;
 import consulo.index.io.PersistentStringEnumerator;
 import consulo.util.collection.SLRUCache;
 import consulo.util.io.FileUtil;
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +38,6 @@ public class SymbolTable {
   private static final int STRING_CACHE_SIZE = 1024;
 
   private final SLRUCache<Integer, String> myIndexStringCache = new SLRUCache<>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
-    @Nonnull
     public String createValue(Integer key) {
       try {
         return myTrie.valueOf(key);
@@ -51,7 +49,6 @@ public class SymbolTable {
   };
 
   private final SLRUCache<String, Integer> myStringIndexCache = new SLRUCache<>(STRING_CACHE_SIZE * 2, STRING_CACHE_SIZE) {
-    @Nonnull
     public Integer createValue(String key) {
       try {
         return myTrie.enumerate(key);
@@ -78,7 +75,7 @@ public class SymbolTable {
     }
   }
 
-  public synchronized int getId(@Nonnull String symbol) throws CacheCorruptedException {
+  public synchronized int getId(String symbol) throws CacheCorruptedException {
     if (symbol.length() == 0) {
       return -1;
     }

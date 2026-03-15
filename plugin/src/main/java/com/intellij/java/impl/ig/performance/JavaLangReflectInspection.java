@@ -24,17 +24,13 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class JavaLangReflectInspection extends BaseInspection {
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.javaLangReflectDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.javaLangReflectProblemDescriptor().get();
     }
@@ -46,7 +42,7 @@ public class JavaLangReflectInspection extends BaseInspection {
     private static class JavaLangReflectVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             super.visitVariable(variable);
             PsiType type = variable.getType();
             PsiType componentType = type.getDeepComponentType();
@@ -54,7 +50,7 @@ public class JavaLangReflectInspection extends BaseInspection {
                 return;
             }
             String className = ((PsiClassType) componentType).getClassName();
-            @NonNls String javaLangReflect = "java.lang.reflect.";
+            String javaLangReflect = "java.lang.reflect.";
             if (!className.startsWith(javaLangReflect)) {
                 return;
             }

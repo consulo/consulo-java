@@ -18,7 +18,6 @@ package com.intellij.java.impl.codeInsight.template.postfix.templates;
 import com.intellij.java.impl.codeInsight.generation.surroundWith.JavaWithIfExpressionSurrounder;
 import consulo.language.editor.refactoring.postfixTemplate.ElseExpressionPostfixTemplateBase;
 import consulo.language.editor.surroundWith.Surrounder;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.*;
 
@@ -27,7 +26,6 @@ public class ElseStatementPostfixTemplate extends ElseExpressionPostfixTemplateB
     super(JAVA_PSI_INFO, selectorTopmost(IS_BOOLEAN));
   }
 
-  @Nonnull
   @Override
   protected Surrounder getSurrounder() {
     return new JavaWithIfExpressionSurrounder();

@@ -26,7 +26,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -45,14 +44,12 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
     private static final Set<String> METHOD_REDUNDANT_MODIFIERS =
         new HashSet<String>(Arrays.asList(PsiModifier.PUBLIC, PsiModifier.ABSTRACT));
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryInterfaceModifierDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiModifierList modifierList = (PsiModifierList) infos[1];
         PsiElement parent = modifierList.getParent();
@@ -93,7 +90,6 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
             this.modifiersText = modifiersText;
         }
 
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(modifiersText);
         }
@@ -139,7 +135,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
 
     private static class UnnecessaryInterfaceModifierVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             PsiClass parent = ClassUtils.getContainingClass(aClass);
             if (parent != null && parent.isInterface()) {
                 PsiModifierList modifiers = aClass.getModifierList();
@@ -157,7 +153,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
         }
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             // don't call super, to keep this from drilling in
             PsiClass containingClass = field.getContainingClass();
             if (containingClass == null) {
@@ -171,7 +167,7 @@ public class UnnecessaryInterfaceModifierInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             // don't call super, to keep this from drilling in
             PsiClass aClass = method.getContainingClass();
             if (aClass == null) {

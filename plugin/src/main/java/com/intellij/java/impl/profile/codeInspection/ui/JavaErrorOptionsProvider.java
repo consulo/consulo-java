@@ -29,14 +29,13 @@ import consulo.ui.CheckBox;
 import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Consumer;
 
 @ExtensionImpl
 public class JavaErrorOptionsProvider implements AdditionalEditorGeneralSettingProvider {
   @Override
   @RequiredUIAccess
-  public void fillProperties(@Nonnull SimpleConfigurableByProperties.PropertyBuilder propertyBuilder, @Nonnull Consumer<Component> consumer) {
+  public void fillProperties(SimpleConfigurableByProperties.PropertyBuilder propertyBuilder, Consumer<Component> consumer) {
     CheckBox suppressWay = CheckBox.create(ApplicationBundle.message("checkbox.suppress.with.suppresswarnings"));
     consumer.accept(suppressWay);
 

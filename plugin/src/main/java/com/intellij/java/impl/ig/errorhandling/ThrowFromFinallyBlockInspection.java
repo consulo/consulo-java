@@ -22,11 +22,9 @@ import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThrowFromFinallyBlockInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.throwFromFinallyBlockDisplayName();
@@ -36,7 +34,6 @@ public class ThrowFromFinallyBlockInspection extends BaseInspection {
         return true;
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.throwFromFinallyBlockProblemDescriptor().get();
     }

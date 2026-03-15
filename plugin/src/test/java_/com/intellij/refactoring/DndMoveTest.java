@@ -20,7 +20,7 @@ import consulo.application.util.function.Computable;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.editor.refactoring.move.MoveHandler;
 import com.intellij.testFramework.PsiTestUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna

@@ -25,18 +25,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class IgnoredJUnitTestInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.ignoredJunitTestDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {
@@ -75,7 +71,7 @@ public class IgnoredJUnitTestInspection extends BaseInspection {
                 return;
             }
             PsiClass aClass = (PsiClass) target;
-            @NonNls String qualifiedName = aClass.getQualifiedName();
+            String qualifiedName = aClass.getQualifiedName();
             if (!"org.junit.Ignore".equals(qualifiedName)) {
                 return;
             }

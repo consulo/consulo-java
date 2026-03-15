@@ -32,7 +32,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -88,7 +87,6 @@ public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompi
     return option == Configuration.InstrumentationType.ASSERT || option == Configuration.InstrumentationType.EXCEPTION;
   }
 
-  @Nonnull
   protected Instrumenter createInstrumenter(ClassWriter classwriter) {
     synchronized (myAnnotations) {
       final Configuration.InstrumentationType instrumentation = Configuration.getInstance().getAdvancedConfiguration().getInstrumentation();
@@ -100,7 +98,6 @@ public class PatternValidationCompiler extends AnnotationBasedInstrumentingCompi
     return "Inserting @Pattern assertions";
   }
 
-  @Nonnull
   public String getDescription() {
     return "Pattern Validation";
   }

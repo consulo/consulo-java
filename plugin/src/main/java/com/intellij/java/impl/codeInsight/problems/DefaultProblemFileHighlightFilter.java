@@ -23,7 +23,6 @@ import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -38,7 +37,7 @@ public class DefaultProblemFileHighlightFilter implements WolfFileProblemFilter 
   }
 
   @Override
-  public boolean isToBeHighlighted(@Nonnull VirtualFile file) {
+  public boolean isToBeHighlighted(VirtualFile file) {
     return JavaProjectRootsUtil.isJavaSourceFile(myProject, file, false)
       && !CompilerManager.getInstance(myProject).isExcludedFromCompilation(file);
   }

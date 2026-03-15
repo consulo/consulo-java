@@ -38,8 +38,7 @@ import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
@@ -72,7 +71,6 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
       myValidityState = new TimestampValidityState(myFile.lastModified());
     }
 
-    @Nonnull
     @Override
     public File getFile() {
       return myFile;
@@ -85,7 +83,6 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
     }
   }
 
-  @Nonnull
   @Override
   public ProcessingItem[] getProcessingItems(CompileContext compileContext) {
     List<ProcessingItem> list = new LinkedList<>();
@@ -182,8 +179,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
     return processingItems;
   }
 
-  @Nonnull
-  public static InstrumentationClassFinder createClassFinder(@Nonnull CompileContext context, @Nonnull final Module module) {
+  public static InstrumentationClassFinder createClassFinder(CompileContext context, final Module module) {
     ModuleChunk moduleChunk =
       new ModuleChunk((CompileContextEx)context, new Chunk<>(module), Collections.<Module, List<VirtualFile>>emptyMap());
 
@@ -193,8 +189,7 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
     return new InstrumentationClassFinder(toUrls(compilationBootClasspath), toUrls(compilationClasspath));
   }
 
-  @Nonnull
-  private static URL[] toUrls(@Nonnull Set<VirtualFile> files) {
+  private static URL[] toUrls(Set<VirtualFile> files) {
     List<URL> urls = new ArrayList<>(files.size());
     for (VirtualFile file : files) {
       try {
@@ -208,7 +203,6 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
     return urls.toArray(new URL[urls.size()]);
   }
 
-  @Nonnull
   @Override
   public String getDescription() {
     return "JavaBytecodeCompiler";

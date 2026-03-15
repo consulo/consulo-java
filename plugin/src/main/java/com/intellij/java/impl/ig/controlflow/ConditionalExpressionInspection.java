@@ -23,7 +23,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -32,14 +31,12 @@ public class ConditionalExpressionInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean ignoreSimpleAssignmentsAndReturns = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.conditionalExpressionDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.conditionalExpressionProblemDescriptor().get();
     }

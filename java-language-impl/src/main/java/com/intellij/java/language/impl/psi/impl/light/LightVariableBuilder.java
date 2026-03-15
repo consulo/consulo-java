@@ -10,9 +10,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.NavigationItem;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 public class LightVariableBuilder<T extends LightVariableBuilder<?>> extends LightElement implements PsiVariable, NavigationItem, OriginInfoAwareElement {
   private final String myName;
@@ -20,23 +18,23 @@ public class LightVariableBuilder<T extends LightVariableBuilder<?>> extends Lig
   private volatile LightModifierList myModifierList;
   private String myOriginInfo;
 
-  public LightVariableBuilder(@Nonnull String name, @Nonnull String type, @Nonnull PsiElement navigationElement) {
+  public LightVariableBuilder(String name, String type, PsiElement navigationElement) {
     this(name,
          JavaPsiFacade.getElementFactory(navigationElement.getProject()).createTypeFromText(type, navigationElement),
          navigationElement);
   }
 
-  public LightVariableBuilder(@Nonnull String name, @Nonnull PsiType type, @Nonnull PsiElement navigationElement) {
+  public LightVariableBuilder(String name, PsiType type, PsiElement navigationElement) {
     this(navigationElement.getManager(), name, type, JavaLanguage.INSTANCE);
     setNavigationElement(navigationElement);
   }
 
-  public LightVariableBuilder(PsiManager manager, @Nonnull String name, @Nonnull PsiType type, @Nonnull Language language) {
+  public LightVariableBuilder(PsiManager manager, String name, PsiType type, Language language) {
     this(manager, name, type, language, new LightModifierList(manager));
   }
 
-  public LightVariableBuilder(PsiManager manager, @Nonnull String name, @Nonnull PsiType type,
-                              @Nonnull Language language, @Nonnull LightModifierList modifierList) {
+  public LightVariableBuilder(PsiManager manager, String name, PsiType type,
+                              Language language, LightModifierList modifierList) {
     super(manager, language);
     myName = name;
     myType = type;
@@ -44,7 +42,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder<?>> extends Lig
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitVariable(this);
     }
@@ -58,26 +56,22 @@ public class LightVariableBuilder<T extends LightVariableBuilder<?>> extends Lig
     return "LightVariableBuilder:" + getName();
   }
 
-  @Nonnull
   @Override
   public PsiType getType() {
     return myType;
   }
 
   @Override
-  @Nonnull
   public PsiModifierList getModifierList() {
     return myModifierList;
   }
 
-  @Nonnull
-  public T setModifiers(@Nonnull String... modifiers) {
+  public T setModifiers(String... modifiers) {
     myModifierList = new LightModifierList(getManager(), getLanguage(), modifiers);
     //noinspection unchecked
     return (T)this;
   }
 
-  @Nonnull
   public T setModifierList(LightModifierList modifierList) {
     myModifierList = modifierList;
     //noinspection unchecked
@@ -85,11 +79,10 @@ public class LightVariableBuilder<T extends LightVariableBuilder<?>> extends Lig
   }
 
   @Override
-  public boolean hasModifierProperty(@NonNls @Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return myModifierList.hasModifierProperty(name);
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return myName;
@@ -125,7 +118,7 @@ public class LightVariableBuilder<T extends LightVariableBuilder<?>> extends Lig
   }
 
   @Override
-  public PsiElement setName(@NonNls @Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     throw new UnsupportedOperationException("setName is not implemented yet in com.intellij.psi.impl.light.LightVariableBuilder");
   }
 

@@ -27,7 +27,6 @@ import consulo.disposer.Disposer;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.TestOnly;
 
 import java.util.concurrent.TimeUnit;
@@ -41,7 +40,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
     private volatile boolean myDisposed;
 
-    DebuggerManagerThreadImpl(@Nonnull Disposable parent, Project project) {
+    DebuggerManagerThreadImpl(Disposable parent, Project project) {
         super(project);
         Disposer.register(parent, this);
     }
@@ -52,7 +51,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
     }
 
     @TestOnly
-    public static DebuggerManagerThreadImpl createTestInstance(@Nonnull Disposable parent, Project project) {
+    public static DebuggerManagerThreadImpl createTestInstance(Disposable parent, Project project) {
         return new DebuggerManagerThreadImpl(parent, project);
     }
 
@@ -132,7 +131,7 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
     }
 
     @Override
-    public void processEvent(@Nonnull DebuggerCommandImpl managerCommand) {
+    public void processEvent(DebuggerCommandImpl managerCommand) {
         assertIsManagerThread();
         try {
             if (myEvents.isClosed()) {

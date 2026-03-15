@@ -11,15 +11,14 @@ import consulo.language.psi.PsiManager;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public final class JavaEditorTabTitleProvider implements EditorTabTitleProvider {
   @Override
   @Nullable
   @RequiredReadAction
-  public String getEditorTabTitle(@Nonnull Project project, @Nonnull VirtualFile file) {
+  public String getEditorTabTitle(Project project, VirtualFile file) {
     String fileName = file.getName();
     if (!PsiJavaModule.MODULE_INFO_FILE.equals(fileName)) return null;
     return ReadAction.compute(() -> {

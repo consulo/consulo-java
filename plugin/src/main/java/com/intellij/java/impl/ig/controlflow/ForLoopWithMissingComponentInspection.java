@@ -25,8 +25,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -37,14 +36,12 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
      */
     public boolean ignoreCollectionLoops = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.forLoopWithMissingComponentDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         boolean hasInitializer = (Boolean) infos[0];
         boolean hasCondition = (Boolean) infos[1];
@@ -90,7 +87,7 @@ public class ForLoopWithMissingComponentInspection extends BaseInspection {
 
     private class ForLoopWithMissingComponentVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitForStatement(@Nonnull PsiForStatement statement) {
+        public void visitForStatement(PsiForStatement statement) {
             super.visitForStatement(statement);
             boolean hasCondition = hasCondition(statement);
             boolean hasInitializer = hasInitializer(statement);

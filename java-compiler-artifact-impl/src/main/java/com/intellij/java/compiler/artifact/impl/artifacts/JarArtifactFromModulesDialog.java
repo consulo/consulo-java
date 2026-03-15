@@ -30,8 +30,7 @@ import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -113,7 +112,6 @@ public class JarArtifactFromModulesDialog extends DialogWrapper {
         return (Module)myModuleComboBox.getSelectedItem();
     }
 
-    @Nonnull
     public Module[] getSelectedModules() {
         final Module module = getSelectedModule();
         if (module != null) {
@@ -122,7 +120,6 @@ public class JarArtifactFromModulesDialog extends DialogWrapper {
         return myContext.getModulesProvider().getModules();
     }
 
-    @Nonnull
     public String getDirectoryForManifest() {
         return FileUtil.toSystemIndependentName(myManifestDirField.getText());
     }
@@ -156,7 +153,7 @@ public class JarArtifactFromModulesDialog extends DialogWrapper {
 
     private static class ModuleListRenderer extends ColoredListCellRenderer<Module> {
         @Override
-        protected void customizeCellRenderer(@Nonnull JList<? extends Module> jList, Module module, int i, boolean b, boolean b1) {
+        protected void customizeCellRenderer(JList<? extends Module> jList, Module module, int i, boolean b, boolean b1) {
             if (module != null) {
                 setIcon(PlatformIconGroup.nodesModule());
                 append(module.getName());

@@ -39,8 +39,7 @@ import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -76,7 +75,7 @@ public class ExtractLightMethodObjectHandler {
     public static ExtractedData extractLightMethodObject(
         final Project project,
         @Nullable PsiElement originalContext,
-        @Nonnull PsiCodeFragment fragment,
+        PsiCodeFragment fragment,
         final String methodName
     ) throws PrepareFailedException {
         PsiElementFactory elementFactory = JavaPsiFacade.getElementFactory(project);
@@ -205,13 +204,13 @@ public class ExtractLightMethodObjectHandler {
             }
 
             @Override
-            public void visitMethod(@Nonnull PsiMethod method) {
+            public void visitMethod(PsiMethod method) {
                 super.visitMethod(method);
                 makePublic(method);
             }
 
             @Override
-            public void visitField(@Nonnull PsiField field) {
+            public void visitField(PsiField field) {
                 super.visitField(field);
                 makePublic(field);
             }

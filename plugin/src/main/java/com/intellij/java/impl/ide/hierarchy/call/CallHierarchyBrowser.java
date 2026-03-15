@@ -29,7 +29,6 @@ import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
 
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Comparator;
@@ -38,12 +37,12 @@ import java.util.Map;
 public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
     private static final Logger LOG = Logger.getInstance(CallHierarchyBrowser.class);
 
-    public CallHierarchyBrowser(@Nonnull Project project, @Nonnull PsiMethod method) {
+    public CallHierarchyBrowser(Project project, PsiMethod method) {
         super(project, method);
     }
 
     @Override
-    protected void createTrees(@Nonnull Map<String, JTree> type2TreeMap) {
+    protected void createTrees(Map<String, JTree> type2TreeMap) {
         ActionGroup group = (ActionGroup) ActionManager.getInstance().getAction(IdeActions.GROUP_CALL_HIERARCHY_POPUP);
         JTree tree1 = createTree(false);
         PopupHandler.installPopupHandler(tree1, group, ActionPlaces.CALL_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
@@ -60,7 +59,7 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
     }
 
     @Override
-    protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
+    protected PsiElement getElementFromDescriptor(HierarchyNodeDescriptor descriptor) {
         if (descriptor instanceof CallHierarchyNodeDescriptor nodeDescriptor) {
             return nodeDescriptor.getEnclosingElement();
         }
@@ -68,7 +67,7 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
     }
 
     @Override
-    protected PsiElement getOpenFileElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
+    protected PsiElement getOpenFileElementFromDescriptor(HierarchyNodeDescriptor descriptor) {
         if (descriptor instanceof CallHierarchyNodeDescriptor nodeDescriptor) {
             return nodeDescriptor.getTargetElement();
         }
@@ -76,12 +75,12 @@ public class CallHierarchyBrowser extends CallHierarchyBrowserBase {
     }
 
     @Override
-    protected boolean isApplicableElement(@Nonnull PsiElement element) {
+    protected boolean isApplicableElement(PsiElement element) {
         return element instanceof PsiMethod;
     }
 
     @Override
-    protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull String typeName, @Nonnull PsiElement psiElement) {
+    protected HierarchyTreeStructure createHierarchyTreeStructure(String typeName, PsiElement psiElement) {
         if (CALLER_TYPE.equals(typeName)) {
             return new CallerMethodsTreeStructure(myProject, (PsiMethod)psiElement, getCurrentScopeType());
         }

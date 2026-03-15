@@ -35,8 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -51,13 +50,12 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implemen
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         return LocalizeValue.localizeTODO("Surround with array initialization");
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+    public boolean isAvailable(Project project, Editor editor, PsiElement element) {
         return getExpression(element) != null;
     }
 
@@ -119,7 +117,7 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implemen
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) {
             return;
         }
@@ -130,7 +128,7 @@ public class SurroundWithArrayFix extends PsiElementBaseIntentionAction implemen
         JavaCodeStyleManager.getInstance(project).shortenClassReferences(expression.replace(toReplace));
     }
 
-    private static String getArrayCreation(@Nonnull PsiExpression expression) {
+    private static String getArrayCreation(PsiExpression expression) {
         PsiType expressionType = expression.getType();
         assert expressionType != null;
         return "new " + expressionType.getCanonicalText() + "[]{" + expression.getText() + "}";

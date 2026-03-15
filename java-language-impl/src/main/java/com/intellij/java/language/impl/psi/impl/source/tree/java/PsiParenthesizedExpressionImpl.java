@@ -31,8 +31,7 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement implements PsiParenthesizedExpression, Constants {
   private static final Logger LOG = Logger.getInstance(PsiParenthesizedExpressionImpl.class);
@@ -92,7 +91,7 @@ public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement impleme
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitParenthesizedExpression(this);
     }
@@ -102,10 +101,10 @@ public class PsiParenthesizedExpressionImpl extends ExpressionPsiElement impleme
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     if (lastParent != null) return true;
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
     if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;

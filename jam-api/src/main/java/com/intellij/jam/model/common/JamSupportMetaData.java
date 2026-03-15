@@ -28,7 +28,6 @@ import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.DomUtil;
 import consulo.xml.util.xml.ElementPresentationManager;
 import consulo.xml.util.xml.ModelMergerUtil;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
@@ -71,12 +70,10 @@ public abstract class JamSupportMetaData<T extends CommonModelElement> implement
     return new Object[]{getDeclaration(), PsiModificationTracker.MODIFICATION_COUNT};
   }
 
-  @NonNls
   public final String getName() {
     return StringUtil.notNullize(ElementPresentationManager.getElementName(myElement));
   }
 
-  @NonNls
   public String getName(PsiElement context) {
     return getName();
   }

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ipp.conditional;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.psi.PsiConditionalExpression;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiExpression;
@@ -41,8 +40,8 @@ class RemoveConditionalPredicate implements PsiElementPredicate {
     if (thenExpression == null || elseExpression == null) {
       return false;
     }
-    @NonNls String thenText = thenExpression.getText();
-    @NonNls String elseText = elseExpression.getText();
+    String thenText = thenExpression.getText();
+    String elseText = elseExpression.getText();
     if ("true".equals(elseText) && "false".equals(thenText)) {
       return !ErrorUtil.containsError(element);
     }

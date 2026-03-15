@@ -15,9 +15,7 @@
  */
 package com.intellij.codeInsight.daemon.lambda;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
@@ -25,9 +23,8 @@ import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.testFramework.IdeaTestUtil;
 
 public abstract class MethodRefHighlightingTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/methodRef";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/methodRef";
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

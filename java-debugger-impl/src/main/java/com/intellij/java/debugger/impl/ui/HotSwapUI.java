@@ -22,15 +22,13 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
  */
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class HotSwapUI {
-  @Nonnull
-  public static HotSwapUI getInstance(@Nonnull Project project) {
+  public static HotSwapUI getInstance(Project project) {
     return ServiceManager.getService(project, HotSwapUI.class);
   }
 

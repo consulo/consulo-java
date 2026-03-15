@@ -32,26 +32,24 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 /**
  * @author max
  */
 public abstract class JavaImportStatementElementType extends JavaStubElementType<PsiImportStatementStub, PsiImportStatementBase> {
-  public JavaImportStatementElementType(@NonNls @Nonnull final String id) {
+  public JavaImportStatementElementType(final String id) {
     super(id);
   }
 
   @Override
-  public PsiImportStatementBase createPsi(@Nonnull final PsiImportStatementStub stub) {
+  public PsiImportStatementBase createPsi(final PsiImportStatementStub stub) {
     return getPsiFactory(stub).createImportStatement(stub);
   }
 
   @Override
-  public PsiImportStatementBase createPsi(@Nonnull final ASTNode node) {
+  public PsiImportStatementBase createPsi(final ASTNode node) {
     if (node instanceof ImportStaticStatementElement) {
       return new PsiImportStaticStatementImpl(node);
     } else {
@@ -78,20 +76,19 @@ public abstract class JavaImportStatementElementType extends JavaStubElementType
   }
 
   @Override
-  public void serialize(@Nonnull final PsiImportStatementStub stub, @Nonnull final StubOutputStream dataStream) throws IOException {
+  public void serialize(final PsiImportStatementStub stub, final StubOutputStream dataStream) throws IOException {
     dataStream.writeByte(((PsiImportStatementStubImpl) stub).getFlags());
     dataStream.writeName(stub.getImportReferenceText());
   }
 
-  @Nonnull
   @Override
-  public PsiImportStatementStub deserialize(@Nonnull final StubInputStream dataStream, final StubElement parentStub) throws IOException {
+  public PsiImportStatementStub deserialize(final StubInputStream dataStream, final StubElement parentStub) throws IOException {
     final byte flags = dataStream.readByte();
     final StringRef refText = dataStream.readName();
     return new PsiImportStatementStubImpl(parentStub, StringRef.toString(refText), flags);
   }
 
   @Override
-  public void indexStub(@Nonnull final PsiImportStatementStub stub, @Nonnull final IndexSink sink) {
+  public void indexStub(final PsiImportStatementStub stub, final IndexSink sink) {
   }
 }

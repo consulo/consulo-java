@@ -4,7 +4,6 @@ package com.intellij.debugger.streams.psi;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -12,7 +11,7 @@ import jakarta.annotation.Nonnull;
 public final class PsiUtil {
   private PsiUtil() {}
 
-  public static @Nonnull PsiElement ignoreWhiteSpaces(@Nonnull PsiElement element) {
+  public static PsiElement ignoreWhiteSpaces(PsiElement element) {
     PsiElement result = PsiTreeUtil.skipSiblingsForward(element, PsiWhiteSpace.class);
     if (result == null) {
       result = PsiTreeUtil.skipSiblingsBackward(element, PsiWhiteSpace.class);

@@ -28,14 +28,12 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.AddDeprecationAnnotationIntention", categories = {"Java", "Control Flow"}, fileExtensions = "java")
 public class AddDeprecationAnnotationIntention extends AddAnnotationIntention {
-  @Nonnull
   @Override
-  public Pair<String, String[]> getAnnotations(@Nonnull Project project) {
+  public Pair<String, String[]> getAnnotations(Project project) {
     return new Pair<String, String[]>("java.lang.annotation.Deprecated", ArrayUtil.EMPTY_STRING_ARRAY);
   }
 }

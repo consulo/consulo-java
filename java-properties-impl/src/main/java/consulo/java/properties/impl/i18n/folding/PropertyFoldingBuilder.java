@@ -41,8 +41,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -56,8 +55,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
 
   @RequiredReadAction
   @Override
-  @Nonnull
-  public FoldingDescriptor[] buildFoldRegions(@Nonnull PsiElement element, @Nonnull Document document, boolean quick) {
+  public FoldingDescriptor[] buildFoldRegions(PsiElement element, Document document, boolean quick) {
     if (!(element instanceof PsiJavaFile) || quick || !isFoldingsOn()) {
       return FoldingDescriptor.EMPTY;
     }
@@ -129,7 +127,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
 
 
   @Override
-  public String getPlaceholderText(@Nonnull ASTNode node) {
+  public String getPlaceholderText(ASTNode node) {
     final PsiElement element = SourceTreeToPsiMap.treeElementToPsi(node);
     if (element instanceof PsiLiteralExpression) {
       return getI18nMessage(element.getProject(), (PsiLiteralExpression) element);
@@ -170,7 +168,7 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
     return methodCallExpression.getText();
   }
 
-  private static String getI18nMessage(@Nonnull Project project, PsiLiteralExpression literal) {
+  private static String getI18nMessage(Project project, PsiLiteralExpression literal) {
     final IProperty property = getI18nProperty(project, literal);
     return property == null ? literal.getText() : formatI18nProperty(literal, property);
   }
@@ -224,12 +222,12 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
   }
 
   @Override
-  public boolean isCollapsedByDefault(@Nonnull ASTNode node) {
+  public boolean isCollapsedByDefault(ASTNode node) {
     return isFoldingsOn();
   }
 
 
-  public static boolean isI18nProperty(@Nonnull PsiLiteralExpression expr) {
+  public static boolean isI18nProperty(PsiLiteralExpression expr) {
     if (!isStringLiteral(expr)) {
       return false;
     }
@@ -260,7 +258,6 @@ public class PropertyFoldingBuilder extends FoldingBuilderEx {
     return text.startsWith("\"") && text.endsWith("\"") && text.length() > 2;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

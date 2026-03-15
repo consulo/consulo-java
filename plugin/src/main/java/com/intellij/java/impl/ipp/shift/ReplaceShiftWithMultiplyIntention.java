@@ -26,19 +26,16 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceMultiplyWithShiftIntention", fileExtensions = "java", categories = {"Java", "Shift Operation"})
 public class ReplaceShiftWithMultiplyIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.replaceMultiplyWithShiftIntentionFamilyName();
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         if (element instanceof PsiBinaryExpression) {
@@ -71,7 +68,6 @@ public class ReplaceShiftWithMultiplyIntention extends MutablyNamedIntention {
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ShiftByLiteralPredicate();
     }

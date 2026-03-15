@@ -44,7 +44,6 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -54,7 +53,6 @@ import java.util.*;
 @ExtensionImpl
 public class JavaDocCommentFixer implements DocCommentFixer {
 
-  @Nonnull
   private static final String PARAM_TAG = "@param";
 
   /**
@@ -75,17 +73,14 @@ public class JavaDocCommentFixer implements DocCommentFixer {
    *   }
    * </pre>
    */
-  @Nonnull
   private static final Set<String> CARET_ANCHOR_TAGS = ContainerUtilRt.newHashSet(PARAM_TAG, "@throws", "@return");
 
-  @Nonnull
   private static final Comparator<PsiElement> COMPARATOR = (e1, e2) -> e2.getTextRange().getEndOffset() - e1.getTextRange().getEndOffset();
 
-  @Nonnull
   private static final String PARAM_TAG_NAME = "param";
 
   @Override
-  public void fixComment(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiComment comment) {
+  public void fixComment(Project project, Editor editor, PsiComment comment) {
     if (!(comment instanceof PsiDocComment)) {
       return;
     }
@@ -130,7 +125,6 @@ public class JavaDocCommentFixer implements DocCommentFixer {
     locateCaret(docComment, editor, file);
   }
 
-  @Nonnull
   private static JavaDocLocalInspection getDocLocalInspection() {
     JavaDocLocalInspection localInspection = new JavaDocLocalInspection();
 
@@ -156,7 +150,7 @@ public class JavaDocCommentFixer implements DocCommentFixer {
   }
 
   @SuppressWarnings("unchecked")
-  private static void fixReferenceProblems(@Nonnull ProblemDescriptor[] problems, @Nonnull Project project) {
+  private static void fixReferenceProblems(ProblemDescriptor[] problems, Project project) {
     for (ProblemDescriptor problem : problems) {
       QuickFix[] fixes = problem.getFixes();
       if (fixes != null) {
@@ -176,7 +170,7 @@ public class JavaDocCommentFixer implements DocCommentFixer {
    * @param project  current project
    */
   @SuppressWarnings("unchecked")
-  private static void fixCommonProblems(@Nonnull ProblemDescriptor[] problems, @Nonnull PsiComment comment, @Nonnull Document document, @Nonnull Project project) {
+  private static void fixCommonProblems(ProblemDescriptor[] problems, PsiComment comment, Document document, Project project) {
     List<PsiElement> toRemove = new ArrayList<>();
     for (ProblemDescriptor problem : problems) {
       PsiElement element = problem.getPsiElement();
@@ -235,7 +229,7 @@ public class JavaDocCommentFixer implements DocCommentFixer {
     psiDocumentManager.commitDocument(document);
   }
 
-  private static void ensureContentOrdered(@Nonnull PsiDocComment comment, @Nonnull Document document) {
+  private static void ensureContentOrdered(PsiDocComment comment, Document document) {
     //region Parse existing doc comment parameters.
     List<String> current = new ArrayList<>();
     Map<String, Pair<TextRange, String>> tagInfoByName = new HashMap<>();
@@ -298,8 +292,7 @@ public class JavaDocCommentFixer implements DocCommentFixer {
     //endregion
   }
 
-  @Nonnull
-  private static Pair<TextRange, String> parseTagValue(@Nonnull PsiDocTag tag, @Nonnull Document document) {
+  private static Pair<TextRange, String> parseTagValue(PsiDocTag tag, Document document) {
     PsiDocTagValue valueElement = tag.getValueElement();
     assert valueElement != null;
 
@@ -315,7 +308,7 @@ public class JavaDocCommentFixer implements DocCommentFixer {
     return Pair.create(TextRange.create(startOffset, endOffset), text.subSequence(startOffset, endOffset).toString());
   }
 
-  private static void locateCaret(@Nonnull PsiDocComment comment, @Nonnull Editor editor, @Nonnull PsiFile file) {
+  private static void locateCaret(PsiDocComment comment, Editor editor, PsiFile file) {
     Document document = editor.getDocument();
     int lineToNavigate = -1;
     for (PsiDocTag tag : comment.getTags()) {
@@ -355,7 +348,6 @@ public class JavaDocCommentFixer implements DocCommentFixer {
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -30,7 +30,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class AddVariableInitializerFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.daemon.impl.quickfix.AddReturnFix");
@@ -41,14 +40,13 @@ public class AddVariableInitializerFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   @RequiredReadAction
   public LocalizeValue getText() {
     return CodeInsightLocalize.quickfixAddVariableText(myVariable.getName());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myVariable != null
       && myVariable.isValid()
       && myVariable.getManager().isInProject(myVariable)
@@ -58,7 +56,7 @@ public class AddVariableInitializerFix implements SyntheticIntentionAction {
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(myVariable.getContainingFile())) return;
 
     String initializerText = suggestInitializer();

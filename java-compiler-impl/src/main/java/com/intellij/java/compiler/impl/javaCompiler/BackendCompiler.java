@@ -27,8 +27,7 @@ import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
 import consulo.localize.LocalizeValue;
 import consulo.process.ProcessHandler;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -36,20 +35,19 @@ import java.io.IOException;
 public interface BackendCompiler {
     ExtensionPointName<BackendCompiler> EP_NAME = ExtensionPointName.create(BackendCompiler.class);
 
-    @Nonnull
     LocalizeValue getPresentableName();
 
     @Nullable
     default OutputParser createErrorParser(
         BackendCompilerProcessBuilder processBuilder,
-        @Nonnull String outputDir,
+        String outputDir,
         ProcessHandler process
     ) {
         return null;
     }
 
     @Nullable
-    default OutputParser createOutputParser(BackendCompilerProcessBuilder processBuilder, @Nonnull String outputDir) {
+    default OutputParser createOutputParser(BackendCompilerProcessBuilder processBuilder, String outputDir) {
         return null;
     }
 
@@ -62,10 +60,9 @@ public interface BackendCompiler {
         return true;
     }
 
-    @Nonnull
     BackendCompilerProcessBuilder prepareProcess(
-        @Nonnull ModuleChunk chunk,
-        @Nonnull String outputDir,
-        @Nonnull CompileContext compileContext
+        ModuleChunk chunk,
+        String outputDir,
+        CompileContext compileContext
     ) throws IOException;
 }

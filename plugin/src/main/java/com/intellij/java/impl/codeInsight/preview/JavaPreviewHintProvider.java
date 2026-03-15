@@ -31,7 +31,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 import consulo.xml.util.ColorSampleLookupValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -60,7 +59,7 @@ public class JavaPreviewHintProvider implements PreviewHintProvider {
   }
 
   @Override
-  public JComponent getPreviewComponent(@Nonnull PsiElement element) {
+  public JComponent getPreviewComponent(PsiElement element) {
     PsiNewExpression psiNewExpression = PsiTreeUtil.getParentOfType(element, PsiNewExpression.class);
 
     if (psiNewExpression != null) {

@@ -34,8 +34,7 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Function;
 
 public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements PsiPolyadicExpression {
@@ -46,13 +45,12 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
   }
 
   @Override
-  @Nonnull
   public IElementType getOperationTokenType() {
     return ((PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN)).getTokenType();
   }
 
   @Override
-  public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand) {
+  public PsiJavaToken getTokenBeforeOperand(PsiExpression operand) {
     PsiElement element = operand;
     while (element != null) {
       if (getChildRole(element.getNode()) == ChildRole.OPERATION_SIGN) {
@@ -120,7 +118,7 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
 
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitPolyadicExpression(this);
     } else {
@@ -128,7 +126,6 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
     }
   }
 
-  @Nonnull
   @Override
   public PsiExpression[] getOperands() {
     PsiExpression[] operands = cachedOperands;
@@ -139,18 +136,18 @@ public class PsiPolyadicExpressionImpl extends ExpressionPsiElement implements P
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     return processDeclarations(this, processor, state, lastParent, place);
   }
 
-  static boolean processDeclarations(@Nonnull PsiPolyadicExpression expression,
-                                     @Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  static boolean processDeclarations(PsiPolyadicExpression expression,
+                                     PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     IElementType tokenType = expression.getOperationTokenType();
     boolean and = tokenType.equals(JavaTokenType.ANDAND);
     boolean or = tokenType.equals(JavaTokenType.OROR);

@@ -2,8 +2,7 @@
 package com.intellij.java.language.psi.javadoc;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -48,14 +47,12 @@ public interface PsiSnippetAttribute extends PsiElement {
    * @return name element of this name-value pair.
    */
   @Contract(pure = true)
-  @Nonnull
   PsiElement getNameIdentifier();
 
   /**
    * @return name of this name-value pair.
    */
   @Contract(pure = true)
-  @Nonnull
   String getName();
 
   /**

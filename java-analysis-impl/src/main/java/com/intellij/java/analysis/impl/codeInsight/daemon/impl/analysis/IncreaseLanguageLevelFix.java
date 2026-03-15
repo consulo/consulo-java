@@ -38,8 +38,7 @@ import consulo.module.content.layer.ModifiableRootModel;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author cdr
@@ -53,13 +52,11 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction, Local
         myLevel = targetLevel;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return CodeInsightLocalize.setLanguageLevelTo0(myLevel.getDescription().get());
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return getText();
@@ -67,7 +64,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction, Local
 
     @Override
     @RequiredUIAccess
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         invoke(project, null, element.getContainingFile());
     }
@@ -82,7 +79,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction, Local
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         VirtualFile virtualFile = file.getVirtualFile();
         if (virtualFile == null) {
             return false;
@@ -98,7 +95,7 @@ public class IncreaseLanguageLevelFix implements SyntheticIntentionAction, Local
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         VirtualFile virtualFile = file.getVirtualFile();
         LOG.assertTrue(virtualFile != null);
         Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);

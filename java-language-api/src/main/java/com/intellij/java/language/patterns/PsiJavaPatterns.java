@@ -27,8 +27,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.util.ProcessingContext;
 import consulo.language.pattern.VirtualFilePattern;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -93,7 +92,7 @@ public class PsiJavaPatterns extends StandardPatterns {
     });
   }
 
-  public static PsiJavaElementPattern.Capture<PsiNewExpression> psiNewExpression(@Nonnull final String... fqns) {
+  public static PsiJavaElementPattern.Capture<PsiNewExpression> psiNewExpression(final String... fqns) {
     return new PsiJavaElementPattern.Capture<>(new InitialPatternCondition<>(PsiNewExpression.class) {
       public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
         if(o instanceof PsiNewExpression) {

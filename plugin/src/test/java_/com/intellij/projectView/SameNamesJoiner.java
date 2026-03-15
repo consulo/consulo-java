@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.ui.ex.tree.PresentationData;
 import consulo.project.ui.view.tree.ProjectViewNode;
@@ -107,7 +106,6 @@ class SameNamesJoiner implements TreeStructureProvider {
     Collection<AbstractTreeNode> myChildren;
 
     @Override
-    @Nonnull
     public Collection<AbstractTreeNode> getChildren() {
       return myChildren;
     }
@@ -123,7 +121,7 @@ class SameNamesJoiner implements TreeStructureProvider {
     }
 
     @Override
-    public boolean contains(@Nonnull VirtualFile file) {
+    public boolean contains(VirtualFile file) {
       return false;
     }
 

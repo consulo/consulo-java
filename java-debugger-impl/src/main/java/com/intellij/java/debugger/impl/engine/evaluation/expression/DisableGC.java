@@ -19,7 +19,6 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import consulo.internal.com.sun.jdi.ObjectReference;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Eugene Zhuravlev
@@ -29,12 +28,12 @@ public class DisableGC implements Evaluator
 {
 	private final Evaluator myDelegate;
 
-	private DisableGC(@Nonnull Evaluator delegate)
+	private DisableGC(Evaluator delegate)
 	{
 		myDelegate = delegate;
 	}
 
-	public static Evaluator create(@Nonnull Evaluator delegate)
+	public static Evaluator create(Evaluator delegate)
 	{
 		if(!(delegate instanceof DisableGC))
 		{

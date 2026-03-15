@@ -22,7 +22,6 @@ import consulo.content.base.SourcesOrderRootType;
 import consulo.content.library.ui.RootDetector;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -31,9 +30,8 @@ public class JavaSourceRootDetector extends RootDetector {
     super(SourcesOrderRootType.getInstance(), false, "java sources");
   }
 
-  @Nonnull
   @Override
-  public Collection<VirtualFile> detectRoots(@Nonnull VirtualFile virtualFile, @Nonnull ProgressIndicator progressIndicator) {
+  public Collection<VirtualFile> detectRoots(VirtualFile virtualFile, ProgressIndicator progressIndicator) {
     return JavaVfsSourceRootDetectionUtil.suggestRoots(virtualFile, progressIndicator);
   }
 }

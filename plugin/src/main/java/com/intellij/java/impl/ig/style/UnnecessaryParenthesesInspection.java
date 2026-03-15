@@ -26,7 +26,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -40,14 +39,12 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreParenthesesOnLambdaParameter = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryParenthesesDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryParenthesesProblemDescriptor().get();
     }
@@ -73,7 +70,6 @@ public abstract class UnnecessaryParenthesesInspection extends BaseInspection {
     }
 
     private class UnnecessaryParenthesesFix extends InspectionGadgetsFix {
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryParenthesesRemoveQuickfix();
         }

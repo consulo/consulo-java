@@ -19,18 +19,17 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LocalsControlFlowPolicy implements ControlFlowPolicy {
   private final PsiElement myCodeFragment;
 
-  public LocalsControlFlowPolicy(@Nonnull PsiElement codeFragment) {
+  public LocalsControlFlowPolicy(PsiElement codeFragment) {
     myCodeFragment = codeFragment;
   }
 
   @Override
-  public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr) {
+  public PsiVariable getUsedVariable(PsiReferenceExpression refExpr) {
     if (refExpr.isQualified()) {
       return null;
     }
@@ -40,7 +39,7 @@ public class LocalsControlFlowPolicy implements ControlFlowPolicy {
   }
 
   @Nullable
-  private PsiVariable checkCodeFragment(@Nonnull PsiElement refElement) {
+  private PsiVariable checkCodeFragment(PsiElement refElement) {
     PsiElement codeFragment;
     if (refElement instanceof PsiParameter) {
       final PsiElement declarationScope = ((PsiParameter) refElement).getDeclarationScope();
@@ -67,12 +66,12 @@ public class LocalsControlFlowPolicy implements ControlFlowPolicy {
   }
 
   @Override
-  public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter) {
+  public boolean isParameterAccepted(PsiParameter psiParameter) {
     return checkCodeFragment(psiParameter) != null;
   }
 
   @Override
-  public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable) {
+  public boolean isLocalVariableAccepted(PsiLocalVariable psiVariable) {
     return checkCodeFragment(psiVariable) != null;
   }
 

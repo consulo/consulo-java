@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an array access expession, for example, <code>i [1]</code>.
@@ -27,7 +26,6 @@ public interface PsiArrayAccessExpression extends PsiExpression {
    *
    * @return the array expression.
    */
-  @Nonnull
   PsiExpression getArrayExpression();
 
   /**

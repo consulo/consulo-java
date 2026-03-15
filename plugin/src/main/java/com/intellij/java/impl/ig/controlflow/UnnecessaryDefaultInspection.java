@@ -24,18 +24,15 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class UnnecessaryDefaultInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryDefaultDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryDefaultProblemDescriptor().get();
     }
@@ -49,7 +46,7 @@ public class UnnecessaryDefaultInspection extends BaseInspection {
 
         @Override
         public void visitSwitchStatement(
-            @Nonnull PsiSwitchStatement statement
+            PsiSwitchStatement statement
         ) {
             super.visitSwitchStatement(statement);
             PsiSwitchLabelStatement defaultStatement =

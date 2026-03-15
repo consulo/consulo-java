@@ -41,8 +41,7 @@ import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ import java.util.List;
 @ExtensionImpl
 public class JavaReferenceAdjuster implements ReferenceAdjuster {
   @Override
-  public ASTNode process(@Nonnull ASTNode element, boolean addImports, boolean incompleteCode, boolean useFqInJavadoc, boolean useFqInCode) {
+  public ASTNode process(ASTNode element, boolean addImports, boolean incompleteCode, boolean useFqInJavadoc, boolean useFqInCode) {
     IElementType elementType = element.getElementType();
     if ((elementType == JavaElementType.JAVA_CODE_REFERENCE || elementType == JavaElementType.REFERENCE_EXPRESSION) && !isAnnotated(element)) {
       IElementType parentType = element.getTreeParent().getElementType();
@@ -154,7 +153,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
   }
 
   @Override
-  public ASTNode process(@Nonnull ASTNode element, boolean addImports, boolean incompleteCode, Project project) {
+  public ASTNode process(ASTNode element, boolean addImports, boolean incompleteCode, Project project) {
     CodeStyleSettings settings = CodeStyle.getSettings(element.getPsi().getContainingFile());
     JavaCodeStyleSettings javaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
     return process(element, addImports, incompleteCode, javaSettings.useFqNamesInJavadocAlways(), javaSettings.USE_FQ_CLASS_NAMES);
@@ -186,7 +185,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
   }
 
   @Override
-  public void processRange(@Nonnull ASTNode element, int startOffset, int endOffset, boolean useFqInJavadoc, boolean useFqInCode) {
+  public void processRange(ASTNode element, int startOffset, int endOffset, boolean useFqInJavadoc, boolean useFqInCode) {
     List<ASTNode> array = new ArrayList<>();
     addReferencesInRange(array, element, startOffset, endOffset);
     for (ASTNode ref : array) {
@@ -197,7 +196,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
   }
 
   @Override
-  public void processRange(@Nonnull ASTNode element, int startOffset, int endOffset, Project project) {
+  public void processRange(ASTNode element, int startOffset, int endOffset, Project project) {
     CodeStyleSettings settings = CodeStyle.getSettings(element.getPsi().getContainingFile());
     JavaCodeStyleSettings javaSettings = settings.getCustomSettings(JavaCodeStyleSettings.class);
     processRange(element, startOffset, endOffset, javaSettings.useFqNamesInJavadocAlways(), javaSettings.USE_FQ_CLASS_NAMES);
@@ -241,9 +240,8 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
     }
   }
 
-  @Nonnull
-  private static ASTNode makeShortReference(@Nonnull CompositeElement reference, @Nonnull PsiClass refClass, boolean addImports) {
-    @Nonnull PsiJavaCodeReferenceElement psiReference = (PsiJavaCodeReferenceElement) reference.getPsi();
+  private static ASTNode makeShortReference(CompositeElement reference, PsiClass refClass, boolean addImports) {
+    PsiJavaCodeReferenceElement psiReference = (PsiJavaCodeReferenceElement) reference.getPsi();
     PsiQualifiedReferenceElement reference1 = getClassReferenceToShorten(refClass, addImports, psiReference);
     if (reference1 != null) {
       replaceReferenceWithShort(reference1);
@@ -252,9 +250,9 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
   }
 
   @Nullable
-  public static PsiQualifiedReferenceElement getClassReferenceToShorten(@Nonnull PsiClass refClass,
+  public static PsiQualifiedReferenceElement getClassReferenceToShorten(PsiClass refClass,
                                                                         boolean addImports,
-                                                                        @Nonnull PsiQualifiedReferenceElement reference) {
+                                                                        PsiQualifiedReferenceElement reference) {
     PsiClass parentClass = refClass.getContainingClass();
     if (parentClass != null) {
       JavaPsiFacade facade = JavaPsiFacade.getInstance(parentClass.getProject());
@@ -281,7 +279,7 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
     return reference;
   }
 
-  private static boolean isSafeToShortenReference(@Nonnull PsiElement psiReference, @Nonnull PsiClass refClass) {
+  private static boolean isSafeToShortenReference(PsiElement psiReference, PsiClass refClass) {
     return isSafeToShortenReference(refClass.getName(), psiReference, refClass);
   }
 
@@ -309,7 +307,6 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
     return false;
   }
 
-  @Nonnull
   private static ASTNode replaceReferenceWithShort(PsiQualifiedReferenceElement reference) {
     ASTNode node = reference.getNode();
     assert node != null;
@@ -341,7 +338,6 @@ public class JavaReferenceAdjuster implements ReferenceAdjuster {
     return reference;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

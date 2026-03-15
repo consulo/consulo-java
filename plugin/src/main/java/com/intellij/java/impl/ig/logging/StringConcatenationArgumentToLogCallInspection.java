@@ -30,9 +30,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,7 +43,6 @@ import java.util.Set;
 @ExtensionImpl
 public class StringConcatenationArgumentToLogCallInspection extends BaseInspection {
 
-    @NonNls
     private static final Set<String> logNames = new HashSet<String>();
 
     static {
@@ -56,13 +53,11 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
         logNames.add("error");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringConcatenationArgumentToLogCallDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringConcatenationArgumentToLogCallProblemDescriptor().get();
@@ -83,7 +78,6 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
         public StringConcatenationArgumentToLogCallFix() {
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.stringConcatenationInFormatCallQuickfix();
@@ -102,7 +96,7 @@ public class StringConcatenationArgumentToLogCallInspection extends BaseInspecti
             if (arguments.length == 0) {
                 return;
             }
-            @NonNls StringBuilder newMethodCall = new StringBuilder(methodCallExpression.getMethodExpression().getText());
+            StringBuilder newMethodCall = new StringBuilder(methodCallExpression.getMethodExpression().getText());
             newMethodCall.append('(');
             PsiExpression argument = arguments[0];
             int usedArguments;

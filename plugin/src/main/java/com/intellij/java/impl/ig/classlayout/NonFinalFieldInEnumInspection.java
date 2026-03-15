@@ -26,21 +26,18 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class NonFinalFieldInEnumInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonFinalFieldInEnumDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {

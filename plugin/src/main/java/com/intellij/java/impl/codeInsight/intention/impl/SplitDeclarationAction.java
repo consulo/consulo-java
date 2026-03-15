@@ -34,7 +34,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -48,7 +47,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
 
   @Override
   @RequiredReadAction
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (element instanceof PsiCompiledElement
       || !element.getManager().isInProject(element)
       || !element.getLanguage().isKindOf(JavaLanguage.INSTANCE)) {
@@ -109,12 +108,12 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
           Ref<Boolean> conflictFound = new Ref<>(false);
           parent.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
             }
 
             @Override
             @RequiredReadAction
-            public void visitVariable(@Nonnull PsiVariable variable) {
+            public void visitVariable(PsiVariable variable) {
               super.visitVariable(variable);
               if (varName.equals(variable.getName())) {
                 conflictFound.set(true);
@@ -143,7 +142,7 @@ public class SplitDeclarationAction extends PsiElementBaseIntentionAction {
 
   @Override
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     PsiDeclarationStatement decl = PsiTreeUtil.getParentOfType(element, PsiDeclarationStatement.class);
 
     PsiManager psiManager = PsiManager.getInstance(project);

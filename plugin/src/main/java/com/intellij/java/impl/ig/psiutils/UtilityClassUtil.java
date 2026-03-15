@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 
@@ -23,11 +22,11 @@ public class UtilityClassUtil {
 
   private UtilityClassUtil() {}
 
-  public static boolean isUtilityClass(@Nonnull PsiClass aClass) {
+  public static boolean isUtilityClass(PsiClass aClass) {
     return isUtilityClass(aClass, true);
   }
 
-  public static boolean isUtilityClass(@Nonnull PsiClass aClass, boolean fullCheck) {
+  public static boolean isUtilityClass(PsiClass aClass, boolean fullCheck) {
     if (aClass.isInterface() || aClass.isEnum() || aClass.isAnnotationType()) {
       return false;
     }

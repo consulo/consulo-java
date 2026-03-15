@@ -5,17 +5,14 @@ import consulo.ide.impl.idea.usages.impl.UsageViewImpl;
 import consulo.usage.UsageContextPanel;
 import consulo.usage.UsageView;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UsageContextDataflowFromPanelProvider extends UsageContextDataflowToPaneProvider {
-  @Nonnull
   @Override
-  public UsageContextPanel create(@Nonnull UsageView usageView) {
+  public UsageContextPanel create(UsageView usageView) {
     return new UsageContextDataflowFromPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
   }
 
-  @Nonnull
   @Override
   public String getTabTitle() {
     return "Dataflow from Here";

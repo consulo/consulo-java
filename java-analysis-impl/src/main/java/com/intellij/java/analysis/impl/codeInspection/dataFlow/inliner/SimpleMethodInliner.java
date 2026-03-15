@@ -13,7 +13,6 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
 
@@ -22,7 +21,7 @@ import static consulo.util.lang.ObjectUtil.tryCast;
  */
 public class SimpleMethodInliner implements CallInliner {
   @Override
-  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(CFGBuilder builder, PsiMethodCallExpression call) {
     if (!call.getArgumentList().isEmpty())
       return false;
     if (!ExpressionUtil.isEffectivelyUnqualified(call.getMethodExpression()))

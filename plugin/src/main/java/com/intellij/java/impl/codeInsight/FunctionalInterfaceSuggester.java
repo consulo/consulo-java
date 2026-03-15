@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -59,18 +58,18 @@ public class FunctionalInterfaceSuggester {
         "org.apache.commons.collections.Transformer",
     };
 
-    public static Collection<? extends PsiType> suggestFunctionalInterfaces(@Nonnull PsiFunctionalExpression expression) {
+    public static Collection<? extends PsiType> suggestFunctionalInterfaces(PsiFunctionalExpression expression) {
         PsiType qualifierType = expression instanceof PsiMethodReferenceExpression methodRefExpr
             ? PsiMethodReferenceUtil.getQualifierType(methodRefExpr) : null;
         return suggestFunctionalInterfaces(expression, aClass -> composeAcceptableType(aClass, expression, qualifierType));
     }
 
-    public static Collection<? extends PsiType> suggestFunctionalInterfaces(@Nonnull PsiMethod method) {
+    public static Collection<? extends PsiType> suggestFunctionalInterfaces(PsiMethod method) {
         return suggestFunctionalInterfaces(method, false);
     }
 
     public static Collection<? extends PsiType> suggestFunctionalInterfaces(
-        @Nonnull PsiMethod method,
+        PsiMethod method,
         boolean suggestUnhandledThrowables
     ) {
         if (method.isConstructor()) {
@@ -154,7 +153,7 @@ public class FunctionalInterfaceSuggester {
     }
 
     private static <T extends PsiElement> Collection<? extends PsiType> suggestFunctionalInterfaces(
-        @Nonnull T element,
+        T element,
         Function<? super PsiClass, ? extends List<? extends PsiType>> acceptanceChecker
     ) {
         Project project = element.getProject();
@@ -190,8 +189,8 @@ public class FunctionalInterfaceSuggester {
 
     @RequiredReadAction
     private static List<? extends PsiType> composeAcceptableType(
-        @Nonnull PsiClass interface2Consider,
-        @Nonnull PsiFunctionalExpression expression,
+        PsiClass interface2Consider,
+        PsiFunctionalExpression expression,
         PsiType qualifierType
     ) {
         PsiType type =
@@ -203,7 +202,6 @@ public class FunctionalInterfaceSuggester {
         return composeAcceptableType1(interface2Consider, expression, qualifierType);
     }
 
-    @Nonnull
     @RequiredReadAction
     private static List<? extends PsiType> composeAcceptableType1(
         PsiClass interface2Consider,

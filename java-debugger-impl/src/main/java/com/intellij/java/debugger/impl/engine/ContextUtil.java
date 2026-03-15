@@ -37,7 +37,7 @@ import com.intellij.java.language.psi.PsiResolveHelper;
 import com.intellij.java.language.psi.PsiStatement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.internal.com.sun.jdi.Location;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ContextUtil
 {

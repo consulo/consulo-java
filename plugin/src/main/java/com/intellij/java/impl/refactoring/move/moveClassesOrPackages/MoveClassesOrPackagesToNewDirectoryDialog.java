@@ -47,8 +47,7 @@ import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.usage.UsageViewUtil;
 import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -67,12 +66,12 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
   private final PsiElement[] myElementsToMove;
   private final MoveCallback myMoveCallback;
 
-  public MoveClassesOrPackagesToNewDirectoryDialog(@Nonnull PsiDirectory directory, PsiElement[] elementsToMove,
+  public MoveClassesOrPackagesToNewDirectoryDialog(PsiDirectory directory, PsiElement[] elementsToMove,
                                                    MoveCallback moveCallback) {
     this(directory, elementsToMove, true, moveCallback);
   }
 
-  public MoveClassesOrPackagesToNewDirectoryDialog(@Nonnull final PsiDirectory directory, PsiElement[] elementsToMove,
+  public MoveClassesOrPackagesToNewDirectoryDialog(final PsiDirectory directory, PsiElement[] elementsToMove,
                                                    boolean canShowPreserveSourceRoots,
                                                    MoveCallback moveCallback) {
     super(false);

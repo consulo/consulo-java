@@ -21,7 +21,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -33,5 +32,5 @@ import jakarta.annotation.Nonnull;
 public interface ExtraExceptionHandler {
     ExtensionPointName<ExtraExceptionHandler> EP_NAME = ExtensionPointName.create(ExtraExceptionHandler.class);
 
-    boolean isHandled(@Nonnull PsiClassType type, @Nonnull PsiElement element);
+    boolean isHandled(PsiClassType type, PsiElement element);
 }

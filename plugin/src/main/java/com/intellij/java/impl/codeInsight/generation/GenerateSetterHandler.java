@@ -24,7 +24,7 @@ import consulo.language.editor.generation.ClassMember;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 

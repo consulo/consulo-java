@@ -21,10 +21,8 @@ import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.InitialPatternCondition;
 import consulo.language.pattern.PatternConditionPlus;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.function.BiPredicate;
 
@@ -32,7 +30,7 @@ import java.util.function.BiPredicate;
  * @author peter
  */
 public class PsiMemberPattern<T extends PsiMember, Self extends PsiMemberPattern<T,Self>> extends PsiModifierListOwnerPattern<T,Self> {
-  public PsiMemberPattern(@Nonnull final InitialPatternCondition<T> condition) {
+  public PsiMemberPattern(final InitialPatternCondition<T> condition) {
     super(condition);
   }
 
@@ -40,7 +38,7 @@ public class PsiMemberPattern<T extends PsiMember, Self extends PsiMemberPattern
     super(aClass);
   }
 
-  public Self inClass(final @NonNls String qname) {
+  public Self inClass(final String qname) {
     return inClass(PsiJavaPatterns.psiClass().withQualifiedName(qname));
   }
 

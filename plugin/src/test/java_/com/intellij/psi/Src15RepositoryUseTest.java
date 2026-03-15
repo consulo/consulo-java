@@ -27,7 +27,6 @@ import com.intellij.testFramework.PsiTestUtil;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileFilter;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -327,7 +326,6 @@ public abstract class Src15RepositoryUseTest extends PsiTestCase {
     getJavaFacade().setAssertOnFileLoadingFilter(VirtualFileFilter.NONE, null);
   }
 
-  @Nonnull
   private PsiClass findClass(String name) {
     PsiClass aClass = myJavaFacade.findClass(name, GlobalSearchScope.moduleScope(myModule));
     assertNotNull(name, aClass);

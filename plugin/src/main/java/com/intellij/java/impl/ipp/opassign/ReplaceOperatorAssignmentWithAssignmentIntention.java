@@ -26,7 +26,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,12 +51,10 @@ public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNam
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new OperatorAssignmentPredicate();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.replaceWithOperatorAssignmentIntentionFamilyName();
@@ -72,7 +69,7 @@ public class ReplaceOperatorAssignmentWithAssignmentIntention extends MutablyNam
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) {
+    protected void processIntention(PsiElement element) {
         PsiAssignmentExpression assignmentExpression = (PsiAssignmentExpression) element;
         PsiJavaToken sign = assignmentExpression.getOperationSign();
         PsiExpression lhs = assignmentExpression.getLExpression();

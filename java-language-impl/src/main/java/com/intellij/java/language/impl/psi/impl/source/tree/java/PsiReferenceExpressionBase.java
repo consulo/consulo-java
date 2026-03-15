@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.java.language.psi.JavaResolveResult;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
@@ -27,17 +26,17 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement implements PsiReferenceExpression
 {
-	public PsiReferenceExpressionBase(@Nonnull final IElementType type)
+	public PsiReferenceExpressionBase(final IElementType type)
 	{
 		super(type);
 	}
 
 	@Override
-	public PsiElement bindToElementViaStaticImport(@Nonnull final PsiClass qualifierClass) throws
+	public PsiElement bindToElementViaStaticImport(final PsiClass qualifierClass) throws
 			IncorrectOperationException
 	{
 		throw new IncorrectOperationException();
@@ -68,7 +67,7 @@ public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement im
 	}
 
 	@Override
-	public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException
+	public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException
 	{
 		throw new IncorrectOperationException();
 	}
@@ -91,7 +90,6 @@ public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement im
 		return this;
 	}
 
-	@Nonnull
 	@Override
 	public JavaResolveResult advancedResolve(boolean incompleteCode)
 	{
@@ -112,7 +110,6 @@ public abstract class PsiReferenceExpressionBase extends ExpressionPsiElement im
 		return PsiTreeUtil.getChildOfType(this, PsiReferenceParameterList.class);
 	}
 
-	@Nonnull
 	@Override
 	public PsiType[] getTypeParameters()
 	{

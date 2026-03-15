@@ -41,8 +41,7 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.intellij.lang.annotations.Pattern;
 
@@ -164,21 +163,18 @@ public class MismatchedCollectionQueryUpdateInspection extends BaseInspection {
         return panel;
     }
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "MismatchedQueryAndUpdateOfCollection";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.mismatchedUpdateCollectionDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         boolean updated = (Boolean)infos[0];
         return updated
@@ -221,7 +217,7 @@ public class MismatchedCollectionQueryUpdateInspection extends BaseInspection {
 
             @Override
             @RequiredReadAction
-            public void visitThisExpression(@Nonnull PsiThisExpression expression) {
+            public void visitThisExpression(PsiThisExpression expression) {
                 super.visitThisExpression(expression);
                 if (variable == null) {
                     process(findEffectiveReference(expression));
@@ -471,7 +467,7 @@ public class MismatchedCollectionQueryUpdateInspection extends BaseInspection {
         return CommonClassNames.JAVA_UTIL_COLLECTIONS.equals(qualifiedName);
     }
 
-    private static boolean isQueryMethod(@Nonnull PsiCallExpression call) {
+    private static boolean isQueryMethod(PsiCallExpression call) {
         PsiType type = call.getType();
         boolean immutable = isImmutable(type);
         // If pure method returns mutable object, then it's possible that further mutation of that object will modify the original collection
@@ -513,7 +509,7 @@ public class MismatchedCollectionQueryUpdateInspection extends BaseInspection {
         }
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             super.visitField(field);
             if (!field.isPrivate()) {
                 PsiClass aClass = field.getContainingClass();
@@ -538,7 +534,7 @@ public class MismatchedCollectionQueryUpdateInspection extends BaseInspection {
         }
 
         @Override
-        public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+        public void visitLocalVariable(PsiLocalVariable variable) {
             super.visitLocalVariable(variable);
             PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
             if (!checkVariable(variable, codeBlock)) {

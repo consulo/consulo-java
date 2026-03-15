@@ -21,7 +21,6 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiAnnotation;
-import jakarta.annotation.Nonnull;
 
 /**
 * User: anna
@@ -44,14 +43,13 @@ class ChangeNullableDefaultsFix implements LocalQuickFix {
     myNullableName = nullable;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("Make \"" + (myNotNullName != null ? myNotNullName : myNullableName) + "\" default annotation");
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     if (myNotNullName != null) {
       myManager.setDefaultNotNull(myNotNullName);
     } else {

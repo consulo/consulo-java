@@ -46,10 +46,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +60,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitDocTagValue(this);
     }
@@ -130,7 +128,6 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
           (methodSignature != null && !MethodSignatureUtil.areSignaturesErasureEqual(methodSignature, method.getSignature(PsiSubstitutor.EMPTY)))) continue;
       return new MyReference(method) {
         @Override
-        @Nonnull
         public PsiElement[] getVariants() {
           final List<PsiMethod> lst = new ArrayList<PsiMethod>();
           for (PsiMethod method : methods) {
@@ -245,21 +242,18 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     }
 
     @Override
-    @Nonnull
     public JavaResolveResult advancedResolve(boolean incompleteCode) {
       return myReferredElement == null ? JavaResolveResult.EMPTY
                                   : new CandidateInfo(myReferredElement, PsiSubstitutor.EMPTY);
     }
 
     @Override
-    @Nonnull
     public JavaResolveResult[] multiResolve(boolean incompleteCode) {
       return myReferredElement == null ? JavaResolveResult.EMPTY_ARRAY
                                   : new JavaResolveResult[]{new CandidateInfo(myReferredElement, PsiSubstitutor.EMPTY)};
     }
 
     @Override
-    @Nonnull
     public PsiElement[] getVariants(){
       final List<PsiModifierListOwner> vars = new ArrayList<PsiModifierListOwner>();
       PsiClass scope = getScope();
@@ -277,7 +271,6 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     }
 
     @Override
-    @Nonnull
     public String getCanonicalText() {
       final PsiElement nameElement = getNameElement();
       assert nameElement != null;
@@ -296,7 +289,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
     }
 
     @Override
-    public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+    public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
       if (isReferenceTo(element)) return PsiDocMethodOrFieldRef.this;
       final PsiElement nameElement = getNameElement();
       assert nameElement != null;
@@ -339,7 +332,7 @@ public class PsiDocMethodOrFieldRef extends CompositePsiElement implements PsiDo
       if (hasSignature || !name.equals(newName)) {
         String text = getText();
 
-        @NonNls StringBuffer newText = new StringBuffer();
+        StringBuffer newText = new StringBuffer();
         newText.append("/** @see ");
         if (name.equals(newName)) { // hasSignature is true here, so we can search for '('
           newText.append(text.substring(0, text.indexOf('(')));

@@ -45,8 +45,7 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -80,7 +79,6 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         setOptions(options);
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return myCommandName;
@@ -119,13 +117,11 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         myCommandName = LocalizeValue.localizeTODO(commandName.toString());
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new MoveMemberViewDescriptor(PsiUtilCore.toPsiElementArray(myMembersToMove));
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -152,7 +148,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    protected void refreshElements(@Nonnull PsiElement[] elements) {
+    protected void refreshElements(PsiElement[] elements) {
         LOG.assertTrue(myMembersToMove.size() == elements.length);
         myMembersToMove.clear();
         for (PsiElement resolved : elements) {
@@ -171,7 +167,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         try {
             PsiClass targetClass =
                 JavaPsiFacade.getInstance(myProject).findClass(myOptions.getTargetClassName(), GlobalSearchScope.projectScope(myProject));
@@ -306,7 +302,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         UsageInfo[] usages = refUsages.get();
 
@@ -345,7 +341,7 @@ public class MoveMembersProcessor extends BaseRefactoringProcessor {
         UsageInfo[] usages,
         Set<PsiMember> membersToMove,
         String newVisibility,
-        @Nonnull PsiClass targetClass,
+        PsiClass targetClass,
         Map<PsiMember, PsiModifierList> modifierListCopies,
         MultiMap<PsiElement, LocalizeValue> conflicts
     ) {

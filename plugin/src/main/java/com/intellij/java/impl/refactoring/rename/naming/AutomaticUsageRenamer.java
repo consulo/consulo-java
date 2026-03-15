@@ -18,8 +18,7 @@ package com.intellij.java.impl.refactoring.rename.naming;
 import consulo.usage.RenameableUsage;
 import consulo.util.lang.StringUtil;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -104,7 +103,7 @@ public abstract class AutomaticUsageRenamer<T> {
     return myRenames;
   }
 
-  public void setRename(T element, @Nonnull String replacement) {
+  public void setRename(T element, String replacement) {
     myRenames.put(element, replacement);
   }
 

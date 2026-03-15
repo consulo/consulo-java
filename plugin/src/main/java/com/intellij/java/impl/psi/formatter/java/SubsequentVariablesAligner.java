@@ -22,7 +22,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.AlignmentStrategy;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 public class SubsequentVariablesAligner extends ChildAlignmentStrategyProvider {
@@ -39,7 +38,7 @@ public class SubsequentVariablesAligner extends ChildAlignmentStrategyProvider {
   }
 
   @Override
-  public AlignmentStrategy getNextChildStrategy(@Nonnull ASTNode child) {
+  public AlignmentStrategy getNextChildStrategy(ASTNode child) {
     IElementType childType = child.getElementType();
     if (childType != JavaElementType.DECLARATION_STATEMENT || StringUtil.countNewLines(child.getChars()) > 0) {
       updateAlignmentStrategy();

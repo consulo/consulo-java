@@ -21,12 +21,10 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
-import jakarta.annotation.Nonnull;
 
 public class EffectiveLanguageLevelUtil {
-  @Nonnull
   @RequiredReadAction
-  public static LanguageLevel getEffectiveLanguageLevel(@Nonnull final Module module) {
+  public static LanguageLevel getEffectiveLanguageLevel(final Module module) {
     ApplicationManager.getApplication().assertReadAccessAllowed();
     final JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
     return extension == null ? LanguageLevel.HIGHEST : extension.getLanguageLevel();

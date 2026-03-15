@@ -44,7 +44,6 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.usage.UsageViewUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -89,7 +88,6 @@ class CopyClassDialog extends DialogWrapper {
     }
 
     @Override
-    @Nonnull
     protected Action[] createActions() {
         return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
     }

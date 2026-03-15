@@ -12,8 +12,7 @@ import consulo.language.editor.inspection.ProblemHighlightType;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,13 +26,11 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
     private final static int MIN_PERCENT_RATIO = 5;
     public final static int MAX_QUICK_FIX_COUNTS = 4;
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesInheritanceIssues();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO(
@@ -50,8 +47,8 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
     @Override
     @RequiredReadAction
     public ProblemDescriptor[] checkClass(
-        @Nonnull PsiClass aClass,
-        @Nonnull InspectionManager manager,
+        PsiClass aClass,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -104,7 +101,7 @@ public class SuperClassHasFrequentlyUsedInheritorsInspection extends BaseJavaLoc
 
     @Nullable
     @RequiredReadAction
-    private static PsiClass getSuperIfUnique(@Nonnull PsiClass aClass) {
+    private static PsiClass getSuperIfUnique(PsiClass aClass) {
         if (aClass instanceof PsiAnonymousClass anonymousClass) {
             return (PsiClass) anonymousClass.getBaseClassReference().resolve();
         }

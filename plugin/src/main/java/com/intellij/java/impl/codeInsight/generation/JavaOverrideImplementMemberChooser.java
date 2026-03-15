@@ -32,9 +32,7 @@ import consulo.ui.ex.action.*;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.keymap.KeymapManager;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.InputEvent;
@@ -49,9 +47,7 @@ import java.util.LinkedHashSet;
 public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodMember> {
   private static final String SORT_METHODS_BY_PERCENT_DESCRIPTION = "Sort by Percent of Classes which Overrides a Method";
 
-  @NonNls
   public static final String PROP_COMBINED_OVERRIDE_IMPLEMENT = "OverrideImplement.combined";
-  @NonNls
   public static final String PROP_OVERRIDING_SORTED_OVERRIDE_IMPLEMENT = "OverrideImplement.overriding.sorted";
 
   private ToggleAction myMergeAction;
@@ -81,7 +77,6 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
     allCandidates.addAll(secondary);
     PsiMethodMember[] all = convertToMethodMembers(allCandidates);
     NotNullLazyValue<PsiMethodWithOverridingPercentMember[]> lazyElementsWithPercent = new NotNullLazyValue<>() {
-      @Nonnull
       @Override
       protected PsiMethodWithOverridingPercentMember[] compute() {
         PsiMethodWithOverridingPercentMember[] elements = PsiMethodWithOverridingPercentMember.calculateOverridingPercents(candidates);
@@ -124,7 +119,7 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
     PsiMethodMember[] allElements,
     PsiMethodMember[] onlyPrimaryElements,
     NotNullLazyValue<PsiMethodWithOverridingPercentMember[]> lazyElementsWithPercent,
-    @Nonnull Project project,
+    Project project,
     boolean isInsertOverrideVisible,
     boolean merge,
     boolean toImplement,
@@ -206,12 +201,12 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
     }
 
     @Override
-    public boolean isSelected(@Nonnull AnActionEvent e) {
+    public boolean isSelected(AnActionEvent e) {
       return mySortedByOverriding;
     }
 
     @Override
-    public void setSelected(@Nonnull AnActionEvent e, boolean state) {
+    public void setSelected(AnActionEvent e, boolean state) {
       mySortedByOverriding = state;
       if (state) {
         if (myMerge) {
@@ -236,12 +231,12 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
     }
 
     @Override
-    public boolean isSelected(@Nonnull AnActionEvent e) {
+    public boolean isSelected(AnActionEvent e) {
       return myMerge;
     }
 
     @Override
-    public void setSelected(@Nonnull AnActionEvent e, boolean state) {
+    public void setSelected(AnActionEvent e, boolean state) {
       myMerge = state;
       if (state && mySortedByOverriding) {
         mySortedByOverriding = false;

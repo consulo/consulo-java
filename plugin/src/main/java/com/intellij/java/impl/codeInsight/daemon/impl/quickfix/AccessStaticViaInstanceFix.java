@@ -35,8 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,23 +43,20 @@ import java.util.List;
 public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     private static final Logger LOG = Logger.getInstance(AccessStaticViaInstanceFix.class);
     private final boolean myOnTheFly;
-    @Nonnull
     private final LocalizeValue myText;
 
-    public AccessStaticViaInstanceFix(@Nonnull PsiReferenceExpression expression, @Nonnull JavaResolveResult result, boolean onTheFly) {
+    public AccessStaticViaInstanceFix(PsiReferenceExpression expression, JavaResolveResult result, boolean onTheFly) {
         super(expression);
         myOnTheFly = onTheFly;
         PsiMember member = (PsiMember) result.getElement();
         myText = calcText(member, result.getSubstitutor());
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myText;
     }
 
-    @Nonnull
     private static LocalizeValue calcText(PsiMember member, PsiSubstitutor substitutor) {
         PsiClass aClass = member.getContainingClass();
         if (aClass == null) {
@@ -76,11 +72,11 @@ public class AccessStaticViaInstanceFix extends LocalQuickFixAndIntentionActionO
     @Override
     @RequiredReadAction
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiReferenceExpression myExpression = (PsiReferenceExpression) startElement;
 

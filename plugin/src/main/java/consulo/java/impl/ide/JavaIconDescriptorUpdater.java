@@ -37,7 +37,6 @@ import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.DumbService;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -47,7 +46,7 @@ import jakarta.annotation.Nonnull;
 public class JavaIconDescriptorUpdater implements IconDescriptorUpdater {
   @RequiredReadAction
   @Override
-  public void updateIcon(@Nonnull IconDescriptor iconDescriptor, @Nonnull PsiElement element, int flags) {
+  public void updateIcon(IconDescriptor iconDescriptor, PsiElement element, int flags) {
     if (element instanceof PsiClass) {
       if (processedFile(element, iconDescriptor)) {
         return;

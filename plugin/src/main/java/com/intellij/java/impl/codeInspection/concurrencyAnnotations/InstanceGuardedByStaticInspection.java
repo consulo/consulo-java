@@ -28,32 +28,27 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTool {
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesConcurrencyAnnotationIssues();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaAnalysisLocalize.inspectionInstanceGuardedByStaticDisplayName();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "InstanceGuardedByStatic";
     }
 
-    @Nonnull
     @Override
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -70,7 +65,7 @@ public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTo
 
         @Override
         @RequiredReadAction
-        public void visitDocTag(@Nonnull PsiDocTag psiDocTag) {
+        public void visitDocTag(PsiDocTag psiDocTag) {
             super.visitDocTag(psiDocTag);
             if (!JCiPUtil.isGuardedByTag(psiDocTag)) {
                 return;
@@ -99,7 +94,7 @@ public class InstanceGuardedByStaticInspection extends BaseJavaLocalInspectionTo
 
         @Override
         @RequiredReadAction
-        public void visitAnnotation(@Nonnull PsiAnnotation annotation) {
+        public void visitAnnotation(PsiAnnotation annotation) {
             super.visitAnnotation(annotation);
             if (!JCiPUtil.isGuardedByAnnotation(annotation)) {
                 return;

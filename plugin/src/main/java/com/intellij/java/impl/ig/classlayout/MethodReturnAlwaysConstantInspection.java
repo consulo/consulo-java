@@ -28,7 +28,6 @@ import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.localize.LocalizeValue;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +36,6 @@ import java.util.Set;
 public abstract class MethodReturnAlwaysConstantInspection extends BaseGlobalInspection {
     private static final Key<Boolean> ALWAYS_CONSTANT = Key.create("ALWAYS_CONSTANT");
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.methodReturnAlwaysConstantDisplayName();

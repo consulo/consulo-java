@@ -7,24 +7,21 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.LiveTemplateContributor;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JavaSurroundLiveTemplateContributor implements LiveTemplateContributor {
     @Override
-    @Nonnull
     public String groupId() {
         return "javasurround";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue groupName() {
         return LocalizeValue.localizeTODO("Java Surround");
     }
 
     @Override
-    public void contribute(@Nonnull LiveTemplateContributor.Factory factory) {
+    public void contribute(LiveTemplateContributor.Factory factory) {
 //        try (Builder builder = factory.newBuilder("javasurroundB", "B", "{$SELECTION$}", CodeInsightLocalize.livetemplateDescriptionSurroundBraces())) {
 //            builder.withReformat();
 //

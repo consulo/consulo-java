@@ -6,8 +6,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 /**
@@ -18,14 +17,12 @@ public class EqualityCheck {
       CallMatcher.staticCall(CommonClassNames.JAVA_UTIL_OBJECTS, "equals").parameterCount(2),
       CallMatcher.staticCall("com.google.common.base.Objects", "equal").parameterCount(2));
   private final
-  @Nonnull
   PsiExpression myLeft;
   private final
-  @Nonnull
   PsiExpression myRight;
   private final boolean myLeftDereferenced;
 
-  private EqualityCheck(@Nonnull PsiExpression left, @Nonnull PsiExpression right, boolean leftDereferenced) {
+  private EqualityCheck(PsiExpression left, PsiExpression right, boolean leftDereferenced) {
     myLeft = left;
     myRight = right;
     myLeftDereferenced = leftDereferenced;
@@ -77,12 +74,10 @@ public class EqualityCheck {
     return null;
   }
 
-  @Nonnull
   public PsiExpression getLeft() {
     return myLeft;
   }
 
-  @Nonnull
   public PsiExpression getRight() {
     return myRight;
   }

@@ -21,7 +21,7 @@ import com.intellij.jam.view.JamUserResponse;
 import consulo.ide.ServiceManager;
 import consulo.xml.util.xml.DomElement;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 
 /**

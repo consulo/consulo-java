@@ -14,7 +14,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
@@ -26,7 +25,7 @@ public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction im
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }
@@ -46,7 +45,7 @@ public class WrapSwitchRuleStatementsIntoBlockFix extends BaseIntentionAction im
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!myRuleStatement.isValid()) {
       return;
     }

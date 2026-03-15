@@ -24,25 +24,22 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceDiamondWithExplicitTypeArgumentsIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ReplaceDiamondWithExplicitTypeArgumentsIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceDiamondWithExplicitTypeArgumentsIntentionName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new DiamondTypePredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiDiamondTypeUtil.replaceDiamondWithExplicitTypes(element);
     }

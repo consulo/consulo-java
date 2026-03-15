@@ -2,7 +2,6 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents list of elements which goes after {@code case} when it contains patterns, null or default elements
@@ -11,7 +10,6 @@ public interface PsiCaseLabelElementList extends PsiElement {
   /**
    * @return array of the elements contained in the list
    */
-  @Nonnull
   PsiCaseLabelElement[] getElements();
 
   /**

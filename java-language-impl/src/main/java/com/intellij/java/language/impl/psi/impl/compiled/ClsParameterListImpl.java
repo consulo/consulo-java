@@ -25,15 +25,13 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
 
 public class ClsParameterListImpl extends ClsRepositoryPsiElement<PsiParameterListStub> implements PsiParameterList {
-  public ClsParameterListImpl(@Nonnull PsiParameterListStub stub) {
+  public ClsParameterListImpl(PsiParameterListStub stub) {
     super(stub);
   }
 
   @Override
-  @Nonnull
   public PsiParameter[] getParameters() {
     return getStub().getChildrenByType(JavaStubElementTypes.PARAMETER, PsiParameter.ARRAY_FACTORY);
   }
@@ -50,7 +48,7 @@ public class ClsParameterListImpl extends ClsRepositoryPsiElement<PsiParameterLi
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append('(');
     PsiParameter[] parameters = getParameters();
     for (int i = 0; i < parameters.length; i++) {
@@ -61,13 +59,13 @@ public class ClsParameterListImpl extends ClsRepositoryPsiElement<PsiParameterLi
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(getParameters(), SourceTreeToPsiMap.<PsiParameterList>treeToPsiNotNull(element).getParameters());
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitParameterList(this);
     }

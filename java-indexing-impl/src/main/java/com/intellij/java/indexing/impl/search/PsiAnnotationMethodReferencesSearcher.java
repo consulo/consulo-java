@@ -13,7 +13,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.search.ReferencesSearchQueryExecutor;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;
 
@@ -23,7 +22,7 @@ import java.util.function.Predicate;
 @ExtensionImpl
 public class PsiAnnotationMethodReferencesSearcher implements ReferencesSearchQueryExecutor {
     @Override
-    public boolean execute(@Nonnull ReferencesSearch.SearchParameters p, @Nonnull Predicate<? super PsiReference> consumer) {
+    public boolean execute(ReferencesSearch.SearchParameters p, Predicate<? super PsiReference> consumer) {
         PsiElement refElement = p.getElementToSearch();
         if (PsiUtil.isAnnotationMethod(refElement)) {
             PsiMethod method = (PsiMethod)refElement;

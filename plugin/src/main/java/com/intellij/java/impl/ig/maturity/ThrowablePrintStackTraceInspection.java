@@ -24,22 +24,18 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThrowablePrintStackTraceInspection extends BaseInspection {
-    @Nonnull
     public String getID() {
         return "CallToPrintStackTrace";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.printstacktraceCallDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.printstacktraceCallProblemDescriptor().get();
     }
@@ -50,7 +46,7 @@ public class ThrowablePrintStackTraceInspection extends BaseInspection {
 
     private static class ThrowablePrintStackTraceVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             String methodName = MethodCallUtils.getMethodName(expression);
             if (!HardcodedMethodConstants.PRINT_STACK_TRACE.equals(methodName)) {

@@ -8,8 +8,7 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ServiceImpl;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -20,17 +19,16 @@ import java.util.List;
 @ServiceImpl
 public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
     private static final Key<Boolean> INFERRED_ANNOTATION = Key.create("INFERRED_ANNOTATION");
-    @Nonnull
     private final Project myProject;
 
     @Inject
-    public InferredAnnotationsManagerImpl(@Nonnull Project project) {
+    public InferredAnnotationsManagerImpl(Project project) {
         myProject = project;
     }
 
     @Nullable
     @Override
-    public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
+    public PsiAnnotation findInferredAnnotation(PsiModifierListOwner listOwner, String annotationFQN) {
         return myProject.getExtensionPoint(InferredAnnotationProvider.class).computeSafeIfAny(provider -> {
             PsiAnnotation annotation = provider.findInferredAnnotation(listOwner, annotationFQN);
             if (annotation != null) {
@@ -40,9 +38,8 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
         });
     }
 
-    @Nonnull
     @Override
-    public PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner) {
+    public PsiAnnotation[] findInferredAnnotations(PsiModifierListOwner listOwner) {
         List<PsiAnnotation> result = new ArrayList<>();
         myProject.getExtensionPoint(InferredAnnotationProvider.class).forEach(provider -> {
             List<PsiAnnotation> annotations = provider.findInferredAnnotations(listOwner);
@@ -55,11 +52,11 @@ public class InferredAnnotationsManagerImpl extends InferredAnnotationsManager {
     }
 
     @Override
-    public boolean isInferredAnnotation(@Nonnull PsiAnnotation annotation) {
+    public boolean isInferredAnnotation(PsiAnnotation annotation) {
         return annotation.getUserData(INFERRED_ANNOTATION) != null;
     }
 
-    private static void markInferred(@Nonnull PsiAnnotation annotation) {
+    private static void markInferred(PsiAnnotation annotation) {
         annotation.putUserData(INFERRED_ANNOTATION, Boolean.TRUE);
     }
 }

@@ -26,8 +26,7 @@ import consulo.language.psi.PsiElement;
 import consulo.util.collection.Stack;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 
 import static consulo.language.codeStyle.arrangement.std.StdArrangementTokens.Section.END_SECTION;
@@ -47,7 +46,7 @@ public class ArrangementSectionDetector {
   private final Stack<ArrangementSectionRule> myOpenedSections = new Stack<>();
 
   public ArrangementSectionDetector(
-    @Nullable Document document, @Nonnull ArrangementSettings settings, @Nonnull Consumer<ArrangementSectionEntryTemplate> producer) {
+    @Nullable Document document, ArrangementSettings settings, Consumer<ArrangementSectionEntryTemplate> producer) {
     myDocument = document;
     mySettings = settings;
     mySectionEntryProducer = producer;
@@ -58,7 +57,7 @@ public class ArrangementSectionDetector {
    *
    * @return true for section comment, false otherwise
    */
-  public boolean processComment(@Nonnull PsiComment comment) {
+  public boolean processComment(PsiComment comment) {
     TextRange range = comment.getTextRange();
     TextRange expandedRange = myDocument == null ? range : ArrangementUtil.expandToLineIfPossible(range, myDocument);
     TextRange sectionTextRange = new TextRange(expandedRange.getStartOffset(), expandedRange.getEndOffset());
@@ -83,7 +82,7 @@ public class ArrangementSectionDetector {
   }
 
   @Nullable
-  public static ArrangementSectionRule isSectionStartComment(@Nonnull ArrangementSettings settings, @Nonnull String comment) {
+  public static ArrangementSectionRule isSectionStartComment(ArrangementSettings settings, String comment) {
     for (ArrangementSectionRule rule : settings.getSections()) {
       if (rule.getStartComment() != null && StringUtil.equals(comment, rule.getStartComment())) {
         return rule;
@@ -99,7 +98,7 @@ public class ArrangementSectionDetector {
     private String myText;
 
     public ArrangementSectionEntryTemplate(
-      @Nonnull PsiElement element, @Nonnull ArrangementSettingsToken token, @Nonnull TextRange range, @Nonnull String text) {
+      PsiElement element, ArrangementSettingsToken token, TextRange range, String text) {
       myElement = element;
       myToken = token;
       myTextRange = range;

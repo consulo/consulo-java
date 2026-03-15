@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -33,7 +32,6 @@ public interface PsiPackageAccessibilityStatement extends PsiStatement {
     OPENS
   }
 
-  @Nonnull
   Role getRole();
 
   @Nullable
@@ -42,9 +40,7 @@ public interface PsiPackageAccessibilityStatement extends PsiStatement {
   @Nullable
   String getPackageName();
 
-  @Nonnull
   Iterable<PsiJavaModuleReferenceElement> getModuleReferences();
 
-  @Nonnull
   List<String> getModuleNames();
 }

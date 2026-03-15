@@ -8,7 +8,6 @@ import com.intellij.java.language.psi.PsiTypeElement;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 
@@ -19,7 +18,7 @@ public class JavaExpressionContextType extends JavaCodeContextType implements Ja
   }
 
   @Override
-  protected boolean isInContext(@Nonnull PsiElement element) {
+  protected boolean isInContext(PsiElement element) {
     return isExpressionContext(element);
   }
 

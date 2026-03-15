@@ -30,7 +30,6 @@ import consulo.ui.image.Image;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 public class LabelRenderer extends TypeRenderer implements ValueLabelRenderer, OnDemandRenderer {
@@ -94,7 +93,6 @@ public class LabelRenderer extends TypeRenderer implements ValueLabelRenderer, O
         return result;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getLinkText() {
         return LocalizeValue.of("… " + getLabelExpression().getText());

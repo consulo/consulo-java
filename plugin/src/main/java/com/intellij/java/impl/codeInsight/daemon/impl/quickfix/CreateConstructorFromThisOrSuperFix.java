@@ -36,7 +36,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
@@ -56,7 +55,6 @@ public abstract class CreateConstructorFromThisOrSuperFix extends CreateFromUsag
         myMethodCall = methodCall;
     }
 
-    @NonNls
     protected abstract String getSyntheticMethodName();
 
     @Override

@@ -23,17 +23,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TransientFieldNotInitializedInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.transientFieldNotInitializedDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.transientFieldNotInitializedProblemDescriptor().get();
     }
@@ -65,7 +62,7 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
             registerFieldError(field);
         }
 
-        private static boolean isInitializedInConstructors(@Nonnull PsiField field, @Nonnull PsiClass aClass) {
+        private static boolean isInitializedInConstructors(PsiField field, PsiClass aClass) {
             PsiMethod[] constructors = aClass.getConstructors();
             if (constructors.length == 0) {
                 return false;
@@ -79,7 +76,7 @@ public class TransientFieldNotInitializedInspection extends BaseInspection {
             return true;
         }
 
-        private static boolean isInitializedInInitializer(@Nonnull PsiField field, @Nonnull PsiClass aClass) {
+        private static boolean isInitializedInInitializer(PsiField field, PsiClass aClass) {
             PsiClassInitializer[] initializers = aClass.getInitializers();
             for (PsiClassInitializer initializer : initializers) {
                 if (initializer.hasModifierProperty(PsiModifier.STATIC)) {

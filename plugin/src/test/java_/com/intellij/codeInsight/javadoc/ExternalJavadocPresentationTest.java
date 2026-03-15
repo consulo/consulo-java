@@ -24,8 +24,6 @@ import java.io.StringReader;
 
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
 import consulo.virtualFileSystem.LocalFileSystem;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import consulo.language.impl.internal.psi.LoadTextUtil;
 import consulo.project.Project;
@@ -40,7 +38,6 @@ public abstract class ExternalJavadocPresentationTest extends LightCodeInsightTe
 {
 	private static final String TEST_ROOT = "/codeInsight/externalJavadoc/";
 
-	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{
@@ -64,7 +61,7 @@ public abstract class ExternalJavadocPresentationTest extends LightCodeInsightTe
 		doTest("java/lang/package-summary.html", "packageSummary/util/page.html", "packageSummary/util/expected.html");
 	}
 
-	private void doTest(@NonNls String url, @NonNls String pageText, @NonNls String expected) throws Exception
+	private void doTest(String url, String pageText, String expected) throws Exception
 	{
 		String basePath = getTestDataPath() + TEST_ROOT;
 		VirtualFile pageTextFile = LocalFileSystem.getInstance().findFileByPath(basePath + pageText);

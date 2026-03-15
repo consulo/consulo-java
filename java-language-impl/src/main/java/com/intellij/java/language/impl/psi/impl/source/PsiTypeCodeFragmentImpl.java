@@ -17,8 +17,6 @@ package com.intellij.java.language.impl.psi.impl.source;
 
 import static consulo.util.lang.BitUtil.isSet;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import com.intellij.java.language.psi.JavaCodeFragmentFactory;
@@ -45,7 +43,7 @@ public class PsiTypeCodeFragmentImpl extends PsiCodeFragmentImpl implements PsiT
 	private final boolean myAllowDisjunction;
 	private final boolean myAllowConjunction;
 
-	public PsiTypeCodeFragmentImpl(final Project project, final boolean isPhysical, @NonNls final String name, final CharSequence text, final int flags, PsiElement context)
+	public PsiTypeCodeFragmentImpl(final Project project, final boolean isPhysical, final String name, final CharSequence text, final int flags, PsiElement context)
 	{
 		super(project, isSet(flags, JavaCodeFragmentFactory.ALLOW_INTERSECTION) ? JavaElementType.TYPE_WITH_CONJUNCTIONS_TEXT : JavaElementType.TYPE_WITH_DISJUNCTIONS_TEXT, isPhysical, name, text,
 				context);
@@ -62,7 +60,6 @@ public class PsiTypeCodeFragmentImpl extends PsiCodeFragmentImpl implements PsiT
 	}
 
 	@Override
-	@Nonnull
 	public PsiType getType() throws TypeSyntaxException, NoTypeException
 	{
 		class MyTypeSyntaxException extends RuntimeException

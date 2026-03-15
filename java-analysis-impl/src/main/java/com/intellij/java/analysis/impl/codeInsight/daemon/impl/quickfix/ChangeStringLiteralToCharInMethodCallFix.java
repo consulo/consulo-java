@@ -30,8 +30,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,7 +44,6 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
         myCall = methodCall;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public LocalizeValue getText() {
@@ -59,12 +57,12 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     }
 
     @Override
-    public boolean isAvailable(@Nonnull final Project project, final Editor editor, final PsiFile file) {
+    public boolean isAvailable(final Project project, final Editor editor, final PsiFile file) {
         return myCall.isValid() && myLiteral.isValid() && myCall.getManager().isInProject(myCall);
     }
 
     @Override
-    public void invoke(@Nonnull final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
+    public void invoke(final Project project, final Editor editor, final PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -99,9 +97,9 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     }
 
     public static void registerFixes(
-        @Nonnull PsiMethod[] candidates,
-        @Nonnull PsiConstructorCall call,
-        @Nonnull HighlightInfo.Builder hlBuilder
+        PsiMethod[] candidates,
+        PsiConstructorCall call,
+        HighlightInfo.Builder hlBuilder
     ) {
         Set<PsiLiteralExpression> literals = new HashSet<>();
         if (call.getArgumentList() == null) {
@@ -117,9 +115,9 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     }
 
     public static void registerFixes(
-        @Nonnull CandidateInfo[] candidates,
-        @Nonnull PsiMethodCallExpression methodCall,
-        @Nullable HighlightInfo.Builder hlBuilder
+        CandidateInfo[] candidates,
+        PsiMethodCallExpression methodCall,
+        HighlightInfo.@Nullable Builder hlBuilder
     ) {
         if (hlBuilder == null) {
             return;
@@ -138,9 +136,9 @@ public class ChangeStringLiteralToCharInMethodCallFix implements SyntheticIntent
     }
 
     private static void processLiterals(
-        @Nonnull Set<PsiLiteralExpression> literals,
-        @Nonnull PsiCall call,
-        @Nonnull HighlightInfo.Builder hlBuilder
+        Set<PsiLiteralExpression> literals,
+        PsiCall call,
+        HighlightInfo.Builder hlBuilder
     ) {
         for (PsiLiteralExpression literal : literals) {
             hlBuilder.registerFix(new ChangeStringLiteralToCharInMethodCallFix(literal, call));

@@ -32,7 +32,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -55,7 +54,7 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor) {
             ((JavaElementVisitor) visitor).visitEnumConstant(this);
         }
@@ -74,7 +73,6 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
         return (PsiEnumConstantInitializer) getStubOrPsiChild(JavaStubElementTypes.ENUM_CONSTANT_INITIALIZER);
     }
 
-    @Nonnull
     @Override
     public PsiEnumConstantInitializer getOrCreateInitializingClass() {
         final PsiEnumConstantInitializer initializingClass = getInitializingClass();
@@ -113,12 +111,11 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
     }
 
     @Override
-    public boolean hasModifierProperty(@Nonnull String name) {
+    public boolean hasModifierProperty(String name) {
         return PsiModifier.PUBLIC.equals(name) || PsiModifier.STATIC.equals(name) || PsiModifier.FINAL.equals(name);
     }
 
     @Override
-    @Nonnull
     public PsiType getType() {
         return JavaPsiFacade.getInstance(getProject()).getElementFactory().createType(getContainingClass());
     }
@@ -158,13 +155,11 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
     }
 
     @Override
-    @Nonnull
     public JavaResolveResult[] multiResolve(boolean incompleteCode) {
         return myReference.multiResolve(incompleteCode);
     }
 
     @Override
-    @Nonnull
     public JavaResolveResult resolveMethodGenerics() {
         PsiClass containingClass = getContainingClass();
         LOG.assertTrue(containingClass != null);
@@ -173,13 +168,11 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
     }
 
     @Override
-    @Nonnull
     public PsiIdentifier getNameIdentifier() {
         return (PsiIdentifier) calcTreeElement().findChildByRoleAsPsiElement(ChildRole.NAME);
     }
 
     @Override
-    @Nonnull
     public String getName() {
         final PsiFieldStub stub = getStub();
         if (stub != null) {
@@ -189,7 +182,7 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
     }
 
     @Override
-    public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+    public PsiElement setName(String name) throws IncorrectOperationException {
         PsiImplUtil.setName(getNameIdentifier(), name);
         return this;
     }
@@ -245,16 +238,15 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
         }
 
         @Override
-        public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+        public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
             throw new IncorrectOperationException("Invalid operation");
         }
 
         @Override
-        public void processVariants(@Nonnull PsiScopeProcessor processor) {
+        public void processVariants(PsiScopeProcessor processor) {
         }
 
         @Override
-        @Nonnull
         public JavaResolveResult[] multiResolve(boolean incompleteCode) {
             final JavaPsiFacade facade = JavaPsiFacade.getInstance(getProject());
             PsiClassType type = facade.getElementFactory().createType(getContainingClass());
@@ -262,7 +254,6 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
         }
 
         @Override
-        @Nonnull
         public JavaResolveResult advancedResolve(boolean incompleteCode) {
             final JavaResolveResult[] results = multiResolve(incompleteCode);
             if (results.length == 1) {
@@ -277,7 +268,6 @@ public class PsiEnumConstantImpl extends JavaStubPsiElement<PsiFieldStub> implem
         }
 
         @Override
-        @Nonnull
         public String getCanonicalText() {
             return getContainingClass().getName();
         }

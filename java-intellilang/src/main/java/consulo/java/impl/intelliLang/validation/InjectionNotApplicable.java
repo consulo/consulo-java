@@ -30,9 +30,7 @@ import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class InjectionNotApplicable extends LocalInspectionTool {
@@ -43,7 +41,6 @@ public class InjectionNotApplicable extends LocalInspectionTool {
     return JavaLanguage.INSTANCE;
   }
 
-  @Nonnull
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.ERROR;
   }
@@ -52,18 +49,15 @@ public class InjectionNotApplicable extends LocalInspectionTool {
     return true;
   }
 
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Injection Annotation not applicable");
   }
 
-  @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final String annotationName =
         Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationClass();
@@ -104,8 +98,6 @@ public class InjectionNotApplicable extends LocalInspectionTool {
     holder.registerProblem(annotation, "Language Injection is only applicable to elements of type String", new RemoveAnnotationFix(this));
   }
 
-  @Nonnull
-  @NonNls
   public String getShortName() {
     return "InjectionNotApplicable";
   }

@@ -24,12 +24,11 @@ import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerBuilder;
 import consulo.process.cmd.GeneralCommandLine;
 
-import jakarta.annotation.Nonnull;
 
 public abstract class JavaCommandLineState extends CommandLineState implements JavaCommandLine {
   private OwnJavaParameters myParams;
 
-  protected JavaCommandLineState(@Nonnull ExecutionEnvironment environment) {
+  protected JavaCommandLineState(ExecutionEnvironment environment) {
     super(environment);
   }
 
@@ -45,18 +44,17 @@ public abstract class JavaCommandLineState extends CommandLineState implements J
     myParams = null;
   }
 
-  protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+  protected void buildProcessHandler(ProcessHandlerBuilder builder) throws ExecutionException {
     if (ansiColoringEnabled()) {
       builder.colored();
     }
   }
 
-  protected void setupProcessHandler(@Nonnull ProcessHandler handler) {
+  protected void setupProcessHandler(ProcessHandler handler) {
     ProcessTerminatedListener.attach(handler);
   }
 
   @Override
-  @Nonnull
   protected final ProcessHandler startProcess() throws ExecutionException {
     ProcessHandlerBuilder builder = ProcessHandlerBuilder.create(createCommandLine());
     buildProcessHandler(builder);

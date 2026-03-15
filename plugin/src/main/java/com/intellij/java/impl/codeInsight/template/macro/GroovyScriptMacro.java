@@ -24,7 +24,6 @@ import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.macro.Macro;
-import jakarta.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -45,7 +44,7 @@ public class GroovyScriptMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     if (params.length == 0) return null;
     Object o = runIt(params, context);
     if (o != null) return new TextResult(o.toString());
@@ -93,12 +92,12 @@ public class GroovyScriptMacro extends Macro {
   }
 
   @Override
-  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     Object o = runIt(params, context);
     if (o != null) {
       Set<LookupElement> set = new LinkedHashSet<>();

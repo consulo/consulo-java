@@ -44,8 +44,7 @@ import consulo.usage.UsageViewUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -94,9 +93,8 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
         }
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         PsiElement[] elements = new PsiElement[myFilesToMove.size()];
         PsiFile[] classes = PsiUtilCore.toPsiFileArray(myFilesToMove.keySet());
         System.arraycopy(classes, 0, elements, 0, classes.length);
@@ -107,7 +105,6 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
         return RefactoringUIUtil.getDescription(getTargetDirectory(null).getTargetDirectory(), false);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public UsageInfo[] findUsages() {
@@ -120,7 +117,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         for (PsiFile psiFile : myFilesToMove.keySet()) {
             try {
@@ -137,12 +134,12 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     }
 
     @Override
-    protected void refreshElements(@Nonnull PsiElement[] elements) {
+    protected void refreshElements(PsiElement[] elements) {
     }
 
     @Override
     @RequiredWriteAction
-    public void performRefactoring(@Nonnull UsageInfo[] usages) {
+    public void performRefactoring(UsageInfo[] usages) {
         //try to create all directories beforehand
         try {
             //top level directories should be created even if they are empty
@@ -226,7 +223,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
         Map<PsiFile, TargetDirectoryWrapper> files2Move,
         PsiDirectory directory,
         PsiDirectory rootDirectory,
-        @Nonnull TargetDirectoryWrapper targetDirectory
+        TargetDirectoryWrapper targetDirectory
     ) {
         PsiElement[] children = directory.getChildren();
         String relativePath = VirtualFileUtil.getRelativePath(directory.getVirtualFile(), rootDirectory.getVirtualFile(), '/');
@@ -244,7 +241,6 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
         }
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.movingDirectoriesCommand();

@@ -35,23 +35,19 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThrowsRuntimeExceptionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.throwsRuntimeExceptionDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.throwsRuntimeExceptionProblemDescriptor().get();
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         String exceptionName = (String) infos[0];
@@ -72,7 +68,6 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
             myExceptionName = exceptionName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.throwsRuntimeExceptionMoveQuickfix(myExceptionName);
@@ -120,7 +115,7 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
             element.delete();
         }
 
-        public static boolean isApplicable(@Nonnull PsiJavaCodeReferenceElement reference) {
+        public static boolean isApplicable(PsiJavaCodeReferenceElement reference) {
             PsiElement parent = reference.getParent();
             PsiElement grandParent = parent.getParent();
             if (!(grandParent instanceof PsiMethod)) {
@@ -167,7 +162,6 @@ public class ThrowsRuntimeExceptionInspection extends BaseInspection {
             myClassName = className;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.throwsRuntimeExceptionQuickfix(myClassName);

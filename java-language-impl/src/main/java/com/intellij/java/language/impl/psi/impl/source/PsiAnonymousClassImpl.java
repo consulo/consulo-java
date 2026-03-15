@@ -29,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SoftReference;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousClass {
   private SoftReference<PsiClassType> myCachedBaseType;
@@ -61,7 +60,6 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
   }
 
   @Override
-  @Nonnull
   public PsiJavaCodeReferenceElement getBaseClassReference() {
     final PsiElement baseRef = getFirstChild();
     assert baseRef instanceof PsiJavaCodeReferenceElement : getText();
@@ -69,7 +67,6 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
   }
 
   @Override
-  @Nonnull
   public PsiClassType getBaseClassType() {
     final PsiClassStub stub = getGreenStub();
     if (stub == null) {
@@ -133,7 +130,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return name.equals(PsiModifier.FINAL);
   }
 
@@ -178,7 +175,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitAnonymousClass(this);
     } else {
@@ -191,7 +188,7 @@ public class PsiAnonymousClassImpl extends PsiClassImpl implements PsiAnonymousC
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor, @Nonnull ResolveState state, PsiElement lastParent, @Nonnull PsiElement place) {
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
     if (lastParent instanceof PsiExpressionList) {
       return true;
     }

@@ -26,10 +26,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.lang.String;
 import java.util.HashSet;
 import java.util.Set;
@@ -197,7 +195,6 @@ public class AnnotationUtilEx {
    * String and as a Set. This is done for performance reasons because the Set is required by the
    * {@link AnnotationUtil} utility class and allows to avoid unnecessary object constructions.
    */
-  @Nonnull
   public static PsiAnnotation[] getAnnotationFrom(PsiModifierListOwner owner,
                                                   Pair<String, ? extends Set<String>> annotationName,
                                                   boolean allowIndirect,
@@ -244,8 +241,8 @@ public class AnnotationUtilEx {
     return PsiAnnotation.EMPTY_ARRAY;
   }
 
-  public static PsiAnnotation[] getAnnotationFrom(@Nonnull PsiModifierListOwner owner,
-                                                  @Nonnull Pair<String, ? extends Set<String>> annotationName,
+  public static PsiAnnotation[] getAnnotationFrom(PsiModifierListOwner owner,
+                                                  Pair<String, ? extends Set<String>> annotationName,
                                                   boolean allowIndirect) {
     return getAnnotationFrom(owner, annotationName, allowIndirect, true);
   }
@@ -256,7 +253,7 @@ public class AnnotationUtilEx {
    * it finds.
    */
   @Nullable
-  public static String calcAnnotationValue(PsiAnnotation[] annotation, @NonNls String attr) {
+  public static String calcAnnotationValue(PsiAnnotation[] annotation, String attr) {
     for (PsiAnnotation psiAnnotation : annotation) {
       final String value = calcAnnotationValue(psiAnnotation, attr);
       if (value != null) return value;
@@ -265,7 +262,7 @@ public class AnnotationUtilEx {
   }
 
   @Nullable
-  public static String calcAnnotationValue(@Nonnull PsiAnnotation annotation, @NonNls String attr) {
+  public static String calcAnnotationValue(PsiAnnotation annotation, String attr) {
     PsiElement value = annotation.findAttributeValue(attr);
     Object o = CONSTANT_EVALUATION_HELPER.computeConstantExpression(value);
     if (o instanceof String) {
@@ -279,7 +276,7 @@ public class AnnotationUtilEx {
    *
    * @see AnnotationUtil#isAnnotated(PsiModifierListOwner, String, boolean)
    */
-  private static PsiAnnotation[] getAnnotations(@Nonnull PsiModifierListOwner listOwner, boolean inHierarchy) {
+  private static PsiAnnotation[] getAnnotations(PsiModifierListOwner listOwner, boolean inHierarchy) {
     final PsiModifierList modifierList = listOwner.getModifierList();
     if (modifierList == null) {
       return PsiAnnotation.EMPTY_ARRAY;

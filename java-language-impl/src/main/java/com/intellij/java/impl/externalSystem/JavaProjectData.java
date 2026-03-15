@@ -24,8 +24,7 @@ import consulo.externalSystem.service.project.AbstractExternalEntityData;
 import consulo.externalSystem.util.ExternalSystemApiUtil;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,7 +34,6 @@ import java.util.regex.Pattern;
  */
 public class JavaProjectData extends AbstractExternalEntityData {
 
-  @Nonnull
   public static final Key<JavaProjectData> KEY = Key.create(JavaProjectData.class, ProjectKeys.PROJECT.getProcessingWeight() + 1);
 
   private static final Logger LOG = Logger.getInstance(JavaProjectData.class);
@@ -46,34 +44,29 @@ public class JavaProjectData extends AbstractExternalEntityData {
   private static final JavaSdkVersion DEFAULT_JDK_VERSION    = JavaSdkVersion.JDK_1_6;
   private static final Pattern        JDK_VERSION_PATTERN    = Pattern.compile(".*1\\.(\\d+).*");
 
-  @Nonnull
   private JavaSdkVersion myJdkVersion    = DEFAULT_JDK_VERSION;
-  @Nonnull
   private LanguageLevel  myLanguageLevel = DEFAULT_LANGUAGE_LEVEL;
 
-  @Nonnull
   private  String myCompileOutputPath;
 
-  public JavaProjectData(@Nonnull ProjectSystemId owner, @Nonnull String compileOutputPath) {
+  public JavaProjectData(ProjectSystemId owner, String compileOutputPath) {
     super(owner);
     myCompileOutputPath = compileOutputPath;
   }
 
-  @Nonnull
   public String getCompileOutputPath() {
     return myCompileOutputPath;
   }
 
-  public void setCompileOutputPath(@Nonnull String compileOutputPath) {
+  public void setCompileOutputPath(String compileOutputPath) {
     myCompileOutputPath = ExternalSystemApiUtil.toCanonicalPath(compileOutputPath);
   }
 
-  @Nonnull
   public JavaSdkVersion getJdkVersion() {
     return myJdkVersion;
   }
 
-  public void setJdkVersion(@Nonnull JavaSdkVersion jdkVersion) {
+  public void setJdkVersion(JavaSdkVersion jdkVersion) {
     myJdkVersion = jdkVersion;
   }
 
@@ -121,12 +114,11 @@ public class JavaProjectData extends AbstractExternalEntityData {
     return false;
   }
 
-  @Nonnull
   public LanguageLevel getLanguageLevel() {
     return myLanguageLevel;
   }
 
-  public void setLanguageLevel(@Nonnull LanguageLevel level) {
+  public void setLanguageLevel(LanguageLevel level) {
     myLanguageLevel = level;
   }
 

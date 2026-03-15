@@ -41,12 +41,10 @@ import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ThreeState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nls;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -62,7 +60,7 @@ public final class TrackingRunner extends DataFlowRunner {
     private final List<TrackingDfaMemoryState> killedStates = new ArrayList<>();
 
     private TrackingRunner(
-        @Nonnull PsiElement context,
+        PsiElement context,
         PsiExpression expression,
         boolean unknownMembersAreNullable,
         boolean ignoreAssertions
@@ -99,15 +97,13 @@ public final class TrackingRunner extends DataFlowRunner {
         });
     }
 
-    @Nonnull
     @Override
     protected DfaMemoryState createMemoryState() {
         return new TrackingDfaMemoryState(getFactory());
     }
 
     @Override
-    @Nonnull
-    protected DfaInstructionState[] acceptInstruction(@Nonnull InstructionVisitor visitor, @Nonnull DfaInstructionState instructionState) {
+    protected DfaInstructionState[] acceptInstruction(InstructionVisitor visitor, DfaInstructionState instructionState) {
         Instruction instruction = instructionState.getInstruction();
         TrackingDfaMemoryState memState = (TrackingDfaMemoryState)instructionState.getMemoryState().createCopy();
         DfaInstructionState[] states = super.acceptInstruction(visitor, instructionState);
@@ -235,7 +231,6 @@ public final class TrackingRunner extends DataFlowRunner {
     }
 
     public abstract static class DfaProblemType {
-        @Nonnull
         public LocalizeValue getMessage() {
             return LocalizeValue.ofNullable(toString());
         }
@@ -257,26 +252,24 @@ public final class TrackingRunner extends DataFlowRunner {
 
     public static class CauseItem {
         private static final String PLACE_POINTER = "___PLACE___";
-        @Nonnull
         final List<CauseItem> myChildren;
-        @Nonnull
         final DfaProblemType myProblem;
         @Nullable
         final SmartPsiFileRange myTarget;
 
-        private CauseItem(@Nonnull List<CauseItem> children, @Nonnull DfaProblemType problem, @Nullable SmartPsiFileRange target) {
+        private CauseItem(List<CauseItem> children, DfaProblemType problem, @Nullable SmartPsiFileRange target) {
             myChildren = children;
             myProblem = problem;
             myTarget = target;
         }
 
         @RequiredReadAction
-        CauseItem(@Nonnull LocalizeValue problem, @Nullable PsiElement target) {
+        CauseItem(LocalizeValue problem, @Nullable PsiElement target) {
             this(new CustomDfaProblemType(problem), target);
         }
 
         @RequiredReadAction
-        CauseItem(@Nonnull DfaProblemType problem, @Nullable PsiElement target) {
+        CauseItem(DfaProblemType problem, @Nullable PsiElement target) {
             myChildren = new ArrayList<>();
             myProblem = problem;
             if (target != null) {
@@ -289,12 +282,12 @@ public final class TrackingRunner extends DataFlowRunner {
         }
 
         @RequiredReadAction
-        CauseItem(@Nonnull LocalizeValue problem, @Nonnull MemoryStateChange change) {
+        CauseItem(LocalizeValue problem, MemoryStateChange change) {
             this(new CustomDfaProblemType(problem), change);
         }
 
         @RequiredReadAction
-        CauseItem(@Nonnull DfaProblemType problem, @Nonnull MemoryStateChange change) {
+        CauseItem(DfaProblemType problem, MemoryStateChange change) {
             this(problem, change.getExpression());
         }
 
@@ -312,7 +305,6 @@ public final class TrackingRunner extends DataFlowRunner {
         }
 
         private
-        @Nls
         String getProblemName() {
             return myProblem.toString();
         }
@@ -470,7 +462,6 @@ public final class TrackingRunner extends DataFlowRunner {
             return new CauseItem[0];
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getMessage() {
             return JavaAnalysisLocalize.dfaFindCauseCastMayFail();
@@ -488,7 +479,6 @@ public final class TrackingRunner extends DataFlowRunner {
             return new CauseItem[0];
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getMessage() {
             return JavaAnalysisLocalize.dfaFindCauseMayBeNull();
@@ -504,7 +494,6 @@ public final class TrackingRunner extends DataFlowRunner {
                 : super.findCauses(runner, expression, history);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getMessage() {
             return JavaAnalysisLocalize.dfaFindCauseCallAlwaysFails();
@@ -514,7 +503,6 @@ public final class TrackingRunner extends DataFlowRunner {
     static class PossibleExecutionDfaProblemType extends DfaProblemType {
         boolean myComplete = true;
 
-        @Nonnull
         @Override
         public LocalizeValue getMessage() {
             return myComplete ?
@@ -524,14 +512,12 @@ public final class TrackingRunner extends DataFlowRunner {
     }
 
     static class RangeDfaProblemType extends DfaProblemType {
-        @Nonnull
         final LocalizeValue myTemplate;
-        @Nonnull
         final LongRangeSet myRangeSet;
         @Nullable
         final PsiPrimitiveType myType;
 
-        RangeDfaProblemType(@Nonnull LocalizeValue template, @Nonnull LongRangeSet set, @Nullable PsiPrimitiveType type) {
+        RangeDfaProblemType(LocalizeValue template, LongRangeSet set, @Nullable PsiPrimitiveType type) {
             myTemplate = template;
             myRangeSet = set;
             myType = type;
@@ -547,7 +533,6 @@ public final class TrackingRunner extends DataFlowRunner {
                 : super.tryMerge(other);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getMessage() {
             return LocalizeValue.of(String.format(myTemplate.get(), myRangeSet.getPresentationText(myType)));
@@ -567,7 +552,6 @@ public final class TrackingRunner extends DataFlowRunner {
             return runner.findConstantValueCause(expression, history, myValue);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getMessage() {
             return JavaAnalysisLocalize.dfaFindCauseValueIsAlwaysTheSame(myValue);
@@ -581,14 +565,12 @@ public final class TrackingRunner extends DataFlowRunner {
             myMessage = message;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getMessage() {
             return myMessage;
         }
     }
 
-    @Nonnull
     @RequiredReadAction
     private CauseItem[] findConstantValueCause(PsiExpression expression, MemoryStateChange history, Object expectedValue) {
         if (expression instanceof PsiLiteralExpression) {
@@ -635,7 +617,6 @@ public final class TrackingRunner extends DataFlowRunner {
         return new CauseItem[0];
     }
 
-    @Nonnull
     @Contract("_, _ -> new")
     @RequiredReadAction
     private static CauseItem createAssignmentCause(AssignInstruction instruction, DfaValue target) {
@@ -937,13 +918,11 @@ public final class TrackingRunner extends DataFlowRunner {
         return null;
     }
 
-    @Nonnull
     @RequiredReadAction
     private CauseItem[] findRelationCause(RelationType relationType, MemoryStateChange leftChange, MemoryStateChange rightChange) {
         return findRelationCause(relationType, leftChange, leftChange.myTopOfStack, rightChange, rightChange.myTopOfStack);
     }
 
-    @Nonnull
     @RequiredReadAction
     private CauseItem[] findRelationCause(
         RelationType relationType,
@@ -1496,7 +1475,6 @@ public final class TrackingRunner extends DataFlowRunner {
         return null;
     }
 
-    @Nonnull
     private static LocalizeValue getContractKind(PsiCallExpression call) {
         PsiMethod method = call.resolveMethod();
         if (method == null || JavaMethodContractUtil.hasExplicitContractAnnotation(method)) {
@@ -1512,8 +1490,7 @@ public final class TrackingRunner extends DataFlowRunner {
         return JavaAnalysisLocalize.dfaFindCauseContractKindHardCoded();
     }
 
-    @Nonnull
-    private ThreeState contractApplies(@Nonnull PsiMethodCallExpression call, @Nonnull MethodContract contract) {
+    private ThreeState contractApplies(PsiMethodCallExpression call, MethodContract contract) {
         List<ContractValue> conditions = contract.getConditions();
         for (ContractValue condition : conditions) {
             DfaCondition cond = condition.fromCall(getFactory(), call);
@@ -1527,13 +1504,12 @@ public final class TrackingRunner extends DataFlowRunner {
         return ThreeState.UNSURE;
     }
 
-    @Nonnull
     @RequiredReadAction
     private CauseItem fromSingleContract(
-        @Nonnull MemoryStateChange history,
-        @Nonnull PsiMethodCallExpression call,
-        @Nonnull PsiMethod method,
-        @Nonnull MethodContract contract
+        MemoryStateChange history,
+        PsiMethodCallExpression call,
+        PsiMethod method,
+        MethodContract contract
     ) {
         List<ContractValue> conditions = contract.getConditions();
         String conditionsText = StringUtil.join(
@@ -1584,7 +1560,7 @@ public final class TrackingRunner extends DataFlowRunner {
     }
 
     @RequiredReadAction
-    private static CauseItem findRangeCause(MemoryStateChange factUse, DfaValue value, LongRangeSet range, @Nonnull LocalizeValue template) {
+    private static CauseItem findRangeCause(MemoryStateChange factUse, DfaValue value, LongRangeSet range, LocalizeValue template) {
         if (value instanceof DfaVariableValue variableValue) {
             if (variableValue.getDescriptor() instanceof SpecialField specialField && range.equals(LongRangeSet.indexRange())) {
                 switch (specialField) {
@@ -1732,7 +1708,6 @@ public final class TrackingRunner extends DataFlowRunner {
         return item;
     }
 
-    @Nonnull
     public static LocalizeValue getObviouslyNonNullExplanation(PsiExpression arg) {
         if (arg == null || ExpressionUtils.isNullLiteral(arg)) {
             return LocalizeValue.empty();

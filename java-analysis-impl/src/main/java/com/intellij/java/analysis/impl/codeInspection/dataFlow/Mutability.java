@@ -28,8 +28,7 @@ import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.util.Collection;
@@ -57,16 +56,13 @@ public enum Mutability {
      */
     UNMODIFIABLE(JavaAnalysisLocalize.mutabilityUnmodifiable(), "org.jetbrains.annotations.Unmodifiable");
 
-    @Nonnull
     public static final String UNMODIFIABLE_ANNOTATION = UNMODIFIABLE.myAnnotation;
-    @Nonnull
     public static final String UNMODIFIABLE_VIEW_ANNOTATION = UNMODIFIABLE_VIEW.myAnnotation;
-    @Nonnull
     private final LocalizeValue myPresentationName;
     private final String myAnnotation;
     private final Key<CachedValue<PsiAnnotation>> myKey;
 
-    Mutability(@Nonnull LocalizeValue presentationName, String annotation) {
+    Mutability(LocalizeValue presentationName, String annotation) {
         myPresentationName = presentationName;
         myAnnotation = annotation;
         myKey = annotation == null ? null : Key.create(annotation);
@@ -76,7 +72,6 @@ public enum Mutability {
         return DfTypes.customObject(TypeConstraints.TOP, DfaNullability.UNKNOWN, this, null, DfTypes.BOTTOM);
     }
 
-    @Nonnull
     public String getPresentationName() {
         return myPresentationName.get();
     }
@@ -85,7 +80,6 @@ public enum Mutability {
         return this == UNMODIFIABLE || this == UNMODIFIABLE_VIEW;
     }
 
-    @Nonnull
     public Mutability unite(Mutability other) {
         if (this == other) {
             return this;
@@ -102,7 +96,6 @@ public enum Mutability {
         return UNMODIFIABLE;
     }
 
-    @Nonnull
     public Mutability intersect(Mutability other) {
         if (this == other) {
             return this;
@@ -146,8 +139,7 @@ public enum Mutability {
      * @param owner an element to check the mutability
      * @return a Mutability enum value; {@link #UNKNOWN} if cannot be determined or specified element type is not supported.
      */
-    @Nonnull
-    public static Mutability getMutability(@Nonnull PsiModifierListOwner owner) {
+    public static Mutability getMutability(PsiModifierListOwner owner) {
         if (owner instanceof LightElement) {
             return UNKNOWN;
         }
@@ -157,9 +149,8 @@ public enum Mutability {
         );
     }
 
-    @Nonnull
     @RequiredReadAction
-    private static Mutability calcMutability(@Nonnull PsiModifierListOwner owner) {
+    private static Mutability calcMutability(PsiModifierListOwner owner) {
         if (owner instanceof PsiParameter parameter && parameter.getParent() instanceof PsiParameterList list) {
             PsiMethod method = ObjectUtil.tryCast(list.getParent(), PsiMethod.class);
             if (method != null) {

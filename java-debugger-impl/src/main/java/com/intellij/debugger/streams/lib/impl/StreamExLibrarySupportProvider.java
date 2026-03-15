@@ -12,7 +12,6 @@ import consulo.execution.debug.stream.trace.TraceExpressionBuilder;
 import consulo.execution.debug.stream.trace.dsl.impl.DslImpl;
 import consulo.execution.debug.stream.wrapper.StreamChainBuilder;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -22,25 +21,21 @@ public final class StreamExLibrarySupportProvider extends JvmLibrarySupportProvi
     private final LibrarySupport librarySupport = new StreamExLibrarySupport();
     private final DslImpl javaDsl = new DslImpl(new JavaStatementFactory());
 
-    @Nonnull
     @Override
     public String getLanguageId() {
         return "JAVA";
     }
 
-    @Nonnull
     @Override
     public LibrarySupport getLibrarySupport() {
         return librarySupport;
     }
 
-    @Nonnull
     @Override
-    public TraceExpressionBuilder getExpressionBuilder(@Nonnull Project project) {
+    public TraceExpressionBuilder getExpressionBuilder(Project project) {
         return new JavaTraceExpressionBuilder(project, librarySupport.createHandlerFactory(javaDsl), javaDsl);
     }
 
-    @Nonnull
     @Override
     public StreamChainBuilder getChainBuilder() {
         return new JavaStreamChainBuilder(new JavaChainTransformerImpl(), PackageChainDetector.forJavaStreams("one.util.streamex"));

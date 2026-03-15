@@ -28,18 +28,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class AmbiguousMethodCallInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.ambiguousMethodCallDisplayName();
   }
 
-  @Nonnull
   @RequiredReadAction
   protected String buildErrorString(Object... infos) {
     PsiClass superClass = (PsiClass)infos[0];
@@ -54,7 +51,6 @@ public class AmbiguousMethodCallInspection extends BaseInspection {
 
   private static class AmbiguousMethodCallFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.ambiguousMethodCallQuickfix();
     }

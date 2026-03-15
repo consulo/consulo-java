@@ -27,39 +27,36 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiMatcherImpl;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class InsertConstructorCallFix implements SyntheticIntentionAction, HighPriorityAction {
     protected final PsiMethod myConstructor;
     private final String myCall;
 
-    public InsertConstructorCallFix(@Nonnull PsiMethod constructor, String call) {
+    public InsertConstructorCallFix(PsiMethod constructor, String call) {
         myConstructor = constructor;
         myCall = call;
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.insertSuperConstructorCallText(myCall);
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return myConstructor.isValid()
             && myConstructor.getBody() != null
             && myConstructor.getBody().getLBrace() != null
             && myConstructor.getManager().isInProject(myConstructor);
     }
 
-    @Nonnull
     @Override
-    public PsiElement getElementToMakeWritable(@Nonnull PsiFile file) {
+    public PsiElement getElementToMakeWritable(PsiFile file) {
         return myConstructor;
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         PsiStatement superCall =
             JavaPsiFacade.getInstance(myConstructor.getProject()).getElementFactory().createStatementFromText(myCall, null);
 

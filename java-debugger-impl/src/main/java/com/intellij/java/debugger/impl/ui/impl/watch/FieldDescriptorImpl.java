@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
@@ -40,7 +39,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.language.util.IncorrectOperationException;
 import consulo.execution.debug.frame.XValueModifier;
 import consulo.internal.com.sun.jdi.*;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDescriptor
 {
@@ -50,7 +49,7 @@ public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDes
 	private Boolean myIsPrimitive = null;
 	private final boolean myIsStatic;
 
-	public FieldDescriptorImpl(Project project, ObjectReference objRef, @Nonnull Field field)
+	public FieldDescriptorImpl(Project project, ObjectReference objRef, Field field)
 	{
 		super(project);
 		myObject = objRef;
@@ -189,7 +188,7 @@ public class FieldDescriptorImpl extends ValueDescriptorImpl implements FieldDes
 		return new JavaValueModifier(value)
 		{
 			@Override
-			protected void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback)
+			protected void setValueImpl(String expression, XModificationCallback callback)
 			{
 				final DebuggerContextImpl debuggerContext = DebuggerManagerEx.getInstanceEx(getProject()).getContext();
 				FieldDescriptorImpl fieldDescriptor = FieldDescriptorImpl.this;

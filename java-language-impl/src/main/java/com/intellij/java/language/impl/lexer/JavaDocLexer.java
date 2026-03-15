@@ -23,12 +23,11 @@ import consulo.language.lexer.LexerBase;
 import consulo.language.lexer.MergingLexerAdapter;
 import consulo.language.ast.IElementType;
 import consulo.util.lang.CharArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
 public class JavaDocLexer extends MergingLexerAdapter {
-  public JavaDocLexer(@Nonnull LanguageLevel level) {
+  public JavaDocLexer(LanguageLevel level) {
     this(JavaDocTokenTypes.INSTANCE, level.isAtLeast(LanguageLevel.JDK_1_5));
   }
 
@@ -54,7 +53,7 @@ public class JavaDocLexer extends MergingLexerAdapter {
     }
 
     @Override
-    public final void start(@Nonnull CharSequence buffer, int startOffset, int endOffset, int initialState) {
+    public final void start(CharSequence buffer, int startOffset, int endOffset, int initialState) {
       myBuffer = buffer;
       myBufferIndex = startOffset;
       myBufferEndOffset = endOffset;
@@ -68,7 +67,6 @@ public class JavaDocLexer extends MergingLexerAdapter {
       return myState;
     }
 
-    @Nonnull
     @Override
     public CharSequence getBufferSequence() {
       return myBuffer;

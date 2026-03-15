@@ -32,10 +32,9 @@ import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Supplier;
 
@@ -51,7 +50,6 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider 
     myProject = project;
   }
 
-  @Nonnull
   @Override
   public String getId() {
     return "java-sdk-notify";
@@ -60,7 +58,7 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider 
   @RequiredReadAction
   @Nullable
   @Override
-  public EditorNotificationBuilder buildNotification(@Nonnull VirtualFile file, @Nonnull FileEditor fileEditor, @Nonnull Supplier<EditorNotificationBuilder> supplier) {
+  public EditorNotificationBuilder buildNotification(VirtualFile file, FileEditor fileEditor, Supplier<EditorNotificationBuilder> supplier) {
     if (file.getFileType() == JavaClassFileType.INSTANCE) {
       return null;
     }
@@ -91,7 +89,7 @@ public class SetupJDKNotificationProvider implements EditorNotificationProvider 
     return null;
   }
 
-  private static void createPanel(@Nonnull Project project, @Nonnull PsiFile file, EditorNotificationBuilder builder) {
+  private static void createPanel(Project project, PsiFile file, EditorNotificationBuilder builder) {
     builder.withText(LocalizeValue.localizeTODO(JavaCoreBundle.message("module.jdk.not.defined")));
     builder.withAction(LocalizeValue.localizeTODO(JavaCoreBundle.message("module.jdk.setup")), (e) ->
     {

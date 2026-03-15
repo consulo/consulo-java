@@ -6,7 +6,6 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.indexing.search.searches.DirectClassInheritorsSearch;
 import consulo.application.util.function.Processor;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -22,9 +21,9 @@ public class InheritorsStatisticalDataSearch {
    * @param minPercentRatio - head volume
    * @return - search results in relevant ordering (frequency descent)
    */
-  public static List<InheritorsStatisticsSearchResult> search(@Nonnull PsiClass superClass,
-                                                              @Nonnull PsiClass aClass,
-                                                              @Nonnull GlobalSearchScope scope,
+  public static List<InheritorsStatisticsSearchResult> search(PsiClass superClass,
+                                                              PsiClass aClass,
+                                                              GlobalSearchScope scope,
                                                               int minPercentRatio) {
     String superClassName = superClass.getName();
     String aClassName = aClass.getName();

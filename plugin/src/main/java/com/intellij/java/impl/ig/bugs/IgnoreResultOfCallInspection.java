@@ -30,9 +30,7 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +50,6 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
     /**
      * @noinspection PublicField
      */
-    @NonNls
     public String callCheckString = "java.io.InputStream,read," +
         "java.io.InputStream,skip," +
         "java.lang.StringBuffer,toString," +
@@ -72,20 +69,17 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
         parseString(callCheckString, classNames, methodNamePatterns);
     }
 
-    @Nonnull
     @Override
     public String getID() {
         return "ResultOfMethodCallIgnored";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.resultOfMethodCallIgnoredDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiClass containingClass = (PsiClass) infos[0];
         String className = containingClass.getName();
@@ -93,13 +87,13 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
     }
 
     @Override
-    public void readSettings(@Nonnull Element element) throws InvalidDataException {
+    public void readSettings(Element element) throws InvalidDataException {
         super.readSettings(element);
         parseString(callCheckString, classNames, methodNamePatterns);
     }
 
     @Override
-    public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+    public void writeSettings(Element element) throws WriteExternalException {
         callCheckString = formatString(classNames, methodNamePatterns);
         super.writeSettings(element);
     }
@@ -136,7 +130,7 @@ public class IgnoreResultOfCallInspection extends BaseInspection {
     private class IgnoreResultOfCallVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
+        public void visitExpressionStatement(PsiExpressionStatement statement) {
             super.visitExpressionStatement(statement);
             PsiExpression expression = statement.getExpression();
             if (!(expression instanceof PsiMethodCallExpression)) {

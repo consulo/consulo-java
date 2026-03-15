@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiPrimitiveType;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeCastExpression;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class TypeCastInstruction extends ExpressionPushingInstruction<PsiTypeCastExpression> {
   private final PsiExpression myCasted;

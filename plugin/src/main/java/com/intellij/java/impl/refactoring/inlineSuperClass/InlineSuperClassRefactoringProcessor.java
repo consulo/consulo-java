@@ -49,8 +49,7 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -88,15 +87,14 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
         myMemberInfos = members.toArray(new MemberInfo[members.size()]);
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new InlineSuperClassUsageViewDescriptor(mySuperClass);
     }
 
     @Override
     @RequiredReadAction
-    protected void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+    protected void findUsages(List<FixableUsageInfo> usages) {
         JavaPsiFacade facade = JavaPsiFacade.getInstance(myProject);
         PsiElementFactory elementFactory = facade.getElementFactory();
         PsiResolveHelper resolveHelper = facade.getResolveHelper();
@@ -214,7 +212,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         PushDownConflicts pushDownConflicts = new PushDownConflicts(mySuperClass, myMemberInfos);
         for (PsiClass targetClass : myTargetClasses) {
@@ -273,18 +271,18 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         new PushDownProcessor(mySuperClass.getProject(), myMemberInfos, mySuperClass, new DocCommentPolicy(myPolicy)) {
             //push down conflicts are already collected
             @Override
             @RequiredUIAccess
-            protected boolean showConflicts(@Nonnull MultiMap<PsiElement, LocalizeValue> conflicts, UsageInfo[] usages) {
+            protected boolean showConflicts(MultiMap<PsiElement, LocalizeValue> conflicts, UsageInfo[] usages) {
                 return true;
             }
 
             @Override
             @RequiredWriteAction
-            protected void performRefactoring(@Nonnull UsageInfo[] pushDownUsages) {
+            protected void performRefactoring(UsageInfo[] pushDownUsages) {
                 if (myCurrentInheritor != null) {
                     encodeRefs();
                     pushDownToClass(myCurrentInheritor);
@@ -336,7 +334,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
             targetClass.accept(new JavaRecursiveElementWalkingVisitor() {
                 @Override
                 @RequiredReadAction
-                public void visitTypeElement(@Nonnull PsiTypeElement typeElement) {
+                public void visitTypeElement(PsiTypeElement typeElement) {
                     super.visitTypeElement(typeElement);
                     PsiType superClassType = typeElement.getType();
                     if (PsiUtil.resolveClassInType(superClassType) == mySuperClass) {
@@ -350,7 +348,7 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
 
                 @Override
                 @RequiredReadAction
-                public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+                public void visitNewExpression(PsiNewExpression expression) {
                     super.visitNewExpression(expression);
                     PsiType superClassType = expression.getType();
                     if (PsiUtil.resolveClassInType(superClassType) == mySuperClass) {
@@ -408,7 +406,6 @@ public class InlineSuperClassRefactoringProcessor extends FixableUsagesRefactori
         return subst;
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return InlineSuperClassRefactoringHandler.REFACTORING_NAME;

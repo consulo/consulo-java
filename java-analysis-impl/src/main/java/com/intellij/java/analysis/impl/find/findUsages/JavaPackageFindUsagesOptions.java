@@ -3,7 +3,6 @@ package com.intellij.java.analysis.impl.find.findUsages;
 import consulo.find.FindBundle;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 import java.util.LinkedHashSet;
 
 /**
@@ -14,7 +13,7 @@ public class JavaPackageFindUsagesOptions extends JavaFindUsagesOptions {
   public boolean isIncludeSubpackages = true;
   public boolean isSkipPackageStatements = false;
 
-  public JavaPackageFindUsagesOptions(@Nonnull Project project) {
+  public JavaPackageFindUsagesOptions(Project project) {
     super(project);
   }
 

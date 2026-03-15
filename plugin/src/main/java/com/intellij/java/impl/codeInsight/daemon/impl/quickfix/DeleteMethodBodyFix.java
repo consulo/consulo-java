@@ -26,7 +26,6 @@ import com.intellij.java.language.psi.PsiCodeBlock;
 import consulo.language.psi.PsiFile;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -39,18 +38,17 @@ public class DeleteMethodBodyFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.deleteBodyText();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myMethod.isValid() && myMethod.getManager().isInProject(myMethod) && myMethod.getBody() != null;
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myMethod)) return;
     PsiCodeBlock body = myMethod.getBody();
     assert body != null;

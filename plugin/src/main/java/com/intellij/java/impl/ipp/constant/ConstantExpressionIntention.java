@@ -27,28 +27,23 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConstantExpressionIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ConstantExpressionIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         String text = HighlightUtil.getPresentableText(element);
         return IntentionPowerPackLocalize.constantExpressionIntentionName(text);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.constantExpressionIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new ConstantExpressionPredicate();
     }
@@ -57,7 +52,7 @@ public class ConstantExpressionIntention extends MutablyNamedIntention {
     public void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiExpression expression = (PsiExpression) element;
         Object value = ExpressionUtils.computeConstantExpression(expression);
-        @NonNls String newExpression;
+        String newExpression;
         if (value instanceof String) {
             String string = (String) value;
             newExpression = '"' + StringUtil.escapeStringCharacters(string) + '"';

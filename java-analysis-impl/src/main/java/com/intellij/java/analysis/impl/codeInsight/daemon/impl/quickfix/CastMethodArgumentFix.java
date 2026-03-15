@@ -29,7 +29,6 @@ import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 public class CastMethodArgumentFix extends MethodArgumentFix {
   private CastMethodArgumentFix(PsiExpressionList list, int i, PsiType toType, final ArgumentFixerActionFactory factory) {
@@ -37,7 +36,6 @@ public class CastMethodArgumentFix extends MethodArgumentFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     if (myArgList.getExpressions().length == 1) {
       return JavaQuickFixLocalize.castSingleParameterText(JavaHighlightUtil.formatType(myToType));

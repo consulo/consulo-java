@@ -28,21 +28,18 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 @ExtensionImpl
 public class MalformedRegexInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.malformedRegularExpressionDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return infos.length == 0
             ? InspectionGadgetsLocalize.malformedRegularExpressionProblemDescriptor1().get()
@@ -62,7 +59,7 @@ public class MalformedRegexInspection extends BaseInspection {
     private static class MalformedRegexVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {

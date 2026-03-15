@@ -28,15 +28,14 @@ import com.intellij.java.analysis.codeInspection.reference.*;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.inspection.GlobalInspectionContext;
 import consulo.language.editor.inspection.GlobalInspectionTool;
-import jakarta.annotation.Nonnull;
 
 public class UnreferencedFilter extends RefUnreachableFilter {
-  public UnreferencedFilter(@Nonnull GlobalInspectionTool tool, @Nonnull GlobalInspectionContext context) {
+  public UnreferencedFilter(GlobalInspectionTool tool, GlobalInspectionContext context) {
     super(tool, context);
   }
 
   @Override
-  public int getElementProblemCount(@Nonnull RefJavaElement refElement) {
+  public int getElementProblemCount(RefJavaElement refElement) {
     if (refElement instanceof RefParameter) return 0;
     if (refElement.isEntry() || !((RefElementImpl) refElement).isSuspicious() || refElement.isSyntheticJSP()) return 0;
 

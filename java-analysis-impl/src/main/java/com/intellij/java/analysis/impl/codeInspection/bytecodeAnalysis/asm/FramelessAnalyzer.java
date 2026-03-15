@@ -4,7 +4,7 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm;
 import consulo.internal.org.objectweb.asm.tree.*;
 import consulo.internal.org.objectweb.asm.tree.analysis.Analyzer;
 import consulo.internal.org.objectweb.asm.tree.analysis.AnalyzerException;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 

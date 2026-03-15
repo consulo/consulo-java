@@ -29,25 +29,21 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ThreadRunInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.threadRunDisplayName();
   }
 
   @Override
-  @Nonnull
   public String getID() {
     return "CallToThreadRun";
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.threadRunProblemDescriptor().get();
   }
@@ -59,13 +55,12 @@ public class ThreadRunInspection extends BaseInspection {
 
   private static class ThreadRunFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.threadRunReplaceQuickfix();
     }
 
     @Override
-    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
+    public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       PsiElement methodNameIdentifier = descriptor.getPsiElement();
       PsiReferenceExpression methodExpression =
@@ -91,7 +86,7 @@ public class ThreadRunInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();

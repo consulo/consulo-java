@@ -23,7 +23,6 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -34,13 +33,13 @@ import jakarta.annotation.Nonnull;
 public class JavaVersionServiceImpl extends JavaVersionService {
     @Override
     @RequiredReadAction
-    public boolean isAtLeast(@Nonnull PsiElement element, @Nonnull JavaSdkVersion version) {
+    public boolean isAtLeast(PsiElement element, JavaSdkVersion version) {
         return JavaSdkVersionUtil.isAtLeast(element, version);
     }
 
     @Override
     @RequiredReadAction
-    public JavaSdkVersion getJavaSdkVersion(@Nonnull PsiElement element) {
+    public JavaSdkVersion getJavaSdkVersion(PsiElement element) {
         return JavaSdkVersionUtil.getJavaSdkVersion(element);
     }
 }

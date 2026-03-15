@@ -2,7 +2,6 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Map;
@@ -11,23 +10,22 @@ abstract class AbstractControlFlow implements ControlFlow
 {
 	// Low 4 bytes = start; high 4 bytes = end
 	final
-	@Nonnull
 	Map<PsiElement, int[]> myElementToOffsetMap;
 
-	AbstractControlFlow(@Nonnull Map<PsiElement, int[]> map)
+	AbstractControlFlow(Map<PsiElement, int[]> map)
 	{
 		myElementToOffsetMap = map;
 	}
 
 	@Override
-	public int getStartOffset(@Nonnull PsiElement element)
+	public int getStartOffset(PsiElement element)
 	{
 		int[] offsets = myElementToOffsetMap.get(element);
 		return offsets == null ? -1 : offsets[0];
 	}
 
 	@Override
-	public int getEndOffset(@Nonnull PsiElement element)
+	public int getEndOffset(PsiElement element)
 	{
 		int[] offsets = myElementToOffsetMap.get(element);
 		return offsets == null ? -1 : offsets[1];

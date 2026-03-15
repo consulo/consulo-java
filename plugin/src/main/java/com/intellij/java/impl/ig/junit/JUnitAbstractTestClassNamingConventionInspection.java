@@ -27,14 +27,12 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class JUnitAbstractTestClassNamingConventionInspection extends ConventionInspection {
     private static final int DEFAULT_MIN_LENGTH = 12;
     private static final int DEFAULT_MAX_LENGTH = 64;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.junitAbstractTestClassNamingConventionDisplayName();
@@ -51,7 +49,6 @@ public class JUnitAbstractTestClassNamingConventionInspection extends Convention
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         String className = (String) infos[0];
         if (className.length() < getMinLength()) {

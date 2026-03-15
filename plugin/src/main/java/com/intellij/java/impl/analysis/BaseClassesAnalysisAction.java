@@ -28,29 +28,28 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author mike
  */
 public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
-    protected BaseClassesAnalysisAction(@Nonnull LocalizeValue actionText,
-                                        @Nonnull LocalizeValue actionDescription,
-                                        @Nonnull LocalizeValue title,
-                                        @Nonnull LocalizeValue analysisNoon) {
+    protected BaseClassesAnalysisAction(LocalizeValue actionText,
+                                        LocalizeValue actionDescription,
+                                        LocalizeValue title,
+                                        LocalizeValue analysisNoon) {
         super(actionText, actionDescription, title, analysisNoon);
     }
 
     protected abstract void analyzeClasses(Project project, AnalysisScope scope, ProgressIndicator indicator);
 
     @Override
-    protected void analyze(@Nonnull Project project, @Nonnull AnalysisScope scope) {
+    protected void analyze(Project project, AnalysisScope scope) {
         FileDocumentManager.getInstance().saveAllDocuments();
 
         ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject(), true) {
             @RequiredReadAction
             @Override
-            public void run(@Nonnull ProgressIndicator indicator) {
+            public void run(ProgressIndicator indicator) {
                 indicator.setIndeterminate(true);
                 indicator.setTextValue(AnalysisScopeLocalize.checkingClassFiles());
 
@@ -87,7 +86,6 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
 
     private void doAnalyze(Project project, AnalysisScope scope) {
         ProgressManager.getInstance().run(new Task.Backgroundable(project, AnalysisScopeLocalize.analyzingProject(), true) {
-            @Nonnull
             @Override
             public NotificationInfo getNotificationInfo() {
                 return new NotificationInfo(
@@ -98,7 +96,7 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
             }
 
             @Override
-            public void run(@Nonnull ProgressIndicator indicator) {
+            public void run(ProgressIndicator indicator) {
                 analyzeClasses(project, scope, indicator);
             }
         });

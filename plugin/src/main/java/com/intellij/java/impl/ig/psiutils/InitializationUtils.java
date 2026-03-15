@@ -21,8 +21,7 @@ import com.siyeh.ig.psiutils.BoolUtils;
 import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -34,18 +33,18 @@ public class InitializationUtils {
   }
 
   public static boolean methodAssignsVariableOrFails(
-    @Nullable PsiMethod method, @Nonnull PsiVariable variable) {
+    @Nullable PsiMethod method, PsiVariable variable) {
     return methodAssignsVariableOrFails(method, variable, false);
   }
 
   public static boolean expressionAssignsVariableOrFails(
-    @Nullable PsiExpression expression, @Nonnull PsiVariable variable) {
+    @Nullable PsiExpression expression, PsiVariable variable) {
     return expressionAssignsVariableOrFails(expression, variable,
                                             new HashSet(), true);
   }
 
   public static boolean methodAssignsVariableOrFails(
-    @Nullable PsiMethod method, @Nonnull PsiVariable variable,
+    @Nullable PsiMethod method, PsiVariable variable,
     boolean strict) {
     if (method == null) {
       return false;
@@ -56,20 +55,20 @@ public class InitializationUtils {
   }
 
   public static boolean blockAssignsVariableOrFails(
-    @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable) {
+    @Nullable PsiCodeBlock block, PsiVariable variable) {
     return blockAssignsVariableOrFails(block, variable, false);
   }
 
   public static boolean blockAssignsVariableOrFails(
-    @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
+    @Nullable PsiCodeBlock block, PsiVariable variable,
     boolean strict) {
     return blockAssignsVariableOrFails(block, variable,
                                        new HashSet<MethodSignature>(), strict);
   }
 
   private static boolean blockAssignsVariableOrFails(
-    @Nullable PsiCodeBlock block, @Nonnull PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    @Nullable PsiCodeBlock block, PsiVariable variable,
+    Set<MethodSignature> checkedMethods, boolean strict) {
     if (block == null) {
       return false;
     }
@@ -91,7 +90,7 @@ public class InitializationUtils {
 
   private static boolean statementAssignsVariableOrFails(
     @Nullable PsiStatement statement, PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    Set<MethodSignature> checkedMethods, boolean strict) {
     if (statement == null) {
       return false;
     }
@@ -215,17 +214,17 @@ public class InitializationUtils {
   }
 
   public static boolean switchStatementAssignsVariableOrFails(
-    @Nonnull PsiSwitchStatement switchStatement,
-    @Nonnull PsiVariable variable,
+    PsiSwitchStatement switchStatement,
+    PsiVariable variable,
     boolean strict) {
     return switchStatementAssignsVariableOrFails(switchStatement, variable,
                                                  new HashSet(), strict);
   }
 
   private static boolean switchStatementAssignsVariableOrFails(
-    @Nonnull PsiSwitchStatement switchStatement,
-    @Nonnull PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    PsiSwitchStatement switchStatement,
+    PsiVariable variable,
+    Set<MethodSignature> checkedMethods, boolean strict) {
     PsiExpression expression = switchStatement.getExpression();
     if (expressionAssignsVariableOrFails(expression, variable,
                                          checkedMethods, strict)) {
@@ -292,8 +291,8 @@ public class InitializationUtils {
     return false;
   }
 
-  private static boolean tryStatementAssignsVariableOrFails(@Nonnull PsiTryStatement tryStatement, PsiVariable variable,
-                                                            @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+  private static boolean tryStatementAssignsVariableOrFails(PsiTryStatement tryStatement, PsiVariable variable,
+                                                            Set<MethodSignature> checkedMethods, boolean strict) {
     PsiResourceList resourceList = tryStatement.getResourceList();
     if (resourceList != null) {
       List<PsiResourceVariable> resourceVariables = resourceList.getResourceVariables();
@@ -323,9 +322,9 @@ public class InitializationUtils {
   }
 
   private static boolean ifStatementAssignsVariableOrFails(
-    @Nonnull PsiIfStatement ifStatement,
+    PsiIfStatement ifStatement,
     PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods,
+    Set<MethodSignature> checkedMethods,
     boolean strict) {
     PsiExpression condition = ifStatement.getCondition();
     if (expressionAssignsVariableOrFails(condition, variable,
@@ -349,9 +348,9 @@ public class InitializationUtils {
   }
 
   private static boolean doWhileAssignsVariableOrFails(
-    @Nonnull PsiDoWhileStatement doWhileStatement,
+    PsiDoWhileStatement doWhileStatement,
     PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods,
+    Set<MethodSignature> checkedMethods,
     boolean strict) {
     PsiExpression condition = doWhileStatement.getCondition();
     PsiStatement body = doWhileStatement.getBody();
@@ -362,8 +361,8 @@ public class InitializationUtils {
   }
 
   private static boolean whileStatementAssignsVariableOrFails(
-    @Nonnull PsiWhileStatement whileStatement, PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods,
+    PsiWhileStatement whileStatement, PsiVariable variable,
+    Set<MethodSignature> checkedMethods,
     boolean strict) {
     PsiExpression condition = whileStatement.getCondition();
     if (expressionAssignsVariableOrFails(condition, variable,
@@ -381,8 +380,8 @@ public class InitializationUtils {
   }
 
   private static boolean forStatementAssignsVariableOrFails(
-    @Nonnull PsiForStatement forStatement, PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    PsiForStatement forStatement, PsiVariable variable,
+    Set<MethodSignature> checkedMethods, boolean strict) {
     PsiStatement initialization = forStatement.getInitialization();
     if (statementAssignsVariableOrFails(initialization, variable,
                                         checkedMethods, strict)) {
@@ -413,7 +412,7 @@ public class InitializationUtils {
   }
 
   private static boolean expressionAssignsVariableOrFails(@Nullable PsiExpression expression, PsiVariable variable,
-                                                          @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+                                                          Set<MethodSignature> checkedMethods, boolean strict) {
     if (expression == null) {
       return false;
     }
@@ -519,8 +518,8 @@ public class InitializationUtils {
   }
 
   private static boolean newExpressionAssignsVariableOrFails(
-    @Nonnull PsiNewExpression newExpression, PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    PsiNewExpression newExpression, PsiVariable variable,
+    Set<MethodSignature> checkedMethods, boolean strict) {
     PsiExpressionList argumentList = newExpression.getArgumentList();
     if (argumentList != null) {
       PsiExpression[] args = argumentList.getExpressions();
@@ -549,9 +548,9 @@ public class InitializationUtils {
   }
 
   private static boolean methodCallAssignsVariableOrFails(
-    @Nonnull PsiMethodCallExpression callExpression,
+    PsiMethodCallExpression callExpression,
     PsiVariable variable,
-    @Nonnull Set<MethodSignature> checkedMethods, boolean strict) {
+    Set<MethodSignature> checkedMethods, boolean strict) {
     PsiExpressionList argList = callExpression.getArgumentList();
     PsiExpression[] args = argList.getExpressions();
     for (PsiExpression arg : args) {
@@ -606,7 +605,7 @@ public class InitializationUtils {
     return true;
   }
 
-  public static boolean isInitializedInInitializer(@Nonnull PsiField field, @Nonnull PsiClass aClass) {
+  public static boolean isInitializedInInitializer(PsiField field, PsiClass aClass) {
     PsiClassInitializer[] initializers = aClass.getInitializers();
     for (PsiClassInitializer initializer : initializers) {
       if (initializer.hasModifierProperty(PsiModifier.STATIC)) {

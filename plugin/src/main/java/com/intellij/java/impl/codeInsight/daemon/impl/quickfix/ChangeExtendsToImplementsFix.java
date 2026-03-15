@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiKeyword;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * changes 'class a extends b' to 'class a implements b' or vice versa
@@ -38,7 +37,6 @@ public class ChangeExtendsToImplementsFix extends ExtendsListFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return myName;
   }

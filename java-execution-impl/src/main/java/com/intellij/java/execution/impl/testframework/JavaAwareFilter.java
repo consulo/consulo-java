@@ -24,7 +24,6 @@ import consulo.execution.test.Filter;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -34,7 +33,7 @@ public class JavaAwareFilter {
   private JavaAwareFilter() {
   }
 
-  public static Filter METHOD(@Nonnull final Project project, @Nonnull final GlobalSearchScope searchScope) {
+  public static Filter METHOD(final Project project, final GlobalSearchScope searchScope) {
     return new Filter() {
       @Override
       public boolean shouldAccept(final AbstractTestProxy test) {

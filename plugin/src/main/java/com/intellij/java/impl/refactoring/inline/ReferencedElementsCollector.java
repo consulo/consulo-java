@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import consulo.language.psi.*;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 
@@ -41,7 +40,7 @@ public class ReferencedElementsCollector extends JavaRecursiveElementWalkingVisi
     }
   }
 
-  protected void checkAddMember(@Nonnull PsiMember member) {
+  protected void checkAddMember(PsiMember member) {
     myReferencedMembers.add(member);
   }
 }

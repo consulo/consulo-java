@@ -37,8 +37,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +53,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction implements Synth
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) return;
     int offset = editor.getCaretModel().getOffset();
 
@@ -144,7 +143,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction implements Synth
     }
   }
 
-  private static PsiElement getFinallySectionStart(@Nonnull PsiCodeBlock finallyBlock) {
+  private static PsiElement getFinallySectionStart(PsiCodeBlock finallyBlock) {
     PsiElement finallyElement = finallyBlock;
     while (!PsiUtil.isJavaToken(finallyElement, JavaTokenType.FINALLY_KEYWORD) && finallyElement != null) {
       finallyElement = finallyElement.getPrevSibling();
@@ -154,7 +153,7 @@ public class AddExceptionToCatchFix extends BaseIntentionAction implements Synth
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
 
     int offset = editor.getCaretModel().getOffset();

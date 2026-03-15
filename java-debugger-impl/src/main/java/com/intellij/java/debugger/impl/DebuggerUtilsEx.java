@@ -87,11 +87,9 @@ import consulo.util.xml.serializer.JDOMExternalizable;
 import consulo.util.xml.serializer.WriteExternalException;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Attribute;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -152,14 +150,14 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return range;
     }
 
-    public static boolean isAssignableFrom(@Nonnull final String baseQualifiedName, @Nonnull ReferenceType checkedType) {
+    public static boolean isAssignableFrom(final String baseQualifiedName, ReferenceType checkedType) {
         if (CommonClassNames.JAVA_LANG_OBJECT.equals(baseQualifiedName)) {
             return true;
         }
         return getSuperClass(baseQualifiedName, checkedType) != null;
     }
 
-    public static ReferenceType getSuperClass(@Nonnull final String baseQualifiedName, @Nonnull ReferenceType checkedType) {
+    public static ReferenceType getSuperClass(final String baseQualifiedName, ReferenceType checkedType) {
         if (baseQualifiedName.equals(checkedType.name())) {
             return checkedType;
         }
@@ -269,11 +267,11 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return false;
     }
 
-    public static boolean isFiltered(@Nonnull String qName, ClassFilter[] classFilters) {
+    public static boolean isFiltered(String qName, ClassFilter[] classFilters) {
         return isFiltered(qName, Arrays.asList(classFilters));
     }
 
-    public static boolean isFiltered(@Nonnull String qName, List<ClassFilter> classFilters) {
+    public static boolean isFiltered(String qName, List<ClassFilter> classFilters) {
         if (qName.indexOf('[') != -1) {
             return false; //is array
         }
@@ -297,7 +295,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return filters;
     }
 
-    public static void writeFilters(Element parentNode, @NonNls String tagName, ClassFilter[] filters) throws WriteExternalException {
+    public static void writeFilters(Element parentNode, String tagName, ClassFilter[] filters) throws WriteExternalException {
         for (ClassFilter filter : filters) {
             Element element = new Element(tagName);
             parentNode.addContent(element);
@@ -400,7 +398,6 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return elementsEqual(root1, root2);
     }
 
-    @Nonnull
     public static List<Pair<Breakpoint, Event>> getEventDescriptors(@Nullable SuspendContextImpl suspendContext) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         if (suspendContext != null) {
@@ -520,7 +517,6 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return defaultFactory;
     }
 
-    @Nonnull
     public static CodeFragmentFactory findAppropriateCodeFragmentFactory(final TextWithImports text, final PsiElement context) {
         CodeFragmentFactory factory = ReadAction.compute(() -> getCodeFragmentFactory(context, text.getFileType()));
         return new CodeFragmentFactoryContextWrapper(factory);
@@ -546,7 +542,6 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
             return buffer.length() <= pos;
         }
 
-        @NonNls
         String getSignature() {
             if (eof()) {
                 return "";
@@ -642,7 +637,6 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return new SigReader(s).getSignature();
     }
 
-    @Nonnull
     public static List<Location> allLineLocations(Method method) {
         try {
             return method.allLineLocations();
@@ -652,7 +646,6 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         }
     }
 
-    @Nonnull
     public static List<Location> allLineLocations(ReferenceType cls) {
         try {
             return cls.allLineLocations();
@@ -829,10 +822,9 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
 
     private static class JavaXSourcePosition implements XSourcePosition, XSourcePositionWithHighlighter {
         private final SourcePosition mySourcePosition;
-        @Nonnull
         private final VirtualFile myFile;
 
-        public JavaXSourcePosition(@Nonnull SourcePosition sourcePosition, @Nonnull VirtualFile file) {
+        public JavaXSourcePosition(SourcePosition sourcePosition, VirtualFile file) {
             mySourcePosition = sourcePosition;
             myFile = file;
         }
@@ -847,15 +839,13 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
             return mySourcePosition.getOffset();
         }
 
-        @Nonnull
         @Override
         public VirtualFile getFile() {
             return myFile;
         }
 
-        @Nonnull
         @Override
-        public Navigatable createNavigatable(@Nonnull Project project) {
+        public Navigatable createNavigatable(Project project) {
             return project.getApplication().getInstance(XSourcePositionFactory.class).createDefaultNavigatable(project, this);
         }
 
@@ -890,7 +880,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return file != null ? file.findElementAt(offset) : null;
     }
 
-    public static String getLocationMethodQName(@Nonnull Location location) {
+    public static String getLocationMethodQName(Location location) {
         StringBuilder res = new StringBuilder();
         ReferenceType type = location.declaringType();
         if (type != null) {
@@ -931,7 +921,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
 
     public static final Comparator<Method> LAMBDA_ORDINAL_COMPARATOR = Comparator.comparingInt(m -> getLambdaOrdinal(m.name()));
 
-    public static int getLambdaOrdinal(@Nonnull String name) {
+    public static int getLambdaOrdinal(String name) {
         int pos = name.lastIndexOf('$');
         if (pos > -1) {
             try {
@@ -943,7 +933,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return -1;
     }
 
-    public static List<PsiLambdaExpression> collectLambdas(@Nonnull SourcePosition position, final boolean onlyOnTheLine) {
+    public static List<PsiLambdaExpression> collectLambdas(SourcePosition position, final boolean onlyOnTheLine) {
         ApplicationManager.getApplication().assertReadAccessAllowed();
         PsiFile file = position.getFile();
         final int line = position.getLine();
@@ -1001,7 +991,6 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return null;
     }
 
-    @Nonnull
     public static PsiParameter[] getParameters(PsiElement method) {
         if (method instanceof PsiParameterListOwner) {
             return ((PsiParameterListOwner)method).getParameterList().getParameters();
@@ -1017,7 +1006,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return ((BooleanValue)value).booleanValue();
     }
 
-    public static boolean intersects(@Nonnull TextRange range, @Nonnull PsiElement elem) {
+    public static boolean intersects(TextRange range, PsiElement elem) {
         TextRange elemRange = elem.getTextRange();
         return elemRange != null && elemRange.intersects(range);
     }
@@ -1056,7 +1045,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return body;
     }
 
-    public static boolean inTheMethod(@Nonnull SourcePosition pos, @Nonnull PsiElement method) {
+    public static boolean inTheMethod(SourcePosition pos, PsiElement method) {
         PsiElement elem = pos.getElementAt();
         if (elem == null) {
             return false;
@@ -1064,7 +1053,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return Comparing.equal(getContainingMethod(elem), method);
     }
 
-    public static boolean inTheSameMethod(@Nonnull SourcePosition pos1, @Nonnull SourcePosition pos2) {
+    public static boolean inTheSameMethod(SourcePosition pos1, SourcePosition pos2) {
         ApplicationManager.getApplication().assertReadAccessAllowed();
         PsiElement elem1 = pos1.getElementAt();
         PsiElement elem2 = pos2.getElementAt();
@@ -1080,7 +1069,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     }
 
     public static boolean methodMatches(
-        @Nonnull PsiMethod psiMethod,
+        PsiMethod psiMethod,
         String className,
         String name,
         String signature,
@@ -1151,7 +1140,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return -1;
     }
 
-    public static boolean isInLibraryContent(@Nullable VirtualFile file, @Nonnull Project project) {
+    public static boolean isInLibraryContent(@Nullable VirtualFile file, Project project) {
         return ReadAction.compute(() -> {
             if (file == null) {
                 return true;

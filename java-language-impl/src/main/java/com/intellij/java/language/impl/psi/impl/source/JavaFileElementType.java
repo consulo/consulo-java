@@ -30,7 +30,6 @@ import consulo.language.psi.stub.*;
 import consulo.language.util.FlyweightCapableTreeStructure;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -58,7 +57,7 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
     return isInSourceContent(file);
   }
 
-  public static boolean isInSourceContent(@Nonnull VirtualFile file) {
+  public static boolean isInSourceContent(VirtualFile file) {
     final VirtualFile dir = file.getParent();
     return dir == null || dir.getUserData(LanguageLevel.KEY) != null;
   }
@@ -76,7 +75,7 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
   }
 
   @Override
-  public ASTNode parseContents(@Nonnull final ASTNode chameleon) {
+  public ASTNode parseContents(final ASTNode chameleon) {
     final PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
     doParse(builder);
     return builder.getTreeBuilt().getFirstChildNode();
@@ -88,23 +87,21 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
     root.done(this);
   }
 
-  @Nonnull
   @Override
   public String getExternalId() {
     return "java.FILE";
   }
 
   @Override
-  public void serialize(@Nonnull PsiJavaFileStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiJavaFileStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeBoolean(stub.isCompiled());
     LanguageLevel level = stub.getLanguageLevel();
     dataStream.writeByte(level != null ? level.ordinal() : -1);
     dataStream.writeName(stub.getPackageName());
   }
 
-  @Nonnull
   @Override
-  public PsiJavaFileStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiJavaFileStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     boolean compiled = dataStream.readBoolean();
     int level = dataStream.readByte();
     StringRef packageName = dataStream.readName();
@@ -112,6 +109,6 @@ public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileSt
   }
 
   @Override
-  public void indexStub(@Nonnull PsiJavaFileStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiJavaFileStub stub, IndexSink sink) {
   }
 }

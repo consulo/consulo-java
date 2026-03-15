@@ -28,20 +28,17 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class OrredNotEqualExpressionInspection extends BaseInspection {
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.orredNotEqualExpressionDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.orredNotEqualExpressionProblemDescriptor().get();
     }
@@ -60,7 +57,6 @@ public class OrredNotEqualExpressionInspection extends BaseInspection {
         extends InspectionGadgetsFix {
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.orredNotEqualExpressionQuickfix();
         }

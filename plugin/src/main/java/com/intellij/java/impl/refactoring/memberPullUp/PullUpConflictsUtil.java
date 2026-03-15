@@ -41,8 +41,7 @@ import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -62,8 +61,8 @@ public class PullUpConflictsUtil {
         MemberInfo[] infos,
         PsiClass subclass,
         @Nullable PsiClass superClass,
-        @Nonnull PsiJavaPackage targetPackage,
-        @Nonnull PsiDirectory targetDirectory,
+        PsiJavaPackage targetPackage,
+        PsiDirectory targetDirectory,
         InterfaceContainmentVerifier interfaceContainmentVerifier
     ) {
         return checkConflicts(infos, subclass, superClass, targetPackage, targetDirectory, interfaceContainmentVerifier, true);
@@ -72,10 +71,10 @@ public class PullUpConflictsUtil {
     @RequiredReadAction
     public static MultiMap<PsiElement, LocalizeValue> checkConflicts(
         MemberInfo[] infos,
-        @Nonnull final PsiClass subclass,
+        final PsiClass subclass,
         @Nullable PsiClass superClass,
-        @Nonnull PsiJavaPackage targetPackage,
-        @Nonnull PsiDirectory targetDirectory,
+        PsiJavaPackage targetPackage,
+        PsiDirectory targetDirectory,
         InterfaceContainmentVerifier interfaceContainmentVerifier,
         boolean movedMembers2Super
     ) {

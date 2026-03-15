@@ -35,7 +35,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 
 /**
@@ -54,7 +53,7 @@ public class RightSideTypeMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     int offset = context.getStartOffset();
     Project project = context.getProject();
     PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());

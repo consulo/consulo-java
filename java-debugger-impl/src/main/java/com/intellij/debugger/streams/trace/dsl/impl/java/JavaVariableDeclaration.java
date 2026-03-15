@@ -3,7 +3,6 @@ package com.intellij.debugger.streams.trace.dsl.impl.java;
 
 import consulo.execution.debug.stream.trace.dsl.Variable;
 import consulo.execution.debug.stream.trace.dsl.VariableDeclaration;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -13,17 +12,16 @@ public class JavaVariableDeclaration implements VariableDeclaration {
     private final boolean isMutable;
     private final String init;
 
-    public JavaVariableDeclaration(@Nonnull Variable variable, boolean isMutable) {
+    public JavaVariableDeclaration(Variable variable, boolean isMutable) {
         this(variable, isMutable, "");
     }
 
-    public JavaVariableDeclaration(@Nonnull Variable variable, boolean isMutable, @Nonnull String init) {
+    public JavaVariableDeclaration(Variable variable, boolean isMutable, String init) {
         this.variable = variable;
         this.isMutable = isMutable;
         this.init = init;
     }
 
-    @Nonnull
     @Override
     public Variable getVariable() {
         return variable;
@@ -34,7 +32,6 @@ public class JavaVariableDeclaration implements VariableDeclaration {
         return isMutable;
     }
 
-    @Nonnull
     @Override
     public String toCode(int indent) {
         String modifier = !isMutable ? "final " : "";

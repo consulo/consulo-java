@@ -54,8 +54,7 @@ import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.xml.XmlStringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -74,7 +73,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   @RequiredReadAction
   @Nullable
   @Override
-  public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element) {
+  public LineMarkerInfo getLineMarkerInfo(PsiElement element) {
     PsiModifierListOwner owner = getAnnotationOwner(element);
     if (owner == null) {
       return null;
@@ -113,7 +112,6 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
   }
 
 
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("External annotations");
@@ -125,7 +123,6 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
     return JavaPsiImplIconGroup.gutterExtannotation();
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

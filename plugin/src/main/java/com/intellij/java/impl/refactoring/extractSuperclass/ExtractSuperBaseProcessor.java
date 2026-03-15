@@ -41,7 +41,6 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,9 +72,8 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
         myJavaDocPolicy = javaDocPolicy;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new ExtractSuperClassViewDescriptor(myTargetDirectory, myClass, myMemberInfos);
     }
 
@@ -117,7 +115,6 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
         return false;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -142,7 +139,7 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         try {
             String superClassName = myClass.getName();
             String oldQualifiedName = myClass.getQualifiedName();
@@ -193,15 +190,13 @@ public abstract class ExtractSuperBaseProcessor extends TurnRefsToSuperProcessor
         }
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.extractSubclassCommand();
     }
 
-    @Nonnull
     @Override
-    protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull UsageViewDescriptor descriptor) {
+    protected Collection<? extends PsiElement> getElementsToWrite(UsageViewDescriptor descriptor) {
         return ((ExtractSuperClassViewDescriptor) descriptor).getMembersToMakeWritable();
     }
 }

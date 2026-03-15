@@ -27,8 +27,7 @@ import consulo.logging.Logger;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,7 +44,6 @@ public class RedundantCastUtil {
   private RedundantCastUtil() {
   }
 
-  @Nonnull
   public static List<PsiTypeCastExpression> getRedundantCastsInside(PsiElement where) {
     MyCollectingVisitor visitor = new MyCollectingVisitor();
     if (where instanceof PsiEnumConstant) {
@@ -124,7 +122,7 @@ public class RedundantCastUtil {
     }
 
     @Override
-    protected void addToResults(@Nonnull PsiTypeCastExpression typeCast) {
+    protected void addToResults(PsiTypeCastExpression typeCast) {
       if (!isTypeCastSemantic(typeCast)) {
         myFoundCasts.add(typeCast);
       }
@@ -146,7 +144,7 @@ public class RedundantCastUtil {
       }
     }
 
-    protected void addToResults(@Nonnull PsiTypeCastExpression typeCast) {
+    protected void addToResults(PsiTypeCastExpression typeCast) {
       if (!isTypeCastSemantic(typeCast)) {
         isRedundant = true;
       }

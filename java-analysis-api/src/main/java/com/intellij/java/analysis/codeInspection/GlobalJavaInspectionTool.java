@@ -33,8 +33,7 @@ import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool implements CustomSuppressableInspectionTool {
   @Override
@@ -57,11 +56,10 @@ public abstract class GlobalJavaInspectionTool extends GlobalInspectionTool impl
   }
 
   @Override                                                           
-  public boolean isSuppressedFor(@Nonnull final PsiElement element) {
+  public boolean isSuppressedFor(final PsiElement element) {
     return BatchSuppressManager.getInstance().isSuppressedFor(element, getShortName());
   }
 
-  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;

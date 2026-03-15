@@ -26,10 +26,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import org.intellij.lang.annotations.MagicConstant;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -54,21 +52,18 @@ public abstract class JavaCodeStyleManager {
   })
   public static final int UNCOMPLETE_CODE = INCOMPLETE_CODE;
 
-  public abstract boolean addImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass refClass);
+  public abstract boolean addImport(PsiJavaFile file, PsiClass refClass);
 
-  @Nonnull
-  public abstract PsiElement shortenClassReferences(@Nonnull PsiElement element, @MagicConstant(flags = {
+  public abstract PsiElement shortenClassReferences(PsiElement element, @MagicConstant(flags = {
     DO_NOT_ADD_IMPORTS,
     INCOMPLETE_CODE
   }) int flags) throws IncorrectOperationException;
 
-  @Nonnull
-  public abstract String getPrefixByVariableKind(@Nonnull VariableKind variableKind);
+  public abstract String getPrefixByVariableKind(VariableKind variableKind);
 
-  @Nonnull
-  public abstract String getSuffixByVariableKind(@Nonnull VariableKind variableKind);
+  public abstract String getSuffixByVariableKind(VariableKind variableKind);
 
-  public abstract int findEntryIndex(@Nonnull PsiImportStatementBase statement);
+  public abstract int findEntryIndex(PsiImportStatementBase statement);
 
   /**
    * Replaces fully-qualified class names in the contents of the specified element with
@@ -78,8 +73,7 @@ public abstract class JavaCodeStyleManager {
    * @return the element in the PSI tree after the shorten references operation corresponding to the original element.
    * @throws IncorrectOperationException if the file to shorten references in is read-only.
    */
-  @Nonnull
-  public abstract PsiElement shortenClassReferences(@Nonnull PsiElement element) throws IncorrectOperationException;
+  public abstract PsiElement shortenClassReferences(PsiElement element) throws IncorrectOperationException;
 
   /**
    * Replaces fully-qualified class names in a part of contents of the specified element with
@@ -90,7 +84,7 @@ public abstract class JavaCodeStyleManager {
    * @param endOffset   the end offset in the <b>element</b> of the part where class references are shortened.
    * @throws IncorrectOperationException if the file to shorten references in is read-only.
    */
-  public abstract void shortenClassReferences(@Nonnull PsiElement element,
+  public abstract void shortenClassReferences(PsiElement element,
                                               int startOffset,
                                               int endOffset) throws IncorrectOperationException;
 
@@ -100,7 +94,7 @@ public abstract class JavaCodeStyleManager {
    * @param file the file to optimize the imports in.
    * @throws IncorrectOperationException if the file is read-only.
    */
-  public abstract void optimizeImports(@Nonnull PsiFile file) throws IncorrectOperationException;
+  public abstract void optimizeImports(PsiFile file) throws IncorrectOperationException;
 
   /**
    * Calculates the import list that would be substituted in the specified Java or JSP
@@ -109,7 +103,7 @@ public abstract class JavaCodeStyleManager {
    * @param file the file to calculate the import list for.
    * @return the calculated import list.
    */
-  public abstract PsiImportList prepareOptimizeImportsResult(@Nonnull PsiJavaFile file);
+  public abstract PsiImportList prepareOptimizeImportsResult(PsiJavaFile file);
 
   /**
    * Single-static-import {@code import static classFQN.referenceName;} shadows on-demand static imports, like described
@@ -120,7 +114,7 @@ public abstract class JavaCodeStyleManager {
    * @return true if file contains import which would be shadowed
    * false otherwise
    */
-  public boolean hasConflictingOnDemandImport(@Nonnull PsiJavaFile file, @Nonnull PsiClass psiClass, @Nonnull String referenceName) {
+  public boolean hasConflictingOnDemandImport(PsiJavaFile file, PsiClass psiClass, String referenceName) {
     return false;
   }
 
@@ -130,8 +124,7 @@ public abstract class JavaCodeStyleManager {
    * @param variable the variable to get the kind for.
    * @return the variable kind.
    */
-  @Nonnull
-  public VariableKind getVariableKind(@Nonnull PsiVariable variable) {
+  public VariableKind getVariableKind(PsiVariable variable) {
     if (variable instanceof PsiField) {
       if (variable.hasModifierProperty(PsiModifier.STATIC)) {
         if (variable.hasModifierProperty(PsiModifier.FINAL)) {
@@ -152,7 +145,7 @@ public abstract class JavaCodeStyleManager {
     }
   }
 
-  public SuggestedNameInfo suggestVariableName(@Nonnull final VariableKind kind,
+  public SuggestedNameInfo suggestVariableName(final VariableKind kind,
                                                @Nullable final String propertyName,
                                                @Nullable final PsiExpression expr,
                                                @Nullable PsiType type) {
@@ -164,13 +157,12 @@ public abstract class JavaCodeStyleManager {
    * Should not access indices due to performance reasons (e.g. see IDEA-116803)
    */
   @Nullable
-  public String suggestCompiledParameterName(@Nonnull PsiType type) {
+  public String suggestCompiledParameterName(PsiType type) {
     SuggestedNameInfo info = suggestVariableName(VariableKind.PARAMETER, null, null, type, true);
     return ContainerUtil.getFirstItem(Arrays.asList(info.names));
   }
 
-  @Nonnull
-  public abstract SuggestedNameInfo suggestVariableName(@Nonnull VariableKind kind,
+  public abstract SuggestedNameInfo suggestVariableName(VariableKind kind,
                                                         @Nullable String propertyName,
                                                         @Nullable PsiExpression expr,
                                                         @Nullable PsiType type,
@@ -184,8 +176,7 @@ public abstract class JavaCodeStyleManager {
    * @param variableKind the kind of the variable.
    * @return the stripped-down name.
    */
-  @Nonnull
-  public abstract String variableNameToPropertyName(@NonNls @Nonnull String name, @Nonnull VariableKind variableKind);
+  public abstract String variableNameToPropertyName(String name, VariableKind variableKind);
 
   /**
    * Appends code style defined prefixes and/or suffixes for the specified variable kind
@@ -195,8 +186,7 @@ public abstract class JavaCodeStyleManager {
    * @param variableKind the kind of the variable.
    * @return the variable name.
    */
-  @Nonnull
-  public abstract String propertyNameToVariableName(@NonNls @Nonnull String propertyName, @Nonnull VariableKind variableKind);
+  public abstract String propertyNameToVariableName(String propertyName, VariableKind variableKind);
 
   /**
    * Suggests a unique name for the variable used at the specified location.
@@ -206,8 +196,7 @@ public abstract class JavaCodeStyleManager {
    * @param lookForward if true, the existing variables are searched in both directions; if false - only backward
    * @return the generated unique name,
    */
-  @Nonnull
-  public abstract String suggestUniqueVariableName(@NonNls @Nonnull String baseName, PsiElement place, boolean lookForward);
+  public abstract String suggestUniqueVariableName(String baseName, PsiElement place, boolean lookForward);
 
   /**
    * Suggests a unique name for the variable used at the specified location.
@@ -217,8 +206,7 @@ public abstract class JavaCodeStyleManager {
    * @param lookForward  if true, the existing variables are searched in both directions; if false - only backward
    * @return the generated unique name
    */
-  @Nonnull
-  public SuggestedNameInfo suggestUniqueVariableName(@Nonnull SuggestedNameInfo baseNameInfo, PsiElement place, boolean lookForward) {
+  public SuggestedNameInfo suggestUniqueVariableName(SuggestedNameInfo baseNameInfo, PsiElement place, boolean lookForward) {
     return suggestUniqueVariableName(baseNameInfo, place, false, lookForward);
   }
 
@@ -232,8 +220,7 @@ public abstract class JavaCodeStyleManager {
    * @return the generated unique name
    */
 
-  @Nonnull
-  public abstract SuggestedNameInfo suggestUniqueVariableName(@Nonnull SuggestedNameInfo baseNameInfo,
+  public abstract SuggestedNameInfo suggestUniqueVariableName(SuggestedNameInfo baseNameInfo,
                                                               PsiElement place,
                                                               boolean ignorePlaceName,
                                                               boolean lookForward);
@@ -246,8 +233,7 @@ public abstract class JavaCodeStyleManager {
    * @param element the element to replace the references in.
    * @return the element in the PSI tree after the qualify operation corresponding to the original element.
    */
-  @Nonnull
-  public abstract PsiElement qualifyClassReferences(@Nonnull PsiElement element);
+  public abstract PsiElement qualifyClassReferences(PsiElement element);
 
   /**
    * Removes unused import statements from the specified Java file.
@@ -255,8 +241,8 @@ public abstract class JavaCodeStyleManager {
    * @param file the file to remove the import statements from.
    * @throws IncorrectOperationException if the operation fails for some reason (for example, the file is read-only).
    */
-  public abstract void removeRedundantImports(@Nonnull PsiJavaFile file) throws IncorrectOperationException;
+  public abstract void removeRedundantImports(PsiJavaFile file) throws IncorrectOperationException;
 
   @Nullable
-  public abstract Collection<PsiImportStatementBase> findRedundantImports(@Nonnull PsiJavaFile file);
+  public abstract Collection<PsiImportStatementBase> findRedundantImports(PsiJavaFile file);
 }

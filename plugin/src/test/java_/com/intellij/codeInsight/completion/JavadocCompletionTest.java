@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -96,7 +95,6 @@ public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCa
     assertTrue(getLookupElementStrings().containsAll(Arrays.asList("foo", "myField")));
   }
 
-  @Nonnull
   private List<String> getLookupElementStrings() {
     return ObjectUtil.assertNotNull(myFixture.getLookupElementStrings());
   }
@@ -212,8 +210,7 @@ public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCa
       (PsiReferenceRegistrarImpl) ReferenceProvidersRegistry.getInstance().getRegistrar(JavaLanguage.INSTANCE);
     PsiReferenceProvider provider = new PsiReferenceProvider() {
       @Override
-      @Nonnull
-      public PsiReference[] getReferencesByElement(@Nonnull final PsiElement element, @Nonnull ProcessingContext context) {
+      public PsiReference[] getReferencesByElement(final PsiElement element, ProcessingContext context) {
         return new PsiReference[]{new PsiReferenceBase<PsiElement>(element) {
 
           @Override
@@ -222,7 +219,6 @@ public abstract class JavadocCompletionTest extends LightFixtureCompletionTestCa
           }
 
           @Override
-          @Nonnull
           public Object[] getVariants() {
             return new Object[]{"1", "2", "3"};
           }

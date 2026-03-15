@@ -40,7 +40,6 @@ import consulo.content.scope.NamedScopesHolder;
 import com.intellij.java.impl.psi.search.scope.packageSet.PatternPackageSet;
 import com.intellij.testFramework.IdeaTestUtil;
 import consulo.ui.style.StandardColors;
-import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 import java.io.File;
@@ -53,7 +52,7 @@ import static org.junit.Assert.assertEquals;
  * For "lightweight" tests use LightAdvHighlightingTest.
  */
 public abstract class AdvHighlightingTest extends DaemonAnalyzerTestCase {
-  @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
+  private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
 
   @Override
   protected Sdk getTestProjectJdk() {

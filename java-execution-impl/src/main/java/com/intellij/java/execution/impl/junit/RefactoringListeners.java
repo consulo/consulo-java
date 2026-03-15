@@ -30,7 +30,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.Module;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 
 public class RefactoringListeners {
   public static RefactoringElementListener getListener(final PsiJavaPackage psiPackage, final Accessor<PsiJavaPackage> accessor) {
@@ -117,7 +116,7 @@ public class RefactoringListeners {
       myPath = path;
     }
 
-    public void elementRenamedOrMoved(@Nonnull final PsiElement newElement) {
+    public void elementRenamedOrMoved(final PsiElement newElement) {
       T newElement1 = (T) newElement;
       String qualifiedName = getQualifiedName(newElement1);
       if (myPath.length() > 0) {
@@ -136,7 +135,7 @@ public class RefactoringListeners {
     protected abstract String getQualifiedName(T element);
 
     @Override
-    public void undoElementMovedOrRenamed(@Nonnull PsiElement newElement, @Nonnull String oldQualifiedName) {
+    public void undoElementMovedOrRenamed(PsiElement newElement, String oldQualifiedName) {
       myAccessor.setName(oldQualifiedName);
     }
   }

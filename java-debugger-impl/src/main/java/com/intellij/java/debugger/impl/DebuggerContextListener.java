@@ -15,12 +15,11 @@
  */
 package com.intellij.java.debugger.impl;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.EventListener;
 
 
 public interface DebuggerContextListener extends EventListener
 {
-	void changeEvent(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event);
+	void changeEvent(DebuggerContextImpl newContext, DebuggerSession.Event event);
 }

@@ -17,8 +17,7 @@ package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -29,7 +28,7 @@ public abstract class MethodSignatureBase implements MethodSignature {
   private volatile PsiType[] myErasedParameterTypes;
   protected final PsiTypeParameter[] myTypeParameters;
 
-  protected MethodSignatureBase(@Nonnull PsiSubstitutor substitutor, @Nonnull PsiType[] parameterTypes, @Nonnull PsiTypeParameter[] typeParameters) {
+  protected MethodSignatureBase(PsiSubstitutor substitutor, PsiType[] parameterTypes, PsiTypeParameter[] typeParameters) {
     mySubstitutor = substitutor;
     assert substitutor.isValid();
     myParameterTypes = parameterTypes.length == 0 ? PsiType.EMPTY_ARRAY : new PsiType[parameterTypes.length];
@@ -44,7 +43,7 @@ public abstract class MethodSignatureBase implements MethodSignature {
     myTypeParameters = typeParameters;
   }
 
-  protected MethodSignatureBase(@Nonnull PsiSubstitutor substitutor,
+  protected MethodSignatureBase(PsiSubstitutor substitutor,
                                 @Nullable PsiParameterList parameterList,
                                 @Nullable PsiTypeParameterList typeParameterList) {
     mySubstitutor = substitutor;
@@ -65,13 +64,11 @@ public abstract class MethodSignatureBase implements MethodSignature {
   }
 
   @Override
-  @Nonnull
   public PsiType[] getParameterTypes() {
     return myParameterTypes;
   }
 
   @Override
-  @Nonnull
   public PsiTypeParameter[] getTypeParameters() {
     return myTypeParameters;
   }
@@ -121,7 +118,6 @@ public abstract class MethodSignatureBase implements MethodSignature {
   }
 
   @Override
-  @Nonnull
   public PsiSubstitutor getSubstitutor() {
     return mySubstitutor;
   }

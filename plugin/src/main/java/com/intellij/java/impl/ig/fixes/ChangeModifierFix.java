@@ -26,18 +26,15 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class ChangeModifierFix extends InspectionGadgetsFix {
 
   @PsiModifier.ModifierConstant private final String modifierText;
 
-  public ChangeModifierFix(@NonNls @PsiModifier.ModifierConstant String modifierText) {
+  public ChangeModifierFix(@PsiModifier.ModifierConstant String modifierText) {
     this.modifierText = modifierText;
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.changeModifierQuickfix(modifierText);
   }

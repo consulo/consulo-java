@@ -35,8 +35,7 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +65,7 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         try {
             if (element instanceof PsiIdentifier) {
@@ -111,7 +110,6 @@ public class RemoveSuppressWarningAction implements LocalQuickFix {
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return JavaQuickFixLocalize.removeSuppressionActionName(myID);

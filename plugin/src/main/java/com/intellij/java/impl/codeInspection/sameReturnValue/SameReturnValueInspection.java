@@ -29,8 +29,7 @@ import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author max
@@ -41,12 +40,12 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool {
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor processor,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
+        Object state
     ) {
         if (refEntity instanceof RefMethod refMethod) {
             if (refMethod.isConstructor() || refMethod.hasSuperMethods()) {
@@ -87,11 +86,11 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool {
     ) {
         manager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull RefEntity refEntity) {
+            public void visitElement(RefEntity refEntity) {
                 if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
                     refEntity.accept(new RefJavaVisitor() {
                         @Override
-                        public void visitMethod(@Nonnull RefMethod refMethod) {
+                        public void visitMethod(RefMethod refMethod) {
                             globalContext.enqueueDerivedMethodsProcessor(
                                 refMethod,
                                 derivedMethod -> {
@@ -108,20 +107,17 @@ public class SameReturnValueInspection extends GlobalJavaInspectionTool {
         return false;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionSameReturnValueDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "SameReturnValue";
     }

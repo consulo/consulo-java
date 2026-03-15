@@ -1,8 +1,6 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class Test {
-    @Nonnull
     public  String noNull( @Nullable String text) {
         return text == null ? "" : text;
     }

@@ -26,10 +26,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.List;
@@ -38,7 +35,6 @@ import java.util.List;
 public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
   extends BaseInspection {
 
-  @NonNls
   @SuppressWarnings({"PublicField"})
   public String nonThreadSafeTypes = "";
   @SuppressWarnings("PublicField")
@@ -57,20 +53,17 @@ public class AccessToNonThreadSafeStaticFieldFromInstanceInspection
     }
   }
 
-  @Nonnull
   @Override
   public String getID() {
     return "AccessToNonThreadSafeStaticField";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.accessToNonThreadSafeStaticFieldFromInstanceDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.accessToNonThreadSafeStaticFieldFromInstanceFieldProblemDescriptor(infos[0]).get();
   }

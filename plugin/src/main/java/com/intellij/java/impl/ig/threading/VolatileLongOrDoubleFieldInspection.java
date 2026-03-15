@@ -23,17 +23,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class VolatileLongOrDoubleFieldInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.volatileLongOrDoubleFieldDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiType type = (PsiType)infos[0];
     String typeString = type.getPresentableText();
@@ -48,7 +45,7 @@ public class VolatileLongOrDoubleFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       super.visitField(field);
       if (!field.hasModifierProperty(PsiModifier.VOLATILE)) {
         return;

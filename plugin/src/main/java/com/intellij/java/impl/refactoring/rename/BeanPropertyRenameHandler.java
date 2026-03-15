@@ -29,8 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.ui.ex.awt.DialogWrapper;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Avdeev
@@ -45,11 +44,11 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
     return getProperty(dataContext) != null;
   }
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
     performInvoke(editor, dataContext);
   }
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
     performInvoke(null, dataContext);
   }
 
@@ -58,7 +57,7 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
     new PropertyRenameDialog(property, editor).show();
   }
 
-  public static void doRename(@Nonnull BeanProperty property, String newName, boolean searchInComments, boolean isPreview) {
+  public static void doRename(BeanProperty property, String newName, boolean searchInComments, boolean isPreview) {
     PsiElement psiElement = property.getPsiElement();
     RenameRefactoring rename = RefactoringFactory.getInstance(psiElement.getProject()).createRename(psiElement, newName, searchInComments, false);
     rename.setPreviewUsages(isPreview);

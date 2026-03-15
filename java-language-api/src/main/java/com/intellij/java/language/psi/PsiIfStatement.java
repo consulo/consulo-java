@@ -15,10 +15,9 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java <code>if</code> or <code>if ... else</code> statement.
@@ -66,7 +65,7 @@ public interface PsiIfStatement extends PsiStatement {
    * @throws IncorrectOperationException if the modification fails for some reason (for example,
    * the containing file is read-only).
    */
-  void setElseBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException;
+  void setElseBranch(PsiStatement statement) throws IncorrectOperationException;
 
   /**
    * Sets the statement which is executed when the condition is true to the specified value.
@@ -76,7 +75,7 @@ public interface PsiIfStatement extends PsiStatement {
    * @throws IncorrectOperationException if the modification fails for some reason (for example,
    * the containing file is read-only).
    */
-  void setThenBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException;
+  void setThenBranch(PsiStatement statement) throws IncorrectOperationException;
 
   /**
    * Returns the opening parenthesis enclosing the statement condition.

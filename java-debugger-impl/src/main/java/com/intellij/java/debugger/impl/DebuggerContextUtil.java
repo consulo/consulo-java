@@ -33,7 +33,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Couple;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -74,8 +73,7 @@ public class DebuggerContextUtil {
         );
     }
 
-    @Nonnull
-    public static DebuggerContextImpl createDebuggerContext(@Nonnull DebuggerSession session, SuspendContextImpl suspendContext) {
+    public static DebuggerContextImpl createDebuggerContext(DebuggerSession session, SuspendContextImpl suspendContext) {
         return DebuggerContextImpl.createDebuggerContext(
             session,
             suspendContext,
@@ -84,7 +82,7 @@ public class DebuggerContextUtil {
         );
     }
 
-    public static SourcePosition findNearest(@Nonnull DebuggerContextImpl context, @Nonnull PsiElement psi, @Nonnull PsiFile file) {
+    public static SourcePosition findNearest(DebuggerContextImpl context, PsiElement psi, PsiFile file) {
         DebuggerSession session = context.getDebuggerSession();
         if (session != null) {
             try {

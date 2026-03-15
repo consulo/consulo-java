@@ -23,17 +23,14 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NullArgumentToVariableArgMethodInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nullArgumentToVarArgMethodDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nullArgumentToVarArgMethodProblemDescriptor().get();
     }
@@ -51,7 +48,7 @@ public class NullArgumentToVariableArgMethodInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression call
+            PsiMethodCallExpression call
         ) {
             super.visitMethodCallExpression(call);
 

@@ -26,7 +26,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -45,21 +44,18 @@ public class FieldCountInspection extends ClassMetricInspection {
      */
     public boolean m_considerStaticFinalFieldsConstant = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ClassWithTooManyFields";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.tooManyFieldsDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.tooManyFieldsProblemDescriptor(infos[0]).get();
     }
@@ -130,7 +126,7 @@ public class FieldCountInspection extends ClassMetricInspection {
     private class FieldCountVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // note: no call to super
             int totalFields = countFields(aClass);
             if (totalFields <= getLimit()) {

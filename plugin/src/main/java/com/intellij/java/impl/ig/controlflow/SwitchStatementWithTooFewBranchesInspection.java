@@ -28,8 +28,7 @@ import consulo.language.editor.localize.CommonQuickFixLocalize;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -41,7 +40,6 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
   public int m_limit = DEFAULT_BRANCH_LIMIT;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.switchStatementWithTooFewBranchesDisplayName();
   }
@@ -53,7 +51,6 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     Integer branchCount = (Integer) infos[0];
     PsiSwitchBlock block = (PsiSwitchBlock) infos[1];
@@ -90,7 +87,7 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
     }
 
     @Override
-    public void visitSwitchStatement(@Nonnull PsiSwitchStatement statement) {
+    public void visitSwitchStatement(PsiSwitchStatement statement) {
       Object[] infos = processSwitch(statement);
       if (infos == null) {
         return;
@@ -99,7 +96,7 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
     }
 
     @Nullable
-    public Object[] processSwitch(@Nonnull PsiSwitchBlock block) {
+    public Object[] processSwitch(PsiSwitchBlock block) {
       PsiCodeBlock body = block.getBody();
       if (body == null) {
         return null;
@@ -152,19 +149,17 @@ public abstract class SwitchStatementWithTooFewBranchesInspection extends BaseIn
       myBranchCount = branchCount;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return myBranchCount == 0 ? getFamilyName() : CommonQuickFixLocalize.fixReplaceXWithY(PsiKeyword.SWITCH, PsiKeyword.IF);
     }
 
-    @Nonnull
     public LocalizeValue getFamilyName() {
       return CommonQuickFixLocalize.fixUnwrap(PsiKeyword.SWITCH);
     }
 
     @Override
-    public void doFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void doFix(Project project, ProblemDescriptor descriptor) {
       PsiSwitchBlock block = PsiTreeUtil.getParentOfType(descriptor.getStartElement(), PsiSwitchBlock.class);
       if (block instanceof PsiSwitchStatement) {
         ConvertSwitchToIfIntention.doProcessIntention((PsiSwitchStatement) block);

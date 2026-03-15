@@ -29,7 +29,7 @@ import consulo.language.editor.completion.lookup.LookupElementDecorator;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter

@@ -49,8 +49,7 @@ import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.Queue;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -72,7 +71,7 @@ public abstract class TurnRefsToSuperProcessorBase extends BaseRefactoringProces
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
         List<UsageInfo> filtered = new ArrayList<>();
         for (UsageInfo usage : usages) {

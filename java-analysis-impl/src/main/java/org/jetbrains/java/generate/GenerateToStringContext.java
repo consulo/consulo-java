@@ -24,7 +24,6 @@ import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
 import consulo.ide.ServiceManager;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Singleton;
 
 /**
@@ -42,7 +41,6 @@ import jakarta.inject.Singleton;
 @ServiceAPI(ComponentScope.APPLICATION)
 @ServiceImpl
 public class GenerateToStringContext implements PersistentStateComponent<Config> {
-  @Nonnull
   public static GenerateToStringContext getInstance() {
     return ServiceManager.getService(GenerateToStringContext.class);
   }

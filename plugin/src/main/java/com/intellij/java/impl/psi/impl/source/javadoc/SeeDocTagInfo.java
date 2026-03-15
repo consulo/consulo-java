@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.psi.impl.source.javadoc;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.language.LanguageLevel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
@@ -29,9 +28,9 @@ import com.intellij.java.language.psi.util.PsiUtil;
 class SeeDocTagInfo implements JavadocTagInfo {
   private final String myName;
   private final boolean myInline;
-  private static final @NonNls String LINKPLAIN_TAG = "linkplain";
+  private static final String LINKPLAIN_TAG = "linkplain";
 
-  public SeeDocTagInfo(@NonNls String name, boolean isInline) {
+  public SeeDocTagInfo(String name, boolean isInline) {
     myName = name;
     myInline = isInline;
   }

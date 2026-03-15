@@ -43,7 +43,6 @@ import consulo.project.Project;
 import consulo.util.collection.ArrayFactory;
 import consulo.util.lang.CharArrayUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
@@ -67,7 +66,6 @@ public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDoc
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getDescriptionElements() {
     ArrayList<PsiElement> array = new ArrayList<>();
     for (ASTNode child = getFirstChildNode(); child != null; child = child.getTreeNext()) {
@@ -83,7 +81,6 @@ public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDoc
   }
 
   @Override
-  @Nonnull
   public PsiDocTag[] getTags() {
     return getChildrenAsPsiElements(TAG_BIT_SET, ARRAY_FACTORY);
   }
@@ -111,7 +108,6 @@ public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDoc
   }
 
   @Override
-  @Nonnull
   public PsiDocTag[] findTagsByName(String name) {
     ArrayList<PsiDocTag> array = new ArrayList<>();
     PsiDocTag[] tags = getTags();
@@ -248,7 +244,7 @@ public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDoc
     }
   }
 
-  private static boolean nodeIsNextAfterAsterisks(@Nonnull ASTNode node) {
+  private static boolean nodeIsNextAfterAsterisks(ASTNode node) {
     ASTNode current = TreeUtil.findSiblingBackward(node, JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS);
     if (current == null || current == node) {
       return false;
@@ -263,7 +259,7 @@ public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDoc
     return true;
   }
 
-  private static boolean docTagEndsWithLineFeedAndAsterisks(@Nonnull ASTNode node) {
+  private static boolean docTagEndsWithLineFeedAndAsterisks(ASTNode node) {
     assert (node.getElementType() == DOC_TAG);
     ASTNode lastAsterisks = TreeUtil.findChildBackward(node, JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS);
     if (lastAsterisks == null || !lastAsterisks.getTreePrev().textContains('\n')) {
@@ -282,7 +278,7 @@ public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDoc
     return true;
   }
 
-  private static boolean nodeOnSameLineWithCommentStartBlock(@Nonnull ASTNode node) {
+  private static boolean nodeOnSameLineWithCommentStartBlock(ASTNode node) {
     ASTNode current = TreeUtil.findSiblingBackward(node, JavaDocTokenType.DOC_COMMENT_START);
     if (current == null) {
       return false;
@@ -300,7 +296,7 @@ public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDoc
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (child.getElementType() == DOC_TAG) {
       if (child.getTreeNext() == null || child.getTreeNext().getElementType() != DOC_TAG) {
         ASTNode prev = child.getTreePrev();
@@ -365,7 +361,7 @@ public class PsiDocCommentImpl extends LazyParseablePsiElement implements PsiDoc
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitDocComment(this);
     } else {

@@ -29,7 +29,6 @@ import consulo.language.editor.template.VariableNode;
 import consulo.language.editor.template.macro.MacroCallNode;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class ForeachPostfixTemplate extends PostfixTemplate {
   public ForeachPostfixTemplate() {
@@ -37,13 +36,13 @@ public class ForeachPostfixTemplate extends PostfixTemplate {
   }
 
   @Override
-  public boolean isApplicable(@Nonnull PsiElement context, @Nonnull Document copyDocument, int newOffset) {
+  public boolean isApplicable(PsiElement context, Document copyDocument, int newOffset) {
     PsiExpression expr = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     return expr != null && (JavaPostfixTemplatesUtils.isArray(expr.getType()) || JavaPostfixTemplatesUtils.isIterable(expr.getType()));
   }
 
   @Override
-  public void expand(@Nonnull PsiElement context, @Nonnull Editor editor) {
+  public void expand(PsiElement context, Editor editor) {
     PsiExpression expr = JavaPostfixTemplatesUtils.getTopmostExpression(context);
     if (expr == null) return;
     Project project = context.getProject();

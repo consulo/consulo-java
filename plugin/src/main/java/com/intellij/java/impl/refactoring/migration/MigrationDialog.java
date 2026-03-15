@@ -26,8 +26,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,7 +71,6 @@ public class MigrationDialog extends DialogWrapper
 	}
 
 	@Override
-	@Nonnull
 	protected Action[] createActions()
 	{
 		return new Action[]{

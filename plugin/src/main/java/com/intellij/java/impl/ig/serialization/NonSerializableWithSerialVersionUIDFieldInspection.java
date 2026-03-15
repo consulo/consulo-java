@@ -31,26 +31,22 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonSerializableWithSerialVersionUIDFieldInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "NonSerializableClassWithSerialVersionUID";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.nonSerializableWithSerialversionuidDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiClass aClass = (PsiClass)infos[0];
     if (aClass.isAnnotationType()) {
@@ -68,7 +64,6 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
   }
 
   @Override
-  @Nonnull
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     PsiClass aClass = (PsiClass)infos[0];
     if (aClass.isAnnotationType() || aClass.isInterface() ||
@@ -81,7 +76,6 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
 
   private static class RemoveSerialVersionUIDFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.nonSerializableWithSerialversionuidRemoveQuickfix();
     }
@@ -109,7 +103,7 @@ public class NonSerializableWithSerialVersionUIDFieldInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       // no call to super, so it doesn't drill down
       PsiField field = aClass.findFieldByName(
         HardcodedMethodConstants.SERIAL_VERSION_UID, false);

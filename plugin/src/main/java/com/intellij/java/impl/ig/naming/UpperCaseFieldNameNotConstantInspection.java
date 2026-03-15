@@ -24,19 +24,16 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UpperCaseFieldNameNotConstantInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.upperCaseFieldNameNotConstantDisplayName();
   }
 
   @Override
-  @Nonnull
   public String getID() {
     return "NonConstantFieldWithUpperCaseName";
   }
@@ -47,7 +44,6 @@ public class UpperCaseFieldNameNotConstantInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.upperCaseFieldNameNotConstantProblemDescriptor().get();
   }
@@ -66,7 +62,7 @@ public class UpperCaseFieldNameNotConstantInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       super.visitField(field);
       if (field.hasModifierProperty(PsiModifier.STATIC) &&
           field.hasModifierProperty(PsiModifier.FINAL)) {

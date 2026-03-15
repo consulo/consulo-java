@@ -18,8 +18,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.util.*;
@@ -34,7 +33,6 @@ import static consulo.util.lang.ObjectUtil.tryCast;
 public final class DfaUtil {
 
   public static
-  @Nonnull
   Collection<PsiExpression> getVariableValues(@Nullable PsiVariable variable, @Nullable PsiElement context) {
     if (variable == null || context == null) {
       return Collections.emptyList();
@@ -134,7 +132,6 @@ public final class DfaUtil {
    */
   //@ApiStatus.ScheduledForRemoval(inVersion = "2020.2")
   @Deprecated(forRemoval = true)
-  @Nonnull
   public static Nullability checkNullability(final @Nullable PsiVariable variable, final @Nullable PsiElement context) {
     if (context instanceof PsiExpression) {
       return NullabilityUtil.getExpressionNullability((PsiExpression) context, true);
@@ -143,8 +140,7 @@ public final class DfaUtil {
   }
 
   public static
-  @Nonnull
-  Collection<PsiExpression> getPossibleInitializationElements(@Nonnull PsiElement qualifierExpression) {
+  Collection<PsiExpression> getPossibleInitializationElements(PsiElement qualifierExpression) {
     if (qualifierExpression instanceof PsiMethodCallExpression) {
       return Collections.singletonList((PsiMethodCallExpression) qualifierExpression);
     }
@@ -166,7 +162,6 @@ public final class DfaUtil {
   }
 
   public static
-  @Nonnull
   Nullability inferMethodNullability(PsiMethod method) {
     if (PsiUtil.resolveClassInType(method.getReturnType()) == null) {
       return Nullability.UNKNOWN;
@@ -189,7 +184,6 @@ public final class DfaUtil {
   }
 
   public static
-  @Nonnull
   Nullability inferLambdaNullability(PsiLambdaExpression lambda) {
     if (LambdaUtil.getFunctionalInterfaceReturnType(lambda) == null) {
       return Nullability.UNKNOWN;
@@ -199,8 +193,7 @@ public final class DfaUtil {
   }
 
   private static
-  @Nonnull
-  Nullability inferBlockNullability(@Nonnull PsiParameterListOwner owner, boolean suppressNullable) {
+  Nullability inferBlockNullability(PsiParameterListOwner owner, boolean suppressNullable) {
     PsiElement body = owner.getBody();
     if (body == null) {
       return Nullability.UNKNOWN;
@@ -213,10 +206,10 @@ public final class DfaUtil {
       boolean hasUnknowns = false;
 
       @Override
-      protected void checkReturnValue(@Nonnull DfaValue value,
-                                      @Nonnull PsiExpression expression,
-                                      @Nonnull PsiParameterListOwner context,
-                                      @Nonnull DfaMemoryState state) {
+      protected void checkReturnValue(DfaValue value,
+                                      PsiExpression expression,
+                                      PsiParameterListOwner context,
+                                      DfaMemoryState state) {
         if (context == owner) {
           if (TypeConversionUtil.isPrimitiveAndNotNull(expression.getType()) || state.isNotNull(value)) {
             hasNotNulls = true;
@@ -243,7 +236,7 @@ public final class DfaUtil {
     return Nullability.UNKNOWN;
   }
 
-  static DfaValue getPossiblyNonInitializedValue(@Nonnull DfaValueFactory factory, @Nonnull PsiField target, @Nonnull PsiElement context) {
+  static DfaValue getPossiblyNonInitializedValue(DfaValueFactory factory, PsiField target, PsiElement context) {
     if (target.getType() instanceof PsiPrimitiveType) {
       return null;
     }
@@ -341,7 +334,7 @@ public final class DfaUtil {
     return Integer.MAX_VALUE; // accessed after initialization or at unknown moment
   }
 
-  public static boolean hasInitializationHacks(@Nonnull PsiField field) {
+  public static boolean hasInitializationHacks(PsiField field) {
     PsiClass containingClass = field.getContainingClass();
     return containingClass != null && System.class.getName().equals(containingClass.getQualifiedName());
   }
@@ -433,9 +426,8 @@ public final class DfaUtil {
   }
 
   public static
-  @Nonnull
   List<? extends MethodContract> addRangeContracts(@Nullable PsiMethod method,
-                                                   @Nonnull List<? extends MethodContract> contracts) {
+                                                   List<? extends MethodContract> contracts) {
     if (method == null) {
       return contracts;
     }

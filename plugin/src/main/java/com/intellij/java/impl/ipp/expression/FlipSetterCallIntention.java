@@ -31,8 +31,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -42,13 +41,12 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipSetterCallIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class FlipSetterCallIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.flipSetterCallIntentionName();
     }
 
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         Project project = element.getProject();
         Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         if (editor != null) {
@@ -67,7 +65,6 @@ public class FlipSetterCallIntention extends Intention {
         }
     }
 
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new SetterCallPredicate();
     }

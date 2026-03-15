@@ -30,7 +30,6 @@ import consulo.language.impl.ast.CompositeElement;
 import consulo.language.impl.ast.TreeUtil;
 import consulo.language.impl.psi.IndentHelper;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 @ExtensionImpl
@@ -45,8 +44,8 @@ public class JavaIndentHelper implements IndentHelperExtension {
     @RequiredReadAction
     @Override
     public int getIndentInner(
-        @Nonnull PsiFile file,
-        @Nonnull ASTNode element,
+        PsiFile file,
+        ASTNode element,
         boolean includeNonSpace,
         int recursionLevel) {
         if (recursionLevel > TOO_BIG_WALK_THRESHOLD) {
@@ -123,7 +122,7 @@ public class JavaIndentHelper implements IndentHelperExtension {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull PsiFile psiFile) {
+    public boolean isAvailable(PsiFile psiFile) {
         return psiFile instanceof PsiJavaFile;
     }
 }

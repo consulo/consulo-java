@@ -10,7 +10,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
-import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
@@ -20,7 +19,6 @@ public class PsiForeachStatementImpl extends PsiForeachStatementBaseImpl impleme
   }
 
   @Override
-  @Nonnull
   public PsiParameter getIterationParameter() {
     return (PsiParameter)Objects.requireNonNull(findChildByRoleAsPsiElement(ChildRole.FOR_ITERATION_PARAMETER));
   }
@@ -31,10 +29,10 @@ public class PsiForeachStatementImpl extends PsiForeachStatementBaseImpl impleme
   }
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
     if (lastParent == null || lastParent.getParent() != this || lastParent == getIteratedValue())
       // Parent element should not see our vars
@@ -46,7 +44,7 @@ public class PsiForeachStatementImpl extends PsiForeachStatementBaseImpl impleme
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitForeachStatement(this);
     }

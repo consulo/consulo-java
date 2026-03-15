@@ -20,13 +20,11 @@ import com.intellij.testFramework.LightCodeInsightTestCase;
 import consulo.util.collection.ContainerUtil;
 import consulo.language.editor.TargetElementUtil;
 import consulo.codeInsight.TargetElementUtilEx;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
  */
 public abstract class InlineLocalTest extends LightCodeInsightTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

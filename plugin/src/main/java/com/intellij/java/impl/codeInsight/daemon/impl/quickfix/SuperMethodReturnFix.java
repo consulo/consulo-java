@@ -31,7 +31,6 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class SuperMethodReturnFix implements SyntheticIntentionAction {
 
@@ -44,7 +43,6 @@ public class SuperMethodReturnFix implements SyntheticIntentionAction {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         String name = PsiFormatUtil.formatMethod(
             mySuperMethod,
@@ -55,7 +53,7 @@ public class SuperMethodReturnFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return
             mySuperMethod != null
                 && mySuperMethod.isValid()
@@ -65,7 +63,7 @@ public class SuperMethodReturnFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(mySuperMethod.getContainingFile())) {
             return;
         }

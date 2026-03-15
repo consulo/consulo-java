@@ -4,7 +4,6 @@ package com.intellij.java.language.psi.tree;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -14,7 +13,6 @@ import java.util.Set;
  * Could be used to create hierarchy for IElementType
  */
 public interface ParentProviderElementType {
-  @Nonnull
   Set<IElementType> getParents();
 
 
@@ -23,7 +21,7 @@ public interface ParentProviderElementType {
    * @param tokenSet The set of token types to check against (this token set must contain the highest parents to check against)
    * @return true if the provided token set contains given source element type or any of its parents, otherwise false
    */
-  static boolean containsWithSourceParent(@Nonnull IElementType source, @Nonnull TokenSet tokenSet) {
+  static boolean containsWithSourceParent(IElementType source, TokenSet tokenSet) {
     if (tokenSet.contains(source)) {
       return true;
     }

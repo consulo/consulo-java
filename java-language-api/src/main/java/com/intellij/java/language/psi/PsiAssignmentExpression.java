@@ -16,8 +16,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a simple assignment (<code>a=b</code>) or a compound assignment (<code>a+=1</code>) expression.
@@ -28,7 +27,6 @@ public interface PsiAssignmentExpression extends PsiExpression {
    *
    * @return the left side expression.
    */
-  @Nonnull
   PsiExpression getLExpression();
 
   /**
@@ -46,7 +44,6 @@ public interface PsiAssignmentExpression extends PsiExpression {
    *
    * @return the assignment operation token.
    */
-  @Nonnull
   PsiJavaToken getOperationSign();
 
   /**
@@ -54,6 +51,5 @@ public interface PsiAssignmentExpression extends PsiExpression {
    *
    * @return the token type.
    */
-  @Nonnull
   IElementType getOperationTokenType();
 }

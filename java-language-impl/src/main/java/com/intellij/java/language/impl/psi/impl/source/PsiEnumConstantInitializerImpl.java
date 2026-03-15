@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiEnumConstantInitializer {
   private static final Logger LOG = Logger.getInstance(PsiEnumConstantInitializerImpl.class);
@@ -64,7 +63,6 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  @Nonnull
   public PsiJavaCodeReferenceElement getBaseClassReference() {
     PsiClass containingClass = getBaseClass();
     return new LightClassReference(getManager(), containingClass.getName(), containingClass);
@@ -79,13 +77,11 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  @Nonnull
   public PsiEnumConstant getEnumConstant() {
     return (PsiEnumConstant) getParent();
   }
 
   @Override
-  @Nonnull
   public PsiClassType getBaseClassType() {
     if (myCachedBaseType == null) {
       myCachedBaseType = JavaPsiFacade.getInstance(getProject()).getElementFactory().createType(getBaseClass());
@@ -109,7 +105,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return false;
   }
 
@@ -124,7 +120,6 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  @Nonnull
   public PsiClassType[] getSuperTypes() {
     return new PsiClassType[]{getBaseClassType()};
   }
@@ -155,7 +150,7 @@ public class PsiEnumConstantInitializerImpl extends PsiClassImpl implements PsiE
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitEnumConstantInitializer(this);
     } else {

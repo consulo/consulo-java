@@ -26,9 +26,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.InferLambdaParameterTypeIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
@@ -36,20 +35,18 @@ public class InferLambdaParameterTypeIntention extends Intention {
   private static final Logger LOG = Logger.getInstance(InferLambdaParameterTypeIntention.class);
   private String myInferredTypesText;
 
-  @Nonnull
   @Override
   protected PsiElementPredicate getElementPredicate() {
     return new LambdaParametersPredicate();
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Expand lambda to " + myInferredTypesText + " -> {...}");
   }
 
   @Override
-  protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+  protected void processIntention(PsiElement element) throws IncorrectOperationException {
     PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     LOG.assertTrue(lambdaExpression != null);
     PsiType functionalInterfaceType = lambdaExpression.getFunctionalInterfaceType();

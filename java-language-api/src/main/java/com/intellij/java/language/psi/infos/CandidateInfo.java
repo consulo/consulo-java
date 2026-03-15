@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi.infos;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
@@ -32,7 +31,6 @@ public class CandidateInfo implements JavaResolveResult
 
 	private final PsiElement myPlace;
 	private final PsiClass myAccessClass;
-	@Nonnull
 	private final PsiElement myCandidate;
 	private final boolean myStaticsProblem;
 	protected final PsiSubstitutor mySubstitutor;
@@ -40,8 +38,8 @@ public class CandidateInfo implements JavaResolveResult
 	private final boolean myPackagePrefixPackageReference;
 	private Boolean myAccessible; // benign datarace
 
-	private CandidateInfo(@Nonnull PsiElement candidate,
-			@Nonnull PsiSubstitutor substitutor,
+	private CandidateInfo(PsiElement candidate,
+			PsiSubstitutor substitutor,
 			Boolean accessible,
 			boolean staticsProblem,
 			PsiElement currFileContext,
@@ -59,32 +57,32 @@ public class CandidateInfo implements JavaResolveResult
 		myPackagePrefixPackageReference = packagePrefixPackageReference;
 	}
 
-	public CandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, boolean accessProblem, boolean staticsProblem, PsiElement currFileContext)
+	public CandidateInfo(PsiElement candidate, PsiSubstitutor substitutor, boolean accessProblem, boolean staticsProblem, PsiElement currFileContext)
 	{
 		this(candidate, substitutor, !accessProblem, staticsProblem, currFileContext, null, null, false);
 	}
 
-	public CandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, boolean accessProblem, boolean staticsProblem)
+	public CandidateInfo(PsiElement candidate, PsiSubstitutor substitutor, boolean accessProblem, boolean staticsProblem)
 	{
 		this(candidate, substitutor, accessProblem, staticsProblem, null);
 	}
 
-	public CandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, PsiElement place, PsiClass accessClass, boolean staticsProblem, PsiElement currFileContext)
+	public CandidateInfo(PsiElement candidate, PsiSubstitutor substitutor, PsiElement place, PsiClass accessClass, boolean staticsProblem, PsiElement currFileContext)
 	{
 		this(candidate, substitutor, null, staticsProblem, currFileContext, place, accessClass, false);
 	}
 
-	public CandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor, PsiElement place, boolean staticsProblem)
+	public CandidateInfo(PsiElement candidate, PsiSubstitutor substitutor, PsiElement place, boolean staticsProblem)
 	{
 		this(candidate, substitutor, place, null, staticsProblem, null);
 	}
 
-	public CandidateInfo(@Nonnull PsiElement candidate, @Nonnull PsiSubstitutor substitutor)
+	public CandidateInfo(PsiElement candidate, PsiSubstitutor substitutor)
 	{
 		this(candidate, substitutor, null, null, false, null);
 	}
 
-	public CandidateInfo(@Nonnull CandidateInfo candidate, @Nonnull PsiSubstitutor newSubstitutor)
+	public CandidateInfo(CandidateInfo candidate, PsiSubstitutor newSubstitutor)
 	{
 		this(candidate.myCandidate, newSubstitutor, candidate.myAccessible, candidate.myStaticsProblem, candidate.myCurrentFileResolveContext, candidate.myPlace, null, false);
 	}
@@ -102,13 +100,11 @@ public class CandidateInfo implements JavaResolveResult
 	}
 
 	@Override
-	@Nonnull
 	public PsiElement getElement()
 	{
 		return myCandidate;
 	}
 
-	@Nonnull
 	@Override
 	public PsiSubstitutor getSubstitutor()
 	{
@@ -231,6 +227,5 @@ public class CandidateInfo implements JavaResolveResult
 		return result;
 	}
 
-	@Nonnull
 	public static final JavaResolveResult[] RESOLVE_RESULT_FOR_PACKAGE_PREFIX_PACKAGE = {new CandidateInfo(PsiUtilCore.NULL_PSI_ELEMENT, PsiSubstitutor.EMPTY, Boolean.TRUE, false, null, null, null, true)};
 }

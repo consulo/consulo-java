@@ -20,7 +20,6 @@ import java.util.HashSet;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import consulo.dataContext.DataContext;
 import consulo.logging.Logger;
@@ -41,7 +40,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
   public static final String REFACTORING_NAME = RefactoringBundle.message("encapsulate.fields.title");
 
   @RequiredReadAction
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
     int offset = editor.getCaretModel().getOffset();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = file.findElementAt(offset);
@@ -72,7 +71,7 @@ public class EncapsulateFieldsHandler implements RefactoringActionHandler {
    * if elements.length == 1 the expected value is either PsiClass or PsiField
    * if elements.length > 1 the expected values are PsiField objects only
    */
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
     PsiClass aClass = null;
     HashSet<PsiField> preselectedFields = new HashSet<>();
     if (elements.length == 1) {

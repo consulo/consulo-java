@@ -56,9 +56,8 @@ import consulo.util.lang.ThreeState;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -74,7 +73,6 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
         return true;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return getText();
@@ -82,13 +80,13 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
 
     @Override
     @RequiredReadAction
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         invoke(project, null, descriptor.getPsiElement().getContainingFile());
     }
 
     @Nullable
     @RequiredReadAction
-    public static List<LocalQuickFix> registerFixes(@Nonnull PsiReference reference) {
+    public static List<LocalQuickFix> registerFixes(PsiReference reference) {
         PsiElement psiElement = reference.getElement();
         String shortReferenceName = reference.getRangeInElement().substring(psiElement.getText());
 
@@ -213,7 +211,7 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
 
     @RequiredReadAction
     private static void registerExternalFixes(
-        @Nonnull PsiReference reference,
+        PsiReference reference,
         PsiElement psiElement,
         String shortReferenceName,
         JavaPsiFacade facade,
@@ -274,7 +272,7 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
     }
 
     public static void importClass(
-        @Nonnull Module currentModule,
+        Module currentModule,
         @Nullable Editor editor,
         @Nullable PsiReference reference,
         @Nullable String className
@@ -291,14 +289,14 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
         }
     }
 
-    public static void addJarToRoots(@Nonnull String jarPath, @Nonnull Module module, @Nullable PsiElement location) {
+    public static void addJarToRoots(String jarPath, Module module, @Nullable PsiElement location) {
         addJarsToRoots(Collections.singletonList(jarPath), null, module, location);
     }
 
     public static void addJarsToRoots(
-        @Nonnull List<String> jarPaths,
+        List<String> jarPaths,
         @Nullable String libraryName,
-        @Nonnull Module module,
+        Module module,
         @Nullable PsiElement location
     ) {
         List<String> urls = refreshAndConvertToUrls(jarPaths);
@@ -306,13 +304,11 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
         ModuleRootModificationUtil.addModuleLibrary(module, libraryName, urls, Collections.emptyList(), scope);
     }
 
-    @Nonnull
-    public static List<String> refreshAndConvertToUrls(@Nonnull List<String> jarPaths) {
+    public static List<String> refreshAndConvertToUrls(List<String> jarPaths) {
         return ContainerUtil.map(jarPaths, OrderEntryFix::refreshAndConvertToUrl);
     }
 
-    @Nonnull
-    public static DependencyScope suggestScopeByLocation(@Nonnull Module module, @Nullable PsiElement location) {
+    public static DependencyScope suggestScopeByLocation(Module module, @Nullable PsiElement location) {
         if (location != null) {
             VirtualFile vFile = location.getContainingFile().getVirtualFile();
             if (vFile != null && ModuleRootManager.getInstance(module).getFileIndex().isInTestSourceContent(vFile)) {
@@ -322,7 +318,6 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
         return DependencyScope.COMPILE;
     }
 
-    @Nonnull
     private static String refreshAndConvertToUrl(String jarPath) {
         File libraryRoot = new File(jarPath);
         LocalFileSystem.getInstance().refreshAndFindFileByIoFile(libraryRoot);

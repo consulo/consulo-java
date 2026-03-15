@@ -6,8 +6,6 @@ import consulo.annotation.DeprecationInfo;
 import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.component.util.localize.AbstractBundle;
 import consulo.java.language.localize.JavaLanguageLocalize;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.util.function.Supplier;
@@ -23,15 +21,12 @@ public final class JavaPsiBundle extends AbstractBundle {
     super(BUNDLE);
   }
 
-  @Nonnull
   public static
-  @Nls
-  String message(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
+  String message(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
     return INSTANCE.getMessage(key, params);
   }
 
-  @Nonnull
-  public static Supplier<String> messagePointer(@Nonnull @PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
+  public static Supplier<String> messagePointer(@PropertyKey(resourceBundle = BUNDLE) String key, Object... params) {
     return () -> INSTANCE.getMessage(key, params);
   }
 
@@ -41,8 +36,7 @@ public final class JavaPsiBundle extends AbstractBundle {
    * Note that it's not localized in the usual sense: modifiers returned from this method are kept in English,
    * regardless of the active language pack. It's believed that this way it's more clear.
    */
-  @Nonnull
-  public static String visibilityPresentation(@Nonnull @PsiModifier.ModifierConstant String modifier) {
+  public static String visibilityPresentation(@PsiModifier.ModifierConstant String modifier) {
     return modifier.equals(PsiModifier.PACKAGE_LOCAL) ? "package-private" : modifier;
   }
 }

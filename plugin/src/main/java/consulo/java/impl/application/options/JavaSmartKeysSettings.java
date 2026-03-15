@@ -15,7 +15,6 @@ import consulo.util.xml.serializer.XmlSerializer;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -33,7 +32,6 @@ import jakarta.annotation.Nonnull;
 public class JavaSmartKeysSettings implements PersistentStateComponent<Element> {
   private static final Logger LOGGER = Logger.getInstance(JavaSmartKeysSettings.class);
 
-  @Nonnull
   public static JavaSmartKeysSettings getInstance() {
     return ServiceManager.getService(JavaSmartKeysSettings.class);
   }

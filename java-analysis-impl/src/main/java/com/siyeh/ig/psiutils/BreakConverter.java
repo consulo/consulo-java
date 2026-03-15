@@ -6,9 +6,8 @@ import com.intellij.java.language.psi.*;
 import com.siyeh.ig.fixes.DeleteUnnecessaryStatementFix;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +36,6 @@ public class BreakConverter {
     }
   }
 
-  @Nonnull
   private List<PsiBreakStatement> collectBreaks() {
     List<PsiBreakStatement> breaks = new ArrayList<>();
     mySwitchBlock.accept(new JavaRecursiveElementWalkingVisitor() {

@@ -28,7 +28,6 @@ import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 import javax.swing.*;
@@ -46,14 +45,12 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
 
     private final List<String> loggerClassNames = new ArrayList();
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.publicMethodWithoutLoggingDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.publicMethodWithoutLoggingProblemDescriptor().get();
     }
@@ -66,13 +63,13 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
     }
 
     @Override
-    public void readSettings(@Nonnull Element element) throws InvalidDataException {
+    public void readSettings(Element element) throws InvalidDataException {
         super.readSettings(element);
         parseString(loggerClassName, loggerClassNames);
     }
 
     @Override
-    public void writeSettings(@Nonnull Element element) throws WriteExternalException {
+    public void writeSettings(Element element) throws WriteExternalException {
         loggerClassName = formatString(loggerClassNames);
         super.writeSettings(element);
     }
@@ -85,7 +82,7 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
     private class PublicMethodWithoutLoggingVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //no drilldown
             if (method.getNameIdentifier() == null) {
                 return;
@@ -121,7 +118,7 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
         private boolean containsLoggingCall = false;
 
         @Override
-        public void visitElement(@Nonnull PsiElement element) {
+        public void visitElement(PsiElement element) {
             if (containsLoggingCall) {
                 return;
             }
@@ -129,7 +126,7 @@ public class PublicMethodWithoutLoggingInspection extends BaseInspection {
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             if (containsLoggingCall) {
                 return;
             }

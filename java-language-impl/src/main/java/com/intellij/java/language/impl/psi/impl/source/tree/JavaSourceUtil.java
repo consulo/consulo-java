@@ -30,7 +30,6 @@ import consulo.language.util.CharTable;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class JavaSourceUtil {
   private static final Logger LOG = Logger.getInstance(JavaSourceUtil.class);
@@ -41,7 +40,7 @@ public class JavaSourceUtil {
   private JavaSourceUtil() {
   }
 
-  public static void fullyQualifyReference(@Nonnull CompositeElement reference, @Nonnull PsiClass targetClass) {
+  public static void fullyQualifyReference(CompositeElement reference, PsiClass targetClass) {
     if (((SourceJavaCodeReference) reference).isQualified()) { // qualified reference
       final PsiClass parentClass = targetClass.getContainingClass();
       if (parentClass == null) {
@@ -81,8 +80,7 @@ public class JavaSourceUtil {
     }
   }
 
-  @Nonnull
-  public static String getReferenceText(@Nonnull PsiJavaCodeReferenceElement ref) {
+  public static String getReferenceText(PsiJavaCodeReferenceElement ref) {
     final StringBuilder buffer = new StringBuilder();
 
     ((TreeElement) ref.getNode()).acceptTree(new RecursiveTreeElementWalkingVisitor() {
@@ -113,13 +111,11 @@ public class JavaSourceUtil {
     return buffer.toString();
   }
 
-  @Nonnull
-  public static String getReferenceText(@Nonnull LighterAST tree, @Nonnull LighterASTNode node) {
+  public static String getReferenceText(LighterAST tree, LighterASTNode node) {
     return LightTreeUtil.toFilteredString(tree, node, REF_FILTER);
   }
 
-  @Nonnull
-  public static TreeElement addParenthToReplacedChild(@Nonnull ASTNode child, @Nonnull TreeElement newChild, @Nonnull PsiManager manager) {
+  public static TreeElement addParenthToReplacedChild(ASTNode child, TreeElement newChild, PsiManager manager) {
     boolean needParenth = ElementType.EXPRESSION_BIT_SET.contains(child.getElementType()) &&
         ElementType.EXPRESSION_BIT_SET.contains(newChild.getElementType()) &&
         ReplaceExpressionUtil.isNeedParenthesis(child, newChild);
@@ -152,7 +148,7 @@ public class JavaSourceUtil {
     return parenthExpr;
   }
 
-  public static void deleteSeparatingComma(@Nonnull CompositeElement element, @Nonnull ASTNode child) {
+  public static void deleteSeparatingComma(CompositeElement element, ASTNode child) {
     assert child.getElementType() != JavaTokenType.COMMA : child;
 
     ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
@@ -166,9 +162,9 @@ public class JavaSourceUtil {
     }
   }
 
-  public static void addSeparatingComma(@Nonnull CompositeElement element,
-                                        @Nonnull ASTNode child,
-                                        @Nonnull TokenSet listTypes) {
+  public static void addSeparatingComma(CompositeElement element,
+                                        ASTNode child,
+                                        TokenSet listTypes) {
     assert child.getElementType() != JavaTokenType.COMMA : child;
 
     scanChildren(element, child, listTypes, true);

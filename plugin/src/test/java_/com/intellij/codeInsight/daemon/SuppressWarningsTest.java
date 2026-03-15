@@ -20,19 +20,16 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
 public abstract class SuppressWarningsTest extends LightDaemonAnalyzerTestCase {
-  @NonNls private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
+  private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting";
 
   private void doTest(boolean checkWarnings) throws Exception {
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, false);
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{new UnusedSymbolLocalInspection()};

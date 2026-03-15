@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.document.FileDocumentManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
 
 public abstract class TurnRefsToSuperTest extends MultiFileTestCase {
   public void testSuperClass() throws Exception { doTest("AClass", "ASuper", true); }
@@ -64,7 +63,7 @@ public abstract class TurnRefsToSuperTest extends MultiFileTestCase {
   //public void testForEach1() throws Exception { doTest("Test.MyIterableImpl", "Test.MyIterable", false); }
   //public void testForEach2() throws Exception { doTest("Test.MyIterableImpl", "Test.MyIterable", false); }
 
-  private void doTest(@NonNls final String className, @NonNls final String superClassName, final boolean replaceInstanceOf) throws Exception {
+  private void doTest(final String className, final String superClassName, final boolean replaceInstanceOf) throws Exception {
     doTest(new PerformAction() {
       @Override
       public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {

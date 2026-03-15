@@ -25,7 +25,6 @@ import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.search.DefinitionsScopedSearch;
 import consulo.language.psi.search.DefinitionsScopedSearchExecutor;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;
 
@@ -33,8 +32,8 @@ import java.util.function.Predicate;
 public class ClassImplementationsSearch implements DefinitionsScopedSearchExecutor {
     @Override
     public boolean execute(
-        @Nonnull DefinitionsScopedSearch.SearchParameters queryParameters,
-        @Nonnull Predicate<? super PsiElement> consumer
+        DefinitionsScopedSearch.SearchParameters queryParameters,
+        Predicate<? super PsiElement> consumer
     ) {
         PsiElement sourceElement = queryParameters.getElement();
         return !(sourceElement instanceof PsiClass psiClass)

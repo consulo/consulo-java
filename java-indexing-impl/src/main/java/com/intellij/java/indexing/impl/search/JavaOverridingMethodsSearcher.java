@@ -14,8 +14,7 @@ import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
 import consulo.content.scope.SearchScope;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -27,8 +26,8 @@ import java.util.function.Supplier;
 public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExecutor {
     @Override
     public boolean execute(
-        @Nonnull OverridingMethodsSearch.SearchParameters p,
-        @Nonnull Predicate<? super PsiMethod> consumer
+        OverridingMethodsSearch.SearchParameters p,
+        Predicate<? super PsiMethod> consumer
     ) {
         PsiMethod method = p.getMethod();
         SearchScope scope = p.getScope();
@@ -44,7 +43,7 @@ public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExe
     }
 
     @Nullable
-    public static PsiMethod findOverridingMethod(PsiClass inheritor, PsiMethod method, @Nonnull PsiClass methodContainingClass) {
+    public static PsiMethod findOverridingMethod(PsiClass inheritor, PsiMethod method, PsiClass methodContainingClass) {
         String name = method.getName();
         if (inheritor.findMethodsByName(name, false).length > 0) {
             PsiMethod found = MethodSignatureUtil.findMethodBySuperSignature(
@@ -71,8 +70,7 @@ public class JavaOverridingMethodsSearcher implements OverridingMethodsSearchExe
         return null;
     }
 
-    @Nonnull
-    private static MethodSignature getSuperSignature(PsiClass inheritor, @Nonnull PsiClass parentClass, PsiMethod method) {
+    private static MethodSignature getSuperSignature(PsiClass inheritor, PsiClass parentClass, PsiMethod method) {
         PsiSubstitutor substitutor = TypeConversionUtil.getMaybeSuperClassSubstitutor(parentClass, inheritor, PsiSubstitutor.EMPTY);
         // if null, we have EJB custom inheritance here and still check overriding
         return method.getSignature(substitutor != null ? substitutor : PsiSubstitutor.EMPTY);

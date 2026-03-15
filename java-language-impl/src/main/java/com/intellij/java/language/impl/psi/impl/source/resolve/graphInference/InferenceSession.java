@@ -40,8 +40,7 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.SystemProperties;
 import consulo.util.lang.ref.Ref;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.util.*;
@@ -171,11 +170,11 @@ public class InferenceSession {
     initBounds(typeParams);
   }
 
-  public static PsiType getUpperBound(@Nonnull PsiClass psiClass) {
+  public static PsiType getUpperBound(PsiClass psiClass) {
     return psiClass.getUserData(UPPER_BOUND);
   }
 
-  public static PsiType getLowerBound(@Nonnull PsiClass psiClass) {
+  public static PsiType getLowerBound(PsiClass psiClass) {
     return psiClass.getUserData(LOWER_BOUND);
   }
 
@@ -319,7 +318,7 @@ public class InferenceSession {
     return true;
   }
 
-  private static PsiTypeParameterListOwner getTypeParameterOwner(@Nonnull PsiMethod method, PsiElement gParent) {
+  private static PsiTypeParameterListOwner getTypeParameterOwner(PsiMethod method, PsiElement gParent) {
     PsiTypeParameterListOwner owner = null;
     if (method.getTypeParameters().length > 0 && gParent instanceof PsiCallExpression && ((PsiCallExpression)gParent).getTypeArgumentList()
                                                                                                                      .getTypeParameterElements().length == 0) {
@@ -349,40 +348,36 @@ public class InferenceSession {
     return substitutor.substitute(PsiTypesUtil.getParameterType(parameters, i, varargs));
   }
 
-  @Nonnull
   public PsiSubstitutor infer() {
     return infer(null, null, null);
   }
 
 
-  public PsiSubstitutor collectAdditionalAndInfer(@Nonnull PsiParameter[] parameters,
-                                                  @Nonnull PsiExpression[] args,
-                                                  @Nonnull MethodCandidateInfo.CurrentCandidateProperties properties,
-                                                  @Nonnull PsiSubstitutor psiSubstitutor) {
+  public PsiSubstitutor collectAdditionalAndInfer(PsiParameter[] parameters,
+                                                  PsiExpression[] args,
+                                                  MethodCandidateInfo.CurrentCandidateProperties properties,
+                                                  PsiSubstitutor psiSubstitutor) {
     return performGuardedInference(parameters, args, myContext, properties, psiSubstitutor);
   }
 
-  @Nonnull
   public PsiSubstitutor infer(@Nullable PsiParameter[] parameters,
                               @Nullable PsiExpression[] args,
                               @Nullable PsiElement parent) {
     return infer(parameters, args, parent, getCurrentProperties(parent));
   }
 
-  @Nonnull
   public PsiSubstitutor infer(@Nullable PsiParameter[] parameters,
                               @Nullable PsiExpression[] args,
                               @Nullable PsiElement parent,
-                              @Nullable MethodCandidateInfo.CurrentCandidateProperties properties) {
+                              MethodCandidateInfo.@Nullable CurrentCandidateProperties properties) {
     return performGuardedInference(parameters, args, parent, properties, PsiSubstitutor.EMPTY);
   }
 
-  @Nonnull
   private PsiSubstitutor performGuardedInference(@Nullable PsiParameter[] parameters,
                                                  @Nullable PsiExpression[] args,
                                                  @Nullable PsiElement parent,
-                                                 @Nullable MethodCandidateInfo.CurrentCandidateProperties properties,
-                                                 @Nonnull PsiSubstitutor initialSubstitutor) {
+                                                 MethodCandidateInfo.@Nullable CurrentCandidateProperties properties,
+                                                 PsiSubstitutor initialSubstitutor) {
     try {
       doInfer(parameters, args, parent, properties, initialSubstitutor);
       return prepareSubstitution();
@@ -403,8 +398,8 @@ public class InferenceSession {
   private void doInfer(@Nullable PsiParameter[] parameters,
                        @Nullable PsiExpression[] args,
                        @Nullable PsiElement parent,
-                       @Nullable MethodCandidateInfo.CurrentCandidateProperties properties,
-                       @Nonnull PsiSubstitutor initialSubstitutor) {
+                       MethodCandidateInfo.@Nullable CurrentCandidateProperties properties,
+                       PsiSubstitutor initialSubstitutor) {
     if (!repeatInferencePhases()) {
       return;
     }
@@ -772,7 +767,7 @@ public class InferenceSession {
    * either exiting ones, or newly created ones.
    */
   public InferenceVariable[] initOrReuseVariables(PsiElement context,
-                                                  @Nonnull PsiTypeParameter... typeParameters) {
+                                                  PsiTypeParameter... typeParameters) {
     if (typeParameters.length == 0) return new InferenceVariable[0];
     Map<PsiTypeParameter, PsiType> map = myInferenceSubstitution.getSubstitutionMap();
     InferenceVariable[] variables = StreamEx.of(typeParameters).map(map::get)
@@ -1251,7 +1246,7 @@ public class InferenceSession {
   }
 
   private void resolveBounds(final Collection<InferenceVariable> inferenceVariables,
-                             @Nonnull PsiSubstitutor substitutor) {
+                             PsiSubstitutor substitutor) {
     final Collection<InferenceVariable> allVars = new ArrayList<>(inferenceVariables);
     while (!allVars.isEmpty()) {
       final List<InferenceVariable> vars = InferenceVariablesOrder.resolveOrder(allVars, this);
@@ -1355,7 +1350,6 @@ public class InferenceSession {
     return substitutor;
   }
 
-  @Nonnull
   private PsiSubstitutor resolveSubset(Collection<InferenceVariable> vars, PsiSubstitutor substitutor) {
     if (myErased) {
       for (InferenceVariable var : vars) {
@@ -1463,7 +1457,7 @@ public class InferenceSession {
     registerIncompatibleErrorMessage("no instance(s) of type variable(s) " + variablesEnumeration + " exist so that " + incompatibleTypesMessage);
   }
 
-  public void registerIncompatibleErrorMessage(@Nonnull String incompatibleBoundsMessage) {
+  public void registerIncompatibleErrorMessage(String incompatibleBoundsMessage) {
     if (myErrorMessages == null) {
       myErrorMessages = new ArrayList<>();
     }
@@ -1719,7 +1713,6 @@ public class InferenceSession {
     return false;
   }
 
-  @Nonnull
   private Set<InferenceVariable> getOutputVariables(Set<ConstraintFormula> constraintFormulas) {
     final Set<InferenceVariable> outputVariables = new HashSet<>();
     for (ConstraintFormula constraint : constraintFormulas) {

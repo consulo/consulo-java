@@ -11,7 +11,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.wrapreturnvalue.WrapReturnValueProcessor;
 import com.intellij.JavaTestUtil;
-import org.jetbrains.annotations.NonNls;
 
 public abstract class WrapReturnValueTest extends MultiFileTestCase{
   @Override
@@ -28,7 +27,7 @@ public abstract class WrapReturnValueTest extends MultiFileTestCase{
     doTest(existing, null);
   }
 
-  private void doTest(boolean existing, @NonNls String exceptionMessage) throws Exception {
+  private void doTest(boolean existing, String exceptionMessage) throws Exception {
     doTest(existing, exceptionMessage, false);
   }
 
@@ -45,7 +44,7 @@ public abstract class WrapReturnValueTest extends MultiFileTestCase{
 
 
 
-          @NonNls String wrapperClassName = "Wrapper";
+          String wrapperClassName = "Wrapper";
 
           PsiClass wrapperClass = myJavaFacade.findClass(wrapperClassName, GlobalSearchScope.projectScope(getProject()));
 

@@ -55,8 +55,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -69,14 +68,14 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
 
     @Override
     @RequiredReadAction
-    public boolean isAvailableForQuickList(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext) {
+    public boolean isAvailableForQuickList(Editor editor, PsiFile file, DataContext dataContext) {
         PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
         return getCannotRefactorMessage(PsiTreeUtil.getParentOfType(element, PsiMember.class)) == null;
     }
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull final Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(final Project project, Editor editor, PsiFile file, DataContext dataContext) {
         int offset = editor.getCaretModel().getOffset();
         PsiElement element = file.findElementAt(offset);
         final PsiMember member = PsiTreeUtil.getParentOfType(element, PsiMember.class);
@@ -102,7 +101,7 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
         if (dlg.showAndGet()) {
             ProgressManager.getInstance().run(new Task.Backgroundable(project, "Locate duplicates", true) {
                 @Override
-                public void run(@Nonnull ProgressIndicator indicator) {
+                public void run(ProgressIndicator indicator) {
                     indicator.setIndeterminate(true);
                     invokeOnScope(project, member, dlg.getScope(scope));
                 }
@@ -336,13 +335,13 @@ public class MethodDuplicatesHandler implements RefactoringActionHandler, Contex
     }
 
     @RequiredUIAccess
-    private static void showErrorMessage(@Nonnull LocalizeValue message, Project project, Editor editor) {
+    private static void showErrorMessage(LocalizeValue message, Project project, Editor editor) {
         CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.METHOD_DUPLICATES);
     }
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         throw new UnsupportedOperationException();
     }
 }

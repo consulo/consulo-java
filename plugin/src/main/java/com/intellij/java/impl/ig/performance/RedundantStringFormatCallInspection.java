@@ -27,18 +27,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class RedundantStringFormatCallInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.redundantStringFormatCallDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.redundantStringFormatCallProblemDescriptor().get();
     }
@@ -50,7 +47,6 @@ public class RedundantStringFormatCallInspection extends BaseInspection {
 
     private static class RedundantStringFormatCallFix extends InspectionGadgetsFix {
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.redundantStringFormatCallQuickfix();
         }

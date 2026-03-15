@@ -19,7 +19,6 @@ import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.Language;
 import consulo.language.version.LanguageVersion;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 
@@ -33,13 +32,11 @@ public class JavaLanguage extends Language {
         super("JAVA", "text/java", "application/x-java", "text/x-java");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.javaLanguageDisplayName();
     }
 
-    @Nonnull
     @Override
     public LanguageVersion[] findVersions() {
         return Arrays.stream(LanguageLevel.values()).map(LanguageLevel::toLangVersion).toArray(LanguageVersion[]::new);

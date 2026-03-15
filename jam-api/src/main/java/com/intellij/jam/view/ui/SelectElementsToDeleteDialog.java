@@ -18,7 +18,6 @@ package com.intellij.jam.view.ui;
 import com.intellij.jam.JamMessages;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.List;
@@ -30,7 +29,6 @@ public class SelectElementsToDeleteDialog extends SelectElementsDialog {
     getSelectedItems().addAll(elements);
   }
 
-  @Nonnull
   protected Action[] createActions() {
     getOKAction().putValue(Action.NAME, JamMessages.message("button.delete"));
     getCancelAction().putValue(Action.NAME, JamMessages.message("button.do.not.delete"));

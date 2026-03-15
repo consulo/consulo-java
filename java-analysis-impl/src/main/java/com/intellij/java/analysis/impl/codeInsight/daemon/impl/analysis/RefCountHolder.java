@@ -19,8 +19,7 @@ import consulo.project.Project;
 import consulo.util.collection.*;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
@@ -33,7 +32,6 @@ import java.util.concurrent.ConcurrentHashMap;
 final class RefCountHolder {
     private final PsiFile myFile;
     // resolved elements -> list of their references in this file
-    @Nonnull
     private final MultiMap<PsiElement, PsiReference> myLocalRefsMap;
 
     private final Set<PsiAnchor> myDclsUsedMap;
@@ -44,7 +42,7 @@ final class RefCountHolder {
     private volatile boolean ready; // true when analysis completed and inner maps can be queried
 
     @RequiredReadAction
-    static RefCountHolder get(@Nonnull PsiFile file, @Nonnull TextRange dirtyScope) {
+    static RefCountHolder get(PsiFile file, TextRange dirtyScope) {
         Reference<RefCountHolder> ref = file.getUserData(REF_COUNT_HOLDER_IN_FILE_KEY);
         RefCountHolder storedHolder = consulo.util.lang.ref.SoftReference.dereference(ref);
         boolean wholeFile = dirtyScope.equals(file.getTextRange());
@@ -62,16 +60,16 @@ final class RefCountHolder {
             : storedHolder.removeInvalidRefs();
     }
 
-    void storeReadyHolder(@Nonnull PsiFile file) {
+    void storeReadyHolder(PsiFile file) {
         ready = true;
         file.putUserData(REF_COUNT_HOLDER_IN_FILE_KEY, new SoftReference<>(this));
     }
 
     private RefCountHolder(
-        @Nonnull PsiFile file,
-        @Nonnull MultiMap<PsiElement, PsiReference> localRefsMap,
-        @Nonnull Set<PsiAnchor> dclsUsedMap,
-        @Nonnull Map<PsiReference, PsiImportStatementBase> importStatements
+        PsiFile file,
+        MultiMap<PsiElement, PsiReference> localRefsMap,
+        Set<PsiAnchor> dclsUsedMap,
+        Map<PsiReference, PsiImportStatementBase> importStatements
     ) {
         myFile = file;
         myLocalRefsMap = localRefsMap;
@@ -80,9 +78,8 @@ final class RefCountHolder {
         log("c: created for ", file);
     }
 
-    @Nonnull
     GlobalUsageHelper getGlobalUsageHelper(
-        @Nonnull PsiFile file,
+        PsiFile file,
         @Nullable UnusedDeclarationInspectionBase deadCodeInspection,
         UnusedDeclarationInspectionState deadCodeState
     ) {
@@ -115,7 +112,7 @@ final class RefCountHolder {
                 });
 
                 @Override
-                public boolean shouldCheckUsages(@Nonnull PsiMember member) {
+                public boolean shouldCheckUsages(PsiMember member) {
                     return !myEntryPointCache.get(member);
                 }
             };
@@ -124,11 +121,11 @@ final class RefCountHolder {
     }
 
     @RequiredReadAction
-    void registerLocallyReferenced(@Nonnull PsiNamedElement result) {
+    void registerLocallyReferenced(PsiNamedElement result) {
         myDclsUsedMap.add(PsiAnchor.create(result));
     }
 
-    void registerReference(@Nonnull PsiReference ref, @Nonnull JavaResolveResult resolveResult) {
+    void registerReference(PsiReference ref, JavaResolveResult resolveResult) {
         PsiElement refElement = resolveResult.getElement();
         PsiFile psiFile = refElement == null ? null : refElement.getContainingFile();
         if (psiFile != null) {
@@ -154,16 +151,16 @@ final class RefCountHolder {
         }
     }
 
-    private void registerImportStatement(@Nonnull PsiReference ref, @Nonnull PsiImportStatementBase importStatement) {
+    private void registerImportStatement(PsiReference ref, PsiImportStatementBase importStatement) {
         myImportStatements.put(ref, importStatement);
     }
 
-    boolean isRedundant(@Nonnull PsiImportStatementBase importStatement) {
+    boolean isRedundant(PsiImportStatementBase importStatement) {
         assert ready;
         return !myImportStatements.containsValue(importStatement);
     }
 
-    private void registerLocalRef(@Nonnull PsiReference ref, PsiElement refElement) {
+    private void registerLocalRef(PsiReference ref, PsiElement refElement) {
         PsiElement element = ref.getElement();
         if (refElement instanceof PsiMethod && PsiTreeUtil.isAncestor(refElement, element, true)) {
             return; // filter self-recursive calls
@@ -176,7 +173,6 @@ final class RefCountHolder {
         myLocalRefsMap.putValue(refElement, ref);
     }
 
-    @Nonnull
     @RequiredReadAction
     private RefCountHolder removeInvalidRefs() {
         assert ready;
@@ -217,7 +213,7 @@ final class RefCountHolder {
     }
 
     @RequiredReadAction
-    boolean isReferenced(@Nonnull PsiElement element) {
+    boolean isReferenced(PsiElement element) {
         assert ready;
         Collection<PsiReference> array = myLocalRefsMap.get(element);
         if (!array.isEmpty() && !isParameterUsedRecursively(element, array) && !isClassUsedForInnerImports(element, array)) {
@@ -232,7 +228,7 @@ final class RefCountHolder {
     }
 
     @RequiredReadAction
-    private boolean isClassUsedForInnerImports(@Nonnull PsiElement element, @Nonnull Collection<? extends PsiReference> array) {
+    private boolean isClassUsedForInnerImports(PsiElement element, Collection<? extends PsiReference> array) {
         assert ready;
         if (!(element instanceof PsiClass)) {
             return false;
@@ -265,7 +261,7 @@ final class RefCountHolder {
     }
 
     @RequiredReadAction
-    private static boolean isParameterUsedRecursively(@Nonnull PsiElement element, @Nonnull Collection<? extends PsiReference> array) {
+    private static boolean isParameterUsedRecursively(PsiElement element, Collection<? extends PsiReference> array) {
         if (!(element instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod method)) {
             return false;
         }
@@ -299,7 +295,7 @@ final class RefCountHolder {
     }
 
     @RequiredReadAction
-    boolean isReferencedForRead(@Nonnull PsiVariable variable) {
+    boolean isReferencedForRead(PsiVariable variable) {
         assert ready;
         Collection<PsiReference> array = myLocalRefsMap.get(variable);
         if (array.isEmpty()) {
@@ -322,7 +318,7 @@ final class RefCountHolder {
     }
 
     @RequiredReadAction
-    private static ReadWriteAccessDetector.Access getAccess(@Nonnull PsiReference ref, @Nonnull PsiElement resolved) {
+    private static ReadWriteAccessDetector.Access getAccess(PsiReference ref, PsiElement resolved) {
         PsiElement start = resolved.getLanguage() == ref.getElement().getLanguage() ? resolved : ref.getElement();
         ReadWriteAccessDetector detector = ReadWriteAccessDetector.findDetector(start);
         if (detector != null) {
@@ -332,7 +328,7 @@ final class RefCountHolder {
     }
 
     // "var++;"
-    private static boolean isJustIncremented(@Nonnull ReadWriteAccessDetector.Access access, @Nonnull PsiElement refElement) {
+    private static boolean isJustIncremented(ReadWriteAccessDetector.Access access, PsiElement refElement) {
         return access == ReadWriteAccessDetector.Access.ReadWrite
             && refElement instanceof PsiExpression
             && refElement.getParent() instanceof PsiExpression
@@ -340,7 +336,7 @@ final class RefCountHolder {
     }
 
     @RequiredReadAction
-    boolean isReferencedForWrite(@Nonnull PsiVariable variable) {
+    boolean isReferencedForWrite(PsiVariable variable) {
         assert ready;
         Collection<PsiReference> array = myLocalRefsMap.get(variable);
         if (array.isEmpty()) {
@@ -358,13 +354,13 @@ final class RefCountHolder {
         return false;
     }
 
-    private static void log(@Nonnull Object... info) {
+    private static void log(Object... info) {
         //FileStatusMap.log(info);
     }
 
     private class GlobalUsageHelperBase extends GlobalUsageHelper {
         @Override
-        public boolean shouldCheckUsages(@Nonnull PsiMember member) {
+        public boolean shouldCheckUsages(PsiMember member) {
             return false;
         }
 
@@ -375,7 +371,7 @@ final class RefCountHolder {
 
         @Override
         @RequiredReadAction
-        public boolean isLocallyUsed(@Nonnull PsiNamedElement member) {
+        public boolean isLocallyUsed(PsiNamedElement member) {
             return isReferenced(member);
         }
     }

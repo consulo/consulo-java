@@ -19,8 +19,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.siyeh.ig.psiutils.MethodUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class SerializationUtils {
 
@@ -35,7 +34,7 @@ public class SerializationUtils {
     return InheritanceUtil.isInheritor(aClass, CommonClassNames.JAVA_IO_EXTERNALIZABLE);
   }
 
-  public static boolean isDirectlySerializable(@Nonnull PsiClass aClass) {
+  public static boolean isDirectlySerializable(PsiClass aClass) {
     PsiReferenceList implementsList = aClass.getImplementsList();
     if (implementsList == null) {
       return false;
@@ -54,7 +53,7 @@ public class SerializationUtils {
     return false;
   }
 
-  public static boolean hasReadObject(@Nonnull PsiClass aClass) {
+  public static boolean hasReadObject(PsiClass aClass) {
     PsiMethod[] methods = aClass.findMethodsByName("readObject", false);
     for (PsiMethod method : methods) {
       if (isReadObject(method)) {
@@ -64,7 +63,7 @@ public class SerializationUtils {
     return false;
   }
 
-  public static boolean hasReadResolve(@Nonnull PsiClass aClass) {
+  public static boolean hasReadResolve(PsiClass aClass) {
     PsiMethod[] methods = aClass.findMethodsByName("readResolve", true);
     for (PsiMethod method : methods) {
       if (isReadResolve(method)) {
@@ -74,7 +73,7 @@ public class SerializationUtils {
     return false;
   }
 
-  public static boolean hasWriteObject(@Nonnull PsiClass aClass) {
+  public static boolean hasWriteObject(PsiClass aClass) {
     PsiMethod[] methods = aClass.findMethodsByName("writeObject", false);
     for (PsiMethod method : methods) {
       if (isWriteObject(method)) {
@@ -84,7 +83,7 @@ public class SerializationUtils {
     return false;
   }
 
-  public static boolean hasWriteReplace(@Nonnull PsiClass aClass) {
+  public static boolean hasWriteReplace(PsiClass aClass) {
     PsiMethod[] methods = aClass.findMethodsByName("writeReplace", true);
     for (PsiMethod method : methods) {
       if (isWriteReplace(method)) {
@@ -94,21 +93,21 @@ public class SerializationUtils {
     return false;
   }
 
-  public static boolean isReadObject(@Nonnull PsiMethod method) {
+  public static boolean isReadObject(PsiMethod method) {
     PsiClassType type = TypeUtils.getType("java.io.ObjectInputStream", method);
     return MethodUtils.methodMatches(method, null, PsiType.VOID, "readObject", type);
   }
 
-  public static boolean isWriteObject(@Nonnull PsiMethod method) {
+  public static boolean isWriteObject(PsiMethod method) {
     PsiClassType type = TypeUtils.getType("java.io.ObjectOutputStream", method);
     return MethodUtils.methodMatches(method, null, PsiType.VOID, "writeObject", type);
   }
 
-  public static boolean isReadResolve(@Nonnull PsiMethod method) {
+  public static boolean isReadResolve(PsiMethod method) {
     return MethodUtils.simpleMethodMatches(method, null, CommonClassNames.JAVA_LANG_OBJECT, "readResolve");
   }
 
-  public static boolean isWriteReplace(@Nonnull PsiMethod method) {
+  public static boolean isWriteReplace(PsiMethod method) {
     return MethodUtils.simpleMethodMatches(method, null, CommonClassNames.JAVA_LANG_OBJECT, "writeReplace");
   }
 

@@ -25,7 +25,6 @@ import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.lazy.LazyValue;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public abstract class ClsMemberImpl<T extends PsiMemberStub> extends ClsRepositoryPsiElement<T> implements PsiDocCommentOwner, PsiNameIdentifierOwner {
@@ -44,20 +43,18 @@ public abstract class ClsMemberImpl<T extends PsiMemberStub> extends ClsReposito
   }
 
   @Override
-  @Nonnull
   public PsiIdentifier getNameIdentifier() {
     return myNameIdentifier.get();
   }
 
   @Override
-  @Nonnull
   public String getName() {
     //noinspection ConstantConditions
     return getStub().getName();
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }

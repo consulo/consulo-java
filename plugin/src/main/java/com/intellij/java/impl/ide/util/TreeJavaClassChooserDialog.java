@@ -34,8 +34,7 @@ import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Conditions;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.util.List;
@@ -55,7 +54,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
   public TreeJavaClassChooserDialog(
     String title,
-    @Nonnull Project project,
+    Project project,
     GlobalSearchScope scope,
     ClassFilter classFilter,
     @Nullable PsiClass initialClass
@@ -65,7 +64,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
   public TreeJavaClassChooserDialog(
     String title,
-    @Nonnull Project project,
+    Project project,
     GlobalSearchScope scope,
     @Nullable ClassFilter classFilter,
     PsiClass baseClass,
@@ -86,7 +85,7 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
 
   public static TreeJavaClassChooserDialog withInnerClasses(
     String title,
-    @Nonnull Project project,
+    Project project,
     GlobalSearchScope scope,
     ClassFilter classFilter,
     @Nullable PsiClass initialClass
@@ -103,7 +102,6 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     }
   }
 
-  @Nonnull
   protected List<PsiClass> getClassesByName(
     String name,
     boolean checkBoxState,
@@ -119,9 +117,8 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
     return ContainerUtil.newArrayList(classes);
   }
 
-  @Nonnull
   @Override
-  protected TreeClassInheritorsProvider<PsiClass> getInheritorsProvider(@Nonnull PsiClass baseClass) {
+  protected TreeClassInheritorsProvider<PsiClass> getInheritorsProvider(PsiClass baseClass) {
     return new JavaInheritorsProvider(getProject(), baseClass, (GlobalSearchScope) getScope());
   }
 
@@ -139,7 +136,6 @@ public class TreeJavaClassChooserDialog extends AbstractTreeClassChooserDialog<P
       myProject = project;
     }
 
-    @Nonnull
     @Override
     public Query<PsiClass> searchForInheritors(PsiClass baseClass, ProjectAwareSearchScope searchScope, boolean checkDeep) {
       return ClassInheritorsSearch.search(baseClass, searchScope, checkDeep);

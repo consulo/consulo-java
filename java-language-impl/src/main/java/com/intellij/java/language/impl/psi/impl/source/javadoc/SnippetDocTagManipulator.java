@@ -11,7 +11,6 @@ import consulo.language.psi.AbstractElementManipulator;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
@@ -19,8 +18,8 @@ import java.util.List;
 public final class SnippetDocTagManipulator extends AbstractElementManipulator<PsiSnippetDocTagImpl> {
 
   @Override
-  public PsiSnippetDocTagImpl handleContentChange(@Nonnull PsiSnippetDocTagImpl element,
-                                                  @Nonnull TextRange range,
+  public PsiSnippetDocTagImpl handleContentChange(PsiSnippetDocTagImpl element,
+                                                  TextRange range,
                                                   String newContent) throws IncorrectOperationException {
     final PsiElementFactory factory = JavaPsiFacade.getElementFactory(element.getProject());
 
@@ -38,14 +37,14 @@ public final class SnippetDocTagManipulator extends AbstractElementManipulator<P
   }
 
   @Contract(pure = true)
-  private static @Nonnull
-  String prependAbsentAsterisks(@Nonnull String input) {
+  private static 
+  String prependAbsentAsterisks(String input) {
     return input.replaceAll("(\\n\\s*)([^*\\s])", "$1 * $2");
   }
 
   @Override
-  public @Nonnull
-  TextRange getRangeInElement(@Nonnull PsiSnippetDocTagImpl element) {
+  public 
+  TextRange getRangeInElement(PsiSnippetDocTagImpl element) {
     final List<TextRange> ranges = element.getContentRanges();
     if (ranges.isEmpty()) return TextRange.EMPTY_RANGE;
     final int startOffset = ranges.get(0).getStartOffset();
@@ -53,7 +52,6 @@ public final class SnippetDocTagManipulator extends AbstractElementManipulator<P
     return TextRange.create(startOffset, endOffset);
   }
 
-  @Nonnull
   @Override
   public Class<PsiSnippetDocTagImpl> getElementClass() {
     return PsiSnippetDocTagImpl.class;

@@ -1,4 +1,3 @@
-import jakarta.annotation.Nonnull;
 
 import org.junit.Assert;
 
@@ -19,7 +18,7 @@ class Test {
     }
   }
 
-  private static @Nonnull
+  private static 
   String createString() {
     throw new NullPointerException();
   }

@@ -33,7 +33,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,18 +41,15 @@ import java.util.List;
 public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.charUsedInArithmeticContextDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.charUsedInArithmeticContextProblemDescriptor().get();
   }
 
-  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     List<InspectionGadgetsFix> result = new ArrayList<InspectionGadgetsFix>();
@@ -83,7 +79,6 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
 
   private static class CharUsedInArithmeticContentFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.charUsedInArithmeticContextQuickfix();
     }
@@ -112,7 +107,6 @@ public class CharUsedInArithmeticContextInspection extends BaseInspection {
       this.typeText = typeText;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.charUsedInArithmeticContextCastQuickfix(typeText);
     }

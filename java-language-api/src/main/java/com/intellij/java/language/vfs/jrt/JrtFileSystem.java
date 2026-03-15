@@ -6,18 +6,17 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFilePointerCapableFileSystem;
 import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 
-import jakarta.annotation.Nonnull;
 
 public interface JrtFileSystem extends ArchiveFileSystem, VirtualFilePointerCapableFileSystem {
   public static final String PROTOCOL = "jrt";
   public static final String PROTOCOL_PREFIX = PROTOCOL + URLUtil.SCHEME_SEPARATOR;
   public static final String SEPARATOR = URLUtil.JAR_SEPARATOR;
 
-  public static boolean isRoot(@Nonnull VirtualFile file) {
+  public static boolean isRoot(VirtualFile file) {
     return file.getParent() == null && file.getFileSystem() instanceof JrtFileSystem;
   }
 
-  public static boolean isModuleRoot(@Nonnull VirtualFile file) {
+  public static boolean isModuleRoot(VirtualFile file) {
     VirtualFile parent = file.getParent();
     return parent != null && isRoot(parent);
   }

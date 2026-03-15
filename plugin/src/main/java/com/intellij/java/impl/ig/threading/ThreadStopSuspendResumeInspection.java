@@ -24,23 +24,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ThreadStopSuspendResumeInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "CallToThreadStopSuspendOrResumeManager";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.threadStopSuspendResumeDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.threadStopSuspendResumeProblemDescriptor().get();
   }
@@ -54,7 +49,7 @@ public class ThreadStopSuspendResumeInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isStopSuspendOrResume(expression)) {
         return;
@@ -66,7 +61,7 @@ public class ThreadStopSuspendResumeInspection extends BaseInspection {
       PsiMethodCallExpression expression) {
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!("stop".equals(methodName) || "suspend".equals(methodName) ||
             "resume".equals(methodName))) {

@@ -30,8 +30,7 @@ import consulo.language.statistician.StatisticsInfo;
 import consulo.language.statistician.StatisticsManager;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -326,11 +325,11 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager {
   }
 
   @Override
-  public void typeSelected(@Nonnull PsiType type) {
+  public void typeSelected(PsiType type) {
     typeSelected(type, getDefaultType());
   }
 
-  public static void typeSelected(@Nonnull PsiType type, @Nullable PsiType defaultType) {
+  public static void typeSelected(PsiType type, @Nullable PsiType defaultType) {
     if (defaultType == null) {
       return;
     }
@@ -349,7 +348,7 @@ public class TypeSelectorManagerImpl implements TypeSelectorManager {
     return "IntroduceVariable##" + serialize(defaultType);
   }
 
-  private static String serialize(@Nonnull PsiType type) {
+  private static String serialize(PsiType type) {
     if (PsiUtil.resolveClassInType(type) instanceof PsiTypeParameter) {
       return type.getCanonicalText();
     }

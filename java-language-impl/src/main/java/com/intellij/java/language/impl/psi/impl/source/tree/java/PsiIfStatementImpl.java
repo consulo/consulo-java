@@ -36,7 +36,6 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStatement, Constants {
   private static final Logger LOG = Logger.getInstance(PsiIfStatementImpl.class);
@@ -51,7 +50,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (child == getElseBranch()) {
       ASTNode elseKeyword = findChildByRole(ChildRole.ELSE_KEYWORD);
       if (elseKeyword != null) {
@@ -87,7 +86,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void setElseBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException {
+  public void setElseBranch(PsiStatement statement) throws IncorrectOperationException {
     PsiStatement elseBranch = getElseBranch();
     if (elseBranch != null) {
       elseBranch.delete();
@@ -105,7 +104,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void setThenBranch(@Nonnull PsiStatement statement) throws IncorrectOperationException {
+  public void setThenBranch(PsiStatement statement) throws IncorrectOperationException {
     PsiElementFactory elementFactory = JavaPsiFacade.getInstance(getProject()).getElementFactory();
     ASTNode keyword = findChildByRole(ChildRole.IF_KEYWORD);
     LOG.assertTrue(keyword != null);
@@ -202,10 +201,10 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
 
   @Override
   @RequiredReadAction
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     ElementClassHint elementClassHint = processor.getHint(ElementClassHint.KEY);
     if (elementClassHint != null && !elementClassHint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) return true;
     PsiExpression condition = getCondition();
@@ -264,7 +263,7 @@ public class PsiIfStatementImpl extends CompositePsiElement implements PsiIfStat
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitIfStatement(this);
     }

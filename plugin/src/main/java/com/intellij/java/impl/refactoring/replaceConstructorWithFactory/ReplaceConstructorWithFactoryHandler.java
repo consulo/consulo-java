@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring.replaceConstructorWithFactory;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import consulo.dataContext.DataContext;
@@ -40,7 +39,7 @@ public class ReplaceConstructorWithFactoryHandler
   public static final String REFACTORING_NAME = RefactoringBundle.message("replace.constructor.with.factory.method.title");
   private Project myProject;
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
     int offset = editor.getCaretModel().getOffset();
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     PsiElement element = file.findElementAt(offset);
@@ -92,7 +91,7 @@ public class ReplaceConstructorWithFactoryHandler
     }
   }
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     myProject = project;

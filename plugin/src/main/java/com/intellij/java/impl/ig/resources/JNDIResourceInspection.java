@@ -23,8 +23,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -35,19 +33,16 @@ public class JNDIResourceInspection extends ResourceInspection {
   public boolean insideTryAllowed = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "JNDIResourceOpenedButNotSafelyClosed";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.jndiResourceOpenedNotClosedDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiExpression expression = (PsiExpression)infos[0];
     PsiType type = expression.getType();
@@ -69,16 +64,13 @@ public class JNDIResourceInspection extends ResourceInspection {
 
   private class JNDIResourceVisitor extends BaseInspectionVisitor {
 
-    @NonNls
     private static final String LIST = "list";
-    @NonNls
     private static final String LIST_BINDING = "listBindings";
-    @NonNls
     private static final String GET_ALL = "getAll";
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isJNDIFactoryMethod(expression)) {
         return;
@@ -100,7 +92,7 @@ public class JNDIResourceInspection extends ResourceInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression expression) {
+      PsiNewExpression expression) {
       super.visitNewExpression(expression);
       if (!isJNDIResource(expression)) {
         return;

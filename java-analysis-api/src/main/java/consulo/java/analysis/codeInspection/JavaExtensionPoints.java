@@ -18,7 +18,6 @@ package consulo.java.analysis.codeInspection;
 import com.intellij.java.analysis.codeInspection.ex.EntryPoint;
 import consulo.component.extension.ExtensionPointName;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -26,10 +25,8 @@ import jakarta.annotation.Nonnull;
  */
 @Deprecated
 public interface JavaExtensionPoints {
-    @Nonnull
     @Deprecated
     ExtensionPointName<EntryPoint> DEAD_CODE_EP_NAME = ExtensionPointName.create(EntryPoint.class);
 
-    @Nonnull
     ExtensionPointName<CantBeStaticCondition> CANT_BE_STATIC_EP_NAME = ExtensionPointName.create(CantBeStaticCondition.class);
 }

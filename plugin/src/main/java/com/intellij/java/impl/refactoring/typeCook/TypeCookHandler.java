@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.typeCook;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
@@ -27,11 +26,11 @@ import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 
 public class TypeCookHandler implements RefactoringActionHandler {
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
     invoke(project, new PsiElement[]{file}, dataContext);
   }
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
     if (elements == null || elements.length == 0) return;
 
     for (PsiElement element : elements) {

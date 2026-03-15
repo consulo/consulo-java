@@ -42,8 +42,7 @@ import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class JavaResolveUtil {
   public static PsiClass getContextClass(PsiElement element) {
@@ -65,19 +64,19 @@ public class JavaResolveUtil {
     return scope;
   }
 
-  public static boolean isAccessible(@Nonnull PsiMember member,
+  public static boolean isAccessible(PsiMember member,
                                      @Nullable PsiClass memberClass,
                                      @Nullable PsiModifierList modifierList,
-                                     @Nonnull PsiElement place,
+                                     PsiElement place,
                                      @Nullable PsiClass accessObjectClass,
                                      @Nullable PsiElement fileResolveScope) {
     return isAccessible(member, memberClass, modifierList, place, accessObjectClass, fileResolveScope, place.getContainingFile());
   }
 
-  public static boolean isAccessible(@Nonnull PsiMember member,
+  public static boolean isAccessible(PsiMember member,
                                      @Nullable PsiClass memberClass,
                                      @Nullable PsiModifierList modifierList,
-                                     @Nonnull PsiElement place,
+                                     PsiElement place,
                                      @Nullable PsiClass accessObjectClass,
                                      @Nullable PsiElement fileResolveScope,
                                      @Nullable PsiFile placeFile) {
@@ -191,8 +190,8 @@ public class JavaResolveUtil {
     return true;
   }
 
-  public static boolean canAccessProtectedMember(@Nonnull PsiMember member,
-                                                 @Nonnull PsiClass memberClass,
+  public static boolean canAccessProtectedMember(PsiMember member,
+                                                 PsiClass memberClass,
                                                  @Nullable PsiClass accessObjectClass, @Nullable PsiClass contextClass, boolean isStatic) {
     while (contextClass != null) {
       if (InheritanceUtil.isInheritorOrSelf(contextClass, memberClass, true)) {
@@ -207,7 +206,7 @@ public class JavaResolveUtil {
     return false;
   }
 
-  private static boolean isInClassAnnotationParameterList(@Nonnull PsiElement place, @Nullable PsiClass contextClass) {
+  private static boolean isInClassAnnotationParameterList(PsiElement place, @Nullable PsiClass contextClass) {
     if (contextClass != null) {
       PsiAnnotation annotation = PsiTreeUtil.getContextOfType(place, PsiAnnotation.class, true);
       if (annotation != null && PsiTreeUtil.isAncestor(contextClass.getModifierList(), annotation, false)) {
@@ -237,7 +236,7 @@ public class JavaResolveUtil {
     return false;
   }
 
-  private static PsiClass getTopLevelClass(@Nonnull PsiElement place, PsiClass memberClass) {
+  private static PsiClass getTopLevelClass(PsiElement place, PsiClass memberClass) {
     PsiClass lastClass = null;
     Boolean isAtLeast17 = null;
     for (PsiElement placeParent = place; placeParent != null; placeParent = placeParent.getContext()) {
@@ -282,7 +281,7 @@ public class JavaResolveUtil {
     return true;
   }
 
-  public static void substituteResults(@Nonnull final PsiJavaCodeReferenceElement ref, @Nonnull JavaResolveResult[] result) {
+  public static void substituteResults(final PsiJavaCodeReferenceElement ref, JavaResolveResult[] result) {
     if (result.length > 0 && result[0].getElement() instanceof PsiClass) {
       PsiDeconstructionPattern pattern = ObjectUtil.tryCast(ref.getParent().getParent(), PsiDeconstructionPattern.class);
       for (int i = 0; i < result.length; i++) {
@@ -295,7 +294,6 @@ public class JavaResolveUtil {
             result[i] = pattern != null && ref.getTypeParameterCount() == 0
               ? PatternInference.inferPatternGenerics(resolveResult, pattern, resultClass, JavaPsiPatternUtil.getContextType(pattern))
               : new CandidateInfo(resolveResult, substitutor) {
-              @Nonnull
               @Override
               public PsiSubstitutor getSubstitutor() {
                 PsiType[] parameters = ref.getTypeParameters();
@@ -308,12 +306,11 @@ public class JavaResolveUtil {
     }
   }
 
-  @Nonnull
-  public static <T extends PsiPolyVariantReference> JavaResolveResult[] resolveWithContainingFile(@Nonnull T ref,
-                                                                                                  @Nonnull ResolveCache.PolyVariantContextResolver<T> resolver,
+  public static <T extends PsiPolyVariantReference> JavaResolveResult[] resolveWithContainingFile(T ref,
+                                                                                                  ResolveCache.PolyVariantContextResolver<T> resolver,
                                                                                                   boolean needToPreventRecursion,
                                                                                                   boolean incompleteCode,
-                                                                                                  @Nonnull PsiFile containingFile) {
+                                                                                                  PsiFile containingFile) {
     boolean valid = containingFile.isValid();
     if (!valid) {
       return JavaResolveResult.EMPTY_ARRAY;
@@ -329,9 +326,9 @@ public class JavaResolveUtil {
    * which the "{@code super();}" no-args call resolves to if inserted in the {@code place} (typically it would be inserted in the sub class constructor)
    * No code modifications happen in this method; it's used for resolving multiple overloaded constructors.
    */
-  public static PsiElement resolveImaginarySuperCallInThisPlace(@Nonnull PsiMember place,
-                                                                @Nonnull Project project,
-                                                                @Nonnull PsiClass superClassWhichTheSuperCallMustResolveTo) {
+  public static PsiElement resolveImaginarySuperCallInThisPlace(PsiMember place,
+                                                                Project project,
+                                                                PsiClass superClassWhichTheSuperCallMustResolveTo) {
     PsiExpressionListImpl expressionList = new PsiExpressionListImpl();
     final DummyHolder result = DummyHolderFactory.createHolder(PsiManager.getInstance(project), place);
     final FileElement holder = result.getTreeElement();

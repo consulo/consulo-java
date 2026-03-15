@@ -47,7 +47,6 @@ import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -80,12 +79,10 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
     }
 
     @Override
-    @Nonnull
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new PullUpUsageViewDescriptor();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -136,7 +133,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         moveMembersToBase();
         moveFieldInitializations();
         for (UsageInfo usage : usages) {
@@ -189,7 +186,6 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
         );
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.pullupCommand(DescriptiveNameUtil.getDescriptiveName(mySourceClass));
@@ -227,7 +223,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
     }
 
     @RequiredReadAction
-    private PullUpHelper<MemberInfo> getProcessor(@Nonnull PsiElement element) {
+    private PullUpHelper<MemberInfo> getProcessor(PsiElement element) {
         Language language = element.getLanguage();
         return getProcessor(language);
     }
@@ -242,7 +238,7 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
     }
 
     @RequiredReadAction
-    private PullUpHelper<MemberInfo> getProcessor(@Nonnull MemberInfo info) {
+    private PullUpHelper<MemberInfo> getProcessor(MemberInfo info) {
         PsiReferenceList refList = info.getSourceReferenceList();
         if (refList != null) {
             return getProcessor(refList.getLanguage());
@@ -337,7 +333,6 @@ public class PullUpProcessor extends BaseRefactoringProcessor implements PullUpD
         }
 
         @Override
-        @Nonnull
         public PsiElement[] getElements() {
             return new PsiElement[]{mySourceClass};
         }

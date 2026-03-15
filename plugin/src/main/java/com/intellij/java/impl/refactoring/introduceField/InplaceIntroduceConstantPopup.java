@@ -32,8 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBUI;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -209,7 +208,7 @@ public class InplaceIntroduceConstantPopup extends AbstractInplaceIntroduceField
     }
 
     @Override
-    protected void saveSettings(@Nonnull PsiVariable psiVariable) {
+    protected void saveSettings(PsiVariable psiVariable) {
         super.saveSettings(psiVariable);
         JavaRefactoringSettings.getInstance().INTRODUCE_CONSTANT_VISIBILITY = getSelectedVisibility();
     }

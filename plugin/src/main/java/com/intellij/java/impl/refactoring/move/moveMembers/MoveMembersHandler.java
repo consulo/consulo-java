@@ -23,7 +23,7 @@ import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandlerDelegate;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class MoveMembersHandler extends MoveHandlerDelegate {

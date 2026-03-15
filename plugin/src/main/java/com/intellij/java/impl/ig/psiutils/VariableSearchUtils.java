@@ -18,7 +18,6 @@ package com.intellij.java.impl.ig.psiutils;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
 import consulo.language.psi.*;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,8 @@ public class VariableSearchUtils {
   }
 
   public static boolean variableNameResolvesToTarget(
-    @Nonnull String variableName, @Nonnull PsiVariable target,
-    @Nonnull PsiElement context) {
+    String variableName, PsiVariable target,
+    PsiElement context) {
 
     Project project = context.getProject();
     JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(project);

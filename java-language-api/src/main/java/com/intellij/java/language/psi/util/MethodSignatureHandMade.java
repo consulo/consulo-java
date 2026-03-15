@@ -16,28 +16,27 @@
 package com.intellij.java.language.psi.util;
 
 import com.intellij.java.language.psi.*;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class MethodSignatureHandMade extends MethodSignatureBase {
   private final String myName;
   private final boolean myIsConstructor;
 
-  MethodSignatureHandMade(@Nonnull String name,
+  MethodSignatureHandMade(String name,
                           @Nullable PsiParameterList parameterList,
                           @Nullable PsiTypeParameterList typeParameterList,
-                          @Nonnull PsiSubstitutor substitutor,
+                          PsiSubstitutor substitutor,
                           boolean isConstructor) {
     super(substitutor, parameterList, typeParameterList);
     myName = name;
     myIsConstructor = isConstructor;
   }
 
-  MethodSignatureHandMade(@Nonnull String name,
-                          @Nonnull PsiType[] parameterTypes,
-                          @Nonnull PsiTypeParameter[] typeParameters,
-                          @Nonnull PsiSubstitutor substitutor,
+  MethodSignatureHandMade(String name,
+                          PsiType[] parameterTypes,
+                          PsiTypeParameter[] typeParameters,
+                          PsiSubstitutor substitutor,
                           boolean isConstructor) {
     super(substitutor, parameterTypes, typeParameters);
     myName = name;
@@ -45,7 +44,6 @@ public class MethodSignatureHandMade extends MethodSignatureBase {
   }
 
 
-  @Nonnull
   @Override
   public String getName() {
     return myName;

@@ -21,7 +21,6 @@ import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 
@@ -31,7 +30,6 @@ import java.math.BigDecimal;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertToPlainIntention", fileExtensions = "java", categories = {"Java", "Numbers"})
 public class ConvertToPlainIntention extends ConvertNumberIntentionBase {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.convertToPlainIntentionName();
@@ -49,7 +47,6 @@ public class ConvertToPlainIntention extends ConvertNumberIntentionBase {
         return text;
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ConvertToPlainPredicate();

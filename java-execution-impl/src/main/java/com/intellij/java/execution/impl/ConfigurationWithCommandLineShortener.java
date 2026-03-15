@@ -4,7 +4,7 @@ package com.intellij.java.execution.impl;
 import com.intellij.java.execution.ShortenCommandLine;
 import consulo.project.Project;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ConfigurationWithCommandLineShortener {
   /**

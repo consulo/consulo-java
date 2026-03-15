@@ -8,8 +8,7 @@ import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -21,7 +20,7 @@ public class PsiDeconstructionPatternVariableImpl extends CompositePsiElement im
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitPatternVariable(this);
     }
@@ -43,12 +42,12 @@ public class PsiDeconstructionPatternVariableImpl extends CompositePsiElement im
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return false;
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiElement getDeclarationScope() {
     return JavaSharedImplUtil.getPatternVariableDeclarationScope(this);
   }
@@ -59,13 +58,13 @@ public class PsiDeconstructionPatternVariableImpl extends CompositePsiElement im
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiType getType() {
     return JavaSharedImplUtil.getType(getTypeElement(), getNameIdentifier());
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiTypeElement getTypeElement() {
     return getPattern().getTypeElement();
   }
@@ -95,25 +94,25 @@ public class PsiDeconstructionPatternVariableImpl extends CompositePsiElement im
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiIdentifier getNameIdentifier() {
     return (PsiIdentifier)Objects.requireNonNull(findPsiChildByType(JavaTokenType.IDENTIFIER));
   }
 
   @Override
-  public @Nonnull
+  public 
   String getName() {
     return getNameIdentifier().getText();
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }
 
   @Override
-  public @Nonnull
+  public 
   PsiDeconstructionPattern getPattern() {
     return (PsiDeconstructionPattern)getParent();
   }

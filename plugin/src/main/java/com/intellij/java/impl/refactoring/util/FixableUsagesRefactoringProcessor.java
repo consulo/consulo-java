@@ -28,7 +28,6 @@ import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +42,7 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
+    protected void performRefactoring(UsageInfo[] usageInfos) {
         CommonRefactoringUtil.sortDepthFirstRightLeftOrder(usageInfos);
         for (UsageInfo usageInfo : usageInfos) {
             if (usageInfo instanceof FixableUsageInfo fixableUsageInfo) {
@@ -57,7 +56,6 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
         }
     }
 
-    @Nonnull
     @Override
     protected final UsageInfo[] findUsages() {
         List<FixableUsageInfo> usages = Collections.synchronizedList(new ArrayList<FixableUsageInfo>());
@@ -67,7 +65,7 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
         return usageArray;
     }
 
-    protected abstract void findUsages(@Nonnull List<FixableUsageInfo> usages);
+    protected abstract void findUsages(List<FixableUsageInfo> usages);
 
     @RequiredReadAction
     protected static void checkConflicts(SimpleReference<UsageInfo[]> refUsages, MultiMap<PsiElement, LocalizeValue> conflicts) {

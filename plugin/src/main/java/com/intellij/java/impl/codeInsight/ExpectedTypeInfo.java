@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiType;
 import org.intellij.lang.annotations.MagicConstant;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -40,7 +39,6 @@ public interface ExpectedTypeInfo {
 
   PsiMethod getCalledMethod();
 
-  @Nonnull
   PsiType getType();
 
   PsiType getDefaultType();
@@ -52,9 +50,7 @@ public interface ExpectedTypeInfo {
 
   String toString();
 
-  @Nonnull
-  ExpectedTypeInfo[] intersect(@Nonnull ExpectedTypeInfo info);
+  ExpectedTypeInfo[] intersect(ExpectedTypeInfo info);
 
-  @Nonnull
   TailType getTailType();
 }

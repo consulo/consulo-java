@@ -29,7 +29,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -43,7 +42,6 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
     @SuppressWarnings("PublicField")
     public boolean ignoreAnnotations = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodDisplayName();
@@ -55,7 +53,6 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodProblemDescriptor().get();
     }
@@ -75,7 +72,6 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
     }
 
     private static class AbstractMethodOverridesAbstractMethodFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.abstractMethodOverridesAbstractMethodRemoveQuickfix();
@@ -98,7 +94,7 @@ public abstract class AbstractMethodOverridesAbstractMethodInspection extends Ba
     private class AbstractMethodOverridesAbstractMethodVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             //no call to super, so we don't drill into anonymous classes
             if (method.isConstructor()) {
                 return;

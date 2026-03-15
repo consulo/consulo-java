@@ -13,8 +13,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -23,7 +22,7 @@ import java.util.Objects;
  */
 public final class JavaPsiVariableUtil {
 
-    private static PsiVariable findSameNameSibling(@Nonnull PsiVariable variable) {
+    private static PsiVariable findSameNameSibling(PsiVariable variable) {
         PsiElement scope = variable.getParent();
         PsiElement[] children = scope.getChildren();
         for (PsiElement child : children) {
@@ -37,7 +36,7 @@ public final class JavaPsiVariableUtil {
         return null;
     }
 
-    private static PsiPatternVariable findSamePatternVariableInBranches(@Nonnull PsiPatternVariable variable) {
+    private static PsiPatternVariable findSamePatternVariableInBranches(PsiPatternVariable variable) {
         PsiPattern pattern = variable.getPattern();
         PatternResolveState hint = PatternResolveState.WHEN_TRUE;
         VariablesNotProcessor proc = new VariablesNotProcessor(variable, false) {
@@ -90,7 +89,7 @@ public final class JavaPsiVariableUtil {
      * @return a previous declaration of a colliding variable with the same name; null if not found
      */
     @Nullable
-    public static PsiVariable findPreviousVariableDeclaration(@Nonnull PsiVariable variable) {
+    public static PsiVariable findPreviousVariableDeclaration(PsiVariable variable) {
         if (variable instanceof ExternallyDefinedPsiElement || variable.isUnnamed()) return null;
         PsiVariable oldVariable = null;
         PsiElement declarationScope = null;

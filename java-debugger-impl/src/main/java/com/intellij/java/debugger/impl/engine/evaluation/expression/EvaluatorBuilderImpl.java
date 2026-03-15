@@ -52,8 +52,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +76,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         TextWithImports text,
         @Nullable PsiElement contextElement,
         @Nullable SourcePosition position,
-        @Nonnull Project project
+        Project project
     ) throws
         EvaluateException {
         CodeFragmentFactory factory = DebuggerUtilsEx.findAppropriateCodeFragmentFactory(text, contextElement);
@@ -111,7 +110,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitCodeFragment(@Nonnull JavaCodeFragment codeFragment) {
+        public void visitCodeFragment(JavaCodeFragment codeFragment) {
             myVisitedFragments.add(codeFragment);
             ArrayList<Evaluator> evaluators = new ArrayList<>();
 
@@ -142,7 +141,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+        public void visitAssignmentExpression(PsiAssignmentExpression expression) {
             PsiExpression rExpression = expression.getRExpression();
             if (rExpression == null) {
                 throwExpressionInvalid(expression);
@@ -209,7 +208,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             if (statement.getResourceList() != null) {
                 throw new EvaluateRuntimeException(new UnsupportedExpressionException(
                     LocalizeValue.localizeTODO("Try with resources is not yet supported")
@@ -249,7 +248,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitThrowStatement(@Nonnull PsiThrowStatement statement) {
+        public void visitThrowStatement(PsiThrowStatement statement) {
             Evaluator accept = accept(statement.getException());
             if (accept != null) {
                 myResult = new ThrowEvaluator(accept);
@@ -257,14 +256,14 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+        public void visitReturnStatement(PsiReturnStatement statement) {
             myResult = new ReturnEvaluator(accept(statement.getReturnValue()));
         }
 
 
         @Override
         @RequiredReadAction
-        public void visitStatement(@Nonnull PsiStatement statement) {
+        public void visitStatement(PsiStatement statement) {
             throwEvaluateException(JavaDebuggerLocalize.evaluationErrorStatementNotSupported(statement.getText()));
         }
 
@@ -287,7 +286,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitCodeBlock(@Nonnull PsiCodeBlock block) {
+        public void visitCodeBlock(PsiCodeBlock block) {
             CodeFragmentEvaluator oldFragmentEvaluator = setNewCodeFragmentEvaluator();
             try {
                 myResult = new BlockStatementEvaluator(visitStatements(block.getStatements()));
@@ -298,12 +297,12 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitBlockStatement(@Nonnull PsiBlockStatement statement) {
+        public void visitBlockStatement(PsiBlockStatement statement) {
             visitCodeBlock(statement.getCodeBlock());
         }
 
         @Override
-        public void visitLabeledStatement(@Nonnull PsiLabeledStatement labeledStatement) {
+        public void visitLabeledStatement(PsiLabeledStatement labeledStatement) {
             PsiStatement statement = labeledStatement.getStatement();
             if (statement != null) {
                 statement.accept(this);
@@ -315,7 +314,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+        public void visitDoWhileStatement(PsiDoWhileStatement statement) {
             Evaluator bodyEvaluator = accept(statement.getBody());
             Evaluator conditionEvaluator = accept(statement.getCondition());
             if (conditionEvaluator != null) {
@@ -324,7 +323,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+        public void visitWhileStatement(PsiWhileStatement statement) {
             Evaluator bodyEvaluator = accept(statement.getBody());
             Evaluator conditionEvaluator = accept(statement.getCondition());
             if (conditionEvaluator != null) {
@@ -333,7 +332,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitForStatement(@Nonnull PsiForStatement statement) {
+        public void visitForStatement(PsiForStatement statement) {
             CodeFragmentEvaluator oldFragmentEvaluator = setNewCodeFragmentEvaluator();
             try {
                 Evaluator initializerEvaluator = accept(statement.getInitialization());
@@ -359,7 +358,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+        public void visitForeachStatement(PsiForeachStatement statement) {
             CodeFragmentEvaluator oldFragmentEvaluator = setNewCodeFragmentEvaluator();
             try {
                 String iterationParameterName = statement.getIterationParameter().getName();
@@ -393,7 +392,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+        public void visitIfStatement(PsiIfStatement statement) {
             PsiStatement thenBranch = statement.getThenBranch();
             if (thenBranch == null) {
                 return;
@@ -419,31 +418,31 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+        public void visitBreakStatement(PsiBreakStatement statement) {
             PsiIdentifier labelIdentifier = statement.getLabelIdentifier();
             myResult = BreakContinueStatementEvaluator.createBreakEvaluator(labelIdentifier != null ? labelIdentifier.getText() : null);
         }
 
         @Override
         @RequiredReadAction
-        public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
+        public void visitContinueStatement(PsiContinueStatement statement) {
             PsiIdentifier labelIdentifier = statement.getLabelIdentifier();
             myResult = BreakContinueStatementEvaluator.createContinueEvaluator(labelIdentifier != null ? labelIdentifier.getText() : null);
         }
 
         @Override
-        public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
+        public void visitExpressionStatement(PsiExpressionStatement statement) {
             statement.getExpression().accept(this);
         }
 
         @Override
-        public void visitExpression(@Nonnull PsiExpression expression) {
+        public void visitExpression(PsiExpression expression) {
             LOG.debug("visitExpression {}", expression);
         }
 
         @Override
         @RequiredReadAction
-        public void visitPolyadicExpression(@Nonnull PsiPolyadicExpression wideExpression) {
+        public void visitPolyadicExpression(PsiPolyadicExpression wideExpression) {
             LOG.debug("visitPolyadicExpression {}", wideExpression);
             PsiExpression[] operands = wideExpression.getOperands();
             operands[0].accept(this);
@@ -476,9 +475,9 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
             Evaluator lResult,
             PsiType lType,
             Evaluator rResult,
-            @Nonnull PsiType rType,
-            @Nonnull IElementType operation,
-            @Nonnull PsiType expressionExpectedType
+            PsiType rType,
+            IElementType operation,
+            PsiType expressionExpectedType
         ) {
             // handle unboxing if necessary
             if (isUnboxingInBinaryExpressionApplicable(lType, rType, operation)) {
@@ -622,7 +621,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitDeclarationStatement(@Nonnull PsiDeclarationStatement statement) {
+        public void visitDeclarationStatement(PsiDeclarationStatement statement) {
             List<Evaluator> evaluators = new ArrayList<>();
 
             PsiElement[] declaredElements = statement.getDeclaredElements();
@@ -695,7 +694,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitConditionalExpression(@Nonnull PsiConditionalExpression expression) {
+        public void visitConditionalExpression(PsiConditionalExpression expression) {
             LOG.debug("visitConditionalExpression {}", expression);
             PsiExpression thenExpression = expression.getThenExpression();
             PsiExpression elseExpression = expression.getElseExpression();
@@ -723,14 +722,14 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             LOG.debug("visitReferenceExpression {}", expression);
             PsiExpression qualifier = expression.getQualifierExpression();
             JavaResolveResult resolveResult = expression.advancedResolve(true);
             PsiElement element = resolveResult.getElement();
 
             if (element instanceof PsiLocalVariable || element instanceof PsiParameter) {
-                @Nonnull PsiVariable variable = (PsiVariable) element;
+                PsiVariable variable = (PsiVariable) element;
                 Value labeledValue = variable.getUserData(CodeFragmentFactoryContextWrapper.LABEL_VARIABLE_VALUE_KEY);
                 if (labeledValue != null) {
                     myResult = new IdentityEvaluator(labeledValue);
@@ -891,13 +890,13 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
             throwEvaluateException(JavaDebuggerLocalize.evaluationErrorInvalidExpression(expression.getText()));
         }
 
-        private static void throwEvaluateException(@Nonnull LocalizeValue message) throws EvaluateRuntimeException {
+        private static void throwEvaluateException(LocalizeValue message) throws EvaluateRuntimeException {
             throw new EvaluateRuntimeException(EvaluateExceptionUtil.createEvaluateException(message));
         }
 
         @Override
         @RequiredReadAction
-        public void visitSuperExpression(@Nonnull PsiSuperExpression expression) {
+        public void visitSuperExpression(PsiSuperExpression expression) {
             LOG.debug("visitSuperExpression {}", expression);
             int iterationCount = calcIterationCount(expression.getQualifier());
             myResult = new SuperEvaluator(iterationCount);
@@ -905,7 +904,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitThisExpression(@Nonnull PsiThisExpression expression) {
+        public void visitThisExpression(PsiThisExpression expression) {
             LOG.debug("visitThisExpression {}", expression);
             int iterationCount = calcIterationCount(expression.getQualifier());
             myResult = new ThisEvaluator(iterationCount);
@@ -940,7 +939,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression expression) {
+        public void visitInstanceOfExpression(PsiInstanceOfExpression expression) {
             LOG.debug("visitInstanceOfExpression {}", expression);
             PsiTypeElement checkType = expression.getCheckType();
             if (checkType == null) {
@@ -954,7 +953,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitParenthesizedExpression(@Nonnull PsiParenthesizedExpression expression) {
+        public void visitParenthesizedExpression(PsiParenthesizedExpression expression) {
             LOG.debug("visitParenthesizedExpression {}", expression);
             PsiExpression expr = expression.getExpression();
             if (expr != null) {
@@ -964,7 +963,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression) {
+        public void visitPostfixExpression(PsiPostfixExpression expression) {
             if (expression.getType() == null) {
                 throwEvaluateException(JavaDebuggerLocalize.evaluationErrorUnknownExpressionType(expression.getText()));
             }
@@ -1051,7 +1050,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             LOG.debug("visitMethodCallExpression {}", expression);
             PsiExpressionList argumentList = expression.getArgumentList();
             PsiExpression[] argExpressions = argumentList.getExpressions();
@@ -1169,7 +1168,7 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
 
         @Override
         @RequiredReadAction
-        public void visitLiteralExpression(@Nonnull PsiLiteralExpression expression) {
+        public void visitLiteralExpression(PsiLiteralExpression expression) {
             HighlightInfo.Builder parsingError = HighlightUtil.checkLiteralExpressionParsingError(expression, null, null);
             if (parsingError != null) {
                 HighlightInfo hlInfo = parsingError.create();
@@ -1296,14 +1295,14 @@ public class EvaluatorBuilderImpl implements EvaluatorBuilder {
         }
 
         @Override
-        public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+        public void visitLambdaExpression(PsiLambdaExpression expression) {
             throw new EvaluateRuntimeException(new UnsupportedExpressionException(
                 JavaDebuggerLocalize.evaluationErrorLambdaEvaluationNotSupported()
             ));
         }
 
         @Override
-        public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
+        public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
             throw new EvaluateRuntimeException(new UnsupportedExpressionException(
                 JavaDebuggerLocalize.evaluationErrorMethodReferenceEvaluationNotSupported()
             ));

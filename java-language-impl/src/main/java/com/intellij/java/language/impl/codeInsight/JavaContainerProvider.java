@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Max Medvedev
@@ -30,7 +29,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl(id = "java")
 public class JavaContainerProvider implements ContainerProvider {
   @Override
-  public PsiElement getContainer(@Nonnull PsiElement item) {
+  public PsiElement getContainer(PsiElement item) {
     if (item instanceof PsiTypeParameter) {
       PsiElement parent = item.getParent();
       return parent == null ? null : parent.getParent();

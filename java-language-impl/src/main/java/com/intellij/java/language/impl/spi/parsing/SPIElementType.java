@@ -17,14 +17,12 @@ package com.intellij.java.language.impl.spi.parsing;
 
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.spi.SPILanguage;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
  */
 public class SPIElementType extends IElementType {
-  public SPIElementType(@Nonnull @NonNls String debugName) {
+  public SPIElementType(String debugName) {
     super(debugName, SPILanguage.INSTANCE);
   }
 }

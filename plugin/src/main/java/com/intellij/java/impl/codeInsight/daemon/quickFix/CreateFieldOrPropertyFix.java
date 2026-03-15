@@ -41,8 +41,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
@@ -73,31 +71,29 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         return myMemberType == PropertyMemberType.FIELD
             ? JavaQuickFixLocalize.createFieldText(myName)
             : JavaQuickFixLocalize.createPropertyText(myName);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return getText();
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         applyFixInner(project);
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return true;
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         applyFixInner(project);
     }
 
@@ -138,7 +134,7 @@ public class CreateFieldOrPropertyFix implements IntentionAction, LocalQuickFix 
             };
             TemplateBuilder builder = TemplateBuilderFactory.getInstance().createTemplateBuilder(scope);
             boolean first = true;
-            @NonNls String TYPE_NAME_VAR = "TYPE_NAME_VAR";
+            String TYPE_NAME_VAR = "TYPE_NAME_VAR";
             for (GenerationInfo prototype : prototypes) {
                 PsiTypeElement typeElement = PropertyUtil.getPropertyTypeElement(prototype.getPsiMember());
                 if (first) {

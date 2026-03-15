@@ -33,14 +33,11 @@ import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction {
-  @Nonnull
   protected abstract AbstractPatternBasedConfigurationProducer<T> getPatternBasedProducer();
 
-  @Nonnull
   protected abstract ConfigurationType getConfigurationType();
 
   protected abstract boolean isPatternBasedConfiguration(T configuration);
@@ -77,7 +74,6 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
           return configuration.getIcon();
         }
 
-        @Nonnull
         @Override
         public String getTextFor(T value) {
           return value.getName();

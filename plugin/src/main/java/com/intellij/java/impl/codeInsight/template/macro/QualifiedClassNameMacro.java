@@ -28,7 +28,6 @@ import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class QualifiedClassNameMacro extends Macro {
@@ -44,7 +43,7 @@ public class QualifiedClassNameMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     PsiElement place = context.getPsiElementAtStartOffset();
     while (place != null){
       if (place instanceof PsiClass psiClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)){

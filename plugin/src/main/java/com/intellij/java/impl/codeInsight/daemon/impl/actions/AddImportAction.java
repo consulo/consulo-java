@@ -33,8 +33,7 @@ import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -49,10 +48,10 @@ public class AddImportAction implements QuestionAction {
   private final PsiClass[] myTargetClasses;
   private final Editor myEditor;
 
-  public AddImportAction(@Nonnull Project project,
-                         @Nonnull PsiReference ref,
-                         @Nonnull Editor editor,
-                         @Nonnull PsiClass... targetClasses) {
+  public AddImportAction(Project project,
+                         PsiReference ref,
+                         Editor editor,
+                         PsiClass... targetClasses) {
     myProject = project;
     myReference = ref;
     myTargetClasses = targetClasses;
@@ -117,7 +116,6 @@ public class AddImportAction implements QuestionAction {
             return true;
           }
 
-          @Nonnull
           @Override
           public String getTextFor(PsiClass value) {
             return ObjectUtil.assertNotNull(value.getQualifiedName());
@@ -159,7 +157,6 @@ public class AddImportAction implements QuestionAction {
     List<String> toExclude = getAllExcludableStrings(qname);
 
     return new BaseListPopupStep<String>(null, toExclude) {
-      @Nonnull
       @Override
       public String getTextFor(String value) {
         return "Exclude '" + value + "' from auto-import";
@@ -187,7 +184,7 @@ public class AddImportAction implements QuestionAction {
     });
   }
 
-  public static List<String> getAllExcludableStrings(@Nonnull String qname) {
+  public static List<String> getAllExcludableStrings(String qname) {
     List<String> toExclude = new ArrayList<>();
     while (true) {
       toExclude.add(qname);

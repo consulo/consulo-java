@@ -28,8 +28,7 @@ import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DoubleClickListener;
 import consulo.ui.ex.awt.tree.TreeUIHelper;
 import consulo.util.lang.function.Condition;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +51,7 @@ public class MethodListDlg extends DialogWrapper {
     myWholePanel.add(ScrollPaneFactory.createScrollPane(myList));
     myList.setCellRenderer(new ColoredListCellRenderer<>() {
       protected void customizeCellRenderer(
-        @Nonnull final JList<? extends PsiMethod> list,
+        final JList<? extends PsiMethod> list,
         final PsiMethod psiMethod,
         final int index,
         final boolean selected,

@@ -29,17 +29,13 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class LiteralAsArgToStringEqualsInspection extends BaseInspection {
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.literalAsArgToStringEqualsDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     String methodName = (String)infos[0];
     return InspectionGadgetsLocalize.literalAsArgToStringEqualsProblemDescriptor(methodName).get();
@@ -55,7 +51,6 @@ public class LiteralAsArgToStringEqualsInspection extends BaseInspection {
 
   private static class SwapEqualsFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.literalAsArgToStringEqualsFlipQuickfix();
     }
@@ -92,10 +87,10 @@ public class LiteralAsArgToStringEqualsInspection extends BaseInspection {
 
   private static class LiteralAsArgToEqualsVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression = expression.getMethodExpression();
-      @NonNls String methodName = methodExpression.getReferenceName();
+      String methodName = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.EQUALS.equals(methodName) &&
           !HardcodedMethodConstants.EQUALS_IGNORE_CASE.equals(
             methodName)) {

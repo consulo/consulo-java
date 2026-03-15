@@ -41,14 +41,12 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.MultiMap;
 import consulo.util.io.FileUtil;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.MagicConstant;
 
 /**
  * @author Bas Leijdekkers
  */
 abstract class ModifierIntention extends Intention implements LowPriorityAction {
-    @Nonnull
     @Override
     protected final PsiElementPredicate getElementPredicate() {
         return new ModifierPredicate(getModifier());
@@ -61,7 +59,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
 
     @Override
     @RequiredUIAccess
-    protected final void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected final void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiMember member = (PsiMember) element.getParent();
         PsiModifierList modifierList = member.getModifierList();
         if (modifierList == null) {
@@ -88,7 +86,7 @@ abstract class ModifierIntention extends Intention implements LowPriorityAction 
     }
 
     @RequiredReadAction
-    private MultiMap<PsiElement, LocalizeValue> checkForConflicts(@Nonnull PsiMember member) {
+    private MultiMap<PsiElement, LocalizeValue> checkForConflicts(PsiMember member) {
         if (member instanceof PsiClass aClass && getModifier().equals(PsiModifier.PUBLIC)) {
             if (!(aClass.getParent() instanceof PsiJavaFile javaFile)) {
                 return MultiMap.empty();

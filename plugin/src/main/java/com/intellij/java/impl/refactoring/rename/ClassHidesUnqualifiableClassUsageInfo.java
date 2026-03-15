@@ -23,7 +23,6 @@ import consulo.language.editor.refactoring.rename.UnresolvableCollisionUsageInfo
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -36,7 +35,6 @@ public class ClassHidesUnqualifiableClassUsageInfo extends UnresolvableCollision
         myHiddenClass = hiddenClass;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDescription() {
         PsiElement container = ConflictsUtil.getContainer(myHiddenClass);

@@ -45,8 +45,7 @@ import consulo.util.lang.Couple;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Functions;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
@@ -151,7 +150,6 @@ public class TypeMigrationLabeler {
         return map2Usages(myFailedConversions.keySet());
     }
 
-    @Nonnull
     @RequiredReadAction
     private static UsageInfo[] map2Usages(Collection<Pair<SmartPsiElementPointer<PsiExpression>, PsiType>> usages) {
         return ContainerUtil.map2Array(usages, new UsageInfo[usages.size()], pair ->
@@ -314,7 +312,7 @@ public class TypeMigrationLabeler {
             myRemainConversions = conversions;
         }
 
-        public void change(@Nonnull final TypeMigrationUsageInfo usageInfo, @Nonnull Consumer<PsiNewExpression> consumer) {
+        public void change(final TypeMigrationUsageInfo usageInfo, Consumer<PsiNewExpression> consumer) {
             final PsiElement element = usageInfo.getElement();
             if (element == null) {
                 return;
@@ -442,7 +440,7 @@ public class TypeMigrationLabeler {
         }
     }
 
-    void postProcessNewExpression(@Nonnull PsiNewExpression expression) {
+    void postProcessNewExpression(PsiNewExpression expression) {
         TypeMigrationReplacementUtil.tryToReplaceWithDiamond(expression, null);
     }
 
@@ -784,8 +782,7 @@ public class TypeMigrationLabeler {
         }
     }
 
-    @Nonnull
-    private static Set<PsiTypeParameter> getTypeParameters(@Nonnull PsiType type) {
+    private static Set<PsiTypeParameter> getTypeParameters(PsiType type) {
         if (type instanceof PsiClassType) {
             PsiTypesUtil.TypeParameterSearcher searcher = new PsiTypesUtil.TypeParameterSearcher();
             type.accept(searcher);
@@ -839,7 +836,7 @@ public class TypeMigrationLabeler {
         return null;
     }
 
-    private boolean typeContainsTypeParameters(@Nullable PsiType type, @Nonnull Set<PsiTypeParameter> excluded) {
+    private boolean typeContainsTypeParameters(@Nullable PsiType type, Set<PsiTypeParameter> excluded) {
         if (!(type instanceof PsiClassType)) {
             return false;
         }
@@ -1143,7 +1140,7 @@ public class TypeMigrationLabeler {
             block.accept(new JavaRecursiveElementWalkingVisitor() {
                 @Override
                 @RequiredUIAccess
-                public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+                public void visitReturnStatement(PsiReturnStatement statement) {
                     final PsiExpression value = statement.getReturnValue();
                     if (value != null) {
                         final PsiType type = getTypeEvaluator().evaluateType(value);
@@ -1160,11 +1157,11 @@ public class TypeMigrationLabeler {
                 }
 
                 @Override
-                public void visitClass(@Nonnull PsiClass aClass) {
+                public void visitClass(PsiClass aClass) {
                 }
 
                 @Override
-                public void visitLambdaExpression(@Nonnull PsiLambdaExpression expression) {
+                public void visitLambdaExpression(PsiLambdaExpression expression) {
                 }
             });
         }
@@ -1213,7 +1210,6 @@ public class TypeMigrationLabeler {
         checkInterrupted();
     }
 
-    @Nonnull
     private PsiReference[] findReferences(PsiElement element) {
         return ReferencesSearch.search(element, myRules.getSearchScope(), false).toArray(PsiReference.EMPTY_ARRAY);
     }
@@ -1262,7 +1258,7 @@ public class TypeMigrationLabeler {
         return refs;
     }
 
-    private static boolean canBeRoot(@Nullable PsiElement element, @Nonnull SearchScope migrationScope) {
+    private static boolean canBeRoot(@Nullable PsiElement element, SearchScope migrationScope) {
         return element != null && element.isValid() && element.isPhysical() && PsiSearchScopeUtil.isInScope(migrationScope, element);
     }
 

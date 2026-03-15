@@ -25,19 +25,15 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.equalsDoesntCheckClassParameterDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.equalsDoesntCheckClassParameterProblemDescriptor().get();
     }
@@ -55,7 +51,7 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
     private static class EqualsWhichDoesntCheckParameterClassVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             // note: no call to super
             if (!MethodUtils.isEquals(method)) {
                 return;
@@ -134,7 +130,7 @@ public class EqualsWhichDoesntCheckParameterClassInspection extends BaseInspecti
             }
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) expression;
             PsiReferenceExpression methodExpression = methodCallExpression.getMethodExpression();
-            @NonNls String referenceName = methodExpression.getReferenceName();
+            String referenceName = methodExpression.getReferenceName();
             if (!"reflectionEquals".equals(referenceName)) {
                 return false;
             }

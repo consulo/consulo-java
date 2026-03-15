@@ -15,13 +15,10 @@
  */
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.impl.JavaDebuggerEditorsProvider;
 import com.intellij.java.debugger.impl.breakpoints.JavaBreakpointFiltersPanel;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
@@ -36,7 +33,7 @@ import consulo.execution.debug.breakpoint.XLineBreakpointType;
  */
 public abstract class JavaLineBreakpointTypeBase<P extends JavaBreakpointProperties> extends XLineBreakpointType<P>
 {
-	public JavaLineBreakpointTypeBase(@NonNls @Nonnull String id, @Nls @Nonnull String title)
+	public JavaLineBreakpointTypeBase(String id, String title)
 	{
 		super(id, title);
 	}
@@ -55,14 +52,14 @@ public abstract class JavaLineBreakpointTypeBase<P extends JavaBreakpointPropert
 
 	@Nullable
 	@Override
-	public final XBreakpointCustomPropertiesPanel<XLineBreakpoint<P>> createCustomRightPropertiesPanel(@Nonnull Project project)
+	public final XBreakpointCustomPropertiesPanel<XLineBreakpoint<P>> createCustomRightPropertiesPanel(Project project)
 	{
 		return new JavaBreakpointFiltersPanel<P, XLineBreakpoint<P>>(project);
 	}
 
 	@Nullable
 	@Override
-	public final XDebuggerEditorsProvider getEditorsProvider(@Nonnull XLineBreakpoint<P> breakpoint, @Nonnull Project project)
+	public final XDebuggerEditorsProvider getEditorsProvider(XLineBreakpoint<P> breakpoint, Project project)
 	{
 		return new JavaDebuggerEditorsProvider();
 	}

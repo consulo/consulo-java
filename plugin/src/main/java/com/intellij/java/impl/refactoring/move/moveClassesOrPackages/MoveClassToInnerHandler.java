@@ -25,8 +25,7 @@ import consulo.project.Project;
 import consulo.usage.NonCodeUsageInfo;
 import consulo.usage.UsageInfo;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -39,16 +38,16 @@ public interface MoveClassToInnerHandler {
     ExtensionPointName<MoveClassToInnerHandler> EP_NAME = ExtensionPointName.create(MoveClassToInnerHandler.class);
 
     @Nullable
-    PsiClass moveClass(@Nonnull PsiClass aClass, @Nonnull PsiClass targetClass);
+    PsiClass moveClass(PsiClass aClass, PsiClass targetClass);
 
     /**
      * filters out import usages from results. Returns all found import usages
      */
-    List<PsiElement> filterImports(@Nonnull List<UsageInfo> usageInfos, @Nonnull Project project);
+    List<PsiElement> filterImports(List<UsageInfo> usageInfos, Project project);
 
-    void retargetClassRefsInMoved(@Nonnull Map<PsiElement, PsiElement> mapping);
+    void retargetClassRefsInMoved(Map<PsiElement, PsiElement> mapping);
 
-    void retargetNonCodeUsages(@Nonnull Map<PsiElement, PsiElement> oldToNewElementMap, @Nonnull NonCodeUsageInfo[] myNonCodeUsages);
+    void retargetNonCodeUsages(Map<PsiElement, PsiElement> oldToNewElementMap, NonCodeUsageInfo[] myNonCodeUsages);
 
     void removeRedundantImports(PsiFile targetClassFile);
 }

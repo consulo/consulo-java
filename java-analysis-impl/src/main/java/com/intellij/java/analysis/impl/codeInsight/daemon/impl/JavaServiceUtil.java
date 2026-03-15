@@ -18,8 +18,7 @@ import consulo.language.psi.PsiElement;
 import consulo.navigation.NavigationItem;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.awt.event.MouseEvent;
@@ -30,23 +29,20 @@ import java.util.Optional;
 public final class JavaServiceUtil {
     public static final CallMatcher SERVICE_LOADER_LOAD = CallMatcher.staticCall("java.util.ServiceLoader", "load", "loadInstalled");
 
-    public static boolean isServiceProviderMethod(@Nonnull PsiMethod method) {
+    public static boolean isServiceProviderMethod(PsiMethod method) {
         return "provider".equals(method.getName()) && method.getParameterList().isEmpty() && method.isPublic() && method.isStatic();
     }
 
-    @Nonnull
-    public static List<LineMarkerInfo<PsiElement>> collectServiceProviderMethod(@Nonnull PsiMethod method) {
+    public static List<LineMarkerInfo<PsiElement>> collectServiceProviderMethod(PsiMethod method) {
         PsiClass containingClass = method.getContainingClass();
         PsiClass resultClass = PsiUtil.resolveClassInType(method.getReturnType());
         return createJavaServiceLineMarkerInfo(method.getNameIdentifier(), containingClass, resultClass);
     }
 
-    @Nonnull
-    public static List<LineMarkerInfo<PsiElement>> collectServiceImplementationClass(@Nonnull PsiClass psiClass) {
+    public static List<LineMarkerInfo<PsiElement>> collectServiceImplementationClass(PsiClass psiClass) {
         return createJavaServiceLineMarkerInfo(psiClass.getNameIdentifier(), psiClass, psiClass);
     }
 
-    @Nonnull
     private static List<LineMarkerInfo<PsiElement>> createJavaServiceLineMarkerInfo(
         @Nullable PsiIdentifier identifier,
         @Nullable PsiClass implementerClass,
@@ -92,8 +88,8 @@ public final class JavaServiceUtil {
 
     @RequiredReadAction
     public static List<LineMarkerInfo<PsiElement>> collectServiceLoaderLoadCall(
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull PsiMethodCallExpression methodCall
+        PsiIdentifier identifier,
+        PsiMethodCallExpression methodCall
     ) {
         if (PsiUtil.isLanguageLevel9OrHigher(methodCall)) {
             PsiExpression[] arguments = methodCall.getArgumentList().getExpressions();
@@ -136,7 +132,7 @@ public final class JavaServiceUtil {
     abstract static class ServiceNavigationHandler implements GutterIconNavigationHandler<PsiElement> {
         final String myInterfaceClassName;
 
-        ServiceNavigationHandler(@Nonnull String interfaceClassName) {
+        ServiceNavigationHandler(String interfaceClassName) {
             myInterfaceClassName = interfaceClassName;
         }
 
@@ -150,9 +146,8 @@ public final class JavaServiceUtil {
                 .ifPresent(item -> item.navigate(true));
         }
 
-        public abstract PsiJavaCodeReferenceElement findTargetReference(@Nonnull PsiJavaModule module);
+        public abstract PsiJavaCodeReferenceElement findTargetReference(PsiJavaModule module);
 
-        @Nonnull
         protected String getTargetFQN() {
             return myInterfaceClassName;
         }
@@ -168,7 +163,7 @@ public final class JavaServiceUtil {
         }
 
         @Override
-        public PsiJavaCodeReferenceElement findTargetReference(@Nonnull PsiJavaModule module) {
+        public PsiJavaCodeReferenceElement findTargetReference(PsiJavaModule module) {
             return StreamEx.of(module.getUses().iterator())
                 .map(PsiUsesStatement::getClassReference)
                 .findAny(this::isTargetReference)
@@ -179,13 +174,13 @@ public final class JavaServiceUtil {
     private static class ServiceProvidesNavigationHandler extends ServiceNavigationHandler {
         private final String myImplementerClassName;
 
-        ServiceProvidesNavigationHandler(@Nonnull String interfaceClassName, @Nonnull String implementerClassName) {
+        ServiceProvidesNavigationHandler(String interfaceClassName, String implementerClassName) {
             super(interfaceClassName);
             myImplementerClassName = implementerClassName;
         }
 
         @Override
-        public PsiJavaCodeReferenceElement findTargetReference(@Nonnull PsiJavaModule module) {
+        public PsiJavaCodeReferenceElement findTargetReference(PsiJavaModule module) {
             PsiProvidesStatement statement = ContainerUtil.find(module.getProvides(), this::isTargetStatement);
             if (statement != null) {
                 PsiReferenceList list = statement.getImplementationList();
@@ -197,13 +192,12 @@ public final class JavaServiceUtil {
             return null;
         }
 
-        @Nonnull
         @Override
         protected String getTargetFQN() {
             return myImplementerClassName;
         }
 
-        private boolean isTargetStatement(@Nonnull PsiProvidesStatement statement) {
+        private boolean isTargetStatement(PsiProvidesStatement statement) {
             PsiJavaCodeReferenceElement reference = statement.getInterfaceReference();
             return reference != null && myInterfaceClassName.equals(reference.getQualifiedName());
         }

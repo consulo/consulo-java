@@ -32,9 +32,8 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -48,7 +47,7 @@ import static com.intellij.java.language.patterns.PsiJavaPatterns.psiElement;
 @ExtensionImpl(id = "javaBasic2ClassName", order = "before javaMemberName, before javaLegacy, after liveTemplates")
 public class JavaNoVariantsDelegator extends CompletionContributor implements DumbAware {
   @Override
-  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull final CompletionResultSet result) {
+  public void fillCompletionVariants(CompletionParameters parameters, final CompletionResultSet result) {
     if (JavaModuleCompletion.isModuleFile(parameters.getOriginalFile())) {
       return;
     }
@@ -86,7 +85,7 @@ public class JavaNoVariantsDelegator extends CompletionContributor implements Du
     }
   }
 
-  private static boolean areNonImportedInheritorsAlreadySuggested(@Nonnull CompletionParameters parameters) {
+  private static boolean areNonImportedInheritorsAlreadySuggested(CompletionParameters parameters) {
     return JavaSmartCompletionContributor.AFTER_NEW.accepts(parameters.getPosition()) && JavaSmartCompletionContributor.getExpectedTypes(parameters).length > 0;
   }
 
@@ -197,7 +196,6 @@ public class JavaNoVariantsDelegator extends CompletionContributor implements Du
     });
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

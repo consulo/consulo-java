@@ -9,8 +9,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -26,9 +25,9 @@ public final class Jsr305Support implements AnnotationPackageSupport {
   @RequiredReadAction
   @Nullable
   @Override
-  public NullabilityAnnotationInfo getNullabilityByContainerAnnotation(@Nonnull PsiAnnotation annotation,
-                                                                       @Nonnull PsiElement context,
-                                                                       @Nonnull PsiAnnotation.TargetType[] placeTargetTypes,
+  public NullabilityAnnotationInfo getNullabilityByContainerAnnotation(PsiAnnotation annotation,
+                                                                       PsiElement context,
+                                                                       PsiAnnotation.TargetType[] placeTargetTypes,
                                                                        boolean superPackage) {
     if (superPackage) return null;
     PsiClass declaration = annotation.resolveAnnotationType();
@@ -55,7 +54,7 @@ public final class Jsr305Support implements AnnotationPackageSupport {
   }
 
   @Nullable
-  private static Nullability getJsr305QualifierNullability(@Nonnull PsiAnnotation qualifier) {
+  private static Nullability getJsr305QualifierNullability(PsiAnnotation qualifier) {
     String qName = qualifier.getQualifiedName();
     if (qName == null) return null;
     NullableNotNullManager manager = NullableNotNullManager.getInstance(qualifier.getProject());
@@ -66,7 +65,7 @@ public final class Jsr305Support implements AnnotationPackageSupport {
     return manager.getAnnotationNullability(qName).orElse(null);
   }
 
-  public static boolean isNullabilityNickName(@Nonnull PsiClass candidate) {
+  public static boolean isNullabilityNickName(PsiClass candidate) {
     String qname = candidate.getQualifiedName();
     if (qname == null || qname.startsWith("javax.annotation.")) return false;
     return getNickNamedNullability(candidate) != null;
@@ -76,14 +75,14 @@ public final class Jsr305Support implements AnnotationPackageSupport {
    * @param psiClass annotation class
    * @return nicknamed nullability declared by this annotation; null if this annotation is not a nullability nickname annotation
    */
-  public static @Nullable Nullability getNickNamedNullability(@Nonnull PsiClass psiClass) {
+  public static @Nullable Nullability getNickNamedNullability(PsiClass psiClass) {
     if (AnnotationUtil.findAnnotation(psiClass, TYPE_QUALIFIER_NICKNAME) == null) return null;
 
     PsiAnnotation nonNull = AnnotationUtil.findAnnotation(psiClass, JAVAX_ANNOTATION_NONNULL);
     return nonNull != null ? extractNullityFromWhenValue(nonNull) : null;
   }
 
-  public static @Nullable Nullability extractNullityFromWhenValue(@Nonnull PsiAnnotation nonNull) {
+  public static @Nullable Nullability extractNullityFromWhenValue(PsiAnnotation nonNull) {
     PsiAnnotationMemberValue when = nonNull.findAttributeValue("when");
     if (when instanceof PsiReferenceExpression) {
       String refName = ((PsiReferenceExpression)when).getReferenceName();
@@ -105,9 +104,8 @@ public final class Jsr305Support implements AnnotationPackageSupport {
     return null;
   }
 
-  @Nonnull
   @Override
-  public List<String> getNullabilityAnnotations(@Nonnull Nullability nullability) {
+  public List<String> getNullabilityAnnotations(Nullability nullability) {
     return switch (nullability) {
       case NOT_NULL -> Collections.singletonList(JAVAX_ANNOTATION_NONNULL);
       case NULLABLE -> Arrays.asList(JAVAX_ANNOTATION_NULLABLE, "javax.annotation.CheckForNull");

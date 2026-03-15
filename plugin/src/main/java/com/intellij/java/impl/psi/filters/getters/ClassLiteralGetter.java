@@ -27,15 +27,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
 public class ClassLiteralGetter {
 
-  public static void addCompletions(@Nonnull JavaSmartCompletionParameters parameters,
-                                    @Nonnull Consumer<LookupElement> result, PrefixMatcher matcher) {
+  public static void addCompletions(JavaSmartCompletionParameters parameters,
+                                    Consumer<LookupElement> result, PrefixMatcher matcher) {
     PsiType expectedType = parameters.getExpectedType();
     if (!InheritanceUtil.isInheritor(expectedType, CommonClassNames.JAVA_LANG_CLASS)) {
       return;

@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import jakarta.annotation.Nonnull;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.refactoring.convertToInstanceMethod.ConvertToInstanceMethodProcessor;
 import consulo.language.psi.PsiElement;
@@ -21,7 +20,6 @@ import consulo.codeInsight.TargetElementUtilEx;
  * @author dsl
  */
 public abstract class ConvertToInstanceMethodTest extends LightRefactoringTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

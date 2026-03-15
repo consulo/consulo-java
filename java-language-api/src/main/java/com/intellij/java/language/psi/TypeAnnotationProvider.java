@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * An object that returns annotations for {@link PsiType}. Since computing type annotations might be computationally expensive sometimes,
@@ -27,14 +26,12 @@ import jakarta.annotation.Nonnull;
  */
 public interface TypeAnnotationProvider {
   TypeAnnotationProvider EMPTY = new TypeAnnotationProvider() {
-    @Nonnull
     @Override
     public PsiAnnotation[] getAnnotations() {
       return PsiAnnotation.EMPTY_ARRAY;
     }
   };
 
-  @Nonnull
   PsiAnnotation[] getAnnotations();
 
 
@@ -45,14 +42,12 @@ public interface TypeAnnotationProvider {
       myAnnotations = annotations;
     }
 
-    @Nonnull
     @Override
     public PsiAnnotation[] getAnnotations() {
       return myAnnotations;
     }
 
-    @Nonnull
-    public static TypeAnnotationProvider create(@Nonnull PsiAnnotation[] annotations) {
+    public static TypeAnnotationProvider create(PsiAnnotation[] annotations) {
       return annotations.length == 0 ? EMPTY : new Static(annotations);
     }
   }

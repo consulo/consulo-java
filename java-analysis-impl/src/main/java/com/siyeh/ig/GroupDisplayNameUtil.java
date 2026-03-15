@@ -17,7 +17,6 @@ package com.siyeh.ig;
 
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +70,6 @@ public class GroupDisplayNameUtil {
   private GroupDisplayNameUtil() {
   }
 
-  @Nonnull
   public static LocalizeValue getGroupDisplayName(Class<?> aClass) {
     final Package thisPackage = aClass.getPackage();
     assert thisPackage != null : "need package to determine group display name";

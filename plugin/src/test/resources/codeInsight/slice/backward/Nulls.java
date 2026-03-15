@@ -1,5 +1,4 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class X  {
     private final static String CON = "";
@@ -51,7 +50,7 @@ public class X  {
     void set(String d) {
         l = d;
     }
-    void setFromNN(@Nonnull String d) {
+    void setFromNN(String d) {
         l = d;
     }
 }

@@ -1,19 +1,15 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class Main {
-  @Nonnull
   private Object test1(@jakarta.annotation.Nonnull Object defVal, @jakarta.annotation.Nullable final Object val) {
     return defVal;
   }
-  @Nonnull
-  private Object test11(@Nonnull Object defVal, @jakarta.annotation.Nullable final Object val) {
+  private Object test11(Object defVal, @jakarta.annotation.Nullable final Object val) {
     if (val != null) {
       return val;
     }
     return defVal;
   }
-  @Nonnull
   private Object test5(@jakarta.annotation.Nonnull Object defVal, @jakarta.annotation.Nullable final Object val) {
     if (defVal == val) {
       return val;
@@ -28,7 +24,7 @@ public class Main {
     return defVal;
   }
   @jakarta.annotation.Nonnull
-  private Object test7(@Nonnull Object defVal, @jakarta.annotation.Nullable final Object val) {
+  private Object test7(Object defVal, @jakarta.annotation.Nullable final Object val) {
     if (<warning descr="Method invocation 'val.equals(defVal)' may produce 'java.lang.NullPointerException'">val.equals(defVal)</warning>) {
       return defVal;
     }

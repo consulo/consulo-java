@@ -28,18 +28,16 @@ import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.ReferenceSetBase;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
  */
 public class PackageReferenceSet extends ReferenceSetBase<PackageReference> {
 
-  public PackageReferenceSet(@Nonnull final String str, @Nonnull final PsiElement element, final int startInElement) {
+  public PackageReferenceSet(final String str, final PsiElement element, final int startInElement) {
     super(str, element, startInElement, '.');
   }
 
-  @Nonnull
   protected PackageReference createReference(final TextRange range, final int index) {
     return new PackageReference(this, range, index);
   }

@@ -25,29 +25,26 @@ import consulo.ui.style.StandardColors;
 import consulo.usage.TextChunk;
 import consulo.usage.UsagePresentation;
 
-import jakarta.annotation.Nonnull;
 import java.awt.*;
 
 /**
  * User: cdr
  */
 public class SliceTooComplexDFAUsage extends SliceUsage {
-  public SliceTooComplexDFAUsage(@Nonnull PsiElement element, @Nonnull SliceUsage parent, @Nonnull PsiSubstitutor substitutor) {
+  public SliceTooComplexDFAUsage(PsiElement element, SliceUsage parent, PsiSubstitutor substitutor) {
     super(element, parent, substitutor, 0, "");
   }
 
   @Override
-  public void processChildren(@Nonnull Processor<SliceUsage> processor) {
+  public void processChildren(Processor<SliceUsage> processor) {
     // no children
   }
 
-  @Nonnull
   @Override
   public UsagePresentation getPresentation() {
     final UsagePresentation presentation = super.getPresentation();
     return new UsagePresentation() {
       @Override
-      @Nonnull
       public TextChunk[] getText() {
         return new TextChunk[]{
             new TextChunk(new TextAttributes(StandardColors.RED, null, null, EffectType.WAVE_UNDERSCORE, Font.PLAIN), getTooltipText())
@@ -55,7 +52,6 @@ public class SliceTooComplexDFAUsage extends SliceUsage {
       }
 
       @Override
-      @Nonnull
       public String getPlainText() {
         return presentation.getPlainText();
       }

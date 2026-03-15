@@ -9,7 +9,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.language.editor.navigation.GotoDeclarationHandlerBase;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public final class GotoVarTypeHandler extends GotoDeclarationHandlerBase {

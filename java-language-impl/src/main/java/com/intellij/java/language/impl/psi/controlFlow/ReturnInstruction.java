@@ -17,17 +17,15 @@ package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 
 public class ReturnInstruction extends GoToInstruction {
   private static final Logger LOG = Logger.getInstance(ReturnInstruction.class);
 
-  @Nonnull
   private CallInstruction myCallInstruction;
   private boolean myRethrowFromFinally;
 
-  public ReturnInstruction(int offset, @Nonnull CallInstruction callInstruction) {
+  public ReturnInstruction(int offset, CallInstruction callInstruction) {
     super(offset, Role.END, false);
     myCallInstruction = callInstruction;
   }
@@ -36,7 +34,6 @@ public class ReturnInstruction extends GoToInstruction {
     return "RETURN FROM " + getProcBegin() + (offset == 0 ? "" : " TO " + offset);
   }
 
-  @Nonnull
   int[] getPossibleReturnOffsets() {
     return offset == 0 ?
         new int[]{
@@ -63,7 +60,7 @@ public class ReturnInstruction extends GoToInstruction {
     return myCallInstruction.procEnd;
   }
 
-  void setCallInstruction(@Nonnull CallInstruction callInstruction) {
+  void setCallInstruction(CallInstruction callInstruction) {
     myCallInstruction = callInstruction;
   }
 
@@ -96,7 +93,7 @@ public class ReturnInstruction extends GoToInstruction {
   }
 
   @Override
-  public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
+  public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
     visitor.visitReturnInstruction(this, offset, nextOffset);
   }
 

@@ -23,8 +23,7 @@ import com.intellij.java.language.psi.PsiKeyword;
 import consulo.language.ast.IElementType;
 import consulo.language.parser.PsiBuilder;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
@@ -37,12 +36,11 @@ public class ModuleParser {
 
   private final JavaParser myParser;
 
-  public ModuleParser(@Nonnull JavaParser parser) {
+  public ModuleParser(JavaParser parser) {
     myParser = parser;
   }
 
-  @Nullable
-  public PsiBuilder.Marker parse(@Nonnull PsiBuilder builder) {
+  public PsiBuilder.@Nullable Marker parse(PsiBuilder builder) {
     PsiBuilder.Marker module = builder.mark();
 
     PsiBuilder.Marker firstAnnotation = myParser.getDeclarationParser().parseAnnotations(builder);
@@ -232,7 +230,6 @@ public class ModuleParser {
     return parsePackageStatement(builder, statement, JavaElementType.OPENS_STATEMENT);
   }
 
-  @Nonnull
   private PsiBuilder.Marker parsePackageStatement(PsiBuilder builder, PsiBuilder.Marker statement, IElementType type) {
     boolean hasError = false;
 

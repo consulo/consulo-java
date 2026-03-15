@@ -28,18 +28,15 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class LoopWithImplicitTerminationConditionInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.loopWithImplicitTerminationConditionDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return Boolean.TRUE.equals(infos[0])
             ? InspectionGadgetsLocalize.loopWithImplicitTerminationConditionDowhileProblemDescriptor().get()
@@ -52,7 +49,6 @@ public class LoopWithImplicitTerminationConditionInspection extends BaseInspecti
     }
 
     private static class LoopWithImplicitTerminationConditionFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.loopWithImplicitTerminationConditionQuickfix();
@@ -137,7 +133,7 @@ public class LoopWithImplicitTerminationConditionInspection extends BaseInspecti
         }
 
         private static void replaceStatement(
-            @Nonnull PsiStatement replacedStatement,
+            PsiStatement replacedStatement,
             @Nullable PsiStatement replacingStatement
         )
             throws IncorrectOperationException {

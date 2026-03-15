@@ -34,8 +34,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.dataholder.KeyWithDefaultValue;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +51,6 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
 
     private static final List<StaticImporter> IMPORTERS = asList(new SingleMemberStaticImporter(), new OnDemandStaticImporter());
 
-    @Nonnull
     @Override
     public KeyWithDefaultValue<Boolean> getKey() {
         return KEY;
@@ -87,7 +85,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
     }
 
     @Nullable
-    private static PsiElement getNext(@Nonnull PsiElement element) {
+    private static PsiElement getNext(PsiElement element) {
         PsiElement result = element.getNextSibling();
         for (PsiElement current = element; current != null && result == null; current = current.getParent()) {
             result = current.getNextSibling();
@@ -95,21 +93,20 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
         return result;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getOptionText() {
         return CodeInsightLocalize.dialogEditTemplateCheckboxUseStaticImport();
     }
 
     private interface StaticImporter {
-        boolean canPerform(@Nonnull PsiElement element);
+        boolean canPerform(PsiElement element);
 
         void perform(Project project, PsiFile file, Editor editor, PsiElement element);
     }
 
     private static class SingleMemberStaticImporter implements StaticImporter {
         @Override
-        public boolean canPerform(@Nonnull PsiElement element) {
+        public boolean canPerform(PsiElement element) {
             return AddSingleMemberStaticImportAction.getStaticImportClass(element) != null;
         }
 
@@ -122,7 +119,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
     private static class OnDemandStaticImporter implements StaticImporter {
         @Override
         @RequiredReadAction
-        public boolean canPerform(@Nonnull PsiElement element) {
+        public boolean canPerform(PsiElement element) {
             return AddOnDemandStaticImportAction.getClassToPerformStaticImport(element) != null;
         }
 

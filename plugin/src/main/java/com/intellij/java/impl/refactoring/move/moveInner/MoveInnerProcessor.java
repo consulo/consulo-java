@@ -53,8 +53,7 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -96,19 +95,16 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         setup(innerClass, name, passOuterClass, parameterName, true, true, targetContainer);
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.moveInnerClassCommand(myDescriptiveName);
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new MoveInnerViewDescriptor(myInnerClass);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -176,7 +172,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         PsiManager manager = PsiManager.getInstance(myProject);
         PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
 
@@ -339,7 +335,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         final MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         final Map<PsiElement, Set<PsiElement>> reported = new HashMap<>();
         class Visitor extends JavaRecursiveElementWalkingVisitor {
@@ -354,7 +350,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
             }
 
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 if (aClass == myInnerClass) {
                     return;
                 }
@@ -367,7 +363,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         myInnerClass.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
             @RequiredReadAction
-            public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+            public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
                 super.visitReferenceElement(reference);
                 if (reference.resolve() instanceof PsiMember member
                     && PsiTreeUtil.isAncestor(myOuterClass, member, true)
@@ -445,7 +441,7 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
         String parameterName,
         boolean searchInComments,
         boolean searchInNonJava,
-        @Nonnull PsiElement targetContainer
+        PsiElement targetContainer
     ) {
         myNewClassName = className;
         myInnerClass = innerClass;

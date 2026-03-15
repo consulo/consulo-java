@@ -27,8 +27,7 @@ import consulo.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.ast.IElementType;
 import com.intellij.java.language.psi.tree.java.IJavaElementType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class JavaBraceMatcher implements PairedBraceMatcher {
@@ -45,7 +44,7 @@ public class JavaBraceMatcher implements PairedBraceMatcher {
   }
 
   @Override
-  public boolean isPairedBracesAllowedBeforeType(@Nonnull IElementType lbraceType, @Nullable IElementType contextType) {
+  public boolean isPairedBracesAllowedBeforeType(IElementType lbraceType, @Nullable IElementType contextType) {
     if (contextType instanceof IJavaElementType) return isPairedBracesAllowedBeforeTypeInJava(contextType);
     return true;
   }
@@ -85,7 +84,6 @@ public class JavaBraceMatcher implements PairedBraceMatcher {
     return openingBraceOffset;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

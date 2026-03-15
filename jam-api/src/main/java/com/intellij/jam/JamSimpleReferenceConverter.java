@@ -25,8 +25,7 @@ import consulo.language.psi.PsiReference;
 import consulo.util.collection.ContainerUtil;
 import consulo.xml.util.xml.ElementPresentationManager;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -36,7 +35,6 @@ import java.util.function.Function;
  * @author peter
  */
 public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
-  @Nonnull
   @Override
   public PsiReference[] createReferences(JamStringAttributeElement<T> context) {
     final PsiLiteral literal = context.getPsiLiteral();
@@ -50,7 +48,7 @@ public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
   }
 
   @Nullable
-  protected PsiElement getPsiElementFor(@Nonnull T target) {
+  protected PsiElement getPsiElementFor(T target) {
     if (target instanceof PsiElement) {
       return (PsiElement)target;
     } else if (target instanceof CommonModelElement) {
@@ -59,8 +57,7 @@ public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
     return null;
   }
 
-  @Nonnull
-  protected LookupElement createLookupElementFor(@Nonnull T target) {
+  protected LookupElement createLookupElementFor(T target) {
     String name = ElementPresentationManager.getElementName(target);
     if (name != null) {
       return LookupElementBuilder.create(name);
@@ -74,7 +71,6 @@ public abstract class JamSimpleReferenceConverter<T> extends JamConverter<T>{
 
   public LookupElement[] getLookupVariants(JamStringAttributeElement<T> context) {
     return ContainerUtil.map2Array(getVariants(context), LookupElement.class, new Function<T, LookupElement>() {
-      @Nonnull
       public LookupElement apply(T t) {
         return createLookupElementFor(t);
       }

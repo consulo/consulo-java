@@ -70,8 +70,7 @@ import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -89,14 +88,13 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     @Nullable
     private final XSourcePosition myXSourcePosition;
     private final NodeManagerImpl myNodeManager;
-    @Nonnull
     private final StackFrameDescriptorImpl myDescriptor;
     private static final JavaFramesListRenderer FRAME_RENDERER = new JavaFramesListRenderer();
     private JavaDebuggerEvaluator myEvaluator = null;
     private final String myEqualityObject;
     private CapturePoint myInsertCapturePoint;
 
-    public JavaStackFrame(@Nonnull StackFrameDescriptorImpl descriptor, boolean update) {
+    public JavaStackFrame(StackFrameDescriptorImpl descriptor, boolean update) {
         myDescriptor = descriptor;
         if (update) {
             myDescriptor.setContext(null);
@@ -108,7 +106,6 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
         myXSourcePosition = DebuggerUtilsEx.toXSourcePosition(myDescriptor.getSourcePosition());
     }
 
-    @Nonnull
     public StackFrameDescriptorImpl getDescriptor() {
         return myDescriptor;
     }
@@ -129,7 +126,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     }
 
     @Override
-    public void customizePresentation(@Nonnull ColoredTextContainer component) {
+    public void customizePresentation(ColoredTextContainer component) {
         StackFrameDescriptorImpl selectedDescriptor = null;
         DebuggerSession session = myDebugProcess.getSession();
         if (session != null) {
@@ -145,7 +142,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     }
 
     @Override
-    public void computeChildren(@Nonnull XCompositeNode node) {
+    public void computeChildren(XCompositeNode node) {
         if (node.isObsolete()) {
             return;
         }
@@ -290,7 +287,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     private void buildVariables(
         DebuggerContextImpl debuggerContext,
         EvaluationContextImpl evaluationContext,
-        @Nonnull DebugProcessImpl debugProcess,
+        DebugProcessImpl debugProcess,
         XValueChildrenList children,
         ObjectReference thisObjectReference,
         Location location
@@ -392,8 +389,8 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 
     private static Set<TextWithImports> computeExtraVars(
         Pair<Set<String>, Set<TextWithImports>> usedVars,
-        @Nonnull SourcePosition sourcePosition,
-        @Nonnull EvaluationContextImpl evalContext
+        SourcePosition sourcePosition,
+        EvaluationContextImpl evalContext
     ) {
         Set<String> alreadyCollected = new HashSet<>(usedVars.first);
         usedVars.second.stream().map(TextWithImports::getText).forEach(alreadyCollected::add);
@@ -428,16 +425,15 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
         }
 
         @Override
-        public void computePresentation(@Nonnull XValueNode node, @Nonnull XValuePlace place) {
+        public void computePresentation(XValueNode node, XValuePlace place) {
             node.setPresentation(myIcon, new XValuePresentation() {
-                @Nonnull
                 @Override
                 public String getSeparator() {
                     return "";
                 }
 
                 @Override
-                public void renderValue(@Nonnull XValueTextRenderer renderer) {
+                public void renderValue(XValueTextRenderer renderer) {
                     renderer.renderValue(myMessage.get());
                 }
             }, false);
@@ -456,7 +452,6 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
         }
     }
 
-    @Nonnull
     public StackFrameProxyImpl getStackFrameProxy() {
         return myDescriptor.getFrameProxy();
     }
@@ -506,7 +501,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             if (myCollectExpressions) {
                 PsiMethod psiMethod = expression.resolveMethod();
                 if (psiMethod != null && !DebuggerUtils.hasSideEffectsOrReferencesMissingVars(expression, myVisibleLocals)) {
@@ -567,7 +562,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
         }
 
         @Override
-        public void visitArrayAccessExpression(@Nonnull PsiArrayAccessExpression expression) {
+        public void visitArrayAccessExpression(PsiArrayAccessExpression expression) {
             if (myCollectExpressions && !DebuggerUtils.hasSideEffectsOrReferencesMissingVars(expression, myVisibleLocals)) {
                 myExpressions.add(new TextWithImportsImpl(expression));
             }
@@ -576,14 +571,14 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
 
         @Override
         @RequiredReadAction
-        public void visitParameter(@Nonnull PsiParameter parameter) {
+        public void visitParameter(PsiParameter parameter) {
             processVariable(parameter);
             super.visitParameter(parameter);
         }
 
         @Override
         @RequiredReadAction
-        public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+        public void visitLocalVariable(PsiLocalVariable variable) {
             processVariable(variable);
             super.visitLocalVariable(variable);
         }
@@ -596,7 +591,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // Do not step in to local and anonymous classes...
         }
     }
@@ -645,7 +640,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     }
 
     @RequiredReadAction
-    private static Pair<Set<String>, Set<TextWithImports>> findReferencedVars(Set<String> visibleVars, @Nonnull SourcePosition position) {
+    private static Pair<Set<String>, Set<TextWithImports>> findReferencedVars(Set<String> visibleVars, SourcePosition position) {
         int line = position.getLine();
         if (line < 0) {
             return Pair.create(Collections.emptySet(), Collections.<TextWithImports>emptySet());
@@ -730,7 +725,7 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
         element.accept(new JavaRecursiveElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitExpressionStatement(@Nonnull PsiExpressionStatement statement) {
+            public void visitExpressionStatement(PsiExpressionStatement statement) {
                 TextRange stRange = statement.getTextRange();
                 if (originalRange.intersects(stRange)) {
                     TextRange currentRange = rangeRef.get();

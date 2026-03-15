@@ -23,8 +23,6 @@ import consulo.language.pattern.StandardPatterns;
 import consulo.language.pattern.StringPattern;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author nik
@@ -36,7 +34,7 @@ public class PsiStatementPattern<T extends PsiStatement, Self extends PsiStateme
 
   public Self insideMethod(final PsiMethodPattern pattern) {
     return with(new PatternCondition<T>("insideMethod") {
-      public boolean accepts(@Nonnull final T t, final ProcessingContext context) {
+      public boolean accepts(final T t, final ProcessingContext context) {
         PsiMethod method = PsiTreeUtil.getParentOfType(t, PsiMethod.class, false, PsiMember.class);
         return method != null && pattern.accepts(method, context);
       }
@@ -47,7 +45,7 @@ public class PsiStatementPattern<T extends PsiStatement, Self extends PsiStateme
     return insideMethod(PsiJavaPatterns.psiMethod().withName(methodName).definedInClass(qualifiedClassName));
   }
 
-  public Self insideMethod(@Nonnull @NonNls String methodName, @Nonnull @NonNls String qualifiedClassName) {
+  public Self insideMethod(String methodName, String qualifiedClassName) {
     return insideMethod(StandardPatterns.string().equalTo(methodName), qualifiedClassName);
   }
 

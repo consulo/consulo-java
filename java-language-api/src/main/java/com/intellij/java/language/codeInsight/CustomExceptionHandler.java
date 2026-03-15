@@ -5,8 +5,7 @@ import com.intellij.java.language.psi.PsiClassType;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Allow to specify that exception produced by the element is handled.
@@ -22,5 +21,5 @@ public interface CustomExceptionHandler {
    * @param exceptionType type of produced exception
    * @param topElement    element at which exception should be handled
    */
-  boolean isHandled(@Nullable PsiElement element, @Nonnull PsiClassType exceptionType, PsiElement topElement);
+  boolean isHandled(@Nullable PsiElement element, PsiClassType exceptionType, PsiElement topElement);
 }

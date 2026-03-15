@@ -16,7 +16,6 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +30,6 @@ public final class BreakpointCategory {
   private BreakpointCategory() {
   }
 
-  @Nonnull
   public static <T extends Breakpoint> Key<T> lookup(String name) {
     Key<T> key = ourMap.get(name);
     if (key == null) {

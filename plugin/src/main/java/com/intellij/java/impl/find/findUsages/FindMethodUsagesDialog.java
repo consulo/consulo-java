@@ -31,7 +31,7 @@ import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
 
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 
 public class FindMethodUsagesDialog extends JavaFindUsagesDialog<JavaMethodFindUsagesOptions> {

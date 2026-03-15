@@ -33,8 +33,7 @@ import consulo.logging.Logger;
 import consulo.navigation.NavigationItem;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -64,7 +63,7 @@ public class DefaultSymbolNavigationContributor implements GotoSymbolContributor
   }
 
   @Override
-  public void processNames(@Nonnull Processor<String> processor, @Nonnull SearchScope scope, @Nullable IdFilter filter) {
+  public void processNames(Processor<String> processor, SearchScope scope, @Nullable IdFilter filter) {
     PsiShortNamesCache cache = PsiShortNamesCache.getInstance(((ProjectAwareSearchScope) scope).getProject());
     cache.processAllClassNames(processor, (GlobalSearchScope) scope, filter);
     cache.processAllFieldNames(processor, (GlobalSearchScope) scope, filter);
@@ -72,8 +71,8 @@ public class DefaultSymbolNavigationContributor implements GotoSymbolContributor
   }
 
   @Override
-  public void processElementsWithName(@Nonnull String name, @Nonnull final Processor<NavigationItem> processor,
-                                      @Nonnull FindSymbolParameters parameters) {
+  public void processElementsWithName(String name, final Processor<NavigationItem> processor,
+                                      FindSymbolParameters parameters) {
 
     GlobalSearchScope scope = (GlobalSearchScope) parameters.getSearchScope();
     IdFilter filter = parameters.getIdFilter();

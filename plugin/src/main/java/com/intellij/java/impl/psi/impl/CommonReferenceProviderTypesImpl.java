@@ -21,7 +21,6 @@ import com.intellij.java.language.impl.psi.JavaClassPsiReferenceProvider;
 import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Dmitry Avdeev
@@ -43,13 +42,11 @@ public class CommonReferenceProviderTypesImpl extends CommonReferenceProviderTyp
     };
   }
 
-  @Nonnull
   @Override
   public JavaClassPsiReferenceProvider getClassReferenceProvider() {
     return myProvider;
   }
 
-  @Nonnull
   @Override
   public JavaClassPsiReferenceProvider getSoftClassReferenceProvider() {
     return mySoftProvider;

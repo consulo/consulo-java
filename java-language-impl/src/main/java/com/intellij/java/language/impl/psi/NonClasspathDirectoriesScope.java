@@ -23,7 +23,6 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +34,7 @@ import java.util.Set;
 public class NonClasspathDirectoriesScope extends GlobalSearchScope {
   private final Set<VirtualFile> myRoots;
 
-  public NonClasspathDirectoriesScope(@Nonnull Collection<VirtualFile> roots) {
+  public NonClasspathDirectoriesScope(Collection<VirtualFile> roots) {
     myRoots = new HashSet<>(roots);
   }
 
@@ -44,9 +43,8 @@ public class NonClasspathDirectoriesScope extends GlobalSearchScope {
     return true;
   }
 
-  @Nonnull
   @UsedInPlugin
-  public static GlobalSearchScope compose(@Nonnull List<VirtualFile> roots) {
+  public static GlobalSearchScope compose(List<VirtualFile> roots) {
     if (roots.isEmpty()) {
       return EMPTY_SCOPE;
     }
@@ -55,17 +53,17 @@ public class NonClasspathDirectoriesScope extends GlobalSearchScope {
   }
 
   @Override
-  public boolean contains(@Nonnull VirtualFile file) {
+  public boolean contains(VirtualFile file) {
     return VirtualFileUtil.isUnder(file, myRoots);
   }
 
   @Override
-  public int compare(@Nonnull VirtualFile file1, @Nonnull VirtualFile file2) {
+  public int compare(VirtualFile file1, VirtualFile file2) {
     return 0;
   }
 
   @Override
-  public boolean isSearchInModuleContent(@Nonnull Module aModule) {
+  public boolean isSearchInModuleContent(Module aModule) {
     return false;
   }
 
@@ -93,7 +91,6 @@ public class NonClasspathDirectoriesScope extends GlobalSearchScope {
     return result;
   }
 
-  @Nonnull
   @Override
   public String getDisplayName() {
     if (myRoots.size() == 1) {

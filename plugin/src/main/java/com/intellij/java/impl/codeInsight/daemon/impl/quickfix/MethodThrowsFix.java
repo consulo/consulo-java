@@ -30,8 +30,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement {
     private static final Logger LOG = Logger.getInstance(MethodThrowsFix.class);
@@ -51,7 +50,6 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
             0);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         if (myShouldThrow) {
@@ -63,21 +61,21 @@ public class MethodThrowsFix extends LocalQuickFixAndIntentionActionOnPsiElement
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project,
-                               @Nonnull PsiFile file,
-                               @Nonnull PsiElement startElement,
-                               @Nonnull PsiElement endElement) {
+    public boolean isAvailable(Project project,
+                               PsiFile file,
+                               PsiElement startElement,
+                               PsiElement endElement) {
         PsiMethod myMethod = (PsiMethod) startElement;
         return myMethod.isValid()
             && myMethod.getManager().isInProject(myMethod);
     }
 
     @Override
-    public void invoke(@Nonnull Project project,
-                       @Nonnull PsiFile file,
+    public void invoke(Project project,
+                       PsiFile file,
                        @Nullable Editor editor,
-                       @Nonnull PsiElement startElement,
-                       @Nonnull PsiElement endElement) {
+                       PsiElement startElement,
+                       PsiElement endElement) {
         PsiMethod myMethod = (PsiMethod) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) {
             return;

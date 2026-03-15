@@ -48,9 +48,7 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
@@ -78,7 +76,7 @@ public class MoveInnerDialog extends RefactoringDialog {
   private SuggestedNameInfo mySuggestedNameInfo;
   private final PsiClass myOuterClass;
 
-  @NonNls private static final String RECENTS_KEY = "MoveInnerDialog.RECENTS_KEY";
+  private static final String RECENTS_KEY = "MoveInnerDialog.RECENTS_KEY";
 
   public MoveInnerDialog(Project project, PsiClass innerClass, MoveInnerProcessor processor, PsiElement targetContainer) {
     super(project, true);
@@ -120,7 +118,6 @@ public class MoveInnerDialog extends RefactoringDialog {
     return myCbPassOuterClass.isSelected();
   }
 
-  @Nonnull
   public PsiClass getInnerClass() {
     return myInnerClass;
   }

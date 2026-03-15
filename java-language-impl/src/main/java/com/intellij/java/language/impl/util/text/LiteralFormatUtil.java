@@ -19,8 +19,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.util.lang.CharFilter;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LiteralFormatUtil
 {
@@ -30,14 +29,12 @@ public class LiteralFormatUtil
 	{
 	}
 
-	@Nonnull
-	public static String removeUnderscores(@Nonnull final String text)
+	public static String removeUnderscores(final String text)
 	{
 		return StringUtil.strip(text, UNDERSCORES_FILTER);
 	}
 
-	@Nonnull
-	public static String format(@Nonnull final String original, @Nullable final PsiType type)
+	public static String format(final String original, @Nullable final PsiType type)
 	{
 		final boolean isFP = PsiType.FLOAT.equals(type) || PsiType.DOUBLE.equals(type);
 

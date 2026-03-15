@@ -32,7 +32,6 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -42,7 +41,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         PsiElement element = dataContext.getData(PsiElement.KEY);
         if (element instanceof PsiMethod method) {
@@ -91,7 +90,7 @@ public class InvertBooleanHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, @Nonnull DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length == 1 && elements[0] instanceof PsiMethod method) {
             invoke(method, project, null);
         }

@@ -24,7 +24,6 @@ import consulo.ide.setting.ShowSettingsUtil;
 import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.concurrent.AsyncResult;
-import jakarta.annotation.Nonnull;
 
 @ActionImpl(id = "Debugger.AdjustArrayRange")
 public class AdjustArrayRangeAction extends ArrayAction {
@@ -32,13 +31,12 @@ public class AdjustArrayRangeAction extends ArrayAction {
         super(XDebuggerLocalize.actionAdjustArrayRangeText());
     }
 
-    @Nonnull
     @Override
     @RequiredUIAccess
     protected AsyncResult<ArrayRenderer> createNewRenderer(
         XValueNode node,
         ArrayRenderer original,
-        @Nonnull DebuggerContextImpl debuggerContext,
+        DebuggerContextImpl debuggerContext,
         LocalizeValue title
     ) {
         ArrayRenderer clonedRenderer = original.clone();

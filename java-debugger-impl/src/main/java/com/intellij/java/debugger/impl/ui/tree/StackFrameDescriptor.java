@@ -17,7 +17,7 @@ package com.intellij.java.debugger.impl.ui.tree;
 
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 

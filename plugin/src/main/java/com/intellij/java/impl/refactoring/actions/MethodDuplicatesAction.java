@@ -22,7 +22,6 @@ import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -39,12 +38,12 @@ public class MethodDuplicatesAction extends BaseRefactoringAction {
     }
 
     @Override
-    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    protected boolean isEnabledOnElements(PsiElement[] elements) {
         return false;
     }
 
     @Override
-    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+    protected RefactoringActionHandler getHandler(DataContext dataContext) {
         return new MethodDuplicatesHandler();
     }
 }

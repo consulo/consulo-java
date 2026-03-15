@@ -5,13 +5,11 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PropertyUtilBase;
 import com.intellij.java.language.util.PropertyKind;
 import consulo.annotation.access.RequiredReadAction;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 final class DefaultPropertyAccessorDetector {
-  @Nullable
   @RequiredReadAction
-  static PropertyAccessorDetector.PropertyAccessorInfo getDefaultAccessorInfo(@Nonnull PsiMethod method) {
+  static PropertyAccessorDetector.@Nullable PropertyAccessorInfo getDefaultAccessorInfo(PsiMethod method) {
     if (PropertyUtilBase.isSimplePropertyGetter(method)) {
       return new PropertyAccessorDetector.PropertyAccessorInfo(PropertyUtilBase.getPropertyNameByGetter(method),
                                                                method.getReturnType(),

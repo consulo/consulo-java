@@ -30,7 +30,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
 
 /**
  *  @author dsl
@@ -42,7 +41,6 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   private String newTypeName;
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return variableName == null || newTypeName == null
       ? CodeInsightLocalize.intentionMakeTypeGenericFamily()
@@ -50,7 +48,7 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     return PsiUtil.isLanguageLevel5OrHigher(element) && element.isWritable() && findVariable(element) != null;
   }
 
@@ -95,7 +93,7 @@ public class MakeTypeGenericAction extends PsiElementBaseIntentionAction {
 
   @Override
   @RequiredUIAccess
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     Pair<PsiVariable, PsiType> pair = findVariable(element);
     if (pair == null) return;
     PsiVariable variable = pair.getFirst();

@@ -40,7 +40,6 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,13 +48,13 @@ import java.util.List;
 abstract class OverrideImplementMethodAction extends AnAction {
     private static final Logger LOG = Logger.getInstance(OverrideImplementMethodAction.class);
 
-    protected OverrideImplementMethodAction(@Nonnull LocalizeValue text, @Nonnull LocalizeValue description) {
+    protected OverrideImplementMethodAction(LocalizeValue text, LocalizeValue description) {
         super(text, description);
     }
 
     @Override
     @RequiredUIAccess
-    public final void actionPerformed(@Nonnull AnActionEvent event) {
+    public final void actionPerformed(AnActionEvent event) {
         DataContext dataContext = event.getDataContext();
         MethodHierarchyBrowser methodHierarchyBrowser = (MethodHierarchyBrowser) dataContext.getData(MethodHierarchyBrowserBase.DATA_KEY);
         if (methodHierarchyBrowser == null) {
@@ -108,7 +107,7 @@ abstract class OverrideImplementMethodAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public final void update(@Nonnull AnActionEvent e) {
+    public final void update(AnActionEvent e) {
         Presentation presentation = e.getPresentation();
         DataContext dataContext = e.getDataContext();
 

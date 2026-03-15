@@ -34,8 +34,7 @@ import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +48,6 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
 
     private final LocalQuickFix myQuickFixAction = new AcceptSuggested();
 
-    @Nonnull
     @Override
     public InspectionToolState<? extends RedundantCastInspectionState> createStateProvider() {
         return new RedundantCastInspectionState();
@@ -60,7 +58,6 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
         return true;
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
@@ -70,8 +67,8 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
     @Override
     @RequiredReadAction
     public ProblemDescriptor[] getDescriptions(
-        @Nonnull PsiElement where,
-        @Nonnull InspectionManager manager,
+        PsiElement where,
+        InspectionManager manager,
         boolean isOnTheFly,
         RedundantCastInspectionState state
     ) {
@@ -95,8 +92,8 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
     @Override
     @RequiredReadAction
     public ProblemDescriptor[] checkField(
-        @Nonnull PsiField field,
-        @Nonnull InspectionManager manager,
+        PsiField field,
+        InspectionManager manager,
         boolean isOnTheFly,
         RedundantCastInspectionState state
     ) {
@@ -106,8 +103,8 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
     @Nullable
     @RequiredReadAction
     private ProblemDescriptor createDescription(
-        @Nonnull PsiTypeCastExpression cast,
-        @Nonnull InspectionManager manager,
+        PsiTypeCastExpression cast,
+        InspectionManager manager,
         boolean onTheFly,
         RedundantCastInspectionState state
     ) {
@@ -139,14 +136,13 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
 
     private static class AcceptSuggested implements LocalQuickFix {
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionRedundantCastRemoveQuickfix();
         }
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiElement castTypeElement = descriptor.getPsiElement();
             PsiTypeCastExpression cast = castTypeElement == null ? null : (PsiTypeCastExpression) castTypeElement.getParent();
             if (cast != null) {
@@ -156,19 +152,16 @@ public class RedundantCastInspection extends GenericsInspectionToolBase<Redundan
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionRedundantCastDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesVerboseOrRedundantCodeConstructs();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }

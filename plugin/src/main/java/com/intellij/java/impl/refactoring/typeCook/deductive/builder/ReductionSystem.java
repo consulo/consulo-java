@@ -26,7 +26,6 @@ import com.intellij.java.impl.refactoring.typeCook.Settings;
 import com.intellij.java.impl.refactoring.typeCook.Util;
 import com.intellij.java.impl.refactoring.typeCook.deductive.PsiTypeVariableFactory;
 import com.intellij.java.impl.refactoring.typeCook.deductive.resolver.Binding;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -98,7 +97,7 @@ public class ReductionSystem {
 
   @SuppressWarnings({"StringConcatenationInsideStringBufferAppend"})
   public String toString() {
-    @NonNls StringBuffer buffer = new StringBuffer();
+    StringBuffer buffer = new StringBuffer();
 
     buffer.append("Victims:\n");
 
@@ -349,8 +348,8 @@ public class ReductionSystem {
     return myBoundVariables;
   }
 
-  public @NonNls String dumpString() {
-    @NonNls String[] data = new String[myElements.size()];
+  public String dumpString() {
+    String[] data = new String[myElements.size()];
 
     int i = 0;
 
@@ -376,7 +375,7 @@ public class ReductionSystem {
     return repr.toString();
   }
 
-  @NonNls private static
+  private static
   String elementString(PsiElement element) {
     if (element instanceof PsiNewExpression) {
       return "new";
@@ -399,7 +398,7 @@ public class ReductionSystem {
   }
 
   public String dumpResult(final Binding bestBinding) {
-    @NonNls String[] data = new String[myElements.size()];
+    String[] data = new String[myElements.size()];
 
     class Substitutor {
       PsiType substitute(PsiType t) {

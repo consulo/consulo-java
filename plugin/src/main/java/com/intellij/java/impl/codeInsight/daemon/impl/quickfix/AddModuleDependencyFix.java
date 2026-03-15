@@ -47,8 +47,7 @@ import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -107,7 +106,6 @@ class AddModuleDependencyFix extends AddOrderEntryFix {
         myModules = modules;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         if (myModules.size() == 1) {
@@ -121,13 +119,13 @@ class AddModuleDependencyFix extends AddOrderEntryFix {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return !project.isDisposed() && !myCurrentModule.isDisposed() && !myModules.isEmpty() && myModules.stream()
             .noneMatch(Module::isDisposed);
     }
 
     @Override
-    public void invoke(@Nonnull Project project, @Nullable Editor editor, PsiFile file) {
+    public void invoke(Project project, @Nullable Editor editor, PsiFile file) {
         if (myModules.size() == 1) {
             addDependencyOnModule(project, editor, ContainerUtil.getFirstItem(myModules));
         }

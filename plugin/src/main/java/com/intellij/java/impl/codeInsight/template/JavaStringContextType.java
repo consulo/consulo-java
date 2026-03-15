@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiUtilCore;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -36,7 +35,7 @@ public class JavaStringContextType extends BaseTemplateContextType {
   }
 
   @Override
-  public boolean isInContext(@Nonnull PsiFile file, int offset) {
+  public boolean isInContext(PsiFile file, int offset) {
     if (PsiUtilCore.getLanguageAtOffset(file, offset).isKindOf(JavaLanguage.INSTANCE)) {
       return isStringLiteral(file.findElementAt(offset));
     }

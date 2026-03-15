@@ -29,7 +29,7 @@ import consulo.xml.util.xml.DomManager;
 import consulo.xml.util.xml.DomTarget;
 import consulo.xml.util.xml.DomUtil;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter

@@ -28,14 +28,13 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Konstantin Bulenkov
  */
 public class GenerateCreateUIHandler implements CodeInsightActionHandler {
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     PsiElement element = PsiUtilBase.getElementAtCaret(editor);
     PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
     if (psiClass == null) return;

@@ -30,8 +30,7 @@ import consulo.project.Project;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 
 public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
@@ -55,7 +54,6 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     myDisplayDescriptorSearcher.clear();
   }
 
-  @Nonnull
   public <T extends NodeDescriptor> T getDescriptor(NodeDescriptor parent, DescriptorData<T> key) {
     final T descriptor = key.createDescriptor(myProject);
 
@@ -136,7 +134,6 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, new ArrayItemData(array, index));
   }
 
-  @Nonnull
   @Override
   public FieldDescriptorImpl getFieldDescriptor(NodeDescriptor parent, ObjectReference objRef, Field field) {
     final DescriptorData<FieldDescriptorImpl> descriptorData;
@@ -160,7 +157,7 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, new ArgValueData(variable, value));
   }
 
-  public StackFrameDescriptorImpl getStackFrameDescriptor(@Nullable NodeDescriptorImpl parent, @Nonnull StackFrameProxyImpl frameProxy) {
+  public StackFrameDescriptorImpl getStackFrameDescriptor(@Nullable NodeDescriptorImpl parent, StackFrameProxyImpl frameProxy) {
     return getDescriptor(parent, new StackFrameData(frameProxy));
   }
 

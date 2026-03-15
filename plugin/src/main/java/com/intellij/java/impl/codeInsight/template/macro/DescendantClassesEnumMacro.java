@@ -35,8 +35,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.scope.GlobalSearchScope;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -56,7 +55,7 @@ public class DescendantClassesEnumMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
     Result[] results = calculateResults(classes);
@@ -107,7 +106,7 @@ public class DescendantClassesEnumMacro extends Macro {
   }
 
   @Override
-  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
     List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
     Result[] results = calculateResults(classes);
@@ -116,7 +115,7 @@ public class DescendantClassesEnumMacro extends Macro {
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     List<PsiClass> classes = findDescendants(context, params);
     if (classes == null || classes.size() == 0) return null;
 

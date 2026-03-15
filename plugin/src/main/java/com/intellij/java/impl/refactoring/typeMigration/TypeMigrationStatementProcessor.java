@@ -37,7 +37,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -572,13 +571,13 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor {
     }
   }
 
-  private void tryToRemoveLocalVariableAssignment(@Nonnull PsiLocalVariable variable, @Nonnull PsiExpression valueExpression, @Nonnull PsiType migrationType) {
+  private void tryToRemoveLocalVariableAssignment(PsiLocalVariable variable, PsiExpression valueExpression, PsiType migrationType) {
     PsiCodeBlock codeBlock = PsiTreeUtil.getParentOfType(variable, PsiCodeBlock.class);
     PsiElement[] refs = DefUseUtil.getRefs(codeBlock, variable, valueExpression);
     if (refs.length == 0) {
       myLabeler.setConversionMapping(valueExpression, new TypeConversionDescriptorBase() {
         @Override
-        public PsiExpression replace(PsiExpression expression, @Nonnull TypeEvaluator evaluator) throws IncorrectOperationException {
+        public PsiExpression replace(PsiExpression expression, TypeEvaluator evaluator) throws IncorrectOperationException {
           PsiElement parent = expression.getParent();
           if (parent instanceof PsiLocalVariable) {
             PsiLocalVariable var = (PsiLocalVariable) parent;
@@ -609,7 +608,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor {
   }
 
 
-  private static boolean canBeVariableType(@Nonnull PsiType type) {
+  private static boolean canBeVariableType(PsiType type) {
     return !type.getDeepComponentType().equals(PsiType.VOID);
   }
 
@@ -645,7 +644,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor {
     final PsiType myType;
     final boolean myChanged;
 
-    public TypeView(@Nonnull PsiExpression expr) {
+    public TypeView(PsiExpression expr) {
       PsiType exprType = expr.getType();
       exprType = exprType instanceof PsiEllipsisType ? ((PsiEllipsisType) exprType).toArrayType() : exprType;
       myOriginType = GenericsUtil.getVariableTypeByExpressionType(exprType);

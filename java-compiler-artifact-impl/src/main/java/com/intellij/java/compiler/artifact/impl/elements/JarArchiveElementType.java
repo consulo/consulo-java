@@ -30,15 +30,13 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.image.Image;
 import consulo.util.io.FileUtil;
 import consulo.util.io.PathUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
  */
 @ExtensionImpl(order = "after zip-archive-element")
 public class JarArchiveElementType extends CompositePackagingElementType<JarArchivePackagingElement> {
-    @Nonnull
     public static JarArchiveElementType getInstance() {
         return getInstance(JarArchiveElementType.class);
     }
@@ -48,26 +46,24 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
     }
 
     @Override
-    public boolean isAvailableForAdd(@Nonnull ArtifactEditorContext context, @Nonnull Artifact artifact) {
+    public boolean isAvailableForAdd(ArtifactEditorContext context, Artifact artifact) {
         return ModuleUtilCore.hasModuleExtension(context.getModulesProvider(), JavaModuleExtension.class);
     }
 
-    @Nonnull
     @Override
     public Image getIcon() {
         return PlatformIconGroup.filetypesArchive();
     }
 
-    @Nonnull
     @Override
-    public JarArchivePackagingElement createEmpty(@Nonnull Project project) {
+    public JarArchivePackagingElement createEmpty(Project project) {
         return new JarArchivePackagingElement();
     }
 
     /*@Override
     public PackagingElementPropertiesPanel createElementPropertiesPanel(
-        @Nonnull JarArchivePackagingElement element,
-        @Nonnull ArtifactEditorContext context
+        JarArchivePackagingElement element,
+        ArtifactEditorContext context
     ) {
         return new JarArchiveElementPropertiesPanel(element, context);
     }*/
@@ -77,7 +73,7 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
     public CompositePackagingElement<?> createComposite(
         CompositePackagingElement<?> parent,
         @Nullable String baseName,
-        @Nonnull ArtifactEditorContext context
+        ArtifactEditorContext context
     ) {
         String initialValue = ArtifactUtil.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
         String path = Messages.showInputDialog(

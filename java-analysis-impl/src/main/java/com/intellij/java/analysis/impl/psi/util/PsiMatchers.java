@@ -28,7 +28,6 @@ import consulo.language.psi.util.PsiMatcherExpression;
 import consulo.util.collection.ArrayUtil;
 import consulo.xml.psi.xml.XmlTag;
 
-import jakarta.annotation.Nonnull;
 
 public class PsiMatchers {
 
@@ -57,7 +56,7 @@ public class PsiMatchers {
     };
   }
 
-  public static PsiMatcherExpression hasText(@Nonnull final String... texts) {
+  public static PsiMatcherExpression hasText(final String... texts) {
     return new PsiMatcherExpression() {
       @Override
       public Boolean match(PsiElement element) {

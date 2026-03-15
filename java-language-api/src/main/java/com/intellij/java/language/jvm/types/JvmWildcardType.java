@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.jvm.types;
 
-import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.WildcardType;
 
@@ -40,7 +39,6 @@ public interface JvmWildcardType extends JvmType
 	 * @return an upper bound
 	 * @see WildcardType#getUpperBounds
 	 */
-	@Nonnull
 	JvmType upperBound();
 
 	/**
@@ -55,6 +53,5 @@ public interface JvmWildcardType extends JvmType
 	 * @return a lower bound
 	 * @see WildcardType#getLowerBounds()
 	 */
-	@Nonnull
 	JvmType lowerBound();
 }

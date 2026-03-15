@@ -45,7 +45,6 @@ import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -255,7 +254,7 @@ public class PullUpDialog extends PullUpDialogBase<MemberInfoStorage, MemberInfo
         }
 
         @Override
-        public int checkForProblems(@Nonnull MemberInfo member) {
+        public int checkForProblems(MemberInfo member) {
             if (member.isChecked()) {
                 return OK;
             }

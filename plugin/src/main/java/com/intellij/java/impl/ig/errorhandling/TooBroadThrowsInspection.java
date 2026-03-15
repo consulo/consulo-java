@@ -30,7 +30,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.*;
@@ -49,19 +48,16 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
     public boolean ignoreThrown = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "OverlyBroadThrowsClause";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overlyBroadThrowsClauseDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         List<SmartTypePointer> typesMasked = (List<SmartTypePointer>) infos[0];
         PsiType type = typesMasked.get(0).getType();
@@ -94,7 +90,6 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
         return panel;
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix buildFix(Object... infos) {
         Collection<SmartTypePointer> maskedExceptions = (Collection<SmartTypePointer>) infos[0];
@@ -112,7 +107,6 @@ public abstract class TooBroadThrowsInspection extends BaseInspection {
             this.originalNeeded = originalNeeded;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return originalNeeded

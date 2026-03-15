@@ -23,28 +23,23 @@ import com.intellij.java.language.psi.PsiClassType;
 import com.intellij.java.language.psi.PsiReferenceList;
 import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import consulo.language.psi.stub.StubElement;
-import jakarta.annotation.Nonnull;
 
 public interface PsiClassReferenceListStub extends StubElement<PsiReferenceList>
 {
 	/**
 	 * @return types
 	 */
-	@Nonnull
 	PsiClassType[] getReferencedTypes();
 
 	/**
 	 * @return type names
 	 */
-	@Nonnull
 	String[] getReferencedNames();
 
 	/**
 	 * @return array of TypeInfo objects
 	 */
-	@Nonnull
 	TypeInfo[] getTypes();
 
-	@Nonnull
 	PsiReferenceList.Role getRole();
 }

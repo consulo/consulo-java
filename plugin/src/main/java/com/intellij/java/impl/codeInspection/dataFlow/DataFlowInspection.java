@@ -46,8 +46,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -61,7 +60,6 @@ import static javax.swing.SwingConstants.TOP;
 public class DataFlowInspection extends DataFlowInspectionBase {
     private static final Logger LOG = Logger.getInstance(DataFlowInspection.class);
 
-    @Nonnull
     @Override
     public InspectionToolState<? extends DataFlowInspectionStateBase> createStateProvider() {
         return new DataFlowInspectionState();
@@ -81,7 +79,6 @@ public class DataFlowInspection extends DataFlowInspectionBase {
         return new LocalQuickFix[]{toRemove ? new RemoveAssignmentFix() : createSimplifyToAssignmentFix()};
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaInspectionsLocalize.inspectionDataFlowDisplayName();
@@ -151,7 +148,6 @@ public class DataFlowInspection extends DataFlowInspectionBase {
         return target instanceof PsiField field && field.hasModifierProperty(PsiModifier.VOLATILE);
     }
 
-    @Nonnull
     @Override
     protected List<LocalQuickFix> createMethodReferenceNPEFixes(PsiMethodReferenceExpression methodRef, boolean onTheFly) {
         List<LocalQuickFix> fixes = new ArrayList<>();
@@ -171,7 +167,6 @@ public class DataFlowInspection extends DataFlowInspectionBase {
         return null;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected List<LocalQuickFix> createCastFixes(
@@ -211,7 +206,6 @@ public class DataFlowInspection extends DataFlowInspectionBase {
         return fixes;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected List<LocalQuickFix> createNPEFixes(

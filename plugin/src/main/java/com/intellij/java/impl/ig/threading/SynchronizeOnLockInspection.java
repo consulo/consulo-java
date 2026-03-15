@@ -23,25 +23,21 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SynchronizeOnLockInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "SynchroniziationOnLockObject";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.synchronizeOnLockDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     String type = (String)infos[0];
     return InspectionGadgetsLocalize.synchronizeOnLockProblemDescriptor(type).get();
@@ -57,7 +53,7 @@ public class SynchronizeOnLockInspection extends BaseInspection {
 
     @Override
     public void visitSynchronizedStatement(
-      @Nonnull PsiSynchronizedStatement statement) {
+      PsiSynchronizedStatement statement) {
       super.visitSynchronizedStatement(statement);
       PsiExpression lockExpression = statement.getLockExpression();
       if (lockExpression == null) {

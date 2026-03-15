@@ -30,24 +30,23 @@ import com.intellij.java.language.psi.PsiParameter;
 import com.intellij.java.language.psi.PsiReferenceExpression;
 import com.intellij.java.language.psi.PsiVariable;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 public class AllVariablesControlFlowPolicy implements ControlFlowPolicy {
   private static final AllVariablesControlFlowPolicy INSTANCE = new AllVariablesControlFlowPolicy();
 
   @Override
-  public PsiVariable getUsedVariable(@Nonnull PsiReferenceExpression refExpr) {
+  public PsiVariable getUsedVariable(PsiReferenceExpression refExpr) {
     PsiElement resolved = refExpr.resolve();
     return resolved instanceof PsiVariable ? (PsiVariable) resolved : null;
   }
 
   @Override
-  public boolean isParameterAccepted(@Nonnull PsiParameter psiParameter) {
+  public boolean isParameterAccepted(PsiParameter psiParameter) {
     return true;
   }
 
   @Override
-  public boolean isLocalVariableAccepted(@Nonnull PsiLocalVariable psiVariable) {
+  public boolean isLocalVariableAccepted(PsiLocalVariable psiVariable) {
     return true;
   }
 

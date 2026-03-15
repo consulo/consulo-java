@@ -45,7 +45,6 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -161,12 +160,10 @@ class WrapReturnValueDialog extends RefactoringDialog {
         return myInnerClassNameTextField.getText().trim();
     }
 
-    @Nonnull
     public String getPackageName() {
         return packageTextField.getText().trim();
     }
 
-    @Nonnull
     public String getClassName() {
         return classNameField.getText().trim();
     }

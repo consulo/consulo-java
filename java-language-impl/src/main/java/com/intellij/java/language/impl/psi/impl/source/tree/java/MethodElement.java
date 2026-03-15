@@ -30,7 +30,6 @@ import consulo.language.ast.TokenType;
 import consulo.language.impl.ast.*;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 public class MethodElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance(MethodElement.class);
@@ -69,7 +68,7 @@ public class MethodElement extends CompositeElement implements Constants {
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (child.getElementType() == CODE_BLOCK) {
       final ASTNode prevWS = TreeUtil.prevLeaf(child);
       if (prevWS != null && prevWS.getElementType() == TokenType.WHITE_SPACE) {

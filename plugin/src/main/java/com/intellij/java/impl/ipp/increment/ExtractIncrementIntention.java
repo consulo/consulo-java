@@ -29,14 +29,12 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ExtractIncrementIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class ExtractIncrementIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     public LocalizeValue getTextForElement(PsiElement element) {
         PsiJavaToken sign;
@@ -50,20 +48,18 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
         return IntentionPowerPackLocalize.extractIncrementIntentionName(operator);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.extractIncrementIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ExtractIncrementPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiExpression operand;
         if (element instanceof PsiPostfixExpression) {
@@ -268,7 +264,7 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
         replaceExpression(operandText, (PsiExpression) element);
     }
 
-    private static String getElementText(@Nonnull PsiElement element,
+    private static String getElementText(PsiElement element,
                                          @Nullable PsiElement elementToReplace,
                                          @Nullable String replacement) {
         StringBuilder out = new StringBuilder();
@@ -277,10 +273,10 @@ public class ExtractIncrementIntention extends MutablyNamedIntention {
     }
 
     private static void getElementText(
-        @Nonnull PsiElement element,
+        PsiElement element,
         @Nullable PsiElement elementToReplace,
         @Nullable String replacement,
-        @Nonnull StringBuilder out) {
+        StringBuilder out) {
         if (element.equals(elementToReplace)) {
             out.append(replacement);
             return;

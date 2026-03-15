@@ -26,14 +26,11 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceAssertEqualsWithAssertLiteralIntention", fileExtensions = "java", categories = {"Java", "JUnit"})
 public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         PsiMethodCallExpression call = (PsiMethodCallExpression) element;
@@ -51,20 +48,18 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
         return IntentionPowerPackLocalize.replaceAssertEqualsWithAssertLiteralIntentionName(assertString);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.replaceAssertEqualsWithAssertLiteralIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new AssertEqualsWithLiteralPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) {
+    public void processIntention(PsiElement element) {
         PsiMethodCallExpression call = (PsiMethodCallExpression) element;
         PsiReferenceExpression expression = call.getMethodExpression();
         PsiExpressionList argumentList = call.getArgumentList();
@@ -72,7 +67,7 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
         String assertString;
         String actualArgumentText;
         if (args.length == 2) {
-            @NonNls String argText = args[0].getText();
+            String argText = args[0].getText();
             PsiExpression otherArg;
             if ("true".equals(argText) || "false".equals(argText) || "null".equals(argText)) {
                 otherArg = args[1];
@@ -84,7 +79,7 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
             assertString = getAssertString(argText);
         }
         else {
-            @NonNls String argText = args[1].getText();
+            String argText = args[1].getText();
             PsiExpression otherArg;
             if ("true".equals(argText) || "false".equals(argText) || "null".equals(argText)) {
                 otherArg = args[2];
@@ -96,7 +91,7 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
             assertString = getAssertString(argText);
         }
         PsiElement qualifier = expression.getQualifier();
-        @NonNls StringBuilder newExpression = new StringBuilder();
+        StringBuilder newExpression = new StringBuilder();
         if (qualifier == null) {
             PsiMethod containingMethod = PsiTreeUtil.getParentOfType(call, PsiMethod.class);
             if (containingMethod != null && AnnotationUtil.isAnnotated(containingMethod, "org.junit.Test", true)) {
@@ -112,8 +107,7 @@ public class ReplaceAssertEqualsWithAssertLiteralIntention extends MutablyNamedI
         replaceExpression(newExpression.toString(), call);
     }
 
-    @NonNls
-    private static String getAssertString(@NonNls String text) {
+    private static String getAssertString(String text) {
         if ("true".equals(text)) {
             return "assertTrue";
         }

@@ -27,7 +27,6 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import java.util.ArrayList;
@@ -35,27 +34,23 @@ import java.util.List;
 
 @ExtensionImpl
 public class StringEqualsIgnoreCaseInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "CallToStringEqualsIgnoreCase";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringEqualsignorecaseCallDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringEqualsignorecaseCallProblemDescriptor().get();
     }
 
     @Override
-    @Nonnull
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) infos[0];
         List<InspectionGadgetsFix> result = new ArrayList();
@@ -80,7 +75,7 @@ public class StringEqualsIgnoreCaseInspection extends BaseInspection {
 
     private static class StringEqualsIgnoreCaseVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

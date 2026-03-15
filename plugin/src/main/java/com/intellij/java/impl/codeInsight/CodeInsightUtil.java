@@ -48,7 +48,6 @@ import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.JBTreeTraverser;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -56,7 +55,7 @@ import java.util.function.Consumer;
 public class CodeInsightUtil extends JavaCodeInsightUtilCore {
   private static final Logger LOG = Logger.getInstance(CodeInsightUtil.class);
 
-  public static <T extends PsiMember & PsiDocCommentOwner> void sortIdenticalShortNamedMembers(T[] members, @Nonnull PsiReference context) {
+  public static <T extends PsiMember & PsiDocCommentOwner> void sortIdenticalShortNamedMembers(T[] members, PsiReference context) {
     if (members.length <= 1) {
       return;
     }
@@ -144,12 +143,12 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
     }
   }
 
-  public static Editor positionCursorAtLBrace(Project project, PsiFile targetFile, @Nonnull PsiClass psiClass) {
+  public static Editor positionCursorAtLBrace(Project project, PsiFile targetFile, PsiClass psiClass) {
     PsiElement lBrace = psiClass.getLBrace();
     return positionCursor(project, targetFile, lBrace != null ? lBrace : psiClass);
   }
 
-  public static Editor positionCursor(Project project, PsiFile targetFile, @Nonnull PsiElement element) {
+  public static Editor positionCursor(Project project, PsiFile targetFile, PsiElement element) {
     TextRange range = element.getTextRange();
     LOG.assertTrue(range != null, "element: " + element + "; valid: " + element.isValid());
     int textOffset = range.getStartOffset();
@@ -158,11 +157,11 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
     return FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
   }
 
-  public static boolean preparePsiElementsForWrite(@Nonnull PsiElement... elements) {
+  public static boolean preparePsiElementsForWrite(PsiElement... elements) {
     return FileModificationService.getInstance().preparePsiElementsForWrite(Arrays.asList(elements));
   }
 
-  public static void processSubTypes(PsiType psiType, PsiElement context, boolean getRawSubtypes, @Nonnull PrefixMatcher matcher, Consumer<PsiType> consumer) {
+  public static void processSubTypes(PsiType psiType, PsiElement context, boolean getRawSubtypes, PrefixMatcher matcher, Consumer<PsiType> consumer) {
     int arrayDim = psiType.getArrayDimensions();
 
     psiType = psiType.getDeepComponentType();
@@ -227,7 +226,7 @@ public class CodeInsightUtil extends JavaCodeInsightUtilCore {
                                                               int arrayDim,
                                                               boolean getRawSubtypes,
                                                               Consumer<PsiType> result,
-                                                              @Nonnull PsiClass baseClass,
+                                                              PsiClass baseClass,
                                                               PsiSubstitutor baseSubstitutor) {
     PsiManager manager = context.getManager();
     JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());

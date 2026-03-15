@@ -35,8 +35,7 @@ import consulo.module.Module;
 import consulo.platform.Platform;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 public class JavaMakeUtil extends MakeUtil {
   private static final Logger LOGGER = Logger.getInstance(JavaMakeUtil.class);
@@ -127,7 +126,6 @@ public class JavaMakeUtil extends MakeUtil {
   }
 
   public static
-  @NonNls
   String parseObjectType(final String descriptor, int fromIndex) {
     int semicolonIndex = descriptor.indexOf(';', fromIndex);
     if (descriptor.charAt(fromIndex) == 'L' && semicolonIndex > fromIndex) { // isObjectType
@@ -245,7 +243,7 @@ public class JavaMakeUtil extends MakeUtil {
   }
 
   public static AnnotationConstantValue findAnnotation(
-    @NonNls final String annotationQName,
+    final String annotationQName,
     AnnotationConstantValue[] annotations,
     final SymbolTable symbolTable
   ) throws CacheCorruptedException {

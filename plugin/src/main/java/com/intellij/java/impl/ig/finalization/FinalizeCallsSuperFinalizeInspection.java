@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -38,19 +37,16 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
   public boolean ignoreTrivialFinalizers = true;
 
   @Override
-  @Nonnull
   public String getID() {
     return "FinalizeDoesntCallSuperFinalize";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.finalizeDoesntCallSuperDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.finalizeDoesntCallSuperProblemDescriptor().get();
   }
@@ -77,7 +73,7 @@ public class FinalizeCallsSuperFinalizeInspection extends BaseInspection {
   private class NoExplicitFinalizeCallsVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       //note: no call to super;
       String methodName = method.getName();
       if (!HardcodedMethodConstants.FINALIZE.equals(methodName)) {

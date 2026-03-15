@@ -15,8 +15,7 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the call of a Java class constructor (a simple or qualified class instance
@@ -40,7 +39,6 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall
 	 * @return the array of expressions for the dimensions, or an empty array if the
 	 * <code>new</code> expression is not an array creation expression.
 	 */
-	@Nonnull
 	PsiExpression[] getArrayDimensions();
 
 	/**
@@ -86,7 +84,7 @@ public interface PsiNewExpression extends PsiCallExpression, PsiConstructorCall
 	 * @return annotated subtype or null, if annotation is incorrectly placed.
 	 */
 	@Nullable
-	PsiType getOwner(@Nonnull PsiAnnotation annotation);
+	PsiType getOwner(PsiAnnotation annotation);
 
 	/**
 	 * @return true if it's an array creation in form of {@code new T[0]} or {@code new T[] {...}}

@@ -36,7 +36,6 @@ import consulo.logging.Logger;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.ref.SoftReference;
-import jakarta.annotation.Nonnull;
 
 import java.lang.ref.Reference;
 import java.util.Arrays;
@@ -46,15 +45,15 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
 
   private volatile Reference<PsiType> myCachedType = null;
 
-  public PsiParameterImpl(@Nonnull PsiParameterStub stub) {
+  public PsiParameterImpl(PsiParameterStub stub) {
     this(stub, JavaStubElementTypes.PARAMETER);
   }
 
-  protected PsiParameterImpl(@Nonnull PsiParameterStub stub, @Nonnull IStubElementType type) {
+  protected PsiParameterImpl(PsiParameterStub stub, IStubElementType type) {
     super(stub, type);
   }
 
-  public PsiParameterImpl(@Nonnull ASTNode node) {
+  public PsiParameterImpl(ASTNode node) {
     super(node);
   }
 
@@ -106,7 +105,6 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  @Nonnull
   public final String getName() {
     PsiParameterStub stub = getStub();
     if (stub != null) {
@@ -117,25 +115,22 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  public final PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public final PsiElement setName(String name) throws IncorrectOperationException {
     PsiImplUtil.setName(getNameIdentifier(), name);
     return this;
   }
 
   @Override
-  @Nonnull
   public final PsiIdentifier getNameIdentifier() {
     return PsiTreeUtil.getRequiredChildOfType(this, PsiIdentifier.class);
   }
 
   @Override
-  @Nonnull
   public CompositeElement getNode() {
     return (CompositeElement) super.getNode();
   }
 
   @Override
-  @Nonnull
   public PsiType getType() {
     PsiParameterStub stub = getStub();
     if (stub != null) {
@@ -175,7 +170,6 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  @Nonnull
   public PsiModifierList getModifierList() {
     PsiModifierList modifierList = getStubOrPsiChild(JavaStubElementTypes.MODIFIER_LIST);
     assert modifierList != null : this;
@@ -183,7 +177,7 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
@@ -209,7 +203,7 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitParameter(this);
     } else {
@@ -222,7 +216,6 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  @Nonnull
   public PsiElement getDeclarationScope() {
     final PsiElement parent = getParent();
     if (parent == null) {
@@ -279,7 +272,6 @@ public class PsiParameterImpl extends JavaStubPsiElement<PsiParameterStub> imple
   }
 
   @Override
-  @Nonnull
   public SearchScope getUseScope() {
     final PsiElement declarationScope = getDeclarationScope();
     return new LocalSearchScope(declarationScope);

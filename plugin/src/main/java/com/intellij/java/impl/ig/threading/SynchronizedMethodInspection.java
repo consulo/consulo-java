@@ -28,8 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -45,13 +43,11 @@ public class SynchronizedMethodInspection extends BaseInspection {
   public boolean ignoreSynchronizedSuperMethods = true;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.synchronizedMethodDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiMethod method = (PsiMethod)infos[0];
     return InspectionGadgetsLocalize.synchronizedMethodProblemDescriptor(method.getName()).get();
@@ -85,7 +81,6 @@ public class SynchronizedMethodInspection extends BaseInspection {
   private static class SynchronizedMethodFix extends InspectionGadgetsFix {
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.synchronizedMethodMoveQuickfix();
     }
@@ -104,7 +99,7 @@ public class SynchronizedMethodInspection extends BaseInspection {
         return;
       }
       String text = body.getText();
-      @NonNls String replacementText;
+      String replacementText;
       if (method.hasModifierProperty(PsiModifier.STATIC)) {
         PsiClass containingClass = method.getContainingClass();
         assert containingClass != null;
@@ -125,7 +120,7 @@ public class SynchronizedMethodInspection extends BaseInspection {
   private class SynchronizedMethodVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       if (!method.hasModifierProperty(PsiModifier.SYNCHRONIZED)) {
         return;
       }

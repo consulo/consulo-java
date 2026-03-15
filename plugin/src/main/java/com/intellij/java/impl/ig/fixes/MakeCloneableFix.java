@@ -25,7 +25,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class MakeCloneableFix extends InspectionGadgetsFix {
 
@@ -35,7 +34,6 @@ public class MakeCloneableFix extends InspectionGadgetsFix {
     this.isInterface = isInterface;
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     if (isInterface) {
       return InspectionGadgetsLocalize.makeInterfaceCloneableQuickfix();

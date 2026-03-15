@@ -1,8 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.security.MessageDigest;
 
 /**
@@ -18,6 +17,5 @@ public interface MemberDescriptor
 	 * @param md message digest to use for hashing (could be null to use the default one)
 	 * @return a corresponding HMethod.
 	 */
-	@Nonnull
 	HMember hashed(@Nullable MessageDigest md);
 }

@@ -7,9 +7,8 @@ import consulo.internal.org.objectweb.asm.tree.InsnList;
 import consulo.internal.org.objectweb.asm.tree.analysis.*;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashSet;
 import java.util.LinkedList;
 
@@ -105,7 +104,6 @@ public class OriginsAnalysis
 	 * @return array, array[i] == true means that the result of a method execution may originate at an i-th instruction
 	 * @throws AnalyzerException
 	 */
-	@Nonnull
 	public static boolean[] resultOrigins(Frame<? extends Value>[] frames, InsnList instructions, ControlFlowGraph graph)
 			throws AnalyzerException
 	{
@@ -211,8 +209,7 @@ public class OriginsAnalysis
 		return null;
 	}
 
-	@Nonnull
-	private static Frame<SourceValue> makePreFrame(@Nonnull Frame<? extends Value> frame)
+	private static Frame<SourceValue> makePreFrame(Frame<? extends Value> frame)
 	{
 		Frame<SourceValue> preFrame = new Frame<>(frame.getLocals(), frame.getMaxStackSize());
 		for(int i = 0; i < frame.getLocals(); i++)

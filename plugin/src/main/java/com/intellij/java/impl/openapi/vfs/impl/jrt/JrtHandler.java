@@ -4,7 +4,6 @@ package com.intellij.java.impl.openapi.vfs.impl.jrt;
 import consulo.logging.Logger;
 import consulo.util.lang.ref.SoftReference;
 import consulo.virtualFileSystem.archive.ArchiveHandler;
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +24,7 @@ class JrtHandler extends ArchiveHandler {
 
     private SoftReference<FileSystem> myFileSystem;
 
-    JrtHandler(@Nonnull String path) {
+    JrtHandler(String path) {
         super(path);
     }
 
@@ -66,7 +65,6 @@ class JrtHandler extends ArchiveHandler {
         return fs;
     }
 
-    @Nonnull
     @Override
     protected Map<String, EntryInfo> createEntriesMap() throws IOException {
         Map<String, EntryInfo> map = new HashMap<>();
@@ -112,9 +110,8 @@ class JrtHandler extends ArchiveHandler {
         return map;
     }
 
-    @Nonnull
     @Override
-    public byte[] contentsToByteArray(@Nonnull String relativePath) throws IOException {
+    public byte[] contentsToByteArray(String relativePath) throws IOException {
         EntryInfo entry = getEntryInfo(relativePath);
         if (entry == null) {
             throw new FileNotFoundException(getFile() + " : " + relativePath);

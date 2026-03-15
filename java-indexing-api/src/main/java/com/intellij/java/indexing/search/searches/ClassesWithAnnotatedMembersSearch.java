@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.content.scope.SearchScope;
 import consulo.application.util.query.ExtensibleQueryFactory;
 import consulo.application.util.query.Query;
-import jakarta.annotation.Nonnull;
 
 /**
  * Searcher that searches for classes which have members annotated with the specified annotation.
@@ -51,7 +50,7 @@ public class ClassesWithAnnotatedMembersSearch extends ExtensibleQueryFactory<Ps
     super(ClassesWithAnnotatedMembersSearchExecutor.class);
   }
 
-  public static Query<PsiClass> search(@Nonnull PsiClass annotationClass, @Nonnull SearchScope scope) {
+  public static Query<PsiClass> search(PsiClass annotationClass, SearchScope scope) {
     return INSTANCE.createQuery(new Parameters(annotationClass, scope));
   }
 }

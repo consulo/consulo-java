@@ -1,10 +1,8 @@
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
 public class Bar3 {
 
-  @Nonnull
   Object getObj() {
     return new Object();
   }

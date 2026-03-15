@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -47,13 +46,11 @@ public class LocalVariableNamingConventionInspection
   private static final int DEFAULT_MAX_LENGTH = 20;
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.localVariableNamingConventionDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     String varName = (String)infos[0];
     if (varName.length() < getMinLength()) {
@@ -101,7 +98,7 @@ public class LocalVariableNamingConventionInspection
 
     @Override
     public void visitLocalVariable(
-      @Nonnull PsiLocalVariable variable) {
+      PsiLocalVariable variable) {
       super.visitLocalVariable(variable);
       if (m_ignoreForLoopParameters) {
         PsiElement parent = variable.getParent();
@@ -129,7 +126,7 @@ public class LocalVariableNamingConventionInspection
     }
 
     @Override
-    public void visitParameter(@Nonnull PsiParameter variable) {
+    public void visitParameter(PsiParameter variable) {
       PsiElement scope = variable.getDeclarationScope();
       boolean isCatchParameter =
         scope instanceof PsiCatchSection;

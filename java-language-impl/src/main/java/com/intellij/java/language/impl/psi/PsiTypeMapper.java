@@ -5,8 +5,7 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
 import consulo.util.collection.SmartList;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -17,12 +16,12 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
     protected static final Logger LOG = Logger.getInstance(PsiTypeMapper.class);
 
     @SuppressWarnings("unchecked")
-    public @Nullable <T extends PsiType> T mapType(@NotNull T type) {
+    public @Nullable <T extends PsiType> T mapType(T type) {
         return (T) type.accept(this);
     }
 
     @Override
-    public PsiType visitArrayType(final @NotNull PsiArrayType type) {
+    public PsiType visitArrayType(final PsiArrayType type) {
         PsiType componentType = type.getComponentType();
         PsiType mappedComponent = mapType(componentType);
         if (mappedComponent == null) return null;
@@ -32,7 +31,7 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
     }
 
     @Override
-    public PsiType visitEllipsisType(final @NotNull PsiEllipsisType type) {
+    public PsiType visitEllipsisType(final PsiEllipsisType type) {
         PsiType componentType = type.getComponentType();
         PsiType mappedComponent = mapType(componentType);
         if (mappedComponent == null) return null;
@@ -41,36 +40,36 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
     }
 
     @Override
-    public PsiType visitTypeVariable(final @NotNull PsiTypeVariable var) {
+    public PsiType visitTypeVariable(final PsiTypeVariable var) {
         return var;
     }
 
     @Override
-    public PsiType visitBottom(final @NotNull Bottom bottom) {
+    public PsiType visitBottom(final Bottom bottom) {
         return bottom;
     }
 
     @Override
-    public PsiType visitCapturedWildcardType(final @NotNull PsiCapturedWildcardType type) {
+    public PsiType visitCapturedWildcardType(final PsiCapturedWildcardType type) {
         return type;
     }
 
     @Override
-    public abstract PsiType visitClassType(final @NotNull PsiClassType classType);
+    public abstract PsiType visitClassType(final PsiClassType classType);
 
     @Override
-    public PsiType visitPrimitiveType(final @NotNull PsiPrimitiveType primitiveType) {
+    public PsiType visitPrimitiveType(final PsiPrimitiveType primitiveType) {
         return primitiveType;
     }
 
     @Override
-    public PsiType visitType(final @NotNull PsiType type) {
+    public PsiType visitType(final PsiType type) {
         LOG.error("No visit* methods were calleed for " + type);
         return null;
     }
 
     @Override
-    public PsiType visitWildcardType(final @NotNull PsiWildcardType wildcardType) {
+    public PsiType visitWildcardType(final PsiWildcardType wildcardType) {
         PsiType bound = wildcardType.getBound();
         final PsiManager manager = wildcardType.getManager();
         if (bound == null) return PsiWildcardType.createUnbounded(manager);
@@ -81,7 +80,7 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
     }
 
     @Override
-    public @Nullable PsiType visitIntersectionType(@NotNull PsiIntersectionType intersectionType) {
+    public @Nullable PsiType visitIntersectionType(PsiIntersectionType intersectionType) {
         final List<PsiType> substituted = new SmartList<>();
         for (PsiType component : intersectionType.getConjuncts()) {
             PsiType mapped = mapType(component);
@@ -93,7 +92,7 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
     }
 
     @Override
-    public PsiType visitDisjunctionType(@NotNull PsiDisjunctionType disjunctionType) {
+    public PsiType visitDisjunctionType(PsiDisjunctionType disjunctionType) {
         final List<PsiType> substituted = new SmartList<>();
         for (PsiType component : disjunctionType.getDisjunctions()) {
             PsiType mapped = mapType(component);
@@ -105,7 +104,7 @@ public abstract class PsiTypeMapper extends PsiTypeVisitorEx<PsiType> {
     }
 
     @Override
-    public PsiType visitDiamondType(@NotNull PsiDiamondType diamondType) {
+    public PsiType visitDiamondType(PsiDiamondType diamondType) {
         return diamondType;
     }
 

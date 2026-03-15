@@ -27,7 +27,6 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageViewUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jetbrains.annotations.NonNls;
 
 public class RefactoringMessageUtil {
 
@@ -51,7 +50,7 @@ public class RefactoringMessageUtil {
           ).get();
       }
     }
-    @NonNls String fileName = className + ".java";
+    String fileName = className + ".java";
     return checkCanCreateFile(destinationDirectory, fileName);
   }
 

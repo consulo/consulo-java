@@ -20,7 +20,6 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.ResolveResult;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -451,9 +450,9 @@ public final class JavaHintUtils {
         }
     }
 
-    static boolean isAssignable(@Nonnull PsiParameter parameter,
-                                @Nonnull PsiExpression argument,
-                                @Nonnull PsiSubstitutor substitutor) {
+    static boolean isAssignable(PsiParameter parameter,
+                                PsiExpression argument,
+                                PsiSubstitutor substitutor) {
         // Substitute the parameter’s declared type
         PsiType substitutedType = substitutor.substitute(parameter.getType());
         if (substitutedType == null) {

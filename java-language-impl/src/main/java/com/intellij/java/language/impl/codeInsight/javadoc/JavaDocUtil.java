@@ -26,8 +26,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -263,7 +262,7 @@ public class JavaDocUtil {
   }
 
   public static String getShortestClassName(PsiClass aClass, PsiElement context) {
-    @NonNls String shortName = aClass.getName();
+    String shortName = aClass.getName();
     if (shortName == null) {
       shortName = "null";
     }

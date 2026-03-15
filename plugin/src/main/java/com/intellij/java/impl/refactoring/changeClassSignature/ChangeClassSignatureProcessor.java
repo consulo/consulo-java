@@ -39,7 +39,6 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -64,21 +63,19 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
         myClass = (PsiClass)elements[0];
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return ChangeClassSignatureDialog.REFACTORING_NAME;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new ChangeClassSigntaureViewDescriptor(myClass);
     }
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
 
         PsiTypeParameter[] parameters = myClass.getTypeParameters();
@@ -99,7 +96,6 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
         return showConflicts(conflicts, refUsages.get());
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -126,7 +122,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         LocalHistoryAction a = LocalHistory.getInstance().startAction(getCommandName());
         try {
             doRefactoring(usages);
@@ -151,7 +147,7 @@ public class ChangeClassSignatureProcessor extends BaseRefactoringProcessor {
         Map<PsiTypeElement, PsiClass> supersMap = new HashMap<>();
         myClass.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitTypeElement(@Nonnull PsiTypeElement typeElement) {
+            public void visitTypeElement(PsiTypeElement typeElement) {
                 super.visitTypeElement(typeElement);
                 if (PsiUtil.resolveClassInType(typeElement.getType()) instanceof PsiTypeParameter typeParam) {
                     int i = ArrayUtil.find(typeParameters, typeParam);

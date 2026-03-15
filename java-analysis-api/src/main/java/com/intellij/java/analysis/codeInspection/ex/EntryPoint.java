@@ -24,15 +24,13 @@ import consulo.logging.Logger;
 import consulo.util.xml.serializer.JDOMExternalizable;
 import org.jdom.Element;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 @Deprecated
 public abstract class EntryPoint implements JDOMExternalizable, Cloneable {
   private static final Logger LOG = Logger.getInstance(EntryPoint.class);
 
-  @Nonnull
   public abstract String getDisplayName();
 
   public abstract boolean isEntryPoint(RefElement refElement, PsiElement psiElement);

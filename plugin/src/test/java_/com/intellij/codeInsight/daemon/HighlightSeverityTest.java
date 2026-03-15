@@ -15,19 +15,16 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.rawHighlight.HighlightDisplayLevel;
 import consulo.language.editor.inspection.scheme.LocalInspectionToolWrapper;
 import com.intellij.java.impl.codeInspection.unusedSymbol.UnusedSymbolLocalInspection;
 
 public abstract class HighlightSeverityTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/highlightSeverity";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/highlightSeverity";
 
 
   public void testErrorLikeUnusedSymbol() throws Exception {
     enableInspectionTool(new LocalInspectionToolWrapper(new UnusedSymbolLocalInspection()) {
-      @Nonnull
       @Override
       public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;

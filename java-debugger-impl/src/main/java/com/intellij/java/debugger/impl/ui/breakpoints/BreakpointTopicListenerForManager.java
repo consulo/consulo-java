@@ -4,7 +4,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.TopicImpl;
 import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.event.XTopicBreakpointListener;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -13,7 +12,7 @@ import jakarta.annotation.Nonnull;
 @TopicImpl(ComponentScope.PROJECT)
 public class BreakpointTopicListenerForManager implements XTopicBreakpointListener {
     @Override
-    public void breakpointAdded(@Nonnull XBreakpoint<?> xBreakpoint) {
+    public void breakpointAdded(XBreakpoint<?> xBreakpoint) {
         Breakpoint breakpoint = BreakpointManager.getJavaBreakpoint(xBreakpoint);
         if (breakpoint != null) {
             BreakpointManager.addBreakpoint(breakpoint);
@@ -21,7 +20,7 @@ public class BreakpointTopicListenerForManager implements XTopicBreakpointListen
     }
 
     @Override
-    public void breakpointChanged(@Nonnull XBreakpoint xBreakpoint) {
+    public void breakpointChanged(XBreakpoint xBreakpoint) {
         Breakpoint breakpoint = BreakpointManager.getJavaBreakpoint(xBreakpoint);
         if (breakpoint != null) {
             BreakpointManager.fireBreakpointChanged(breakpoint);

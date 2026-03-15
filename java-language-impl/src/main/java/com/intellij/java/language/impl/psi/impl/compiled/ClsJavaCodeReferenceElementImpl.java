@@ -32,8 +32,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,13 +46,13 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   private final TypeAnnotationContainer myAnnotations;
   private final ClsJavaCodeReferenceElementImpl myQualifier;
 
-  public ClsJavaCodeReferenceElementImpl(@Nonnull PsiElement parent, @Nonnull String canonicalText) {
+  public ClsJavaCodeReferenceElementImpl(PsiElement parent, String canonicalText) {
     this(parent, canonicalText, TypeAnnotationContainer.EMPTY);
   }
 
-  public ClsJavaCodeReferenceElementImpl(@Nonnull PsiElement parent,
-                                         @Nonnull String canonicalText,
-                                         @Nonnull TypeAnnotationContainer annotations) {
+  public ClsJavaCodeReferenceElementImpl(PsiElement parent,
+                                         String canonicalText,
+                                         TypeAnnotationContainer annotations) {
     myParent = parent;
 
     String canonical = TypeInfo.internFrequentType(canonicalText);
@@ -70,7 +69,6 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     if (myQualifier != null) {
       return myRefParameterList != null ? new PsiElement[]{
@@ -102,12 +100,10 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  @Nonnull
   public String getCanonicalText() {
     return myCanonicalText;
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText(boolean annotated, @Nullable PsiAnnotation[] annotations) {
     String text = getCanonicalText();
@@ -146,14 +142,13 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
     public static final Resolver INSTANCE = new Resolver();
 
     @Override
-    @Nonnull
-    public JavaResolveResult[] resolve(@Nonnull ClsJavaCodeReferenceElementImpl ref, @Nonnull PsiFile containingFile, boolean incompleteCode) {
+    public JavaResolveResult[] resolve(ClsJavaCodeReferenceElementImpl ref, PsiFile containingFile, boolean incompleteCode) {
       final JavaResolveResult resolveResult = ref.advancedResolveImpl(containingFile);
       return resolveResult == null ? JavaResolveResult.EMPTY_ARRAY : new JavaResolveResult[]{resolveResult};
     }
   }
 
-  private JavaResolveResult advancedResolveImpl(@Nonnull PsiFile containingFile) {
+  private JavaResolveResult advancedResolveImpl(PsiFile containingFile) {
     PsiTypeElement[] typeElements = myRefParameterList == null ? PsiTypeElement.EMPTY_ARRAY : myRefParameterList.getTypeParameterElements();
     PsiElement resolve = resolveElement(containingFile);
     if (resolve == null) {
@@ -177,7 +172,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
     }
   }
 
-  private void collectOuterClassTypeArgs(@Nonnull PsiClass psiClass,
+  private void collectOuterClassTypeArgs(PsiClass psiClass,
                                          final String canonicalText,
                                          final Map<PsiTypeParameter, PsiType> substitutionMap) {
     final PsiClass containingClass = psiClass.getContainingClass();
@@ -203,7 +198,6 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  @Nonnull
   public JavaResolveResult advancedResolve(boolean incompleteCode) {
     final JavaResolveResult[] results = multiResolve(incompleteCode);
     if (results.length == 1) {
@@ -213,7 +207,6 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  @Nonnull
   public JavaResolveResult[] multiResolve(boolean incompleteCode) {
     PsiFile file = getContainingFile();
     if (file == null) {
@@ -227,7 +220,6 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
     return (JavaResolveResult[]) results;
   }
 
-  @Nonnull
   private JavaResolveResult[] diagnoseNoFile() {
     PsiElement root = SyntaxTraverser.psiApi().parents(this).last();
     PsiUtilCore.ensureValid(Objects.requireNonNull(root));
@@ -240,7 +232,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Nullable
-  private PsiElement resolveElement(@Nonnull PsiFile containingFile) {
+  private PsiElement resolveElement(PsiFile containingFile) {
     PsiElement element = getParent();
     while (element != null && !(element instanceof PsiFile)) {
       if (element instanceof PsiMethod) {
@@ -274,7 +266,7 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  public void processVariants(@Nonnull PsiScopeProcessor processor) {
+  public void processVariants(PsiScopeProcessor processor) {
     throw new RuntimeException("Variants are not available for light references");
   }
 
@@ -299,17 +291,17 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  public PsiElement handleElementRename(@Nonnull String newElementName) throws IncorrectOperationException {
+  public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
   @Override
-  public boolean isReferenceTo(@Nonnull PsiElement element) {
+  public boolean isReferenceTo(PsiElement element) {
     if (!(element instanceof PsiClass)) {
       return false;
     }
@@ -318,7 +310,6 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  @Nonnull
   public Object[] getVariants() {
     throw new RuntimeException("Variants are not available for references to compiled code");
   }
@@ -329,17 +320,17 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
   }
 
   @Override
-  public void appendMirrorText(final int indentLevel, @Nonnull final StringBuilder buffer) {
+  public void appendMirrorText(final int indentLevel, final StringBuilder buffer) {
     buffer.append(getCanonicalText());
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.JAVA_CODE_REFERENCE);
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceElement(this);
     } else {
@@ -347,20 +338,17 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
     }
   }
 
-  @Nonnull
   @Override
   public TextRange getRangeInElement() {
     return new TextRange(0, getTextLength());
   }
 
-  @Nonnull
   @Override
   public PsiElement getElement() {
     return this;
   }
 
   @Override
-  @Nonnull
   public PsiType[] getTypeParameters() {
     return myRefParameterList == null ? PsiType.EMPTY_ARRAY : myRefParameterList.getTypeArguments();
   }

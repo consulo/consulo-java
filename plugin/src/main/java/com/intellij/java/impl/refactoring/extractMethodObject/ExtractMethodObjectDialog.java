@@ -37,7 +37,6 @@ import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -148,7 +147,6 @@ public class ExtractMethodObjectDialog extends DialogWrapper implements Abstract
         return null;
     }
 
-    @Nonnull
     @Override
     protected Action[] createActions() {
         return new Action[]{

@@ -18,17 +18,15 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.asm;
 
 import java.util.Arrays;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.internal.org.objectweb.asm.tree.analysis.Value;
 
 final class ParamsValue implements Value
 {
-  @Nonnull
   final boolean[] params;
   final int size;
 
-  ParamsValue(@Nonnull boolean[] params, int size) {
+  ParamsValue(boolean[] params, int size) {
     this.params = params;
     this.size = size;
   }

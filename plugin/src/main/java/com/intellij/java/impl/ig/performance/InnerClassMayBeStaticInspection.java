@@ -30,7 +30,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 
@@ -38,13 +37,11 @@ import java.util.Collection;
 public class InnerClassMayBeStaticInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.innerClassMayBeStaticDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.innerClassMayBeStaticProblemDescriptor().get();
   }
@@ -61,7 +58,6 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
 
   private static class InnerClassMayBeStaticFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.makeStaticQuickfix();
     }
@@ -105,7 +101,7 @@ public class InnerClassMayBeStaticInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       // no call to super, so that it doesn't drill down to inner classes
       if (aClass.getContainingClass() != null &&
           !aClass.hasModifierProperty(PsiModifier.STATIC)) {

@@ -29,19 +29,15 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.privateMemberAccessBetweenOuterAndInnerClassesDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {
@@ -57,7 +53,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
             return new MakePackagePrivateFix(className, true);
         }
         PsiMember member = (PsiMember) infos[1];
-        @NonNls String memberName;
+        String memberName;
         if (member instanceof PsiMethod) {
             PsiMethod method = (PsiMethod) member;
             if (method.isConstructor()) {
@@ -68,7 +64,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
         else {
             memberName = member.getName();
         }
-        @NonNls String elementName = className + '.' + memberName;
+        String elementName = className + '.' + memberName;
         return new MakePackagePrivateFix(elementName, false);
     }
 
@@ -82,7 +78,6 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
             this.constructor = constructor;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return constructor
@@ -213,7 +208,7 @@ public class PrivateMemberAccessBetweenOuterAndInnerClassInspection extends Base
 
         @Override
         public void visitReferenceExpression(
-            @Nonnull PsiReferenceExpression expression
+            PsiReferenceExpression expression
         ) {
     /*  if (JspPsiUtil.isInJspFile(expression)) {
         // disable for jsp files IDEADEV-12957

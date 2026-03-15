@@ -20,15 +20,12 @@ import consulo.fileEditor.structureView.tree.*;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.project.ui.view.tree.AbstractTreeNode;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
 public class PropertiesGrouper implements Grouper {
-  @NonNls public static final String ID = "SHOW_PROPERTIES";
+  public static final String ID = "SHOW_PROPERTIES";
 
-  @Nonnull
   public Collection<Group> group(Object parent, Collection<TreeElement> children) {
     if (((AbstractTreeNode) parent).getValue() instanceof PropertyGroup) {
       return Collections.emptyList();
@@ -58,12 +55,10 @@ public class PropertiesGrouper implements Grouper {
     return result.values();
   }
 
-  @Nonnull
   public ActionPresentation getPresentation() {
     return new ActionPresentationData(IdeLocalize.actionStructureviewShowProperties().get(), null, AllIcons.Nodes.Property);
   }
 
-  @Nonnull
   public String getName() {
     return ID;
   }

@@ -25,17 +25,14 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonSerializableWithSerializationMethodsInspection extends BaseInspection {
     @Override
-    @Nonnull
     public String getID() {
         return "NonSerializableClassWithSerializationMethods";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonSerializableClassWithReadwriteobjectDisplayName();
@@ -50,7 +47,6 @@ public class NonSerializableWithSerializationMethodsInspection extends BaseInspe
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         boolean hasReadObject = (Boolean) infos[0];
         boolean hasWriteObject = (Boolean) infos[1];
@@ -86,7 +82,7 @@ public class NonSerializableWithSerializationMethodsInspection extends BaseInspe
 
     private static class NonserializableDefinesSerializationMethodsVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // no call to super, so it doesn't drill down
             if (aClass.isInterface() || aClass.isAnnotationType()) {
                 return;

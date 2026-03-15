@@ -27,14 +27,12 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.ui.ex.ColoredItemPresentation;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class ClassPresentationProvider implements ItemPresentationProvider<PsiClass> {
-  @Nonnull
   @Override
   public Class<PsiClass> getItemClass() {
     return PsiClass.class;

@@ -34,8 +34,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author max
@@ -46,7 +45,7 @@ public class RefFieldImpl extends RefJavaElementImpl implements RefField {
   private static final int USED_FOR_WRITING_MASK = 0x20000;
   private static final int ASSIGNED_ONLY_IN_INITIALIZER = 0x40000;
 
-  RefFieldImpl(@Nonnull RefClass ownerClass, PsiField field, RefManager manager) {
+  RefFieldImpl(RefClass ownerClass, PsiField field, RefManager manager) {
     super(field, manager);
 
     ((RefClassImpl) ownerClass).add(this);

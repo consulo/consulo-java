@@ -61,8 +61,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,7 +90,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
 
     @Override
     @RequiredUIAccess
-    protected boolean invokeImpl(@Nonnull Project project, @Nonnull PsiExpression selectedExpr, Editor editor) {
+    protected boolean invokeImpl(Project project, PsiExpression selectedExpr, Editor editor) {
         PsiElement element = getPhysicalElement(selectedExpr);
 
         PsiFile file = element.getContainingFile();
@@ -328,7 +327,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
         return RefactoringUtil.getTypeByExpressionWithExpectedType(expr);
     }
 
-    public PsiClass getParentClass(@Nonnull PsiExpression initializerExpression) {
+    public PsiClass getParentClass(PsiExpression initializerExpression) {
         PsiElement element = initializerExpression.getUserData(ElementToWorkOn.PARENT);
         if (element == null) {
             element = initializerExpression.getParent();
@@ -508,7 +507,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
 
     protected abstract boolean accept(ElementToWorkOn elementToWorkOn);
 
-    protected ElementToWorkOn.ElementsProcessor<ElementToWorkOn> getElementProcessor(@Nonnull Project project, final Editor editor) {
+    protected ElementToWorkOn.ElementsProcessor<ElementToWorkOn> getElementProcessor(Project project, final Editor editor) {
         return new ElementToWorkOn.ElementsProcessor<>() {
             @Override
             public boolean accept(ElementToWorkOn el) {
@@ -537,7 +536,6 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
         };
     }
 
-    @Nonnull
     protected abstract LocalizeValue getRefactoringName();
 
     public static class Settings {
@@ -691,7 +689,7 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
             myProject = parentClass.getProject();
         }
 
-        public TargetDestination(@Nonnull PsiClass targetClass) {
+        public TargetDestination(PsiClass targetClass) {
             myTargetClass = targetClass;
             myQualifiedName = targetClass.getQualifiedName();
             myProject = targetClass.getProject();
@@ -736,7 +734,6 @@ public abstract class BaseExpressionToFieldHandler extends IntroduceHandlerBase 
         private PsiExpression mySelectedExpr;
         private final Settings mySettings;
         private final PsiElement myAnchorElement;
-        @Nonnull
         private final Project myProject;
         private final String myFieldName;
         private final PsiType myType;

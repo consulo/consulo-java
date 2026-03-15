@@ -37,7 +37,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl(id = "javaStatement", order = "before javaDeclaration")
 public class StatementMover extends LineMover {
@@ -46,14 +45,14 @@ public class StatementMover extends LineMover {
   private PsiElement statementToSurroundWithCodeBlock;
 
   @Override
-  public void beforeMove(@Nonnull Editor editor, @Nonnull MoveInfo info, boolean down) {
+  public void beforeMove(Editor editor, MoveInfo info, boolean down) {
     super.beforeMove(editor, info, down);
     if (statementToSurroundWithCodeBlock != null) {
       surroundWithCodeBlock(info, down);
     }
   }
 
-  private void surroundWithCodeBlock(@Nonnull MoveInfo info, boolean down) {
+  private void surroundWithCodeBlock(MoveInfo info, boolean down) {
     try {
       Document document = PsiDocumentManager.getInstance(statementToSurroundWithCodeBlock.getProject()).getDocument(statementToSurroundWithCodeBlock.getContainingFile());
       int startOffset = document.getLineStartOffset(info.toMove.startLine);
@@ -89,7 +88,7 @@ public class StatementMover extends LineMover {
   }
 
   @Override
-  public boolean checkAvailable(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull MoveInfo info, boolean down) {
+  public boolean checkAvailable(Editor editor, PsiFile file, MoveInfo info, boolean down) {
     //if (!(file instanceof PsiJavaFile)) return false;
     boolean available = super.checkAvailable(editor, file, info, down);
     if (!available) return false;
@@ -142,7 +141,7 @@ public class StatementMover extends LineMover {
 
     return destLine;
   }
-  private boolean calcInsertOffset(@Nonnull PsiFile file, @Nonnull Editor editor, @Nonnull LineRange range, @Nonnull MoveInfo info, boolean down) {
+  private boolean calcInsertOffset(PsiFile file, Editor editor, LineRange range, MoveInfo info, boolean down) {
     int destLine = getDestLineForAnon(file, editor, range, info, down);
 
     int startLine = down ? range.endLine : range.startLine - 1;
@@ -215,7 +214,7 @@ public class StatementMover extends LineMover {
     return false;
   }
 
-  private boolean checkMovingInsideOutside(PsiFile file, Editor editor, LineRange range, @Nonnull MoveInfo info, boolean down) {
+  private boolean checkMovingInsideOutside(PsiFile file, Editor editor, LineRange range, MoveInfo info, boolean down) {
     int offset = editor.getCaretModel().getOffset();
 
     PsiElement elementAtOffset = file.getViewProvider().findElementAt(offset, JavaLanguage.INSTANCE);

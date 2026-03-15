@@ -28,24 +28,20 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CastConflictsWithInstanceofInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.castConflictsWithInstanceofDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.castConflictsWithInstanceofProblemDescriptor().get();
   }
 
-  @Nonnull
   @Override
   protected InspectionGadgetsFix[] buildFixes(Object... infos) {
     String castExpressionType = ((PsiTypeElement)infos[1]).getText();
@@ -65,7 +61,7 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitTypeCastExpression(@Nonnull PsiTypeCastExpression expression) {
+    public void visitTypeCastExpression(PsiTypeCastExpression expression) {
       super.visitTypeCastExpression(expression);
       PsiTypeElement castType = expression.getCastType();
       if (castType == null) {
@@ -209,7 +205,6 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
       myCastType = castType;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix1(myCastType, myInstanceofType);
     }
@@ -230,7 +225,6 @@ public class CastConflictsWithInstanceofInspection extends BaseInspection {
       myCastType = castType;
     }
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.castConflictsWithInstanceofQuickfix2(myInstanceofType, myCastType);
     }

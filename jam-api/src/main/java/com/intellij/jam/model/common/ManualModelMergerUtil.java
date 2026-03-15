@@ -35,8 +35,7 @@ import consulo.xml.util.xml.DomUtil;
 import consulo.xml.util.xml.GenericValue;
 import consulo.xml.util.xml.MergedObject;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
@@ -79,7 +78,6 @@ public class ManualModelMergerUtil {
       }
 
       @Override
-      @Nonnull
       public GenericValue<X> join(@Nullable final GenericValue<X> prev, final GenericValue<X> next,
                                   final Collection<GenericValue<X>> notToBeMergedSet) {
         return prev == null? next : prev instanceof MyGenericValue? ((MyGenericValue<X>)prev).addImplementation(next) : new MyGenericValue<X>(prev, next);
@@ -131,24 +129,20 @@ public class ManualModelMergerUtil {
     Collection<? extends T> map(V v);
     @Nullable
     Object key(T t);
-    @Nonnull
     T join(@Nullable T prev, T next, Collection<T> notToBeMergedSet);
   }
 
   public static abstract class SimpleJoiner<V, T extends CommonModelElement> implements Joiner<V, T> {
     @Override
-    @Nonnull
     public final T join(@Nullable T prev, T next, final Collection<T> notToBeMergedSet) {
       return prev == null ? next : prev instanceof MyMergedObject ? ((MyMergedObject<T>)prev).addImplementation(next) : createMergedImplementation(prev, next);
     }
 
-    @Nonnull
     protected abstract T createMergedImplementation(T prev, T next);
   }
 
   public static abstract class NextJoiner<V, T> implements Joiner<V, T> {
     @Override
-    @Nonnull
     public final T join(@Nullable T prev, T next, final Collection<T> notToBeMergedSet) {
       return next;
     }
@@ -156,7 +150,6 @@ public class ManualModelMergerUtil {
 
   public static abstract class AnnoJoiner<V, T extends CommonModelElement, Psi extends PsiMember> implements Joiner<V, T> {
     @Override
-    @Nonnull
     public final T join(@Nullable T prev, T next, final Collection<T> notToBeMergedSet) {
       if (shouldNotBeMerged(next)) {
         notToBeMergedSet.add(next);
@@ -165,7 +158,6 @@ public class ManualModelMergerUtil {
       return joinInner(prev, next);
     }
 
-    @Nonnull
     protected T joinInner(@Nullable T prev, T next) {
       if (prev instanceof MyMergedObject) return ((MyMergedObject<T>)prev).addImplementation(next);
       if (prev != null) return createMergedImplementation(prev, next);
@@ -179,7 +171,6 @@ public class ManualModelMergerUtil {
     @Nullable
     protected abstract T getCurrentJam(final T next, final Psi psiMember);
 
-    @Nonnull
     protected abstract T createMergedImplementation(T prev, T next);
     @Nullable
     protected abstract Psi getPsiMember(T element);
@@ -376,7 +367,6 @@ public class ManualModelMergerUtil {
     }
 
     @Override
-    @Nonnull
     public PsiElement getNavigationElement() {
       return findLast(myTargets, new Function<T, PsiElement>() {
         public PsiElement apply(final T t) {
@@ -405,7 +395,7 @@ public class ManualModelMergerUtil {
     }
 
     @Override
-    public MyRenameableTarget setName(@Nonnull final String newName) {
+    public MyRenameableTarget setName(final String newName) {
       final ArrayList<PomRenameableTarget> list = new ArrayList<PomRenameableTarget>(myTargets.size());
       for (PomRenameableTarget target : myTargets) {
         final Object result = target.setName(newName);

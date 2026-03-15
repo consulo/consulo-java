@@ -15,9 +15,7 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import jakarta.annotation.Nonnull;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.compiler.JavacQuirksInspection;
 import com.intellij.java.analysis.impl.codeInspection.redundantCast.RedundantCastInspection;
@@ -32,7 +30,7 @@ import com.intellij.testFramework.IdeaTestUtil;
  * For "heavyweight" tests use AdvHighlightingTest.
  */
 public abstract class LightAdvHighlightingJdk6Test extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting6";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting6";
 
   private void doTest(boolean checkWarnings, boolean checkInfos, Class<?>... classes) {
     setLanguageLevel(LanguageLevel.JDK_1_6);
@@ -41,7 +39,6 @@ public abstract class LightAdvHighlightingJdk6Test extends LightDaemonAnalyzerTe
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, checkInfos);
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{

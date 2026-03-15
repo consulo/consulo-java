@@ -24,14 +24,12 @@ import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public final class NullabilityUtil {
 
-  @Nonnull
   public static DfaNullability calcCanBeNull(DfaVariableValue value) {
     if (value.getDescriptor() instanceof DfaExpressionFactory.ThisDescriptor) {
       return DfaNullability.NOT_NULL;

@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -40,7 +39,7 @@ import java.util.function.Consumer;
 public class JavaMembersGetter extends MembersGetter {
   private final PsiType myExpectedType;
 
-  public JavaMembersGetter(@Nonnull PsiType expectedType, CompletionParameters parameters) {
+  public JavaMembersGetter(PsiType expectedType, CompletionParameters parameters) {
     super(new JavaStaticMemberProcessor(parameters), parameters.getPosition());
     myExpectedType = JavaCompletionUtil.originalize(expectedType);
   }

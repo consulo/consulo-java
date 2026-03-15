@@ -38,8 +38,7 @@ import consulo.util.lang.VersionComparatorUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.encoding.EncodingProjectManager;
 import consulo.virtualFileSystem.util.PathsList;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
 
 import java.nio.charset.Charset;
@@ -128,7 +127,6 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     return getValidJdkToRunModule(module, false);
   }
 
-  @Nonnull
   public static Sdk getValidJdkToRunModule(final Module module, boolean productionOnly) throws CantRunException {
     Sdk jdk = getJdkToRunModule(module, productionOnly);
     if (jdk == null) {
@@ -164,8 +162,7 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     return findLatestVersion(moduleSdk, sdksFromDependencies);
   }
 
-  @Nonnull
-  private static Sdk findLatestVersion(@Nonnull Sdk mainSdk, @Nonnull Set<Sdk> sdks) {
+  private static Sdk findLatestVersion(Sdk mainSdk, Set<Sdk> sdks) {
     Sdk result = mainSdk;
     for (Sdk sdk : sdks) {
       if (VersionComparatorUtil.compare(result.getVersionString(), sdk.getVersionString()) < 0) {

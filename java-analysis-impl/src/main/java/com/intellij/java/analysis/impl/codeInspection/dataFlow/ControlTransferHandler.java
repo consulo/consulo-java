@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.FList;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,6 @@ class ControlTransferHandler
 		this.traps = transferValue.getTraps();
 	}
 
-	@Nonnull
 	public List<DfaInstructionState> dispatch()
 	{
 		Trap head = traps.getHead();
@@ -90,7 +88,7 @@ class ControlTransferHandler
 		return runner;
 	}
 
-	public List<DfaInstructionState> processCatches(@Nonnull TypeConstraint thrownValue, Map<PsiCatchSection, ControlFlow.ControlFlowOffset> catches)
+	public List<DfaInstructionState> processCatches(TypeConstraint thrownValue, Map<PsiCatchSection, ControlFlow.ControlFlowOffset> catches)
 	{
 		List<DfaInstructionState> result = new ArrayList<>();
 
@@ -134,7 +132,6 @@ class ControlTransferHandler
 		return ContainerUtil.concat(result, dispatch());
 	}
 
-	@Nonnull
 	private List<TypeConstraint> allCaughtTypes(PsiParameter param)
 	{
 		PsiType type = param.getType();
@@ -143,7 +140,6 @@ class ControlTransferHandler
 		return psiTypes.stream().map(TypeConstraints::instanceOf).collect(Collectors.toList());
 	}
 
-	@Nonnull
 	private DfaMemoryState stateForCatchClause(PsiParameter param, TypeConstraint constraint)
 	{
 		DfaMemoryState catchingCopy = state.createCopy();

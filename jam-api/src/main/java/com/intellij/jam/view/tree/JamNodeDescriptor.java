@@ -30,8 +30,7 @@ import consulo.ui.ex.tree.NodeDescriptor;
 import consulo.ui.image.Image;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.event.InputEvent;
 
@@ -51,7 +50,6 @@ public abstract class JamNodeDescriptor<P> extends SimpleNode implements DataPro
     myElement = element;
   }
 
-  @Nonnull
   public Object[] getEqualityObjects() {
     return new Object[] { myElement };
   }

@@ -18,7 +18,6 @@ import consulo.language.psi.stub.ScalarIndexExtension;
 import consulo.util.lang.Pair;
 import one.util.streamex.StreamEx;
 
-import jakarta.annotation.Nonnull;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
@@ -34,13 +33,11 @@ import static com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis.Pr
 public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
   static final ID<HMember, Void> NAME = ID.create("bytecodeAnalysis");
 
-  @Nonnull
   @Override
   public ID<HMember, Void> getName() {
     return NAME;
   }
 
-  @Nonnull
   @Override
   public DataIndexer<HMember, Void, FileContent> getIndexer() {
     return inputData -> {
@@ -57,7 +54,6 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     };
   }
 
-  @Nonnull
   private static Map<HMember, Void> collectKeys(byte[] content) {
     HashMap<HMember, Void> map = new HashMap<>();
     MessageDigest md = BytecodeAnalysisConverter.getMessageDigest();
@@ -81,7 +77,6 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     return map;
   }
 
-  @Nonnull
   @Override
   public KeyDescriptor<HMember> getKeyDescriptor() {
     return HKeyDescriptor.INSTANCE;
@@ -92,7 +87,6 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     return true;
   }
 
-  @Nonnull
   @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return new DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE);
@@ -115,12 +109,12 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     static final HKeyDescriptor INSTANCE = new HKeyDescriptor();
 
     @Override
-    public void save(@Nonnull DataOutput out, HMember value) throws IOException {
+    public void save(DataOutput out, HMember value) throws IOException {
       out.write(value.asBytes());
     }
 
     @Override
-    public HMember read(@Nonnull DataInput in) throws IOException {
+    public HMember read(DataInput in) throws IOException {
       byte[] bytes = new byte[HMember.HASH_SIZE];
       in.readFully(bytes);
       return new HMember(bytes);
@@ -132,7 +126,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
    */
   public static class EquationsExternalizer implements DataExternalizer<Map<HMember, Equations>> {
     @Override
-    public void save(@Nonnull DataOutput out, Map<HMember, Equations> value) throws IOException {
+    public void save(DataOutput out, Map<HMember, Equations> value) throws IOException {
       DataInputOutputUtil.writeSeq(out, value.entrySet(), entry -> {
         HKeyDescriptor.INSTANCE.save(out, entry.getKey());
         saveEquations(out, entry.getValue());
@@ -140,12 +134,12 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
     }
 
     @Override
-    public Map<HMember, Equations> read(@Nonnull DataInput in) throws IOException {
+    public Map<HMember, Equations> read(DataInput in) throws IOException {
       return StreamEx.of(DataInputOutputUtil.readSeq(in, () -> Pair.create(HKeyDescriptor.INSTANCE.read(in), readEquations(in)))).
           toMap(p -> p.getFirst(), p -> p.getSecond(), ClassDataIndexer.MERGER);
     }
 
-    private static void saveEquations(@Nonnull DataOutput out, Equations eqs) throws IOException {
+    private static void saveEquations(DataOutput out, Equations eqs) throws IOException {
       out.writeBoolean(eqs.stable);
       MessageDigest md = BytecodeAnalysisConverter.getMessageDigest();
       DataInputOutputUtil.writeINT(out, eqs.results.size());
@@ -180,7 +174,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
       }
     }
 
-    private static Equations readEquations(@Nonnull DataInput in) throws IOException {
+    private static Equations readEquations(DataInput in) throws IOException {
       boolean stable = in.readBoolean();
       int size = DataInputOutputUtil.readINT(in);
       ArrayList<DirectionResultPair> results = new ArrayList<>(size);
@@ -222,22 +216,21 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
       return new Equations(results, stable);
     }
 
-    @Nonnull
-    private static EKey readKey(@Nonnull DataInput in) throws IOException {
+    private static EKey readKey(DataInput in) throws IOException {
       byte[] bytes = new byte[HMember.HASH_SIZE];
       in.readFully(bytes);
       int rawDirKey = DataInputOutputUtil.readINT(in);
       return new EKey(new HMember(bytes), Direction.fromInt(Math.abs(rawDirKey)), in.readBoolean(), rawDirKey < 0);
     }
 
-    private static void writeKey(@Nonnull DataOutput out, EKey key, MessageDigest md) throws IOException {
+    private static void writeKey(DataOutput out, EKey key, MessageDigest md) throws IOException {
       out.write(key.member.hashed(md).asBytes());
       int rawDirKey = key.negated ? -key.dirKey : key.dirKey;
       DataInputOutputUtil.writeINT(out, rawDirKey);
       out.writeBoolean(key.stable);
     }
 
-    private static void writeEffect(@Nonnull DataOutput out, EffectQuantum effect, MessageDigest md) throws IOException {
+    private static void writeEffect(DataOutput out, EffectQuantum effect, MessageDigest md) throws IOException {
       if (effect == EffectQuantum.TopEffectQuantum) {
         DataInputOutputUtil.writeINT(out, -1);
       } else if (effect == EffectQuantum.ThisChangeQuantum) {
@@ -262,7 +255,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
       }
     }
 
-    private static EffectQuantum readEffect(@Nonnull DataInput in) throws IOException {
+    private static EffectQuantum readEffect(DataInput in) throws IOException {
       int effectMask = DataInputOutputUtil.readINT(in);
       switch (effectMask) {
         case -1:
@@ -287,7 +280,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
       }
     }
 
-    private static void writeDataValue(@Nonnull DataOutput out, DataValue dataValue, MessageDigest md) throws IOException {
+    private static void writeDataValue(DataOutput out, DataValue dataValue, MessageDigest md) throws IOException {
       if (dataValue == DataValue.ThisDataValue) {
         DataInputOutputUtil.writeINT(out, -1);
       } else if (dataValue == DataValue.LocalDataValue) {
@@ -306,7 +299,7 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
       }
     }
 
-    private static DataValue readDataValue(@Nonnull DataInput in) throws IOException {
+    private static DataValue readDataValue(DataInput in) throws IOException {
       int dataI = DataInputOutputUtil.readINT(in);
       switch (dataI) {
         case -1:

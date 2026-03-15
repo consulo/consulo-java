@@ -7,8 +7,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
 import consulo.language.ast.TokenSet;
 import consulo.language.parser.PsiBuilder;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import static com.intellij.java.language.impl.parser.JavaParserUtil.*;
@@ -19,7 +18,7 @@ public class PatternParser implements JavaElementType {
 
   private final JavaParser myParser;
 
-  public PatternParser(@Nonnull JavaParser javaParser) {
+  public PatternParser(JavaParser javaParser) {
     myParser = javaParser;
   }
 
@@ -54,8 +53,7 @@ public class PatternParser implements JavaElementType {
   /**
    * @return null when not pattern
    */
-  @Nullable
-  PsiBuilder.Marker preParsePattern(final PsiBuilder builder, boolean parensAllowed) {
+  PsiBuilder.@Nullable Marker preParsePattern(final PsiBuilder builder, boolean parensAllowed) {
     PsiBuilder.Marker patternStart = builder.mark();
     if (parensAllowed) {
       while (builder.getTokenType() == JavaTokenType.LPARENTH) {

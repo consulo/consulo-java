@@ -1,5 +1,4 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class Test {
   String myFoo = "";
@@ -7,7 +6,6 @@ class Test {
   String myFoo1 = null;
 
   String myFoo2 = foo2();
-  @Nonnull
   String foo2() { return "";}
 
   String myFoo3 = foo3();

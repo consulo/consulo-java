@@ -20,7 +20,6 @@ import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.impl.psi.impl.source.Constants;
-import jakarta.annotation.Nonnull;
 
 public class PsiEmptyExpressionImpl extends ExpressionPsiElement implements PsiExpression{
   public PsiEmptyExpressionImpl() {
@@ -33,7 +32,7 @@ public class PsiEmptyExpressionImpl extends ExpressionPsiElement implements PsiE
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitExpression(this);
     }

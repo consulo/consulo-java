@@ -17,7 +17,7 @@ package com.intellij.java.language.psi;
 
 import consulo.util.collection.ArrayFactory;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Function;
 
 /**

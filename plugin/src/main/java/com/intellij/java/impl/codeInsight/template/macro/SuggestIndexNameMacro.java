@@ -35,7 +35,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class SuggestIndexNameMacro extends Macro {
@@ -50,14 +49,13 @@ public class SuggestIndexNameMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "a";
   }
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     if (params.length != 0) return null;
 
     Project project = context.getProject();

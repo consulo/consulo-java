@@ -24,23 +24,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ThreadYieldInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "CallToThreadYield";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.threadYieldDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.threadYieldProblemDescriptor().get();
   }
@@ -53,7 +48,7 @@ public class ThreadYieldInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isThreadYield(expression)) {
         return;
@@ -65,7 +60,7 @@ public class ThreadYieldInspection extends BaseInspection {
       PsiMethodCallExpression expression) {
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String methodName =
+      String methodName =
         methodExpression.getReferenceName();
       if (!"yield".equals(methodName)) {
         return false;

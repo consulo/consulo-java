@@ -9,8 +9,7 @@ import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.*;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,7 +25,7 @@ public class TextBlockBlock extends AbstractJavaBlock {
                         Indent indent,
                         CommonCodeStyleSettings settings,
                         JavaCodeStyleSettings javaSettings,
-                        @Nonnull FormattingMode formattingMode) {
+                        FormattingMode formattingMode) {
     super(textBlock, wrap, alignment, indent, settings, javaSettings, formattingMode);
     myIndent = indent;
   }
@@ -46,7 +45,6 @@ public class TextBlockBlock extends AbstractJavaBlock {
     return children;
   }
 
-  @Nonnull
   private List<TextRange> extractLinesRanges() {
     PsiLiteralExpression literal = ObjectUtil.tryCast(myNode.getPsi(), PsiLiteralExpression.class);
     if (literal == null || !literal.isTextBlock()) return Collections.emptyList();
@@ -74,7 +72,7 @@ public class TextBlockBlock extends AbstractJavaBlock {
 
   @Nullable
   @Override
-  public Spacing getSpacing(@Nullable Block child1, @Nonnull Block child2) {
+  public Spacing getSpacing(@Nullable Block child1, Block child2) {
     return null;
   }
 

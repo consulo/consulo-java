@@ -30,8 +30,7 @@ import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.logging.Logger;
 import consulo.util.lang.ExceptionUtil;
 import consulo.util.lang.ThreeState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
@@ -46,7 +45,6 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 
 	// cached data
 	private final Map<ObjectReference, ObjectReferenceProxyImpl> myObjectReferenceProxies = new HashMap<ObjectReference, ObjectReferenceProxyImpl>();
-	@Nonnull
 	private Map<ThreadReference, ThreadReferenceProxyImpl> myAllThreads = new HashMap<ThreadReference, ThreadReferenceProxyImpl>();
 	private final Map<ThreadGroupReference, ThreadGroupReferenceProxyImpl> myThreadGroups = new HashMap<ThreadGroupReference, ThreadGroupReferenceProxyImpl>();
 	private boolean myAllThreadsDirty = true;
@@ -57,7 +55,7 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 	private final boolean myVersionHigher_15;
 	private final boolean myVersionHigher_14;
 
-	public VirtualMachineProxyImpl(DebugProcessImpl debugProcess, @Nonnull VirtualMachine virtualMachine)
+	public VirtualMachineProxyImpl(DebugProcessImpl debugProcess, VirtualMachine virtualMachine)
 	{
 		myVirtualMachine = virtualMachine;
 		myDebugProcess = debugProcess;
@@ -92,7 +90,6 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		}
 	}
 
-	@Nonnull
 	public VirtualMachine getVirtualMachine()
 	{
 		return myVirtualMachine;

@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.psi.formatter.java;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.ast.ASTNode;
 import consulo.util.lang.StringUtil;
@@ -34,7 +33,7 @@ public class MultipleFieldDeclarationHelper
 	/**
 	 * @return {@code true} if given node is a non-first part of composite field definition; {@code false} otherwise
 	 */
-	public static boolean compoundFieldPart(@Nonnull ASTNode node)
+	public static boolean compoundFieldPart(ASTNode node)
 	{
 		if(node.getElementType() != JavaElementType.FIELD)
 		{
@@ -60,8 +59,7 @@ public class MultipleFieldDeclarationHelper
 	 * @param child child field node to check
 	 * @return last child field node at the field group identified by the given node if any; given child otherwise
 	 */
-	@Nonnull
-	public static ASTNode findLastFieldInGroup(@Nonnull ASTNode child)
+	public static ASTNode findLastFieldInGroup(ASTNode child)
 	{
 		PsiElement psi = child.getPsi();
 		if(psi == null)

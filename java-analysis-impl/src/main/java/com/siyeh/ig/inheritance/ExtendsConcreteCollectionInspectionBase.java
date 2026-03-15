@@ -22,23 +22,19 @@ import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspection {
   @Override
-  @Nonnull
   public String getID() {
     return "ClassExtendsConcreteCollection";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.extendsConcreteCollectionDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     final PsiClass superClass = (PsiClass) infos[0];
     final PsiClass aClass = (PsiClass) infos[1];
@@ -54,7 +50,7 @@ public abstract class ExtendsConcreteCollectionInspectionBase extends BaseInspec
 
   private static class ExtendsConcreteCollectionVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
         return;
       }

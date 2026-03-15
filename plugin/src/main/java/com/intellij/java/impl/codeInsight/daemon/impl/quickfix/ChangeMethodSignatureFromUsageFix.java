@@ -46,8 +46,7 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -58,7 +57,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
         @Nullable
         private final PsiType[] myParamTypes;
 
-        private ParameterTypes(@Nullable ParameterInfoImpl[] parameterInfos, @Nonnull PsiElement context) {
+        private ParameterTypes(@Nullable ParameterInfoImpl[] parameterInfos, PsiElement context) {
             if (parameterInfos == null) {
                 myParamTypes = null;
                 return;
@@ -77,7 +76,6 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
             }
         }
 
-        @Nonnull
         public String getPresentableText() {
             if (myParamTypes == null) {
                 return IdeLocalize.textNotApplicable().get();
@@ -108,7 +106,6 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
     final PsiMethod myTargetMethod;
     final PsiExpression[] myExpressions;
     final PsiSubstitutor mySubstitutor;
-    @Nonnull
     final PsiElement myContext;
     private final boolean myChangeAllUsages;
     private final int myMinUsagesNumberToShowDialog;
@@ -117,10 +114,10 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
     private static final Logger LOG = Logger.getInstance(ChangeMethodSignatureFromUsageFix.class);
 
     public ChangeMethodSignatureFromUsageFix(
-        @Nonnull PsiMethod targetMethod,
-        @Nonnull PsiExpression[] expressions,
-        @Nonnull PsiSubstitutor substitutor,
-        @Nonnull PsiElement context,
+        PsiMethod targetMethod,
+        PsiExpression[] expressions,
+        PsiSubstitutor substitutor,
+        PsiElement context,
         boolean changeAllUsages, int minUsagesNumberToShowDialog
     ) {
         myTargetMethod = targetMethod;
@@ -131,7 +128,6 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
         myMinUsagesNumberToShowDialog = minUsagesNumberToShowDialog;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         LocalizeValue shortText = myShortName;
@@ -180,7 +176,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) {
             return false;
         }
@@ -221,7 +217,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+    public void invoke(Project project, Editor editor, PsiFile file) {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -250,10 +246,10 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
 
     @RequiredUIAccess
     static List<ParameterInfoImpl> performChange(
-        @Nonnull Project project,
+        Project project,
         Editor editor,
         PsiFile file,
-        @Nonnull PsiMethod method,
+        PsiMethod method,
         int minUsagesNumber,
         final ParameterInfoImpl[] newParametersInfo,
         final boolean changeAllUsages,
@@ -295,7 +291,6 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
                 method.getReturnType(),
                 newParametersInfo
             ) {
-                @Nonnull
                 @Override
                 protected UsageInfo[] findUsages() {
                     return changeAllUsages ? super.findUsages() : UsageInfo.EMPTY_ARRAY;
@@ -303,7 +298,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
 
                 @Override
                 @RequiredReadAction
-                protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+                protected void performRefactoring(UsageInfo[] usages) {
                     CommandProcessor.getInstance().setCurrentCommandName(getCommandName());
                     super.performRefactoring(usages);
                     if (callback != null) {
@@ -489,8 +484,7 @@ public class ChangeMethodSignatureFromUsageFix implements SyntheticIntentionActi
         return result.toArray(new ParameterInfoImpl[0]);
     }
 
-    @Nonnull
-    protected static String escapePresentableType(@Nonnull PsiType exprType) {
+    protected static String escapePresentableType(PsiType exprType) {
         return StringUtil.escapeXmlEntities(exprType.getPresentableText());
     }
 

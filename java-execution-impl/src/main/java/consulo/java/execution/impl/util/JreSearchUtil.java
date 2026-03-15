@@ -10,8 +10,7 @@ import consulo.platform.Platform;
 import consulo.process.ExecutionException;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -23,9 +22,9 @@ public class JreSearchUtil {
   public static final String USE_JAVA_HOME = "#JAVA_HOME";
 
   @Nullable
-  private Sdk getSdkForRun(@Nonnull SdkTable sdkTable,
+  private Sdk getSdkForRun(SdkTable sdkTable,
                            @Nullable String jreHome,
-                           @Nonnull LanguageLevel languageLevel) throws ExecutionException {
+                           LanguageLevel languageLevel) throws ExecutionException {
     if (USE_JAVA_HOME.equals(jreHome)) {
       final String javaHome = Platform.current().os().getEnvironmentVariable("JAVA_HOME");
       if (StringUtil.isEmptyOrSpaces(javaHome)) {
@@ -46,7 +45,7 @@ public class JreSearchUtil {
   }
 
   @Nullable
-  public static Sdk findSdkOfLevel(@Nonnull SdkTable sdkTable, @Nonnull LanguageLevel languageLevel, @Nullable String runtimeJdkName) {
+  public static Sdk findSdkOfLevel(SdkTable sdkTable, LanguageLevel languageLevel, @Nullable String runtimeJdkName) {
     if (runtimeJdkName != null) {
       Sdk sdk = sdkTable.findSdk(runtimeJdkName);
       if (sdk != null) {

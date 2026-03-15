@@ -39,8 +39,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -53,13 +51,11 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
     @SuppressWarnings({"PublicField"})
     public boolean ignoreInlineLinkToSuper = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryJavadocLinkDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         int n = (Integer) infos[1];
@@ -94,7 +90,6 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
             this.tagName = tagName;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryJavadocLinkQuickfix(tagName);
@@ -151,7 +146,7 @@ public class UnnecessaryJavaDocLinkInspection extends BaseInspection {
         @Override
         public void visitDocTag(PsiDocTag tag) {
             super.visitDocTag(tag);
-            @NonNls String name = tag.getName();
+            String name = tag.getName();
             if ("link".equals(name) || "linkplain".equals(name)) {
                 if (!(tag instanceof PsiInlineDocTag)) {
                     return;

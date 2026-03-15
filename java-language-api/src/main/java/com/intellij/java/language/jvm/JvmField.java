@@ -16,7 +16,6 @@
 package com.intellij.java.language.jvm;
 
 import com.intellij.java.language.jvm.types.JvmType;
-import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.Field;
 
@@ -30,7 +29,6 @@ public interface JvmField extends JvmMember {
   /**
    * @see Field#getName
    */
-  @Nonnull
   @Override
   String getName();
 
@@ -38,6 +36,5 @@ public interface JvmField extends JvmMember {
    * @see Field#getGenericType
    * @see Field#getAnnotatedType
    */
-  @Nonnull
   JvmType getType();
 }

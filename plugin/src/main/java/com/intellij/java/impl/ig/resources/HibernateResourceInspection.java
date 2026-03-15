@@ -24,7 +24,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -35,19 +34,16 @@ public class HibernateResourceInspection extends ResourceInspection {
   public boolean insideTryAllowed = false;
 
   @Override
-  @Nonnull
   public String getID() {
     return "HibernateResourceOpenedButNotSafelyClosed";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.hibernateResourceOpenedNotClosedDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiExpression expression = (PsiExpression)infos[0];
     PsiType type = expression.getType();
@@ -71,7 +67,7 @@ public class HibernateResourceInspection extends ResourceInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isHibernateFactoryMethod(expression)) {
         return;

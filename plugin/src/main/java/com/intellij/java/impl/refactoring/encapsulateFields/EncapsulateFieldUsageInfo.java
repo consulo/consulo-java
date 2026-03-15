@@ -17,7 +17,6 @@ package com.intellij.java.impl.refactoring.encapsulateFields;
 
 import consulo.language.psi.PsiReference;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Max Medvedev
@@ -25,12 +24,11 @@ import jakarta.annotation.Nonnull;
 public class EncapsulateFieldUsageInfo extends UsageInfo {
   private final FieldDescriptor myFieldDescriptor;
 
-  public EncapsulateFieldUsageInfo(PsiReference ref, @Nonnull FieldDescriptor descriptor) {
+  public EncapsulateFieldUsageInfo(PsiReference ref, FieldDescriptor descriptor) {
     super(ref);
     myFieldDescriptor = descriptor;
   }
 
-  @Nonnull
   public FieldDescriptor getFieldDescriptor() {
     return myFieldDescriptor;
   }

@@ -21,18 +21,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class UseOfSunClassesInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.useSunClassesDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.useSunClassesProblemDescriptor().get();
   }
@@ -45,7 +41,7 @@ public class UseOfSunClassesInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitVariable(@Nonnull PsiVariable variable) {
+    public void visitVariable(PsiVariable variable) {
       super.visitVariable(variable);
       PsiType type = variable.getType();
       PsiType deepComponentType = type.getDeepComponentType();
@@ -53,7 +49,7 @@ public class UseOfSunClassesInspection extends BaseInspection {
         return;
       }
       PsiClassType classType = (PsiClassType)deepComponentType;
-      @NonNls String className = classType.getCanonicalText();
+      String className = classType.getCanonicalText();
       if (className == null || !className.startsWith("sun.")) {
         return;
       }
@@ -66,7 +62,7 @@ public class UseOfSunClassesInspection extends BaseInspection {
 
     @Override
     public void visitNewExpression(
-      @Nonnull PsiNewExpression newExpression) {
+      PsiNewExpression newExpression) {
       super.visitNewExpression(newExpression);
       PsiType type = newExpression.getType();
       if (type == null) {
@@ -76,7 +72,7 @@ public class UseOfSunClassesInspection extends BaseInspection {
         return;
       }
       PsiClassType classType = (PsiClassType)type;
-      @NonNls String className = classType.getCanonicalText();
+      String className = classType.getCanonicalText();
       if (className == null || !className.startsWith("sun.")) {
         return;
       }

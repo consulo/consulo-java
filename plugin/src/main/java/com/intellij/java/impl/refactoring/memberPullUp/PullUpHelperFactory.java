@@ -23,8 +23,7 @@ import consulo.language.Language;
 import consulo.language.extension.ByLanguageValue;
 import consulo.language.extension.LanguageExtension;
 import consulo.language.extension.LanguageOneToOne;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by Max Medvedev on 10/4/13
@@ -34,7 +33,7 @@ public interface PullUpHelperFactory extends LanguageExtension {
   ExtensionPointCacheKey<PullUpHelperFactory, ByLanguageValue<PullUpHelperFactory>> KEY = ExtensionPointCacheKey.create("PullUpHelperFactory", LanguageOneToOne.build());
 
   @Nullable
-  static PullUpHelperFactory forLanguage(@Nonnull Language language) {
+  static PullUpHelperFactory forLanguage(Language language) {
     return Application.get().getExtensionPoint(PullUpHelperFactory.class).getOrBuildCache(KEY).get(language);
   }
 

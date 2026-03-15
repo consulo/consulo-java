@@ -41,10 +41,8 @@ import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -56,7 +54,6 @@ public class ClassRenderer extends NodeRendererImpl {
     private static final Logger LOG = Logger.getInstance(ClassRenderer.class);
 
     public static final
-    @NonNls
     String UNIQUE_ID = "ClassRenderer";
 
     public boolean SHOW_SYNTHETICS = true;
@@ -188,7 +185,6 @@ public class ClassRenderer extends NodeRendererImpl {
         builder.setChildren(children);
     }
 
-    @Nonnull
     protected FieldDescriptor createFieldDescriptor(ValueDescriptorImpl parentDescriptor,
                                                     NodeDescriptorFactory nodeDescriptorFactory,
                                                     ObjectReference objRef,
@@ -197,7 +193,7 @@ public class ClassRenderer extends NodeRendererImpl {
         return nodeDescriptorFactory.getFieldDescriptor(parentDescriptor, objRef, field);
     }
 
-    protected boolean shouldDisplay(EvaluationContext context, @Nonnull ObjectReference objInstance, @Nonnull Field field) {
+    protected boolean shouldDisplay(EvaluationContext context, ObjectReference objInstance, Field field) {
         final boolean isSynthetic = DebuggerUtils.isSynthetic(field);
         if (!SHOW_SYNTHETICS && isSynthetic) {
             return false;
@@ -277,7 +273,6 @@ public class ClassRenderer extends NodeRendererImpl {
 
     @Override
     public
-    @NonNls
     String getName() {
         return "Object";
     }
@@ -288,7 +283,7 @@ public class ClassRenderer extends NodeRendererImpl {
     }
 
     @Nullable
-    public static String getEnumConstantName(@Nonnull ObjectReference objRef, ClassType classType) {
+    public static String getEnumConstantName(ObjectReference objRef, ClassType classType) {
         do {
             if (!classType.isPrepared()) {
                 return null;

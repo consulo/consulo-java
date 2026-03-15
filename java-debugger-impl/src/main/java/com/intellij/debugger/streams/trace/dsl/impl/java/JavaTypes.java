@@ -9,7 +9,6 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.execution.debug.stream.trace.dsl.Types;
 import consulo.execution.debug.stream.trace.impl.handler.type.*;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -41,102 +40,87 @@ public final class JavaTypes implements Types {
     private JavaTypes() {
     }
 
-    @Nonnull
     @Override
     public GenericType ANY() {
         return ANY;
     }
 
-    @Nonnull
     @Override
     public GenericType INT() {
         return INT;
     }
 
-    @Nonnull
     @Override
     public GenericType BOOLEAN() {
         return BOOLEAN;
     }
 
-    @Nonnull
     @Override
     public GenericType DOUBLE() {
         return DOUBLE;
     }
 
-    @Nonnull
     @Override
     public GenericType EXCEPTION() {
         return EXCEPTION;
     }
 
-    @Nonnull
     @Override
     public GenericType VOID() {
         return VOID;
     }
 
-    @Nonnull
     @Override
     public GenericType TIME() {
         return TIME;
     }
 
-    @Nonnull
     @Override
     public GenericType STRING() {
         return STRING;
     }
 
-    @Nonnull
     @Override
     public GenericType LONG() {
         return LONG;
     }
 
-    @Nonnull
     @Override
-    public ArrayType array(@Nonnull GenericType elementType) {
+    public ArrayType array(GenericType elementType) {
         return new ArrayTypeImpl(elementType,
                                  name -> name + "[]",
                                  size -> "new " + elementType.getVariableTypeName() + "[" + size + "]");
     }
 
-    @Nonnull
     @Override
-    public MapType map(@Nonnull GenericType keyType, @Nonnull GenericType valueType) {
+    public MapType map(GenericType keyType, GenericType valueType) {
         return new MapTypeImpl(keyType, valueType,
                                (keys, values) -> "java.util.Map<" + keys + ", " + values + ">",
                                "new java.util.HashMap<>()",
                                (keys, values) -> "java.util.Map.Entry<" + keys + ", " + values + ">");
     }
 
-    @Nonnull
     @Override
-    public MapType linkedMap(@Nonnull GenericType keyType, @Nonnull GenericType valueType) {
+    public MapType linkedMap(GenericType keyType, GenericType valueType) {
         return new MapTypeImpl(keyType, valueType,
                                (keys, values) -> "java.util.Map<" + keys + ", " + values + ">",
                                "new java.util.LinkedHashMap<>()",
                                (keys, values) -> "java.util.Map.Entry<" + keys + ", " + values + ">");
     }
 
-    @Nonnull
     @Override
-    public ListType list(@Nonnull GenericType elementsType) {
+    public ListType list(GenericType elementsType) {
         return new ListTypeImpl(elementsType,
                                 type -> "java.util.List<" + type + ">",
                                 "new java.util.ArrayList<>()");
     }
 
-    @Nonnull
     @Override
-    public GenericType nullable(@Nonnull Function<Types, GenericType> typeSelector) {
+    public GenericType nullable(Function<Types, GenericType> typeSelector) {
         return typeSelector.apply(this);
     }
 
-    @Nonnull
-    public GenericType fromStreamPsiType(@Nonnull PsiType streamPsiType) {
+    public GenericType fromStreamPsiType(PsiType streamPsiType) {
         if (InheritanceUtil.isInheritor(streamPsiType, CommonClassNames.JAVA_UTIL_STREAM_INT_STREAM)) {
             return INT;
         }
@@ -152,8 +136,7 @@ public final class JavaTypes implements Types {
         return ANY;
     }
 
-    @Nonnull
-    public GenericType fromPsiClass(@Nonnull PsiClass psiClass) {
+    public GenericType fromPsiClass(PsiClass psiClass) {
         if (InheritanceUtil.isInheritor(psiClass, CommonClassNames.JAVA_UTIL_STREAM_INT_STREAM)) {
             return INT;
         }
@@ -166,8 +149,7 @@ public final class JavaTypes implements Types {
         return ANY;
     }
 
-    @Nonnull
-    public GenericType fromPsiType(@Nonnull PsiType type) {
+    public GenericType fromPsiType(PsiType type) {
         if (PsiTypes.voidType().equals(type)) {
             return VOID;
         }
@@ -186,8 +168,7 @@ public final class JavaTypes implements Types {
         return new ClassTypeImpl(TypeConversionUtil.erasure(type).getCanonicalText());
     }
 
-    @Nonnull
-    public GenericType unwrapOptional(@Nonnull GenericType type) {
+    public GenericType unwrapOptional(GenericType type) {
         assert isOptional(type);
 
         if (type.equals(optionalInt)) {
@@ -202,7 +183,7 @@ public final class JavaTypes implements Types {
         return ANY;
     }
 
-    private boolean isOptional(@Nonnull GenericType type) {
+    private boolean isOptional(GenericType type) {
         return OPTIONAL_TYPES.contains(type);
     }
 }

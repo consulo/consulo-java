@@ -31,8 +31,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.PairFunction;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -67,8 +66,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
     return nameRef == null ? null : nameRef.getReferenceName();
   }
 
-  @Nonnull
-  public static String getAnnotationShortName(@Nonnull String annoText) {
+  public static String getAnnotationShortName(String annoText) {
     int at = annoText.indexOf('@');
     int paren = annoText.indexOf('(');
     String qualified = PsiNameHelper.getQualifiedClassName(annoText.substring(at + 1, paren > 0 ? paren : annoText.length()), true);
@@ -103,7 +101,6 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
   }
 
   @Override
-  @Nonnull
   public PsiAnnotationParameterList getParameterList() {
     return getRequiredStubOrPsiChild(JavaStubElementTypes.ANNOTATION_PARAMETER_LIST);
   }
@@ -119,7 +116,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
   }
 
   @Override
-  public final void accept(@Nonnull PsiElementVisitor visitor) {
+  public final void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitAnnotation(this);
     }
@@ -134,7 +131,7 @@ public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> imp
   }
 
   @Override
-  public boolean hasQualifiedName(@Nonnull String qualifiedName) {
+  public boolean hasQualifiedName(String qualifiedName) {
     return StringUtil.getShortName(qualifiedName).equals(getShortName()) && PsiAnnotation.super.hasQualifiedName(qualifiedName);
   }
 

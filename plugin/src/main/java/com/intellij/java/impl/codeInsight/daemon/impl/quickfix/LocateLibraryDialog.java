@@ -29,9 +29,7 @@ import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.io.FilePermissionCopier;
 import consulo.util.io.FileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -52,7 +50,7 @@ public class LocateLibraryDialog extends DialogWrapper {
   private final Project myProject;
   private List<String> myResultingLibraryPaths;
 
-  public LocateLibraryDialog(@Nonnull Module module, @Nonnull List<String> defaultLibraryPaths, @Nonnull @NonNls String presentableName) {
+  public LocateLibraryDialog(Module module, List<String> defaultLibraryPaths, String presentableName) {
     super(module.getProject(), true);
     myDefaultLibraryPaths = defaultLibraryPaths;
     setTitle(JavaQuickFixBundle.message("add.library.title.dialog", presentableName));
@@ -80,7 +78,6 @@ public class LocateLibraryDialog extends DialogWrapper {
     init();
   }
 
-  @Nonnull
   public List<String> showAndGetResult() {
     if (myProject.getApplication().isHeadlessEnvironment()) {
       Disposer.dispose(myDisposable);
@@ -100,7 +97,6 @@ public class LocateLibraryDialog extends DialogWrapper {
   }
 
   @Override
-  @NonNls
   protected String getDimensionServiceKey() {
     return "#com.intellij.codeInsight.daemon.impl.quickfix.LocateLibraryDialog";
   }

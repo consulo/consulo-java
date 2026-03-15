@@ -21,7 +21,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -106,7 +105,7 @@ public class AllClassesGetter {
     }
 
     @Override
-    public void handleInsert(@Nonnull InsertionContext context, @Nonnull JavaPsiClassReferenceElement item) {
+    public void handleInsert(InsertionContext context, JavaPsiClassReferenceElement item) {
       _handleInsert(context, item);
       item.getTailType().processTail(context.getEditor(), context.getEditor().getCaretModel().getOffset());
     }
@@ -122,10 +121,10 @@ public class AllClassesGetter {
     }
   };
 
-  public static void processJavaClasses(@Nonnull CompletionParameters parameters,
-                                        @Nonnull PrefixMatcher prefixMatcher,
+  public static void processJavaClasses(CompletionParameters parameters,
+                                        PrefixMatcher prefixMatcher,
                                         boolean filterByScope,
-                                        @Nonnull Consumer<? super PsiClass> consumer) {
+                                        Consumer<? super PsiClass> consumer) {
     PsiElement context = parameters.getPosition();
     Project project = context.getProject();
     GlobalSearchScope scope = filterByScope ? context.getContainingFile().getResolveScope() : GlobalSearchScope.allScope(project);
@@ -136,10 +135,10 @@ public class AllClassesGetter {
     }));
   }
 
-  public static void processJavaClasses(@Nonnull PrefixMatcher prefixMatcher,
-                                        @Nonnull Project project,
-                                        @Nonnull GlobalSearchScope scope,
-                                        @Nonnull Processor<? super PsiClass> processor) {
+  public static void processJavaClasses(PrefixMatcher prefixMatcher,
+                                        Project project,
+                                        GlobalSearchScope scope,
+                                        Processor<? super PsiClass> processor) {
     Set<String> names = new HashSet<>(10000);
     AllClassesSearchExecutor.processClassNames(project, scope, s -> {
       if (prefixMatcher.prefixMatches(s)) {
@@ -151,8 +150,8 @@ public class AllClassesGetter {
     AllClassesSearchExecutor.processClassesByNames(project, scope, sorted, processor);
   }
 
-  public static boolean isAcceptableInContext(@Nonnull PsiElement context,
-                                              @Nonnull PsiClass psiClass,
+  public static boolean isAcceptableInContext(PsiElement context,
+                                              PsiClass psiClass,
                                               boolean filterByScope, boolean pkgContext) {
     ProgressManager.checkCanceled();
 
@@ -172,7 +171,7 @@ public class AllClassesGetter {
     return JavaCompletionUtil.isSourceLevelAccessible(context, psiClass, pkgContext);
   }
 
-  public static JavaPsiClassReferenceElement createLookupItem(@Nonnull PsiClass psiClass,
+  public static JavaPsiClassReferenceElement createLookupItem(PsiClass psiClass,
                                                               InsertHandler<JavaPsiClassReferenceElement> insertHandler) {
     JavaPsiClassReferenceElement item = new JavaPsiClassReferenceElement(psiClass);
     item.setInsertHandler(insertHandler);

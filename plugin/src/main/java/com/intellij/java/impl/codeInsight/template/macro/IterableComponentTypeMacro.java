@@ -29,7 +29,6 @@ import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -47,14 +46,13 @@ public class IterableComponentTypeMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "a";
   }
 
   @Override
   @RequiredReadAction
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     if (params.length != 1) return null;
     Result result = params[0].calculateResult(context);
     if (result == null) return null;
@@ -102,7 +100,7 @@ public class IterableComponentTypeMacro extends Macro {
 
   @Override
   @RequiredReadAction
-  public Result calculateQuickResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
     return calculateResult(params, context);
   }
 

@@ -31,8 +31,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -43,7 +42,6 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
      */
     public boolean checkDivision = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoDisplayName();
@@ -55,7 +53,6 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
         return new SingleCheckboxOptionsPanel(message.get(), this, "checkDivision");
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.expressionCanBeReplacedProblemDescriptor(calculateReplacementShift((PsiExpression) infos[0]))
             .get();
@@ -134,7 +131,6 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
     }
 
     private static class MultiplyByPowerOfTwoFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.multiplyOrDivideByPowerOfTwoReplaceQuickfix();
@@ -155,7 +151,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
 
         @Override
         public void visitBinaryExpression(
-            @Nonnull PsiBinaryExpression expression
+            PsiBinaryExpression expression
         ) {
             super.visitBinaryExpression(expression);
             PsiExpression rhs = expression.getROperand();
@@ -184,7 +180,7 @@ public class MultiplyOrDivideByPowerOfTwoInspection extends BaseInspection {
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression expression
+            PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
             if (!WellFormednessUtils.isWellFormed(expression)) {

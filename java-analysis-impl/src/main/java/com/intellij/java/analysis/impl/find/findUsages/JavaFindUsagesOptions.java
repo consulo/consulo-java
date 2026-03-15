@@ -5,7 +5,6 @@ import consulo.find.FindUsagesOptions;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.LinkedHashSet;
 
 /**
@@ -15,7 +14,7 @@ public abstract class JavaFindUsagesOptions extends FindUsagesOptions
 {
   public boolean isSkipImportStatements = false;
 
-  public JavaFindUsagesOptions(@Nonnull Project project) {
+  public JavaFindUsagesOptions(Project project) {
     super(project, null);
 
     isUsages = true;

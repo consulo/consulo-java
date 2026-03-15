@@ -32,7 +32,7 @@ import consulo.versionControlSystem.history.VcsSelection;
 import consulo.versionControlSystem.history.VcsSelectionProvider;
 import consulo.virtualFileSystem.VirtualFile;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Set;
 
 /**

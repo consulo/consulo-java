@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiAnnotationMemberValue;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElementRef;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -40,7 +39,6 @@ public abstract class JamClassAttributeMeta<JamType> extends JamAttributeMeta<Ja
       super(attrName);
     }
 
-    @Nonnull
     public List<JamClassAttributeElement> getJam(PsiElementRef<PsiAnnotation> anno) {
       return getCollectionJam(anno, new Function<PsiAnnotationMemberValue, JamClassAttributeElement>() {
         public JamClassAttributeElement apply(PsiAnnotationMemberValue psiAnnotationMemberValue) {
@@ -56,12 +54,10 @@ public abstract class JamClassAttributeMeta<JamType> extends JamAttributeMeta<Ja
       super(attrName);
     }
 
-    @Nonnull
     public JamClassAttributeElement getJam(PsiElementRef<PsiAnnotation> anno) {
       return new JamClassAttributeElement(anno, getAttributeLink().getAttributeName());
     }
 
-    @Nonnull
     public JamClassAttributeElement getJam(PsiElementRef<PsiAnnotation> anno, final Supplier<PsiClass> defaultValue) {
       return new JamClassAttributeElement(anno, getAttributeLink().getAttributeName()) {
         @Override

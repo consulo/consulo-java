@@ -46,8 +46,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.content.ProjectRootManager;
 import consulo.util.lang.function.Functions;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.util.Collection;
 
@@ -103,7 +102,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider {
   @RequiredReadAction
   @Nullable
   @Override
-  public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element) {
+  public LineMarkerInfo getLineMarkerInfo(PsiElement element) {
     PsiElement parent;
     if (element instanceof PsiIdentifier && (parent = element.getParent()) instanceof PsiClass) {
       PsiClass annotation = findSubscribeAnnotation(element);
@@ -134,8 +133,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider {
     return null;
   }
 
-  @Nonnull
-  private static Query<PsiMember> createQuery(@Nonnull PsiClass target, @Nonnull PsiClass annClass) {
+  private static Query<PsiMember> createQuery(PsiClass target, PsiClass annClass) {
     PsiImmediateClassType type = new PsiImmediateClassType(target, PsiSubstitutor.EMPTY);
     return new FilteredQuery<>(AnnotatedMembersSearch.search(annClass), psiMember -> ReadAction.compute(() ->
     {
@@ -151,7 +149,7 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider {
   }
 
   @Nullable
-  private static PsiClass findSubscribeAnnotation(@Nonnull PsiElement element) {
+  private static PsiClass findSubscribeAnnotation(PsiElement element) {
     return LanguageCachedValueUtil.getCachedValue(element, () ->
     {
       PsiClass javaClass = JavaPsiFacade.getInstance(element.getProject()).findClass(GuavaLibrary.Subscribe, element.getResolveScope());
@@ -159,7 +157,6 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider {
     });
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -25,8 +25,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +47,6 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
       return myClass;
     }
 
-    @Nonnull
     @Override
     public PsiSubstitutor getSubstitutor() {
       return mySubstitutor;
@@ -80,15 +78,15 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
     }
   };
 
-  public PsiImmediateClassType(@Nonnull PsiClass aClass, @Nonnull PsiSubstitutor substitutor) {
+  public PsiImmediateClassType(PsiClass aClass, PsiSubstitutor substitutor) {
     this(aClass, substitutor, null, TypeAnnotationProvider.EMPTY);
   }
 
-  public PsiImmediateClassType(@Nonnull PsiClass aClass, @Nonnull PsiSubstitutor substitutor, @Nullable LanguageLevel level) {
+  public PsiImmediateClassType(PsiClass aClass, PsiSubstitutor substitutor, @Nullable LanguageLevel level) {
     this(aClass, substitutor, level, TypeAnnotationProvider.EMPTY);
   }
 
-  public PsiImmediateClassType(@Nonnull PsiClass aClass, @Nonnull PsiSubstitutor substitutor, @Nullable LanguageLevel level, @Nonnull PsiAnnotation... annotations) {
+  public PsiImmediateClassType(PsiClass aClass, PsiSubstitutor substitutor, @Nullable LanguageLevel level, PsiAnnotation... annotations) {
     super(level, annotations);
     myClass = aClass;
     myManager = aClass.getManager();
@@ -96,7 +94,7 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
     assert substitutor.isValid();
   }
 
-  public PsiImmediateClassType(@Nonnull PsiClass aClass, @Nonnull PsiSubstitutor substitutor, @Nullable LanguageLevel level, @Nonnull TypeAnnotationProvider provider) {
+  public PsiImmediateClassType(PsiClass aClass, PsiSubstitutor substitutor, @Nullable LanguageLevel level, TypeAnnotationProvider provider) {
     super(level, provider);
     myClass = aClass;
     myManager = aClass.getManager();
@@ -115,7 +113,6 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
   }
 
   @Override
-  @Nonnull
   public PsiType[] getParameters() {
     final PsiTypeParameter[] parameters = myClass.getTypeParameters();
     if (parameters.length == 0) {
@@ -134,18 +131,15 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
   }
 
   @Override
-  @Nonnull
   public ClassResolveResult resolveGenerics() {
     return myClassResolveResult;
   }
 
   @Override
-  @Nonnull
   public PsiClassType rawType() {
     return JavaPsiFacade.getInstance(myClass.getProject()).getElementFactory().createType(myClass);
   }
 
-  @Nonnull
   @Override
   public String getPresentableText(boolean annotated) {
     if (myPresentableText == null) {
@@ -154,7 +148,6 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
     return myPresentableText;
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText(boolean annotated) {
     String cached = annotated ? myCanonicalTextAnnotated : myCanonicalText;
@@ -169,7 +162,6 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
     return cached;
   }
 
-  @Nonnull
   @Override
   public String getInternalCanonicalText() {
     if (myInternalCanonicalText == null) {
@@ -182,14 +174,14 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
     PRESENTABLE, CANONICAL, INT_CANONICAL
   }
 
-  private String getText(@Nonnull TextType textType, boolean annotated) {
+  private String getText(TextType textType, boolean annotated) {
     mySubstitutor.ensureValid();
     StringBuilder buffer = new StringBuilder();
     buildText(myClass, mySubstitutor, buffer, textType, annotated);
     return buffer.toString();
   }
 
-  private void buildText(@Nonnull PsiClass aClass, @Nonnull PsiSubstitutor substitutor, @Nonnull StringBuilder buffer, @Nonnull TextType textType, boolean annotated) {
+  private void buildText(PsiClass aClass, PsiSubstitutor substitutor, StringBuilder buffer, TextType textType, boolean annotated) {
     if (aClass instanceof PsiAnonymousClass) {
       ClassResolveResult baseResolveResult = ((PsiAnonymousClass) aClass).getBaseClassType().resolveGenerics();
       PsiClass baseClass = baseResolveResult.getElement();
@@ -276,7 +268,7 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
   }
 
   @Override
-  public boolean equalsToText(@Nonnull String text) {
+  public boolean equalsToText(String text) {
     String name = myClass.getName();
     if (name == null || !text.contains(name)) {
       return false;
@@ -296,20 +288,17 @@ public class PsiImmediateClassType extends PsiClassType.Stub {
   }
 
   @Override
-  @Nonnull
   public GlobalSearchScope getResolveScope() {
     return myClass.getResolveScope();
   }
 
   @Override
-  @Nonnull
   public LanguageLevel getLanguageLevel() {
     return myLanguageLevel != null ? myLanguageLevel : PsiUtil.getLanguageLevel(myClass);
   }
 
-  @Nonnull
   @Override
-  public PsiClassType setLanguageLevel(@Nonnull LanguageLevel level) {
+  public PsiClassType setLanguageLevel(LanguageLevel level) {
     return level.equals(myLanguageLevel) ? this : new PsiImmediateClassType(myClass, mySubstitutor, level, getAnnotationProvider());
   }
 }

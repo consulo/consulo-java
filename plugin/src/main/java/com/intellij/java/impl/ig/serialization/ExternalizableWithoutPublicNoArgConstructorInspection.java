@@ -29,22 +29,18 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseInspection {
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.externalizableWithoutPublicNoArgConstructorDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.externalizableWithoutPublicNoArgConstructorProblemDescriptor().get();
@@ -80,7 +76,6 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
 
   private static class MakeConstructorPublicFix extends InspectionGadgetsFix {
     @Override
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.makeConstructorPublic();
     }
@@ -109,7 +104,7 @@ public class ExternalizableWithoutPublicNoArgConstructorInspection extends BaseI
   private static class ExternalizableWithoutPublicNoArgConstructorVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       if (aClass.isInterface() || aClass.isEnum() || aClass.isAnnotationType() || aClass instanceof PsiTypeParameter) {
         return;
       }

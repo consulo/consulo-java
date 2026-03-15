@@ -37,7 +37,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -77,7 +76,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
   }
 
   @Override
-  public void fillCompletionVariants(@Nonnull CompletionParameters parameters, @Nonnull CompletionResultSet result) {
+  public void fillCompletionVariants(CompletionParameters parameters, CompletionResultSet result) {
     if (parameters.getCompletionType() != CompletionType.BASIC) {
       return;
     }
@@ -108,7 +107,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static void addAnnotationClasses(@Nonnull PsiClass psiClass, boolean isDeclared, @Nonnull CompletionResultSet result) {
+  private static void addAnnotationClasses(PsiClass psiClass, boolean isDeclared, CompletionResultSet result) {
     Set<PsiAnnotation> declaredAnnotations = isDeclared ? Set.of(AnnotationUtil.getAllAnnotations(psiClass, false, null, false)) : null;
 
     PsiAnnotation[] annotations = AnnotationUtil.getAllAnnotations(psiClass, true, null, false);
@@ -132,7 +131,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static void addConstructorParameterTypes(@Nonnull PsiClass psiClass, boolean isDeclared, @Nonnull CompletionResultSet result) {
+  private static void addConstructorParameterTypes(PsiClass psiClass, boolean isDeclared, CompletionResultSet result) {
     PsiMethod[] constructors = psiClass.getConstructors();
     for (PsiMethod constructor : constructors) {
       LookupElement lookupElement = JavaLookupElementBuilder.forMethod(constructor, PsiSubstitutor.EMPTY).withInsertHandler
@@ -144,7 +143,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static void handleAnnotationClassInsertion(@Nonnull InsertionContext context, @Nonnull LookupElement item) {
+  private static void handleAnnotationClassInsertion(InsertionContext context, LookupElement item) {
     Object object = item.getObject();
     if (object instanceof PsiClass) {
       String className = ((PsiClass) object).getQualifiedName();
@@ -154,7 +153,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static void handleConstructorSignatureInsertion(@Nonnull InsertionContext context, @Nonnull LookupElement item) {
+  private static void handleConstructorSignatureInsertion(InsertionContext context, LookupElement item) {
     Object object = item.getObject();
     if (object instanceof PsiMethod) {
       String text = getParameterTypesText((PsiMethod) object);
@@ -164,7 +163,7 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
     }
   }
 
-  private static void handleParametersInsertion(@Nonnull InsertionContext context, @Nonnull String text) {
+  private static void handleParametersInsertion(InsertionContext context, String text) {
     PsiElement newElement = PsiUtilCore.getElementAtOffset(context.getFile(), context.getStartOffset());
     PsiExpressionList parameterList = PsiTreeUtil.getParentOfType(newElement, PsiExpressionList.class);
     if (parameterList != null) {
@@ -175,7 +174,6 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
@@ -184,13 +182,13 @@ public class JavaReflectionCompletionContributor extends CompletionContributor {
   private static class MethodDefinedInInterfacePatternCondition extends PatternCondition<PsiMethod> {
     private final String myInterfaceName;
 
-    public MethodDefinedInInterfacePatternCondition(@Nonnull String interfaceName) {
+    public MethodDefinedInInterfacePatternCondition(String interfaceName) {
       super("definedInInterface");
       myInterfaceName = interfaceName;
     }
 
     @Override
-    public boolean accepts(@Nonnull PsiMethod method, ProcessingContext context) {
+    public boolean accepts(PsiMethod method, ProcessingContext context) {
       PsiClass containingClass = method.getContainingClass();
       return InheritanceUtil.isInheritor(containingClass, false, myInterfaceName);
     }

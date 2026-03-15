@@ -28,8 +28,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -37,9 +36,9 @@ import java.util.*;
  * @author cdr
  */
 public class SliceForwardUtil {
-  public static boolean processUsagesFlownFromThe(@Nonnull PsiElement element,
-                                                  @Nonnull final Processor<SliceUsage> processor,
-                                                  @Nonnull final SliceUsage parent) {
+  public static boolean processUsagesFlownFromThe(PsiElement element,
+                                                  final Processor<SliceUsage> processor,
+                                                  final SliceUsage parent) {
     Pair<PsiElement, PsiSubstitutor> pair = getAssignmentTarget(element, parent);
     if (pair != null) {
       PsiElement target = pair.getFirst();
@@ -102,7 +101,7 @@ public class SliceForwardUtil {
   private static boolean processAssignedFrom(PsiElement from,
                                              PsiElement context,
                                              final SliceUsage parent,
-                                             @Nonnull final Processor<SliceUsage> processor) {
+                                             final Processor<SliceUsage> processor) {
     if (from instanceof PsiLocalVariable) {
       return searchReferencesAndProcessAssignmentTarget(from, context, parent, processor);
     }
@@ -196,7 +195,7 @@ public class SliceForwardUtil {
     return true;
   }
 
-  private static boolean searchReferencesAndProcessAssignmentTarget(@Nonnull PsiElement element,
+  private static boolean searchReferencesAndProcessAssignmentTarget(PsiElement element,
                                                                     @Nullable final PsiElement context,
                                                                     final SliceUsage parent,
                                                                     final Processor<SliceUsage> processor) {
@@ -290,8 +289,7 @@ public class SliceForwardUtil {
     return target == null ? null : Pair.create(target, substitutor);
   }
 
-  @Nonnull
-  public static PsiElement complexify(@Nonnull PsiElement element) {
+  public static PsiElement complexify(PsiElement element) {
     PsiElement parent = element.getParent();
     if (parent instanceof PsiParenthesizedExpression && element.equals(((PsiParenthesizedExpression) parent).getExpression())) {
       return complexify(parent);

@@ -23,7 +23,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -38,12 +37,10 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
     public boolean ignoreInAssert = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "MethodWithMoreThanThreeNegations";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.threeNegationsPerMethodDisplayName();
@@ -58,7 +55,6 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer negationCount = (Integer) infos[0];
         return InspectionGadgetsLocalize.threeNegationsPerMethodProblemDescriptor(negationCount).get();
@@ -72,7 +68,7 @@ public class ThreeNegationsPerMethodInspection extends BaseInspection {
     private class ThreeNegationsPerMethodVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             // note: no call to super
             if (method.getNameIdentifier() == null) {
                 return;

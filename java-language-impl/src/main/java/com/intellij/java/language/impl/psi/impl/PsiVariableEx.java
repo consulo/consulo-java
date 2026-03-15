@@ -16,7 +16,7 @@
 package com.intellij.java.language.impl.psi.impl;
 
 import com.intellij.java.language.psi.PsiVariable;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 

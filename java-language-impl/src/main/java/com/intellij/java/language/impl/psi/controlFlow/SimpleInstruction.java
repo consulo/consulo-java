@@ -17,7 +17,6 @@
 package com.intellij.java.language.impl.psi.controlFlow;
 
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 public abstract class SimpleInstruction extends InstructionBase {
   private static final Logger LOG = Logger.getInstance(SimpleInstruction.class);
@@ -34,7 +33,7 @@ public abstract class SimpleInstruction extends InstructionBase {
   }
 
   @Override
-  public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
+  public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset) {
     visitor.visitSimpleInstruction(this, offset, nextOffset);
   }
 }

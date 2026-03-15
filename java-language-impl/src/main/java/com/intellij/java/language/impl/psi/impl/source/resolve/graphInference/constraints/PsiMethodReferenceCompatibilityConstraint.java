@@ -24,8 +24,7 @@ import com.intellij.java.language.psi.util.*;
 import consulo.language.psi.PsiElement;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -253,7 +252,7 @@ public class PsiMethodReferenceCompatibilityConstraint implements ConstraintForm
     return psiSubstitutor;
   }
 
-  public static PsiSubstitutor getParameterizedTypeSubstitutor(PsiClass qContainingClass, @Nonnull PsiType pType) {
+  public static PsiSubstitutor getParameterizedTypeSubstitutor(PsiClass qContainingClass, PsiType pType) {
     if (pType instanceof PsiIntersectionType) {
       for (PsiType type : ((PsiIntersectionType) pType).getConjuncts()) {
         PsiClassType.ClassResolveResult resolveResult = PsiUtil.resolveGenericsClassInType(type);

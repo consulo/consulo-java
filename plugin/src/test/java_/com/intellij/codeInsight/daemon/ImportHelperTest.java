@@ -11,7 +11,6 @@ import java.util.List;
 import com.intellij.java.language.psi.*;
 import consulo.undoRedo.UndoManager;
 import consulo.virtualFileSystem.LocalFileSystem;
-import org.jetbrains.annotations.NonNls;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.ide.impl.idea.codeInsight.daemon.impl.DaemonListeners;
 import consulo.language.editor.rawHighlight.HighlightInfo;
@@ -71,7 +70,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 	@WrapInCommand
 	public void testImportsInsertedAlphabetically() throws Throwable
 	{
-		@NonNls String text = "class I {}";
+		String text = "class I {}";
 		final PsiJavaFile file = (PsiJavaFile) configureByText(JavaFileType.INSTANCE, text);
 		assertEmpty(highlightErrors());
 		CommandProcessor.getInstance().executeCommand(getProject(), new Runnable()
@@ -113,7 +112,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 	@WrapInCommand
 	public void testStaticImportsGrouping() throws Throwable
 	{
-		@NonNls String text = "import static java.lang.Math.max;\n" + "import java.util.Map;\n" + "\n" + "import static java.lang.Math.min;\n" + "\n" + "import java.awt.Component;\n" + "\n" + "\n" +
+		String text = "import static java.lang.Math.max;\n" + "import java.util.Map;\n" + "\n" + "import static java.lang.Math.min;\n" + "\n" + "import java.awt.Component;\n" + "\n" + "\n" +
 				"\n" + "import static javax.swing.SwingConstants.CENTER;\n" + "class I {{ max(0, 0); Map.class.hashCode(); min(0,0); Component.class.hashCode(); int i = CENTER; }}";
 
 		final PsiJavaFile file = (PsiJavaFile) configureByText(JavaFileType.INSTANCE, text);
@@ -179,7 +178,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 		assertOrder(file, expectedOrder);
 	}
 
-	private static void assertOrder(PsiJavaFile file, @NonNls String... expectedOrder)
+	private static void assertOrder(PsiJavaFile file, String... expectedOrder)
 	{
 		PsiImportStatementBase[] statements = file.getImportList().getAllImportStatements();
 
@@ -192,7 +191,6 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 		}
 	}
 
-	@NonNls
 	private static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting/reimportConflictingClasses";
 
 	@WrapInCommand
@@ -221,7 +219,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 		}
 
 
-		@NonNls String fullPath = getTestDataPath() + BASE_PATH + "/x/Usage_afterOptimize.txt";
+		String fullPath = getTestDataPath() + BASE_PATH + "/x/Usage_afterOptimize.txt";
 		VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(fullPath.replace(File.separatorChar, '/'));
 		String text = LoadTextUtil.loadText(vFile).toString();
 		assertEquals(text, getFile().getText());
@@ -316,7 +314,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportWorksWhenITypeSpaceAfterClassName() throws Throwable
 	{
-		@NonNls String text = "class S { ArrayList<caret> }";
+		String text = "class S { ArrayList<caret> }";
 		configureByText(JavaFileType.INSTANCE, text);
 
 		boolean old = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
@@ -346,7 +344,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportAfterUncomment() throws Throwable
 	{
-		@NonNls String text = "class S { /*ArrayList l; HashMap h; <caret>*/ }";
+		String text = "class S { /*ArrayList l; HashMap h; <caret>*/ }";
 		configureByText(JavaFileType.INSTANCE, text);
 
 		boolean old = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
@@ -374,7 +372,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportWorks() throws Throwable
 	{
-		@NonNls String text = "class S { JFrame x; <caret> }";
+		String text = "class S { JFrame x; <caret> }";
 		configureByText(JavaFileType.INSTANCE, text);
 		((UndoManagerImpl) UndoManager.getInstance(getProject())).flushCurrentCommandMerger();
 		((UndoManagerImpl) UndoManager.getInstance(getProject())).clearUndoRedoQueueInTests(getFile().getVirtualFile());
@@ -395,7 +393,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportOfGenericReference() throws Throwable
 	{
-		@NonNls String text = "class S {{ new ArrayList<caret><> }}";
+		String text = "class S {{ new ArrayList<caret><> }}";
 		configureByText(JavaFileType.INSTANCE, text);
 		boolean old = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
 		CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY = true;
@@ -426,7 +424,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoOptimizeUnresolvedImports() throws Throwable
 	{
-		@NonNls String text = "import xxx.yyy; class S { } <caret> ";
+		String text = "import xxx.yyy; class S { } <caret> ";
 		configureByText(JavaFileType.INSTANCE, text);
 
 		boolean old = CodeInsightSettings.getInstance().OPTIMIZE_IMPORTS_ON_THE_FLY;
@@ -455,7 +453,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoInsertImportForInnerClass() throws Throwable
 	{
-		@NonNls String text = "package x; class S { void f(ReadLock r){} } <caret> ";
+		String text = "package x; class S { void f(ReadLock r){} } <caret> ";
 		configureByText(JavaFileType.INSTANCE, text);
 
 		boolean old = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
@@ -481,7 +479,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportSkipsClassReferenceInMethodPosition() throws Throwable
 	{
-		@NonNls String text = "package x; import java.util.HashMap; class S { HashMap<String,String> f(){ return  Hash<caret>Map <String, String >();} }  ";
+		String text = "package x; import java.util.HashMap; class S { HashMap<String,String> f(){ return  Hash<caret>Map <String, String >();} }  ";
 		configureByText(JavaFileType.INSTANCE, text);
 
 		boolean old = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
@@ -508,7 +506,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportDoNotBreakCode() throws Throwable
 	{
-		@NonNls String text = "package x; class S {{ S.<caret>\n Runnable r; }}";
+		String text = "package x; class S {{ S.<caret>\n Runnable r; }}";
 		configureByText(JavaFileType.INSTANCE, text);
 
 		boolean old = CodeInsightSettings.getInstance().ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY;
@@ -531,7 +529,7 @@ public abstract class ImportHelperTest extends DaemonAnalyzerTestCase
 
 	public void testAutoImportIgnoresUnresolvedImportReferences() throws Throwable
 	{
-		@NonNls String text = "package x; import xxx.yyy.ArrayList; class S {{ ArrayList<caret> r; }}";
+		String text = "package x; import xxx.yyy.ArrayList; class S {{ ArrayList<caret> r; }}";
 		configureByText(JavaFileType.INSTANCE, text);
 
 		PsiJavaFile javaFile = (PsiJavaFile) getFile();

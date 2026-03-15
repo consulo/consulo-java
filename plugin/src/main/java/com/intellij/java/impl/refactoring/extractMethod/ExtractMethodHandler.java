@@ -51,8 +51,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -64,7 +63,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (dataContext != null) {
             PsiFile file = dataContext.getData(PsiFile.KEY);
             Editor editor = dataContext.getData(Editor.KEY);
@@ -76,7 +75,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         @RequiredUIAccess
         Consumer<PsiElement[]> callback = selectedValue -> invokeOnElements(project, editor, file, selectedValue);
         selectAndPass(project, editor, file, callback);
@@ -84,10 +83,10 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
 
     @RequiredReadAction
     public static void selectAndPass(
-        @Nonnull Project project,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull @RequiredUIAccess Consumer<PsiElement[]> callback
+        Project project,
+        Editor editor,
+        PsiFile file,
+        @RequiredUIAccess Consumer<PsiElement[]> callback
     ) {
         editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         if (!editor.getSelectionModel().hasSelection()) {
@@ -145,7 +144,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     private static boolean invokeOnElements(
         Project project,
         Editor editor,
-        @Nonnull ExtractMethodProcessor processor,
+        ExtractMethodProcessor processor,
         boolean directTypes
     ) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(project, processor.getTargetClass().getContainingFile())) {
@@ -159,7 +158,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
         return false;
     }
 
-    public static void run(@Nonnull Project project, Editor editor, ExtractMethodProcessor processor) {
+    public static void run(Project project, Editor editor, ExtractMethodProcessor processor) {
         CommandProcessor.getInstance().newCommand()
             .project(project)
             .name(REFACTORING_NAME)
@@ -253,7 +252,7 @@ public class ExtractMethodHandler implements RefactoringActionHandler {
     }
 
     @RequiredUIAccess
-    public static boolean invokeOnElements(Project project, @Nonnull ExtractMethodProcessor processor, PsiFile file, boolean directTypes) {
+    public static boolean invokeOnElements(Project project, ExtractMethodProcessor processor, PsiFile file, boolean directTypes) {
         return invokeOnElements(project, openEditor(project, file), processor, directTypes);
     }
 

@@ -20,7 +20,7 @@
  */
 package com.intellij.java.debugger.impl;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.ContextUtil;

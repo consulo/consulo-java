@@ -21,9 +21,8 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.ide.ServiceManager;
 import consulo.language.psi.scope.GlobalSearchScope;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -44,9 +43,9 @@ public abstract class JavaClassSupers {
    * @see InheritanceUtil#isInheritorOrSelf(PsiClass, PsiClass, boolean)
    */
   @Nullable
-  public abstract PsiSubstitutor getSuperClassSubstitutor(@Nonnull PsiClass superClass,
-                                                          @Nonnull PsiClass derivedClass,
-                                                          @Nonnull GlobalSearchScope resolveScope,
-                                                          @Nonnull PsiSubstitutor derivedSubstitutor);
+  public abstract PsiSubstitutor getSuperClassSubstitutor(PsiClass superClass,
+                                                          PsiClass derivedClass,
+                                                          GlobalSearchScope resolveScope,
+                                                          PsiSubstitutor derivedSubstitutor);
 
 }

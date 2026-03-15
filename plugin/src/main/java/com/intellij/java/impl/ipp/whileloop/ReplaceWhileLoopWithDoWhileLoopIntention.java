@@ -24,23 +24,20 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceWhileLoopWithDoWhileLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceWhileLoopWithDoWhileLoopIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceWhileLoopWithDoWhileLoopIntentionName();
     }
 
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new WhileLoopPredicate();
     }
 
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiWhileStatement whileStatement =
             (PsiWhileStatement) element.getParent();

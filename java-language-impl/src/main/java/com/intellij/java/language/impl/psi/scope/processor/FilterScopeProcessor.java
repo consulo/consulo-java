@@ -17,7 +17,6 @@ package com.intellij.java.language.impl.psi.scope.processor;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 import consulo.util.dataholder.Key;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiSubstitutor;
@@ -26,7 +25,7 @@ import consulo.language.psi.filter.ElementFilter;
 import consulo.language.psi.resolve.BaseScopeProcessor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.util.collection.SmartList;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ik
@@ -39,24 +38,24 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 	private final ElementFilter myFilter;
 	private final PsiScopeProcessor myProcessor;
 
-	public FilterScopeProcessor(@Nonnull ElementFilter filter, @Nonnull List<T> container)
+	public FilterScopeProcessor(ElementFilter filter, List<T> container)
 	{
 		this(filter, null, container);
 	}
 
-	public FilterScopeProcessor(@Nonnull ElementFilter filter, @Nonnull PsiScopeProcessor processor)
+	public FilterScopeProcessor(ElementFilter filter, PsiScopeProcessor processor)
 	{
 		this(filter, processor, new SmartList<T>());
 	}
 
-	public FilterScopeProcessor(@Nonnull ElementFilter filter)
+	public FilterScopeProcessor(ElementFilter filter)
 	{
 		this(filter, null, new SmartList<T>());
 	}
 
-	public FilterScopeProcessor(@Nonnull ElementFilter filter,
+	public FilterScopeProcessor(ElementFilter filter,
 			@Nullable PsiScopeProcessor processor,
-			@Nonnull List<T> container)
+			List<T> container)
 	{
 		myFilter = filter;
 		myProcessor = processor;
@@ -64,7 +63,7 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 	}
 
 	@Override
-	public void handleEvent(@Nonnull PsiScopeProcessor.Event event, Object associated)
+	public void handleEvent(PsiScopeProcessor.Event event, Object associated)
 	{
 		if(myProcessor != null)
 		{
@@ -77,7 +76,7 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 	}
 
 	@Override
-	public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state)
+	public boolean execute(PsiElement element, ResolveState state)
 	{
 		if(myFilter.isAcceptable(element, myCurrentDeclarationHolder))
 		{
@@ -90,14 +89,14 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 		return true;
 	}
 
-	protected void add(@Nonnull PsiElement element, @Nonnull PsiSubstitutor substitutor)
+	protected void add(PsiElement element, PsiSubstitutor substitutor)
 	{
 		//noinspection unchecked
 		myResults.add((T) element);
 	}
 
 	@Override
-	public <K> K getHint(@Nonnull Key<K> hintKey)
+	public <K> K getHint(Key<K> hintKey)
 	{
 		if(myProcessor != null)
 		{
@@ -106,7 +105,6 @@ public class FilterScopeProcessor<T> extends BaseScopeProcessor
 		return null;
 	}
 
-	@Nonnull
 	public List<T> getResults()
 	{
 		return myResults;

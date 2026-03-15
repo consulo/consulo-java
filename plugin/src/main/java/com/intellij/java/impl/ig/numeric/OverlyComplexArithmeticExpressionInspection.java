@@ -26,7 +26,6 @@ import consulo.deadCodeNotWorking.impl.SingleIntegerFieldOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -50,14 +49,12 @@ public abstract class OverlyComplexArithmeticExpressionInspection extends BaseIn
         arithmeticTokens.add(JavaTokenType.PERC);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overlyComplexArithmeticExpressionDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.overlyComplexArithmeticExpressionProblemDescriptor().get();
     }
@@ -85,13 +82,13 @@ public abstract class OverlyComplexArithmeticExpressionInspection extends BaseIn
 
     private class OverlyComplexArithmeticExpressionVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+        public void visitBinaryExpression(PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
             checkExpression(expression);
         }
 
         @Override
-        public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+        public void visitPrefixExpression(PsiPrefixExpression expression) {
             super.visitPrefixExpression(expression);
             checkExpression(expression);
         }

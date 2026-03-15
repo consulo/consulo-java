@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.JBUI;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,9 +44,8 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
     public static final String SHORT_NAME = "UnusedAssignment";
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder holder,
+        final ProblemsHolder holder,
         final boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -55,13 +53,13 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitMethod(@Nonnull PsiMethod method) {
+            public void visitMethod(PsiMethod method) {
                 checkCodeBlock(method.getBody(), holder, isOnTheFly);
             }
 
             @Override
             @RequiredReadAction
-            public void visitClassInitializer(@Nonnull PsiClassInitializer initializer) {
+            public void visitClassInitializer(PsiClassInitializer initializer) {
                 checkCodeBlock(initializer.getBody(), holder, isOnTheFly);
             }
         };
@@ -137,11 +135,11 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
 
         body.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
             }
 
             @Override
-            public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+            public void visitLocalVariable(PsiLocalVariable variable) {
                 if (!usedVariables.contains(variable) && variable.getInitializer() == null && !isOnTheFly) {
                     holder.newProblem(InspectionLocalize.inspectionUnusedAssignmentProblemDescriptor5("<code>#ref</code> #loc"))
                         .range(variable.getNameIdentifier())
@@ -152,7 +150,7 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
 
             @Override
             @RequiredReadAction
-            public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+            public void visitAssignmentExpression(PsiAssignmentExpression expression) {
                 if (expression.getLExpression() instanceof PsiReferenceExpression lRef
                     && expression.getRExpression() instanceof PsiReferenceExpression rRef) {
                     if (lRef.resolve() != rRef.resolve()) {
@@ -221,19 +219,16 @@ public abstract class DefUseInspectionBase extends BaseJavaBatchLocalInspectionT
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionUnusedAssignmentDisplayName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesProbableBugs();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return SHORT_NAME;

@@ -16,8 +16,7 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
@@ -56,7 +55,7 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
 
     @Nullable
     @Override
-    public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
+    public PsiAnnotation findInferredAnnotation(PsiModifierListOwner listOwner, String annotationFQN) {
         if (!JB_INFERRED_ANNOTATIONS.contains(annotationFQN) && !isDefaultNullabilityAnnotation(annotationFQN)) {
             return null;
         }
@@ -131,7 +130,7 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
      *
      * @return whether inference is to be suppressed the given annotation on the given method or parameter
      */
-    private boolean ignoreInference(@Nonnull PsiModifierListOwner owner, @Nullable String annotationFQN) {
+    private boolean ignoreInference(PsiModifierListOwner owner, @Nullable String annotationFQN) {
         if (annotationFQN == null) {
             return true;
         }
@@ -154,7 +153,7 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
     }
 
     @Nullable
-    private PsiAnnotation getInferredMutabilityAnnotation(@Nonnull PsiModifierListOwner owner) {
+    private PsiAnnotation getInferredMutabilityAnnotation(PsiModifierListOwner owner) {
         if (owner instanceof PsiMethod method && IMMUTABLE_FACTORY.methodMatches(method)) {
             return Mutability.UNMODIFIABLE.asAnnotation(myProject);
         }
@@ -248,9 +247,8 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
         return ProjectBytecodeAnalysis.getInstance(project).createContractAnnotation(attrs);
     }
 
-    @Nonnull
     @Override
-    public List<PsiAnnotation> findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner) {
+    public List<PsiAnnotation> findInferredAnnotations(PsiModifierListOwner listOwner) {
         listOwner = PsiUtil.preferCompiledElement(listOwner);
         List<PsiAnnotation> result = new ArrayList<>();
         PsiAnnotation[] fromBytecode = ProjectBytecodeAnalysis.getInstance(myProject).findInferredAnnotations(listOwner);
@@ -287,7 +285,7 @@ public class DefaultInferredAnnotationProvider implements InferredAnnotationProv
         return result;
     }
 
-    public static boolean isExperimentalInferredAnnotation(@Nonnull PsiAnnotation annotation) {
+    public static boolean isExperimentalInferredAnnotation(PsiAnnotation annotation) {
         return EXPERIMENTAL_INFERRED_ANNOTATIONS.contains(annotation.getQualifiedName());
     }
 }

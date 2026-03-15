@@ -45,8 +45,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import javax.swing.*;
@@ -120,19 +119,16 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionVisibilityDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }
@@ -141,12 +137,12 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
     @Nullable
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor processor,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
+        Object state
     ) {
         if (refEntity instanceof RefJavaElement refElement) {
             if (refElement instanceof RefParameter || refElement.isSyntheticJSP()) {
@@ -467,7 +463,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
             .forEach(addin -> addin.fillIgnoreList(manager, processor));
         manager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull RefEntity refEntity) {
+            public void visitElement(RefEntity refEntity) {
                 if (!(refEntity instanceof RefElement)) {
                     return;
                 }
@@ -476,7 +472,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                 }
                 refEntity.accept(new RefJavaVisitor() {
                     @Override
-                    public void visitField(@Nonnull RefField refField) {
+                    public void visitField(RefField refField) {
                         if (refField.getAccessModifier() != PsiModifier.PRIVATE) {
                             globalContext.enqueueFieldUsagesProcessor(refField, psiReference -> {
                                 ignoreElement(processor, refField);
@@ -486,7 +482,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                     }
 
                     @Override
-                    public void visitMethod(@Nonnull RefMethod refMethod) {
+                    public void visitMethod(RefMethod refMethod) {
                         if (!refMethod.isExternalOverride() && refMethod.getAccessModifier() != PsiModifier.PRIVATE
                             && !(refMethod instanceof RefImplicitConstructor)) {
                             globalContext.enqueueDerivedMethodsProcessor(
@@ -527,7 +523,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
                     }
 
                     @Override
-                    public void visitClass(@Nonnull RefClass refClass) {
+                    public void visitClass(RefClass refClass) {
                         if (!refClass.isAnonymous()) {
                             globalContext.enqueueDerivedClassesProcessor(refClass, inheritor -> {
                                 ignoreElement(processor, refClass);
@@ -547,7 +543,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
         return false;
     }
 
-    private static void ignoreElement(@Nonnull ProblemDescriptionsProcessor processor, @Nonnull RefEntity refElement) {
+    private static void ignoreElement(ProblemDescriptionsProcessor processor, RefEntity refElement) {
         processor.ignoreElement(refElement);
 
         if (refElement instanceof RefClass refClass) {
@@ -564,7 +560,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
     }
 
     @Override
-    public void compose(@Nonnull StringBuffer buf, @Nonnull RefEntity refEntity, HTMLComposer composer) {
+    public void compose(StringBuffer buf, RefEntity refEntity, HTMLComposer composer) {
         composer.appendElementInReferences(buf, (RefElement) refEntity);
     }
 
@@ -576,7 +572,7 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
 
     @Override
     @Nullable
-    public String getHint(@Nonnull QuickFix fix) {
+    public String getHint(QuickFix fix) {
         return ((AcceptSuggestedAccess) fix).getHint();
     }
 
@@ -591,14 +587,13 @@ public class VisibilityInspection extends GlobalJavaInspectionTool implements Ol
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionVisibilityAcceptQuickfix();
         }
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             if (!FileModificationService.getInstance().preparePsiElementForWrite(descriptor.getPsiElement())) {
                 return;
             }

@@ -35,19 +35,18 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.util.concurrent.AsyncResult;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public abstract class ArrayAction extends DebuggerAction {
-    protected ArrayAction(@Nonnull LocalizeValue text) {
+    protected ArrayAction(LocalizeValue text) {
         super(text);
     }
 
     @Override
     @RequiredUIAccess
-    public void actionPerformed(@Nonnull AnActionEvent e) {
+    public void actionPerformed(AnActionEvent e) {
         DebuggerContextImpl debuggerContext = DebuggerAction.getDebuggerContext(e.getDataContext());
 
         DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
@@ -83,17 +82,16 @@ public abstract class ArrayAction extends DebuggerAction {
         ));
     }
 
-    @Nonnull
     protected abstract AsyncResult<ArrayRenderer> createNewRenderer(
         XValueNode node,
         ArrayRenderer original,
-        @Nonnull DebuggerContextImpl debuggerContext,
+        DebuggerContextImpl debuggerContext,
         LocalizeValue title
     );
 
     @RequiredUIAccess
     @Override
-    public void update(@Nonnull AnActionEvent e) {
+    public void update(AnActionEvent e) {
         boolean enable = false;
         List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
         if (values.size() == 1) {
@@ -122,7 +120,7 @@ public abstract class ArrayAction extends DebuggerAction {
         return null;
     }
 
-    public static void setArrayRenderer(ArrayRenderer newRenderer, @Nonnull XValueNode node, @Nonnull DebuggerContextImpl debuggerContext) {
+    public static void setArrayRenderer(ArrayRenderer newRenderer, XValueNode node, DebuggerContextImpl debuggerContext) {
         XValue container = node.getValueContainer();
 
         ArrayRenderer renderer = getArrayRenderer(container);
@@ -136,7 +134,7 @@ public abstract class ArrayAction extends DebuggerAction {
         if (debugProcess != null) {
             debugProcess.getManagerThread().schedule(new SuspendContextCommandImpl(debuggerContext.getSuspendContext()) {
                 @Override
-                public void contextAction(@Nonnull SuspendContextImpl suspendContext) throws Exception {
+                public void contextAction(SuspendContextImpl suspendContext) throws Exception {
                     Renderer lastRenderer = descriptor.getLastRenderer();
                     if (lastRenderer instanceof ArrayRenderer) {
                         ((JavaValue)container).setRenderer(newRenderer, node);
@@ -175,7 +173,6 @@ public abstract class ArrayAction extends DebuggerAction {
             myTitle = title;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getDisplayName() {
             return myTitle;

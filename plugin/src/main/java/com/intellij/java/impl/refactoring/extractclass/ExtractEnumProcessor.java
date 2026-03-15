@@ -25,7 +25,6 @@ import consulo.usage.UsageInfo;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Functions;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -190,11 +189,10 @@ public class ExtractEnumProcessor {
     }
 
     private static class ConflictUsageInfo extends FixableUsageInfo {
-        @Nonnull
         private final LocalizeValue myDescription;
 
         @RequiredReadAction
-        public ConflictUsageInfo(PsiElement expression, @Nonnull LocalizeValue description) {
+        public ConflictUsageInfo(PsiElement expression, LocalizeValue description) {
             super(expression);
             myDescription = description;
         }

@@ -28,20 +28,18 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class InlineVariableFix extends InspectionGadgetsFix {
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.inlineVariableQuickfix();
   }
 
   @Override
-  public void doFix(@Nonnull Project project, ProblemDescriptor descriptor) {
+  public void doFix(Project project, ProblemDescriptor descriptor) {
     PsiElement nameElement = descriptor.getPsiElement();
     PsiLocalVariable variable =
       (PsiLocalVariable)nameElement.getParent();

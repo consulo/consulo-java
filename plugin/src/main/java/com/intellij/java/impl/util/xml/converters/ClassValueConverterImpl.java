@@ -24,7 +24,6 @@ import consulo.xml.util.xml.ConvertContext;
 import consulo.xml.util.xml.GenericDomValue;
 import jakarta.inject.Singleton;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * User: Sergey.Vasiliev
@@ -39,7 +38,6 @@ public class ClassValueConverterImpl extends ClassValueConverter {
     REFERENCE_PROVIDER.setAllowEmpty(true);
   }
 
-  @Nonnull
   public PsiReference[] createReferences(GenericDomValue genericDomValue, PsiElement element, ConvertContext context) {
     return REFERENCE_PROVIDER.getReferencesByElement(element);
   }

@@ -18,8 +18,7 @@ package com.intellij.java.impl.ig.psiutils;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,7 +28,6 @@ public class FormatUtils {
   /**
    * @noinspection StaticCollection
    */
-  @NonNls
   public static final Set<String> formatMethodNames = new HashSet<String>(2);
   /**
    * @noinspection StaticCollection

@@ -23,8 +23,7 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -59,7 +58,6 @@ public class InferenceVariable extends LightTypeParameter {
         myInstantiation = instantiation;
     }
 
-    @Nonnull
     @Override
     public PsiClassType[] getExtendsListTypes() {
         List<PsiClassType> result = new ArrayList<>();
@@ -181,7 +179,7 @@ public class InferenceVariable extends LightTypeParameter {
     }
 
     @Override
-    public boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep) {
+    public boolean isInheritor(PsiClass baseClass, boolean checkDeep) {
         for (PsiType type : getBounds(InferenceBound.UPPER)) {
             PsiClass psiClass = PsiUtil.resolveClassInClassTypeOnly(type);
             if (psiClass != null) {

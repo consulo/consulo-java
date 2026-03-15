@@ -21,7 +21,6 @@ import consulo.internal.com.sun.jdi.Type;
 import consulo.logging.Logger;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
 import org.jdom.Element;
 
 public abstract class TypeRenderer implements Renderer
@@ -34,7 +33,7 @@ public abstract class TypeRenderer implements Renderer
 		this(CommonClassNames.JAVA_LANG_OBJECT);
 	}
 
-	protected TypeRenderer(@Nonnull String className)
+	protected TypeRenderer(String className)
 	{
 		myProperties.setClassName(className);
 	}

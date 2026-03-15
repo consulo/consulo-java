@@ -35,9 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -46,7 +44,6 @@ public class UnnecessaryBoxingInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean onlyReportSuperfluouslyBoxed = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryBoxingDisplayName();
@@ -65,7 +62,6 @@ public class UnnecessaryBoxingInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryBoxingProblemDescriptor().get();
     }
@@ -76,14 +72,13 @@ public class UnnecessaryBoxingInspection extends BaseInspection {
     }
 
     private static class UnnecessaryBoxingFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryBoxingRemoveQuickfix();
         }
 
         @Override
-        public void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
             PsiCallExpression expression = (PsiCallExpression) descriptor.getPsiElement();
             PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {
@@ -113,7 +108,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection {
         }
 
         @Nullable
-        private static String getUnboxedExpressionText(@Nonnull PsiExpression unboxedExpression, @Nonnull PsiExpression boxedExpression) {
+        private static String getUnboxedExpressionText(PsiExpression unboxedExpression, PsiExpression boxedExpression) {
             PsiType boxedType = boxedExpression.getType();
             if (boxedType == null) {
                 return null;
@@ -176,7 +171,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection {
     private class UnnecessaryBoxingVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             PsiExpressionList argumentList = expression.getArgumentList();
             if (argumentList == null) {
@@ -222,7 +217,7 @@ public class UnnecessaryBoxingInspection extends BaseInspection {
                 return;
             }
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
-            @NonNls String referenceName = methodExpression.getReferenceName();
+            String referenceName = methodExpression.getReferenceName();
             if (!"valueOf".equals(referenceName)) {
                 return;
             }
@@ -317,9 +312,9 @@ public class UnnecessaryBoxingInspection extends BaseInspection {
         }
 
         private boolean isSameMethodCalledWithoutBoxing(
-            @Nonnull PsiCallExpression methodCallExpression,
-            @Nonnull PsiExpression boxingExpression,
-            @Nonnull PsiExpression boxedExpression
+            PsiCallExpression methodCallExpression,
+            PsiExpression boxingExpression,
+            PsiExpression boxedExpression
         ) {
             PsiMethod originalMethod = methodCallExpression.resolveMethod();
             if (originalMethod == null) {

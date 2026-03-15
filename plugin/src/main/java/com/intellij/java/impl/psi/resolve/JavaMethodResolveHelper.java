@@ -31,8 +31,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
@@ -47,7 +46,7 @@ public class JavaMethodResolveHelper {
   @Nullable
   private final PsiType[] myArgumentTypes;
 
-  public JavaMethodResolveHelper(@Nonnull final PsiElement argumentList,
+  public JavaMethodResolveHelper(final PsiElement argumentList,
                                  PsiFile containingFile,
                                  @Nullable final PsiType[] argumentTypes) {
     myArgumentTypes = argumentTypes;
@@ -56,8 +55,8 @@ public class JavaMethodResolveHelper {
         JavaMethodsConflictResolver(argumentList, argumentTypes, languageLevel);
     myProcessor = new MethodResolverProcessor(argumentList, containingFile, new PsiConflictResolver[]{resolver}) {
       @Override
-      protected MethodCandidateInfo createCandidateInfo(@Nonnull PsiMethod method,
-                                                        @Nonnull PsiSubstitutor substitutor,
+      protected MethodCandidateInfo createCandidateInfo(PsiMethod method,
+                                                        PsiSubstitutor substitutor,
                                                         boolean staticProblem,
                                                         boolean accessible,
                                                         boolean varargs) {
@@ -72,25 +71,24 @@ public class JavaMethodResolveHelper {
     };
   }
 
-  protected MethodCandidateInfo createCandidateInfo(@Nonnull PsiMethod method,
+  protected MethodCandidateInfo createCandidateInfo(PsiMethod method,
                                                     PsiSubstitutor substitutor,
                                                     boolean staticProblem,
                                                     PsiElement currentFileContext,
                                                     boolean accessProblem,
                                                     PsiElement argumentList,
                                                     PsiType[] argumentTypes,
-                                                    @Nonnull LanguageLevel languageLevel) {
+                                                    LanguageLevel languageLevel) {
     return new MethodCandidateInfo(method, substitutor, accessProblem, staticProblem, argumentList,
         currentFileContext, argumentTypes, PsiType.EMPTY_ARRAY, languageLevel);
   }
 
-  public void addMethod(@Nonnull PsiMethod method, @Nonnull PsiSubstitutor substitutor, boolean staticError) {
+  public void addMethod(PsiMethod method, PsiSubstitutor substitutor, boolean staticError) {
     if (myDuplicates.add(method.getSignature(substitutor))) {
       myProcessor.addMethod(method, substitutor, staticError);
     }
   }
 
-  @Nonnull
   public ErrorType getResolveError() {
     List<CandidateInfo> candidates = getCandidates();
     if (candidates.size() != 1) {

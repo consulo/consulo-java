@@ -19,7 +19,6 @@ import consulo.internal.org.objectweb.asm.*;
 import consulo.java.impl.intelliLang.pattern.compiler.InstrumentationException;
 import consulo.java.impl.intelliLang.pattern.compiler.Instrumenter;
 import consulo.language.inject.advanced.Configuration;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,10 +26,10 @@ import java.util.LinkedHashSet;
 import java.util.regex.Pattern;
 
 public class PatternValidationInstrumenter extends Instrumenter implements Opcodes {
-  @NonNls static final String PATTERN_CACHE_NAME = "$_PATTERN_CACHE_$";
-  @NonNls static final String ASSERTIONS_DISABLED_NAME = "$assertionsDisabled";
-  @NonNls static final String JAVA_LANG_STRING = "Ljava/lang/String;";
-  @NonNls static final String JAVA_UTIL_REGEX_PATTERN = "[Ljava/util/regex/Pattern;";
+  static final String PATTERN_CACHE_NAME = "$_PATTERN_CACHE_$";
+  static final String ASSERTIONS_DISABLED_NAME = "$assertionsDisabled";
+  static final String JAVA_LANG_STRING = "Ljava/lang/String;";
+  static final String JAVA_UTIL_REGEX_PATTERN = "[Ljava/util/regex/Pattern;";
 
   private boolean myHasAssertions;
   private boolean myHasStaticInitializer;

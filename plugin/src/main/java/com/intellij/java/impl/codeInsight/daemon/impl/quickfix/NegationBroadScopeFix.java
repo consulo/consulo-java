@@ -26,7 +26,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -41,7 +40,6 @@ public class NegationBroadScopeFix implements SyntheticIntentionAction {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getText() {
         String text = myPrefixExpression.getOperand().getText();
         text += " ";
@@ -66,7 +64,7 @@ public class NegationBroadScopeFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (myPrefixExpression == null || !myPrefixExpression.isValid()) {
             return false;
         }
@@ -83,7 +81,7 @@ public class NegationBroadScopeFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().preparePsiElementForWrite(myPrefixExpression)) {
             return;
         }

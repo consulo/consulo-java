@@ -48,8 +48,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -88,15 +87,14 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
         myCreateNewBuilderClass = createNewBuilderClass;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new ReplaceConstructorWithBuilderViewDescriptor();
     }
 
     @Override
     @RequiredReadAction
-    protected void findUsages(@Nonnull List<FixableUsageInfo> usages) {
+    protected void findUsages(List<FixableUsageInfo> usages) {
         String builderQualifiedName = StringUtil.getQualifiedName(myPackageName, myClassName);
         PsiClass builderClass =
             JavaPsiFacade.getInstance(myProject).findClass(builderQualifiedName, GlobalSearchScope.projectScope(myProject));
@@ -154,7 +152,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usageInfos) {
+    protected void performRefactoring(UsageInfo[] usageInfos) {
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
         PsiClass builderClass = myCreateNewBuilderClass
             ? createBuilderClass()
@@ -319,7 +317,7 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);
         PsiClass builderClass =
@@ -345,7 +343,6 @@ public class ReplaceConstructorWithBuilderProcessor extends FixableUsagesRefacto
         return showConflicts(conflicts, refUsages.get());
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return REFACTORING_NAME;

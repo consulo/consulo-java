@@ -21,19 +21,16 @@ import com.intellij.java.language.psi.PsiClassInitializer;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ClassInitializerDeclarationRangeHandler implements DeclarationRangeHandler {
-  @Nonnull
   @Override
   public Class getElementClass() {
     return PsiClassInitializer.class;
   }
 
   @Override
-  @Nonnull
-  public TextRange getDeclarationRange(@Nonnull PsiElement container) {
+  public TextRange getDeclarationRange(PsiElement container) {
     PsiClassInitializer initializer = (PsiClassInitializer) container;
     int startOffset = initializer.getModifierList().getTextRange().getStartOffset();
     int endOffset = initializer.getBody().getTextRange().getStartOffset();

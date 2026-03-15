@@ -15,11 +15,9 @@
  */
 package com.intellij.java.language.jvm;
 
-import jakarta.annotation.Nonnull;
 
 public interface JvmAnnotatedElement extends JvmElement
 {
 
-	@Nonnull
 	JvmAnnotation[] getAnnotations();
 }

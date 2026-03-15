@@ -32,10 +32,8 @@ import consulo.language.sem.SemKey;
 import consulo.language.sem.SemRegistrar;
 import consulo.language.sem.SemService;
 import consulo.language.util.ProcessingContext;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Function;
 
@@ -48,15 +46,15 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
   private final AnnotationChildLink myAnnotationChildLink;
   private final SemKey<JamAnnotationMeta> myMetaKey;
 
-  public JamAnnotationMeta(@Nonnull @NonNls String annoName) {
+  public JamAnnotationMeta(String annoName) {
     this(annoName, null);
   }
 
-  public JamAnnotationMeta(@Nonnull @NonNls String annoName, @Nullable JamAnnotationArchetype archetype) {
+  public JamAnnotationMeta(String annoName, @Nullable JamAnnotationArchetype archetype) {
     this(annoName, archetype, JamService.ANNO_META_KEY.subKey("AnnoMeta:" + annoName));
   }
 
-  public JamAnnotationMeta(@Nonnull @NonNls String annoName, @Nullable JamAnnotationArchetype archetype,
+  public JamAnnotationMeta(String annoName, @Nullable JamAnnotationArchetype archetype,
                            final SemKey<JamAnnotationMeta> metaKey) {
     super(archetype);
     myAnnotationChildLink = new AnnotationChildLink(annoName);
@@ -77,12 +75,10 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
     return myAnnotationChildLink.getAnnotationQualifiedName();
   }
 
-  @Nonnull
   public <T> T getAttribute(PsiModifierListOwner member, JamAttributeMeta<T> meta) {
     return getAttribute(PsiElementRef.real(member), meta);
   }
   
-  @Nonnull
   public <T> T getAttribute(PsiElementRef<? extends PsiModifierListOwner> member, JamAttributeMeta<T> meta) {
     return meta.getJam(getAnnotationRef(member));
   }
@@ -92,12 +88,10 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
     return myAnnotationChildLink.findLinkedChild(owner);
   }
 
-  @Nonnull
   public PsiElementRef<PsiAnnotation> getAnnotationRef(PsiModifierListOwner owner) {
     return myAnnotationChildLink.createChildRef(owner);
   }
 
-  @Nonnull
   public PsiElementRef<PsiAnnotation> getAnnotationRef(PsiElementRef<? extends PsiModifierListOwner> member) {
     return myAnnotationChildLink.createChildRef(member);
   }
@@ -113,7 +107,7 @@ public class JamAnnotationMeta extends JamAnnotationArchetype implements SemElem
       psiAnnotation().qName(myAnnotationChildLink.getAnnotationQualifiedName()).withSuperParent(
         2, isPackage ? PsiJavaPatterns.psiJavaElement(PsiPackageStatement.class).with(new PatternCondition<PsiPackageStatement>("package") {
         @Override
-        public boolean accepts(@Nonnull PsiPackageStatement psiPackageStatement, ProcessingContext context) {
+        public boolean accepts(PsiPackageStatement psiPackageStatement, ProcessingContext context) {
           return parentPattern.accepts(psiPackageStatement.getPackageReference().resolve(), context);
         }
       }) : parentPattern);

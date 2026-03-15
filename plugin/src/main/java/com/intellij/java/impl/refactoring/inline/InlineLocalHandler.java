@@ -49,8 +49,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -79,7 +78,7 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
      * should be called in AtomicAction
      */
     @RequiredUIAccess
-    public static void invoke(@Nonnull Project project, Editor editor, PsiLocalVariable local, PsiReferenceExpression refExpr) {
+    public static void invoke(Project project, Editor editor, PsiLocalVariable local, PsiReferenceExpression refExpr) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(project, local)) {
             return;
         }

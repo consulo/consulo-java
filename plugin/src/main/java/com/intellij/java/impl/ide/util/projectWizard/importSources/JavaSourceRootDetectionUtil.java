@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 
 public class JavaSourceRootDetectionUtil

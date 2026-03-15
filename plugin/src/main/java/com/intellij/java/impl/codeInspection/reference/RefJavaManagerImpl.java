@@ -54,8 +54,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.util.lang.function.Predicates;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import java.util.Arrays;
@@ -89,7 +88,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
     private PsiElementVisitor myProjectIterator;
     private EntryPointsManager myEntryPointsManager;
 
-    public RefJavaManagerImpl(@Nonnull RefManagerImpl manager) {
+    public RefJavaManagerImpl(RefManagerImpl manager) {
         myRefManager = manager;
         Project project = manager.getProject();
         PsiManager psiManager = PsiManager.getInstance(project);
@@ -165,18 +164,17 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
     @Nullable
     @Override
-    public PsiNamedElement getElementContainer(@Nonnull PsiElement psiElement) {
+    public PsiNamedElement getElementContainer(PsiElement psiElement) {
         return (PsiNamedElement) PsiTreeUtil.findFirstParent(psiElement, PROBLEM_ELEMENT_CONDITION);
     }
 
     @Override
-    public boolean shouldProcessExternalFile(@Nonnull PsiFile file) {
+    public boolean shouldProcessExternalFile(PsiFile file) {
         return file instanceof PsiClassOwner;
     }
 
-    @Nonnull
     @Override
-    public Stream<? extends PsiElement> extractExternalFileImplicitReferences(@Nonnull PsiFile psiFile) {
+    public Stream<? extends PsiElement> extractExternalFileImplicitReferences(PsiFile psiFile) {
         return Arrays.stream(((PsiClassOwner) psiFile).getClasses())
             .flatMap(c -> Arrays.stream(c.getSuperTypes()))
             .map(PsiClassType::resolve)
@@ -184,7 +182,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
     }
 
     @Override
-    public void markExternalReferencesProcessed(@Nonnull RefElement file) {
+    public void markExternalReferencesProcessed(RefElement file) {
         getEntryPointsManager().addEntryPoint(file, false);
     }
 
@@ -228,7 +226,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
     }
 
     @Override
-    public void iterate(@Nonnull RefVisitor visitor) {
+    public void iterate(RefVisitor visitor) {
         if (myPackages != null) {
             for (RefPackage refPackage : myPackages.values()) {
                 refPackage.accept(visitor);
@@ -261,7 +259,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
     @Override
     @RequiredReadAction
-    public void removeReference(@Nonnull RefElement refElement) {
+    public void removeReference(RefElement refElement) {
         if (refElement instanceof RefMethod refMethod) {
             RefParameter[] params = refMethod.getParameters();
             for (RefParameter param : params) {
@@ -273,7 +271,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
     @Nullable
     @Override
     @RequiredReadAction
-    public RefElement createRefElement(@Nonnull PsiElement elem) {
+    public RefElement createRefElement(PsiElement elem) {
         if (elem instanceof PsiClass psiClass) {
             return new RefClassImpl(psiClass, myRefManager);
         }
@@ -310,7 +308,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
     @Nullable
     @Override
-    public String getType(@Nonnull RefEntity ref) {
+    public String getType(RefEntity ref) {
         if (ref instanceof RefMethod) {
             return METHOD;
         }
@@ -329,14 +327,13 @@ public class RefJavaManagerImpl extends RefJavaManager {
         return null;
     }
 
-    @Nonnull
     @Override
-    public RefEntity getRefinedElement(@Nonnull RefEntity ref) {
+    public RefEntity getRefinedElement(RefEntity ref) {
         return ref instanceof RefImplicitConstructor implicitConstructor ? implicitConstructor.getOwnerClass() : ref;
     }
 
     @Override
-    public void visitElement(@Nonnull PsiElement element) {
+    public void visitElement(PsiElement element) {
         if (myProjectIterator == null) {
             myProjectIterator = new MyJavaElementVisitor();
         }
@@ -345,19 +342,19 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
     @Override
     @Nullable
-    public String getGroupName(@Nonnull RefEntity entity) {
+    public String getGroupName(RefEntity entity) {
         return entity instanceof RefFile && !(entity instanceof RefJavaFileImpl)
             ? null : RefJavaUtil.getInstance().getPackageName(entity);
     }
 
     @Override
-    public boolean belongsToScope(@Nonnull PsiElement psiElement) {
+    public boolean belongsToScope(PsiElement psiElement) {
         return !(psiElement instanceof PsiTypeParameter);
     }
 
     @RequiredReadAction
     @Override
-    public void export(@Nonnull RefEntity refEntity, @Nonnull Element element) {
+    public void export(RefEntity refEntity, Element element) {
         if (refEntity instanceof RefElement refElement) {
             SmartPsiElementPointer pointer = refElement.getPointer();
             if (pointer != null) {
@@ -370,7 +367,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
     }
 
     @Override
-    public void onEntityInitialized(@Nonnull RefElement refElement, @Nonnull PsiElement psiElement) {
+    public void onEntityInitialized(RefElement refElement, PsiElement psiElement) {
         if (isEntryPoint(refElement)) {
             getEntryPointsManager().addEntryPoint(refElement, false);
         }
@@ -413,16 +410,16 @@ public class RefJavaManagerImpl extends RefJavaManager {
         }
 
         @Override
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             visitElement(expression);
         }
 
         @Override
-        public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+        public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
         }
 
         @Override
-        public void visitReferenceParameterList(@Nonnull PsiReferenceParameterList list) {
+        public void visitReferenceParameterList(PsiReferenceParameterList list) {
             super.visitReferenceParameterList(list);
             PsiMember member = PsiTreeUtil.getParentOfType(list, PsiMember.class);
             PsiType[] typeArguments = list.getTypeArguments();
@@ -432,7 +429,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (!(aClass instanceof PsiTypeParameter)) {
                 super.visitClass(aClass);
                 RefElement refClass = myRefManager.getReference(aClass);
@@ -444,7 +441,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
         @Override
         @RequiredReadAction
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             RefElement refElement = myRefManager.getReference(method);
             if (refElement instanceof RefMethodImpl refMethod) {
@@ -453,7 +450,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
         }
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             super.visitField(field);
             RefElement refElement = myRefManager.getReference(field);
             if (refElement instanceof RefFieldImpl refField) {
@@ -463,7 +460,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
         @Override
         @RequiredReadAction
-        public void visitDocComment(@Nonnull PsiDocComment comment) {
+        public void visitDocComment(PsiDocComment comment) {
             super.visitDocComment(comment);
             PsiDocTag[] tags = comment.getTags();
             for (PsiDocTag tag : tags) {
@@ -488,7 +485,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
         @Override
         @RequiredReadAction
-        public void visitAnnotation(@Nonnull PsiAnnotation annotation) {
+        public void visitAnnotation(PsiAnnotation annotation) {
             super.visitAnnotation(annotation);
             if (BatchSuppressManager.SUPPRESS_INSPECTIONS_ANNOTATION_NAME.equals(annotation.getQualifiedName())) {
                 PsiModifierListOwner listOwner = PsiTreeUtil.getParentOfType(annotation, PsiModifierListOwner.class);
@@ -509,13 +506,13 @@ public class RefJavaManagerImpl extends RefJavaManager {
         }
 
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             super.visitVariable(variable);
             myRefUtil.addTypeReference(variable, variable.getType(), myRefManager);
         }
 
         @Override
-        public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression expression) {
+        public void visitInstanceOfExpression(PsiInstanceOfExpression expression) {
             super.visitInstanceOfExpression(expression);
             PsiTypeElement typeElement = expression.getCheckType();
             if (typeElement != null) {
@@ -525,7 +522,7 @@ public class RefJavaManagerImpl extends RefJavaManager {
 
         @Override
         @RequiredReadAction
-        public void visitThisExpression(@Nonnull PsiThisExpression expression) {
+        public void visitThisExpression(PsiThisExpression expression) {
             super.visitThisExpression(expression);
             PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
             if (qualifier != null) {

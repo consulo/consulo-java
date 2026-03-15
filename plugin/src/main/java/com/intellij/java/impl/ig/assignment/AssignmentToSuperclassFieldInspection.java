@@ -25,20 +25,17 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
  */
 @ExtensionImpl
 public class AssignmentToSuperclassFieldInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentToSuperclassFieldDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected String buildErrorString(Object... infos) {

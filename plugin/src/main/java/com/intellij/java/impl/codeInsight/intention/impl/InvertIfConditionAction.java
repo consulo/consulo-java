@@ -45,7 +45,6 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   private static final Logger LOG = Logger.getInstance(InvertIfConditionAction.class);
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
 
     int offset = editor.getCaretModel().getOffset();
     PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);
@@ -77,13 +76,12 @@ public class InvertIfConditionAction extends PsiElementBaseIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionInvertIfCondition();
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiElement element) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
 
     PsiIfStatement ifStatement = PsiTreeUtil.getParentOfType(element, PsiIfStatement.class);

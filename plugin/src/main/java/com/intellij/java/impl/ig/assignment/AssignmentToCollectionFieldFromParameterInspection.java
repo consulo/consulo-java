@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -41,19 +40,16 @@ public class AssignmentToCollectionFieldFromParameterInspection extends BaseInsp
      */
     public boolean ignorePrivateMethods = true;
 
-    @Nonnull
     @Override
     @Pattern("[a-zA-Z_0-9.]+")
     public String getID() {
         return "AssignmentToCollectionOrArrayFieldFromParameter";
     }
 
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentCollectionArrayFieldFromParameterDisplayName();
     }
 
-    @Nonnull
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
         PsiExpression rhs = (PsiExpression) infos[0];
@@ -79,7 +75,6 @@ public class AssignmentToCollectionFieldFromParameterInspection extends BaseInsp
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull
             PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);

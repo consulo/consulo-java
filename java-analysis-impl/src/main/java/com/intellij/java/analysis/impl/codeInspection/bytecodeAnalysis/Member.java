@@ -2,8 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import consulo.internal.org.objectweb.asm.tree.MethodInsnNode;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.security.MessageDigest;
 
@@ -20,7 +19,7 @@ public final class Member implements MemberDescriptor
 	 * @param methodName        method name
 	 * @param methodDesc        method descriptor in asm format
 	 */
-	public Member(@Nonnull String internalClassName, @Nonnull String methodName, @Nonnull String methodDesc)
+	public Member(String internalClassName, String methodName, String methodDesc)
 	{
 		this.internalClassName = internalClassName;
 		this.methodName = methodName;
@@ -59,7 +58,6 @@ public final class Member implements MemberDescriptor
 		return result;
 	}
 
-	@Nonnull
 	@Override
 	public HMember hashed(@Nullable MessageDigest md)
 	{

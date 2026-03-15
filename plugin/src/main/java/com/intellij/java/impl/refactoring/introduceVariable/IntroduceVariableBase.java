@@ -77,8 +77,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -94,11 +93,11 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     protected static final LocalizeValue REFACTORING_NAME = RefactoringLocalize.introduceVariableTitle();
     public static final Key<Boolean> NEED_PARENTHESIS = Key.create("NEED_PARENTHESIS");
 
-    public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, @Nonnull PsiExpression expression) {
+    public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, PsiExpression expression) {
         return getSuggestedName(type, expression, expression);
     }
 
-    public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, @Nonnull PsiExpression expression, PsiElement anchor) {
+    public static SuggestedNameInfo getSuggestedName(@Nullable PsiType type, PsiExpression expression, PsiElement anchor) {
         JavaCodeStyleManager codeStyleManager = JavaCodeStyleManager.getInstance(expression.getProject());
         SuggestedNameInfo nameInfo = codeStyleManager.suggestVariableName(VariableKind.LOCAL_VARIABLE, null, expression, type);
         String[] strings =
@@ -109,7 +108,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         SelectionModel selectionModel = editor.getSelectionModel();
         if (!selectionModel.hasSelection()) {
             int offset = editor.getCaretModel().getOffset();
@@ -573,7 +572,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
 
     @Override
     @RequiredUIAccess
-    protected boolean invokeImpl(@Nonnull Project project, PsiExpression expr, Editor editor) {
+    protected boolean invokeImpl(Project project, PsiExpression expr, Editor editor) {
         if (expr != null) {
             String errorMessage = getErrorMessage(expr);
             if (errorMessage != null) {
@@ -1149,7 +1148,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
 
     @Override
     @RequiredUIAccess
-    protected boolean invokeImpl(@Nonnull Project project, PsiLocalVariable localVariable, Editor editor) {
+    protected boolean invokeImpl(Project project, PsiLocalVariable localVariable, Editor editor) {
         throw new UnsupportedOperationException();
     }
 
@@ -1185,7 +1184,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
     }
 
     @RequiredUIAccess
-    protected abstract void showErrorMessage(Project project, Editor editor, @Nonnull LocalizeValue message);
+    protected abstract void showErrorMessage(Project project, Editor editor, LocalizeValue message);
 
     protected boolean reportConflicts(MultiMap<PsiElement, LocalizeValue> conflicts, Project project, IntroduceVariableSettings settings) {
         return false;
@@ -1253,7 +1252,7 @@ public abstract class IntroduceVariableBase extends IntroduceHandlerBase {
         Project project,
         Editor editor,
         PsiElement tempAnchorElement,
-        @Nonnull LocalizeValue refactoringName,
+        LocalizeValue refactoringName,
         String helpID
     ) {
         if (tempAnchorElement instanceof PsiExpressionStatement exprStmt

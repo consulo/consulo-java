@@ -17,7 +17,6 @@ package com.intellij.java.compiler.impl.util.cls;
 
 import consulo.util.lang.StringUtil;
 import com.intellij.java.language.util.cls.ClsFormatException;
-import org.jetbrains.annotations.NonNls;
 
 
 public class ClsUtil {
@@ -389,7 +388,7 @@ public class ClsUtil {
 
   public static String literalToString(CharSequence value, char quote) {
     int length = value.length();
-    @NonNls StringBuilder buffer = new StringBuilder(length + 3);
+    StringBuilder buffer = new StringBuilder(length + 3);
     buffer.append(quote);
 
     for (int i = 0; i < length; i++) {

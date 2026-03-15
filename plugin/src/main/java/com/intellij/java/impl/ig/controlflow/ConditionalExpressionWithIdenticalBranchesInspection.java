@@ -34,8 +34,7 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -50,13 +49,11 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         EquivalenceChecker.Decision decision = (EquivalenceChecker.Decision) infos[1];
         return decision.isExact()
@@ -77,7 +74,6 @@ public class ConditionalExpressionWithIdenticalBranchesInspection extends BaseIn
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return getEquivalenceDecision().getExactlyMatches()
                 ? InspectionGadgetsLocalize.conditionalExpressionWithIdenticalBranchesCollapseQuickfix()

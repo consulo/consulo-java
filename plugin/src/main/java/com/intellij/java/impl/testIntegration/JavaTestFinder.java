@@ -29,8 +29,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.editor.testIntegration.TestFinder;
 import consulo.language.editor.testIntegration.TestFinderHelper;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -39,12 +38,11 @@ import java.util.regex.Pattern;
 
 @ExtensionImpl
 public class JavaTestFinder implements TestFinder {
-  public PsiClass findSourceElement(@Nonnull PsiElement element) {
+  public PsiClass findSourceElement(PsiElement element) {
     return TestIntegrationUtils.findOuterClass(element);
   }
 
-  @Nonnull
-  public Collection<PsiElement> findClassesForTest(@Nonnull PsiElement element) {
+  public Collection<PsiElement> findClassesForTest(PsiElement element) {
     PsiClass klass = findSourceElement(element);
     if (klass == null) {
       return Collections.emptySet();
@@ -79,8 +77,7 @@ public class JavaTestFinder implements TestFinder {
     return true;
   }
 
-  @Nonnull
-  public Collection<PsiElement> findTestsForClass(@Nonnull PsiElement element) {
+  public Collection<PsiElement> findTestsForClass(PsiElement element) {
     PsiClass klass = findSourceElement(element);
     if (klass == null) {
       return Collections.emptySet();
@@ -122,7 +119,7 @@ public class JavaTestFinder implements TestFinder {
     return index.getModuleForFile(element.getContainingFile().getVirtualFile());
   }
 
-  public boolean isTest(@Nonnull PsiElement element) {
+  public boolean isTest(PsiElement element) {
     return TestIntegrationUtils.isTest(element);
   }
 }

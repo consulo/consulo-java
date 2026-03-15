@@ -32,19 +32,16 @@ import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.usageOfObsoleteAssertDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.useOfObsoleteAssertProblemDescriptor().get();
   }
@@ -223,7 +220,6 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
       return null;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.useOfObsoleteAssertQuickfix();

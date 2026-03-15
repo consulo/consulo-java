@@ -26,7 +26,6 @@ import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -37,21 +36,18 @@ public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInsp
     @SuppressWarnings({"PublicField"})
     public boolean ignoreEquals = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "AccessingNonPublicFieldOfAnotherObject";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.accessingNonPublicFieldOfAnotherObjectDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.accessingNonPublicFieldOfAnotherObjectProblemDescriptor().get();
     }
@@ -80,7 +76,7 @@ public abstract class UseOfAnotherObjectsPrivateFieldInspection extends BaseInsp
 
         @Override
         public void visitReferenceExpression(
-            @Nonnull PsiReferenceExpression expression
+            PsiReferenceExpression expression
         ) {
             super.visitReferenceExpression(expression);
             PsiExpression qualifier = expression.getQualifierExpression();

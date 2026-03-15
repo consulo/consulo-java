@@ -27,14 +27,11 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipAssertLiteralIntention", fileExtensions = "java", categories = {"Java", "JUnit"})
 public class FlipAssertLiteralIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     protected LocalizeValue getTextForElement(PsiElement element) {
         PsiMethodCallExpression call = (PsiMethodCallExpression) element;
@@ -50,31 +47,29 @@ public class FlipAssertLiteralIntention extends MutablyNamedIntention {
         return IntentionPowerPackLocalize.flipAssertLiteralIntentionName(fromMethodName, toMethodName);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.flipAssertLiteralIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new AssertTrueOrFalsePredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) {
+    public void processIntention(PsiElement element) {
         PsiMethodCallExpression call = (PsiMethodCallExpression) element;
         PsiReferenceExpression methodExpression = call.getMethodExpression();
-        @NonNls String fromMethodName = methodExpression.getReferenceName();
-        @NonNls String toMethodName;
+        String fromMethodName = methodExpression.getReferenceName();
+        String toMethodName;
         if ("assertTrue".equals(fromMethodName)) {
             toMethodName = "assertFalse";
         }
         else {
             toMethodName = "assertTrue";
         }
-        @NonNls StringBuilder newCall = new StringBuilder();
+        StringBuilder newCall = new StringBuilder();
         PsiElement qualifier = methodExpression.getQualifier();
         if (qualifier == null) {
             PsiMethod containingMethod = PsiTreeUtil.getParentOfType(call, PsiMethod.class);

@@ -27,8 +27,7 @@ import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsManager {
@@ -44,7 +43,6 @@ public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsM
     return !initRoots().isEmpty();
   }
 
-  @Nonnull
   private synchronized Set<VirtualFile> initRoots() {
     if (myAnnotationsRoots == null) {
       myAnnotationsRoots = new HashSet<VirtualFile>();
@@ -62,8 +60,7 @@ public class ReadableExternalAnnotationsManager extends BaseExternalAnnotationsM
   }
 
   @Override
-  @Nonnull
-  protected List<VirtualFile> getExternalAnnotationsRoots(@Nonnull VirtualFile libraryFile) {
+  protected List<VirtualFile> getExternalAnnotationsRoots(VirtualFile libraryFile) {
     ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myPsiManager.getProject()).getFileIndex();
     Set<VirtualFile> result = new LinkedHashSet<VirtualFile>();
     for (OrderEntry entry : fileIndex.getOrderEntriesForFile(libraryFile)) {

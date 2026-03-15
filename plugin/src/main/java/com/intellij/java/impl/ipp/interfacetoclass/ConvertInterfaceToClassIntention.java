@@ -36,15 +36,13 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertInterfaceToClassIntention", fileExtensions = "java", categories = {"Java", "Declaration"})
 public class ConvertInterfaceToClassIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.convertInterfaceToClassIntentionName();
@@ -110,7 +108,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
 
     @Override
     @RequiredWriteAction
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiClass anInterface = (PsiClass) element.getParent();
         SearchScope searchScope = anInterface.getUseScope();
         Query<PsiClass> query = ClassInheritorsSearch.search(anInterface, searchScope, false);
@@ -175,7 +173,6 @@ public class ConvertInterfaceToClassIntention extends Intention {
         moveExtendsToImplements(anInterface);
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ConvertInterfaceToClassPredicate();
@@ -219,9 +216,9 @@ public class ConvertInterfaceToClassIntention extends Intention {
 
     @RequiredWriteAction
     private static void moveReference(
-        @Nonnull PsiReferenceList source,
+        PsiReferenceList source,
         @Nullable PsiReferenceList target,
-        @Nonnull PsiJavaCodeReferenceElement reference
+        PsiJavaCodeReferenceElement reference
     ) throws IncorrectOperationException {
         PsiJavaCodeReferenceElement[] implementsReferences = source.getReferenceElements();
         String qualifiedName = reference.getQualifiedName();

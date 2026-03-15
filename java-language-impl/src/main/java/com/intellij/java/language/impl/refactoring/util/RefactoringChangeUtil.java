@@ -26,8 +26,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class RefactoringChangeUtil {
     private static final Logger LOG = Logger.getInstance("#com.intellij.refactoring.util.ChangeUtil");
@@ -74,8 +73,8 @@ public class RefactoringChangeUtil {
     }
 
     public static PsiReferenceExpression qualifyReference(
-        @Nonnull PsiReferenceExpression referenceExpression,
-        @Nonnull PsiMember member,
+        PsiReferenceExpression referenceExpression,
+        PsiMember member,
         @Nullable PsiClass qualifyingClass
     ) throws IncorrectOperationException {
         PsiManager manager = referenceExpression.getManager();
@@ -124,7 +123,7 @@ public class RefactoringChangeUtil {
         return (PsiReferenceExpression)referenceExpression.replace(expressionFromText);
     }
 
-    public static PsiClass getThisClass(@Nonnull PsiElement place) {
+    public static PsiClass getThisClass(PsiElement place) {
         PsiElement parent = place.getContext();
         if (parent == null) {
             return null;
@@ -147,9 +146,9 @@ public class RefactoringChangeUtil {
     @RequiredWriteAction
     @SuppressWarnings("unchecked")
     static <T extends PsiQualifiedExpression> T createQualifiedExpression(
-        @Nonnull PsiManager manager,
+        PsiManager manager,
         PsiClass qualifierClass,
-        @Nonnull String qName
+        String qName
     ) throws IncorrectOperationException {
         PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
         if (qualifierClass != null) {

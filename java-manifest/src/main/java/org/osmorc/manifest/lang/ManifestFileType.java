@@ -30,8 +30,7 @@ import consulo.language.Language;
 import consulo.language.file.LanguageFileType;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Robert F. Beeger (robert@beeger.net)
@@ -43,30 +42,26 @@ public class ManifestFileType extends LanguageFileType {
         super(ManifestLanguage.INSTANCE);
     }
 
-    public ManifestFileType(@Nonnull Language language) {
+    public ManifestFileType(Language language) {
         super(language);
     }
 
     @Override
-    @Nonnull
     public String getId() {
         return "MANIFEST";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return JavaLanguageLocalize.manifestLanguageDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDescription() {
         return LocalizeValue.localizeTODO("Manifest files");
     }
 
     @Override
-    @Nonnull
     public String getDefaultExtension() {
         return "MF";
     }

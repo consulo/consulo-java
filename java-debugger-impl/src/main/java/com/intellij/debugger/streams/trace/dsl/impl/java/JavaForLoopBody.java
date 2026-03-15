@@ -6,7 +6,6 @@ import consulo.execution.debug.stream.trace.dsl.ForLoopBody;
 import consulo.execution.debug.stream.trace.dsl.StatementFactory;
 import consulo.execution.debug.stream.trace.dsl.Variable;
 import consulo.execution.debug.stream.trace.dsl.impl.TextExpression;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -16,18 +15,16 @@ public class JavaForLoopBody extends JavaCodeBlock implements ForLoopBody {
 
     private final Variable loopVariable;
 
-    public JavaForLoopBody(@Nonnull StatementFactory statementFactory, @Nonnull Variable loopVariable) {
+    public JavaForLoopBody(StatementFactory statementFactory, Variable loopVariable) {
         super(statementFactory);
         this.loopVariable = loopVariable;
     }
 
-    @Nonnull
     @Override
     public Variable getLoopVariable() {
         return loopVariable;
     }
 
-    @Nonnull
     @Override
     public Expression breakIteration() {
         return BREAK;

@@ -28,8 +28,7 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,6 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
         myName = parameter.getName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.removeUnusedParameterText(myName);
@@ -50,10 +48,10 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiParameter myParameter = (PsiParameter) startElement;
         return myParameter.isValid()
@@ -63,11 +61,11 @@ public class RemoveUnusedParameterFix extends LocalQuickFixAndIntentionActionOnP
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiParameter myParameter = (PsiParameter) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(myParameter.getContainingFile())) {

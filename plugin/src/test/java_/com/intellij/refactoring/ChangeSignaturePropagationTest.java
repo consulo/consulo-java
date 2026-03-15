@@ -17,7 +17,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 import junit.framework.Assert;
 
 import java.util.Arrays;
@@ -182,7 +181,6 @@ public abstract class ChangeSignaturePropagationTest extends LightRefactoringTes
     return result;
   }
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

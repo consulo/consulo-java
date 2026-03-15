@@ -22,16 +22,14 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.JavaPsiConstructorUtil;
 import consulo.language.psi.PsiManager;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class JavaHighlightUtil {
-  public static boolean isSerializable(@Nonnull PsiClass aClass) {
+  public static boolean isSerializable(PsiClass aClass) {
     PsiManager manager = aClass.getManager();
     PsiClass serializableClass = JavaPsiFacade.getInstance(manager.getProject())
         .findClass(CommonClassNames.JAVA_IO_SERIALIZABLE, aClass.getResolveScope());
@@ -45,7 +43,7 @@ public class JavaHighlightUtil {
     if (method.hasModifierProperty(PsiModifier.STATIC)) {
       return false;
     }
-    @NonNls String name = method.getName();
+    String name = method.getName();
     PsiParameter[] parameters = method.getParameterList().getParameters();
     PsiType returnType = method.getReturnType();
     if ("readObjectNoData".equals(name)) {
@@ -79,7 +77,6 @@ public class JavaHighlightUtil {
     return false;
   }
 
-  @Nonnull
   public static String formatType(@Nullable PsiType type) {
     if (type == null) {
       return PsiKeyword.NULL;
@@ -89,7 +86,7 @@ public class JavaHighlightUtil {
   }
 
   @Nullable
-  private static PsiType getArrayInitializerType(@Nonnull final PsiArrayInitializerExpression element) {
+  private static PsiType getArrayInitializerType(final PsiArrayInitializerExpression element) {
     final PsiType typeCheckResult = sameType(element.getInitializers());
     if (typeCheckResult != null) {
       return typeCheckResult.createArrayType();
@@ -98,7 +95,7 @@ public class JavaHighlightUtil {
   }
 
   @Nullable
-  public static PsiType sameType(@Nonnull PsiExpression[] expressions) {
+  public static PsiType sameType(PsiExpression[] expressions) {
     PsiType type = null;
     for (PsiExpression expression : expressions) {
       final PsiType currentType;
@@ -116,8 +113,7 @@ public class JavaHighlightUtil {
     return type;
   }
 
-  @Nonnull
-  public static String formatMethod(@Nonnull PsiMethod method) {
+  public static String formatMethod(PsiMethod method) {
     return PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
         PsiFormatUtilBase.SHOW_TYPE);
   }
@@ -151,8 +147,7 @@ public class JavaHighlightUtil {
    *
    * @return referring constructor
    */
-  @Nonnull
-  public static List<PsiMethod> getChainedConstructors(@Nonnull PsiMethod constructor) {
+  public static List<PsiMethod> getChainedConstructors(PsiMethod constructor) {
     final ConstructorVisitorInfo info = new ConstructorVisitorInfo();
     visitConstructorChain(constructor, info);
     if (info.visitedConstructors != null) {
@@ -161,7 +156,7 @@ public class JavaHighlightUtil {
     return ObjectUtil.notNull(info.visitedConstructors, Collections.emptyList());
   }
 
-  static void visitConstructorChain(@Nonnull PsiMethod entry, @Nonnull ConstructorVisitorInfo info) {
+  static void visitConstructorChain(PsiMethod entry, ConstructorVisitorInfo info) {
     PsiMethod constructor = entry;
     while (true) {
       PsiMethodCallExpression methodCall = JavaPsiConstructorUtil.findThisOrSuperCallInConstructor(constructor);

@@ -27,8 +27,7 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -160,10 +159,9 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
         return myMethod.getElement() instanceof PsiMethod method ? method : null;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
-    protected final Object[] buildChildren(@Nonnull HierarchyNodeDescriptor descriptor) {
+    protected final Object[] buildChildren(HierarchyNodeDescriptor descriptor) {
         PsiElement psiElement = ((MethodHierarchyNodeDescriptor)descriptor).getPsiClass();
         if (!(psiElement instanceof PsiClass psiClass)) {
             return ArrayUtil.EMPTY_OBJECT_ARRAY;

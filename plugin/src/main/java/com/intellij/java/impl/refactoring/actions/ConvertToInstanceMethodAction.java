@@ -27,7 +27,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.editor.refactoring.action.BaseRefactoringAction;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -44,16 +43,16 @@ public class ConvertToInstanceMethodAction extends BaseRefactoringAction {
     }
 
     @Override
-    protected boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    protected boolean isEnabledOnElements(PsiElement[] elements) {
         return elements.length == 1 && elements[0] instanceof PsiMethod;
     }
 
     @Override
     protected boolean isAvailableOnElementInEditorAndFile(
-        @Nonnull PsiElement element,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull DataContext context
+        PsiElement element,
+        Editor editor,
+        PsiFile file,
+        DataContext context
     ) {
         if (element instanceof PsiIdentifier) {
             element = element.getParent();
@@ -62,7 +61,7 @@ public class ConvertToInstanceMethodAction extends BaseRefactoringAction {
     }
 
     @Override
-    protected RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+    protected RefactoringActionHandler getHandler(DataContext dataContext) {
         return new ConvertToInstanceMethodHandler();
     }
 }

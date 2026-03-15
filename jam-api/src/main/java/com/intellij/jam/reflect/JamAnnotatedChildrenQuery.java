@@ -19,9 +19,7 @@ import com.intellij.jam.JamElement;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.util.collection.ContainerUtil;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,15 +30,15 @@ import java.util.List;
 public abstract class JamAnnotatedChildrenQuery<Jam extends JamElement> extends JamChildrenQuery<Jam> {
   private final String myAnnoName;
 
-  public JamAnnotatedChildrenQuery(@NonNls JamAnnotationMeta meta) {
+  public JamAnnotatedChildrenQuery(JamAnnotationMeta meta) {
     myAnnoName = meta.getAnnoName();
   }
 
   @Nullable
-  protected abstract JamMemberMeta<?, ? extends Jam> getMemberMeta(@Nonnull PsiModifierListOwner member);
+  protected abstract JamMemberMeta<?, ? extends Jam> getMemberMeta(PsiModifierListOwner member);
 
   @Override
-  public JamMemberMeta<?, ? extends Jam> getMeta(@Nonnull PsiModifierListOwner member) {
+  public JamMemberMeta<?, ? extends Jam> getMeta(PsiModifierListOwner member) {
     final JamMemberMeta<?, ? extends Jam> memberMeta = getMemberMeta(member);
     return memberMeta != null && isAnnotated(member, myAnnoName) ? memberMeta : null;
   }
@@ -49,9 +47,9 @@ public abstract class JamAnnotatedChildrenQuery<Jam extends JamElement> extends 
     return myAnnoName;
   }
 
-  protected abstract PsiModifierListOwner[] getAllChildren(@Nonnull PsiMember parent);
+  protected abstract PsiModifierListOwner[] getAllChildren(PsiMember parent);
 
-  public List<Jam> findChildren(@Nonnull PsiMember parent) {
+  public List<Jam> findChildren(PsiMember parent) {
     final ArrayList<Jam> list = ContainerUtil.newArrayList();
     for (final PsiModifierListOwner child : getAllChildren(parent)) {
       if (isAnnotated(child, myAnnoName)) {

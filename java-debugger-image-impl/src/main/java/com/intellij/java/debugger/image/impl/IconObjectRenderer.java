@@ -33,7 +33,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 /**

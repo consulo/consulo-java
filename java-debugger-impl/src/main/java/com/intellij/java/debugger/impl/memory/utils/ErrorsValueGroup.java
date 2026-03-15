@@ -22,8 +22,7 @@ import consulo.execution.debug.frame.XCompositeNode;
 import consulo.execution.debug.frame.XNamedValue;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +37,7 @@ public class ErrorsValueGroup extends XValueGroup
 		super("Errors");
 	}
 
-	public void addErrorValue(@Nonnull String message, @Nonnull XNamedValue value)
+	public void addErrorValue(String message, XNamedValue value)
 	{
 		List<XNamedValue> lst;
 		if(!myErrorMessage2ValueMap.containsKey(message))
@@ -63,7 +62,7 @@ public class ErrorsValueGroup extends XValueGroup
 	}
 
 	@Override
-	public void computeChildren(@Nonnull XCompositeNode node)
+	public void computeChildren(XCompositeNode node)
 	{
 		XValueChildrenList lst = new XValueChildrenList();
 		myErrorMessage2ValueMap.keySet().forEach(s -> lst.addTopGroup(new MyErrorsValueGroup(s)));
@@ -74,7 +73,7 @@ public class ErrorsValueGroup extends XValueGroup
 	{
 
 		@Override
-		public void computeChildren(@Nonnull XCompositeNode node)
+		public void computeChildren(XCompositeNode node)
 		{
 			XValueChildrenList lst = new XValueChildrenList();
 			String name = getName();
@@ -82,7 +81,7 @@ public class ErrorsValueGroup extends XValueGroup
 			node.addChildren(lst, true);
 		}
 
-		MyErrorsValueGroup(@Nonnull String name)
+		MyErrorsValueGroup(String name)
 		{
 			super(name);
 		}

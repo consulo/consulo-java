@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.util.Collections;
 
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.impl.codeInspection.i18n.I18nQuickFixHandler;
 import com.intellij.java.impl.codeInspection.i18n.I18nizeAction;
 import consulo.java.analysis.impl.util.JavaI18nUtil;
@@ -21,18 +20,17 @@ import consulo.language.util.IncorrectOperationException;
 
 
 public abstract class I18nizeTest extends LightCodeInsightTestCase {
-  @NonNls
   private static String getBasePath() {
     return "/codeInsight/daemonCodeAnalyzer/quickFix/i18nize";
   }
 
-  private void doTest(@NonNls String ext) throws Exception {
+  private void doTest(String ext) throws Exception {
     configureByFile(getBasePath() + "/before"+getTestName(false)+"."+ext);
     I18nizeAction action = new I18nizeAction();
     DataContext dataContext = DataManager.getInstance().getDataContext(myEditor.getComponent());
     AnActionEvent event = new AnActionEvent(null, dataContext, "place", action.getTemplatePresentation(), null, 0);
     action.update(event);
-    @NonNls String afterFile = getBasePath() + "/after" + getTestName(false) + "." + ext;
+    String afterFile = getBasePath() + "/after" + getTestName(false) + "." + ext;
     boolean afterFileExists = new File(afterFile).exists();
     I18nQuickFixHandler handler = action.getHandler(event);
     try {

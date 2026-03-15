@@ -33,7 +33,6 @@ import consulo.language.lexer.Lexer;
 import consulo.language.version.LanguageVersion;
 import consulo.xml.psi.xml.XmlTokenType;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -113,18 +112,16 @@ public class JavaFileHighlighter extends LanguageVersionableSyntaxHighlighter {
     this(LanguageLevel.HIGHEST.toLangVersion());
   }
 
-  public JavaFileHighlighter(@Nonnull LanguageVersion languageLevel) {
+  public JavaFileHighlighter(LanguageVersion languageLevel) {
     super(languageLevel);
   }
 
   @Override
-  @Nonnull
   public Lexer getHighlightingLexer(LanguageVersion languageVersion) {
     return new JavaHighlightingLexer(((JavaLanguageVersion) languageVersion).getLanguageLevel());
   }
 
   @Override
-  @Nonnull
   public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
     return pack(ourMap1.get(tokenType), ourMap2.get(tokenType));
   }

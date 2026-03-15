@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.util.duplicates;
 import java.util.List;
 
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.analysis.impl.refactoring.util.duplicates.Match;
 import consulo.language.psi.PsiElement;

@@ -25,11 +25,9 @@ import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InfiniteLoopStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.infiniteLoopStatementDisplayName();
@@ -41,7 +39,6 @@ public class InfiniteLoopStatementInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.infiniteLoopStatementProblemDescriptor().get();
     }
@@ -54,19 +51,19 @@ public class InfiniteLoopStatementInspection extends BaseInspection {
     private static class InfiniteLoopStatementsVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitForStatement(@Nonnull PsiForStatement statement) {
+        public void visitForStatement(PsiForStatement statement) {
             super.visitForStatement(statement);
             checkStatement(statement);
         }
 
         @Override
-        public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+        public void visitWhileStatement(PsiWhileStatement statement) {
             super.visitWhileStatement(statement);
             checkStatement(statement);
         }
 
         @Override
-        public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+        public void visitDoWhileStatement(PsiDoWhileStatement statement) {
             super.visitDoWhileStatement(statement);
             checkStatement(statement);
         }

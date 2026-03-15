@@ -54,8 +54,7 @@ import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -82,7 +81,6 @@ public class DebugProcessEvents extends DebugProcessImpl {
         }
     }
 
-    @Nonnull
     public LocalizeValue getEventText(Breakpoint breakpoint, Event event) {
         return switch (event) {
             case LocatableEvent locatableEvent -> {

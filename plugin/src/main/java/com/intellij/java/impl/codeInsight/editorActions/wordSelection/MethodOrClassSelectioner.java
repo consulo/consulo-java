@@ -26,7 +26,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -87,7 +86,7 @@ public class MethodOrClassSelectioner extends BasicSelectioner {
     return result;
   }
 
-  private static Collection<TextRange> selectWithTypeParameters(@Nonnull PsiClass psiClass) {
+  private static Collection<TextRange> selectWithTypeParameters(PsiClass psiClass) {
     PsiIdentifier identifier = psiClass.getNameIdentifier();
     PsiTypeParameterList list = psiClass.getTypeParameterList();
     if (identifier != null && list != null) {
@@ -96,8 +95,8 @@ public class MethodOrClassSelectioner extends BasicSelectioner {
     return Collections.emptyList();
   }
 
-  private static Collection<TextRange> selectBetweenBracesLines(@Nonnull PsiElement[] children,
-                                                                @Nonnull CharSequence editorText) {
+  private static Collection<TextRange> selectBetweenBracesLines(PsiElement[] children,
+                                                                CharSequence editorText) {
     int start = CodeBlockOrInitializerSelectioner.findOpeningBrace(children);
     // in non-Java PsiClasses, there can be no opening brace
     if (start != 0) {

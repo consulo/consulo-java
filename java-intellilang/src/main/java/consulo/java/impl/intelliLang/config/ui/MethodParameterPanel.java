@@ -54,8 +54,7 @@ import consulo.ui.ex.awt.tree.table.ListTreeTableModelOnColumns;
 import consulo.ui.ex.awt.tree.table.TreeColumnInfo;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.table.TableCellEditor;
@@ -107,7 +106,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     myParamsTable.getTree().setCellRenderer(new ColoredTreeCellRenderer() {
 
       public void customizeCellRenderer(
-        @Nonnull final JTree tree,
+        final JTree tree,
         final Object value,
         final boolean selected,
         final boolean expanded,
@@ -145,7 +144,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
     new AnAction("Toggle") {
       @Override
       @RequiredUIAccess
-      public void actionPerformed(@Nonnull final AnActionEvent e) {
+      public void actionPerformed(final AnActionEvent e) {
         performToggleAction();
       }
     }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0)), myParamsTable);

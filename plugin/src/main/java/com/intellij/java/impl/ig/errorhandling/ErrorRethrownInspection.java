@@ -26,26 +26,22 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class ErrorRethrownInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ErrorNotRethrown";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.errorRethrownDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.errorRethrownProblemDescriptor().get();
     }
@@ -57,7 +53,7 @@ public class ErrorRethrownInspection extends BaseInspection {
 
     private static class ErrorRethrownVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+        public void visitTryStatement(PsiTryStatement statement) {
             super.visitTryStatement(statement);
             PsiCatchSection[] catchSections = statement.getCatchSections();
             for (PsiCatchSection catchSection : catchSections) {

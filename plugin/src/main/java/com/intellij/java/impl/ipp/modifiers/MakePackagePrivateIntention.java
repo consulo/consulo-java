@@ -21,7 +21,6 @@ import com.siyeh.localize.IntentionPowerPackLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -35,7 +34,6 @@ public class MakePackagePrivateIntention extends ModifierIntention {
         return PsiModifier.PACKAGE_LOCAL;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.makePackagePrivateIntentionName();

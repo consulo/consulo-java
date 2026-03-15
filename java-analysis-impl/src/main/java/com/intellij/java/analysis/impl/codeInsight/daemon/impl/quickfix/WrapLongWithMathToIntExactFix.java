@@ -26,8 +26,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Dmitry Batkovich
@@ -37,28 +36,27 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 
     private final PsiType myType;
 
-    public WrapLongWithMathToIntExactFix(final PsiType type, final @Nonnull PsiExpression expression) {
+    public WrapLongWithMathToIntExactFix(final PsiType type, final PsiExpression expression) {
         super(expression);
         myType = type;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.wrapLongWithMathToIntText();
     }
 
     @Override
-    public void invoke(@Nonnull Project project,
-                       @Nonnull PsiFile file,
+    public void invoke(Project project,
+                       PsiFile file,
                        @Nullable Editor editor,
-                       @Nonnull PsiElement startElement,
-                       @Nonnull PsiElement endElement) {
+                       PsiElement startElement,
+                       PsiElement endElement) {
         startElement.replace(getModifiedExpression(startElement));
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+    public boolean isAvailable(Project project, PsiFile file, PsiElement startElement, PsiElement endElement) {
         return startElement.isValid() &&
             startElement.getManager().isInProject(startElement) &&
             PsiUtil.isLanguageLevel8OrHigher(startElement) &&
@@ -66,7 +64,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
             areSameTypes(((PsiExpression) startElement).getType(), PsiType.LONG);
     }
 
-    private static boolean areSameTypes(@Nullable PsiType type, @Nonnull PsiPrimitiveType expected) {
+    private static boolean areSameTypes(@Nullable PsiType type, PsiPrimitiveType expected) {
         return !(type == null ||
             !type.isValid() ||
             (!type.equals(expected) && !expected.getBoxedTypeName().equals(type.getCanonicalText(false))));
@@ -78,11 +76,10 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
 
     private static class MyMethodArgumentFix extends MethodArgumentFix implements HighPriorityAction {
 
-        protected MyMethodArgumentFix(@Nonnull PsiExpressionList list, int i, @Nonnull PsiType toType, @Nonnull ArgumentFixerActionFactory fixerActionFactory) {
+        protected MyMethodArgumentFix(PsiExpressionList list, int i, PsiType toType, ArgumentFixerActionFactory fixerActionFactory) {
             super(list, i, toType, fixerActionFactory);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getText() {
             if (myArgList.getExpressions().length == 1) {
@@ -94,7 +91,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
         }
 
         @Override
-        public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+        public boolean isAvailable(Project project, Editor editor, PsiFile file) {
             return PsiUtil.isLanguageLevel8OrHigher(file) && super.isAvailable(project, editor, file);
         }
     }
@@ -107,7 +104,7 @@ public class WrapLongWithMathToIntExactFix extends LocalQuickFixAndIntentionActi
         }
 
         @Override
-        public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, @Nonnull final PsiElement context) {
+        public boolean areTypesConvertible(final PsiType exprType, final PsiType parameterType, final PsiElement context) {
             return parameterType.isConvertibleFrom(exprType) || (areSameTypes(parameterType, PsiType.INT) && areSameTypes(exprType, PsiType.LONG));
         }
 

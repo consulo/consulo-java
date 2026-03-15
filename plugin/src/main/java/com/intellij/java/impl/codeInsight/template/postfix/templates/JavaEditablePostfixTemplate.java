@@ -20,7 +20,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.DumbService;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.function.Predicates;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 import java.util.function.Function;
@@ -30,52 +29,50 @@ public class JavaEditablePostfixTemplate
   extends EditablePostfixTemplateWithMultipleExpressions<JavaPostfixTemplateExpressionCondition> {
   private static final Predicate<PsiElement> PSI_ERROR_FILTER = element -> !PsiTreeUtil.hasErrorElements(element);
 
-  @Nonnull
   private final LanguageLevel myMinimumLanguageLevel;
 
-  public JavaEditablePostfixTemplate(@Nonnull String templateName,
-                                     @Nonnull String templateText,
-                                     @Nonnull String example,
-                                     @Nonnull Set<? extends JavaPostfixTemplateExpressionCondition> expressionConditions,
-                                     @Nonnull LanguageLevel minimumLanguageLevel,
+  public JavaEditablePostfixTemplate(String templateName,
+                                     String templateText,
+                                     String example,
+                                     Set<? extends JavaPostfixTemplateExpressionCondition> expressionConditions,
+                                     LanguageLevel minimumLanguageLevel,
                                      boolean useTopmostExpression,
-                                     @Nonnull PostfixTemplateProvider provider) {
+                                     PostfixTemplateProvider provider) {
     this(templateName, templateName, createTemplate(templateText), example, expressionConditions, minimumLanguageLevel,
          useTopmostExpression, provider);
   }
 
-  public JavaEditablePostfixTemplate(@Nonnull String templateId,
-                                     @Nonnull String templateName,
-                                     @Nonnull String templateText,
-                                     @Nonnull String example,
-                                     @Nonnull Set<? extends JavaPostfixTemplateExpressionCondition> expressionConditions,
-                                     @Nonnull LanguageLevel minimumLanguageLevel,
+  public JavaEditablePostfixTemplate(String templateId,
+                                     String templateName,
+                                     String templateText,
+                                     String example,
+                                     Set<? extends JavaPostfixTemplateExpressionCondition> expressionConditions,
+                                     LanguageLevel minimumLanguageLevel,
                                      boolean useTopmostExpression,
-                                     @Nonnull PostfixTemplateProvider provider) {
+                                     PostfixTemplateProvider provider) {
     super(templateId, templateName, createTemplate(templateText), example, expressionConditions, useTopmostExpression, provider);
     myMinimumLanguageLevel = minimumLanguageLevel;
   }
 
-  public JavaEditablePostfixTemplate(@Nonnull String templateId,
-                                     @Nonnull String templateName,
-                                     @Nonnull Template liveTemplate,
-                                     @Nonnull String example,
-                                     @Nonnull Set<? extends JavaPostfixTemplateExpressionCondition> expressionConditions,
-                                     @Nonnull LanguageLevel minimumLanguageLevel,
+  public JavaEditablePostfixTemplate(String templateId,
+                                     String templateName,
+                                     Template liveTemplate,
+                                     String example,
+                                     Set<? extends JavaPostfixTemplateExpressionCondition> expressionConditions,
+                                     LanguageLevel minimumLanguageLevel,
                                      boolean useTopmostExpression,
-                                     @Nonnull PostfixTemplateProvider provider) {
+                                     PostfixTemplateProvider provider) {
     super(templateId, templateName, liveTemplate, example, expressionConditions, useTopmostExpression, provider);
     myMinimumLanguageLevel = minimumLanguageLevel;
   }
 
 
-  @Nonnull
   public LanguageLevel getMinimumLanguageLevel() {
     return myMinimumLanguageLevel;
   }
 
   @Override
-  protected List<PsiElement> getExpressions(@Nonnull PsiElement context, @Nonnull Document document, int offset) {
+  protected List<PsiElement> getExpressions(PsiElement context, Document document, int offset) {
     DumbService dumbService = DumbService.getInstance(context.getProject());
     if (dumbService.isDumb() && !DumbService.isDumbAware(this)) return Collections.emptyList();
     if (!PsiUtil.getLanguageLevel(context).isAtLeast(myMinimumLanguageLevel)) {
@@ -96,9 +93,8 @@ public class JavaEditablePostfixTemplate
       getExpressionCompositeCondition())));
   }
 
-  @Nonnull
   @Override
-  protected PsiElement getTopmostExpression(@Nonnull PsiElement element) {
+  protected PsiElement getTopmostExpression(PsiElement element) {
     PsiElement parent = element.getParent();
     if (parent instanceof PsiExpressionStatement) {
       return parent;
@@ -108,7 +104,7 @@ public class JavaEditablePostfixTemplate
   }
 
   @Override
-  protected @Nonnull TextRange getRangeToRemove(@Nonnull PsiElement element) {
+  protected TextRange getRangeToRemove(PsiElement element) {
     PsiElement toRemove = getElementToRemove(element);
     if (toRemove instanceof PsiExpressionStatement) {
       PsiElement lastChild = toRemove.getLastChild();
@@ -122,7 +118,6 @@ public class JavaEditablePostfixTemplate
     return toRemove.getTextRange();
   }
 
-  @Nonnull
   @Override
   protected Function<PsiElement, String> getElementRenderer() {
     return JavaPostfixTemplatesUtils.getRenderer();

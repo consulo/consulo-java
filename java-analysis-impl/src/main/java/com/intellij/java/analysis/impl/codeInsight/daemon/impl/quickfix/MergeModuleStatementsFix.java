@@ -26,9 +26,8 @@ import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiEl
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -39,17 +38,17 @@ import java.util.stream.Collectors;
  * @author Pavel.Dolgov
  */
 public abstract class MergeModuleStatementsFix<T extends PsiElement> extends LocalQuickFixAndIntentionActionOnPsiElement {
-    protected MergeModuleStatementsFix(@Nonnull PsiJavaModule javaModule) {
+    protected MergeModuleStatementsFix(PsiJavaModule javaModule) {
         super(javaModule);
     }
 
     @Override
     @RequiredReadAction
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         return PsiUtil.isLanguageLevel9OrHigher(file);
     }
@@ -57,11 +56,11 @@ public abstract class MergeModuleStatementsFix<T extends PsiElement> extends Loc
     @Override
     @RequiredWriteAction
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         if (startElement instanceof PsiJavaModule javaModule) {
             List<T> statementsToMerge = getStatementsToMerge(javaModule);
@@ -93,14 +92,11 @@ public abstract class MergeModuleStatementsFix<T extends PsiElement> extends Loc
         }
     }
 
-    @Nonnull
     protected abstract String getReplacementText(List<T> statementsToMerge);
 
-    @Nonnull
-    protected abstract List<T> getStatementsToMerge(@Nonnull PsiJavaModule javaModule);
+    protected abstract List<T> getStatementsToMerge(PsiJavaModule javaModule);
 
-    @Nonnull
-    protected static String joinUniqueNames(@Nonnull List<String> names) {
+    protected static String joinUniqueNames(List<String> names) {
         return names.stream().distinct().collect(Collectors.joining(","));
     }
 

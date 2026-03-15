@@ -36,7 +36,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.DumbAwareAction;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -74,7 +73,6 @@ public class CustomizeContextViewAction extends DumbAwareAction {
                     NodeRendererSettings.getInstance().fireRenderersChanged();
                 }
 
-                @Nonnull
                 @Override
                 public LocalizeValue getDisplayName() {
                     return JavaDebuggerLocalize.titleCustomizeDataViews();

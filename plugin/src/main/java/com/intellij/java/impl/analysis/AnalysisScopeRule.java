@@ -33,18 +33,16 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.Module;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
-    @Nonnull
     @Override
     public Key<AnalysisScope> getKey() {
         return AnalysisScope.KEY;
     }
 
     @Override
-    public AnalysisScope getData(@Nonnull DataProvider dataProvider) {
+    public AnalysisScope getData(DataProvider dataProvider) {
         Object psiFile = dataProvider.getDataUnchecked(PsiFile.KEY);
         if (psiFile instanceof PsiJavaFile javaFile) {
             return new JavaAnalysisScope(javaFile);

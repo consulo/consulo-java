@@ -31,8 +31,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -49,20 +48,17 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
      */
     public boolean ignoreObscureOperators = false;
 
-    @Nonnull
     @Override
     @Pattern("[a-zA-Z_0-9.]+")
     public String getID() {
         return "AssignmentReplaceableWithOperatorAssignment";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentReplaceableWithOperatorAssignmentDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
@@ -126,7 +122,6 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
     }
 
     private static class ReplaceAssignmentWithOperatorAssignmentFix extends InspectionGadgetsFix {
-        @Nonnull
         private final LocalizeValue myName;
 
         @RequiredReadAction
@@ -142,7 +137,6 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
             myName = InspectionGadgetsLocalize.assignmentReplaceableWithOperatorReplaceQuickfix(signText);
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return myName;
@@ -150,7 +144,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
 
         @Override
         @RequiredWriteAction
-        public void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
             if (!(descriptor.getPsiElement() instanceof PsiAssignmentExpression expression)) {
                 return;
             }
@@ -178,7 +172,7 @@ public class ReplaceAssignmentWithOperatorAssignmentInspection extends BaseInspe
 
     private class ReplaceAssignmentWithOperatorAssignmentVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
+        public void visitAssignmentExpression(PsiAssignmentExpression assignment) {
             super.visitAssignmentExpression(assignment);
             IElementType assignmentTokenType = assignment.getOperationTokenType();
             if (!assignmentTokenType.equals(JavaTokenType.EQ)) {

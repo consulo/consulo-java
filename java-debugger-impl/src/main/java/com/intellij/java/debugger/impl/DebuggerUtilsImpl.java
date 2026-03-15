@@ -58,8 +58,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
 import consulo.util.xml.serializer.XmlSerializer;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 
@@ -159,7 +158,6 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
     return PositionUtil.getContextElement(context);
   }
 
-  @Nonnull
   public static Pair<PsiElement, PsiType> getPsiClassAndType(@Nullable String className, Project project) {
     PsiElement contextClass = null;
     PsiType contextType = null;
@@ -194,7 +192,6 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
   }
 
   @Override
-  @Nonnull
   public TransportService.ListenKey findAvailableDebugAddress(final int type) throws ExecutionException {
     final TransportServiceWrapper transportService = TransportServiceWrapper.createTransportService(type);
 

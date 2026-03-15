@@ -26,7 +26,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -42,13 +41,12 @@ public class RemoveAnnotationQuickFix implements LocalQuickFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return CodeInsightLocalize.removeAnnotation();
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     if (myAnnotation.isPhysical()) {
       try {
         if (!FileModificationService.getInstance().preparePsiElementForWrite(myAnnotation)) return;

@@ -23,8 +23,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.language.psi.PsiTarget;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a Java local variable, method parameter or field.
@@ -35,7 +34,6 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
      *
      * @return the variable type.
      */
-    @Nonnull
     PsiType getType();
 
     /**
@@ -93,7 +91,7 @@ public interface PsiVariable extends PsiModifierListOwner, PsiNameIdentifierOwne
     PsiIdentifier getNameIdentifier();
 
     @Override
-    PsiElement setName(@Nonnull String name) throws IncorrectOperationException;
+    PsiElement setName(String name) throws IncorrectOperationException;
 
     /**
      * Adds initializer to the variable declaration statement or, if {@code initializer}

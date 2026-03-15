@@ -41,8 +41,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author ven
@@ -53,19 +51,18 @@ public class SurroundWithIfFix implements LocalQuickFix {
     private final String mySuffix;
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
         return InspectionGadgetsLocalize.inspectionSurroundIfQuickfix(myText, mySuffix);
     }
 
-    public SurroundWithIfFix(@Nonnull PsiExpression expressionToAssert, String suffix) {
+    public SurroundWithIfFix(PsiExpression expressionToAssert, String suffix) {
         myText = ParenthesesUtils.getText(expressionToAssert, ParenthesesUtils.BINARY_AND_PRECEDENCE);
         mySuffix = suffix;
     }
 
     @Override
     @RequiredWriteAction
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         PsiElement anchorStatement = RefactoringUtil.getParentStatement(element, false);
         LOG.assertTrue(anchorStatement != null);
@@ -97,7 +94,7 @@ public class SurroundWithIfFix implements LocalQuickFix {
                 return;
             }
 
-            @NonNls String newText = myText + mySuffix;
+            String newText = myText + mySuffix;
             document.replaceString(textRange.getStartOffset(), textRange.getEndOffset(), newText);
 
             editor.getCaretModel().moveToOffset(textRange.getEndOffset() + newText.length());

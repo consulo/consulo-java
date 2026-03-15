@@ -32,7 +32,7 @@ import consulo.application.AllIcons;
 import consulo.language.editor.refactoring.classMember.MemberInfoModel;
 import consulo.language.editor.refactoring.ui.AbstractMemberSelectionTable;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 

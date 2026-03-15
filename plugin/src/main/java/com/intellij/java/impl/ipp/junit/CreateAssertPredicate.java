@@ -23,7 +23,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
-import org.jetbrains.annotations.NonNls;
 
 class CreateAssertPredicate implements PsiElementPredicate {
 
@@ -70,7 +69,7 @@ class CreateAssertPredicate implements PsiElementPredicate {
     if (parameters.length != 0) {
       return false;
     }
-    @NonNls String methodName = method.getName();
+    String methodName = method.getName();
     if (!methodName.startsWith("test")) {
       return false;
     }

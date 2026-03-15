@@ -24,7 +24,6 @@
  */
 package com.intellij.java.impl.refactoring.util.classMembers;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiElement;
@@ -41,7 +40,7 @@ public class UsesDependencyMemberInfoModel<T extends NavigatablePsiElement, C ex
   }
 
   @Override
-  protected int doCheck(@Nonnull M memberInfo, int problem) {
+  protected int doCheck(M memberInfo, int problem) {
     PsiElement member = memberInfo.getMember();
     if(problem == ERROR
             && member instanceof PsiModifierListOwner

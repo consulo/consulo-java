@@ -32,8 +32,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -668,7 +667,7 @@ public class PsiAdapter {
   }
 
   @RequiredReadAction
-  public static int getJavaVersion(@Nonnull PsiElement element) {
+  public static int getJavaVersion(PsiElement element) {
     JavaSdkVersion sdkVersion = JavaVersionService.getInstance().getJavaSdkVersion(element);
     if (sdkVersion == null) {
       sdkVersion = JavaSdkVersion.fromLanguageLevel(PsiUtil.getLanguageLevel(element));

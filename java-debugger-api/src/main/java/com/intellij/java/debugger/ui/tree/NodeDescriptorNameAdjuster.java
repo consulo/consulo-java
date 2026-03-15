@@ -19,18 +19,17 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.application.Application;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Nikolay.Tropin
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class NodeDescriptorNameAdjuster {
-  public abstract boolean isApplicable(@Nonnull NodeDescriptor descriptor);
+  public abstract boolean isApplicable(NodeDescriptor descriptor);
 
-  public abstract String fixName(String name, @Nonnull NodeDescriptor descriptor);
+  public abstract String fixName(String name, NodeDescriptor descriptor);
 
-  public static NodeDescriptorNameAdjuster findFor(@Nonnull NodeDescriptor descriptor) {
+  public static NodeDescriptorNameAdjuster findFor(NodeDescriptor descriptor) {
     for (NodeDescriptorNameAdjuster adjuster : Application.get().getExtensionList(NodeDescriptorNameAdjuster.class)) {
       if (adjuster.isApplicable(descriptor)) {
         return adjuster;

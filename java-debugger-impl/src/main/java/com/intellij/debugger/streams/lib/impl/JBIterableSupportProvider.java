@@ -21,7 +21,6 @@ import consulo.execution.debug.stream.wrapper.StreamCallType;
 import consulo.execution.debug.stream.wrapper.StreamChainBuilder;
 import consulo.execution.debug.stream.wrapper.impl.CallArgumentImpl;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,34 +35,29 @@ public final class JBIterableSupportProvider extends JvmLibrarySupportProvider {
     private final LibrarySupport librarySupport = new JBIterableSupport();
     private final DslImpl dsl = new DslImpl(new JBIterableJavaStatementFactory());
 
-    @Nonnull
     @Override
     public String getLanguageId() {
         return "JAVA";
     }
 
-    @Nonnull
     @Override
     public StreamChainBuilder getChainBuilder() {
         return new JavaStreamChainBuilder(new JavaChainTransformerImpl(), new InheritanceBasedChainDetector(CLASS_NAME));
     }
 
-    @Nonnull
     @Override
-    public TraceExpressionBuilder getExpressionBuilder(@Nonnull Project project) {
+    public TraceExpressionBuilder getExpressionBuilder(Project project) {
         return new JavaTraceExpressionBuilder(project, librarySupport.createHandlerFactory(dsl), dsl);
     }
 
-    @Nonnull
     @Override
     public LibrarySupport getLibrarySupport() {
         return librarySupport;
     }
 
     private static class JBIterableJavaStatementFactory extends JavaStatementFactory {
-        @Nonnull
         @Override
-        public IntermediateStreamCall createPeekCall(@Nonnull GenericType elementsType, @Nonnull Lambda lambda) {
+        public IntermediateStreamCall createPeekCall(GenericType elementsType, Lambda lambda) {
             var lambdaBody = createEmptyLambdaBody(lambda.getVariableName());
             lambdaBody.add(lambda.getBody());
             lambdaBody.doReturn(new TextExpression("true"));
@@ -81,43 +75,36 @@ public final class JBIterableSupportProvider extends JvmLibrarySupportProvider {
             this.argText = argText;
         }
 
-        @Nonnull
         @Override
         public String getName() {
             return "filter";
         }
 
-        @Nonnull
         @Override
         public String getGenericArguments() {
             return "";
         }
 
-        @Nonnull
         @Override
         public List<CallArgument> getArguments() {
             return Collections.singletonList(new CallArgumentImpl(CommonClassNames.JAVA_LANG_OBJECT, argText));
         }
 
-        @Nonnull
         @Override
         public StreamCallType getType() {
             return StreamCallType.INTERMEDIATE;
         }
 
-        @Nonnull
         @Override
         public TextRange getTextRange() {
             return TextRange.EMPTY_RANGE;
         }
 
-        @Nonnull
         @Override
         public GenericType getTypeBefore() {
             return elementsType;
         }
 
-        @Nonnull
         @Override
         public GenericType getTypeAfter() {
             return elementsType;

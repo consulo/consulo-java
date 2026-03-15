@@ -28,8 +28,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.ast.IElementType;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -42,13 +40,11 @@ public class StringConcatenationMissingWhitespaceInspection extends BaseInspecti
     @SuppressWarnings("PublicField")
     public boolean ignoreNonStringLiterals = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.stringConcatenationMissingWhitespaceProblemDescriptor().get();
@@ -90,7 +86,7 @@ public class StringConcatenationMissingWhitespaceInspection extends BaseInspecti
         }
 
         private boolean isMissingWhitespace(PsiExpression lhs, PsiExpression rhs, boolean formatCall) {
-            @NonNls String lhsLiteral = ExpressionUtils.getLiteralString(lhs);
+            String lhsLiteral = ExpressionUtils.getLiteralString(lhs);
             if (lhsLiteral != null) {
                 int length = lhsLiteral.length();
                 if (length == 0) {
@@ -107,7 +103,7 @@ public class StringConcatenationMissingWhitespaceInspection extends BaseInspecti
             else if (ignoreNonStringLiterals) {
                 return false;
             }
-            @NonNls String rhsLiteral = ExpressionUtils.getLiteralString(rhs);
+            String rhsLiteral = ExpressionUtils.getLiteralString(rhs);
             if (rhsLiteral != null) {
                 if (rhsLiteral.isEmpty()) {
                     return false;

@@ -36,7 +36,7 @@ import consulo.language.psi.PsiCodeFragment;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiType;
 import consulo.internal.com.sun.jdi.Type;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class UserExpressionDescriptorImpl extends EvaluationDescriptor implements UserExpressionDescriptor
 {

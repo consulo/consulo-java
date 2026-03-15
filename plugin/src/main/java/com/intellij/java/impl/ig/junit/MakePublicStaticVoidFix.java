@@ -31,7 +31,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -60,7 +59,7 @@ class MakePublicStaticVoidFix extends InspectionGadgetsFix {
         if (method != null) {
             ChangeSignatureProcessor csp = new ChangeSignatureProcessor(project, method, false, myNewVisibility, method.getName(), PsiType.VOID, new ParameterInfoImpl[0]) {
                 @Override
-                protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+                protected void performRefactoring(UsageInfo[] usages) {
                     super.performRefactoring(usages);
                     PsiUtil.setModifierProperty(method, PsiModifier.STATIC, myMakeStatic);
                 }
@@ -75,7 +74,6 @@ class MakePublicStaticVoidFix extends InspectionGadgetsFix {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
         return myName;
     }

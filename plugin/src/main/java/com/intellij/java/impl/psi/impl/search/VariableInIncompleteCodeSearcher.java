@@ -31,7 +31,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.search.ReferencesSearchQueryExecutor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.util.query.QueryExecutorBase;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;
 
@@ -46,7 +45,7 @@ public class VariableInIncompleteCodeSearcher extends QueryExecutorBase<PsiRefer
 
     @Override
     @RequiredReadAction
-    public void processQuery(@Nonnull ReferencesSearch.SearchParameters p, @Nonnull Predicate<? super PsiReference> consumer) {
+    public void processQuery(ReferencesSearch.SearchParameters p, Predicate<? super PsiReference> consumer) {
         PsiElement refElement = p.getElementToSearch();
         if (!refElement.isValid() || !(refElement instanceof PsiLocalVariable || refElement instanceof PsiParameter)) {
             return;

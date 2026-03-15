@@ -29,7 +29,6 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.table.ListTable;
 import consulo.ui.ex.awt.table.ListWrappingTableModel;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -64,14 +63,12 @@ public class BadExceptionThrownInspection extends BaseInspection {
         }
     }
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ProhibitedExceptionThrown";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.badExceptionThrownDisplayName();
@@ -89,7 +86,6 @@ public class BadExceptionThrownInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiType type = (PsiType) infos[0];
         String exceptionName = type.getPresentableText();

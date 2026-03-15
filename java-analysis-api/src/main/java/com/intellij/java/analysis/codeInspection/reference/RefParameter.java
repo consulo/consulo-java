@@ -17,7 +17,7 @@ package com.intellij.java.analysis.codeInspection.reference;
 
 import com.intellij.java.language.psi.PsiParameter;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A node in the reference graph corresponding to a Java method parameter.

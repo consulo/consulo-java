@@ -27,8 +27,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -46,7 +45,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
 
   protected abstract LocalizeValue getText(String varName);
 
-  private boolean isAvailableInContext(@Nonnull PsiJavaCodeReferenceElement element) {
+  private boolean isAvailableInContext(PsiJavaCodeReferenceElement element) {
     PsiElement parent = element.getParent();
 
     if (myKind == CreateClassKind.ANNOTATION) {
@@ -104,7 +103,7 @@ public abstract class CreateClassFromUsageBaseFix extends BaseIntentionAction im
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiJavaCodeReferenceElement element = getRefElement();
     if (element == null ||
       !element.getManager().isInProject(element) ||

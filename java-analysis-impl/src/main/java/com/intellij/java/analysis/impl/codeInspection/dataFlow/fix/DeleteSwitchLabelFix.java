@@ -14,9 +14,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
-import org.jetbrains.annotations.Nls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +25,7 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   private final String myName;
   private final boolean myBranch;
 
-  public DeleteSwitchLabelFix(@Nonnull PsiExpression label) {
+  public DeleteSwitchLabelFix(PsiExpression label) {
     myName = label.getText();
     PsiSwitchLabelStatementBase labelStatement = Objects.requireNonNull(PsiImplUtil.getSwitchLabel(label));
     PsiExpressionList values = labelStatement.getCaseValues();
@@ -47,8 +45,6 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
     return prevStatement == null || !ControlFlowUtils.statementMayCompleteNormally(prevStatement);
   }
 
-  @Nls(capitalization = Nls.Capitalization.Sentence)
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO(myBranch ?
@@ -57,7 +53,7 @@ public class DeleteSwitchLabelFix implements LocalQuickFix {
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     PsiExpression expression = ObjectUtil.tryCast(descriptor.getStartElement(), PsiExpression.class);
     if (expression == null) {
       return;

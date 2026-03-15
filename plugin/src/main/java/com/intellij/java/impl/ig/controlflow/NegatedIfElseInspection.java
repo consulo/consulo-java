@@ -34,9 +34,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
@@ -47,21 +45,18 @@ public class NegatedIfElseInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean m_ignoreNegatedZeroComparison = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "IfStatementWithNegatedCondition";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.negatedIfElseDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.negatedIfElseProblemDescriptor().get();
     }
@@ -85,7 +80,6 @@ public class NegatedIfElseInspection extends BaseInspection {
     }
 
     private static class NegatedIfElseFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.negatedIfElseInvertQuickfix();
@@ -118,7 +112,7 @@ public class NegatedIfElseInspection extends BaseInspection {
                     elseText += '\n';
                 }
             }
-            @NonNls String newStatement = "if(" + negatedCondition + ')' + elseText + " else " + thenBranch.getText();
+            String newStatement = "if(" + negatedCondition + ')' + elseText + " else " + thenBranch.getText();
             replaceStatement(ifStatement, newStatement);
         }
     }
@@ -126,7 +120,7 @@ public class NegatedIfElseInspection extends BaseInspection {
     private class NegatedIfElseVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+        public void visitIfStatement(PsiIfStatement statement) {
             super.visitIfStatement(statement);
             PsiStatement thenBranch = statement.getThenBranch();
             if (thenBranch == null) {

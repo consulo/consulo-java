@@ -24,8 +24,7 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
@@ -35,20 +34,20 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair {
   private final ClsIdentifierImpl myNameIdentifier;
   private final PsiAnnotationMemberValue myMemberValue;
 
-  ClsNameValuePairImpl(@Nonnull ClsElementImpl parent, @Nullable String name, @Nonnull PsiAnnotationMemberValue value) {
+  ClsNameValuePairImpl(ClsElementImpl parent, @Nullable String name, PsiAnnotationMemberValue value) {
     myParent = parent;
     myNameIdentifier = name != null ? new ClsIdentifierImpl(this, name) : null;
     myMemberValue = ClsParsingUtil.getMemberValue(value, this);
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     appendText(myNameIdentifier, 0, buffer, " = ");
     appendText(myMemberValue, 0, buffer);
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
 
     PsiNameValuePair mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -57,7 +56,6 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair {
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     if (myNameIdentifier != null) {
       return new PsiElement[]{
@@ -75,7 +73,7 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair {
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitNameValuePair(this);
     } else {
@@ -104,8 +102,7 @@ class ClsNameValuePairImpl extends ClsElementImpl implements PsiNameValuePair {
   }
 
   @Override
-  @Nonnull
-  public PsiAnnotationMemberValue setValue(@Nonnull PsiAnnotationMemberValue newValue) {
+  public PsiAnnotationMemberValue setValue(PsiAnnotationMemberValue newValue) {
     throw cannotModifyException(this);
   }
 }

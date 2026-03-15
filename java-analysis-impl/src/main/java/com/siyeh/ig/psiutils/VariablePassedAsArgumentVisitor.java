@@ -15,7 +15,6 @@
  */
 package com.siyeh.ig.psiutils;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.JavaRecursiveElementVisitor;
 import consulo.language.psi.PsiElement;
@@ -27,24 +26,23 @@ import com.intellij.java.language.psi.PsiVariable;
 
 class VariablePassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
 
-  @Nonnull
   private final PsiVariable variable;
   private boolean passed = false;
 
-  public VariablePassedAsArgumentVisitor(@Nonnull PsiVariable variable) {
+  public VariablePassedAsArgumentVisitor(PsiVariable variable) {
     super();
     this.variable = variable;
   }
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (!passed) {
       super.visitElement(element);
     }
   }
 
   @Override
-  public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression call) {
+  public void visitMethodCallExpression(PsiMethodCallExpression call) {
     if (passed) {
       return;
     }
@@ -60,7 +58,7 @@ class VariablePassedAsArgumentVisitor extends JavaRecursiveElementVisitor {
   }
 
   @Override
-  public void visitNewExpression(@Nonnull PsiNewExpression newExpression) {
+  public void visitNewExpression(PsiNewExpression newExpression) {
     if (passed) {
       return;
     }

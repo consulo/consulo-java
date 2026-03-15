@@ -2,7 +2,6 @@ package com.intellij.psi;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jetbrains.annotations.NonNls;
 import consulo.application.ApplicationManager;
 import consulo.undoRedo.CommandProcessor;
 import consulo.ide.ServiceManager;
@@ -27,7 +26,7 @@ public abstract class AbstractReparseTestCase extends PsiTestCase
 		myFileType = fileType;
 	}
 
-	protected void insert(@NonNls final String s) throws IncorrectOperationException
+	protected void insert(final String s) throws IncorrectOperationException
 	{
 		CommandProcessor.getInstance().executeCommand(getProject(), new Runnable()
 		{
@@ -126,7 +125,7 @@ public abstract class AbstractReparseTestCase extends PsiTestCase
 		}, "asd", null);
 	}
 
-	protected void prepareFile(@NonNls String prefix, @NonNls String suffix) throws IncorrectOperationException
+	protected void prepareFile(String prefix, String suffix) throws IncorrectOperationException
 	{
 		myDummyFile = createDummyFile(getTestName(false) + "." + myFileType.getDefaultExtension(), prefix + suffix);
 		myInsertOffset = prefix.length();

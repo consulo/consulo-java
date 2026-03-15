@@ -27,8 +27,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiFunction;
 
@@ -38,14 +37,13 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
     final PsiClass myClassToExtendFrom;
     private final boolean myToAdd;
     private final PsiClassType myTypeToExtendFrom;
-    @Nonnull
     private final LocalizeValue myName;
 
-    public ExtendsListFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType typeToExtendFrom, boolean toAdd) {
+    public ExtendsListFix(PsiClass aClass, PsiClassType typeToExtendFrom, boolean toAdd) {
         this(aClass, typeToExtendFrom.resolve(), typeToExtendFrom, toAdd);
     }
 
-    public ExtendsListFix(@Nonnull PsiClass aClass, @Nonnull PsiClass classToExtendFrom, boolean toAdd) {
+    public ExtendsListFix(PsiClass aClass, PsiClass classToExtendFrom, boolean toAdd) {
         this(
             aClass,
             classToExtendFrom,
@@ -55,9 +53,9 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
     }
 
     private ExtendsListFix(
-        @Nonnull PsiClass aClass,
+        PsiClass aClass,
         PsiClass classToExtendFrom,
-        @Nonnull PsiClassType typeToExtendFrom,
+        PsiClassType typeToExtendFrom,
         boolean toAdd
     ) {
         super(aClass);
@@ -82,7 +80,6 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
     }
 
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myName;
@@ -90,10 +87,10 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiClass myClass = (PsiClass) startElement;
         return myClass.isValid()
@@ -109,11 +106,11 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiClass myClass = (PsiClass) startElement;
         invokeImpl(myClass);
@@ -144,7 +141,7 @@ public class ExtendsListFix extends LocalQuickFixAndIntentionActionOnPsiElement 
     /**
      * @param position to add new class to or -1 if add to the end
      */
-    PsiReferenceList modifyList(@Nonnull PsiReferenceList extendsList, boolean add, int position) throws IncorrectOperationException {
+    PsiReferenceList modifyList(PsiReferenceList extendsList, boolean add, int position) throws IncorrectOperationException {
         PsiJavaCodeReferenceElement[] referenceElements = extendsList.getReferenceElements();
         boolean alreadyExtends = false;
         for (PsiJavaCodeReferenceElement referenceElement : referenceElements) {

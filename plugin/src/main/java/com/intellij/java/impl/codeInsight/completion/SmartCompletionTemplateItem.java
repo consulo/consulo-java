@@ -8,13 +8,12 @@ import consulo.language.editor.completion.lookup.LookupItem;
 import consulo.language.editor.template.Template;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author peter
  */
 public class SmartCompletionTemplateItem extends LookupItem<Template> implements TypedLookupItem {
-  @NonNls private static final String PLACEHOLDER = "xxx";
+  private static final String PLACEHOLDER = "xxx";
   private final PsiElement myContext;
 
   public SmartCompletionTemplateItem(Template o, PsiElement context) {

@@ -25,7 +25,6 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.lang.function.Conditions;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -45,8 +44,8 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
         private final Predicate<String> myNameCondition;
 
         public SearchParameters(
-            @Nonnull PsiClass aClass,
-            @Nonnull SearchScope scope,
+            PsiClass aClass,
+            SearchScope scope,
             boolean checkDeep,
             boolean checkInheritance,
             boolean includeAnonymous
@@ -55,12 +54,12 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
         }
 
         public SearchParameters(
-            @Nonnull PsiClass aClass,
-            @Nonnull SearchScope scope,
+            PsiClass aClass,
+            SearchScope scope,
             boolean checkDeep,
             boolean checkInheritance,
             boolean includeAnonymous,
-            @Nonnull Predicate<String> nameCondition
+            Predicate<String> nameCondition
         ) {
             myClass = aClass;
             myScope = scope;
@@ -70,12 +69,10 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
             myNameCondition = nameCondition;
         }
 
-        @Nonnull
         public PsiClass getClassToProcess() {
             return myClass;
         }
 
-        @Nonnull
         public Predicate<String> getNameCondition() {
             return myNameCondition;
         }
@@ -102,8 +99,8 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
     }
 
     public static Query<PsiClass> search(
-        @Nonnull PsiClass aClass,
-        @Nonnull SearchScope scope,
+        PsiClass aClass,
+        SearchScope scope,
         boolean checkDeep,
         boolean checkInheritance,
         boolean includeAnonymous
@@ -111,7 +108,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
         return search(new SearchParameters(aClass, scope, checkDeep, checkInheritance, includeAnonymous));
     }
 
-    public static Query<PsiClass> search(@Nonnull SearchParameters parameters) {
+    public static Query<PsiClass> search(SearchParameters parameters) {
         return INSTANCE.createUniqueResultsQuery(
             parameters,
             HashingStrategy.canonical(),
@@ -123,19 +120,19 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
     }
 
     public static Query<PsiClass> search(
-        @Nonnull PsiClass aClass,
-        @Nonnull SearchScope scope,
+        PsiClass aClass,
+        SearchScope scope,
         boolean checkDeep,
         boolean checkInheritance
     ) {
         return search(aClass, scope, checkDeep, checkInheritance, true);
     }
 
-    public static Query<PsiClass> search(@Nonnull PsiClass aClass, @Nonnull SearchScope scope, boolean checkDeep) {
+    public static Query<PsiClass> search(PsiClass aClass, SearchScope scope, boolean checkDeep) {
         return search(aClass, scope, checkDeep, true);
     }
 
-    public static Query<PsiClass> search(@Nonnull PsiClass aClass, boolean checkDeep) {
+    public static Query<PsiClass> search(PsiClass aClass, boolean checkDeep) {
         return search(
             aClass,
             Application.get().runReadAction(new Supplier<>() {
@@ -151,7 +148,7 @@ public class ClassInheritorsSearch extends ExtensibleQueryFactory<PsiClass, Clas
         );
     }
 
-    public static Query<PsiClass> search(@Nonnull PsiClass aClass) {
+    public static Query<PsiClass> search(PsiClass aClass) {
         return search(aClass, true);
     }
 

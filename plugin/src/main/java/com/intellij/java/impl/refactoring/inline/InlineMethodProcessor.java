@@ -73,8 +73,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -101,8 +100,8 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
     @RequiredReadAction
     public InlineMethodProcessor(
-        @Nonnull Project project,
-        @Nonnull PsiMethod method,
+        Project project,
+        PsiMethod method,
         @Nullable PsiJavaCodeReferenceElement reference,
         Editor editor,
         boolean isInlineThisOnly
@@ -112,8 +111,8 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
     @RequiredReadAction
     public InlineMethodProcessor(
-        @Nonnull Project project,
-        @Nonnull PsiMethod method,
+        Project project,
+        PsiMethod method,
         @Nullable PsiJavaCodeReferenceElement reference,
         Editor editor,
         boolean isInlineThisOnly,
@@ -135,19 +134,16 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         myDescriptiveName = DescriptiveNameUtil.getDescriptiveName(myMethod);
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.inlineMethodCommand(myDescriptiveName);
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new InlineViewDescriptor(myMethod);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -165,7 +161,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         if (mySearchInComments || mySearchForTextOccurrences) {
             NonCodeUsageInfoFactory infoFactory = new NonCodeUsageInfoFactory(myMethod, myMethod.getName()) {
                 @Override
-                public UsageInfo createUsageInfo(@Nonnull PsiElement usage, int startOffset, int endOffset) {
+                public UsageInfo createUsageInfo(PsiElement usage, int startOffset, int endOffset) {
                     if (PsiTreeUtil.isAncestor(myMethod, usage, false)) {
                         return null;
                     }
@@ -207,7 +203,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         if (!myInlineThisOnly && checkReadOnly()) {
             if (!CommonRefactoringUtil.checkReadOnlyStatus(myProject, myMethod)) {
                 return false;
@@ -253,16 +249,15 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         myInliners.put(
             JavaLanguage.INSTANCE,
             new InlineHandler.Inliner() {
-                @Nonnull
                 @Override
                 @RequiredReadAction
-                public MultiMap<PsiElement, LocalizeValue> getConflicts(@Nonnull PsiReference reference, @Nonnull PsiElement referenced) {
+                public MultiMap<PsiElement, LocalizeValue> getConflicts(PsiReference reference, PsiElement referenced) {
                     return MultiMap.empty();
                 }
 
                 @Override
                 @RequiredReadAction
-                public void inlineUsage(@Nonnull UsageInfo usage, @Nonnull PsiElement referenced) {
+                public void inlineUsage(UsageInfo usage, PsiElement referenced) {
                     if (usage instanceof NonCodeUsageInfo) {
                         return;
                     }
@@ -305,8 +300,8 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     }
 
     private static void processSideEffectsInMethodReferenceQualifier(
-        @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts,
-        @Nonnull PsiMethodReferenceExpression methodRef
+        MultiMap<PsiElement, LocalizeValue> conflicts,
+        PsiMethodReferenceExpression methodRef
     ) {
         PsiExpression qualifierExpression = methodRef.getQualifierExpression();
         if (qualifierExpression != null) {
@@ -337,16 +332,16 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
     private void addInaccessibleSuperCallsConflicts(final UsageInfo[] usagesIn, final MultiMap<PsiElement, LocalizeValue> conflicts) {
         myMethod.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
             }
 
             @Override
-            public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+            public void visitAnonymousClass(PsiAnonymousClass aClass) {
             }
 
             @Override
             @RequiredReadAction
-            public void visitSuperExpression(@Nonnull PsiSuperExpression expression) {
+            public void visitSuperExpression(PsiSuperExpression expression) {
                 super.visitSuperExpression(expression);
                 PsiType type = expression.getType();
                 PsiClass superClass = PsiUtil.resolveClassInType(type);
@@ -449,7 +444,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         int col = -1;
         int line = -1;
         if (myEditor != null) {
@@ -1489,7 +1484,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
             PsiElement classExpr = ref.replace(callExpr);
             classExpr.accept(new JavaRecursiveElementWalkingVisitor() {
                 @Override
-                public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+                public void visitReturnStatement(PsiReturnStatement statement) {
                     super.visitReturnStatement(statement);
                     if (statement.getReturnValue() instanceof PsiMethodCallExpression methodCall) {
                         refsVector.add(methodCall.getMethodExpression());
@@ -1588,7 +1583,6 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
             && myManager.areElementsEquivalent(field, lExpression.resolve()) ? assignment.getRExpression() : null;
     }
 
-    @Nonnull
     public static LocalizeValue checkCalledInSuperOrThisExpr(PsiCodeBlock methodBody, PsiElement element) {
         if (methodBody.getStatements().length > 1) {
             PsiExpression expr = PsiTreeUtil.getParentOfType(element, PsiExpression.class);
@@ -1675,9 +1669,8 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    @Nonnull
     @Override
-    protected Collection<? extends PsiElement> getElementsToWrite(@Nonnull UsageViewDescriptor descriptor) {
+    protected Collection<? extends PsiElement> getElementsToWrite(UsageViewDescriptor descriptor) {
         if (myInlineThisOnly) {
             return Collections.singletonList(myReference);
         }

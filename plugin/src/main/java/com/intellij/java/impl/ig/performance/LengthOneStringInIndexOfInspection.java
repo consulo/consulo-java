@@ -29,27 +29,22 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class LengthOneStringInIndexOfInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.lengthOneStringInIndexofDisplayName();
   }
 
   @Override
-  @Nonnull
   public String getID() {
     return "SingleCharacterStringConcatenation";
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     String string = (String)infos[0];
     String escapedString = StringUtil.escapeStringCharacters(string);
@@ -69,7 +64,6 @@ public class LengthOneStringInIndexOfInspection
   private static class ReplaceStringsWithCharsFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.lengthOneStringsInConcatenationReplaceQuickfix();
     }
@@ -97,7 +91,7 @@ public class LengthOneStringInIndexOfInspection
 
     @Override
     public void visitLiteralExpression(
-      @Nonnull PsiLiteralExpression expression) {
+      PsiLiteralExpression expression) {
       super.visitLiteralExpression(expression);
       PsiType type = expression.getType();
       if (!TypeUtils.isJavaLangString(type)) {
@@ -129,7 +123,7 @@ public class LengthOneStringInIndexOfInspection
         (PsiMethodCallExpression)grandparent;
       PsiReferenceExpression methodExpression =
         call.getMethodExpression();
-      @NonNls String name = methodExpression.getReferenceName();
+      String name = methodExpression.getReferenceName();
       if (!HardcodedMethodConstants.INDEX_OF.equals(name) &&
           !HardcodedMethodConstants.LAST_INDEX_OF.equals(name)) {
         return false;

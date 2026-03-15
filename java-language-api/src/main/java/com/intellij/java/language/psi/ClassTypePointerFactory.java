@@ -20,8 +20,7 @@ import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Created by Max Medvedev on 10/25/13
@@ -31,5 +30,5 @@ public interface ClassTypePointerFactory {
     ExtensionPointName<ClassTypePointerFactory> EP_NAME = ExtensionPointName.create(ClassTypePointerFactory.class);
 
     @Nullable
-    SmartTypePointer createClassTypePointer(@Nonnull PsiClassType classType, @Nonnull Project project);
+    SmartTypePointer createClassTypePointer(PsiClassType classType, Project project);
 }

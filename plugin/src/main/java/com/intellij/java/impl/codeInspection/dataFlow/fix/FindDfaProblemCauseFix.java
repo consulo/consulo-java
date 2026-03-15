@@ -31,7 +31,6 @@ import consulo.ui.ex.popup.event.JBPopupAdapter;
 import consulo.ui.ex.popup.event.LightweightWindowEvent;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 import one.util.streamex.StreamEx;
 
 import javax.swing.*;
@@ -62,14 +61,13 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction 
         return false;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return LocalizeValue.localizeTODO("Find cause");
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         ThrowableComputable<TrackingRunner.CauseItem, RuntimeException> causeFinder = () -> {
             PsiExpression element = myAnchor.getElement();
             if (element == null) {
@@ -156,7 +154,7 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction 
             })
             .addListener(new JBPopupAdapter() {
                 @Override
-                public void onClosed(@Nonnull LightweightWindowEvent event) {
+                public void onClosed(LightweightWindowEvent event) {
                     highlighter.getAndSet(null).dropHighlight();
                 }
             })

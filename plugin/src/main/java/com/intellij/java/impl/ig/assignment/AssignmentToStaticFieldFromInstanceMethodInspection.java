@@ -26,17 +26,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssignmentToStaticFieldFromInstanceMethodInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentToStaticFieldFromInstanceMethodDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.assignmentToStaticFieldFromInstanceMethodProblemDescriptor().get();
     }
@@ -50,7 +47,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection extends BaseIns
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression expression
+            PsiAssignmentExpression expression
         ) {
             if (!WellFormednessUtils.isWellFormed(expression)) {
                 return;
@@ -61,7 +58,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection extends BaseIns
 
         @Override
         public void visitPrefixExpression(
-            @Nonnull PsiPrefixExpression expression
+            PsiPrefixExpression expression
         ) {
             IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&
@@ -77,7 +74,7 @@ public class AssignmentToStaticFieldFromInstanceMethodInspection extends BaseIns
 
         @Override
         public void visitPostfixExpression(
-            @Nonnull PsiPostfixExpression expression
+            PsiPostfixExpression expression
         ) {
             IElementType tokenType = expression.getOperationTokenType();
             if (!tokenType.equals(JavaTokenType.PLUSPLUS) &&

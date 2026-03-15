@@ -26,27 +26,23 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class CharacterComparisonInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "CharacterComparison";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.characterComparisonDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.characterComparisonProblemDescriptor().get();
     }
@@ -59,7 +55,7 @@ public class CharacterComparisonInspection extends BaseInspection {
     private static class CharacterComparisonVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+        public void visitBinaryExpression(PsiBinaryExpression expression) {
             super.visitBinaryExpression(expression);
             PsiExpression rhs = expression.getROperand();
             if (!ComparisonUtils.isComparison(expression) || ComparisonUtils.isEqualityComparison(expression)) {

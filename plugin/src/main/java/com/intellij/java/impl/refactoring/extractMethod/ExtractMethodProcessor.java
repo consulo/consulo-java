@@ -90,8 +90,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
 import java.util.*;
@@ -445,7 +444,7 @@ public class ExtractMethodProcessor implements MatchProvider {
     }
 
     @RequiredReadAction
-    private static Nullability inferNullability(@Nonnull PsiCodeBlock block, @Nonnull PsiExpression expr) {
+    private static Nullability inferNullability(PsiCodeBlock block, PsiExpression expr) {
         DataFlowRunner dfaRunner = new DataFlowRunner(block.getProject());
 
         class Visitor extends StandardInstructionVisitor {
@@ -454,10 +453,10 @@ public class ExtractMethodProcessor implements MatchProvider {
 
             @Override
             protected void beforeExpressionPush(
-                @Nonnull DfaValue value,
-                @Nonnull PsiExpression expression,
+                DfaValue value,
+                PsiExpression expression,
                 @Nullable TextRange range,
-                @Nonnull DfaMemoryState state
+                DfaMemoryState state
             ) {
                 if (expression == expr && range == null) {
                     myVisited = true;
@@ -497,17 +496,17 @@ public class ExtractMethodProcessor implements MatchProvider {
         final List<PsiClass> localClasses = new ArrayList<>();
         container.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 localClasses.add(aClass);
             }
 
             @Override
-            public void visitAnonymousClass(@Nonnull PsiAnonymousClass aClass) {
+            public void visitAnonymousClass(PsiAnonymousClass aClass) {
                 visitElement(aClass);
             }
 
             @Override
-            public void visitTypeParameter(@Nonnull PsiTypeParameter classParameter) {
+            public void visitTypeParameter(PsiTypeParameter classParameter) {
                 visitElement(classParameter);
             }
         });
@@ -664,13 +663,13 @@ public class ExtractMethodProcessor implements MatchProvider {
                     element.accept(new JavaRecursiveElementWalkingVisitor() {
                         @Override
                         @RequiredReadAction
-                        public void visitLocalVariable(@Nonnull PsiLocalVariable variable) {
+                        public void visitLocalVariable(PsiLocalVariable variable) {
                             super.visitLocalVariable(variable);
                             vars.put(variable.getName(), variable);
                         }
 
                         @Override
-                        public void visitClass(@Nonnull PsiClass aClass) {
+                        public void visitClass(PsiClass aClass) {
                         }
                     });
                 }
@@ -1523,7 +1522,6 @@ public class ExtractMethodProcessor implements MatchProvider {
         }
     }
 
-    @Nonnull
     @RequiredWriteAction
     protected PsiMethodCallExpression generateMethodCall(PsiExpression instanceQualifier, boolean generateArgs)
         throws IncorrectOperationException {

@@ -25,8 +25,7 @@ import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiModificationTracker;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -62,12 +61,11 @@ public abstract class TestFrameworks {
   }
 
   @Nullable
-  public static TestFramework detectFramework(@Nonnull final PsiClass psiClass) {
+  public static TestFramework detectFramework(final PsiClass psiClass) {
     return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFramework(psiClass), PsiModificationTracker.MODIFICATION_COUNT));
   }
 
-  @Nonnull
-  public static Set<TestFramework> detectApplicableFrameworks(@Nonnull final PsiClass psiClass) {
+  public static Set<TestFramework> detectApplicableFrameworks(final PsiClass psiClass) {
     return LanguageCachedValueUtil.getCachedValue(psiClass, () -> CachedValueProvider.Result.create(computeFrameworks(psiClass), PsiModificationTracker.MODIFICATION_COUNT));
   }
 

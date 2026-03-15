@@ -6,8 +6,7 @@ import com.intellij.java.language.psi.PsiVariable;
 import consulo.fileEditor.structureView.tree.SortableTreeElement;
 import consulo.project.DumbService;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.psi.util.PsiFormatUtil.formatVariable;
 import static com.intellij.java.language.psi.util.PsiFormatUtilBase.*;
@@ -31,7 +30,6 @@ abstract class JavaVariableBaseTreeElement<T extends PsiVariable> extends JavaCl
   }
 
   @Override
-  @Nonnull
   public String getAlphaSortKey() {
     T element = getElement();
     if (element != null) {

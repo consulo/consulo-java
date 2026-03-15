@@ -27,9 +27,7 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +49,6 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection extends BaseIn
         s_conversionMap.put(CommonClassNames.JAVA_LANG_SHORT, "parseShort");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringDisplayName();
@@ -63,14 +60,12 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection extends BaseIn
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         String replacementString = calculateReplacementExpression((PsiMethodCallExpression) infos[0]);
         return InspectionGadgetsLocalize.unnecessaryTemporaryOnConversionFromStringProblemDescriptor(replacementString).get();
     }
 
     @Nullable
-    @NonNls
     static String calculateReplacementExpression(PsiMethodCallExpression expression) {
         PsiReferenceExpression methodExpression = expression.getMethodExpression();
         PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
@@ -121,7 +116,6 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection extends BaseIn
             myName = name;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return myName;
@@ -160,7 +154,7 @@ public class UnnecessaryTemporaryOnConversionFromStringInspection extends BaseIn
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression = expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();

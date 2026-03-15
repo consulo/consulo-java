@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.*;
 import consulo.language.psi.*;
 import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.impl.ipp.psiutils.ErrorUtil;
-import org.jetbrains.annotations.NonNls;
 
 class AssertTrueOrFalsePredicate implements PsiElementPredicate {
 
@@ -36,7 +35,7 @@ class AssertTrueOrFalsePredicate implements PsiElementPredicate {
     }
     PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"assertTrue".equals(methodName) &&
         !"assertFalse".equals(methodName)) {
       return false;

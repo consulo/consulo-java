@@ -2,7 +2,7 @@
 
 package codeInsight.createFieldFromParameterAction.test1;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class TestBefore {
 

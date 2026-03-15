@@ -27,7 +27,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
 
 public class LightKeyword extends LightElement implements PsiKeyword, PsiJavaToken {
   private final String myText;
@@ -50,7 +49,7 @@ public class LightKeyword extends LightElement implements PsiKeyword, PsiJavaTok
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitKeyword(this);
     } else {

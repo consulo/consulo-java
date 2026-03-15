@@ -46,8 +46,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -79,7 +78,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
     }
 
     @Override
-    public void update(@Nonnull AnActionEvent event) {
+    public void update(AnActionEvent event) {
         super.update(event);
         Presentation presentation = event.getPresentation();
         if (!presentation.isEnabled()) {

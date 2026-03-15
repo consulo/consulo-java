@@ -35,10 +35,8 @@ import consulo.language.psi.resolve.ResolveCache;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.ObjectUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -48,14 +46,13 @@ import java.util.Set;
 public abstract class AbstractQualifiedReference<T extends AbstractQualifiedReference<T>> extends ASTWrapperPsiElement
     implements PsiPolyVariantReference, PsiQualifiedReferenceElement {
   private static final ResolveCache.PolyVariantResolver<AbstractQualifiedReference> MY_RESOLVER = new ResolveCache.PolyVariantResolver<AbstractQualifiedReference>() {
-    @Nonnull
     @Override
-    public ResolveResult[] resolve(@Nonnull AbstractQualifiedReference expression, boolean incompleteCode) {
+    public ResolveResult[] resolve(AbstractQualifiedReference expression, boolean incompleteCode) {
       return expression.resolveInner();
     }
   };
 
-  protected AbstractQualifiedReference(@Nonnull ASTNode node) {
+  protected AbstractQualifiedReference(ASTNode node) {
     super(node);
   }
 
@@ -72,7 +69,6 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   protected abstract ResolveResult[] resolveInner();
 
   @Override
-  @Nonnull
   public final ResolveResult[] multiResolve(boolean incompleteCode) {
     PsiFile file = getContainingFile();
     return ResolveCache.getInstance(file.getProject()).resolveWithCaching(this, MY_RESOLVER, true, false, file);
@@ -101,7 +97,6 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
 
 
   @Override
-  @Nonnull
   public String getCanonicalText() {
     return getText();
   }
@@ -125,7 +120,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     CheckUtil.checkWritable(this);
     if (isReferenceTo(element)) return this;
 
@@ -177,7 +172,6 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     return (AbstractQualifiedReference) newNode.getPsi();
   }
 
-  @Nonnull
   protected abstract T parseReference(String newText);
 
   protected boolean isAccessible(PsiElement element) {
@@ -188,7 +182,6 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     return true;
   }
 
-  @Nonnull
   protected AbstractQualifiedReference shortenReferences() {
     PsiElement refElement = resolve();
     if (refElement instanceof PsiClass) {
@@ -238,7 +231,6 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
 
   @Override
   @Nullable
-  @NonNls
   public String getReferenceName() {
     PsiElement element = getReferenceNameElement();
     return element == null ? null : element.getText().trim();
@@ -254,7 +246,7 @@ public abstract class AbstractQualifiedReference<T extends AbstractQualifiedRefe
     private final Set<ResolveResult> myResults = new LinkedHashSet<ResolveResult>();
 
     @Override
-    public boolean execute(@Nonnull PsiElement element, ResolveState state) {
+    public boolean execute(PsiElement element, ResolveState state) {
       if (isFound()) return false;
       process(element);
       return true;

@@ -27,22 +27,18 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class CallToStringConcatCanBeReplacedByOperatorInspection
   extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorProblemDescriptor().get();
   }
@@ -61,7 +57,6 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
   private static class CallToStringConcatCanBeReplacedByOperatorFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.callToStringConcatCanBeReplacedByOperatorQuickfix();
     }
@@ -94,7 +89,7 @@ public class CallToStringConcatCanBeReplacedByOperatorInspection
         return;
       }
       PsiExpression argument = arguments[0];
-      @NonNls String newExpression =
+      String newExpression =
         qualifier.getText() + '+' + argument.getText();
       replaceExpression(methodCallExpression, newExpression);
     }

@@ -4,8 +4,7 @@ package com.intellij.java.language.impl.psi.impl.light;
 import com.intellij.java.language.impl.psi.impl.PsiClassImplUtil;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +23,7 @@ public class LightPsiClassBuilder extends LightPsiClassBase implements OriginInf
   private PsiClass myContainingClass;
   private String myOriginInfo;
 
-  public LightPsiClassBuilder(@Nonnull PsiElement context, @Nonnull String name) {
+  public LightPsiClassBuilder(PsiElement context, String name) {
     super(context, name);
   }
 
@@ -34,46 +33,39 @@ public class LightPsiClassBuilder extends LightPsiClassBase implements OriginInf
     return myOriginInfo;
   }
 
-  @Nonnull
   @Override
   public LightModifierList getModifierList() {
     return myModifierList;
   }
 
-  @Nonnull
   @Override
   public LightReferenceListBuilder getExtendsList() {
     return myExtendsList;
   }
 
-  @Nonnull
   @Override
   public LightReferenceListBuilder getImplementsList() {
     return myImplementsList;
   }
 
   @Override
-  @Nonnull
   public PsiField  [] getFields() {
     // TODO
     return PsiField.EMPTY_ARRAY;
   }
 
   @Override
-  @Nonnull
   public PsiMethod  [] getMethods() {
     return myMethods.toArray(PsiMethod.EMPTY_ARRAY);
   }
 
   @Override
-  @Nonnull
   public PsiClass [] getInnerClasses() {
     // TODO
     return PsiClass.EMPTY_ARRAY;
   }
 
   @Override
-  @Nonnull
   public PsiClassInitializer [] getInitializers() {
     return PsiClassInitializer.EMPTY_ARRAY;
   }
@@ -89,7 +81,6 @@ public class LightPsiClassBuilder extends LightPsiClassBase implements OriginInf
     return myContainingClass;
   }
 
-  @Nonnull
   @Override
   public LightTypeParameterListBuilder getTypeParameterList() {
     return myTypeParametersList;

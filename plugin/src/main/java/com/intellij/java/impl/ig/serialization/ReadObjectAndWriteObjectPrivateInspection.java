@@ -26,22 +26,18 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ReadObjectAndWriteObjectPrivateInspection extends BaseInspection {
-    @Nonnull
     public String getID() {
         return "NonPrivateSerializationMethod";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.readwriteobjectPrivateDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.readwriteobjectPrivateProblemDescriptor().get();
     }
@@ -56,7 +52,7 @@ public class ReadObjectAndWriteObjectPrivateInspection extends BaseInspection {
 
     private static class ReadObjectWriteObjectPrivateVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             // no call to super, so it doesn't drill down
             PsiClass aClass = method.getContainingClass();
             if (aClass == null) {

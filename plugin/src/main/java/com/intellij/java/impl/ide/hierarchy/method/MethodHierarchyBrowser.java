@@ -32,7 +32,6 @@ import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.IdeActions;
 import consulo.ui.ex.awt.PopupHandler;
 import consulo.ui.ex.tree.NodeDescriptor;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.Comparator;
@@ -46,7 +45,7 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
     }
 
     @Override
-    protected void createTrees(@Nonnull Map<String, JTree> trees) {
+    protected void createTrees(Map<String, JTree> trees) {
         JTree tree = createTree(false);
         ActionGroup group = (ActionGroup) ActionManager.getInstance().getAction(IdeActions.GROUP_METHOD_HIERARCHY_POPUP);
         PopupHandler.installPopupHandler(tree, group, ActionPlaces.METHOD_HIERARCHY_VIEW_POPUP, ActionManager.getInstance());
@@ -68,18 +67,18 @@ public class MethodHierarchyBrowser extends MethodHierarchyBrowserBase {
     }
 
     @Override
-    protected PsiElement getElementFromDescriptor(@Nonnull HierarchyNodeDescriptor descriptor) {
+    protected PsiElement getElementFromDescriptor(HierarchyNodeDescriptor descriptor) {
         return descriptor instanceof MethodHierarchyNodeDescriptor methodHierarchyNodeDescriptor
             ? methodHierarchyNodeDescriptor.getTargetElement() : null;
     }
 
     @Override
-    protected boolean isApplicableElement(@Nonnull PsiElement psiElement) {
+    protected boolean isApplicableElement(PsiElement psiElement) {
         return psiElement instanceof PsiMethod;
     }
 
     @Override
-    protected HierarchyTreeStructure createHierarchyTreeStructure(@Nonnull String typeName, @Nonnull PsiElement psiElement) {
+    protected HierarchyTreeStructure createHierarchyTreeStructure(String typeName, PsiElement psiElement) {
         if (!METHOD_TYPE.equals(typeName)) {
             LOG.error("unexpected type: " + typeName);
             return null;

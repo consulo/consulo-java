@@ -22,25 +22,21 @@ import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class ReturnFromFinallyBlockInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "ReturnInsideFinallyBlock";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.returnFromFinallyBlockDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.returnFromFinallyBlockProblemDescriptor().get();
     }
@@ -56,7 +52,7 @@ public class ReturnFromFinallyBlockInspection extends BaseInspection {
     private static class ReturnFromFinallyBlockVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+        public void visitReturnStatement(PsiReturnStatement statement) {
             super.visitReturnStatement(statement);
             if (!ControlFlowUtils.isInFinallyBlock(statement)) {
                 return;

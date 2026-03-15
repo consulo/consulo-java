@@ -20,7 +20,6 @@ import consulo.language.pattern.PatternCondition;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.util.ProcessingContext;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -30,17 +29,17 @@ public class PsiBinaryExpressionPattern extends PsiExpressionPattern<PsiBinaryEx
     super(PsiBinaryExpression.class);
   }
 
-  public PsiBinaryExpressionPattern left(@Nonnull final ElementPattern pattern) {
+  public PsiBinaryExpressionPattern left(final ElementPattern pattern) {
     return with(new PatternCondition<PsiBinaryExpression>("left") {
-      public boolean accepts(@Nonnull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
+      public boolean accepts(final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
         return pattern.getCondition().accepts(psiBinaryExpression.getLOperand(), context);
       }
     });
   }
 
-  public PsiBinaryExpressionPattern right(@Nonnull final ElementPattern pattern) {
+  public PsiBinaryExpressionPattern right(final ElementPattern pattern) {
     return with(new PatternCondition<PsiBinaryExpression>("right") {
-      public boolean accepts(@Nonnull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
+      public boolean accepts(final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
         return pattern.getCondition().accepts(psiBinaryExpression.getROperand(), context);
       }
     });
@@ -48,7 +47,7 @@ public class PsiBinaryExpressionPattern extends PsiExpressionPattern<PsiBinaryEx
 
   public PsiBinaryExpressionPattern operation(final ElementPattern pattern) {
     return with(new PatternCondition<PsiBinaryExpression>("operation") {
-      public boolean accepts(@Nonnull final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
+      public boolean accepts(final PsiBinaryExpression psiBinaryExpression, final ProcessingContext context) {
         return pattern.getCondition().accepts(psiBinaryExpression.getOperationSign(), context);
       }
     });

@@ -18,7 +18,6 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
@@ -41,7 +40,7 @@ public class DocCommentBlock extends AbstractJavaBlock
 						   Indent indent,
 						   CommonCodeStyleSettings settings,
 						   JavaCodeStyleSettings javaSettings,
-						   @Nonnull FormattingMode formattingMode)
+						   FormattingMode formattingMode)
 	{
 		super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
 	}
@@ -69,7 +68,6 @@ public class DocCommentBlock extends AbstractJavaBlock
 	}
 
 	@Override
-	@Nonnull
 	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		return new ChildAttributes(Indent.getSpaceIndent(1), null);

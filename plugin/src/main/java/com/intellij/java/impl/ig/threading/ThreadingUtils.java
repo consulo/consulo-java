@@ -15,11 +15,9 @@
  */
 package com.intellij.java.impl.ig.threading;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
-import org.jetbrains.annotations.NonNls;
 
 class ThreadingUtils {
 
@@ -27,7 +25,7 @@ class ThreadingUtils {
   }
 
   public static boolean isWaitCall(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
     String methodName = methodExpression.getReferenceName();
@@ -60,10 +58,10 @@ class ThreadingUtils {
   }
 
   public static boolean isNotifyOrNotifyAllCall(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"notify".equals(methodName) && !"notifyAll".equals(methodName)) {
       return false;
     }
@@ -73,10 +71,10 @@ class ThreadingUtils {
   }
 
   public static boolean isSignalOrSignalAllCall(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"signal".equals(methodName) && !"signalAll".equals(methodName)) {
       return false;
     }
@@ -98,10 +96,10 @@ class ThreadingUtils {
   }
 
   public static boolean isAwaitCall(
-    @Nonnull PsiMethodCallExpression expression) {
+    PsiMethodCallExpression expression) {
     PsiReferenceExpression methodExpression =
       expression.getMethodExpression();
-    @NonNls String methodName = methodExpression.getReferenceName();
+    String methodName = methodExpression.getReferenceName();
     if (!"await".equals(methodName)
         && !"awaitUntil".equals(methodName)
         && !"awaitUninterruptibly".equals(methodName)

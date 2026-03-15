@@ -29,7 +29,6 @@ import consulo.project.Project;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -77,9 +76,8 @@ public class JavadocNavigationDelegate implements EditorNavigationDelegate {
    * @param editor current editor
    * @return processing result
    */
-  @Nonnull
   @Override
-  public Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull DataContext dataContext) {
+  public Result navigateToLineEnd(Editor editor, DataContext dataContext) {
     if (!CodeInsightSettings.getInstance().SMART_END_ACTION) {
       return Result.CONTINUE;
     }
@@ -101,7 +99,7 @@ public class JavadocNavigationDelegate implements EditorNavigationDelegate {
     return navigateToLineEnd(editor, psiFile);
   }
 
-  public static Result navigateToLineEnd(@Nonnull Editor editor, @Nonnull PsiFile psiFile) {
+  public static Result navigateToLineEnd(Editor editor, PsiFile psiFile) {
     Document document = editor.getDocument();
     CaretModel caretModel = editor.getCaretModel();
     int offset = caretModel.getOffset();

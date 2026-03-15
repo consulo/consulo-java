@@ -26,16 +26,14 @@ import consulo.language.psi.PsiManager;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
  */
 @ExtensionImpl
 public class ClassFileViewProviderFactory implements VirtualFileViewProviderFactory {
-  @Nonnull
   @Override
-  public FileViewProvider createFileViewProvider(@Nonnull VirtualFile file, Language language, @Nonnull PsiManager manager, boolean eventSystemEnabled) {
+  public FileViewProvider createFileViewProvider(VirtualFile file, Language language, PsiManager manager, boolean eventSystemEnabled) {
     ClassFileDecompiler decompiler = ClassFileDecompilers.find(file);
     if (decompiler instanceof ClassFileDecompiler.Full) {
       return ((ClassFileDecompiler.Full) decompiler).createFileViewProvider(file, manager, eventSystemEnabled);
@@ -44,7 +42,6 @@ public class ClassFileViewProviderFactory implements VirtualFileViewProviderFact
     return new ClassFileViewProvider(manager, file, eventSystemEnabled);
   }
 
-  @Nonnull
   @Override
   public FileType getFileType() {
     return JavaClassFileType.INSTANCE;

@@ -16,8 +16,7 @@ import consulo.util.collection.Lists;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import java.util.*;
@@ -39,24 +38,22 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
     }
 
     @Override
-    public PsiClass findClass(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+    public PsiClass findClass(String qualifiedName, GlobalSearchScope scope) {
         return myJavaFileManager.findClass(qualifiedName, scope);
     }
 
     @Override
-    @Nonnull
-    public PsiClass[] findClasses(@Nonnull String qualifiedName, @Nonnull GlobalSearchScope scope) {
+    public PsiClass[] findClasses(String qualifiedName, GlobalSearchScope scope) {
         return myJavaFileManager.findClasses(qualifiedName, scope);
     }
 
     @Override
-    public PsiJavaPackage findPackage(@Nonnull String qualifiedName) {
+    public PsiJavaPackage findPackage(String qualifiedName) {
         return myJavaFileManager.findPackage(qualifiedName);
     }
 
     @Override
-    @Nonnull
-    public PsiJavaPackage[] getSubPackages(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+    public PsiJavaPackage[] getSubPackages(PsiJavaPackage psiPackage, GlobalSearchScope scope) {
         Map<String, PsiJavaPackage> packagesMap = new HashMap<>();
         String qualifiedName = psiPackage.getQualifiedName();
         for (PsiDirectory dir : psiPackage.getDirectories(scope)) {
@@ -76,17 +73,15 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
         return packagesMap.values().toArray(new PsiJavaPackage[packagesMap.size()]);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
-    public PsiClass[] getClasses(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+    public PsiClass[] getClasses(PsiJavaPackage psiPackage, GlobalSearchScope scope) {
         return getClasses(null, psiPackage, scope);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
-    public PsiClass[] getClasses(@Nullable String shortName, @Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+    public PsiClass[] getClasses(@Nullable String shortName, PsiJavaPackage psiPackage, GlobalSearchScope scope) {
         List<PsiClass> list = null;
         String packageName = psiPackage.getQualifiedName();
         for (PsiDirectory dir : psiPackage.getDirectories(scope)) {
@@ -125,10 +120,9 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
         return list.toArray(new PsiClass[list.size()]);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
-    public Set<String> getClassNames(@Nonnull PsiJavaPackage psiPackage, @Nonnull GlobalSearchScope scope) {
+    public Set<String> getClassNames(PsiJavaPackage psiPackage, GlobalSearchScope scope) {
         Set<String> names = null;
         FileIndexFacade facade = FileIndexFacade.getInstance(myProject);
         for (PsiDirectory dir : psiPackage.getDirectories(scope)) {
@@ -163,9 +157,9 @@ public class DefaultPsiElementFinderImpl extends PsiElementFinder implements Dum
 
     @Override
     public boolean processPackageDirectories(
-        @Nonnull PsiJavaPackage psiPackage,
-        @Nonnull GlobalSearchScope scope,
-        @Nonnull Predicate<PsiDirectory> consumer
+        PsiJavaPackage psiPackage,
+        GlobalSearchScope scope,
+        Predicate<PsiDirectory> consumer
     ) {
         PsiManager psiManager = PsiManager.getInstance(myProject);
         return DirectoryIndex.getInstance(myProject)

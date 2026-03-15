@@ -4,10 +4,8 @@ package com.intellij.java.language.impl.psi.impl.light;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiRecordComponent;
 import consulo.language.psi.SyntheticElement;
-import jakarta.annotation.Nonnull;
 
 public interface LightRecordMember extends PsiElement, SyntheticElement
 {
-	@Nonnull
 	PsiRecordComponent getRecordComponent();
 }

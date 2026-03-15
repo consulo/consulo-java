@@ -36,7 +36,7 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.layout.LabeledLayout;
 import consulo.ui.layout.VerticalLayout;
 import consulo.ui.util.RadioUpDownListener;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 

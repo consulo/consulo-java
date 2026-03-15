@@ -26,19 +26,15 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.RemoveConditionalIntention", fileExtensions = "java", categories = {"Java", "Conditional Operator"})
 public class RemoveConditionalIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.removeConditionalIntentionName();
     }
 
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new RemoveConditionalPredicate();
     }
@@ -50,7 +46,7 @@ public class RemoveConditionalIntention extends Intention {
         PsiExpression condition = expression.getCondition();
         PsiExpression thenExpression = expression.getThenExpression();
         assert thenExpression != null;
-        @NonNls String thenExpressionText = thenExpression.getText();
+        String thenExpressionText = thenExpression.getText();
         if ("true".equals(thenExpressionText)) {
             String newExpression = condition.getText();
             replaceExpression(newExpression, expression);

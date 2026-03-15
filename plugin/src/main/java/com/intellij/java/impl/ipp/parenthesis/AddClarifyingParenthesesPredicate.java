@@ -19,12 +19,11 @@ import com.intellij.java.impl.ipp.base.PsiElementPredicate;
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class AddClarifyingParenthesesPredicate implements PsiElementPredicate {
 
-  public boolean satisfiedBy(@Nonnull PsiElement element) {
+  public boolean satisfiedBy(PsiElement element) {
     PsiElement parent = element.getParent();
     if (mightBeConfusingExpression(parent)) {
       return false;

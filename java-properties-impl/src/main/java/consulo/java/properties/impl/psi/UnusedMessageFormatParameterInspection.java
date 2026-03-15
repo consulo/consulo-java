@@ -32,8 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.properties.localize.PropertiesLocalize;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -54,13 +53,11 @@ public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionT
         return PropertiesLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return PropertiesLocalize.unusedMessageFormatParameterDisplayName();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "UnusedMessageFormatParameter";
@@ -69,7 +66,7 @@ public class UnusedMessageFormatParameterInspection extends BaseLocalInspectionT
     @Nullable
     @Override
     @RequiredReadAction
-    public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly, Object state) {
         if (!(file instanceof PropertiesFile)) {
             return null;
         }

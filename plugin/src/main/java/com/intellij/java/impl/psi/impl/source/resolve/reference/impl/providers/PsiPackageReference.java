@@ -22,7 +22,6 @@ import consulo.document.util.TextRange;
 import consulo.language.psi.*;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -40,7 +39,6 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
     myIndex = index;
   }
 
-  @Nonnull
   private Set<PsiJavaPackage> getContext() {
     if (myIndex == 0) {
       return myReferenceSet.getInitialContext();
@@ -56,7 +54,6 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
   }
 
   @Override
-  @Nonnull
   public Object[] getVariants() {
     Set<PsiJavaPackage> subPackages = new HashSet<>();
     for (PsiJavaPackage psiPackage : getContext()) {
@@ -66,19 +63,16 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
     return subPackages.toArray();
   }
 
-  @Nonnull
   @Override
-  public LocalizeValue buildUnresolvedMessage(@Nonnull String referenceText) {
+  public LocalizeValue buildUnresolvedMessage(String referenceText) {
     return LocalizeValue.localizeTODO(JavaErrorBundle.message("cannot.resolve.package", referenceText));
   }
 
   @Override
-  @Nonnull
   public ResolveResult[] multiResolve(boolean incompleteCode) {
     return doMultiResolve();
   }
 
-  @Nonnull
   protected ResolveResult[] doMultiResolve() {
     Collection<PsiJavaPackage> packages = new HashSet<>();
     for (PsiJavaPackage parentPackage : getContext()) {
@@ -88,7 +82,7 @@ public class PsiPackageReference extends PsiPolyVariantReferenceBase<PsiElement>
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     if (!(element instanceof PsiJavaPackage)) {
       throw new IncorrectOperationException("Cannot bind to " + element);
     }

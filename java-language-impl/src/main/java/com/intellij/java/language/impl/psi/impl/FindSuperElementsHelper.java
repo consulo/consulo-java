@@ -26,14 +26,12 @@ import consulo.application.util.function.Processor;
 import consulo.language.psi.PsiAnchor;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
 public class FindSuperElementsHelper {
-  @Nonnull
-  public static PsiElement[] findSuperElements(@Nonnull PsiElement element) {
+  public static PsiElement[] findSuperElements(PsiElement element) {
     if (element instanceof PsiClass) {
       PsiClass aClass = (PsiClass) element;
       List<PsiClass> allSupers = new ArrayList<>(Arrays.asList(aClass.getSupers()));
@@ -66,7 +64,7 @@ public class FindSuperElementsHelper {
     return PsiElement.EMPTY_ARRAY;
   }
 
-  public static PsiMethod getSiblingInheritedViaSubClass(@Nonnull PsiMethod method) {
+  public static PsiMethod getSiblingInheritedViaSubClass(PsiMethod method) {
     SiblingInfo info = getSiblingInfoInheritedViaSubClass(method);
     return info == null ? null : info.superMethod;
   }
@@ -75,12 +73,11 @@ public class FindSuperElementsHelper {
    * @return (super method, sub class) or null if can't find any siblings
    */
   @Nullable
-  public static SiblingInfo getSiblingInfoInheritedViaSubClass(@Nonnull final PsiMethod method) {
+  public static SiblingInfo getSiblingInfoInheritedViaSubClass(final PsiMethod method) {
     return getSiblingInheritanceInfos(Collections.singletonList(method)).get(method);
   }
 
-  @Nonnull
-  public static Map<PsiMethod, SiblingInfo> getSiblingInheritanceInfos(@Nonnull final Collection<? extends PsiMethod> methods) {
+  public static Map<PsiMethod, SiblingInfo> getSiblingInheritanceInfos(final Collection<? extends PsiMethod> methods) {
     MultiMap<PsiClass, PsiMethod> byClass = MultiMap.create();
     for (PsiMethod method : methods) {
       PsiClass containingClass = method.getContainingClass();
@@ -109,12 +106,10 @@ public class FindSuperElementsHelper {
   }
 
   public static class SiblingInfo {
-    @Nonnull
     public final PsiMethod superMethod;
-    @Nonnull
     public final PsiClass subClass;
 
-    private SiblingInfo(@Nonnull PsiMethod superMethod, @Nonnull PsiClass subClass) {
+    private SiblingInfo(PsiMethod superMethod, PsiClass subClass) {
       this.superMethod = superMethod;
       this.subClass = subClass;
     }

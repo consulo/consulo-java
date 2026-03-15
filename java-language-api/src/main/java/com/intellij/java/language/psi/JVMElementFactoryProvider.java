@@ -23,8 +23,7 @@ import consulo.language.Language;
 import consulo.language.extension.LanguageExtension;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 
@@ -35,13 +34,12 @@ import java.util.Objects;
 public interface JVMElementFactoryProvider extends LanguageExtension {
   ExtensionPointCacheKey<JVMElementFactoryProvider, Map<Language, JVMElementFactoryProvider>> CACHE_KEY = ExtensionPointCacheKey.groupBy("JVMElementFactoryProvider", JVMElementFactoryProvider::getLanguage);
 
-  @Nonnull
-  static JVMElementFactory forLanguageRequired(@Nonnull Project project, @Nonnull Language language) {
+  static JVMElementFactory forLanguageRequired(Project project, Language language) {
     return Objects.requireNonNull(forLanguage(project, language), () -> "JVMElementFactoryProvider impl is not registered for language: " + language);
   }
 
   @Nullable
-  static JVMElementFactory forLanguage(@Nonnull Project project, @Nonnull Language language) {
+  static JVMElementFactory forLanguage(Project project, Language language) {
     ExtensionPoint<JVMElementFactoryProvider> point = project.getExtensionPoint(JVMElementFactoryProvider.class);
     Map<Language, JVMElementFactoryProvider> map = point.getOrBuildCache(CACHE_KEY);
     JVMElementFactoryProvider provider = map.get(language);
@@ -51,6 +49,5 @@ public interface JVMElementFactoryProvider extends LanguageExtension {
     return provider.getFactory(project);
   }
 
-  @Nonnull
   JVMElementFactory getFactory(Project project);
 }

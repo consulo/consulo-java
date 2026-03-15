@@ -52,8 +52,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -62,28 +61,27 @@ import java.util.List;
 public abstract class GenerateMembersHandlerBase implements CodeInsightActionHandler, ContextAwareActionHandler {
     private static final Logger LOG = Logger.getInstance(GenerateMembersHandlerBase.class);
 
-    @Nonnull
     private final LocalizeValue myChooserTitle;
     protected boolean myToCopyJavaDoc = false;
 
-    public GenerateMembersHandlerBase(@Nonnull LocalizeValue chooserTitle) {
+    public GenerateMembersHandlerBase(LocalizeValue chooserTitle) {
         myChooserTitle = chooserTitle;
     }
 
     @Override
     @RequiredReadAction
-    public boolean isAvailableForQuickList(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull DataContext dataContext) {
+    public boolean isAvailableForQuickList(Editor editor, PsiFile file, DataContext dataContext) {
         PsiClass aClass = OverrideImplementUtil.getContextClass(file.getProject(), editor, file, false);
         return aClass != null && hasMembers(aClass);
     }
 
-    protected boolean hasMembers(@Nonnull PsiClass aClass) {
+    protected boolean hasMembers(PsiClass aClass) {
         return true;
     }
 
     @Override
     @RequiredUIAccess
-    public final void invoke(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+    public final void invoke(Project project, Editor editor, PsiFile file) {
         if (!LanguageEditorUtil.checkModificationAllowed(editor)) {
             return;
         }
@@ -134,7 +132,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
     }
 
     @RequiredWriteAction
-    private void doGenerate(@Nonnull Project project, Editor editor, PsiClass aClass, ClassMember[] members) {
+    private void doGenerate(Project project, Editor editor, PsiClass aClass, ClassMember[] members) {
         int offset = editor.getCaretModel().getOffset();
 
         int col = editor.getCaretModel().getLogicalPosition().column;
@@ -207,7 +205,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
 
     @RequiredReadAction
     private static void runTemplates(
-        @Nonnull Project project,
+        Project project,
         final Editor editor,
         final List<TemplateGenerationInfo> templates,
         final int index
@@ -231,7 +229,7 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
                         project.getApplication().invokeLater(() -> new WriteCommandAction(project) {
                             @Override
                             @RequiredReadAction
-                            protected void run(@Nonnull Result result) throws Throwable {
+                            protected void run(Result result) throws Throwable {
                                 runTemplates(project, editor, templates, index + 1);
                             }
                         }.execute());
@@ -316,7 +314,6 @@ public abstract class GenerateMembersHandlerBase implements CodeInsightActionHan
         return null;
     }
 
-    @Nonnull
     protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] members)
         throws IncorrectOperationException {
         List<GenerationInfo> array = new ArrayList<>();

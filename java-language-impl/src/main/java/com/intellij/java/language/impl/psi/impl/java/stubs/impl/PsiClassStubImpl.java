@@ -10,8 +10,7 @@ import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.BitUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiClassStubImpl<T extends PsiClass> extends StubBase<T> implements PsiClassStub<T> {
   private static final int DEPRECATED = 0x01;
@@ -28,14 +27,14 @@ public class PsiClassStubImpl<T extends PsiClass> extends StubBase<T> implements
   private static final int RECORD = 0x800;
   private static final int IMPLICIT = 0x1000;
 
-  private final @Nonnull TypeInfo myTypeInfo;
+  private final TypeInfo myTypeInfo;
   private final String myQualifiedName;
   private final String myName;
   private final String myBaseRefText;
   private final short myFlags;
   private String mySourceFileName;
 
-  public PsiClassStubImpl(@Nonnull JavaClassElementType type,
+  public PsiClassStubImpl(JavaClassElementType type,
                           final StubElement parent,
                           @Nullable final String qualifiedName,
                           @Nullable final String name,
@@ -44,9 +43,9 @@ public class PsiClassStubImpl<T extends PsiClass> extends StubBase<T> implements
     this(type, parent, TypeInfo.fromString(qualifiedName), name, baseRefText, flags);
   }
 
-  public PsiClassStubImpl(@Nonnull JavaClassElementType type,
+  public PsiClassStubImpl(JavaClassElementType type,
                           final StubElement parent,
-                          @Nonnull final TypeInfo typeInfo,
+                          final TypeInfo typeInfo,
                           @Nullable final String name,
                           @Nullable final String baseRefText,
                           final short flags) {
@@ -67,7 +66,7 @@ public class PsiClassStubImpl<T extends PsiClass> extends StubBase<T> implements
     return myName;
   }
 
-  public @Nonnull TypeInfo getQualifiedNameTypeInfo() {
+  public TypeInfo getQualifiedNameTypeInfo() {
     return myTypeInfo;
   }
 

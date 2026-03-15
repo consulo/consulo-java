@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents an array used as a value of an annotation element. For example:
@@ -29,6 +28,5 @@ public interface PsiArrayInitializerMemberValue extends PsiAnnotationMemberValue
    *
    * @return the initializer array elements.
    */
-  @Nonnull
   PsiAnnotationMemberValue[] getInitializers();
 }

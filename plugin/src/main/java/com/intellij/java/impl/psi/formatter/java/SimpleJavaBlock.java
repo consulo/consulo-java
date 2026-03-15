@@ -25,7 +25,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.*;
 import consulo.language.psi.PsiFile;
 
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +43,7 @@ public class SimpleJavaBlock extends AbstractJavaBlock {
                          Indent indent,
                          CommonCodeStyleSettings settings,
                          JavaCodeStyleSettings javaSettings,
-                         @Nonnull FormattingMode formattingMode) {
+                         FormattingMode formattingMode) {
     super(node, wrap, alignment, indent, settings, javaSettings, formattingMode);
   }
 
@@ -109,7 +108,7 @@ public class SimpleJavaBlock extends AbstractJavaBlock {
     }
   }
 
-  private void processHeadCommentsAndWhiteSpaces(@Nonnull List<Block> result) {
+  private void processHeadCommentsAndWhiteSpaces(List<Block> result) {
     while (myCurrentChild != null) {
       if (StdTokenSets.COMMENT_BIT_SET.contains(myCurrentChild.getElementType()) || myCurrentChild.getElementType() == JavaDocElementType.DOC_COMMENT) {
         Block commentBlock = createJavaBlock(
@@ -129,18 +128,16 @@ public class SimpleJavaBlock extends AbstractJavaBlock {
     }
   }
 
-  private static boolean isNotEmptyNode(@Nonnull ASTNode child) {
+  private static boolean isNotEmptyNode(ASTNode child) {
     return !FormatterUtil.containsWhiteSpacesOnly(child) && child.getTextLength() > 0;
   }
 
   @Override
-  @Nonnull
   public TextRange getTextRange() {
     return myStartOffset == -1 ? super.getTextRange() : new TextRange(myStartOffset, myStartOffset + myNode.getTextLength());
   }
 
   @Override
-  @Nonnull
   public ChildAttributes getChildAttributes(int newChildIndex) {
     if (myNode.getElementType() == JavaElementType.CONDITIONAL_EXPRESSION && mySettings.ALIGN_MULTILINE_TERNARY_OPERATION) {
       Alignment usedAlignment = getUsedAlignment(newChildIndex);

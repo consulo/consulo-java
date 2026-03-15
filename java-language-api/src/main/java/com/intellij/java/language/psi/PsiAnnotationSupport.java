@@ -23,8 +23,7 @@ import consulo.language.Language;
 import consulo.language.extension.LanguageExtension;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -37,10 +36,9 @@ public interface PsiAnnotationSupport extends LanguageExtension {
         ExtensionPointCacheKey.groupBy("PsiAnnotationSupport", PsiAnnotationSupport::getLanguage);
 
     @Nullable
-    static PsiAnnotationSupport forLanguage(@Nonnull Language language) {
+    static PsiAnnotationSupport forLanguage(Language language) {
         return Application.get().getExtensionPoint(PsiAnnotationSupport.class).getOrBuildCache(CACHE_KEY).get(language);
     }
 
-    @Nonnull
-    PsiLiteral createLiteralValue(@Nonnull String value, @Nonnull PsiElement context);
+    PsiLiteral createLiteralValue(String value, PsiElement context);
 }

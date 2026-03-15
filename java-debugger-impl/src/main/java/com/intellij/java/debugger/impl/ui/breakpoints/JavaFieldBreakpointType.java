@@ -39,8 +39,7 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.image.Image;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -50,7 +49,6 @@ import javax.swing.*;
  */
 @ExtensionImpl
 public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFieldBreakpointProperties> implements JavaBreakpointType {
-    @Nonnull
     public static JavaFieldBreakpointType getInstance() {
         return EXTENSION_POINT_NAME.findExtension(JavaFieldBreakpointType.class);
     }
@@ -64,13 +62,11 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
         return true;
     }
 
-    @Nonnull
     @Override
     public Image getEnabledIcon() {
         return ExecutionDebugIconGroup.breakpointBreakpointfield();
     }
 
-    @Nonnull
     @Override
     public Image getDisabledIcon() {
         return ExecutionDebugIconGroup.breakpointBreakpointfielddisabled();
@@ -103,7 +99,7 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
 
     @Nullable
     @Override
-    public XBreakpointCustomPropertiesPanel<XLineBreakpoint<JavaFieldBreakpointProperties>> createCustomPropertiesPanel(@Nonnull Project project) {
+    public XBreakpointCustomPropertiesPanel<XLineBreakpoint<JavaFieldBreakpointProperties>> createCustomPropertiesPanel(Project project) {
         return new FieldBreakpointPropertiesPanel();
     }
 
@@ -115,7 +111,7 @@ public class JavaFieldBreakpointType extends JavaLineBreakpointTypeBase<JavaFiel
 
     @Nullable
     @Override
-    public JavaFieldBreakpointProperties createBreakpointProperties(@Nonnull VirtualFile file, int line) {
+    public JavaFieldBreakpointProperties createBreakpointProperties(VirtualFile file, int line) {
         return new JavaFieldBreakpointProperties();
     }
 

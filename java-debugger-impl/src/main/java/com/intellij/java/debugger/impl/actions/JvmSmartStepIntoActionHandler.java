@@ -15,21 +15,19 @@ import consulo.language.psi.PsiElement;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
 public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmartStepIntoActionHandler.JvmSmartStepIntoVariant> {
     private final DebuggerSession mySession;
 
-    public JvmSmartStepIntoActionHandler(@Nonnull DebuggerSession session) {
+    public JvmSmartStepIntoActionHandler(DebuggerSession session) {
         mySession = session;
     }
 
-    @Nonnull
     @Override
-    public List<JvmSmartStepIntoVariant> computeSmartStepVariants(@Nonnull XSourcePosition xPosition) {
+    public List<JvmSmartStepIntoVariant> computeSmartStepVariants(XSourcePosition xPosition) {
         SourcePosition pos = DebuggerUtilsEx.toSourcePosition(xPosition, mySession.getProject());
         JvmSmartStepIntoHandler handler = JvmSmartStepIntoHandler.EP_NAME.findFirstSafe(h -> h.isAvailable(pos));
         if (handler != null) {
@@ -41,13 +39,13 @@ public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmar
     }
 
     @Override
-    public String getPopupTitle(@Nonnull XSourcePosition position) {
+    public String getPopupTitle(XSourcePosition position) {
         return JavaDebuggerLocalize.titleSmartStepPopup().get();
     }
 
     @Override
     @RequiredUIAccess
-    public void startStepInto(@Nonnull JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context) {
+    public void startStepInto(JvmSmartStepIntoVariant variant, @Nullable XSuspendContext context) {
         mySession.stepInto(true, variant.myHandler.createMethodFilter(variant.myTarget));
     }
 

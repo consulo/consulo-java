@@ -33,7 +33,6 @@ import consulo.language.psi.PsiManager;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -45,7 +44,7 @@ public class JavaPushDownHandler implements RefactoringActionHandler, ElementsHa
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         int offset = editor.getCaretModel().getOffset();
         editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
         PsiElement element = file.findElementAt(offset);
@@ -73,7 +72,7 @@ public class JavaPushDownHandler implements RefactoringActionHandler, ElementsHa
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+    public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
         if (elements.length != 1) {
             return;
         }

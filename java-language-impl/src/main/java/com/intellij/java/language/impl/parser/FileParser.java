@@ -11,8 +11,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -27,20 +26,20 @@ public class FileParser
 
 	private final JavaParser myParser;
 
-	public FileParser(@Nonnull JavaParser javaParser)
+	public FileParser(JavaParser javaParser)
 	{
 		myParser = javaParser;
 	}
 
-	public void parse(@Nonnull PsiBuilder builder)
+	public void parse(PsiBuilder builder)
 	{
 		parseFile(builder, FileParser::stopImportListParsing, JavaErrorBundle.getInstance(), "expected.class.or.interface");
 	}
 
-	public void parseFile(@Nonnull PsiBuilder builder,
-						  @Nonnull Predicate<? super PsiBuilder> importListStopper,
-						  @Nonnull AbstractBundle bundle,
-						  @Nonnull String errorMessageKey)
+	public void parseFile(PsiBuilder builder,
+						  Predicate<? super PsiBuilder> importListStopper,
+						  AbstractBundle bundle,
+						  String errorMessageKey)
 	{
 		parsePackageStatement(builder);
 
@@ -121,8 +120,7 @@ public class FileParser
 		return false;
 	}
 
-	@Nullable
-	protected PsiBuilder.Marker parseInitial(PsiBuilder builder)
+	protected PsiBuilder.@Nullable Marker parseInitial(PsiBuilder builder)
 	{
 		return myParser.getDeclarationParser().parse(builder, DeclarationParser.Context.FILE);
 	}
@@ -155,7 +153,6 @@ public class FileParser
 		done(statement, JavaElementType.PACKAGE_STATEMENT);
 	}
 
-	@Nonnull
 	protected Pair<PsiBuilder.Marker, Boolean> parseImportList(PsiBuilder builder, Predicate<? super PsiBuilder> stopper)
 	{
 		PsiBuilder.Marker list = builder.mark();
@@ -209,8 +206,7 @@ public class FileParser
 		return Pair.create(list, isEmpty);
 	}
 
-	@Nullable
-	protected PsiBuilder.Marker parseImportStatement(PsiBuilder builder)
+	protected PsiBuilder.@Nullable Marker parseImportStatement(PsiBuilder builder)
 	{
 		if(builder.getTokenType() != JavaTokenType.IMPORT_KEYWORD)
 		{
@@ -233,8 +229,7 @@ public class FileParser
 		return statement;
 	}
 
-	@Nonnull
-	private static String error(@Nonnull AbstractBundle bundle, @Nonnull String errorMessageKey)
+	private static String error(AbstractBundle bundle, String errorMessageKey)
 	{
 		return bundle.getMessage(errorMessageKey);
 	}

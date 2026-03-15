@@ -54,8 +54,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
 
@@ -229,7 +228,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
         return myCustomRenderers;
     }
 
-    public void setCustomRenderers(@Nonnull RendererConfiguration customRenderers) {
+    public void setCustomRenderers(RendererConfiguration customRenderers) {
         RendererConfiguration oldConfig = myCustomRenderers;
         myCustomRenderers = customRenderers;
         if (oldConfig == null || !oldConfig.equals(customRenderers)) {

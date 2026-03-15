@@ -25,8 +25,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,18 +32,16 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.CreateEnumSwitchBranchesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class CreateEnumSwitchBranchesIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.createEnumSwitchBranchesIntentionName();
     }
 
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new EnumSwitchPredicate();
     }
 
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         if (element instanceof PsiWhiteSpace) {
             element = element.getPrevSibling();
@@ -95,7 +91,7 @@ public class CreateEnumSwitchBranchesIntention extends Intention {
                 missingEnumElements.remove(enumConstant.getName());
             }
         }
-        @NonNls StringBuilder buffer = new StringBuilder();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("switch(");
         buffer.append(switchExpression.getText());
         buffer.append("){");

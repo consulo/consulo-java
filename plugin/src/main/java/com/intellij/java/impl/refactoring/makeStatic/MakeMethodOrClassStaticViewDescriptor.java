@@ -32,7 +32,6 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.usage.localize.UsageLocalize;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 public class MakeMethodOrClassStaticViewDescriptor implements UsageViewDescriptor {
 
@@ -47,7 +46,6 @@ public class MakeMethodOrClassStaticViewDescriptor implements UsageViewDescripto
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getElements() {
     return new PsiElement[]{myMember};
   }

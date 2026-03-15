@@ -23,7 +23,6 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -62,7 +61,7 @@ class ParameterObjectBuilder {
   }
 
   public String buildBeanClass() {
-        @NonNls StringBuffer out = new StringBuffer(1024);
+        StringBuffer out = new StringBuffer(1024);
         if (packageName.length() > 0) out.append("package " + packageName + ';');
         out.append('\n');
         out.append(myVisibility + " class " + className);
@@ -107,7 +106,7 @@ class ParameterObjectBuilder {
         }
     }
 
-    private void outputSetter(ParameterSpec field, @NonNls StringBuffer out) {
+    private void outputSetter(ParameterSpec field, StringBuffer out) {
         if (!field.isSetterRequired()) {
             return;
         }
@@ -142,12 +141,11 @@ class ParameterObjectBuilder {
     }
   }
 
-  @NonNls
     private String calculateStrippedName(String name) {
         return myJavaCodeStyleManager.variableNameToPropertyName(name, VariableKind.PARAMETER);
     }
 
-    private void outputGetter(ParameterSpec field, @NonNls StringBuffer out) {
+    private void outputGetter(ParameterSpec field, StringBuffer out) {
         PsiParameter parameter = field.getParameter();
         PsiType type = field.getType();
         String typeText;
@@ -173,7 +171,7 @@ class ParameterObjectBuilder {
         out.append("\t}\n");
     }
 
-    private void outputConstructor(@NonNls StringBuffer out) {
+    private void outputConstructor(StringBuffer out) {
         out.append("\t" + myVisibility + " " + className + '(');
         for (Iterator<ParameterSpec> iterator = fields.iterator(); iterator.hasNext();) {
             ParameterSpec field = iterator.next();
@@ -224,7 +222,7 @@ class ParameterObjectBuilder {
             typeText = type.getCanonicalText();
         }
         String name = calculateStrippedName(field.getName());
-        @NonNls String modifierString = "private ";
+        String modifierString = "private ";
         if (!field.isSetterRequired()) {
             modifierString += "final ";
         }

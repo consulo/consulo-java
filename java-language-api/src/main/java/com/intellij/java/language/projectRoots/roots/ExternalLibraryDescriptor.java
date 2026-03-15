@@ -17,8 +17,7 @@ package com.intellij.java.language.projectRoots.roots;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
@@ -34,8 +33,8 @@ public abstract class ExternalLibraryDescriptor {
     }
 
     public ExternalLibraryDescriptor(
-        @Nonnull String libraryGroupId,
-        @Nonnull String libraryArtifactId,
+        String libraryGroupId,
+        String libraryArtifactId,
         @Nullable String minVersion,
         @Nullable String maxVersion
     ) {
@@ -45,12 +44,10 @@ public abstract class ExternalLibraryDescriptor {
         myMaxVersion = maxVersion;
     }
 
-    @Nonnull
     public String getLibraryGroupId() {
         return myLibraryGroupId;
     }
 
-    @Nonnull
     public String getLibraryArtifactId() {
         return myLibraryArtifactId;
     }
@@ -69,6 +66,5 @@ public abstract class ExternalLibraryDescriptor {
         return myLibraryArtifactId;
     }
 
-    @Nonnull
     public abstract List<String> getLibraryClassesRoots();
 }

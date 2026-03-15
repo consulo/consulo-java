@@ -30,7 +30,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.module.Module;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class AbstractApplicationConfigurationProducer<T extends ApplicationConfiguration> extends JavaRunConfigurationProducerBase<T> {
     public AbstractApplicationConfigurationProducer(ApplicationConfigurationType configurationType) {

@@ -29,7 +29,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.CheckBox;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,19 +41,16 @@ public class PublicMethodNotExposedInInterfaceInspection extends BaseInspection 
     @SuppressWarnings({"PublicField"})
     public final ExternalizableStringSet ignorableAnnotations = new ExternalizableStringSet();
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.publicMethodNotInInterfaceDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.publicMethodNotInInterfaceProblemDescriptor().get();
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         return AddToIgnoreIfAnnotatedByListQuickFix.build((PsiModifierListOwner) infos[0], ignorableAnnotations);
@@ -97,7 +93,7 @@ public class PublicMethodNotExposedInInterfaceInspection extends BaseInspection 
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (method.isConstructor()) {
                 return;

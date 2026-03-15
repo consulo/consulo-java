@@ -28,8 +28,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.NotNullLazyKey;
 import consulo.util.dataholder.NullableLazyKey;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -90,7 +89,7 @@ public class ExplicitlyImportedWeigher extends ProximityWeigher {
   }
 
   @Override
-  public Integer weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
+  public Integer weigh(PsiElement element, ProximityLocation location) {
     PsiElement position = location.getPosition();
     if (position == null) {
       return 0;

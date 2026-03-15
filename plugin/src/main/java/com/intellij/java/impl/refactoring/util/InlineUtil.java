@@ -35,8 +35,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
@@ -109,7 +107,7 @@ public class InlineUtil {
           LOG.assertTrue(argumentList != null);
           PsiExpression[] arguments = argumentList.getExpressions();
 
-          @NonNls StringBuilder builder = new StringBuilder("new ");
+          StringBuilder builder = new StringBuilder("new ");
           builder.append(exprType.getCanonicalText());
           builder.append("[]{");
           builder.append(StringUtil.join(Arrays.asList(arguments), expr1 -> expr1.getText(), ","));
@@ -298,7 +296,7 @@ public class InlineUtil {
     return result && nonTailCallUsages.isEmpty();
   }
 
-  public static TailCallType getTailCallType(@Nonnull PsiReference psiReference) {
+  public static TailCallType getTailCallType(PsiReference psiReference) {
     PsiElement element = psiReference.getElement();
     PsiExpression methodCall = PsiTreeUtil.getParentOfType(element, PsiMethodCallExpression.class);
     if (methodCall == null) return TailCallType.None;

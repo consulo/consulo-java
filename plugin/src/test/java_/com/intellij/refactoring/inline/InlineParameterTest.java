@@ -3,11 +3,9 @@ package com.intellij.refactoring.inline;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.refactoring.inline.InlineParameterExpressionProcessor;
 import com.intellij.java.impl.refactoring.inline.InlineParameterHandler;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
@@ -21,7 +19,6 @@ import consulo.codeInsight.TargetElementUtilEx;
  * @author yole
  */
 public abstract class InlineParameterTest extends LightRefactoringTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();
@@ -294,7 +291,7 @@ public abstract class InlineParameterTest extends LightRefactoringTestCase {
     getProject().putUserData(InlineParameterExpressionProcessor.CREATE_LOCAL_FOR_TESTS,createLocal);
 
     String name = getTestName(false);
-    @NonNls String fileName = "/refactoring/inlineParameter/" + name + ".java";
+    String fileName = "/refactoring/inlineParameter/" + name + ".java";
     configureByFile(fileName);
     performAction();
     checkResultByFile(null, fileName + ".after", true);

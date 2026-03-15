@@ -33,9 +33,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -44,13 +42,11 @@ import java.util.*;
  */
 @ExtensionImpl
 public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.tryFinallyCanBeTryWithResourcesDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.tryFinallyCanBeTryWithResourcesProblemDescriptor().get();
@@ -62,7 +58,6 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
     }
 
     private static class TryFinallyCanBeTryWithResourcesFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.tryFinallyCanBeTryWithResourcesQuickfix();
@@ -92,7 +87,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
                 }
             }
             PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
-            @NonNls StringBuilder newTryStatementText = new StringBuilder("try (");
+            StringBuilder newTryStatementText = new StringBuilder("try (");
             Set<Integer> unwantedChildren = new HashSet(2);
             boolean separator = false;
             for (PsiLocalVariable variable : variables) {
@@ -504,17 +499,16 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
     static class VariableUsedOutsideContextVisitor extends JavaRecursiveElementVisitor {
 
         private boolean used = false;
-        @Nonnull
         private final PsiVariable variable;
         private final PsiElement skipContext;
 
-        public VariableUsedOutsideContextVisitor(@Nonnull PsiVariable variable, PsiElement skipContext) {
+        public VariableUsedOutsideContextVisitor(PsiVariable variable, PsiElement skipContext) {
             this.variable = variable;
             this.skipContext = skipContext;
         }
 
         @Override
-        public void visitElement(@Nonnull PsiElement element) {
+        public void visitElement(PsiElement element) {
             if (element.equals(skipContext)) {
                 return;
             }
@@ -525,7 +519,7 @@ public class TryFinallyCanBeTryWithResourcesInspection extends BaseInspection {
         }
 
         @Override
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression referenceExpression) {
+        public void visitReferenceExpression(PsiReferenceExpression referenceExpression) {
             if (used) {
                 return;
             }

@@ -20,8 +20,6 @@ import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.Sorter;
 import consulo.ide.localize.IdeLocalize;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Comparator;
 
@@ -43,7 +41,7 @@ public class VisibilitySorter implements Sorter{
     }
   };
 
-  @NonNls public static final String ID = "VISIBILITY_SORTER";
+  public static final String ID = "VISIBILITY_SORTER";
 
   public Comparator getComparator() {
     return VisibilityComparator.IMSTANCE;
@@ -53,12 +51,10 @@ public class VisibilitySorter implements Sorter{
     return true;
   }
 
-  @Nonnull
   public ActionPresentation getPresentation() {
     return PRESENTATION;
   }
 
-  @Nonnull
   public String getName() {
     return ID;
   }

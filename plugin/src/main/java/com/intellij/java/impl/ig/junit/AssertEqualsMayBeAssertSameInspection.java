@@ -28,18 +28,15 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AssertEqualsMayBeAssertSameInspection extends BaseInspection {
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assertequalsMayBeAssertsameDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.assertequalsMayBeAssertsameProblemDescriptor().get();
     }
@@ -51,7 +48,6 @@ public class AssertEqualsMayBeAssertSameInspection extends BaseInspection {
 
     private static class AssertEqualsMayBeAssertSameFix extends InspectionGadgetsFix {
 
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.assertequalsMayBeAssertsameQuickfix();
         }

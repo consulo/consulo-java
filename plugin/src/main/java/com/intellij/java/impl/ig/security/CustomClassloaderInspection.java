@@ -22,19 +22,16 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class CustomClassloaderInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.customClassloaderDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.customClassloaderProblemDescriptor().get();
   }
@@ -46,7 +43,7 @@ public class CustomClassloaderInspection extends BaseInspection {
 
   private static class CustomClassloaderVisitor extends BaseInspectionVisitor {
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       if (!InheritanceUtil.isInheritor(aClass, "java.lang.ClassLoader")) {
         return;
       }

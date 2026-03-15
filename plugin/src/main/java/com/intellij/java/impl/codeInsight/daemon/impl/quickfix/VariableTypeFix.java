@@ -38,8 +38,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.usage.UsageViewUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +49,12 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
     private final PsiType myReturnType;
     protected final String myName;
 
-    public VariableTypeFix(@Nonnull PsiVariable variable, PsiType toReturn) {
+    public VariableTypeFix(PsiVariable variable, PsiType toReturn) {
         super(variable);
         myReturnType = GenericsUtil.getVariableTypeByExpressionType(toReturn);
         myName = variable.getName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.fixVariableTypeText(
@@ -73,10 +71,10 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiVariable myVariable = (PsiVariable) startElement;
         return myVariable.isValid()
@@ -90,11 +88,11 @@ public class VariableTypeFix extends LocalQuickFixAndIntentionActionOnPsiElement
 
     @Override
     public void invoke(
-        @Nonnull final Project project,
-        @Nonnull final PsiFile file,
+        final Project project,
+        final PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         final PsiVariable myVariable = (PsiVariable) startElement;
         if (changeMethodSignatureIfNeeded(myVariable)) {

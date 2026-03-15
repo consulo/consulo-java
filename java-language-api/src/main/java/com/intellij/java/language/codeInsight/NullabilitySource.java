@@ -4,7 +4,6 @@ package com.intellij.java.language.codeInsight;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -66,13 +65,13 @@ public /* sealed */ interface NullabilitySource {
      * produce {@code @Nullable String}, while the second should produce {@code @NotNull String}.
      */
     final class ExtendsBound implements NullabilitySource {
-        private final @Nonnull NullabilitySource myBoundSource;
+        private final NullabilitySource myBoundSource;
 
-        public ExtendsBound(@Nonnull NullabilitySource source) {
+        public ExtendsBound(NullabilitySource source) {
             myBoundSource = source;
         }
 
-        public @Nonnull NullabilitySource boundSource() {
+        public NullabilitySource boundSource() {
             return myBoundSource;
         }
 
@@ -104,13 +103,13 @@ public /* sealed */ interface NullabilitySource {
      * Annotation owner is normally the type.
      */
     final class ExplicitAnnotation implements NullabilitySource {
-        private final @Nonnull PsiAnnotation myAnnotation;
+        private final PsiAnnotation myAnnotation;
 
-        public ExplicitAnnotation(@Nonnull PsiAnnotation annotation) {
+        public ExplicitAnnotation(PsiAnnotation annotation) {
             myAnnotation = annotation;
         }
 
-        public @Nonnull PsiAnnotation annotation() {
+        public PsiAnnotation annotation() {
             return myAnnotation;
         }
 
@@ -139,14 +138,13 @@ public /* sealed */ interface NullabilitySource {
      * Type nullability is inherited from a container (member/class/package/module)
      */
     final class ContainerAnnotation implements NullabilitySource {
-        private final @Nonnull PsiAnnotation myAnnotation;
+        private final PsiAnnotation myAnnotation;
 
-        public ContainerAnnotation(@Nonnull PsiAnnotation annotation) {
+        public ContainerAnnotation(PsiAnnotation annotation) {
             myAnnotation = annotation;
             container(); // validate
         }
 
-        @Nonnull
         PsiElement container() {
             PsiModifierList modifierList = (PsiModifierList) requireNonNull(myAnnotation.getOwner(), "Annotation has no owner");
             PsiElement owner = requireNonNull(modifierList.getParent(), "Modifier list has no parent");
@@ -169,7 +167,7 @@ public /* sealed */ interface NullabilitySource {
             }
         }
 
-        public @Nonnull PsiAnnotation annotation() {
+        public PsiAnnotation annotation() {
             return myAnnotation;
         }
 
@@ -214,16 +212,16 @@ public /* sealed */ interface NullabilitySource {
     }
 
     final class MultiSource implements NullabilitySource {
-        private final @Nonnull Set<NullabilitySource> mySources;
+        private final Set<NullabilitySource> mySources;
 
-        MultiSource(@Nonnull Set<NullabilitySource> sources) {
+        MultiSource(Set<NullabilitySource> sources) {
             if (sources.size() <= 1) {
                 throw new IllegalArgumentException("MultiSource must have at least two sources");
             }
             mySources = sources;
         }
 
-        public @Nonnull Set<NullabilitySource> sources() {
+        public Set<NullabilitySource> sources() {
             return mySources;
         }
 
@@ -250,7 +248,7 @@ public /* sealed */ interface NullabilitySource {
      * @param sources sources to combine
      * @return combined source, or {@link Standard#NONE} if no sources are specified
      */
-    static @Nonnull NullabilitySource multiSource(@Nonnull Collection<NullabilitySource> sources) {
+    static NullabilitySource multiSource(Collection<NullabilitySource> sources) {
         Set<NullabilitySource> set = new LinkedHashSet<>();
         for (NullabilitySource source : sources) {
             if (source instanceof MultiSource) {

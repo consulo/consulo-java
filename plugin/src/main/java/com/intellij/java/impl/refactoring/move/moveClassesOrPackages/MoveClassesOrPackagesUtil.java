@@ -39,8 +39,7 @@ import consulo.usage.UsageInfo;
 import consulo.usage.localize.UsageLocalize;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
@@ -287,7 +286,7 @@ public class MoveClassesOrPackagesUtil {
 
     @Nullable
     @RequiredUIAccess
-    public static PsiDirectory chooseDestinationPackage(@Nonnull Project project, String packageName, @Nullable PsiDirectory baseDir) {
+    public static PsiDirectory chooseDestinationPackage(Project project, String packageName, @Nullable PsiDirectory baseDir) {
         PsiManager psiManager = PsiManager.getInstance(project);
         PackageWrapper packageWrapper = new PackageWrapper(psiManager, packageName);
         PsiJavaPackage aPackage = JavaPsiFacade.getInstance(project).findPackage(packageName);

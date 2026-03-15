@@ -20,8 +20,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LightPackageReferenceExpression extends LightPackageReference implements PsiReferenceExpression {
   public LightPackageReferenceExpression(PsiManager manager, PsiJavaPackage refPackage) {
@@ -34,7 +33,7 @@ public class LightPackageReferenceExpression extends LightPackageReference imple
   }
 
   @Override
-  public PsiElement bindToElementViaStaticImport(@Nonnull PsiClass aClass) throws IncorrectOperationException {
+  public PsiElement bindToElementViaStaticImport(PsiClass aClass) throws IncorrectOperationException {
     throw new IncorrectOperationException();
   }
 

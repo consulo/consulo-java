@@ -4,8 +4,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaVariableValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
 import java.util.*;
@@ -36,7 +35,7 @@ class EqClass extends SortedIntSet implements Iterable<DfaVariableValue>
 		myFactory = factory;
 	}
 
-	EqClass(@Nonnull EqClass toCopy)
+	EqClass(EqClass toCopy)
 	{
 		super(toCopy.toNativeArray());
 		myFactory = toCopy.myFactory;
@@ -94,7 +93,6 @@ class EqClass extends SortedIntSet implements Iterable<DfaVariableValue>
 		return StreamEx.of(iterator()).min(CANONICAL_VARIABLE_COMPARATOR).orElse(null);
 	}
 
-	@Nonnull
 	@Override
 	public Iterator<DfaVariableValue> iterator()
 	{

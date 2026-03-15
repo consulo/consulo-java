@@ -24,26 +24,23 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ReplaceForLoopWithWhileLoopIntention", fileExtensions = "java", categories = {"Java", "Control Flow"})
 public class ReplaceForLoopWithWhileLoopIntention extends Intention {
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new ForLoopPredicate();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceForLoopWithWhileLoopIntentionName();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element)
+    protected void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiForStatement forStatement =
             (PsiForStatement) element.getParent();

@@ -20,14 +20,13 @@ import consulo.language.spellcheker.tokenizer.TokenConsumer;
 import consulo.language.spellcheker.tokenizer.Tokenizer;
 import consulo.language.spellcheker.tokenizer.splitter.IdentifierTokenSplitter;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
  */
 public class PsiIdentifierTokenizer extends Tokenizer<PsiIdentifier> {
   @Override
-  public void tokenize(@Nonnull PsiIdentifier element, TokenConsumer consumer) {
+  public void tokenize(PsiIdentifier element, TokenConsumer consumer) {
     consumer.consumeToken(element, true, IdentifierTokenSplitter.getInstance());
   }
 }

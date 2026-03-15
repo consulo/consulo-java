@@ -4,7 +4,6 @@ package com.intellij.debugger.streams.trace.dsl.impl.java;
 import consulo.execution.debug.stream.trace.dsl.Expression;
 import consulo.execution.debug.stream.trace.dsl.LambdaBody;
 import consulo.execution.debug.stream.trace.dsl.StatementFactory;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -12,18 +11,16 @@ import jakarta.annotation.Nonnull;
 public class JavaLambdaBody extends JavaCodeBlock implements LambdaBody {
     private final Expression lambdaArg;
 
-    public JavaLambdaBody(@Nonnull StatementFactory statementFactory, @Nonnull Expression lambdaArg) {
+    public JavaLambdaBody(StatementFactory statementFactory, Expression lambdaArg) {
         super(statementFactory);
         this.lambdaArg = lambdaArg;
     }
 
-    @Nonnull
     @Override
     public Expression getLambdaArg() {
         return lambdaArg;
     }
 
-    @Nonnull
     @Override
     public String toCode(int indent) {
         if (isExpression()) {
@@ -37,7 +34,7 @@ public class JavaLambdaBody extends JavaCodeBlock implements LambdaBody {
     }
 
     @Override
-    public void doReturn(@Nonnull Expression expression) {
+    public void doReturn(Expression expression) {
         if (getSize() == 0) {
             addStatement(expression);
         } else {

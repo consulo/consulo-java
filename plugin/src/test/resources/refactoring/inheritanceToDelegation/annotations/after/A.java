@@ -1,9 +1,8 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class A {
     @Nullable
-    public Object methodFromA(@Nonnull String s) {
+    public Object methodFromA(String s) {
         return null;
     }
 }

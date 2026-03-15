@@ -35,13 +35,10 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class SimplifiableIfStatementInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.simplifiableIfStatementDisplayName();
@@ -58,7 +55,6 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiIfStatement statement = (PsiIfStatement) infos[0];
         return InspectionGadgetsLocalize.simplifiableIfStatementProblemDescriptor(
@@ -67,7 +63,6 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
     }
 
     @Nullable
-    @NonNls
     static String calculateReplacementStatement(PsiIfStatement statement) {
         PsiStatement thenBranch = ControlFlowUtils.stripBraces(statement.getThenBranch());
         if (thenBranch == null) {
@@ -144,7 +139,6 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
         }
     }
 
-    @NonNls
     private static String calculateReplacementReturnStatement(PsiStatement thenBranch, PsiStatement elseBranch, PsiExpression condition) {
         PsiReturnStatement thenReturnStatement = (PsiReturnStatement) thenBranch;
         PsiExpression thenReturnValue = thenReturnStatement.getReturnValue();
@@ -277,7 +271,6 @@ public class SimplifiableIfStatementInspection extends BaseInspection {
     }
 
     private static class SimplifiableIfStatementFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.constantConditionalExpressionSimplifyQuickfix();

@@ -32,9 +32,7 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.Pair;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +51,6 @@ public class LanguageMismatch extends LocalInspectionTool {
     return JavaLanguage.INSTANCE;
   }
 
-  @Nonnull
   @Override
   public HighlightDisplayLevel getDefaultLevel() {
     return HighlightDisplayLevel.WARNING;
@@ -63,12 +60,10 @@ public class LanguageMismatch extends LocalInspectionTool {
     return true;
   }
 
-  @Nonnull
   public LocalizeValue getGroupDisplayName() {
     return PatternValidator.LANGUAGE_INJECTION;
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Language Mismatch");
   }
@@ -88,8 +83,7 @@ public class LanguageMismatch extends LocalInspectionTool {
     return jPanel;
   }
 
-  @Nonnull
-  public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+  public PsiElementVisitor buildVisitor(final ProblemsHolder holder, boolean isOnTheFly) {
     return new JavaElementVisitor() {
       final Pair<String, ? extends Set<String>> annotationName = Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getLanguageAnnotationPair();
 
@@ -163,7 +157,6 @@ public class LanguageMismatch extends LocalInspectionTool {
               final PsiAnnotation annotation = annotations[annotations.length - 1];
               final String initializer = annotation.getParameterList().getText();
               final AnnotateFix fix = new AnnotateFix(declOwner, annotation.getQualifiedName(), initializer) {
-                @Nonnull
                 public LocalizeValue getName() {
                   return initializer == null ? super.getName() : LocalizeValue.join(super.getName(), LocalizeValue.of(initializer));
                 }
@@ -183,8 +176,6 @@ public class LanguageMismatch extends LocalInspectionTool {
     }
   }
 
-  @Nonnull
-  @NonNls
   public String getShortName() {
     return "LanguageMismatch";
   }

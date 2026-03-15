@@ -29,7 +29,6 @@ import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,7 +50,7 @@ public class PropertyGroup implements Group, ColoredItemPresentation, AccessLeve
   private final Project myProject;
   private final Collection<TreeElement> myChildren = new ArrayList<TreeElement>();
 
-  private PropertyGroup(String propertyName, PsiType propertyType, boolean isStatic, @Nonnull Project project) {
+  private PropertyGroup(String propertyName, PsiType propertyType, boolean isStatic, Project project) {
     myPropertyName = propertyName;
     myPropertyType = propertyType;
     myIsStatic = isStatic;

@@ -27,10 +27,8 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class InlineCallFix extends InspectionGadgetsFix {
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return InspectionGadgetsLocalize.inlineCallQuickfix();

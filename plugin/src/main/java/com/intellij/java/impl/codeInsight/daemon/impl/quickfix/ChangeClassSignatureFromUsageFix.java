@@ -25,7 +25,6 @@ import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -36,15 +35,15 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
   private final PsiClass myClass;
   private final PsiReferenceParameterList myParameterList;
 
-  public ChangeClassSignatureFromUsageFix(@Nonnull PsiClass aClass,
-                                          @Nonnull PsiReferenceParameterList parameterList) {
+  public ChangeClassSignatureFromUsageFix(PsiClass aClass,
+                                          PsiReferenceParameterList parameterList) {
     myClass = aClass;
     myParameterList = parameterList;
     setText(JavaQuickFixLocalize.changeClassSignatureFamily());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!myClass.isValid() || !myParameterList.isValid()) {
       return false;
     }
@@ -64,7 +63,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiTypeParameterList classTypeParameterList = myClass.getTypeParameterList();
     if (classTypeParameterList == null) {
       return;
@@ -82,10 +81,9 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
     dialog.show();
   }
 
-  @Nonnull
-  private static Map<TypeParameterInfo, PsiTypeCodeFragment> createTypeParameters(@Nonnull JavaCodeFragmentFactory factory,
-                                                                                  @Nonnull List<PsiTypeParameter> classTypeParameters,
-                                                                                  @Nonnull List<PsiTypeElement> typeElements) {
+  private static Map<TypeParameterInfo, PsiTypeCodeFragment> createTypeParameters(JavaCodeFragmentFactory factory,
+                                                                                  List<PsiTypeParameter> classTypeParameters,
+                                                                                  List<PsiTypeElement> typeElements) {
     LinkedHashMap<TypeParameterInfo, PsiTypeCodeFragment> result = new LinkedHashMap<TypeParameterInfo, PsiTypeCodeFragment>();
     TypeParameterNameSuggester suggester = new TypeParameterNameSuggester(classTypeParameters);
 
@@ -107,7 +105,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
     return result;
   }
 
-  private static boolean isAssignable(@Nonnull PsiTypeParameter typeParameter, @Nonnull PsiType type) {
+  private static boolean isAssignable(PsiTypeParameter typeParameter, PsiType type) {
     for (PsiClassType t : typeParameter.getExtendsListTypes()) {
       if (!t.isAssignableFrom(type)) {
         return false;
@@ -126,18 +124,17 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
   private static class TypeParameterNameSuggester {
     private final Set<String> usedNames = new HashSet<String>();
 
-    public TypeParameterNameSuggester(@Nonnull PsiTypeParameter... typeParameters) {
+    public TypeParameterNameSuggester(PsiTypeParameter... typeParameters) {
       this(Arrays.asList(typeParameters));
     }
 
-    public TypeParameterNameSuggester(@Nonnull Collection<PsiTypeParameter> typeParameters) {
+    public TypeParameterNameSuggester(Collection<PsiTypeParameter> typeParameters) {
       for (PsiTypeParameter p : typeParameters) {
         usedNames.add(p.getName());
       }
     }
 
-    @Nonnull
-    private String suggestUnusedName(@Nonnull String name) {
+    private String suggestUnusedName(String name) {
       String unusedName = name;
       int i = 0;
       while (true) {
@@ -148,8 +145,7 @@ public class ChangeClassSignatureFromUsageFix extends BaseIntentionAction implem
       }
     }
 
-    @Nonnull
-    public String suggest(@Nonnull PsiClassType type) {
+    public String suggest(PsiClassType type) {
       return suggestUnusedName(type.getClassName().substring(0, 1).toUpperCase());
     }
   }

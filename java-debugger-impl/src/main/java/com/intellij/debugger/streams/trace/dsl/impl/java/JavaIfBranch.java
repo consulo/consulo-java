@@ -5,19 +5,17 @@ import consulo.execution.debug.stream.trace.dsl.CodeBlock;
 import consulo.execution.debug.stream.trace.dsl.Expression;
 import consulo.execution.debug.stream.trace.dsl.Statement;
 import consulo.execution.debug.stream.trace.dsl.impl.common.IfBranchBase;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
  */
 public class JavaIfBranch extends IfBranchBase {
-    public JavaIfBranch(@Nonnull Expression condition,
-                        @Nonnull CodeBlock codeBlock,
-                        @Nonnull JavaStatementFactory statementFactory) {
+    public JavaIfBranch(Expression condition,
+                        CodeBlock codeBlock,
+                        JavaStatementFactory statementFactory) {
         super(condition, codeBlock, statementFactory);
     }
 
-    @Nonnull
     @Override
     public String toCode(int indent) {
         Statement elseBlockVar = elseBlock;

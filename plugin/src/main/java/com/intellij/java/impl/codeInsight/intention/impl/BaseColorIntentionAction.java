@@ -22,8 +22,7 @@ import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static consulo.language.pattern.PlatformPatterns.psiElement;
 
@@ -34,7 +33,7 @@ public abstract class BaseColorIntentionAction extends PsiElementBaseIntentionAc
   protected static final String JAVA_AWT_COLOR = "java.awt.Color";
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     if (!psiElement().inside(psiElement(PsiNewExpression.class)).accepts(element)) {
       return false;
     }

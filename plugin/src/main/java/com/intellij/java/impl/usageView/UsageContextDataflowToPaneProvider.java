@@ -8,18 +8,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.usage.*;
 
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UsageContextDataflowToPaneProvider implements UsageContextPanelProvider {
-  @Nonnull
   @Override
-  public UsageContextPanel create(@Nonnull UsageView usageView) {
+  public UsageContextPanel create(UsageView usageView) {
     return new UsageContextDataflowToPanel(((UsageViewImpl) usageView).getProject(), usageView.getPresentation());
   }
 
   @Override
-  public boolean isAvailableFor(@Nonnull UsageView usageView) {
+  public boolean isAvailableFor(UsageView usageView) {
     UsageTarget[] targets = ((UsageViewImpl) usageView).getTargets();
     if (targets.length == 0) {
       return false;
@@ -39,7 +37,6 @@ public class UsageContextDataflowToPaneProvider implements UsageContextPanelProv
     return file instanceof PsiJavaFile;
   }
 
-  @Nonnull
   @Override
   public String getTabTitle() {
     return "Dataflow to Here";

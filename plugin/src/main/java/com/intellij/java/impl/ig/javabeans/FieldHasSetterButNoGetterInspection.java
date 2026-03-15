@@ -25,18 +25,15 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FieldHasSetterButNoGetterInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.fieldHasSetterButNoGetterDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.fieldHasSetterButNoGetterProblemDescriptor().get();
     }
@@ -48,7 +45,7 @@ public class FieldHasSetterButNoGetterInspection extends BaseInspection {
 
     private static class FieldHasSetterButNoGetterVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             String propertyName = PropertyUtil.suggestPropertyName(field);
             boolean isStatic = field.hasModifierProperty(PsiModifier.STATIC);
             PsiClass containingClass = field.getContainingClass();

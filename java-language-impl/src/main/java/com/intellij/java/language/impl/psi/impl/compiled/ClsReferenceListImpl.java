@@ -24,17 +24,15 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
 
 public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassReferenceListStub> implements PsiReferenceList {
   private static final ClsJavaCodeReferenceElementImpl[] EMPTY_REFS_ARRAY = new ClsJavaCodeReferenceElementImpl[0];
 
   private final NotNullLazyValue<ClsJavaCodeReferenceElementImpl[]> myRefs;
 
-  public ClsReferenceListImpl(@Nonnull PsiClassReferenceListStub stub) {
+  public ClsReferenceListImpl(PsiClassReferenceListStub stub) {
     super(stub);
     myRefs = new AtomicNotNullLazyValue<ClsJavaCodeReferenceElementImpl[]>() {
-      @Nonnull
       @Override
       protected ClsJavaCodeReferenceElementImpl[] compute() {
         String[] strings = getStub().getReferencedNames();
@@ -52,19 +50,16 @@ public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassRefere
   }
 
   @Override
-  @Nonnull
   public PsiJavaCodeReferenceElement[] getReferenceElements() {
     return myRefs.getValue();
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     return getReferenceElements();
   }
 
   @Override
-  @Nonnull
   public PsiClassType[] getReferencedTypes() {
     return getStub().getReferencedTypes();
   }
@@ -75,7 +70,7 @@ public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassRefere
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     String[] names = getStub().getReferencedNames();
     if (names.length != 0) {
       switch (getRole()) {
@@ -103,13 +98,13 @@ public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassRefere
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(getReferenceElements(), SourceTreeToPsiMap.<PsiReferenceList>treeToPsiNotNull(element).getReferenceElements());
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReferenceList(this);
     } else {

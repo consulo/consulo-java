@@ -21,7 +21,6 @@ import consulo.virtualFileSystem.VirtualFileManager;
 import consulo.virtualFileSystem.archive.ArchiveFileType;
 import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -34,25 +33,22 @@ public class JModFileType extends ArchiveFileType {
     super(VirtualFileManager.getInstance());
   }
 
-  @Nonnull
   @Override
   public String getId() {
     return "JMOD_ARCHIVE";
   }
 
-  @Nonnull
   @Override
   public String getDefaultExtension() {
     return "jmod";
   }
 
-  @Nonnull
   @Override
   public String getProtocol() {
     return "jar";
   }
 
-  public static boolean isRoot(@Nonnull VirtualFile file) {
+  public static boolean isRoot(VirtualFile file) {
     if (file.getParent() == null) {
       VirtualFile archiveFile = ArchiveVfsUtil.getVirtualFileForArchive(file);
       return archiveFile != null && archiveFile.getFileType() == JModFileType.INSTANCE;
@@ -60,7 +56,7 @@ public class JModFileType extends ArchiveFileType {
     return false;
   }
 
-  public static boolean isModuleRoot(@Nonnull VirtualFile file) {
+  public static boolean isModuleRoot(VirtualFile file) {
     VirtualFile parent = file.getParent();
     return parent != null && isRoot(parent);
   }

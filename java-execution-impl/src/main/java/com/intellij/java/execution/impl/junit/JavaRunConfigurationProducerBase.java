@@ -12,7 +12,7 @@ import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.test.TestSearchScope;
 import consulo.module.Module;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole

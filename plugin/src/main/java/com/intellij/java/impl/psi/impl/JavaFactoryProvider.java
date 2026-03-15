@@ -23,20 +23,17 @@ import com.intellij.java.language.psi.JVMElementFactory;
 import com.intellij.java.language.psi.JVMElementFactoryProvider;
 import com.intellij.java.language.psi.JavaPsiFacade;
 
-import jakarta.annotation.Nonnull;
 
 /**
 * @author Medvedev Max
 */
 @ExtensionImpl
 public class JavaFactoryProvider implements JVMElementFactoryProvider {
-  @Nonnull
   @Override
   public JVMElementFactory getFactory(Project project) {
     return JavaPsiFacade.getElementFactory(project);
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

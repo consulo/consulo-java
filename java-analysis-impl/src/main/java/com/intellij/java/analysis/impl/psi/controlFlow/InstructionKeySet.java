@@ -17,7 +17,6 @@ package com.intellij.java.analysis.impl.psi.controlFlow;
 
 import consulo.java.analysis.impl.util.DelegateIntObjectMap;
 import consulo.util.collection.primitive.ints.IntMaps;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 
@@ -36,7 +35,6 @@ import java.util.Arrays;
 class InstructionKeySet
 {
 	private final
-	@Nonnull
 	Node myRoot;
 
 	InstructionKeySet(int initialCapacity)
@@ -44,12 +42,12 @@ class InstructionKeySet
 		this.myRoot = new Node(initialCapacity);
 	}
 
-	void add(@Nonnull InstructionKey key)
+	void add(InstructionKey key)
 	{
 		myRoot.add(key.getOffset(), key.getCallStack(), 0);
 	}
 
-	boolean contains(@Nonnull InstructionKey key)
+	boolean contains(InstructionKey key)
 	{
 		return myRoot.contains(key.getOffset(), key.getCallStack(), 0);
 	}
@@ -71,7 +69,7 @@ class InstructionKeySet
 			super(IntMaps.newIntObjectHashMap(Math.max(initialCapacity, 2)));
 		}
 
-		private void add(int offset, @Nonnull int[] stack, int level)
+		private void add(int offset, int[] stack, int level)
 		{
 			if(level < stack.length)
 			{
@@ -92,7 +90,7 @@ class InstructionKeySet
 			}
 		}
 
-		private boolean contains(int offset, @Nonnull int[] stack, int level)
+		private boolean contains(int offset, int[] stack, int level)
 		{
 			if(level < stack.length)
 			{

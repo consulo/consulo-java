@@ -23,7 +23,6 @@ import consulo.language.editor.completion.lookup.InsertionContext;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.icon.IconDescriptorUpdaters;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -36,7 +35,6 @@ public class SimpleMethodCallLookupElement extends LookupElement {
   }
 
   @Override
-  @Nonnull
   public String getLookupString() {
     return myMethod.getName();
   }

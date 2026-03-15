@@ -37,8 +37,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -55,11 +54,11 @@ class SameSignatureCallParametersProvider implements CompletionProvider {
       .class).withParent(psiElement(PsiExpressionList.class).withParent(PsiCall.class)));
 
   @Override
-  public void addCompletions(@Nonnull CompletionParameters parameters, ProcessingContext context, @Nonnull CompletionResultSet result) {
+  public void addCompletions(CompletionParameters parameters, ProcessingContext context, CompletionResultSet result) {
     addSignatureItems(parameters, result);
   }
 
-  void addSignatureItems(@Nonnull CompletionParameters parameters, @Nonnull Consumer<LookupElement> result) {
+  void addSignatureItems(CompletionParameters parameters, Consumer<LookupElement> result) {
     PsiCall methodCall = PsiTreeUtil.getParentOfType(parameters.getPosition(), PsiCall.class);
     assert methodCall != null;
     Set<Pair<PsiMethod, PsiSubstitutor>> candidates = getCallCandidates(methodCall);

@@ -43,8 +43,7 @@ import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListPopup;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -55,13 +54,12 @@ public class DeannotateIntentionAction implements IntentionAction {
   private String myAnnotationName = null;
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return LocalizeValue.join(CodeInsightLocalize.deannotateIntentionActionText(), LocalizeValue.of((myAnnotationName != null ? " " + myAnnotationName : "")));
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiModifierListOwner listOwner = getContainer(editor, file);
     if (listOwner != null) {
       ExternalAnnotationsManager externalAnnotationsManager = ExternalAnnotationsManager.getInstance(project);
@@ -132,7 +130,7 @@ public class DeannotateIntentionAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
     final PsiModifierListOwner listOwner = getContainer(editor, file);
     LOG.assertTrue(listOwner != null); 
     final ExternalAnnotationsManager annotationsManager = ExternalAnnotationsManager.getInstance(project);
@@ -153,7 +151,6 @@ public class DeannotateIntentionAction implements IntentionAction {
       }
 
       @Override
-      @Nonnull
       public String getTextFor(PsiAnnotation value) {
         String qualifiedName = value.getQualifiedName();
         LOG.assertTrue(qualifiedName != null);

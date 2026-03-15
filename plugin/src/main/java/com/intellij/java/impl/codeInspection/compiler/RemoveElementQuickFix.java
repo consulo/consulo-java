@@ -20,24 +20,21 @@ import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class RemoveElementQuickFix implements LocalQuickFix {
-    @Nonnull
     private final LocalizeValue myName;
 
-    public RemoveElementQuickFix(@Nonnull LocalizeValue name) {
+    public RemoveElementQuickFix(LocalizeValue name) {
         myName = name;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return myName;
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         if (element != null) {
             element.delete();

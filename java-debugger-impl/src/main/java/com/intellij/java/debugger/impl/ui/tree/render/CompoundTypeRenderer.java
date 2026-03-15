@@ -33,13 +33,10 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class CompoundTypeRenderer extends CompoundNodeRenderer
 {
 	public static final
-	@NonNls
 	String UNIQUE_ID = "CompoundTypeRenderer";
 	protected static final Logger LOG = Logger.getInstance("#com.intellij.debugger.ui.tree.render.CompoundReferenceRenderer");
 	private static final AutoToStringRenderer AUTO_TO_STRING_RENDERER = new AutoToStringRenderer();
@@ -131,7 +128,7 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 		return UNIQUE_ID;
 	}
 
-	public void setClassName(@Nonnull String name)
+	public void setClassName(String name)
 	{
 		myProperties.setClassName(name);
 		if(getRawLabelRenderer() != null)
@@ -154,7 +151,6 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 	}
 
 	public
-	@Nonnull
 	String getClassName()
 	{
 		return myProperties.getClassName();

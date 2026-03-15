@@ -24,8 +24,6 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
 
@@ -35,26 +33,24 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SplitTryWithMultipleResourcesIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class SplitTryWithMultipleResourcesIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.splitTryWithMultipleResourcesIntentionName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new TryWithMultipleResourcesPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiTryStatement tryStatement = (PsiTryStatement) element.getParent();
         PsiResourceList resourceList = tryStatement.getResourceList();
         if (resourceList == null) {
             return;
         }
-        @NonNls StringBuilder newTryStatementText = new StringBuilder();
+        StringBuilder newTryStatementText = new StringBuilder();
         List<PsiResourceVariable> variables = resourceList.getResourceVariables();
         boolean braces = false;
         for (PsiResourceVariable variable : variables) {

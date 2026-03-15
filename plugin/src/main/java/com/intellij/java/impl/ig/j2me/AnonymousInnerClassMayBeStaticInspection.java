@@ -25,17 +25,14 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class AnonymousInnerClassMayBeStaticInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.anonymousInnerMayBeNamedStaticInnerClassProblemDescriptor().get();
     }
@@ -54,7 +51,7 @@ public class AnonymousInnerClassMayBeStaticInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             if (!(aClass instanceof PsiAnonymousClass)) {
                 return;
             }

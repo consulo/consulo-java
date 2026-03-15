@@ -31,7 +31,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,13 +45,12 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
   private static final Logger LOG = Logger.getInstance(MoveInitializerToSetUpMethodAction.class);
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return CodeInsightLocalize.intentionMoveInitializerToSetUp();
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     boolean isAvailable = super.isAvailable(project, editor, element) && TestIntegrationUtils.isTest(element);
     if (isAvailable) {
       PsiField field = PsiTreeUtil.getParentOfType(element, PsiField.class);
@@ -76,15 +74,13 @@ public class MoveInitializerToSetUpMethodAction extends BaseMoveInitializerToMet
     return false;
   }
 
-  @Nonnull
   @Override
   protected Collection<String> getUnsuitableModifiers() {
     return Arrays.asList(PsiModifier.STATIC, PsiModifier.FINAL);
   }
 
-  @Nonnull
   @Override
-  protected Collection<PsiMethod> getOrCreateMethods(@Nonnull Project project, @Nonnull Editor editor, PsiFile file, @Nonnull PsiClass aClass) {
+  protected Collection<PsiMethod> getOrCreateMethods(Project project, Editor editor, PsiFile file, PsiClass aClass) {
     PsiMethod setUpMethod = TestFrameworks.getInstance().findOrCreateSetUpMethod(aClass);
     return setUpMethod == null ? Collections.<PsiMethod>emptyList() : Arrays.asList(setUpMethod);
   }

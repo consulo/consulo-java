@@ -71,8 +71,7 @@ import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.PathsList;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import java.io.File;
@@ -192,7 +191,6 @@ public class JavacCompiler implements BackendCompiler {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getPresentableName() {
     return JavaCompilerLocalize.compilerJavacName();
   }
@@ -200,7 +198,7 @@ public class JavacCompiler implements BackendCompiler {
   @Override
   public OutputParser createErrorParser(
     BackendCompilerProcessBuilder processBuilder,
-    @Nonnull final String outputDir,
+    final String outputDir,
     ProcessHandler process
   ) {
     if (processBuilder instanceof NewBackendCompilerProcessBuilder) {
@@ -218,11 +216,10 @@ public class JavacCompiler implements BackendCompiler {
     return null;
   }
 
-  @Nonnull
   @Override
-  public BackendCompilerProcessBuilder prepareProcess(@Nonnull ModuleChunk chunk,
-                                                      @Nonnull String outputDir,
-                                                      @Nonnull CompileContext compileContext) throws IOException {
+  public BackendCompilerProcessBuilder prepareProcess(ModuleChunk chunk,
+                                                      String outputDir,
+                                                      CompileContext compileContext) throws IOException {
     JpsJavaCompilerOptions javaCompilerOptions = JavacCompilerConfiguration.getInstance(myProject);
     JavaCompilerConfiguration javaCompilerConfiguration = JavaCompilerConfiguration.getInstance(myProject);
 
@@ -495,7 +492,7 @@ public class JavacCompiler implements BackendCompiler {
   }
 
   @Nullable
-  public static String findModuleName(@Nonnull Module module) {
+  public static String findModuleName(Module module) {
     VirtualFile[] folders =
       AccessRule.read(() -> ModuleRootManager.getInstance(module).getContentFolderFiles(LanguageContentFolderScopes.onlyProduction()));
     assert folders != null;
@@ -515,7 +512,7 @@ public class JavacCompiler implements BackendCompiler {
   }
 
   @Nullable
-  private static String findModuleName(@Nonnull Project project, @Nonnull VirtualFile moduleInfo) {
+  private static String findModuleName(Project project, VirtualFile moduleInfo) {
     PsiFile file = AccessRule.read(() -> PsiManager.getInstance(project).findFile(moduleInfo));
     if (file instanceof PsiJavaFile javaFile) {
       PsiJavaModule moduleDeclaration = AccessRule.read(javaFile::getModuleDeclaration);
@@ -526,11 +523,10 @@ public class JavacCompiler implements BackendCompiler {
     return null;
   }
 
-  private static boolean isAtLeast(@Nonnull JavaSdkVersion version, @Nullable LanguageLevel languageLevel, @Nonnull JavaSdkVersion target) {
+  private static boolean isAtLeast(JavaSdkVersion version, @Nullable LanguageLevel languageLevel, JavaSdkVersion target) {
     return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(target.getMaxLanguageLevel()));
   }
 
-  @Nonnull
   private static Set<VirtualFile> filterModFiles(Set<VirtualFile> files) {
     Set<VirtualFile> newFiles = new LinkedHashSet<>(files.size());
     for (VirtualFile file : files) {
@@ -543,7 +539,6 @@ public class JavacCompiler implements BackendCompiler {
     return newFiles;
   }
 
-  @Nonnull
   private static List<String> toStringList(Set<VirtualFile> files) {
     PathsList pathsList = new PathsList();
     pathsList.addVirtualFiles(files);

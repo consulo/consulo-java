@@ -17,7 +17,6 @@ package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiPolyVariantReference;
 import consulo.language.psi.resolve.PsiScopeProcessor;
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a reference found in Java code.
@@ -40,10 +39,8 @@ public interface PsiJavaReference extends PsiPolyVariantReference {
    * result.
    * @return the result of the resolve.
    */
-  @Nonnull
   JavaResolveResult advancedResolve(boolean incompleteCode);
   
   @Override
-  @Nonnull
   JavaResolveResult[] multiResolve(boolean incompleteCode);
 }

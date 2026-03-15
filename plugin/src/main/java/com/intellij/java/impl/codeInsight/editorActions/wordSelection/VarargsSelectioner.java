@@ -20,8 +20,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.language.psi.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -63,9 +62,8 @@ public class VarargsSelectioner extends BasicSelectioner {
     return Collections.singletonList(new TextRange(firstExpressionRange.getStartOffset(), lastExpressionRange.getEndOffset()));
   }
 
-  @Nonnull
-  private static PsiExpression[] getVarargArgs(@Nonnull PsiParameterList parameterList,
-                                               @Nonnull PsiExpressionList expressionList) {
+  private static PsiExpression[] getVarargArgs(PsiParameterList parameterList,
+                                               PsiExpressionList expressionList) {
     PsiParameter[] parameters = parameterList.getParameters();
     PsiExpression[] expressions = expressionList.getExpressions();
 
@@ -83,7 +81,7 @@ public class VarargsSelectioner extends BasicSelectioner {
   }
 
   @Nullable
-  private static PsiParameterList getParameterList(@Nonnull PsiExpressionList list) {
+  private static PsiParameterList getParameterList(PsiExpressionList list) {
     if (!(list.getParent() instanceof PsiMethodCallExpression)) {
       return null;
     }

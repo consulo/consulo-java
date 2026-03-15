@@ -28,8 +28,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -40,13 +39,11 @@ public class AssignmentToDateFieldFromParameterInspection extends BaseInspection
      */
     public boolean ignorePrivateMethods = true;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.assignmentToDateCalendarFieldFromParameterDisplayName();
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public String buildErrorString(Object... infos) {
@@ -72,7 +69,7 @@ public class AssignmentToDateFieldFromParameterInspection extends BaseInspection
 
         @Override
         public void visitAssignmentExpression(
-            @Nonnull PsiAssignmentExpression expression
+            PsiAssignmentExpression expression
         ) {
             super.visitAssignmentExpression(expression);
             IElementType tokenType = expression.getOperationTokenType();

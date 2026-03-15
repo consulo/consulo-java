@@ -30,7 +30,6 @@ import consulo.language.editor.completion.lookup.LookupElementPresentation;
 import consulo.language.editor.completion.lookup.LookupElementRenderer;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.Consumer;
 
@@ -62,7 +61,6 @@ public class RefactoringCompletionContributor extends CompletionContributor {
     });
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

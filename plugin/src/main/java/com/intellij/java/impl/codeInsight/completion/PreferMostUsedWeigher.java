@@ -25,8 +25,7 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementWeigher;
 import consulo.language.pattern.StandardPatterns;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.patterns.PsiJavaPatterns.psiMethod;
 
@@ -49,14 +48,14 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 
 	// optimization: do not even create weigher if compiler indices aren't available for now
 	@Nullable
-	static PreferMostUsedWeigher create(@Nonnull PsiElement position)
+	static PreferMostUsedWeigher create(PsiElement position)
 	{
 		return null;
 	}
 
 	@Nullable
 	@Override
-	public Integer weigh(@Nonnull LookupElement element)
+	public Integer weigh(LookupElement element)
 	{
 		throw new UnsupportedOperationException();
 		/*final PsiElement psi = ObjectUtils.tryCast(element.getObject(), PsiElement.class);
@@ -81,7 +80,7 @@ class PreferMostUsedWeigher extends LookupElementWeigher
 	}
 
 	//Objects.requireNonNull is an example
-	private static boolean looksLikeHelperMethodOrConst(@Nonnull PsiElement element)
+	private static boolean looksLikeHelperMethodOrConst(PsiElement element)
 	{
 		if(!(element instanceof PsiMethod))
 		{

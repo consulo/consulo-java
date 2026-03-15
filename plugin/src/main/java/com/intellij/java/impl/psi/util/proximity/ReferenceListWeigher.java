@@ -28,8 +28,7 @@ import consulo.language.util.proximity.ProximityLocation;
 import consulo.language.util.proximity.ProximityWeigher;
 import consulo.module.content.ProjectFileIndex;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.impl.psi.util.proximity.ReferenceListWeigher.ReferenceListApplicability.*;
 
@@ -49,7 +48,7 @@ public class ReferenceListWeigher extends ProximityWeigher {
   }
 
   @Nullable
-  protected Preference getPreferredCondition(@Nonnull PsiElement position) {
+  protected Preference getPreferredCondition(PsiElement position) {
     if (INSIDE_REFERENCE_LIST.accepts(position)) {
       PsiReferenceList list = (PsiReferenceList) position.getParent().getParent();
       PsiReferenceList.Role role = list.getRole();
@@ -86,15 +85,14 @@ public class ReferenceListWeigher extends ProximityWeigher {
   }
 
   @Override
-  public ReferenceListApplicability weigh(@Nonnull PsiElement element, @Nonnull ProximityLocation location) {
+  public ReferenceListApplicability weigh(PsiElement element, ProximityLocation location) {
     if (element instanceof PsiClass && location.getPosition() != null) {
       return getApplicability((PsiClass) element, location.getPosition());
     }
     return unknown;
   }
 
-  @Nonnull
-  public ReferenceListApplicability getApplicability(@Nonnull PsiClass aClass, @Nonnull PsiElement position) {
+  public ReferenceListApplicability getApplicability(PsiClass aClass, PsiElement position) {
     Preference condition = getPreferredCondition(position);
     if (condition == Preference.Interfaces) {
       return aClass.isInterface() ? applicableByKind : inapplicable;

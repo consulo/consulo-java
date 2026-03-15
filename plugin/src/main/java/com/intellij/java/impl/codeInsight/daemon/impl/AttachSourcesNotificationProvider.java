@@ -61,8 +61,7 @@ import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFilePathUtil;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
 import java.io.ByteArrayInputStream;
@@ -87,7 +86,6 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		myProject = project;
 	}
 
-	@Nonnull
 	@Override
 	public String getId()
 	{
@@ -98,9 +96,9 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 	@Override
 	@RequiredReadAction
 	public EditorNotificationBuilder buildNotification(
-		@Nonnull VirtualFile file,
-		@Nonnull FileEditor fileEditor,
-		@Nonnull Supplier<EditorNotificationBuilder> supplier
+		VirtualFile file,
+		FileEditor fileEditor,
+		Supplier<EditorNotificationBuilder> supplier
 	)
 	{
 		if (file.getFileType() != JavaClassFileType.INSTANCE)
@@ -288,7 +286,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		}
 
 		@Override
-		public AsyncResult<Void> perform(List<LibraryOrderEntry> orderEntriesContainingFile, @Nonnull ComponentEvent<Component> e)
+		public AsyncResult<Void> perform(List<LibraryOrderEntry> orderEntriesContainingFile, ComponentEvent<Component> e)
 		{
 			List<Library.ModifiableModel> modelsToCommit = new ArrayList<>();
 			for (LibraryOrderEntry orderEntry : orderEntriesContainingFile)
@@ -395,7 +393,6 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 						return value == null ? new ListSeparator() : null;
 					}
 
-					@Nonnull
 					@Override
 					public String getTextFor(LibraryOrderEntry value)
 					{

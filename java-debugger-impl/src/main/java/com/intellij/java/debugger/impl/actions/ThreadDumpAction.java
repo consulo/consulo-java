@@ -38,7 +38,6 @@ import consulo.ui.ex.action.Presentation;
 import consulo.util.collection.SmartList;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -250,7 +249,6 @@ public class ThreadDumpAction extends AnAction {
         return result;
     }
 
-    @Nonnull
     private static LocalizeValue renderLockedObject(ObjectReference monitor) {
         return JavaDebuggerLocalize.threadsExportAttributeLabelLocked(renderObject(monitor));
     }

@@ -33,40 +33,35 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class TestOnlyInspection extends BaseJavaLocalInspectionTool {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionTestOnlyProblemsDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "TestOnlyProblems";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.inspectionGeneralToolsGroupName();
     }
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull final ProblemsHolder h,
+        final ProblemsHolder h,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
     ) {
         return new JavaElementVisitor() {
             @Override
-            public void visitCallExpression(@Nonnull PsiCallExpression e) {
+            public void visitCallExpression(PsiCallExpression e) {
                 validate(e, h);
             }
         };

@@ -10,14 +10,12 @@
  */
 package com.intellij.codeInsight.daemon.quickFix;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.javaDoc.JavaDocLocalInspection;
 
 public abstract class JavadocInspectionQuickFixTest extends LightQuickFix15TestCase {
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     JavaDocLocalInspection javaDocLocalInspection = new JavaDocLocalInspection();

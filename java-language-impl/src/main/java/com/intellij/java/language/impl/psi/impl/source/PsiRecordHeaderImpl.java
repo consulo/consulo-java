@@ -11,15 +11,14 @@ import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiRecordHeaderImpl extends JavaStubPsiElement<PsiRecordHeaderStub> implements PsiRecordHeader {
-  public PsiRecordHeaderImpl(@Nonnull PsiRecordHeaderStub stub) {
+  public PsiRecordHeaderImpl(PsiRecordHeaderStub stub) {
     super(stub, JavaStubElementTypes.RECORD_HEADER);
   }
 
-  public PsiRecordHeaderImpl(@Nonnull ASTNode node) {
+  public PsiRecordHeaderImpl(ASTNode node) {
     super(node);
   }
 
@@ -31,7 +30,7 @@ public class PsiRecordHeaderImpl extends JavaStubPsiElement<PsiRecordHeaderStub>
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitRecordHeader(this);
     } else {
@@ -45,7 +44,6 @@ public class PsiRecordHeaderImpl extends JavaStubPsiElement<PsiRecordHeaderStub>
   }
 
   @Override
-  @Nonnull
   public PsiRecordComponent[] getRecordComponents() {
     return getStubOrPsiChildren(JavaStubElementTypes.RECORD_COMPONENT, PsiRecordComponent.EMPTY_ARRAY);
   }

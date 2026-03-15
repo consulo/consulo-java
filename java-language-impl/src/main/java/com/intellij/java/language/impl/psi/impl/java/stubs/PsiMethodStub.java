@@ -4,8 +4,7 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface PsiMethodStub extends PsiMemberStub<PsiMethod>
 {
@@ -18,7 +17,6 @@ public interface PsiMethodStub extends PsiMemberStub<PsiMethod>
 	@Nullable
 	String getDefaultValueText();
 
-	@Nonnull
 	TypeInfo getReturnTypeText();
 
 	PsiParameterStub findParameter(int idx);

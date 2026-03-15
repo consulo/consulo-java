@@ -29,8 +29,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -43,23 +42,22 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     private final PsiSubstitutor mySubstitutor;
 
     private RemoveRedundantArgumentsFix(
-        @Nonnull PsiMethod targetMethod,
-        @Nonnull PsiExpression[] arguments,
-        @Nonnull PsiSubstitutor substitutor
+        PsiMethod targetMethod,
+        PsiExpression[] arguments,
+        PsiSubstitutor substitutor
     ) {
         myTargetMethod = targetMethod;
         myArguments = arguments;
         mySubstitutor = substitutor;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.removeRedundantArgumentsText(JavaHighlightUtil.formatMethod(myTargetMethod));
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (!myTargetMethod.isValid() || myTargetMethod.getContainingClass() == null) {
             return false;
         }
@@ -78,9 +76,9 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
 
     @Nullable
     private static PsiExpression[] findRedundantArgument(
-        @Nonnull PsiExpression[] arguments,
-        @Nonnull PsiParameter[] parameters,
-        @Nonnull PsiSubstitutor substitutor
+        PsiExpression[] arguments,
+        PsiParameter[] parameters,
+        PsiSubstitutor substitutor
     ) {
         if (arguments.length <= parameters.length) {
             return null;
@@ -105,7 +103,7 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -124,10 +122,10 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     }
 
     public static void registerIntentions(
-        @Nonnull JavaResolveResult[] candidates,
-        @Nonnull PsiExpressionList arguments,
-        @Nullable HighlightInfo.Builder hlBuilder,
-        @Nonnull TextRange fixRange
+        JavaResolveResult[] candidates,
+        PsiExpressionList arguments,
+        HighlightInfo.@Nullable Builder hlBuilder,
+        TextRange fixRange
     ) {
         if (hlBuilder == null) {
             return;
@@ -138,11 +136,11 @@ public class RemoveRedundantArgumentsFix implements SyntheticIntentionAction {
     }
 
     private static void registerIntention(
-        @Nonnull PsiExpressionList arguments,
-        @Nonnull HighlightInfo.Builder hlBuilder,
-        @Nonnull TextRange fixRange,
-        @Nonnull JavaResolveResult candidate,
-        @Nonnull PsiElement context
+        PsiExpressionList arguments,
+        HighlightInfo.Builder hlBuilder,
+        TextRange fixRange,
+        JavaResolveResult candidate,
+        PsiElement context
     ) {
         if (!candidate.isStaticsScopeCorrect()) {
             return;

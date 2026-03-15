@@ -26,8 +26,7 @@ import consulo.language.editor.inspection.reference.RefModule;
 import consulo.language.editor.inspection.scheme.InspectionManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.List;
@@ -37,7 +36,6 @@ public abstract class ModuleWithTooManyClassesInspection extends BaseGlobalInspe
     @SuppressWarnings({"PublicField"})
     public int limit = 100;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.moduleWithTooManyClassesDisplayName();

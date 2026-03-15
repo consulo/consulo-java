@@ -11,7 +11,6 @@ import consulo.language.editor.localize.CommonQuickFixLocalize;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 public class ReplaceWithArgumentFix implements LocalQuickFix {
     private final String myText;
@@ -23,13 +22,12 @@ public class ReplaceWithArgumentFix implements LocalQuickFix {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getName() {
         return CommonQuickFixLocalize.fixReplaceWithX(myText);
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiMethodCallExpression call = PsiTreeUtil.getParentOfType(descriptor.getStartElement(), PsiMethodCallExpression.class);
         if (call == null) {
             return;

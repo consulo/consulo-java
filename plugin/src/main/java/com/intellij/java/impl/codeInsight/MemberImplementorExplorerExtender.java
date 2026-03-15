@@ -5,7 +5,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.component.ComponentManager;
 import consulo.component.extension.ExtensionExtender;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Consumer;
 
 /**
@@ -15,13 +14,12 @@ import java.util.function.Consumer;
 @ExtensionImpl
 public class MemberImplementorExplorerExtender implements ExtensionExtender<MemberImplementorExplorer> {
   @Override
-  public void extend(@Nonnull ComponentManager componentManager, @Nonnull Consumer<MemberImplementorExplorer> consumer) {
+  public void extend(ComponentManager componentManager, Consumer<MemberImplementorExplorer> consumer) {
     for (MethodImplementor implementor : componentManager.getExtensionPoint(MethodImplementor.class)) {
       consumer.accept(implementor::getMethodsToImplement);
     }
   }
 
-  @Nonnull
   @Override
   public Class<MemberImplementorExplorer> getExtensionClass() {
     return MemberImplementorExplorer.class;

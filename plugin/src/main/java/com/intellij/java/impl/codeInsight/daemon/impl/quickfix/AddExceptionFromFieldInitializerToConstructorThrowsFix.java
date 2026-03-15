@@ -32,7 +32,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -50,7 +49,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!myWrongElement.isValid()) {
       return false;
     }
@@ -80,7 +79,7 @@ public class AddExceptionFromFieldInitializerToConstructorThrowsFix extends Base
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
       return;
     }

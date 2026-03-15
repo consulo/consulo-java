@@ -6,15 +6,14 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.content.ProjectFileIndex;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 class JavaAutoModuleFilterScope extends DelegatingGlobalSearchScope {
-  JavaAutoModuleFilterScope(@Nonnull GlobalSearchScope baseScope) {
+  JavaAutoModuleFilterScope(GlobalSearchScope baseScope) {
     super(baseScope);
   }
 
   @Override
-  public boolean contains(@Nonnull VirtualFile file) {
+  public boolean contains(VirtualFile file) {
     if (!super.contains(file)) {
       return false;
     }

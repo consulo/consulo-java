@@ -26,27 +26,23 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ConvertJUnit3TestCaseToJUnit4Intention", fileExtensions = "java", categories = {"Java", "JUnit"})
 public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.convertJUnit3TestCaseToJUnit4IntentionName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ConvertJUnit3TestCaseToJUnit4Predicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiElement parent = element.getParent();
         if (!(parent instanceof PsiClass)) {
             return;
@@ -58,7 +54,7 @@ public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
         }
         PsiMethod[] methods = aClass.getMethods();
         for (PsiMethod method : methods) {
-            @NonNls String name = method.getName();
+            String name = method.getName();
             if (method.hasModifierProperty(PsiModifier.STATIC)) {
                 continue;
             }
@@ -113,10 +109,9 @@ public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
 
     private static class SuperLifeCycleCallRemover extends JavaRecursiveElementVisitor {
 
-        @Nonnull
         private final String myLifeCycleMethodName;
 
-        private SuperLifeCycleCallRemover(@Nonnull String lifeCycleMethodName) {
+        private SuperLifeCycleCallRemover(String lifeCycleMethodName) {
             myLifeCycleMethodName = lifeCycleMethodName;
         }
 
@@ -157,7 +152,7 @@ public class ConvertJUnit3TestCaseToJUnit4Intention extends Intention {
             if (!"junit.framework.Assert".equals(name)) {
                 return;
             }
-            @NonNls String newExpressionText = "org.junit.Assert." + expression.getText();
+            String newExpressionText = "org.junit.Assert." + expression.getText();
             Project project = expression.getProject();
             PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
             PsiExpression newExpression = factory.createExpressionFromText(newExpressionText, expression);

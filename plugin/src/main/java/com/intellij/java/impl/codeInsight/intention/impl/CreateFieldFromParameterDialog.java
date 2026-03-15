@@ -29,8 +29,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -47,7 +46,7 @@ public class CreateFieldFromParameterDialog extends DialogWrapper {
 
   private JComponent myNameField;
   private CheckBox myCbFinal;
-  private static final @NonNls String PROPERTY_NAME = "CREATE_FIELD_FROM_PARAMETER_DECLARE_FINAL";
+  private static final String PROPERTY_NAME = "CREATE_FIELD_FROM_PARAMETER_DECLARE_FINAL";
   private TypeSelector myTypeSelector;
 
   public CreateFieldFromParameterDialog(

@@ -42,8 +42,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
@@ -51,9 +50,9 @@ import java.util.List;
 public class DefaultSourcePositionProvider extends SourcePositionProvider {
   @Nullable
   @Override
-  protected SourcePosition computeSourcePosition(@Nonnull NodeDescriptor descriptor,
-                                                 @Nonnull Project project,
-                                                 @Nonnull DebuggerContextImpl context,
+  protected SourcePosition computeSourcePosition(NodeDescriptor descriptor,
+                                                 Project project,
+                                                 DebuggerContextImpl context,
                                                  boolean nearest) {
     StackFrameProxyImpl frame = context.getFrameProxy();
     if (frame == null) {
@@ -82,9 +81,9 @@ public class DefaultSourcePositionProvider extends SourcePositionProvider {
   }
 
   @Nullable
-  private SourcePosition getSourcePositionForField(@Nonnull FieldDescriptor descriptor,
-                                                   @Nonnull Project project,
-                                                   @Nonnull DebuggerContextImpl context,
+  private SourcePosition getSourcePositionForField(FieldDescriptor descriptor,
+                                                   Project project,
+                                                   DebuggerContextImpl context,
                                                    boolean nearest) {
     final ReferenceType type = descriptor.getField().declaringType();
     final JavaPsiFacade facade = JavaPsiFacade.getInstance(project);
@@ -154,8 +153,8 @@ public class DefaultSourcePositionProvider extends SourcePositionProvider {
 
   @Nullable
   private SourcePosition getSourcePositionForLocalVariable(String name,
-                                                           @Nonnull Project project,
-                                                           @Nonnull DebuggerContextImpl context,
+                                                           Project project,
+                                                           DebuggerContextImpl context,
                                                            boolean nearest) {
     PsiElement place = PositionUtil.getContextElement(context);
     if (place == null) {

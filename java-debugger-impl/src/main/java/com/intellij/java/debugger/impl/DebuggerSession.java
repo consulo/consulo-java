@@ -67,8 +67,7 @@ import consulo.ui.ex.awt.util.Alarm;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.TimeoutUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.HyperlinkEvent;
 import java.util.Collection;
@@ -134,7 +133,6 @@ public class DebuggerSession implements AbstractDebuggerSession {
         resetIgnoreStepFiltersFlag();
     }
 
-    @Nonnull
     public GlobalSearchScope getSearchScope() {
         return mySearchScope;
     }
@@ -167,7 +165,6 @@ public class DebuggerSession implements AbstractDebuggerSession {
             myDebuggerContext = SESSION_EMPTY_CONTEXT;
         }
 
-        @Nonnull
         @Override
         public DebuggerContextImpl getContext() {
             return myDebuggerContext;
@@ -183,7 +180,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
          */
         @Override
         @RequiredUIAccess
-        public void setState(@Nonnull DebuggerContextImpl context, State state, Event event, @Nonnull LocalizeValue description) {
+        public void setState(DebuggerContextImpl context, State state, Event event, LocalizeValue description) {
             UIAccess.assertIsUIThread();
             DebuggerSession session = context.getDebuggerSession();
             LOG.assertTrue(session == DebuggerSession.this || session == null);
@@ -223,7 +220,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
     @RequiredUIAccess
     static DebuggerSession create(
         String sessionName,
-        @Nonnull DebugProcessImpl debugProcess,
+        DebugProcessImpl debugProcess,
         DebugEnvironment environment
     ) throws ExecutionException {
         DebuggerSession session = new DebuggerSession(sessionName, debugProcess, environment);
@@ -237,7 +234,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
         return session;
     }
 
-    private DebuggerSession(String sessionName, @Nonnull DebugProcessImpl debugProcess, DebugEnvironment environment) {
+    private DebuggerSession(String sessionName, DebugProcessImpl debugProcess, DebugEnvironment environment) {
         mySessionName = sessionName;
         myDebugProcess = debugProcess;
         SESSION_EMPTY_CONTEXT = DebuggerContextImpl.createDebuggerContext(this, null, null, null);
@@ -251,7 +248,6 @@ public class DebuggerSession implements AbstractDebuggerSession {
         myRunJre = environment.getRunJre();
     }
 
-    @Nonnull
     public DebuggerStateManager getContextManager() {
         return myContextManager;
     }
@@ -264,7 +260,6 @@ public class DebuggerSession implements AbstractDebuggerSession {
         return mySessionName;
     }
 
-    @Nonnull
     public DebugProcessImpl getProcess() {
         return myDebugProcess;
     }
@@ -383,7 +378,7 @@ public class DebuggerSession implements AbstractDebuggerSession {
     }
 
     @RequiredUIAccess
-    public void runToCursor(@Nonnull XSourcePosition position, boolean ignoreBreakpoints) {
+    public void runToCursor(XSourcePosition position, boolean ignoreBreakpoints) {
         try {
             DebugProcessImpl.ResumeCommand runToCursorCommand =
                 myDebugProcess.createRunToCursorCommand(getSuspendContext(), position, ignoreBreakpoints);
@@ -842,7 +837,6 @@ public class DebuggerSession implements AbstractDebuggerSession {
         }
     }
 
-    @Nonnull
     private static LocalizeValue getDescription(DebuggerContextImpl debuggerContext) {
         SuspendContextImpl suspendContext = debuggerContext.getSuspendContext();
         if (suspendContext != null && debuggerContext.getThreadProxy() != suspendContext.getThread()) {

@@ -49,9 +49,7 @@ import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.undoRedo.CommandProcessor;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.*;
@@ -63,7 +61,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
   private static final Logger LOG = Logger.getInstance(CreateFromUsageBaseFix.class);
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiElement element = getElement();
     if (element == null || isValidElement(element)) {
       return false;
@@ -85,7 +83,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
   protected abstract boolean isValidElement(PsiElement result);
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     PsiDocumentManager.getInstance(project).commitAllDocuments();
 
     PsiElement element = getElement();
@@ -167,7 +165,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
    * @return null means unable to open the editor
    */
   @Nullable
-  protected static Editor positionCursor(@Nonnull Project project, @Nonnull PsiFile targetFile, @Nonnull PsiElement element) {
+  protected static Editor positionCursor(Project project, PsiFile targetFile, PsiElement element) {
     TextRange range = element.getTextRange();
     int textOffset = range.getStartOffset();
     VirtualFile file = targetFile.getVirtualFile();
@@ -229,7 +227,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
           run = (PsiExpression)run.getParent();
         }
         if (run.getParent() instanceof PsiExpressionList && run.getParent().getParent() instanceof PsiMethodCallExpression) {
-          @NonNls String calleeText = ((PsiMethodCallExpression)run.getParent().getParent()).getMethodExpression().getText();
+          String calleeText = ((PsiMethodCallExpression)run.getParent().getParent()).getMethodExpression().getText();
           if (calleeText.equals("this") || calleeText.equals("super")) {
             return true;
           }
@@ -288,7 +286,6 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
   }
 
   //Should return only valid inproject classes
-  @Nonnull
   protected List<PsiClass> getTargetClasses(PsiElement element) {
     PsiClass psiClass = null;
     PsiExpression qualifier = null;
@@ -339,7 +336,7 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
     else if (element instanceof PsiMethodCallExpression) {
       PsiReferenceExpression methodExpression = ((PsiMethodCallExpression)element).getMethodExpression();
       qualifier = methodExpression.getQualifierExpression();
-      @NonNls String referenceName = methodExpression.getReferenceName();
+      String referenceName = methodExpression.getReferenceName();
       if (referenceName == null) {
         return Collections.emptyList();
       }
@@ -424,22 +421,22 @@ public abstract class CreateFromUsageBaseFix extends BaseIntentionAction impleme
     return psiClass.getManager().isInProject(psiClass);
   }
 
-  protected static void startTemplate(@Nonnull Editor editor, Template template, @Nonnull Project project) {
+  protected static void startTemplate(Editor editor, Template template, Project project) {
     startTemplate(editor, template, project, null);
   }
 
-  protected static void startTemplate(@Nonnull Editor editor,
+  protected static void startTemplate(Editor editor,
                                       Template template,
-                                      @Nonnull Project project,
+                                      Project project,
                                       TemplateEditingListener listener) {
     startTemplate(editor, template, project, listener, LocalizeValue.empty());
   }
 
-  public static void startTemplate(@Nonnull final Editor editor,
-                                   @Nonnull Template template,
-                                   @Nonnull final Project project,
+  public static void startTemplate(final Editor editor,
+                                   Template template,
+                                   final Project project,
                                    @Nullable TemplateEditingListener listener,
-                                   @Nonnull LocalizeValue commandName) {
+                                   LocalizeValue commandName) {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {

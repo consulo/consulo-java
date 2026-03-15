@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import consulo.language.psi.PsiElement;
@@ -118,7 +117,6 @@ public abstract class MoveInstanceMethodTest extends LightRefactoringTestCase {
 
   }
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

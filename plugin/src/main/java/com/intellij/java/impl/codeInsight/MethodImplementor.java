@@ -22,8 +22,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.function.Consumer;
 
 /**
@@ -31,15 +30,12 @@ import java.util.function.Consumer;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface MethodImplementor {
-  @Nonnull
   PsiMethod[] getMethodsToImplement(PsiClass aClass);
 
-  @Nonnull
   PsiMethod[] createImplementationPrototypes(PsiClass inClass, PsiMethod method) throws IncorrectOperationException;
 
   @Nullable
   GenerationInfo createGenerationInfo(PsiMethod method, boolean mergeIfExists);
 
-  @Nonnull
   Consumer<PsiMethod> createDecorator(PsiClass targetClass, PsiMethod baseMethod, boolean toCopyJavaDoc, boolean insertOverrideIfPossible);
 }

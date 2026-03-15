@@ -20,33 +20,31 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 
 public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor {
 
-  @Nonnull
   private final Collection<PsiVariable> variables;
   private final boolean recurseIntoClasses;
   private final boolean checkUnaryExpressions;
   private boolean assigned = false;
   private PsiElement excludedElement = null;
 
-  public VariableAssignedVisitor(@Nonnull Collection<PsiVariable> variables, boolean recurseIntoClasses) {
+  public VariableAssignedVisitor(Collection<PsiVariable> variables, boolean recurseIntoClasses) {
     this.variables = variables;
     checkUnaryExpressions = true;
     this.recurseIntoClasses = recurseIntoClasses;
   }
 
-  public VariableAssignedVisitor(@Nonnull PsiVariable variable, boolean recurseIntoClasses) {
+  public VariableAssignedVisitor(PsiVariable variable, boolean recurseIntoClasses) {
     variables = Collections.singleton(variable);
     final PsiType type = variable.getType();
     checkUnaryExpressions = TypeConversionUtil.isNumericType(type);
     this.recurseIntoClasses = recurseIntoClasses;
   }
 
-  public VariableAssignedVisitor(@Nonnull PsiVariable variable) {
+  public VariableAssignedVisitor(PsiVariable variable) {
     this(variable, true);
   }
 
@@ -55,7 +53,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor 
   }
 
   @Override
-  public void visitElement(@Nonnull PsiElement element) {
+  public void visitElement(PsiElement element) {
     if (assigned || element == excludedElement) {
       return;
     }
@@ -63,7 +61,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor 
   }
 
   @Override
-  public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression assignment) {
+  public void visitAssignmentExpression(PsiAssignmentExpression assignment) {
     if (assigned) {
       return;
     }
@@ -86,7 +84,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor 
   }
 
   @Override
-  public void visitPrefixExpression(@Nonnull PsiPrefixExpression prefixExpression) {
+  public void visitPrefixExpression(PsiPrefixExpression prefixExpression) {
     if (assigned) {
       return;
     }
@@ -108,7 +106,7 @@ public class VariableAssignedVisitor extends JavaRecursiveElementWalkingVisitor 
   }
 
   @Override
-  public void visitPostfixExpression(@Nonnull PsiPostfixExpression postfixExpression) {
+  public void visitPostfixExpression(PsiPostfixExpression postfixExpression) {
     if (assigned) {
       return;
     }

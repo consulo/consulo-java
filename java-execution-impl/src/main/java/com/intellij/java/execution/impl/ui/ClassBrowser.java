@@ -32,7 +32,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.ui.ex.awt.MessagesEx;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public abstract class ClassBrowser extends BrowseModuleValueActionListener {
   private final String myTitle;

@@ -18,7 +18,6 @@ package com.intellij.refactoring;
 import java.io.File;
 
 import consulo.virtualFileSystem.LocalFileSystem;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import consulo.application.ApplicationManager;
 import consulo.document.FileDocumentManager;
@@ -73,7 +72,6 @@ public abstract class MultiFileTestCase extends CodeInsightTestCase {
   }
 
   @Override
-  @NonNls
   protected abstract String getTestRoot();
 
   protected interface PerformAction {

@@ -21,7 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.annotation.Nonnull;
 
 import org.intellij.lang.annotations.MagicConstant;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
@@ -51,7 +50,7 @@ public class SuspendManagerImpl implements SuspendManager
 
 	public int suspends = 0;
 
-	public SuspendManagerImpl(@Nonnull DebugProcessImpl debugProcess)
+	public SuspendManagerImpl(DebugProcessImpl debugProcess)
 	{
 		myDebugProcess = debugProcess;
 		myDebugProcess.addDebugProcessListener(new DebugProcessAdapterImpl()
@@ -327,7 +326,7 @@ public class SuspendManagerImpl implements SuspendManager
 	}
 
 	@Override
-	public void resumeThread(SuspendContextImpl context, @Nonnull ThreadReferenceProxyImpl thread)
+	public void resumeThread(SuspendContextImpl context, ThreadReferenceProxyImpl thread)
 	{
 		//LOG.assertTrue(thread != context.getThread(), "Use resume() instead of resuming breakpoint thread");
 		LOG.assertTrue(!context.isExplicitlyResumed(thread));

@@ -17,7 +17,6 @@ package com.intellij.testFramework.fixtures;
 
 import java.util.Set;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.application.Result;
 import consulo.language.editor.WriteCommandAction;
@@ -47,7 +46,7 @@ public class JavaCodeInsightTestUtil
 	{
 	}
 
-	public static void doInlineLocalTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull String before, @Nonnull String after)
+	public static void doInlineLocalTest(final CodeInsightTestFixture fixture, String before, String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -64,7 +63,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineParameterTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull String before, @Nonnull String after)
+	public static void doInlineParameterTest(final CodeInsightTestFixture fixture, String before, String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -81,7 +80,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineMethodTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull String before, @Nonnull String after)
+	public static void doInlineMethodTest(final CodeInsightTestFixture fixture, String before, String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())
@@ -104,7 +103,7 @@ public class JavaCodeInsightTestUtil
 		fixture.checkResultByFile(after, false);
 	}
 
-	public static void doInlineConstantTest(@Nonnull final CodeInsightTestFixture fixture, @Nonnull String before, @Nonnull String after)
+	public static void doInlineConstantTest(final CodeInsightTestFixture fixture, String before, String after)
 	{
 		fixture.configureByFile(before);
 		new WriteCommandAction(fixture.getProject())

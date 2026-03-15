@@ -11,8 +11,7 @@ import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
 import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,9 +33,9 @@ public final class EclipseAnnotationSupport implements AnnotationPackageSupport 
   @RequiredReadAction
   @Override
   @Nullable
-  public NullabilityAnnotationInfo getNullabilityByContainerAnnotation(@Nonnull PsiAnnotation anno,
-                                                                                 @Nonnull PsiElement context,
-                                                                       @Nonnull PsiAnnotation.TargetType [] types,
+  public NullabilityAnnotationInfo getNullabilityByContainerAnnotation(PsiAnnotation anno,
+                                                                                 PsiElement context,
+                                                                       PsiAnnotation.TargetType [] types,
                                                                                  boolean superPackage) {
     if (superPackage) return null;
     if (anno.hasQualifiedName(DEFAULT_NOT_NULL)) {
@@ -62,8 +61,7 @@ public final class EclipseAnnotationSupport implements AnnotationPackageSupport 
   }
 
   @Override
-  @Nonnull
-  public List<String> getNullabilityAnnotations(@Nonnull Nullability nullability) {
+  public List<String> getNullabilityAnnotations(Nullability nullability) {
     return switch (nullability) {
       case NOT_NULL -> Collections.singletonList("org.eclipse.jdt.annotation.NonNull");
       case NULLABLE -> Collections.singletonList("org.eclipse.jdt.annotation.Nullable");

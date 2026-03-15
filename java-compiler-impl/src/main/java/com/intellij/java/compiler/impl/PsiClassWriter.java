@@ -29,7 +29,6 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author yole
@@ -58,7 +57,6 @@ public class PsiClassWriter extends ClassWriter
   protected String getCommonSuperClass(final String type1, final String type2) {
     //PsiManager.getInstance(myProject).findClass(type1.replace('/', '.').replace('$', '.'), myProject.getAllScope());
     return ApplicationManager.getApplication().runReadAction(new Computable<String>() {
-      @NonNls
       public String compute() {
         final PsiManager manager = PsiManager.getInstance(myProject);
         PsiClass c = ClassUtil.findPsiClassByJVMName(manager, type1);

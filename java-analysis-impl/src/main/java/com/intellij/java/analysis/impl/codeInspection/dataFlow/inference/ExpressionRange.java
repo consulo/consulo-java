@@ -22,7 +22,7 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.annotation.access.RequiredReadAction;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * from kotlin

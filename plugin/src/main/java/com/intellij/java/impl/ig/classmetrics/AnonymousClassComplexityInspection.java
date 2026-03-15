@@ -22,21 +22,18 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class AnonymousClassComplexityInspection extends ClassMetricInspection {
     private static final int DEFAULT_COMPLEXITY_LIMIT = 3;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "OverlyComplexAnonymousInnerClass";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.overlyComplexAnonymousInnerClassDisplayName();
@@ -63,7 +60,6 @@ public class AnonymousClassComplexityInspection extends ClassMetricInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Integer totalComplexity = (Integer) infos[0];
         return InspectionGadgetsLocalize.overlyComplexAnonymousInnerClassProblemDescriptor(totalComplexity).get();
@@ -77,13 +73,13 @@ public class AnonymousClassComplexityInspection extends ClassMetricInspection {
     private class ClassComplexityVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitClass(@Nonnull PsiClass psiClass) {
+        public void visitClass(PsiClass psiClass) {
             // no call to super, to prevent double counting
         }
 
         @Override
         public void visitAnonymousClass(
-            @Nonnull PsiAnonymousClass aClass
+            PsiAnonymousClass aClass
         ) {
             if (aClass instanceof PsiEnumConstantInitializer) {
                 return;

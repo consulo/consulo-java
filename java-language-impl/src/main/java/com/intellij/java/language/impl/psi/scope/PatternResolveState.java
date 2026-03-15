@@ -6,7 +6,6 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 
 public enum PatternResolveState {
   WHEN_TRUE,
@@ -35,7 +34,6 @@ public enum PatternResolveState {
     return rs.put(KEY, this);
   }
 
-  @Nonnull
   @RequiredReadAction
   public static PatternResolveState stateAtParent(PsiPatternVariable element, PsiExpression parent) {
     PsiPattern pattern = element.getPattern();

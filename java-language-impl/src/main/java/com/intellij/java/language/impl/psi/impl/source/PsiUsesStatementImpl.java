@@ -21,16 +21,15 @@ import com.intellij.java.language.psi.*;
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStub> implements PsiUsesStatement {
-  public PsiUsesStatementImpl(@Nonnull PsiUsesStatementStub stub) {
+  public PsiUsesStatementImpl(PsiUsesStatementStub stub) {
     super(stub, JavaStubElementTypes.USES_STATEMENT);
   }
 
-  public PsiUsesStatementImpl(@Nonnull ASTNode node) {
+  public PsiUsesStatementImpl(ASTNode node) {
     super(node);
   }
 
@@ -50,7 +49,7 @@ public class PsiUsesStatementImpl extends JavaStubPsiElement<PsiUsesStatementStu
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitUsesStatement(this);
     } else {

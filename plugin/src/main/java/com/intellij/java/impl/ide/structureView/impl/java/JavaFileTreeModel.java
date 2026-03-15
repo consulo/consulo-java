@@ -29,8 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.ui.ex.PlaceHolder;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,12 +38,11 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   private static final Collection<NodeProvider> NODE_PROVIDERS = Arrays.asList(new JavaInheritedMembersNodeProvider(), new JavaAnonymousClassesNodeProvider(), new JavaLambdaNodeProvider());
   private String myPlace;
 
-  public JavaFileTreeModel(@Nonnull PsiClassOwner file, @Nullable Editor editor) {
+  public JavaFileTreeModel(PsiClassOwner file, @Nullable Editor editor) {
     super(editor, file);
   }
 
   @Override
-  @Nonnull
   public Filter[] getFilters() {
     return new Filter[]{
         new FieldsFilter(),
@@ -52,14 +50,12 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
     };
   }
 
-  @Nonnull
   @Override
   public Collection<NodeProvider> getNodeProviders() {
     return NODE_PROVIDERS;
   }
 
   @Override
-  @Nonnull
   public Grouper[] getGroupers() {
     return new Grouper[]{
         new SuperTypesGrouper(),
@@ -68,7 +64,6 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @Nonnull
   public StructureViewTreeElement getRoot() {
     return new JavaFileTreeElement(getPsiFile());
   }
@@ -79,7 +74,6 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @Nonnull
   public Sorter[] getSorters() {
     return new Sorter[]{
         TreeStructureUtil.isInStructureViewPopup(this) ? KindSorter.POPUP_INSTANCE : KindSorter.INSTANCE,
@@ -131,7 +125,6 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  @Nonnull
   protected Class[] getSuitableClasses() {
     return new Class[]{
         PsiClass.class,
@@ -143,7 +136,7 @@ public class JavaFileTreeModel extends TextEditorBasedStructureViewModel impleme
   }
 
   @Override
-  public void setPlace(@Nonnull String place) {
+  public void setPlace(String place) {
     myPlace = place;
   }
 

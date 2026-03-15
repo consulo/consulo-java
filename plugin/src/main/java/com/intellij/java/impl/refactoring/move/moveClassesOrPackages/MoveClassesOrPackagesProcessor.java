@@ -53,8 +53,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -69,14 +68,13 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     private boolean mySearchInNonJavaFiles;
     private final PackageWrapper myTargetPackage;
     private final MoveCallback myMoveCallback;
-    @Nonnull
     protected final MoveDestination myMoveDestination;
     protected NonCodeUsageInfo[] myNonCodeUsages;
 
     public MoveClassesOrPackagesProcessor(
         Project project,
         PsiElement[] elements,
-        @Nonnull MoveDestination moveDestination,
+        MoveDestination moveDestination,
         boolean searchInComments,
         boolean searchInNonJavaFiles,
         MoveCallback moveCallback
@@ -117,9 +115,8 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
         myMoveCallback = moveCallback;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         PsiElement[] elements = new PsiElement[myElementsToMove.length];
         System.arraycopy(myElementsToMove, 0, elements, 0, myElementsToMove.length);
         return new MoveMultipleElementsViewDescriptor(elements, MoveClassesOrPackagesUtil.getPackageName(myTargetPackage));
@@ -168,7 +165,6 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
         mySearchInNonJavaFiles = searchInNonJavaFiles;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -230,7 +226,7 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         UsageInfo[] usages = refUsages.get();
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
         List<UsageInfo> filteredUsages = new ArrayList<>();
@@ -459,13 +455,13 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
     }
 
     @Override
-    protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages) {
+    protected boolean isPreviewUsages(UsageInfo[] usages) {
         return UsageViewUtil.hasNonCodeUsages(usages) || super.isPreviewUsages(usages);
     }
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         // If files are being moved then I need to collect some information to delete these
         // files from CVS. I need to know all common parents of the moved files and relative
         // paths.
@@ -549,7 +545,6 @@ public class MoveClassesOrPackagesProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         String elements = RefactoringUIUtil.calculatePsiElementDescriptionList(myElementsToMove);

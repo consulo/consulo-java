@@ -21,7 +21,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import jakarta.annotation.Nonnull;
 
 /**
  * An instruction that pushes the value of given DfType to the stack
@@ -29,22 +28,20 @@ import jakarta.annotation.Nonnull;
 public class PushValueInstruction extends EvalInstruction
 {
 	private final
-	@Nonnull
 	DfType myValue;
 
-	public PushValueInstruction(@Nonnull DfType value, PsiExpression place)
+	public PushValueInstruction(DfType value, PsiExpression place)
 	{
 		super(place, 0);
 		myValue = value;
 	}
 
-	public PushValueInstruction(@Nonnull DfType value)
+	public PushValueInstruction(DfType value)
 	{
 		this(value, null);
 	}
 
 	public
-	@Nonnull
 	DfType getValue()
 	{
 		return myValue;
@@ -52,8 +49,7 @@ public class PushValueInstruction extends EvalInstruction
 
 	@Override
 	public
-	@Nonnull
-	DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue... arguments)
+	DfaValue eval(DfaValueFactory factory, DfaMemoryState state, DfaValue... arguments)
 	{
 		return factory.fromDfType(myValue);
 	}

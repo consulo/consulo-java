@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.jvm;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Member;
 

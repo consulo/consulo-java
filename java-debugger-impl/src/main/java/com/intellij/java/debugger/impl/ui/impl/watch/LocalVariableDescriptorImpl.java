@@ -15,7 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
@@ -42,7 +42,6 @@ import consulo.internal.com.sun.jdi.InvalidTypeException;
 import consulo.internal.com.sun.jdi.InvocationException;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.Value;
-import jakarta.annotation.Nonnull;
 
 public class LocalVariableDescriptorImpl extends ValueDescriptorImpl implements LocalVariableDescriptor
 {
@@ -54,7 +53,7 @@ public class LocalVariableDescriptorImpl extends ValueDescriptorImpl implements 
 
 	private boolean myIsNewLocal = true;
 
-	public LocalVariableDescriptorImpl(Project project, @Nonnull LocalVariableProxyImpl local)
+	public LocalVariableDescriptorImpl(Project project, LocalVariableProxyImpl local)
 	{
 		super(project);
 		setLvalue(true);
@@ -142,7 +141,7 @@ public class LocalVariableDescriptorImpl extends ValueDescriptorImpl implements 
 		return new JavaValueModifier(value)
 		{
 			@Override
-			protected void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback)
+			protected void setValueImpl(String expression, XModificationCallback callback)
 			{
 				final LocalVariableProxyImpl local = LocalVariableDescriptorImpl.this.getLocalVariable();
 				if(local != null)

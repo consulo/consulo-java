@@ -32,8 +32,7 @@ import com.siyeh.ig.psiutils.MethodCallUtils;
 import com.siyeh.ig.psiutils.StreamApiUtil;
 import consulo.util.collection.ArrayUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
@@ -201,7 +200,6 @@ public class StreamChainInliner implements CallInliner {
       }
     }
 
-    @Nonnull
     Nullability getNullability() {
       return DfaPsiUtil.getElementNullability(myCall.getType(), myCall.resolveMethod());
     }
@@ -233,7 +231,6 @@ public class StreamChainInliner implements CallInliner {
       builder.pop().flushFields();
     }
 
-    @Nonnull
     @Override
     Nullability getNullability() {
       return myNotNullResult ? Nullability.NOT_NULL : super.getNullability();
@@ -243,7 +240,7 @@ public class StreamChainInliner implements CallInliner {
   static abstract class TerminalStep extends Step {
     DfaVariableValue myResult;
 
-    TerminalStep(@Nonnull PsiMethodCallExpression call, PsiExpression function) {
+    TerminalStep(PsiMethodCallExpression call, PsiExpression function) {
       super(call, null, function);
     }
 
@@ -266,7 +263,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class LambdaTerminalStep extends Step {
-    LambdaTerminalStep(@Nonnull PsiMethodCallExpression call) {
+    LambdaTerminalStep(PsiMethodCallExpression call) {
       super(call, null, call.getArgumentList().getExpressions()[0]);
     }
 
@@ -279,7 +276,7 @@ public class StreamChainInliner implements CallInliner {
   static class SumTerminalStep extends TerminalStep {
     private DfType myResultRange;
 
-    SumTerminalStep(@Nonnull PsiMethodCallExpression call) {
+    SumTerminalStep(PsiMethodCallExpression call) {
       super(call, null);
     }
 
@@ -336,13 +333,11 @@ public class StreamChainInliner implements CallInliner {
 
   static class Collect3TerminalStep extends TerminalStep {
     private final
-    @Nonnull
     PsiExpression mySupplier;
     private final
-    @Nonnull
     PsiExpression myAccumulator;
 
-    Collect3TerminalStep(@Nonnull PsiMethodCallExpression call) {
+    Collect3TerminalStep(PsiMethodCallExpression call) {
       super(call, call.getArgumentList().getExpressions()[2]);
       PsiExpression[] args = call.getArgumentList().getExpressions();
       mySupplier = args[0];
@@ -367,7 +362,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class OptionalTerminalStep extends TerminalStep {
-    OptionalTerminalStep(@Nonnull PsiMethodCallExpression call) {
+    OptionalTerminalStep(PsiMethodCallExpression call) {
       super(call, ArrayUtil.getFirstElement(call.getArgumentList().getExpressions()));
     }
 
@@ -395,7 +390,7 @@ public class StreamChainInliner implements CallInliner {
   static class MinMaxTerminalStep extends TerminalStep {
     private final ComparatorModel myComparatorModel;
 
-    MinMaxTerminalStep(@Nonnull PsiMethodCallExpression call) {
+    MinMaxTerminalStep(PsiMethodCallExpression call) {
       super(call, null);
       myComparatorModel = ComparatorModel.from(call.getArgumentList().getExpressions()[0]);
     }
@@ -425,7 +420,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class MatchTerminalStep extends TerminalStep {
-    MatchTerminalStep(@Nonnull PsiMethodCallExpression call) {
+    MatchTerminalStep(PsiMethodCallExpression call) {
       super(call, call.getArgumentList().getExpressions()[0]);
     }
 
@@ -445,7 +440,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class FilterStep extends Step {
-    FilterStep(@Nonnull PsiMethodCallExpression call, Step next) {
+    FilterStep(PsiMethodCallExpression call, Step next) {
       super(call, next, call.getArgumentList().getExpressions()[0]);
     }
 
@@ -463,7 +458,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class MapStep extends Step {
-    MapStep(@Nonnull PsiMethodCallExpression call, Step next) {
+    MapStep(PsiMethodCallExpression call, Step next) {
       super(call, next, call.getArgumentList().getExpressions()[0]);
     }
 
@@ -481,7 +476,7 @@ public class StreamChainInliner implements CallInliner {
     private final PsiParameter myParameter;
     private final PsiExpression myStreamSource;
 
-    FlatMapStep(@Nonnull PsiMethodCallExpression call, Step next) {
+    FlatMapStep(PsiMethodCallExpression call, Step next) {
       super(call, next, null);
       // Try to inline smoothly .flatMap(x -> stream().call().chain())
       PsiLambdaExpression lambda =
@@ -555,7 +550,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class PeekStep extends Step {
-    PeekStep(@Nonnull PsiMethodCallExpression call, Step next) {
+    PeekStep(PsiMethodCallExpression call, Step next) {
       super(call, next, call.getArgumentList().getExpressions()[0]);
     }
 
@@ -575,7 +570,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class StateFilterStep extends Step {
-    StateFilterStep(@Nonnull PsiMethodCallExpression call, Step next) {
+    StateFilterStep(PsiMethodCallExpression call, Step next) {
       super(call, next, null);
     }
 
@@ -602,7 +597,7 @@ public class StreamChainInliner implements CallInliner {
   static class SortedStep extends Step {
     private final ComparatorModel myComparatorModel;
 
-    SortedStep(@Nonnull PsiMethodCallExpression call, Step next) {
+    SortedStep(PsiMethodCallExpression call, Step next) {
       super(call, next, null);
       myComparatorModel = ComparatorModel.from(ArrayUtil.getFirstElement(myCall.getArgumentList().getExpressions()));
     }
@@ -627,7 +622,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class BoxedStep extends Step {
-    BoxedStep(@Nonnull PsiMethodCallExpression call, Step next) {
+    BoxedStep(PsiMethodCallExpression call, Step next) {
       super(call, next, null);
     }
 
@@ -645,7 +640,7 @@ public class StreamChainInliner implements CallInliner {
   abstract static class AbstractCollectionStep extends TerminalStep {
     final boolean myImmutable;
 
-    AbstractCollectionStep(@Nonnull PsiMethodCallExpression call, @Nullable PsiExpression supplier, boolean immutable) {
+    AbstractCollectionStep(PsiMethodCallExpression call, @Nullable PsiExpression supplier, boolean immutable) {
       super(call, supplier);
       myImmutable = immutable;
     }
@@ -667,7 +662,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class ToCollectionStep extends AbstractCollectionStep {
-    ToCollectionStep(@Nonnull PsiMethodCallExpression call, @Nullable PsiExpression supplier, boolean immutable) {
+    ToCollectionStep(PsiMethodCallExpression call, @Nullable PsiExpression supplier, boolean immutable) {
       super(call, supplier, immutable);
     }
 
@@ -690,7 +685,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   static class ToArrayStep extends ToCollectionStep {
-    ToArrayStep(@Nonnull PsiMethodCallExpression call) {
+    ToArrayStep(PsiMethodCallExpression call) {
       super(call, ArrayUtil.getFirstElement(call.getArgumentList().getExpressions()), false);
     }
 
@@ -706,18 +701,16 @@ public class StreamChainInliner implements CallInliner {
 
   static class ToMapStep extends AbstractCollectionStep {
     private final
-    @Nonnull
     PsiExpression myKeyExtractor;
     private final
-    @Nonnull
     PsiExpression myValueExtractor;
     private final
     @Nullable
     PsiExpression myMerger;
 
-    ToMapStep(@Nonnull PsiMethodCallExpression call,
-              @Nonnull PsiExpression keyExtractor,
-              @Nonnull PsiExpression valueExtractor,
+    ToMapStep(PsiMethodCallExpression call,
+              PsiExpression keyExtractor,
+              PsiExpression valueExtractor,
               @Nullable PsiExpression merger,
               @Nullable PsiExpression supplier,
               boolean immutable) {
@@ -760,7 +753,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   @Override
-  public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  public boolean tryInlineCall(CFGBuilder builder, PsiMethodCallExpression call) {
     if (TERMINAL_CALL.test(call)) {
       return inlineCompleteStream(builder, call);
     } else {
@@ -768,7 +761,7 @@ public class StreamChainInliner implements CallInliner {
     }
   }
 
-  private static boolean inlinePartialStream(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  private static boolean inlinePartialStream(CFGBuilder builder, PsiMethodCallExpression call) {
     Step firstStep = buildChain(call, NULL_TERMINAL_STEP);
     if (firstStep == NULL_TERMINAL_STEP) {
       return false;
@@ -785,7 +778,7 @@ public class StreamChainInliner implements CallInliner {
     return true;
   }
 
-  private static boolean inlineCompleteStream(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call) {
+  private static boolean inlineCompleteStream(CFGBuilder builder, PsiMethodCallExpression call) {
     PsiMethodCallExpression qualifierCall = MethodCallUtils.getQualifierMethodCall(call);
     Step terminalStep = createTerminalStep(call);
     Step firstStep = buildChain(qualifierCall, terminalStep);
@@ -939,7 +932,7 @@ public class StreamChainInliner implements CallInliner {
   }
 
   @Override
-  public boolean mayInferPreciseType(@Nonnull PsiExpression expression) {
+  public boolean mayInferPreciseType(PsiExpression expression) {
     return InlinerUtil.isLambdaChainParameterReference(expression, type -> InheritanceUtil.isInheritor(type, JAVA_UTIL_STREAM_STREAM));
   }
 }

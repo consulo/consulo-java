@@ -10,8 +10,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.stub.IdFilter;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.function.Predicate;
@@ -28,8 +27,7 @@ public interface PsiShortNameProvider {
      * @param name the name of the files to find.
      * @return the list of files in the project which have the specified name.
      */
-    @Nonnull
-    default PsiFile[] getFilesByName(@Nonnull String name) {
+    default PsiFile[] getFilesByName(String name) {
         return PsiFile.EMPTY_ARRAY;
     }
 
@@ -38,7 +36,6 @@ public interface PsiShortNameProvider {
      *
      * @return the list of all file names in the project.
      */
-    @Nonnull
     default String[] getAllFileNames() {
         return ArrayUtil.EMPTY_STRING_ARRAY;
     }
@@ -50,8 +47,7 @@ public interface PsiShortNameProvider {
      * @param scope the scope in which classes are searched.
      * @return the list of found classes.
      */
-    @Nonnull
-    public abstract PsiClass[] getClassesByName(@Nonnull String name, @Nonnull GlobalSearchScope scope);
+    public abstract PsiClass[] getClassesByName(String name, GlobalSearchScope scope);
 
     /**
      * Returns the list of names of all classes in the project and
@@ -59,7 +55,6 @@ public interface PsiShortNameProvider {
      *
      * @return the list of all class names.
      */
-    @Nonnull
     public abstract String[] getAllClassNames();
 
     default boolean processAllClassNames(Predicate<String> processor) {
@@ -76,7 +71,7 @@ public interface PsiShortNameProvider {
      *
      * @param dest the set to add the names to.
      */
-    public abstract void getAllClassNames(@Nonnull HashSet<String> dest);
+    public abstract void getAllClassNames(HashSet<String> dest);
 
     /**
      * Returns the list of all methods with the specified name in the specified scope.
@@ -85,25 +80,22 @@ public interface PsiShortNameProvider {
      * @param scope the scope in which methods are searched.
      * @return the list of found methods.
      */
-    @Nonnull
-    public abstract PsiMethod[] getMethodsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope);
+    public abstract PsiMethod[] getMethodsByName(String name, GlobalSearchScope scope);
 
-    @Nonnull
-    public abstract PsiMethod[] getMethodsByNameIfNotMoreThan(@Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
+    public abstract PsiMethod[] getMethodsByNameIfNotMoreThan(String name, GlobalSearchScope scope, int maxCount);
 
-    @Nonnull
-    public abstract PsiField[] getFieldsByNameIfNotMoreThan(@Nonnull String name, @Nonnull GlobalSearchScope scope, int maxCount);
+    public abstract PsiField[] getFieldsByNameIfNotMoreThan(String name, GlobalSearchScope scope, int maxCount);
 
     public abstract boolean processMethodsWithName(
-        @Nonnull String name,
-        @Nonnull GlobalSearchScope scope,
-        @Nonnull Predicate<PsiMethod> processor
+        String name,
+        GlobalSearchScope scope,
+        Predicate<PsiMethod> processor
     );
 
     public abstract boolean processMethodsWithName(
-        @Nonnull String name,
-        @Nonnull Predicate<? super PsiMethod> processor,
-        @Nonnull GlobalSearchScope scope,
+        String name,
+        Predicate<? super PsiMethod> processor,
+        GlobalSearchScope scope,
         @Nullable IdFilter filter
     );
 
@@ -121,7 +113,6 @@ public interface PsiShortNameProvider {
      *
      * @return the list of all method names.
      */
-    @Nonnull
     public abstract String[] getAllMethodNames();
 
     /**
@@ -130,7 +121,7 @@ public interface PsiShortNameProvider {
      *
      * @param set the set to add the names to.
      */
-    public abstract void getAllMethodNames(@Nonnull HashSet<String> set);
+    public abstract void getAllMethodNames(HashSet<String> set);
 
     /**
      * Returns the list of all fields with the specified name in the specified scope.
@@ -139,8 +130,7 @@ public interface PsiShortNameProvider {
      * @param scope the scope in which fields are searched.
      * @return the list of found fields.
      */
-    @Nonnull
-    public abstract PsiField[] getFieldsByName(@Nonnull String name, @Nonnull GlobalSearchScope scope);
+    public abstract PsiField[] getFieldsByName(String name, GlobalSearchScope scope);
 
     /**
      * Returns the list of names of all fields in the project and
@@ -148,7 +138,6 @@ public interface PsiShortNameProvider {
      *
      * @return the list of all field names.
      */
-    @Nonnull
     public abstract String[] getAllFieldNames();
 
     /**
@@ -157,19 +146,19 @@ public interface PsiShortNameProvider {
      *
      * @param set the set to add the names to.
      */
-    public abstract void getAllFieldNames(@Nonnull HashSet<String> set);
+    public abstract void getAllFieldNames(HashSet<String> set);
 
     public abstract boolean processFieldsWithName(
-        @Nonnull String name,
-        @Nonnull Predicate<? super PsiField> processor,
-        @Nonnull GlobalSearchScope scope,
+        String name,
+        Predicate<? super PsiField> processor,
+        GlobalSearchScope scope,
         @Nullable IdFilter filter
     );
 
     public abstract boolean processClassesWithName(
-        @Nonnull String name,
-        @Nonnull Predicate<? super PsiClass> processor,
-        @Nonnull GlobalSearchScope scope,
+        String name,
+        Predicate<? super PsiClass> processor,
+        GlobalSearchScope scope,
         @Nullable IdFilter filter
     );
 }

@@ -26,7 +26,6 @@ import consulo.java.debugger.impl.settings.ThreadsViewConfigurable;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author lex
@@ -40,7 +39,7 @@ public class CustomizeThreadsViewAction extends DebuggerAction {
 
     @Override
     @RequiredUIAccess
-    public void actionPerformed(@Nonnull AnActionEvent e) {
+    public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
 
         ShowSettingsUtil.getInstance().editConfigurable(

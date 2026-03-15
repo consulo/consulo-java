@@ -3,7 +3,6 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 
 import com.intellij.java.language.psi.PsiRecordComponent;
 import consulo.fileEditor.structureView.StructureViewTreeElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +13,7 @@ public class JavaRecordComponentTreeElement extends JavaVariableBaseTreeElement<
   }
 
   @Override
-  public @Nonnull Collection<StructureViewTreeElement> getChildrenBase() {
+  public Collection<StructureViewTreeElement> getChildrenBase() {
     return Collections.emptyList();
   }
 }

@@ -22,8 +22,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -39,7 +38,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
 
   private final String myName;
 
-  PsiPrimitiveType(@Nonnull String name, String boxedName) {
+  PsiPrimitiveType(String name, String boxedName) {
     this(name, TypeAnnotationProvider.EMPTY);
     if (boxedName != null) {
       ourQNameToUnboxed.put(boxedName, this);
@@ -47,35 +46,31 @@ public class PsiPrimitiveType extends PsiType.Stub {
     }
   }
 
-  public PsiPrimitiveType(@Nonnull String name, @Nonnull PsiAnnotation[] annotations) {
+  public PsiPrimitiveType(String name, PsiAnnotation[] annotations) {
     super(annotations);
     myName = name;
   }
 
-  public PsiPrimitiveType(@Nonnull String name, @Nonnull TypeAnnotationProvider provider) {
+  public PsiPrimitiveType(String name, TypeAnnotationProvider provider) {
     super(provider);
     myName = name;
   }
 
-  @Nonnull
   @Override
-  public PsiPrimitiveType annotate(@Nonnull TypeAnnotationProvider provider) {
+  public PsiPrimitiveType annotate(TypeAnnotationProvider provider) {
     return (PsiPrimitiveType) super.annotate(provider);
   }
 
-  @Nonnull
   @Override
   public String getPresentableText(boolean annotated) {
     return getText(false, annotated);
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText(boolean annotated) {
     return getText(true, annotated);
   }
 
-  @Nonnull
   @Override
   public String getInternalCanonicalText() {
     return getCanonicalText(true);
@@ -107,12 +102,12 @@ public class PsiPrimitiveType extends PsiType.Stub {
   }
 
   @Override
-  public boolean equalsToText(@Nonnull String text) {
+  public boolean equalsToText(String text) {
     return myName.equals(text);
   }
 
   @Override
-  public <A> A accept(@Nonnull PsiTypeVisitor<A> visitor) {
+  public <A> A accept(PsiTypeVisitor<A> visitor) {
     return visitor.visitPrimitiveType(this);
   }
 
@@ -122,7 +117,6 @@ public class PsiPrimitiveType extends PsiType.Stub {
   }
 
   @Override
-  @Nonnull
   public PsiType[] getSuperTypes() {
     return EMPTY_ARRAY;
   }
@@ -175,7 +169,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
    * it was not possible to resolve the reference to the class.
    */
   @Nullable
-  public PsiClassType getBoxedType(@Nonnull PsiElement context) {
+  public PsiClassType getBoxedType(PsiElement context) {
     PsiFile file = context.getContainingFile();
     if (file == null) {
       return null;
@@ -201,7 +195,7 @@ public class PsiPrimitiveType extends PsiType.Stub {
   }
 
   @Nullable
-  public PsiClassType getBoxedType(@Nonnull PsiManager manager, @Nonnull GlobalSearchScope resolveScope) {
+  public PsiClassType getBoxedType(PsiManager manager, GlobalSearchScope resolveScope) {
     String boxedQName = getBoxedTypeName();
     if (boxedQName == null) {
       return null;

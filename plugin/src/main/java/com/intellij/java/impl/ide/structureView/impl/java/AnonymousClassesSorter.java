@@ -18,7 +18,6 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.Sorter;
 import consulo.fileEditor.structureView.tree.SorterUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Comparator;
 
@@ -53,13 +52,11 @@ public class AnonymousClassesSorter implements Sorter {
     return false;
   }
 
-  @Nonnull
   @Override
   public ActionPresentation getPresentation() {
     return ALPHA_SORTER.getPresentation();
   }
 
-  @Nonnull
   @Override
   public String getName() {
     return "ANONYMOUS_CLASSES_SORTER";

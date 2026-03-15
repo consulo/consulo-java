@@ -8,8 +8,7 @@ import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,13 +23,10 @@ import java.util.Set;
 public final class VariableNameGenerator
 {
 	private final
-	@Nonnull
 	JavaCodeStyleManager myManager;
 	private final
-	@Nonnull
 	PsiElement myContext;
 	private final
-	@Nonnull
 	VariableKind myKind;
 	private final Set<String> candidates = new LinkedHashSet<>();
 
@@ -40,7 +36,7 @@ public final class VariableNameGenerator
 	 * @param context the place where new variable will be declared
 	 * @param kind    kind of variable to generate
 	 */
-	public VariableNameGenerator(@Nonnull PsiElement context, @Nonnull VariableKind kind)
+	public VariableNameGenerator(PsiElement context, VariableKind kind)
 	{
 		myManager = JavaCodeStyleManager.getInstance(context.getProject());
 		myContext = context;
@@ -120,7 +116,6 @@ public final class VariableNameGenerator
 	 * @param lookForward whether further conflicting declarations should be considered
 	 * @return a generated variable name
 	 */
-	@Nonnull
 	public String generate(boolean lookForward)
 	{
 		String suffixed = null;

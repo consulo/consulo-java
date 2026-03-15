@@ -30,7 +30,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 
@@ -66,13 +65,11 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
         "Y_AXIS", "PAGE_AXIS"
     );
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.absoluteAlignmentInUserInterfaceDisplayName();
     }
 
-    @Nonnull
     @Override
     protected String buildErrorString(Object... infos) {
         String className = (String) infos[0];
@@ -94,7 +91,6 @@ public abstract class AbsoluteAlignmentInUserInterfaceInspection extends BaseIns
             myReplacement = replacement;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             String shortClassName = myClassName.substring(myClassName.lastIndexOf('.') + 1);

@@ -17,7 +17,6 @@ package com.intellij.java.analysis.codeInspection.reference;
 
 import consulo.language.editor.inspection.reference.RefElement;
 import com.intellij.java.language.psi.PsiClass;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 import java.util.Set;
@@ -28,24 +27,18 @@ import java.util.Set;
  */
 public interface RefClass extends RefJavaElement {
 
-  @Nonnull
   Set<RefClass> getBaseClasses();
 
-  @Nonnull
   Set<RefClass> getSubClasses();
 
-  @Nonnull
   List<RefMethod> getConstructors();
 
-  @Nonnull
   Set<RefElement> getInTypeReferences();
 
-  @Nonnull
   Set<RefElement> getInstanceReferences();
 
   RefMethod getDefaultConstructor();
 
-  @Nonnull
   List<RefMethod> getLibraryMethods();
 
   boolean isAnonymous();

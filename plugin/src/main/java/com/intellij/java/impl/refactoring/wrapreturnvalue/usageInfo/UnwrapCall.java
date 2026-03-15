@@ -15,28 +15,24 @@
  */
 package com.intellij.java.impl.refactoring.wrapreturnvalue.usageInfo;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.PsiCallExpression;
 import com.intellij.java.impl.refactoring.psi.MutationUtils;
 import com.intellij.java.impl.refactoring.util.FixableUsageInfo;
 import consulo.language.util.IncorrectOperationException;
-import org.jetbrains.annotations.NonNls;
 
 public class UnwrapCall extends FixableUsageInfo {
-    @Nonnull
     private final PsiCallExpression call;
-    @Nonnull
     private final String unwrapMethod;
 
-    public UnwrapCall(@Nonnull PsiCallExpression call, @Nonnull String unwrapMethod) {
+    public UnwrapCall(PsiCallExpression call, String unwrapMethod) {
         super(call);
         this.call =call;
         this.unwrapMethod = unwrapMethod;
     }
 
     public void fixUsage() throws IncorrectOperationException {
-        @NonNls String newExpression = call.getText() + '.' + unwrapMethod +"()";
+        String newExpression = call.getText() + '.' + unwrapMethod +"()";
         MutationUtils.replaceExpression(newExpression, call);
     }
 }

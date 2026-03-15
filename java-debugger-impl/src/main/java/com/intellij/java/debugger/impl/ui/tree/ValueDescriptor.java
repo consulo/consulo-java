@@ -25,7 +25,7 @@ import consulo.internal.com.sun.jdi.Value;
 import consulo.language.psi.PsiElement;
 import consulo.ui.image.Image;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ValueDescriptor extends NodeDescriptor
 {

@@ -22,23 +22,19 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.util.collection.primitive.ints.IntList;
 import org.intellij.lang.annotations.MagicConstant;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.impl.refactoring.IntroduceParameterRefactoring.*;
 
 public interface IntroduceParameterData {
-  @Nonnull
   Project getProject();
 
   PsiMethod getMethodToReplaceIn();
 
-  @Nonnull
   PsiMethod getMethodToSearchFor();
 
   ExpressionWrapper getParameterInitializer();
 
-  @Nonnull
   String getParameterName();
 
   @MagicConstant(intValues = {REPLACE_FIELDS_WITH_GETTERS_ALL, REPLACE_FIELDS_WITH_GETTERS_INACCESSIBLE, REPLACE_FIELDS_WITH_GETTERS_NONE})
@@ -48,20 +44,16 @@ public interface IntroduceParameterData {
 
   boolean isGenerateDelegate();
 
-  @Nonnull
   PsiType getForcedType();
 
-  @Nonnull
   IntList getParametersToRemove();
 
   interface ExpressionWrapper<RealExpression extends PsiElement> {
-    @Nonnull
     String getText();
 
     @Nullable
     PsiType getType();
 
-    @Nonnull
     RealExpression getExpression();
 
   }

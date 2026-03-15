@@ -41,8 +41,6 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,7 +63,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
   };
 
 
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+  public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
     editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
     int offset = editor.getCaretModel().getOffset();
     PsiElement element = file.findElementAt(offset);
@@ -84,7 +82,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     }
   }
 
-  public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext) {
+  public void invoke(Project project, PsiElement[] elements, DataContext dataContext) {
     if (elements.length != 1) return;
 
     PsiClass aClass = (PsiClass)elements[0];
@@ -105,7 +103,7 @@ public class InheritanceToDelegationHandler implements RefactoringActionHandler 
     if (!CommonRefactoringUtil.checkReadOnlyStatus(project, aClass)) return;
 
     PsiClass[] bases = aClass.getSupers();
-    @NonNls String javaLangObject = CommonClassNames.JAVA_LANG_OBJECT;
+    String javaLangObject = CommonClassNames.JAVA_LANG_OBJECT;
     if (bases.length == 0 || bases.length == 1 && javaLangObject.equals(bases[0].getQualifiedName())) {
       LocalizeValue message = RefactoringLocalize.cannotPerformRefactoringWithReason(
         RefactoringLocalize.classDoesNotHaveBaseClassesOrInterfaces(aClass.getQualifiedName())

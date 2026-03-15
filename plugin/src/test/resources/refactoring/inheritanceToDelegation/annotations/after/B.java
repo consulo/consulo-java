@@ -1,11 +1,10 @@
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class B {
     public final A myDelegate = new A();
 
     @Nullable
-    public Object methodFromA(@Nonnull String s) {
+    public Object methodFromA(String s) {
         return myDelegate.methodFromA(s);
     }
 }

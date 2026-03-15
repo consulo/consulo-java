@@ -33,7 +33,6 @@ import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.function.Predicate;
@@ -50,13 +49,11 @@ public class MethodMayBeStaticInspection extends BaseInspection {
     public boolean m_ignoreEmptyMethods = true;
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.methodMayBeStaticDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.methodMayBeStaticProblemDescriptor().get();
     }
@@ -81,7 +78,7 @@ public class MethodMayBeStaticInspection extends BaseInspection {
 
     private class MethodCanBeStaticVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             if (method.isStatic() ||
                 method.isAbstract() ||

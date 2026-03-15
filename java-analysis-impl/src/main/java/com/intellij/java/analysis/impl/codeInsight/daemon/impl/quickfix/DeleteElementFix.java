@@ -25,30 +25,28 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class DeleteElementFix extends LocalQuickFixAndIntentionActionOnPsiElement {
   private final LocalizeValue myText;
 
-  public DeleteElementFix(@Nonnull PsiElement element) {
+  public DeleteElementFix(PsiElement element) {
     super(element);
     myText = LocalizeValue.empty();
   }
 
-  public DeleteElementFix(@Nonnull PsiElement element, @Nonnull LocalizeValue text) {
+  public DeleteElementFix(PsiElement element, LocalizeValue text) {
     super(element);
     myText = text;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return myText.orIfEmpty(JavaQuickFixLocalize.deleteElementFixText());
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nullable Editor editor, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public void invoke(Project project, PsiFile file, @Nullable Editor editor, PsiElement startElement, PsiElement endElement) {
     if (FileModificationService.getInstance().preparePsiElementForWrite(file)) {
       WriteAction.run(() -> new CommentTracker().deleteAndRestoreComments(startElement));
     }

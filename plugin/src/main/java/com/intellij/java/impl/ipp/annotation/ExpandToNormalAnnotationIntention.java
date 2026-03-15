@@ -28,7 +28,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.ExpandToNormalAnnotationIntention", fileExtensions = "java", categories = {
@@ -44,13 +43,11 @@ public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
         return IntentionPowerPackLocalize.expandToNormalAnnotationName(text);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.expandToNormalAnnotationIntentionFamilyName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new ExpandToNormalAnnotationPredicate();
@@ -67,7 +64,7 @@ public class ExpandToNormalAnnotationIntention extends MutablyNamedIntention {
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         PsiNameValuePair attribute = (PsiNameValuePair) element;
         int textOffset = attribute.getTextOffset();
         Project project = attribute.getProject();

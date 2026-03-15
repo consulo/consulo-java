@@ -28,19 +28,17 @@ import consulo.project.ui.wm.ToolWindowManager;
 import consulo.ui.ex.toolWindow.ToolWindow;
 import consulo.usage.*;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
 public class UsageContextDataflowToPanel extends UsageContextPanelBase {
-  @Nonnull
   private final UsageViewPresentation myPresentation;
   private JComponent myPanel;
 
-  public UsageContextDataflowToPanel(@Nonnull Project project, @Nonnull UsageViewPresentation presentation) {
+  public UsageContextDataflowToPanel(Project project, UsageViewPresentation presentation) {
     super(project, presentation);
     myPresentation = presentation;
   }
@@ -81,7 +79,6 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
     return true;
   }
 
-  @Nonnull
   private static SliceAnalysisParams createParams(PsiElement element, boolean dataFlowToThis) {
     SliceAnalysisParams params = new SliceAnalysisParams();
     params.scope = new AnalysisScope(element.getProject());
@@ -90,8 +87,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
     return params;
   }
 
-  @Nonnull
-  protected JComponent createPanel(@Nonnull PsiElement element, final boolean dataFlowToThis) {
+  protected JComponent createPanel(PsiElement element, final boolean dataFlowToThis) {
     ToolWindow toolWindow = ToolWindowManager.getInstance(myProject).getToolWindow(ToolWindowId.FIND);
     SliceAnalysisParams params = createParams(element, dataFlowToThis);
 
@@ -133,7 +129,7 @@ public class UsageContextDataflowToPanel extends UsageContextPanelBase {
     };
   }
 
-  private static PsiElement getElementToSliceOn(@Nonnull List<? extends UsageInfo> infos) {
+  private static PsiElement getElementToSliceOn(List<? extends UsageInfo> infos) {
     UsageInfo info = infos.get(0);
     return info.getElement();
   }

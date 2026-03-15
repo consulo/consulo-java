@@ -29,8 +29,7 @@ import consulo.language.inject.advanced.Configuration;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class PatternAnnotationNotApplicable extends LocalInspectionTool {
@@ -40,7 +39,6 @@ public class PatternAnnotationNotApplicable extends LocalInspectionTool {
         return JavaLanguage.INSTANCE;
     }
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;
@@ -51,27 +49,24 @@ public class PatternAnnotationNotApplicable extends LocalInspectionTool {
         return true;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return PatternValidator.PATTERN_VALIDATION;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.localizeTODO("Pattern Annotation not applicable");
     }
 
-    @Nonnull
     @Override
-    public PsiElementVisitor buildVisitor(@Nonnull final ProblemsHolder holder, boolean isOnTheFly) {
+    public PsiElementVisitor buildVisitor(final ProblemsHolder holder, boolean isOnTheFly) {
         return new JavaElementVisitor() {
             final String annotationName =
                 Configuration.getProjectInstance(holder.getProject()).getAdvancedConfiguration().getPatternAnnotationClass();
 
             @Override
-            public void visitAnnotation(@Nonnull PsiAnnotation annotation) {
+            public void visitAnnotation(PsiAnnotation annotation) {
                 String name = annotation.getQualifiedName();
                 if (annotationName.equals(name)) {
                     checkAnnotation(annotation, holder);
@@ -109,7 +104,6 @@ public class PatternAnnotationNotApplicable extends LocalInspectionTool {
             .create();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "PatternNotApplicable";

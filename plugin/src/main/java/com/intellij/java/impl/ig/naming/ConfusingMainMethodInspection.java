@@ -25,19 +25,16 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ConfusingMainMethodInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.confusingMainMethodDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.confusingMainMethodProblemDescriptor().get();
   }
@@ -61,7 +58,7 @@ public class ConfusingMainMethodInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod aMethod) {
+    public void visitMethod(PsiMethod aMethod) {
       // no call to super, so it doesn't drill down into inner classes
       String methodName = aMethod.getName();
       if (!HardcodedMethodConstants.MAIN.equals(methodName)) {

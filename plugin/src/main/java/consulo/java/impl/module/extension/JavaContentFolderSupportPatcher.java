@@ -26,7 +26,6 @@ import consulo.module.content.layer.ContentFolderSupportPatcher;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.module.extension.ModuleExtension;
 
-import jakarta.annotation.Nonnull;
 import java.util.Set;
 
 /**
@@ -36,7 +35,7 @@ import java.util.Set;
 @ExtensionImpl
 public class JavaContentFolderSupportPatcher implements ContentFolderSupportPatcher {
   @Override
-  public void patch(@Nonnull ModifiableRootModel model, @Nonnull Set<ContentFolderTypeProvider> set) {
+  public void patch(ModifiableRootModel model, Set<ContentFolderTypeProvider> set) {
     ModuleExtension javaModuleExtension = model.getExtension("java");
     if (javaModuleExtension != null) {
       set.add(ProductionContentFolderTypeProvider.getInstance());

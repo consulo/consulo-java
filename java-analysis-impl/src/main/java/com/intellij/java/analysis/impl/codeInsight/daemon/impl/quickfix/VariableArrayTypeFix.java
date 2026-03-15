@@ -29,17 +29,14 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
-  @Nonnull
   private final PsiArrayType myTargetType;
   private final LocalizeValue myName;
 
-  private VariableArrayTypeFix(@Nonnull PsiArrayInitializerExpression initializer, @Nonnull PsiArrayType arrayType, @Nonnull PsiVariable variable) {
+  private VariableArrayTypeFix(PsiArrayInitializerExpression initializer, PsiArrayType arrayType, PsiVariable variable) {
     super(initializer);
     myTargetType = arrayType;
     PsiExpression myNewExpression = getNewExpressionLocal(initializer);
@@ -52,7 +49,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
   }
 
   @Nullable
-  public static VariableArrayTypeFix createFix(PsiArrayInitializerExpression initializer, @Nonnull PsiType componentType) {
+  public static VariableArrayTypeFix createFix(PsiArrayInitializerExpression initializer, PsiType componentType) {
     PsiArrayType arrayType = new PsiArrayType(componentType);
     PsiArrayInitializerExpression arrayInitializer = initializer;
     while (arrayInitializer.getParent() instanceof PsiArrayInitializerExpression) {
@@ -66,7 +63,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
     return new VariableArrayTypeFix(arrayInitializer, arrayType, variable);
   }
 
-  private static String formatType(@Nonnull PsiVariable variable) {
+  private static String formatType(PsiVariable variable) {
     FindUsagesProvider provider = FindUsagesProvider.forLanguage(variable.getLanguage());
     final String type = provider.getType(variable);
     if (StringUtil.isNotEmpty(type)) {
@@ -85,7 +82,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
     return arrayInitializer;
   }
 
-  private static PsiVariable getVariableLocal(@Nonnull PsiArrayInitializerExpression initializer) {
+  private static PsiVariable getVariableLocal(PsiArrayInitializerExpression initializer) {
     PsiVariable variableLocal = null;
 
     final PsiElement parent = initializer.getParent();
@@ -105,7 +102,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
     return variableLocal;
   }
 
-  private static PsiNewExpression getNewExpressionLocal(@Nonnull PsiArrayInitializerExpression initializer) {
+  private static PsiNewExpression getNewExpressionLocal(PsiArrayInitializerExpression initializer) {
     PsiNewExpression newExpressionLocal = null;
 
     final PsiElement parent = initializer.getParent();
@@ -134,14 +131,13 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
     return newText;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return myName;
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public boolean isAvailable(Project project, PsiFile file, PsiElement startElement, PsiElement endElement) {
     final PsiArrayInitializerExpression myInitializer = (PsiArrayInitializerExpression) startElement;
     final PsiVariable myVariable = getVariableLocal(myInitializer);
 
@@ -149,7 +145,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nonnull PsiFile file, @Nonnull PsiElement startElement, @Nonnull PsiElement endElement) {
+  public void invoke(Project project, PsiFile file, PsiElement startElement, PsiElement endElement) {
     final PsiArrayInitializerExpression myInitializer = (PsiArrayInitializerExpression) startElement;
     final PsiVariable myVariable = getVariableLocal(myInitializer);
     if (myVariable == null) {
@@ -177,7 +173,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
     }
   }
 
-  private void fixVariableType(@Nonnull Project project, @Nonnull PsiFile file, PsiVariable myVariable) {
+  private void fixVariableType(Project project, PsiFile file, PsiVariable myVariable) {
     myVariable.normalizeDeclaration();
     myVariable.getTypeElement().replace(JavaPsiFacade.getElementFactory(project).createTypeElement(myTargetType));
     JavaCodeStyleManager.getInstance(project).shortenClassReferences(myVariable);
@@ -188,7 +184,7 @@ public class VariableArrayTypeFix extends LocalQuickFixOnPsiElement {
   }
 
   private void fixArrayInitializer(PsiArrayInitializerExpression myInitializer, PsiNewExpression myNewExpression) {
-    @NonNls String text = "new " + myTargetType.getCanonicalText() + "{}";
+    String text = "new " + myTargetType.getCanonicalText() + "{}";
     final PsiNewExpression newExpression = (PsiNewExpression) JavaPsiFacade.getElementFactory(myNewExpression.getProject()).createExpressionFromText(text, myNewExpression.getParent());
     final PsiElement[] children = newExpression.getChildren();
     children[children.length - 1].replace(myInitializer);

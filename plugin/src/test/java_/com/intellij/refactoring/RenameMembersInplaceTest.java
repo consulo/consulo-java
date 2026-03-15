@@ -25,7 +25,6 @@ import consulo.language.editor.refactoring.rename.inplace.MemberInplaceRenameHan
 import com.intellij.testFramework.LightCodeInsightTestCase;
 import com.intellij.testFramework.fixtures.CodeInsightTestUtil;
 import consulo.language.editor.TargetElementUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -34,7 +33,6 @@ import jakarta.annotation.Nonnull;
 public abstract class RenameMembersInplaceTest extends LightCodeInsightTestCase {
   private static final String BASE_PATH = "/refactoring/renameInplace/";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

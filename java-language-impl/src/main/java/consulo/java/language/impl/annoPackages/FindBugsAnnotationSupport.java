@@ -9,8 +9,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,9 +20,8 @@ public final class FindBugsAnnotationSupport implements AnnotationPackageSupport
   private static final String NULLABLE = "edu.umd.cs.findbugs.annotations.Nullable";
   private static final String DEFAULT_ANNOTATION_FOR_PARAMETERS = "edu.umd.cs.findbugs.annotations.DefaultAnnotationForParameters";
 
-  @Nonnull
   @Override
-  public List<String> getNullabilityAnnotations(@Nonnull Nullability nullability) {
+  public List<String> getNullabilityAnnotations(Nullability nullability) {
     return switch (nullability) {
       case NOT_NULL -> Collections.singletonList(NON_NULL);
       case NULLABLE -> Collections.singletonList(NULLABLE);
@@ -34,9 +32,9 @@ public final class FindBugsAnnotationSupport implements AnnotationPackageSupport
   @RequiredReadAction
   @Override
   @Nullable
-  public NullabilityAnnotationInfo getNullabilityByContainerAnnotation(@Nonnull PsiAnnotation anno,
-                                                                                 @Nonnull PsiElement context,
-                                                                       @Nonnull PsiAnnotation.TargetType  [] types,
+  public NullabilityAnnotationInfo getNullabilityByContainerAnnotation(PsiAnnotation anno,
+                                                                                 PsiElement context,
+                                                                       PsiAnnotation.TargetType  [] types,
                                                                                  boolean superPackage) {
     if (!superPackage &&
       anno.hasQualifiedName(DEFAULT_ANNOTATION_FOR_PARAMETERS) &&

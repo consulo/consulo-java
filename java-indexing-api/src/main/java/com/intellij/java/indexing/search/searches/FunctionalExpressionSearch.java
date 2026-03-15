@@ -29,7 +29,6 @@ import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.PsiSearchHelper;
 
-import jakarta.annotation.Nonnull;
 
 public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFunctionalExpression, FunctionalExpressionSearch.SearchParameters> {
   public static final FunctionalExpressionSearch INSTANCE = new FunctionalExpressionSearch();
@@ -38,7 +37,7 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
     private final PsiClass myElementToSearch;
     private final SearchScope myScope;
 
-    public SearchParameters(@Nonnull PsiClass aClass, @Nonnull SearchScope scope) {
+    public SearchParameters(PsiClass aClass, SearchScope scope) {
       myElementToSearch = aClass;
       myScope = scope;
     }
@@ -47,7 +46,6 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
       return myElementToSearch;
     }
 
-    @Nonnull
     public SearchScope getEffectiveSearchScope() {
       SearchScope accessScope = PsiSearchHelper.getInstance(myElementToSearch.getProject()).getUseScope(myElementToSearch);
       return myScope.intersectWith(accessScope);
@@ -58,15 +56,15 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
     super(FunctionalExpressionSearchExecutor.class);
   }
 
-  public static Query<PsiFunctionalExpression> search(@Nonnull final PsiClass aClass, @Nonnull SearchScope scope) {
+  public static Query<PsiFunctionalExpression> search(final PsiClass aClass, SearchScope scope) {
     return INSTANCE.createUniqueResultsQuery(new SearchParameters(aClass, scope));
   }
 
-  public static Query<PsiFunctionalExpression> search(@Nonnull final PsiMethod psiMethod) {
+  public static Query<PsiFunctionalExpression> search(final PsiMethod psiMethod) {
     return search(psiMethod, GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(psiMethod)));
   }
 
-  public static Query<PsiFunctionalExpression> search(@Nonnull final PsiMethod psiMethod, @Nonnull final SearchScope scope) {
+  public static Query<PsiFunctionalExpression> search(final PsiMethod psiMethod, final SearchScope scope) {
     return ApplicationManager.getApplication().runReadAction((Computable<Query<PsiFunctionalExpression>>) () -> {
       if (!psiMethod.hasModifierProperty(PsiModifier.STATIC) && !psiMethod.hasModifierProperty(PsiModifier.DEFAULT)) {
         final PsiClass containingClass = psiMethod.getContainingClass();
@@ -79,7 +77,7 @@ public class FunctionalExpressionSearch extends ExtensibleQueryFactory<PsiFuncti
     });
   }
 
-  public static Query<PsiFunctionalExpression> search(@Nonnull final PsiClass aClass) {
+  public static Query<PsiFunctionalExpression> search(final PsiClass aClass) {
     return search(aClass, GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(aClass)));
   }
 }

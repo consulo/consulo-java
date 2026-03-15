@@ -33,9 +33,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -55,7 +53,7 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
     String baseName = "runnable";
     String uniqueName = JavaCodeStyleManager.getInstance(project).suggestUniqueVariableName(baseName, container, false);
 
-    @NonNls String text = "Runnable runnable = new Runnable(){\npublic void run(){\n}};";
+    String text = "Runnable runnable = new Runnable(){\npublic void run(){\n}};";
     PsiDeclarationStatement declarationStatement = (PsiDeclarationStatement)factory.createStatementFromText(text, null);
     declarationStatement = (PsiDeclarationStatement)codeStyleManager.reformat(declarationStatement);
 
@@ -141,7 +139,7 @@ public class JavaWithRunnableSurrounder extends JavaStatementsSurrounder{
     }
   }
 
-  private static boolean canBeDeclaredFinal(@Nonnull PsiVariable variable, @Nullable PsiElement scope) {
+  private static boolean canBeDeclaredFinal(PsiVariable variable, @Nullable PsiElement scope) {
     if (scope == null) {
       return false;
     }

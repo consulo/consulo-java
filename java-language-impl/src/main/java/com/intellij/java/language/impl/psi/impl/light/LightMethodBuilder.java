@@ -35,8 +35,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import java.util.List;
 
@@ -105,7 +104,6 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
   }
 
   @Override
-  @Nonnull
   public PsiTypeParameter[] getTypeParameters() {
     return PsiImplUtil.getTypeParameters(this);
   }
@@ -127,7 +125,7 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     final String className = myContainingClass == null ? "null" : myContainingClass.getQualifiedName();
     throw new UnsupportedOperationException("Please don't rename light methods: writable=" + isWritable() +
         "; class=" + getClass() +
@@ -136,24 +134,21 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
   }
 
   @Override
-  @Nonnull
   public String getName() {
     return myName;
   }
 
   @Override
-  @Nonnull
   public HierarchicalMethodSignature getHierarchicalMethodSignature() {
     return PsiSuperMethodImplUtil.getHierarchicalMethodSignature(this);
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
   @Override
-  @Nonnull
   public PsiModifierList getModifierList() {
     return myModifierList;
   }
@@ -190,9 +185,8 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
     return setMethodReturnType(new Computable.PredefinedValueComputable<PsiType>(returnType));
   }
 
-  public LightMethodBuilder setMethodReturnType(@Nonnull final String returnType) {
+  public LightMethodBuilder setMethodReturnType(final String returnType) {
     return setMethodReturnType(new Computable.NotNullCachedComputable<PsiType>() {
-      @Nonnull
       @Override
       protected PsiType internalCompute() {
         return JavaPsiFacade.getInstance(getManager().getProject()).getElementFactory().createTypeByFQClassName(returnType, getResolveScope());
@@ -206,25 +200,24 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
   }
 
   @Override
-  @Nonnull
   public PsiParameterList getParameterList() {
     return myParameterList;
   }
 
-  public LightMethodBuilder addParameter(@Nonnull PsiParameter parameter) {
+  public LightMethodBuilder addParameter(PsiParameter parameter) {
     ((LightParameterListBuilder) myParameterList).addParameter(parameter);
     return this;
   }
 
-  public LightMethodBuilder addParameter(@Nonnull String name, @Nonnull String type) {
+  public LightMethodBuilder addParameter(String name, String type) {
     return addParameter(name, JavaPsiFacade.getElementFactory(getProject()).createTypeFromText(type, this));
   }
 
-  public LightMethodBuilder addParameter(@Nonnull String name, @Nonnull PsiType type) {
+  public LightMethodBuilder addParameter(String name, PsiType type) {
     return addParameter(new LightParameter(name, type, this, JavaLanguage.INSTANCE));
   }
 
-  public LightMethodBuilder addParameter(@Nonnull String name, @Nonnull PsiType type, boolean isVarArgs) {
+  public LightMethodBuilder addParameter(String name, PsiType type, boolean isVarArgs) {
     if (isVarArgs && !(type instanceof PsiEllipsisType)) {
       type = new PsiEllipsisType(type);
     }
@@ -243,7 +236,6 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
 
 
   @Override
-  @Nonnull
   public PsiReferenceList getThrowsList() {
     return myThrowsList;
   }
@@ -269,8 +261,7 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
   }
 
   @Override
-  @Nonnull
-  public MethodSignature getSignature(@Nonnull PsiSubstitutor substitutor) {
+  public MethodSignature getSignature(PsiSubstitutor substitutor) {
     return MethodSignatureBackedByPsiMethod.create(this, substitutor);
   }
 
@@ -280,25 +271,21 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
   }
 
   @Override
-  @Nonnull
   public PsiMethod[] findSuperMethods() {
     return PsiSuperMethodImplUtil.findSuperMethods(this);
   }
 
   @Override
-  @Nonnull
   public PsiMethod[] findSuperMethods(boolean checkAccess) {
     return PsiSuperMethodImplUtil.findSuperMethods(this, checkAccess);
   }
 
   @Override
-  @Nonnull
   public PsiMethod[] findSuperMethods(PsiClass parentClass) {
     return PsiSuperMethodImplUtil.findSuperMethods(this, parentClass);
   }
 
   @Override
-  @Nonnull
   public List<MethodSignatureBackedByPsiMethod> findSuperMethodSignaturesIncludingStatic(boolean checkAccess) {
     return PsiSuperMethodImplUtil.findSuperMethodSignaturesIncludingStatic(this, checkAccess);
   }
@@ -309,13 +296,12 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
   }
 
   @Override
-  @Nonnull
   public PsiMethod[] findDeepestSuperMethods() {
     return PsiSuperMethodImplUtil.findDeepestSuperMethods(this);
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitMethod(this);
     }
@@ -351,7 +337,6 @@ public class LightMethodBuilder extends LightElement implements PsiMethod, Origi
   }
 
   @Override
-  @Nonnull
   public SearchScope getUseScope() {
     return PsiImplUtil.getMemberUseScope(this);
   }

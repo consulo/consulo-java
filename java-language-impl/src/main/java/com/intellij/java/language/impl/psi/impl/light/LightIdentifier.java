@@ -25,7 +25,6 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.ast.IElementType;
-import jakarta.annotation.Nonnull;
 
 public class LightIdentifier extends LightElement implements PsiIdentifier, PsiJavaToken {
   private final String myText;
@@ -46,7 +45,7 @@ public class LightIdentifier extends LightElement implements PsiIdentifier, PsiJ
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitIdentifier(this);
     } else {

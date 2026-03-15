@@ -22,19 +22,15 @@ import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class SuspiciousSystemArraycopyInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.suspiciousSystemArraycopyDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return (String) infos[0];
     }
@@ -54,12 +50,12 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
-            @NonNls String name = methodExpression.getReferenceName();
+            String name = methodExpression.getReferenceName();
             if (!"arraycopy".equals(name)) {
                 return;
             }
@@ -135,7 +131,7 @@ public class SuspiciousSystemArraycopyInspection extends BaseInspection {
         }
 
         private static boolean isNegativeArgument(
-            @Nonnull PsiExpression argument
+            PsiExpression argument
         ) {
             Object constant =
                 ExpressionUtils.computeConstantExpression(argument);

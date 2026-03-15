@@ -51,7 +51,6 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,9 +63,9 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     private final boolean myNavigateToReference;
 
     public CallHierarchyNodeDescriptor(
-        @Nonnull Project project,
+        Project project,
         HierarchyNodeDescriptor parentDescriptor,
-        @Nonnull PsiElement element,
+        PsiElement element,
         boolean isBase,
         boolean navigateToReference
     ) {

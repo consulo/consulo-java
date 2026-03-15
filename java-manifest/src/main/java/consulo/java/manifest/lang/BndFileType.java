@@ -4,12 +4,10 @@ import consulo.language.file.LanguageFileType;
 import consulo.java.manifest.ManifestIcons;
 import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 import org.osmorc.manifest.lang.ManifestFileType;
 import org.osmorc.manifest.lang.ManifestLanguage;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -25,23 +23,18 @@ public class BndFileType extends ManifestFileType
 	}
 
 	@Override
-	@Nonnull
-	@NonNls
 	public String getId()
 	{
 		return "BND";
 	}
 
 	@Override
-	@Nonnull
 	public LocalizeValue getDescription()
 	{
 		return LocalizeValue.localizeTODO("Bnd files");
 	}
 
 	@Override
-	@Nonnull
-	@NonNls
 	public String getDefaultExtension()
 	{
 		return "bnd";

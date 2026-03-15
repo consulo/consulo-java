@@ -30,8 +30,7 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
     @Override
     @Nullable
     @RequiredReadAction
-    public ProblemDescriptor[] checkFile(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly, Object state) {
         if (file instanceof PsiJavaFile javaFile) {
             PsiDirectory directory = javaFile.getContainingDirectory();
             if (directory == null) {
@@ -102,18 +101,15 @@ public class WrongPackageStatementInspection extends BaseJavaLocalInspectionTool
     }
 
     @Override
-    @Nonnull
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.wrongPackageStatement();
     }
 
-    @Nonnull
     @Override
     public String getShortName() {
         return "WrongPackageStatement";

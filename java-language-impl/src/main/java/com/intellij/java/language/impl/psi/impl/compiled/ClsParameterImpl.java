@@ -34,8 +34,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.DumbService;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.lazy.LazyValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -43,7 +42,7 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   private final Supplier<PsiTypeElement> myType;
   private volatile String myMirrorName;
 
-  public ClsParameterImpl(@Nonnull PsiParameterStub thisStub) {
+  public ClsParameterImpl(PsiParameterStub thisStub) {
     super(thisStub);
     myType = LazyValue.atomicNotNull(() -> new ClsTypeElementImpl(this, getStub().getType()));
   }
@@ -85,24 +84,21 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     throw cannotModifyException(this);
   }
 
   @Override
-  @Nonnull
   public PsiTypeElement getTypeElement() {
     return myType.get();
   }
 
   @Override
-  @Nonnull
   public PsiType getType() {
     return getTypeElement().getType();
   }
 
   @Override
-  @Nonnull
   public PsiModifierList getModifierList() {
     final StubElement<PsiModifierList> child = getStub().findChildStubByType(JavaStubElementTypes.MODIFIER_LIST);
     assert child != null;
@@ -110,7 +106,7 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   }
 
   @Override
-  public boolean hasModifierProperty(@Nonnull String name) {
+  public boolean hasModifierProperty(String name) {
     return getModifierList().hasModifierProperty(name);
   }
 
@@ -134,7 +130,7 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     PsiAnnotation[] annotations = getModifierList().getAnnotations();
     for (PsiAnnotation annotation : annotations) {
       appendText(annotation, indentLevel, buffer);
@@ -190,7 +186,7 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
 
     PsiParameter mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
@@ -199,7 +195,7 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitParameter(this);
     } else {
@@ -208,7 +204,6 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   }
 
   @Override
-  @Nonnull
   public PsiElement getDeclarationScope() {
     // only method parameters exist in compiled code
     return getParent().getParent();
@@ -227,7 +222,6 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
   }
 
   @Override
-  @Nonnull
   public SearchScope getUseScope() {
     return new LocalSearchScope(getDeclarationScope());
   }

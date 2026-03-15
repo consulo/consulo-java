@@ -35,7 +35,6 @@ import consulo.language.pattern.PlatformPatterns;
 import org.osmorc.manifest.lang.ManifestLanguage;
 import org.osmorc.manifest.lang.ManifestTokenType;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Completion contributor which adds the name of all known headers to the autocomplete list.
@@ -56,7 +55,6 @@ public class ManifestCompletionContributor extends CompletionContributor {
            });
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return ManifestLanguage.INSTANCE;

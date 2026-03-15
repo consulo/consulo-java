@@ -36,8 +36,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 
@@ -50,7 +49,7 @@ public class IterateOverIterableIntention implements IntentionAction {
   private static final Logger LOG = Logger.getInstance(IterateOverIterableIntention.class);
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     Template template = getTemplate();
     if (template != null) {
       int offset = editor.getCaretModel().getOffset();
@@ -83,7 +82,6 @@ public class IterateOverIterableIntention implements IntentionAction {
   }
 
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Iterate");
@@ -131,7 +129,7 @@ public class IterateOverIterableIntention implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     Template template = getTemplate();
     SelectionModel selectionModel = editor.getSelectionModel();
     if (!selectionModel.hasSelection()) {

@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.ui.UsageViewDescriptorAdapter;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author dsl
@@ -42,7 +41,6 @@ class ReplaceConstructorWithFactoryViewDescriptor extends UsageViewDescriptorAda
     myConstructor = null;
   }
 
-  @Nonnull
   public PsiElement[] getElements() {
     if (myConstructor != null) {
       return new PsiElement[] {myConstructor};

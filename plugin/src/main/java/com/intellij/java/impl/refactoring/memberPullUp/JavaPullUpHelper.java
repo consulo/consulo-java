@@ -48,8 +48,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.function.Condition;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -145,19 +144,19 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo> {
                 modifierListOwner.accept(new JavaRecursiveElementWalkingVisitor() {
                     @Override
                     @RequiredReadAction
-                    public void visitMethod(@Nonnull PsiMethod method) {
+                    public void visitMethod(PsiMethod method) {
                         check(method);
                     }
 
                     @Override
                     @RequiredReadAction
-                    public void visitField(@Nonnull PsiField field) {
+                    public void visitField(PsiField field) {
                         check(field);
                     }
 
                     @Override
                     @RequiredReadAction
-                    public void visitClass(@Nonnull PsiClass aClass) {
+                    public void visitClass(PsiClass aClass) {
                         check(aClass);
                         super.visitClass(aClass);
                     }
@@ -690,7 +689,7 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo> {
 
         @Override
         @RequiredReadAction
-        public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement referenceElement) {
+        public void visitReferenceElement(PsiJavaCodeReferenceElement referenceElement) {
             if (!myIsMovable) {
                 return;
             }
@@ -838,7 +837,7 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo> {
     private class QualifiedThisSuperAdjuster extends JavaRecursiveElementVisitor {
         @Override
         @RequiredWriteAction
-        public void visitThisExpression(@Nonnull PsiThisExpression expression) {
+        public void visitThisExpression(PsiThisExpression expression) {
             super.visitThisExpression(expression);
             PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
             if (qualifier != null && qualifier.isReferenceTo(mySourceClass)) {
@@ -853,7 +852,7 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo> {
 
         @Override
         @RequiredWriteAction
-        public void visitSuperExpression(@Nonnull PsiSuperExpression expression) {
+        public void visitSuperExpression(PsiSuperExpression expression) {
             super.visitSuperExpression(expression);
             PsiJavaCodeReferenceElement qualifier = expression.getQualifier();
             if (qualifier != null && qualifier.isReferenceTo(mySourceClass)) {
@@ -875,7 +874,7 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo> {
 
         @Override
         @RequiredWriteAction
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             if (expression.getQualifierExpression() instanceof PsiSuperExpression superExpr) {
                 PsiElement resolved = expression.resolve();
                 if (resolved == null || resolved instanceof PsiMethod method && shouldFixSuper(method)) {
@@ -891,7 +890,7 @@ public class JavaPullUpHelper implements PullUpHelper<MemberInfo> {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // do nothing
         }
 

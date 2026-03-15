@@ -22,17 +22,14 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ContinueStatementWithLabelInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.continueStatementWithLabelDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.continueStatementWithLabelProblemDescriptor().get();
     }
@@ -43,7 +40,7 @@ public class ContinueStatementWithLabelInspection extends BaseInspection {
 
     private static class ContinueStatementWithLabelVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
+        public void visitContinueStatement(PsiContinueStatement statement) {
             super.visitContinueStatement(statement);
             PsiIdentifier label = statement.getLabelIdentifier();
             if (label == null) {

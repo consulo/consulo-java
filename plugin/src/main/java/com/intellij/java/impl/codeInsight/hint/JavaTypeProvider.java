@@ -25,7 +25,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.SyntaxTraverser;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -33,27 +32,23 @@ import java.util.List;
  */
 @ExtensionImpl
 public class JavaTypeProvider extends ExpressionTypeProvider<PsiExpression> {
-  @Nonnull
   @Override
-  public String getInformationHint(@Nonnull PsiExpression element) {
+  public String getInformationHint(PsiExpression element) {
     PsiType type = element.getType();
     String text = type == null ? "<unknown>" : type.getCanonicalText();
     return StringUtil.escapeXml(text);
   }
 
-  @Nonnull
   @Override
   public String getErrorHint() {
     return "No expression found";
   }
 
-  @Nonnull
   @Override
-  public List<PsiExpression> getExpressionsAt(@Nonnull PsiElement elementAt) {
+  public List<PsiExpression> getExpressionsAt(PsiElement elementAt) {
     return SyntaxTraverser.psiApi().parents(elementAt).filter(PsiExpression.class).toList();
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

@@ -5,9 +5,8 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.Language;
 import consulo.language.editor.annotation.Annotator;
 import consulo.language.editor.annotation.AnnotatorFactory;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author VISTALL
@@ -21,7 +20,6 @@ public class SPIAnnotatorFactory implements AnnotatorFactory {
     return new SPIAnnotator();
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return SPILanguage.INSTANCE;

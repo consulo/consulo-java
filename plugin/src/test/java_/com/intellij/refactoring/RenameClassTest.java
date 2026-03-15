@@ -9,7 +9,6 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.editor.refactoring.rename.RenameProcessor;
 import consulo.language.editor.refactoring.rename.AutomaticRenamerFactory;
-import org.jetbrains.annotations.NonNls;
 
 public abstract class RenameClassTest extends MultiFileTestCase {
   @Override
@@ -83,7 +82,7 @@ public abstract class RenameClassTest extends MultiFileTestCase {
     doTest("XX", "Y");
   }
 
-  private void doTest(@NonNls final String qClassName, @NonNls final String newName) throws Exception {
+  private void doTest(final String qClassName, final String newName) throws Exception {
     doTest(new PerformAction() {
       @Override
       public void performAction(VirtualFile rootDir, VirtualFile rootAfter) throws Exception {

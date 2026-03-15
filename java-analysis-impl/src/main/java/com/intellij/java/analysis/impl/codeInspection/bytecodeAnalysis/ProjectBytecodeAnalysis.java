@@ -39,8 +39,7 @@ import one.util.streamex.EntryStream;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.security.MessageDigest;
@@ -73,7 +72,7 @@ public class ProjectBytecodeAnalysis {
   private final EquationProvider<?> myEquationProvider;
   private final NullableNotNullManager myNullabilityManager;
 
-  public static ProjectBytecodeAnalysis getInstance(@Nonnull Project project) {
+  public static ProjectBytecodeAnalysis getInstance(Project project) {
     return ServiceManager.getService(project, ProjectBytecodeAnalysis.class);
   }
 
@@ -87,7 +86,7 @@ public class ProjectBytecodeAnalysis {
   }
 
   @Nullable
-  public PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN) {
+  public PsiAnnotation findInferredAnnotation(PsiModifierListOwner listOwner, String annotationFQN) {
     if (!(listOwner instanceof PsiCompiledElement)) {
       return null;
     }
@@ -104,8 +103,7 @@ public class ProjectBytecodeAnalysis {
     return null;
   }
 
-  @Nonnull
-  public PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner) {
+  public PsiAnnotation[] findInferredAnnotations(PsiModifierListOwner listOwner) {
     if (!(listOwner instanceof PsiCompiledElement)) {
       return PsiAnnotation.EMPTY_ARRAY;
     }
@@ -114,7 +112,6 @@ public class ProjectBytecodeAnalysis {
                                                                                           listOwner));
   }
 
-  @Nonnull
   private PsiAnnotation[] collectInferredAnnotations(PsiModifierListOwner listOwner) {
     PsiFile psiFile = listOwner.getContainingFile();
     VirtualFile file = psiFile == null ? null : psiFile.getVirtualFile();
@@ -164,7 +161,6 @@ public class ProjectBytecodeAnalysis {
    * @param methodAnnotations inferred annotations
    * @return Psi annotations
    */
-  @Nonnull
   private PsiAnnotation[] toPsi(EKey primaryKey, MethodAnnotations methodAnnotations) {
     boolean notNull = methodAnnotations.notNulls.contains(primaryKey);
     boolean nullable = methodAnnotations.nullables.contains(primaryKey);
@@ -211,7 +207,6 @@ public class ProjectBytecodeAnalysis {
    * @param parameterAnnotations inferred parameter annotations
    * @return Psi annotations
    */
-  @Nonnull
   private PsiAnnotation[] toPsi(ParameterAnnotations parameterAnnotations) {
     if (parameterAnnotations.notNull) {
       return new PsiAnnotation[]{getNotNullAnnotation()};
@@ -242,7 +237,7 @@ public class ProjectBytecodeAnalysis {
   }
 
   @Nullable
-  public EKey getKey(@Nonnull PsiModifierListOwner owner, MessageDigest md) {
+  public EKey getKey(PsiModifierListOwner owner, MessageDigest md) {
     LOG.assertTrue(owner instanceof PsiCompiledElement, owner);
     EKey key = null;
     if (owner instanceof PsiMethod) {
@@ -271,11 +266,11 @@ public class ProjectBytecodeAnalysis {
    * @param primaryKey primary compressed key for this method
    * @return compressed keys for this method
    */
-  public static List<EKey> collectMethodKeys(@Nonnull PsiMethod method, EKey primaryKey) {
+  public static List<EKey> collectMethodKeys(PsiMethod method, EKey primaryKey) {
     return BytecodeAnalysisConverter.mkInOutKeys(method, primaryKey);
   }
 
-  private ParameterAnnotations loadParameterAnnotations(@Nonnull EKey notNullKey) throws EquationsLimitException {
+  private ParameterAnnotations loadParameterAnnotations(EKey notNullKey) throws EquationsLimitException {
     Solver notNullSolver = new Solver(new ELattice<>(Value.NotNull, Value.Top), Value.Top);
     collectEquations(Collections.singletonList(notNullKey), notNullSolver);
     Map<EKey, Value> notNullSolutions = notNullSolver.solve();
@@ -294,8 +289,8 @@ public class ProjectBytecodeAnalysis {
     return new ParameterAnnotations(notNull, nullable);
   }
 
-  private MethodAnnotations loadMethodAnnotations(@Nonnull PsiMethod owner,
-                                                  @Nonnull EKey key,
+  private MethodAnnotations loadMethodAnnotations(PsiMethod owner,
+                                                  EKey key,
                                                   List<EKey> allKeys) throws EquationsLimitException {
     MethodAnnotations result = new MethodAnnotations();
 
@@ -406,14 +401,13 @@ public class ProjectBytecodeAnalysis {
     }
   }
 
-  @Nonnull
-  private PsiAnnotation createAnnotationFromText(@Nonnull String text) throws IncorrectOperationException {
+  private PsiAnnotation createAnnotationFromText(String text) throws IncorrectOperationException {
     PsiAnnotation annotation = JavaPsiFacade.getElementFactory(myProject).createAnnotationFromText(text, null);
     ((LightVirtualFile)annotation.getContainingFile().getViewProvider().getVirtualFile()).setWritable(false);
     return annotation;
   }
 
-  BitSet findAlwaysNotNullParameters(@Nonnull EKey methodKey, BitSet possiblyNotNullParameters) throws EquationsLimitException {
+  BitSet findAlwaysNotNullParameters(EKey methodKey, BitSet possiblyNotNullParameters) throws EquationsLimitException {
     BitSet alwaysNotNullParameters = new BitSet();
     if (possiblyNotNullParameters.cardinality() != 0) {
       List<EKey> keys = IntStreamEx.of(possiblyNotNullParameters).mapToObj(idx -> methodKey.withDirection(new In(idx, false))).toList();
@@ -437,9 +431,9 @@ public class ProjectBytecodeAnalysis {
    * @param methodKey         a primary key of a method being analyzed. not it is stable
    * @param arity             arity of this method (hint for constructing @Contract annotations)
    */
-  private void addMethodAnnotations(@Nonnull Map<EKey, Value> solution,
-                                    @Nonnull MethodAnnotations methodAnnotations,
-                                    @Nonnull EKey methodKey,
+  private void addMethodAnnotations(Map<EKey, Value> solution,
+                                    MethodAnnotations methodAnnotations,
+                                    EKey methodKey,
                                     int arity)
     throws EquationsLimitException {
     List<StandardMethodContract> contractClauses = new ArrayList<>();
@@ -509,7 +503,7 @@ public class ProjectBytecodeAnalysis {
     }
   }
 
-  private void removeConstraintFromNonNullParameter(@Nonnull EKey methodKey,
+  private void removeConstraintFromNonNullParameter(EKey methodKey,
                                                     List<StandardMethodContract> allContracts) throws EquationsLimitException {
     BitSet possiblyNotNullParameters = StreamEx.of(allContracts)
                                                .flatMapToInt(
@@ -526,7 +520,6 @@ public class ProjectBytecodeAnalysis {
     }
   }
 
-  @Nonnull
   private static List<StandardMethodContract> squashContracts(List<StandardMethodContract> contractClauses) {
     // If there's a pair of contracts yielding the same value like "null,_->true", "!null,_->true"
     // then trivial contract should be used like "_,_->true"
@@ -571,7 +564,7 @@ public class ProjectBytecodeAnalysis {
       project.getMessageBus().connect().subscribe(PsiModificationTrackerListener.class, myEquationCache::clear);
     }
 
-    abstract EKey adaptKey(@Nonnull EKey key, MessageDigest messageDigest);
+    abstract EKey adaptKey(EKey key, MessageDigest messageDigest);
 
     abstract List<Equations> getEquations(MemberDescriptor method);
   }
@@ -586,7 +579,7 @@ public class ProjectBytecodeAnalysis {
     }
 
     @Override
-    public EKey adaptKey(@Nonnull EKey key, MessageDigest messageDigest) {
+    public EKey adaptKey(EKey key, MessageDigest messageDigest) {
       assert key.member instanceof Member;
       return key;
     }
@@ -653,7 +646,7 @@ public class ProjectBytecodeAnalysis {
     }
 
     @Override
-    public EKey adaptKey(@Nonnull EKey key, MessageDigest messageDigest) {
+    public EKey adaptKey(EKey key, MessageDigest messageDigest) {
       return key.hashed(messageDigest);
     }
 

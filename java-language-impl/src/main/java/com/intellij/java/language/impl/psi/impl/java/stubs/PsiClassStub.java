@@ -2,7 +2,7 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiClass;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface PsiClassStub<T extends PsiClass> extends PsiMemberStub<T> {
   @Nullable

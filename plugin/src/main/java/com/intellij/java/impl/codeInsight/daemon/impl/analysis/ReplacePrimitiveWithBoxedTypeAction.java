@@ -23,8 +23,7 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna
@@ -40,7 +39,6 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
         myBoxedTypeName = boxedTypeName;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return LocalizeValue.localizeTODO("Convert '" + myPrimitiveName + "' to '" + myBoxedTypeName + "'");
@@ -48,10 +46,10 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         if (startElement instanceof PsiTypeElement) {
             PsiType type = ((PsiTypeElement) startElement).getType();
@@ -67,11 +65,11 @@ class ReplacePrimitiveWithBoxedTypeAction extends LocalQuickFixAndIntentionActio
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiType type = ((PsiTypeElement) startElement).getType();
         PsiType boxedType;

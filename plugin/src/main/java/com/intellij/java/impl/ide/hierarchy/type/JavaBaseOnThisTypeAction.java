@@ -25,7 +25,6 @@ import consulo.annotation.component.ActionRefAnchor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserBaseEx;
 import consulo.ide.impl.idea.ide.hierarchy.TypeHierarchyBrowserBase;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 @ActionImpl(
     id = "TypeHierarchy.BaseOnThisType",
@@ -34,7 +33,7 @@ import jakarta.annotation.Nonnull;
 public class JavaBaseOnThisTypeAction extends TypeHierarchyBrowserBase.BaseOnThisTypeAction {
     @Override
     @RequiredReadAction
-    protected boolean isEnabled(@Nonnull HierarchyBrowserBaseEx browser, @Nonnull PsiElement psiElement) {
+    protected boolean isEnabled(HierarchyBrowserBaseEx browser, PsiElement psiElement) {
         return super.isEnabled(browser, psiElement)
             && !CommonClassNames.JAVA_LANG_OBJECT.equals(((PsiClass) psiElement).getQualifiedName());
     }

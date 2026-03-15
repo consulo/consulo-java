@@ -31,8 +31,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.query.Query;
 import consulo.deadCodeNotWorking.impl.MultipleCheckboxOptionsPanel;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -48,13 +47,11 @@ public class ParameterNameDiffersFromOverriddenParameterInspection extends BaseI
      */
     public boolean m_ignoreOverridesOfLibraryMethods = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.parameterNameDiffersFromOverriddenParameterProblemDescriptor(infos[0]).get();
     }
@@ -83,7 +80,7 @@ public class ParameterNameDiffersFromOverriddenParameterInspection extends BaseI
 
     private class ParameterNameDiffersFromOverriddenParameterVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() == 0) {
                 return;

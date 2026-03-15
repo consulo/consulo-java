@@ -24,9 +24,8 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class PsiReceiverParameterImpl extends CompositePsiElement implements PsiReceiverParameter {
   public PsiReceiverParameterImpl() {
@@ -34,7 +33,6 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
   }
 
   @Override
-  @Nonnull
   public PsiThisExpression getIdentifier() {
     return PsiTreeUtil.getRequiredChildOfType(this, PsiThisExpression.class);
   }
@@ -46,18 +44,16 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
   }
 
   @Override
-  public boolean hasModifierProperty(@PsiModifier.ModifierConstant @Nonnull String name) {
+  public boolean hasModifierProperty(@PsiModifier.ModifierConstant String name) {
     PsiModifierList modifierList = getModifierList();
     return modifierList != null && modifierList.hasModifierProperty(name);
   }
 
-  @Nonnull
   @Override
   public PsiType getType() {
     return JavaSharedImplUtil.getType(getTypeElement(), getIdentifier());
   }
 
-  @Nonnull
   @Override
   public PsiTypeElement getTypeElement() {
     return PsiTreeUtil.getRequiredChildOfType(this, PsiTypeElement.class);
@@ -81,7 +77,7 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
   }
 
   @Override
-  public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+  public PsiElement setName(String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Cannot rename receiver parameter");
   }
 
@@ -96,7 +92,7 @@ public class PsiReceiverParameterImpl extends CompositePsiElement implements Psi
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitReceiverParameter(this);
     } else {

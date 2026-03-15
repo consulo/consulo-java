@@ -31,8 +31,7 @@ import consulo.logging.Logger;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   private static final Logger LOG = Logger.getInstance(MoveClassToSeparateFileFix.class);
@@ -44,13 +43,12 @@ public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.moveClassToSeparateFileText(myClass.getName());
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, @Nullable Editor editor, @Nonnull PsiFile file) {
+  public boolean isAvailable(Project project, @Nullable Editor editor, PsiFile file) {
     if  (!myClass.isValid() || !myClass.getManager().isInProject(myClass)) return false;
     PsiDirectory dir = file.getContainingDirectory();
     if (dir == null) return false;
@@ -65,7 +63,7 @@ public class MoveClassToSeparateFileFix implements SyntheticIntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, @Nullable Editor editor, @Nonnull PsiFile file) {
+  public void invoke(Project project, @Nullable Editor editor, PsiFile file) {
     if (!FileModificationService.getInstance().prepareFileForWrite(myClass.getContainingFile())) return;
 
     PsiDirectory dir = file.getContainingDirectory();

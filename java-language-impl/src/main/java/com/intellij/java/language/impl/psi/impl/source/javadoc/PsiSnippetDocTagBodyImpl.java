@@ -8,7 +8,6 @@ import com.intellij.java.language.psi.javadoc.PsiSnippetDocTagBody;
 import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
 
 public class PsiSnippetDocTagBodyImpl extends CompositePsiElement implements PsiSnippetDocTagBody {
   public PsiSnippetDocTagBodyImpl() {
@@ -16,7 +15,7 @@ public class PsiSnippetDocTagBodyImpl extends CompositePsiElement implements Psi
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     super.accept(visitor);
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitSnippetDocTagBody(this);
@@ -32,7 +31,6 @@ public class PsiSnippetDocTagBodyImpl extends CompositePsiElement implements Psi
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getContent() {
     return getChildrenAsPsiElements(JavaDocTokenType.DOC_COMMENT_DATA, PsiElement.ARRAY_FACTORY);
   }

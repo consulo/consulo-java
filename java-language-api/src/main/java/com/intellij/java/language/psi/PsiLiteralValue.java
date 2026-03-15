@@ -2,7 +2,7 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface PsiLiteralValue extends PsiElement/*, PsiExternalReferenceHost*/ {
   /**

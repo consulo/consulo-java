@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.generation.actions;
 
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * Action group which contains Generate... actions
@@ -26,7 +25,7 @@ import jakarta.annotation.Nonnull;
  * @author Danila Ponomarenko
  */
 public abstract class GenerateGetterSetterBaseAction extends BaseGenerateAction {
-    protected GenerateGetterSetterBaseAction(CodeInsightActionHandler handler, @Nonnull LocalizeValue text) {
+    protected GenerateGetterSetterBaseAction(CodeInsightActionHandler handler, LocalizeValue text) {
         super(handler, text);
     }
 }

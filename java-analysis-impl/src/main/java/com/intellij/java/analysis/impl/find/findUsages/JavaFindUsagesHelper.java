@@ -52,8 +52,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.function.ThrowableSupplier;
 import consulo.xml.psi.xml.XmlAttributeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -62,8 +61,7 @@ import java.util.function.Supplier;
 public class JavaFindUsagesHelper {
     private static final Logger LOG = Logger.getInstance(JavaFindUsagesHelper.class);
 
-    @Nonnull
-    public static Set<String> getElementNames(@Nonnull PsiElement element) {
+    public static Set<String> getElementNames(PsiElement element) {
         if (element instanceof PsiDirectory directory) {  // normalize a directory to a corresponding package
             PsiPackage aPackage = AccessRule.read(() -> JavaDirectoryService.getInstance().getPackage(directory));
             return aPackage == null ? Collections.emptySet() : getElementNames(aPackage);
@@ -118,9 +116,9 @@ public class JavaFindUsagesHelper {
     }
 
     public static boolean processElementUsages(
-        @Nonnull PsiElement element,
-        @Nonnull FindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiElement element,
+        FindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         if (options instanceof JavaVariableFindUsagesOptions varOptions) {
             if (varOptions.isReadAccess || varOptions.isWriteAccess) {
@@ -238,9 +236,9 @@ public class JavaFindUsagesHelper {
     }
 
     private static boolean addAliasingUsages(
-        @Nonnull PomTarget pomTarget,
-        @Nonnull FindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PomTarget pomTarget,
+        FindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         for (AliasingPsiTargetMapper aliasingPsiTargetMapper : AliasingPsiTargetMapper.EP_NAME.getExtensionList()) {
             for (AliasingPsiTarget psiTarget : aliasingPsiTargetMapper.getTargets(pomTarget)) {
@@ -266,9 +264,9 @@ public class JavaFindUsagesHelper {
     }
 
     private static boolean processOverridingMethods(
-        @Nonnull PsiMethod psiMethod,
-        @Nonnull Predicate<UsageInfo> processor,
-        @Nonnull JavaMethodFindUsagesOptions options
+        PsiMethod psiMethod,
+        Predicate<UsageInfo> processor,
+        JavaMethodFindUsagesOptions options
     ) {
         return OverridingMethodsSearch.search(psiMethod, options.searchScope, options.isCheckDeepInheritance)
             .forEach(new PsiElementProcessorAdapter<>(
@@ -277,9 +275,9 @@ public class JavaFindUsagesHelper {
     }
 
     private static boolean addClassesUsages(
-        @Nonnull PsiPackage aPackage,
-        @Nonnull JavaPackageFindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiPackage aPackage,
+        JavaPackageFindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         ProgressIndicator progress = ProgressManager.getInstance().getProgressIndicator();
         if (progress != null) {
@@ -319,7 +317,7 @@ public class JavaFindUsagesHelper {
         return true;
     }
 
-    private static void addClassesInPackage(@Nonnull PsiPackage aPackage, boolean includeSubpackages, @Nonnull List<PsiClass> array) {
+    private static void addClassesInPackage(PsiPackage aPackage, boolean includeSubpackages, List<PsiClass> array) {
         PsiDirectory[] dirs = AccessRule.read((ThrowableSupplier<PsiDirectory[], RuntimeException>)aPackage::getDirectories);
         for (PsiDirectory dir : dirs) {
             addClassesInDirectory(dir, includeSubpackages, array);
@@ -327,9 +325,9 @@ public class JavaFindUsagesHelper {
     }
 
     private static void addClassesInDirectory(
-        @Nonnull PsiDirectory dir,
+        PsiDirectory dir,
         boolean includeSubdirs,
-        @Nonnull List<PsiClass> array
+        List<PsiClass> array
     ) {
         Application.get().runReadAction(() -> {
             PsiClass[] classes = JavaDirectoryService.getInstance().getClasses(dir);
@@ -344,10 +342,10 @@ public class JavaFindUsagesHelper {
     }
 
     private static boolean addMethodsUsages(
-        @Nonnull PsiClass aClass,
-        @Nonnull PsiManager manager,
-        @Nonnull JavaClassFindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiClass aClass,
+        PsiManager manager,
+        JavaClassFindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         if (options.isIncludeInherited) {
             PsiMethod[] methods = AccessRule.read(aClass::getAllMethods);
@@ -398,10 +396,10 @@ public class JavaFindUsagesHelper {
     }
 
     private static boolean addFieldsUsages(
-        @Nonnull PsiClass aClass,
-        @Nonnull PsiManager manager,
-        @Nonnull JavaClassFindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiClass aClass,
+        PsiManager manager,
+        JavaClassFindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         if (options.isIncludeInherited) {
             PsiField[] fields = AccessRule.read(aClass::getAllFields);
@@ -456,7 +454,7 @@ public class JavaFindUsagesHelper {
 
     @Nullable
     @RequiredReadAction
-    private static PsiClass getFieldOrMethodAccessedClass(@Nonnull PsiReferenceExpression ref, @Nonnull PsiClass fieldOrMethodClass) {
+    private static PsiClass getFieldOrMethodAccessedClass(PsiReferenceExpression ref, PsiClass fieldOrMethodClass) {
         PsiElement[] children = ref.getChildren();
         if (children.length > 1 && children[0] instanceof PsiExpression expr) {
             PsiType type = expr.getType();
@@ -481,18 +479,18 @@ public class JavaFindUsagesHelper {
     }
 
     private static boolean addInheritors(
-        @Nonnull PsiClass aClass,
-        @Nonnull JavaClassFindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiClass aClass,
+        JavaClassFindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         return ClassInheritorsSearch.search(aClass, options.searchScope, options.isCheckDeepInheritance)
             .forEach(new PsiElementProcessorAdapter<>(element -> addResult(element, options, processor)));
     }
 
     private static boolean addDerivedInterfaces(
-        @Nonnull PsiClass anInterface,
-        @Nonnull JavaClassFindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiClass anInterface,
+        JavaClassFindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         return ClassInheritorsSearch.search(anInterface, options.searchScope, options.isCheckDeepInheritance).forEach(
             new PsiElementProcessorAdapter<>(inheritor -> !inheritor.isInterface() || addResult(inheritor, options, processor))
@@ -500,9 +498,9 @@ public class JavaFindUsagesHelper {
     }
 
     private static boolean addImplementingClasses(
-        @Nonnull PsiClass anInterface,
-        @Nonnull JavaClassFindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiClass anInterface,
+        JavaClassFindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         return ClassInheritorsSearch.search(anInterface, options.searchScope, options.isCheckDeepInheritance).forEach(
             new PsiElementProcessorAdapter<>(inheritor -> inheritor.isInterface() || addResult(inheritor, options, processor))
@@ -511,12 +509,12 @@ public class JavaFindUsagesHelper {
 
     @RequiredReadAction
     private static boolean addResultFromReference(
-        @Nonnull PsiReference reference,
-        @Nonnull PsiClass methodClass,
-        @Nonnull PsiManager manager,
-        @Nonnull PsiClass aClass,
-        @Nonnull FindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiReference reference,
+        PsiClass methodClass,
+        PsiManager manager,
+        PsiClass aClass,
+        FindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         PsiElement refElement = reference.getElement();
         if (refElement instanceof PsiReferenceExpression refExpr) {
@@ -531,9 +529,9 @@ public class JavaFindUsagesHelper {
     }
 
     private static boolean addElementUsages(
-        @Nonnull PsiElement element,
-        @Nonnull FindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiElement element,
+        FindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         SearchScope searchScope = options.searchScope;
         PsiClass[] parentClass = new PsiClass[1];
@@ -584,18 +582,18 @@ public class JavaFindUsagesHelper {
 
     @RequiredReadAction
     private static boolean addResult(
-        @Nonnull PsiElement element,
-        @Nonnull FindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiElement element,
+        FindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         return !filterUsage(element, options) || processor.test(new UsageInfo(element));
     }
 
     @RequiredReadAction
     private static boolean addResult(
-        @Nonnull PsiReference ref,
-        @Nonnull FindUsagesOptions options,
-        @Nonnull Predicate<UsageInfo> processor
+        PsiReference ref,
+        FindUsagesOptions options,
+        Predicate<UsageInfo> processor
     ) {
         if (filterUsage(ref.getElement(), options)) {
             TextRange rangeInElement = ref.getRangeInElement();
@@ -610,7 +608,7 @@ public class JavaFindUsagesHelper {
     }
 
     @RequiredReadAction
-    private static boolean filterUsage(PsiElement usage, @Nonnull FindUsagesOptions options) {
+    private static boolean filterUsage(PsiElement usage, FindUsagesOptions options) {
         if (!(usage instanceof PsiJavaCodeReferenceElement javaCodeRef)) {
             return true;
         }

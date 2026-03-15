@@ -25,16 +25,14 @@ import consulo.language.impl.psi.LightElement;
 import consulo.content.scope.SearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.annotation.access.RequiredReadAction;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 public class LightField extends LightElement implements PsiField {
   private final PsiField myField;
   private final PsiClass myContainingClass;
 
-  public LightField(@Nonnull final PsiManager manager, @Nonnull final PsiField field, @Nonnull final PsiClass containingClass) {
+  public LightField(final PsiManager manager, final PsiField field, final PsiClass containingClass) {
     super(manager, JavaLanguage.INSTANCE);
     myField = field;
     myContainingClass = containingClass;
@@ -45,7 +43,6 @@ public class LightField extends LightElement implements PsiField {
     throw new IncorrectOperationException("Not supported");
   }
 
-  @Nonnull
   @Override
   public SearchScope getUseScope() {
     return myField.getUseScope();
@@ -56,7 +53,6 @@ public class LightField extends LightElement implements PsiField {
     return myField.getName();
   }
 
-  @Nonnull
   @Override
   public PsiIdentifier getNameIdentifier() {
     return myField.getNameIdentifier();
@@ -77,7 +73,6 @@ public class LightField extends LightElement implements PsiField {
     return myContainingClass;
   }
 
-  @Nonnull
   @Override
   public PsiType getType() {
     return myField.getType();
@@ -109,7 +104,7 @@ public class LightField extends LightElement implements PsiField {
   }
 
   @Override
-  public PsiElement setName(@NonNls @Nonnull final String name) throws IncorrectOperationException {
+  public PsiElement setName(final String name) throws IncorrectOperationException {
     throw new IncorrectOperationException("Not supported");
   }
 
@@ -119,7 +114,7 @@ public class LightField extends LightElement implements PsiField {
   }
 
   @Override
-  public boolean hasModifierProperty(@NonNls @Nonnull final String name) {
+  public boolean hasModifierProperty(final String name) {
     return myField.hasModifierProperty(name);
   }
 
@@ -135,7 +130,6 @@ public class LightField extends LightElement implements PsiField {
   }
 
   @RequiredReadAction
-  @Nonnull
   @Override
   public TextRange getTextRange() {
     return myField.getTextRange();

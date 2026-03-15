@@ -23,21 +23,20 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.TestOnly;
 
 public abstract class JavaPsiFacadeEx extends JavaPsiFacade
 {
 	@TestOnly
-	public static JavaPsiFacadeEx getInstanceEx(@Nonnull Project project)
+	public static JavaPsiFacadeEx getInstanceEx(Project project)
 	{
 		return (JavaPsiFacadeEx) getInstance(project);
 	}
 
 	@TestOnly
 	@Nullable
-	public PsiClass findClass(@Nonnull String qualifiedName)
+	public PsiClass findClass(String qualifiedName)
 	{
 		return findClass(qualifiedName, GlobalSearchScope.allScope(getProject()));
 	}

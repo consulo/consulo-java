@@ -27,14 +27,13 @@ import com.intellij.java.language.psi.PsiParameter;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author ven
  */
 public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCommentFix {
-  public SuppressParameterFix(@Nonnull HighlightDisplayKey key) {
+  public SuppressParameterFix(HighlightDisplayKey key) {
     this(key.getID());
   }
 
@@ -43,7 +42,6 @@ public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCom
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Suppress for parameter");
   }
@@ -61,8 +59,8 @@ public class SuppressParameterFix extends AbstractBatchSuppressByNoInspectionCom
   }
 
   @Override
-  protected void createSuppression(@Nonnull Project project, @Nonnull PsiElement element,
-                                   @Nonnull PsiElement cont) throws IncorrectOperationException {
+  protected void createSuppression(Project project, PsiElement element,
+                                   PsiElement cont) throws IncorrectOperationException {
     PsiModifierListOwner container = (PsiModifierListOwner) cont;
     final PsiModifierList modifierList = container.getModifierList();
     if (modifierList != null) {

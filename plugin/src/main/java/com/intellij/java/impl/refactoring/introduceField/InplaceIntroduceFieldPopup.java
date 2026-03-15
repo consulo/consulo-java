@@ -32,8 +32,7 @@ import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,7 +145,7 @@ public class InplaceIntroduceFieldPopup extends AbstractInplaceIntroduceFieldPop
         @Nullable final PsiLocalVariable localVariable,
         final PsiExpression initializer,
         final boolean forStatic,
-        @Nonnull final PsiClass parentClass
+        final PsiClass parentClass
     ) {
         return IntroduceFieldDialog.
             createGenerator(forStatic, localVariable, initializer, localVariable != null, null, parentClass, parentClass.getProject()).
@@ -196,7 +195,7 @@ public class InplaceIntroduceFieldPopup extends AbstractInplaceIntroduceFieldPop
     }
 
     @Override
-    protected void saveSettings(@Nonnull PsiVariable psiVariable) {
+    protected void saveSettings(PsiVariable psiVariable) {
         super.saveSettings(psiVariable);
         JavaRefactoringSettings.getInstance().INTRODUCE_FIELD_VISIBILITY = myIntroduceFieldPanel.getFieldVisibility();
         myIntroduceFieldPanel.saveFinalState();

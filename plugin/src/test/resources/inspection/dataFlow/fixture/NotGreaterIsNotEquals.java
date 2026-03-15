@@ -1,9 +1,8 @@
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 
 class Zoo2 {
-  public static boolean startsWith(@Nonnull String path, @jakarta.annotation.Nonnull String start, final boolean caseSensitive) {
+  public static boolean startsWith(String path, @jakarta.annotation.Nonnull String start, final boolean caseSensitive) {
     final int length1 = path.length();
     final int length2 = start.length();
     if (length2 == 0) return true;

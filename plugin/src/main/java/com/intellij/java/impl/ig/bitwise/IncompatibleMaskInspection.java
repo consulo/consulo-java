@@ -29,26 +29,22 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.ast.IElementType;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class IncompatibleMaskInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern("[a-zA-Z_0-9.]+")
     public String getID() {
         return "IncompatibleBitwiseMaskOperation";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.incompatibleMaskOperationDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiBinaryExpression binaryExpression =
             (PsiBinaryExpression) infos[0];
@@ -71,7 +67,7 @@ public class IncompatibleMaskInspection extends BaseInspection {
     private static class IncompatibleMaskVisitor extends BaseInspectionVisitor {
         @Override
         public void visitBinaryExpression(
-            @Nonnull PsiBinaryExpression expression
+            PsiBinaryExpression expression
         ) {
             super.visitBinaryExpression(expression);
             PsiExpression rhs = expression.getROperand();

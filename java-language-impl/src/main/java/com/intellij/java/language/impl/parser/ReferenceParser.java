@@ -10,9 +10,8 @@ import com.intellij.java.language.psi.PsiKeyword;
 import consulo.language.ast.IElementType;
 import consulo.language.ast.TokenSet;
 import consulo.language.parser.PsiBuilder;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.impl.parser.JavaParserUtil.*;
 import static consulo.language.parser.PsiBuilderUtil.expect;
@@ -42,12 +41,11 @@ public class ReferenceParser {
 
   private final JavaParser myParser;
 
-  public ReferenceParser(@Nonnull JavaParser javaParser) {
+  public ReferenceParser(JavaParser javaParser) {
     myParser = javaParser;
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseType(PsiBuilder builder, int flags) {
+  public PsiBuilder.@Nullable Marker parseType(PsiBuilder builder, int flags) {
     TypeInfo typeInfo = parseTypeInfo(builder, flags);
     return typeInfo != null ? typeInfo.marker : null;
   }
@@ -191,8 +189,7 @@ public class ReferenceParser {
     }
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseJavaCodeReference(PsiBuilder builder,
+  public PsiBuilder.@Nullable Marker parseJavaCodeReference(PsiBuilder builder,
                                                   boolean eatLastDot,
                                                   boolean parameterList,
                                                   boolean isNew,
@@ -206,8 +203,7 @@ public class ReferenceParser {
     return !typeInfo.hasErrors;
   }
 
-  @Nullable
-  private PsiBuilder.Marker parseJavaCodeReference(PsiBuilder builder,
+  private PsiBuilder.@Nullable Marker parseJavaCodeReference(PsiBuilder builder,
                                                    boolean eatLastDot,
                                                    boolean parameterList,
                                                    boolean isImport,
@@ -317,7 +313,6 @@ public class ReferenceParser {
     return isOk;
   }
 
-  @Nonnull
   public PsiBuilder.Marker parseTypeParameters(PsiBuilder builder) {
     PsiBuilder.Marker list = builder.mark();
     if (!expect(builder, JavaTokenType.LT)) {
@@ -355,8 +350,7 @@ public class ReferenceParser {
     return list;
   }
 
-  @Nullable
-  public PsiBuilder.Marker parseTypeParameter(PsiBuilder builder) {
+  public PsiBuilder.@Nullable Marker parseTypeParameter(PsiBuilder builder) {
     PsiBuilder.Marker param = builder.mark();
 
     myParser.getDeclarationParser().parseAnnotations(builder);

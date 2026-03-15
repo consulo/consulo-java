@@ -30,13 +30,11 @@ import consulo.language.ast.IElementType;
 import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.FlipExpressionIntention", fileExtensions = "java", categories = {"Java", "Other"})
 public class FlipExpressionIntention extends MutablyNamedIntention {
 
-    @Nonnull
     @Override
     public LocalizeValue getTextForElement(PsiElement element) {
         PsiPolyadicExpression expression = (PsiPolyadicExpression) element.getParent();
@@ -53,20 +51,18 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
         }
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getNeutralText() {
         return IntentionPowerPackLocalize.flipExpressionIntentionFamilyName();
     }
 
     @Override
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new ExpressionPredicate();
     }
 
     @Override
-    public void processIntention(@Nonnull PsiElement element) {
+    public void processIntention(PsiElement element) {
         PsiJavaToken token = (PsiJavaToken) element;
         PsiElement parent = token.getParent();
         if (!(parent instanceof PsiPolyadicExpression)) {
@@ -93,7 +89,7 @@ public class FlipExpressionIntention extends MutablyNamedIntention {
     }
 
     @Override
-    protected void processIntention(Editor editor, @Nonnull PsiElement element) {
+    protected void processIntention(Editor editor, PsiElement element) {
         CaretModel caretModel = editor.getCaretModel();
         int offset = caretModel.getOffset();
         super.processIntention(editor, element);

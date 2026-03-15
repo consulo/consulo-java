@@ -18,8 +18,7 @@ package com.intellij.java.impl.psi.impl.source.codeStyle.javadoc;
 
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import consulo.util.lang.StringUtil;
 import consulo.ide.impl.idea.util.containers.ContainerUtilRt;
 
@@ -27,13 +26,13 @@ public class JDParamListOwnerComment extends JDComment
 {
 	protected List<TagDescription> myParamsList;
 
-	public JDParamListOwnerComment(@Nonnull CommentFormatter formatter)
+	public JDParamListOwnerComment(CommentFormatter formatter)
 	{
 		super(formatter);
 	}
 
 	@Override
-	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(String prefix, StringBuilder sb)
 	{
 		if(myParamsList != null)
 		{
@@ -59,7 +58,7 @@ public class JDParamListOwnerComment extends JDComment
 		return getNameDesc(name, myParamsList);
 	}
 
-	public void addParameter(@Nonnull String name, @Nullable String description)
+	public void addParameter(String name, @Nullable String description)
 	{
 		if(myParamsList == null)
 		{
@@ -88,10 +87,10 @@ public class JDParamListOwnerComment extends JDComment
 	/**
 	 * Generates parameters or exceptions
 	 */
-	protected void generateList(@Nonnull String prefix,
-								@Nonnull StringBuilder sb,
-								@Nonnull List<TagDescription> tagBlocks,
-								@Nonnull String tag,
+	protected void generateList(String prefix,
+								StringBuilder sb,
+								List<TagDescription> tagBlocks,
+								String tag,
 								boolean align_comments,
 								boolean generate_empty_tags,
 								boolean descriptionOnNewLine)
@@ -130,7 +129,7 @@ public class JDParamListOwnerComment extends JDComment
 		}
 	}
 
-	private static int maxTagDescriptionNameLength(@Nonnull List<TagDescription> tagBlocks,
+	private static int maxTagDescriptionNameLength(List<TagDescription> tagBlocks,
 												   boolean align_comments,
 												   boolean generate_empty_tags,
 												   boolean descriptionOnNewLine)
@@ -157,13 +156,13 @@ public class JDParamListOwnerComment extends JDComment
 	}
 
 	private StringBuilder formatJDTagDescription(@Nullable String description,
-												 @Nonnull CharSequence firstLinePrefix,
-												 @Nonnull CharSequence continuationPrefix)
+												 CharSequence firstLinePrefix,
+												 CharSequence continuationPrefix)
 	{
 		return myFormatter.getParser().formatJDTagDescription(description, firstLinePrefix, continuationPrefix);
 	}
 
-	private StringBuilder formatJDTagDescription(@Nullable String description, @Nonnull CharSequence prefix)
+	private StringBuilder formatJDTagDescription(@Nullable String description, CharSequence prefix)
 	{
 		return formatJDTagDescription(description, prefix, prefix);
 	}

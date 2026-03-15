@@ -25,26 +25,22 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class HashCodeUsesNonFinalVariableInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern("[a-zA-Z_0-9.]+")
     public String getID() {
         return "NonFinalFieldReferencedInHashCode";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonFinalFieldInHashcodeDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonFinalFieldInHashcodeProblemDescriptor().get();
     }
@@ -63,7 +59,7 @@ public class HashCodeUsesNonFinalVariableInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             boolean isHashCode = MethodUtils.isHashCode(method);
             if (isHashCode) {
                 method.accept(new JavaRecursiveElementVisitor() {
@@ -75,7 +71,7 @@ public class HashCodeUsesNonFinalVariableInspection extends BaseInspection {
 
                     @Override
                     public void visitReferenceExpression(
-                        @Nonnull PsiReferenceExpression expression
+                        PsiReferenceExpression expression
                     ) {
                         super.visitReferenceExpression(expression);
                         PsiElement element = expression.resolve();

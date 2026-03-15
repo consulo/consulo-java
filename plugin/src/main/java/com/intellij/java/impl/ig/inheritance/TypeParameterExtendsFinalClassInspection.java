@@ -32,19 +32,16 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.typeParameterExtendsFinalClassDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         Integer problemType = (Integer) infos[1];
         PsiNamedElement namedElement = (PsiNamedElement) infos[0];
@@ -61,14 +58,13 @@ public class TypeParameterExtendsFinalClassInspection extends BaseInspection {
     }
 
     private static class TypeParameterExtendsFinalClassFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.typeParameterExtendsFinalClassQuickfix();
         }
 
         @Override
-        protected void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        protected void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
             PsiElement element = descriptor.getPsiElement();
             PsiElement parent = element.getParent();
             if (parent instanceof PsiTypeParameter) {

@@ -22,22 +22,18 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ReturnThisInspection extends BaseInspection {
-    @Nonnull
     public String getID() {
         return "ReturnOfThis";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.returnThisDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.returnThisProblemDescriptor().get();
     }
@@ -48,7 +44,7 @@ public class ReturnThisInspection extends BaseInspection {
 
     private static class ReturnThisVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitThisExpression(@Nonnull PsiThisExpression thisValue) {
+        public void visitThisExpression(PsiThisExpression thisValue) {
             super.visitThisExpression(thisValue);
             if (thisValue.getQualifier() != null) {
                 return;

@@ -38,7 +38,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.SmartHashSet;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 

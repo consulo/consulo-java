@@ -25,29 +25,24 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class OctalAndDecimalIntegersMixedInspection extends BaseInspection {
     @Override
-    @Nonnull
     public String getID() {
         return "OctalAndDecimalIntegersInSameArray";
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.octalAndDecimalIntegersInSameArrayDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.octalAndDecimalIntegersInSameArrayProblemDescriptor().get();
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         return new InspectionGadgetsFix[]{

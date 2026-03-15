@@ -24,8 +24,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna
@@ -48,7 +47,7 @@ public class PsiMethodReferenceUtil {
 
     @RequiredReadAction
     public static boolean isResolvedBySecondSearch(
-        @Nonnull PsiMethodReferenceExpression methodRef,
+        PsiMethodReferenceExpression methodRef,
         @Nullable MethodSignature signature,
         boolean varArgs,
         boolean isStatic,
@@ -210,9 +209,8 @@ public class PsiMethodReferenceUtil {
         return false;
     }
 
-    @Nonnull
     @RequiredReadAction
-    public static QualifierResolveResult getQualifierResolveResult(@Nonnull PsiMethodReferenceExpression methodReferenceExpression) {
+    public static QualifierResolveResult getQualifierResolveResult(PsiMethodReferenceExpression methodReferenceExpression) {
         PsiClass containingClass = null;
         PsiSubstitutor substitutor = PsiSubstitutor.EMPTY;
         PsiExpression expression = methodReferenceExpression.getQualifierExpression();
@@ -253,7 +251,7 @@ public class PsiMethodReferenceUtil {
     }
 
     @RequiredReadAction
-    public static boolean isStaticallyReferenced(@Nonnull PsiMethodReferenceExpression methodReferenceExpression) {
+    public static boolean isStaticallyReferenced(PsiMethodReferenceExpression methodReferenceExpression) {
         PsiExpression qualifierExpression = methodReferenceExpression.getQualifierExpression();
         return qualifierExpression == null
             || qualifierExpression instanceof PsiReferenceExpression refExpr && refExpr.resolve() instanceof PsiClass;
@@ -286,7 +284,7 @@ public class PsiMethodReferenceUtil {
     }
 
     @RequiredReadAction
-    private static PsiType replaceArrayType(PsiType type, @Nonnull PsiElement context) {
+    private static PsiType replaceArrayType(PsiType type, PsiElement context) {
         if (type instanceof PsiArrayType arrayType) {
             type = JavaPsiFacade.getElementFactory(context.getProject())
                 .getArrayClassType(arrayType.getComponentType(), PsiUtil.getLanguageLevel(context));
@@ -294,7 +292,6 @@ public class PsiMethodReferenceUtil {
         return type;
     }
 
-    @Nonnull
     @RequiredReadAction
     public static LocalizeValue checkMethodReferenceContext(PsiMethodReferenceExpression methodRef) {
         PsiElement resolve = methodRef.resolve();
@@ -305,7 +302,6 @@ public class PsiMethodReferenceUtil {
         return checkMethodReferenceContext(methodRef, resolve, methodRef.getFunctionalInterfaceType());
     }
 
-    @Nonnull
     @RequiredReadAction
     public static LocalizeValue checkMethodReferenceContext(
         PsiMethodReferenceExpression methodRef,
@@ -374,7 +370,6 @@ public class PsiMethodReferenceUtil {
         return LocalizeValue.empty();
     }
 
-    @Nonnull
     public static LocalizeValue checkTypeArguments(PsiTypeElement qualifier, PsiType psiType) {
         if (psiType instanceof PsiClassType) {
             PsiJavaCodeReferenceElement referenceElement = qualifier.getInnermostComponentReferenceElement();
@@ -390,7 +385,6 @@ public class PsiMethodReferenceUtil {
         return LocalizeValue.empty();
     }
 
-    @Nonnull
     @RequiredReadAction
     public static LocalizeValue checkReturnType(
         PsiMethodReferenceExpression expression,

@@ -28,7 +28,6 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,14 +35,12 @@ import java.util.List;
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.JoinConcatenatedStringLiteralsIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class JoinConcatenatedStringLiteralsIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.joinConcatenatedStringLiteralsIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new StringConcatPredicate();
     }

@@ -31,8 +31,7 @@ import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileTypeRegistry;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.BiFunction;
@@ -58,7 +57,7 @@ public final class JavaModuleGraphUtil {
   }
 
   @Nullable
-  public static PsiJavaModule findDescriptorByFile(@Nullable VirtualFile file, @Nonnull Project project) {
+  public static PsiJavaModule findDescriptorByFile(@Nullable VirtualFile file, Project project) {
     if (file == null) {
       return null;
     }
@@ -92,38 +91,36 @@ public final class JavaModuleGraphUtil {
     return null;
   }
 
-  @Nonnull
-  public static Collection<PsiJavaModule> findCycle(@Nonnull PsiJavaModule module) {
+  public static Collection<PsiJavaModule> findCycle(PsiJavaModule module) {
     Project project = module.getProject();
     List<Set<PsiJavaModule>> cycles = CachedValuesManager.getManager(project).getCachedValue(project, () ->
         Result.create(findCycles(project), cacheDependency()));
     return ObjectUtil.notNull(ContainerUtil.find(cycles, set -> set.contains(module)), Collections.emptyList());
   }
 
-  public static boolean exports(@Nonnull PsiJavaModule source, @Nonnull String packageName, @Nullable PsiJavaModule target) {
+  public static boolean exports(PsiJavaModule source, String packageName, @Nullable PsiJavaModule target) {
     Map<String, Set<String>> exports = LanguageCachedValueUtil.getCachedValue(source, () ->
         Result.create(exportsMap(source), source.getContainingFile()));
     Set<String> targets = exports.get(packageName);
     return targets != null && (targets.isEmpty() || target != null && targets.contains(target.getName()));
   }
 
-  public static boolean reads(@Nonnull PsiJavaModule source, @Nonnull PsiJavaModule destination) {
+  public static boolean reads(PsiJavaModule source, PsiJavaModule destination) {
     return getRequiresGraph(source).reads(source, destination);
   }
 
-  @Nonnull
   public static Set<PsiJavaModule> getAllDependencies(PsiJavaModule source) {
     return getRequiresGraph(source).getAllDependencies(source);
   }
 
   @Nullable
-  public static Trinity<String, PsiJavaModule, PsiJavaModule> findConflict(@Nonnull PsiJavaModule module) {
+  public static Trinity<String, PsiJavaModule, PsiJavaModule> findConflict(PsiJavaModule module) {
     return getRequiresGraph(module).findConflict(module);
   }
 
   public static
   @Nullable
-  PsiJavaModule findOrigin(@Nonnull PsiJavaModule module, @Nonnull String packageName) {
+  PsiJavaModule findOrigin(PsiJavaModule module, String packageName) {
     return getRequiresGraph(module).findOrigin(module, packageName);
   }
 
@@ -137,7 +134,6 @@ public final class JavaModuleGraphUtil {
    * Library/JDK modules are excluded in an assumption there can't be any lib -> src dependencies.
    * Module references are resolved "globally" (i.e., without taking project dependencies into account).
    */
-  @Nonnull
   private static List<Set<PsiJavaModule>> findCycles(Project project) {
     Set<PsiJavaModule> projectModules = new HashSet<>();
     for (Module module : ModuleManager.getInstance(project).getModules()) {
@@ -181,7 +177,7 @@ public final class JavaModuleGraphUtil {
     return Collections.emptyList();
   }
 
-  private static Map<String, Set<String>> exportsMap(@Nonnull PsiJavaModule source) {
+  private static Map<String, Set<String>> exportsMap(PsiJavaModule source) {
     Map<String, Set<String>> map = new HashMap<>();
     for (PsiPackageAccessibilityStatement statement : source.getExports()) {
       String pkg = statement.getPackageName();
@@ -319,7 +315,6 @@ public final class JavaModuleGraphUtil {
       return module.getName() + '/' + exporter.getName();
     }
 
-    @Nonnull
     public Set<PsiJavaModule> getAllDependencies(PsiJavaModule module) {
       Set<PsiJavaModule> requires = new HashSet<>();
       collectDependencies(module, requires);
@@ -353,19 +348,16 @@ public final class JavaModuleGraphUtil {
     }
 
     @Override
-    @Nonnull
     public Collection<N> getNodes() {
       return myNodes;
     }
 
     @Override
-    @Nonnull
     public Iterator<N> getIn(N n) {
       return myInbound ? myEdges.get(n).iterator() : Collections.emptyIterator();
     }
 
     @Override
-    @Nonnull
     public Iterator<N> getOut(N n) {
       return myInbound ? Collections.emptyIterator() : myEdges.get(n).iterator();
     }
@@ -376,7 +368,7 @@ public final class JavaModuleGraphUtil {
     private final boolean myIncludeLibraries;
     private final boolean myIsInTests;
 
-    private JavaModuleScope(@Nonnull Project project, @Nonnull PsiJavaModule module, @Nonnull VirtualFile moduleFile) {
+    private JavaModuleScope(Project project, PsiJavaModule module, VirtualFile moduleFile) {
       super(project);
       myModule = module;
       ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(project);
@@ -385,7 +377,7 @@ public final class JavaModuleGraphUtil {
     }
 
     @Override
-    public boolean isSearchInModuleContent(@Nonnull Module aModule) {
+    public boolean isSearchInModuleContent(Module aModule) {
       return findDescriptorByModule(aModule, myIsInTests) == myModule;
     }
 
@@ -395,7 +387,7 @@ public final class JavaModuleGraphUtil {
     }
 
     @Override
-    public boolean contains(@Nonnull VirtualFile file) {
+    public boolean contains(VirtualFile file) {
       Project project = getProject();
       if (project == null) {
         return false;
@@ -411,7 +403,7 @@ public final class JavaModuleGraphUtil {
       return myModule.equals(findDescriptorByModule(module, myIsInTests));
     }
 
-    private static boolean isJvmLanguageFile(@Nonnull VirtualFile file) {
+    private static boolean isJvmLanguageFile(VirtualFile file) {
       FileTypeRegistry fileTypeRegistry = FileTypeRegistry.getInstance();
       LanguageFileType languageFileType = tryCast(fileTypeRegistry.getFileTypeByFileName(file.getName()), LanguageFileType.class);
       return languageFileType != null && languageFileType.getLanguage() instanceof JavaLanguage;
@@ -419,7 +411,7 @@ public final class JavaModuleGraphUtil {
 
     public static
     @Nullable
-    JavaModuleScope moduleScope(@Nonnull PsiJavaModule module) {
+    JavaModuleScope moduleScope(PsiJavaModule module) {
       PsiFile moduleFile = module.getContainingFile();
       if (moduleFile == null) {
         return null;

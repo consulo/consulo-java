@@ -11,8 +11,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.component.extension.ExtensionPointName;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,9 +35,9 @@ public interface AnnotationPackageSupport {
     @Nullable
     @RequiredReadAction
     default NullabilityAnnotationInfo getNullabilityByContainerAnnotation(
-        @Nonnull PsiAnnotation anno,
-        @Nonnull PsiElement context,
-        @Nonnull PsiAnnotation.TargetType[] types,
+        PsiAnnotation anno,
+        PsiElement context,
+        PsiAnnotation.TargetType[] types,
         boolean superPackage
     ) {
         return null;
@@ -52,9 +51,8 @@ public interface AnnotationPackageSupport {
      * @param superPackage if true, then the annotation is applied to the super-package
      * @return {@code ContextNullabilityInfo} which returns nullability by a container annotation for a given context
      */
-    @Nonnull
-    default ContextNullabilityInfo getNullabilityByContainerAnnotation(@Nonnull PsiAnnotation anno,
-                                                                       @Nonnull PsiAnnotation.TargetType[] types,
+    default ContextNullabilityInfo getNullabilityByContainerAnnotation(PsiAnnotation anno,
+                                                                       PsiAnnotation.TargetType[] types,
                                                                        boolean superPackage) {
         return ContextNullabilityInfo.constant(null);
     }
@@ -63,8 +61,7 @@ public interface AnnotationPackageSupport {
      * @param owner annotation owner of container (method, class, or package statement)
      * @return list of conflicting annotations which denote different nullability; empty list if no conflicts were found
      */
-    @Nonnull
-    default List<PsiAnnotation> getConflictingContainerAnnotations(@Nonnull PsiAnnotationOwner owner) {
+    default List<PsiAnnotation> getConflictingContainerAnnotations(PsiAnnotationOwner owner) {
         return Collections.emptyList();
     }
 
@@ -72,8 +69,7 @@ public interface AnnotationPackageSupport {
      * @param nullability desired nullability
      * @return list of explicit annotations which denote given nullability (and may denote additional semantics)
      */
-    @Nonnull
-    default List<String> getNullabilityAnnotations(@Nonnull Nullability nullability) {
+    default List<String> getNullabilityAnnotations(Nullability nullability) {
         return Collections.emptyList();
     }
 

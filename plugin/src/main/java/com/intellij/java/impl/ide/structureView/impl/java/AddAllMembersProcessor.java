@@ -11,8 +11,7 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.util.dataholder.Key;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +25,7 @@ class AddAllMembersProcessor implements PsiScopeProcessor {
   private final PsiClass myPsiClass;
   private final Map<MethodSignature, PsiMethod> myMethodsBySignature = new HashMap<>();
 
-  AddAllMembersProcessor(@Nonnull Collection<PsiElement> allMembers, @Nonnull PsiClass psiClass) {
+  AddAllMembersProcessor(Collection<PsiElement> allMembers, PsiClass psiClass) {
     for (PsiElement psiElement : allMembers) {
       if (psiElement instanceof PsiMethod) {
         mapMethodBySignature((PsiMethod) psiElement);
@@ -37,7 +36,7 @@ class AddAllMembersProcessor implements PsiScopeProcessor {
   }
 
   @Override
-  public boolean execute(@Nonnull PsiElement element, @Nonnull ResolveState state) {
+  public boolean execute(PsiElement element, ResolveState state) {
     PsiMember member = (PsiMember) element;
     if (!isInteresting(element)) {
       return true;
@@ -61,7 +60,7 @@ class AddAllMembersProcessor implements PsiScopeProcessor {
 
   @Nullable
   @Override
-  public <T> T getHint(@Nonnull Key<T> hintKey) {
+  public <T> T getHint(Key<T> hintKey) {
     return null;
   }
 
@@ -116,7 +115,7 @@ class AddAllMembersProcessor implements PsiScopeProcessor {
     return method.hasModifierProperty(PsiModifier.STATIC);
   }
 
-  private boolean isVisible(@Nonnull PsiMember element, PsiClass psiClass) {
+  private boolean isVisible(PsiMember element, PsiClass psiClass) {
     return !isInheritedConstructor(element, psiClass) && PsiUtil.isAccessible(element, psiClass, null);
   }
 

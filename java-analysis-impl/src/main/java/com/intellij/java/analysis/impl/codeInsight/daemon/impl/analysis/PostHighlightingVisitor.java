@@ -64,8 +64,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -76,10 +75,8 @@ import java.util.function.Function;
 public class PostHighlightingVisitor {
     private static final Logger LOG = Logger.getInstance(PostHighlightingVisitor.class);
     private final RefCountHolder myRefCountHolder;
-    @Nonnull
     private final Project myProject;
     private final PsiFile myFile;
-    @Nonnull
     private final Document myDocument;
 
     private boolean myHasRedundantImports;
@@ -93,7 +90,7 @@ public class PostHighlightingVisitor {
 
     private final HighlightInfoType myUnusedImportHighlightType;
 
-    private void optimizeImportsOnTheFlyLater(@Nonnull ProgressIndicator progress) {
+    private void optimizeImportsOnTheFlyLater(ProgressIndicator progress) {
         if ((myHasRedundantImports || myHasMissortedImports) && !progress.isCanceled()) {
             // schedule optimise action at the time of session disposal, which is after all applyInformation() calls
             Disposable invokeFixLater = () -> {
@@ -124,9 +121,9 @@ public class PostHighlightingVisitor {
 
     @RequiredReadAction
     public PostHighlightingVisitor(
-        @Nonnull PsiFile file,
-        @Nonnull Document document,
-        @Nonnull RefCountHolder refCountHolder
+        PsiFile file,
+        Document document,
+        RefCountHolder refCountHolder
     ) throws ProcessCanceledException {
         myProject = file.getProject();
         myFile = file;
@@ -163,7 +160,7 @@ public class PostHighlightingVisitor {
     }
 
     @RequiredReadAction
-    public void collectHighlights(@Nonnull HighlightInfoHolder result, @Nonnull ProgressIndicator progress) {
+    public void collectHighlights(HighlightInfoHolder result, ProgressIndicator progress) {
         DaemonCodeAnalyzer daemonCodeAnalyzer = DaemonCodeAnalyzer.getInstance(myProject);
         FileStatusMap fileStatusMap = daemonCodeAnalyzer.getFileStatusMap();
         InspectionProfile profile = InspectionProjectProfileManager.getInstance(myProject).getInspectionProfile();
@@ -236,9 +233,9 @@ public class PostHighlightingVisitor {
     @Nullable
     @RequiredReadAction
     private HighlightInfo processIdentifier(
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull ProgressIndicator progress,
-        @Nonnull GlobalUsageHelper helper
+        PsiIdentifier identifier,
+        ProgressIndicator progress,
+        GlobalUsageHelper helper
     ) {
         PsiElement parent = identifier.getParent();
         if (!(parent instanceof PsiVariable || parent instanceof PsiMember)) {
@@ -300,9 +297,9 @@ public class PostHighlightingVisitor {
     @Nullable
     @RequiredReadAction
     private HighlightInfo processLocalVariable(
-        @Nonnull PsiLocalVariable variable,
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull ProgressIndicator progress
+        PsiLocalVariable variable,
+        PsiIdentifier identifier,
+        ProgressIndicator progress
     ) {
         if (variable instanceof PsiResourceVariable && PsiUtil.isIgnoredName(variable.getName())) {
             return null;
@@ -345,11 +342,11 @@ public class PostHighlightingVisitor {
     @Nullable
     @RequiredReadAction
     private HighlightInfo processField(
-        @Nonnull Project project,
-        @Nonnull PsiField field,
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull ProgressIndicator progress,
-        @Nonnull GlobalUsageHelper helper
+        Project project,
+        PsiField field,
+        PsiIdentifier identifier,
+        ProgressIndicator progress,
+        GlobalUsageHelper helper
     ) {
         if (HighlightUtil.isSerializationImplicitlyUsedField(field)) {
             return null;
@@ -422,12 +419,11 @@ public class PostHighlightingVisitor {
         return null;
     }
 
-    @Nonnull
     @RequiredReadAction
     private HighlightInfo.Builder suggestionsToMakeFieldUsed(
-        @Nonnull PsiField field,
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull LocalizeValue message
+        PsiField field,
+        PsiIdentifier identifier,
+        LocalizeValue message
     ) {
         QuickFixFactory fixFactory = QuickFixFactory.getInstance();
         return UnusedSymbolUtil.createUnusedSymbolInfo(identifier, message, myDeadCodeInfoType)
@@ -442,17 +438,17 @@ public class PostHighlightingVisitor {
         return overrides || OverridingMethodsSearch.search(method).findFirst() != null;
     });
 
-    private boolean isOverriddenOrOverrides(@Nonnull PsiMethod method) {
+    private boolean isOverriddenOrOverrides(PsiMethod method) {
         return isOverriddenOrOverrides.get(method);
     }
 
     @Nullable
     @RequiredReadAction
     private HighlightInfo processParameter(
-        @Nonnull Project project,
-        @Nonnull PsiParameter parameter,
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull ProgressIndicator progress
+        Project project,
+        PsiParameter parameter,
+        PsiIdentifier identifier,
+        ProgressIndicator progress
     ) {
         PsiElement declarationScope = parameter.getDeclarationScope();
         if (declarationScope instanceof PsiMethod method) {
@@ -489,12 +485,11 @@ public class PostHighlightingVisitor {
         return null;
     }
 
-    @Nullable
     @RequiredReadAction
-    private HighlightInfo.Builder checkUnusedParameter(
-        @Nonnull PsiParameter parameter,
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull ProgressIndicator progress
+    private HighlightInfo.@Nullable Builder checkUnusedParameter(
+        PsiParameter parameter,
+        PsiIdentifier identifier,
+        ProgressIndicator progress
     ) {
         if (!myRefCountHolder.isReferenced(parameter) && !UnusedSymbolUtil.isImplicitUsage(myProject, parameter, progress)) {
             LocalizeValue message = JavaErrorLocalize.parameterIsNotUsed(identifier.getText());
@@ -506,11 +501,11 @@ public class PostHighlightingVisitor {
     @Nullable
     @RequiredReadAction
     private HighlightInfo processMethod(
-        @Nonnull Project project,
-        @Nonnull PsiMethod method,
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull ProgressIndicator progress,
-        @Nonnull GlobalUsageHelper helper
+        Project project,
+        PsiMethod method,
+        PsiIdentifier identifier,
+        ProgressIndicator progress,
+        GlobalUsageHelper helper
     ) {
         if (UnusedSymbolUtil.isMethodReferenced(myProject, myFile, method, progress, helper)) {
             return null;
@@ -540,11 +535,11 @@ public class PostHighlightingVisitor {
     @Nullable
     @RequiredReadAction
     private HighlightInfo processClass(
-        @Nonnull Project project,
-        @Nonnull PsiClass aClass,
-        @Nonnull PsiIdentifier identifier,
-        @Nonnull ProgressIndicator progress,
-        @Nonnull GlobalUsageHelper helper
+        Project project,
+        PsiClass aClass,
+        PsiIdentifier identifier,
+        ProgressIndicator progress,
+        GlobalUsageHelper helper
     ) {
         if (UnusedSymbolUtil.isClassUsed(project, myFile, aClass, progress, helper)) {
             return null;
@@ -571,13 +566,13 @@ public class PostHighlightingVisitor {
 
     @RequiredReadAction
     private static HighlightInfo.Builder formatUnusedSymbolHighlightInfo(
-        @Nonnull Project project,
-        @Nonnull Function<String, LocalizeValue> pattern,
-        @Nonnull PsiNameIdentifierOwner aClass,
-        @Nonnull String element,
+        Project project,
+        Function<String, LocalizeValue> pattern,
+        PsiNameIdentifierOwner aClass,
+        String element,
         HighlightDisplayKey highlightDisplayKey,
-        @Nonnull HighlightInfoType highlightInfoType,
-        @Nonnull PsiElement identifier
+        HighlightInfoType highlightInfoType,
+        PsiElement identifier
     ) {
         String symbolName = aClass.getName();
         LocalizeValue message = pattern.apply(symbolName);
@@ -596,7 +591,7 @@ public class PostHighlightingVisitor {
 
     @Nullable
     @RequiredReadAction
-    private HighlightInfo processImport(@Nonnull PsiImportStatementBase importStatement, @Nonnull HighlightDisplayKey unusedImportKey) {
+    private HighlightInfo processImport(PsiImportStatementBase importStatement, HighlightDisplayKey unusedImportKey) {
         // jsp include directive hack
         if (importStatement.isForeignFileImport()) {
             return null;
@@ -639,8 +634,8 @@ public class PostHighlightingVisitor {
 
     @RequiredReadAction
     private HighlightInfo registerRedundantImport(
-        @Nonnull PsiImportStatementBase importStatement,
-        @Nonnull HighlightDisplayKey unusedImportKey
+        PsiImportStatementBase importStatement,
+        HighlightDisplayKey unusedImportKey
     ) {
         myHasRedundantImports = true;
 

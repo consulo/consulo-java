@@ -24,7 +24,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.DumbService;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +70,6 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
         super("switch", "switch(expr)", JavaPostfixTemplatesUtils.JAVA_PSI_INFO, selectorTopmost(SWITCH_TYPE));
     }
 
-    @Nonnull
     @Override
     protected Surrounder getSurrounder() {
         return new JavaExpressionSurrounder() {
@@ -100,7 +98,6 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
                 return TextRange.from(editor.getCaretModel().getOffset(), 0);
             }
 
-            @Nonnull
             @RequiredReadAction
             private static TextRange postprocessSwitch(
                 Editor editor,
@@ -129,7 +126,6 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
                 return TextRange.from(editor.getCaretModel().getOffset(), 0);
             }
 
-            @Nonnull
             @Override
             public LocalizeValue getTemplateDescription() {
                 return JavaLocalize.switchStmtTemplateDescription();
@@ -141,7 +137,7 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
         return new PostfixTemplateExpressionSelectorBase(additionalFilter) {
             @Override
             @RequiredReadAction
-            protected List<PsiElement> getNonFilteredExpressions(@Nonnull PsiElement context, @Nonnull Document document, int offset) {
+            protected List<PsiElement> getNonFilteredExpressions(PsiElement context, Document document, int offset) {
                 boolean isEnhancedSwitchAvailable = PsiUtil.isAvailable(JavaFeature.ENHANCED_SWITCH, context);
                 List<PsiElement> result = new ArrayList<>();
 
@@ -167,7 +163,6 @@ public class SwitchStatementPostfixTemplate extends SurroundPostfixTemplateBase 
                 return super.getFilters(offset).and(getPsiErrorFilter());
             }
 
-            @Nonnull
             @Override
             public Function<PsiElement, String> getRenderer() {
                 return JavaPostfixTemplatesUtils.getRenderer();

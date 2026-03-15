@@ -30,7 +30,6 @@ import consulo.component.extension.ExtensionPoint;
 import consulo.java.analysis.codeInspection.CantBeStaticCondition;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -43,7 +42,6 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.classInitializerMayBeStaticProblemDescriptor().get();
     }
@@ -54,7 +52,6 @@ public class ClassInitializerMayBeStaticInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.classInitializerMayBeStaticDisplayName();
     }

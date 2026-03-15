@@ -17,9 +17,8 @@
 package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -85,7 +84,6 @@ class ResultUtil
 		return null;
 	}
 
-	@Nonnull
 	private Result addSingle(Pending pending, Value value)
 	{
 		for(int i = 0; i < pending.delta.length; i++)

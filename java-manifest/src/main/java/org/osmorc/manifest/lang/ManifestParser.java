@@ -24,7 +24,6 @@
  */
 package org.osmorc.manifest.lang;
 
-import jakarta.annotation.Nonnull;
 import org.osmorc.manifest.lang.headerparser.HeaderParser;
 import consulo.language.ast.ASTNode;
 import consulo.language.parser.PsiBuilder;
@@ -48,8 +47,7 @@ public class ManifestParser implements PsiParser {
   private PsiBuilder.Marker assignmentMarker;
   private IElementType assignmentMarkerType;
 
-  @Nonnull
-  public ASTNode parse(@Nonnull IElementType root, @Nonnull PsiBuilder builder, @Nonnull LanguageVersion languageVersion) {
+  public ASTNode parse(IElementType root, PsiBuilder builder, LanguageVersion languageVersion) {
     builder.setDebugMode(ApplicationProperties.isInSandbox());
     final PsiBuilder.Marker rootMarker = builder.mark();
 

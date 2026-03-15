@@ -28,9 +28,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +35,6 @@ import java.util.Map;
 @ExtensionImpl
 public class BoxingBoxedValueInspection extends BaseInspection {
 
-  @NonNls
   static final Map<String, String> boxedPrimitiveMap =
     new HashMap<String, String>(8);
 
@@ -58,13 +54,11 @@ public class BoxingBoxedValueInspection extends BaseInspection {
     return true;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.boxingBoxedValueDisplayName();
   }
 
-  @Nonnull
   @Override
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.boxingBoxedValueProblemDescriptor().get();
@@ -77,7 +71,6 @@ public class BoxingBoxedValueInspection extends BaseInspection {
 
   private static class BoxingBoxedValueFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.boxingBoxedValueQuickfix();
     }
@@ -165,7 +158,7 @@ public class BoxingBoxedValueInspection extends BaseInspection {
       super.visitMethodCallExpression(expression);
       PsiReferenceExpression methodExpression =
         expression.getMethodExpression();
-      @NonNls String referenceName = methodExpression.getReferenceName();
+      String referenceName = methodExpression.getReferenceName();
       if (!"valueOf".equals(referenceName)) {
         return;
       }

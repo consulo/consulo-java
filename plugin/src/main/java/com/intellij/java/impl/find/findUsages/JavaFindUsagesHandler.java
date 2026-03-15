@@ -44,8 +44,7 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -59,14 +58,14 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     private final PsiElement[] myElementsToSearch;
     private final JavaFindUsagesHandlerFactory myFactory;
 
-    public JavaFindUsagesHandler(@Nonnull PsiElement psiElement, @Nonnull JavaFindUsagesHandlerFactory factory) {
+    public JavaFindUsagesHandler(PsiElement psiElement, JavaFindUsagesHandlerFactory factory) {
         this(psiElement, PsiElement.EMPTY_ARRAY, factory);
     }
 
     public JavaFindUsagesHandler(
-        @Nonnull PsiElement psiElement,
-        @Nonnull PsiElement[] elementsToSearch,
-        @Nonnull JavaFindUsagesHandlerFactory factory
+        PsiElement psiElement,
+        PsiElement[] elementsToSearch,
+        JavaFindUsagesHandlerFactory factory
     ) {
         super(psiElement);
         myElementsToSearch = elementsToSearch;
@@ -74,7 +73,6 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     }
 
     @Override
-    @Nonnull
     public AbstractFindUsagesDialog getFindUsagesDialog(
         boolean isSingleFile,
         boolean toShowInNewTab,
@@ -141,8 +139,8 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
 
     @RequiredUIAccess
     private static boolean askWhetherShouldSearchForParameterInOverridingMethods(
-        @Nonnull PsiElement psiElement,
-        @Nonnull PsiParameter parameter
+        PsiElement psiElement,
+        PsiParameter parameter
     ) {
         return Messages.showOkCancelDialog(
             psiElement.getProject(),
@@ -154,10 +152,9 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
         ) == Messages.OK;
     }
 
-    @Nonnull
     private static PsiElement[] getParameterElementsToSearch(
-        @Nonnull PsiParameter parameter,
-        @Nonnull PsiMethod method
+        PsiParameter parameter,
+        PsiMethod method
     ) {
         PsiMethod[] overrides = OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY);
         for (int i = 0; i < overrides.length; i++) {
@@ -179,7 +176,6 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     }
 
 
-    @Nonnull
     @Override
     @RequiredUIAccess
     public PsiElement[] getPrimaryElements() {
@@ -199,7 +195,6 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     }
 
     @Override
-    @Nonnull
     @RequiredUIAccess
     public PsiElement[] getSecondaryElements() {
         PsiElement element = getPsiElement();
@@ -259,7 +254,6 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     }
 
     @Override
-    @Nonnull
     public FindUsagesOptions getFindUsagesOptions(@Nullable DataContext dataContext) {
         PsiElement element = getPsiElement();
         if (element instanceof PsiPackage) {
@@ -281,28 +275,27 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     }
 
     @Override
-    protected Set<String> getStringsToSearch(@Nonnull PsiElement element) {
+    protected Set<String> getStringsToSearch(PsiElement element) {
         return JavaFindUsagesHelper.getElementNames(element);
     }
 
     @Override
     public boolean processElementUsages(
-        @Nonnull PsiElement element,
-        @Nonnull Predicate<UsageInfo> processor,
-        @Nonnull FindUsagesOptions options
+        PsiElement element,
+        Predicate<UsageInfo> processor,
+        FindUsagesOptions options
     ) {
         return JavaFindUsagesHelper.processElementUsages(element, options, processor);
     }
 
     @Override
-    protected boolean isSearchForTextOccurencesAvailable(@Nonnull PsiElement psiElement, boolean isSingleFile) {
+    protected boolean isSearchForTextOccurencesAvailable(PsiElement psiElement, boolean isSingleFile) {
         return !isSingleFile && new JavaNonCodeSearchElementDescriptionProvider()
             .getElementDescription(psiElement, NonCodeSearchDescriptionLocation.NON_JAVA) != null;
     }
 
-    @Nonnull
     @Override
-    public Collection<PsiReference> findReferencesToHighlight(@Nonnull PsiElement target, @Nonnull SearchScope searchScope) {
+    public Collection<PsiReference> findReferencesToHighlight(PsiElement target, SearchScope searchScope) {
         if (target instanceof PsiMethod method) {
             PsiMethod[] superMethods = method.findDeepestSuperMethods();
             if (superMethods.length == 0) {

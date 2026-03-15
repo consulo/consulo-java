@@ -21,7 +21,6 @@ import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -169,7 +168,6 @@ public class PsiTypeVariableFactory {
         return null;
       }
 
-      @Nonnull
       public PsiType[] getSuperTypes() {
         return new PsiType[0];
       }

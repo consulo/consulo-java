@@ -16,8 +16,6 @@
 package com.intellij.java.language.psi;
 
 import consulo.language.psi.scope.GlobalSearchScope;
-import org.jetbrains.annotations.NonNls;
-import jakarta.annotation.Nonnull;
 
 /**
  * A type which represents a function denoted by a method reference.
@@ -25,7 +23,7 @@ import jakarta.annotation.Nonnull;
 public class PsiMethodReferenceType extends PsiType {
   private final PsiMethodReferenceExpression myReference;
 
-  public PsiMethodReferenceType(@Nonnull final PsiMethodReferenceExpression reference) {
+  public PsiMethodReferenceType(final PsiMethodReferenceExpression reference) {
     super(PsiAnnotation.EMPTY_ARRAY);
     myReference = reference;
   }
@@ -51,12 +49,12 @@ public class PsiMethodReferenceType extends PsiType {
   }
 
   @Override
-  public boolean equalsToText(@NonNls final String text) {
+  public boolean equalsToText(final String text) {
     return false;
   }
 
   @Override
-  public <A> A accept(@Nonnull final PsiTypeVisitor<A> visitor) {
+  public <A> A accept(final PsiTypeVisitor<A> visitor) {
     return visitor.visitMethodReferenceType(this);
   }
 
@@ -65,7 +63,6 @@ public class PsiMethodReferenceType extends PsiType {
     return null;
   }
 
-  @Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     return PsiType.EMPTY_ARRAY;

@@ -24,8 +24,7 @@ import consulo.project.Project;
 import consulo.util.dataholder.NotNullLazyKey;
 import org.jetbrains.annotations.Contract;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Returns annotations inferred by bytecode or source code, for example contracts and nullity.
@@ -41,7 +40,7 @@ public abstract class InferredAnnotationsManager {
   private static final NotNullLazyKey<InferredAnnotationsManager, Project> INSTANCE_KEY =
     ServiceManager.createLazyKey(InferredAnnotationsManager.class);
 
-  public static InferredAnnotationsManager getInstance(@Nonnull Project project) {
+  public static InferredAnnotationsManager getInstance(Project project) {
     return INSTANCE_KEY.getValue(project);
   }
 
@@ -50,7 +49,7 @@ public abstract class InferredAnnotationsManager {
    * different instances of {@link PsiAnnotation}, which are not guaranteed to be equal.
    */
   @Nullable
-  public abstract PsiAnnotation findInferredAnnotation(@Nonnull PsiModifierListOwner listOwner, @Nonnull String annotationFQN);
+  public abstract PsiAnnotation findInferredAnnotation(PsiModifierListOwner listOwner, String annotationFQN);
 
   /**
    * When annotation name is known, prefer {@link #findInferredAnnotation(PsiModifierListOwner, String)} as
@@ -58,12 +57,11 @@ public abstract class InferredAnnotationsManager {
    *
    * @return all inferred annotations for the given element
    */
-  @Nonnull
-  public abstract PsiAnnotation[] findInferredAnnotations(@Nonnull PsiModifierListOwner listOwner);
+  public abstract PsiAnnotation[] findInferredAnnotations(PsiModifierListOwner listOwner);
 
   /**
    * @return whether the given annotation was inferred by this service.
    * @see AnnotationUtil#isInferredAnnotation(PsiAnnotation)
    */
-  public abstract boolean isInferredAnnotation(@Nonnull PsiAnnotation annotation);
+  public abstract boolean isInferredAnnotation(PsiAnnotation annotation);
 }

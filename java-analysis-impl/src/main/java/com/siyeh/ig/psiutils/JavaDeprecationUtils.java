@@ -12,13 +12,11 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.ModuleUtilCore;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.ThreeState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class JavaDeprecationUtils {
-    @Nonnull
     @RequiredReadAction
-    private static ThreeState isDeprecatedByAnnotation(@Nonnull PsiModifierListOwner owner, @Nullable PsiElement context) {
+    private static ThreeState isDeprecatedByAnnotation(PsiModifierListOwner owner, @Nullable PsiElement context) {
         PsiAnnotation annotation = AnnotationUtil.findAnnotation(owner, CommonClassNames.JAVA_LANG_DEPRECATED);
         if (annotation == null) {
             return ThreeState.UNSURE;
@@ -50,7 +48,7 @@ public final class JavaDeprecationUtils {
      * @param context    context in which the check should be performed
      */
     @RequiredReadAction
-    public static boolean isDeprecated(@Nonnull PsiElement psiElement, @Nullable PsiElement context) {
+    public static boolean isDeprecated(PsiElement psiElement, @Nullable PsiElement context) {
         if (psiElement instanceof PsiModifierListOwner modifierListOwner) {
             ThreeState byAnnotation = isDeprecatedByAnnotation(modifierListOwner, context);
             if (byAnnotation != ThreeState.UNSURE) {

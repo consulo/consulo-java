@@ -3,7 +3,6 @@ package consulo.java.debugger.impl;
 import com.intellij.java.language.impl.JavaClassFileType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.virtualFileSystem.fileType.FileType;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author VISTALL
@@ -11,7 +10,6 @@ import jakarta.annotation.Nonnull;
  */
 @ExtensionImpl
 public class JavaClassLineBreakpointTypeResolver extends BaseJavaLineBreakpointTypeResolver {
-  @Nonnull
   @Override
   public FileType getFileType() {
     return JavaClassFileType.INSTANCE;

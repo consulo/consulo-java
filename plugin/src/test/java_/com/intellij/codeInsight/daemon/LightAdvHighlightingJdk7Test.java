@@ -34,9 +34,7 @@ import consulo.language.psi.PsiElement;
 import com.intellij.testFramework.IdeaTestUtil;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -46,7 +44,7 @@ import static org.junit.Assert.assertEquals;
  * For "heavyweight" tests use AdvHighlightingTest
  */
 public abstract class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting7";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/advHighlighting7";
 
   private void doTest(boolean checkWarnings, boolean checkInfos, Class<?>... classes) {
     setLanguageLevel(LanguageLevel.JDK_1_7);
@@ -60,7 +58,6 @@ public abstract class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTe
     doTest(BASE_PATH + "/" + getTestName(false) + ".java", checkWarnings, checkWeakWarnings, checkInfos);
   }
 
-  @Nonnull
   @Override
   protected LocalInspectionTool[] configureLocalInspectionTools() {
     return new LocalInspectionTool[]{
@@ -110,7 +107,6 @@ public abstract class LightAdvHighlightingJdk7Test extends LightDaemonAnalyzerTe
   public void testDynamicallyAddIgnoredAnnotations() throws Exception {
     ExtensionPoint<EntryPoint> point = Application.get().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME);
     EntryPoint extension = new EntryPoint() {
-      @Nonnull
 	  @Override public String getDisplayName() { return "duh"; }
       @Override public boolean isEntryPoint(RefElement refElement, PsiElement psiElement) { return false; }
       @Override public boolean isEntryPoint(PsiElement psiElement) { return false; }

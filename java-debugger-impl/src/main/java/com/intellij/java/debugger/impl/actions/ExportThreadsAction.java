@@ -32,7 +32,6 @@ import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -50,7 +49,7 @@ public class ExportThreadsAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public void actionPerformed(@Nonnull AnActionEvent e) {
+    public void actionPerformed(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
         if (project == null) {
             return;
@@ -91,7 +90,7 @@ public class ExportThreadsAction extends AnAction {
 
     @Override
     @RequiredUIAccess
-    public void update(@Nonnull AnActionEvent event) {
+    public void update(AnActionEvent event) {
         Presentation presentation = event.getPresentation();
         Project project = event.getData(Project.KEY);
         if (project == null) {

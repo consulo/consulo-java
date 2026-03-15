@@ -27,25 +27,23 @@ import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class AnnotateFix implements LocalQuickFix {
   private final PsiModifierListOwner myElement;
   private final String myAnnotationName;
   private final String myArgList;
 
-  public AnnotateFix(@Nonnull PsiModifierListOwner owner, String annotationClassname) {
+  public AnnotateFix(PsiModifierListOwner owner, String annotationClassname) {
     this(owner, annotationClassname, null);
   }
 
-  public AnnotateFix(@Nonnull PsiModifierListOwner owner, String annotationClassname, @Nullable String argList) {
+  public AnnotateFix(PsiModifierListOwner owner, String annotationClassname, @Nullable String argList) {
     myElement = owner;
     myAnnotationName = annotationClassname;
     myArgList = argList;
   }
 
-  @Nonnull
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("Annotate with @" + StringUtil.getShortName(myAnnotationName));
   }
@@ -54,7 +52,7 @@ public class AnnotateFix implements LocalQuickFix {
     return PsiUtilEx.isInSourceContent(myElement) && myElement.getModifierList() != null;
   }
 
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(myElement)) {
       return;
     }

@@ -4,7 +4,6 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.navigation.NavigationItem;
-import org.jetbrains.annotations.NonNls;
 
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.assertThat;
@@ -466,7 +465,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
   }
 
 
-  private static void assertGenericResolve(PsiReference ref, String methodName, String[] expectedTypeParameterValues, @NonNls String expectedCallType) {
+  private static void assertGenericResolve(PsiReference ref, String methodName, String[] expectedTypeParameterValues, String expectedCallType) {
     PsiElement target = ref.resolve();
     assertThat(target, instanceOf(PsiMethod.class));
 
@@ -573,7 +572,7 @@ public abstract class ResolveMethod15Test extends Resolve15TestCase {
     assertResolvesToMethodInClass(result, "SomeSubClass");
   }
 
-  private static void assertResolvesToMethodInClass(JavaResolveResult result, @NonNls String name) {
+  private static void assertResolvesToMethodInClass(JavaResolveResult result, String name) {
     PsiMethod method = (PsiMethod)result.getElement();
     assertNotNull(method);
     assertTrue(result.isValidResult());

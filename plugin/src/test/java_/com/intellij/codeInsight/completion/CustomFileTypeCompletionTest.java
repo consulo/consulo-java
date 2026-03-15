@@ -2,7 +2,6 @@ package com.intellij.codeInsight.completion;
 
 import java.io.IOException;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import consulo.ide.impl.idea.openapi.fileTypes.MockLanguageFileType;
@@ -14,7 +13,6 @@ import consulo.ide.impl.idea.openapi.fileTypes.ex.FileTypeManagerEx;
 public abstract class CustomFileTypeCompletionTest extends LightCompletionTestCase {
   private static final String BASE_PATH = "/codeInsight/completion/customFileType/";
 
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

@@ -30,9 +30,7 @@ import consulo.ui.ex.awt.TitledSeparator;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Couple;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -81,7 +79,6 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
       return Couple.of(copyOf(couple.first), copyOf(couple.second));
     }
 
-    @Nonnull
     private TemplateResource copyOf(TemplateResource resource) {
       TemplateResource result = new TemplateResource();
       result.setFileName(resource.getFileName());
@@ -109,7 +106,6 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
     myManager = manager;
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return LocalizeValue.localizeTODO("Templates");
@@ -122,7 +118,6 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
 
   @Override
   @Nullable
-  @NonNls
   public String getHelpTopic() {
     return null;
   }

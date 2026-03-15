@@ -18,8 +18,7 @@ package com.intellij.java.impl.psi.formatter.java;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import consulo.language.ast.ASTNode;
 import consulo.language.codeStyle.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +39,8 @@ public class CallChunkBlockBuilder {
 
   private boolean isFirst = true;
 
-  public CallChunkBlockBuilder(@Nonnull CommonCodeStyleSettings settings, @Nonnull JavaCodeStyleSettings javaSettings,
-                               @Nonnull FormattingMode formattingMode) {
+  public CallChunkBlockBuilder(CommonCodeStyleSettings settings, JavaCodeStyleSettings javaSettings,
+                               FormattingMode formattingMode) {
     mySettings = settings;
     myIndentSettings = settings.getIndentOptions();
     myJavaSettings = javaSettings;
@@ -50,8 +49,7 @@ public class CallChunkBlockBuilder {
     mySmartIndent = Indent.getSmartIndent(Indent.Type.CONTINUATION, myUseRelativeIndents);
   }
 
-  @Nonnull
-  public Block create(@Nonnull List<? extends ASTNode> subNodes,
+  public Block create(List<? extends ASTNode> subNodes,
                       Wrap wrap,
                       @Nullable Alignment alignment,
                       int relativeIndentSize) {
@@ -73,11 +71,11 @@ public class CallChunkBlockBuilder {
     }
   }
 
-  private Block createSyntheticBlock(@Nonnull List<Block> subBlocks,
-                                     @Nonnull Indent chainedBlockIndent,
+  private Block createSyntheticBlock(List<Block> subBlocks,
+                                     Indent chainedBlockIndent,
                                      @Nullable Alignment alignment,
                                      @Nullable Wrap wrap,
-                                     @Nonnull final String debugName) {
+                                     final String debugName) {
     return new SyntheticCodeBlock(subBlocks, alignment, mySettings, myJavaSettings, chainedBlockIndent, wrap) {
       @Override
       public String toString() {
@@ -94,8 +92,7 @@ public class CallChunkBlockBuilder {
     return isChainedCall ? mySmartIndent : Indent.getContinuationIndent(myUseRelativeIndents);
   }
 
-  @Nonnull
-  private List<Block> createJavaBlocks(@Nonnull List<? extends ASTNode> subNodes) {
+  private List<Block> createJavaBlocks(List<? extends ASTNode> subNodes) {
     ArrayList<Block> result = new ArrayList<>();
     for (ASTNode node : subNodes) {
       Indent indent = Indent.getContinuationWithoutFirstIndent(myIndentSettings.USE_RELATIVE_INDENTS);

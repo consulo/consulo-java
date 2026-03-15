@@ -35,7 +35,7 @@ import com.intellij.java.language.psi.PsiClass;
 import consulo.ui.ex.awt.ComboboxSpeedSearch;
 import consulo.ui.ex.awt.SortedComboBoxModel;
 import consulo.java.language.module.extension.JavaModuleExtension;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ConfigurationModuleSelector
 {

@@ -25,8 +25,7 @@ import com.intellij.java.language.psi.util.JavaElementKind;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.OptionalInt;
 import java.util.function.Function;
@@ -39,7 +38,6 @@ public abstract class ContractValue {
 
     abstract DfaValue makeDfaValue(DfaValueFactory factory, DfaCallArguments arguments);
 
-    @Nonnull
     DfaCondition makeCondition(DfaValueFactory factory, DfaCallArguments arguments) {
         return DfaCondition.getUnknown();
     }
@@ -80,8 +78,7 @@ public abstract class ContractValue {
         return OptionalInt.empty();
     }
 
-    @Nonnull
-    DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
+    DfaCallArguments fixArgument(DfaCallArguments arguments, UnaryOperator<DfType> converter) {
         return arguments;
     }
 
@@ -105,11 +102,11 @@ public abstract class ContractValue {
         return new Argument(index);
     }
 
-    public ContractValue specialField(@Nonnull SpecialField field) {
+    public ContractValue specialField(SpecialField field) {
         return new Spec(this, field);
     }
 
-    public static ContractValue constant(Object value, @Nonnull PsiType type) {
+    public static ContractValue constant(Object value, PsiType type) {
         return new IndependentValue(
             String.valueOf(value),
             factory -> factory.getConstant(TypeConversionUtil.computeCastTo(value, type), type)
@@ -146,8 +143,7 @@ public abstract class ContractValue {
         }
 
         @Override
-        @Nonnull
-        DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
+        DfaCallArguments fixArgument(DfaCallArguments arguments, UnaryOperator<DfType> converter) {
             if (arguments.myQualifier instanceof DfaTypeValue) {
                 DfType type = arguments.myQualifier.getDfType();
                 DfType newType = converter.apply(type);
@@ -212,8 +208,7 @@ public abstract class ContractValue {
         }
 
         @Override
-        @Nonnull
-        DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
+        DfaCallArguments fixArgument(DfaCallArguments arguments, UnaryOperator<DfType> converter) {
             if (arguments.myArguments != null && arguments.myArguments.length > myIndex) {
                 DfaValue value = arguments.myArguments[myIndex];
                 if (value instanceof DfaTypeValue) {
@@ -276,12 +271,10 @@ public abstract class ContractValue {
     }
 
     private static final class Spec extends ContractValue {
-        @Nonnull
         private final ContractValue myQualifier;
-        @Nonnull
         private final SpecialField myField;
 
-        Spec(@Nonnull ContractValue qualifier, @Nonnull SpecialField field) {
+        Spec(ContractValue qualifier, SpecialField field) {
             myQualifier = qualifier;
             myField = field;
         }
@@ -300,8 +293,7 @@ public abstract class ContractValue {
         }
 
         @Override
-        @Nonnull
-        DfaCallArguments fixArgument(@Nonnull DfaCallArguments arguments, @Nonnull UnaryOperator<DfType> converter) {
+        DfaCallArguments fixArgument(DfaCallArguments arguments, UnaryOperator<DfType> converter) {
             return myQualifier.fixArgument(
                 arguments,
                 t -> {
@@ -423,7 +415,6 @@ public abstract class ContractValue {
             return factory.getUnknown();
         }
 
-        @Nonnull
         @Override
         DfaCondition makeCondition(DfaValueFactory factory, DfaCallArguments arguments) {
             DfaValue left = myLeft.makeDfaValue(factory, arguments);
@@ -449,7 +440,6 @@ public abstract class ContractValue {
          * @return condition relation type
          */
         public
-        @Nonnull
         RelationType getRelationType() {
             return myRelationType;
         }
@@ -458,7 +448,6 @@ public abstract class ContractValue {
          * @return condition left operand
          */
         public
-        @Nonnull
         ContractValue getLeft() {
             return myLeft;
         }
@@ -467,7 +456,6 @@ public abstract class ContractValue {
          * @return condition right operand
          */
         public
-        @Nonnull
         ContractValue getRight() {
             return myRight;
         }

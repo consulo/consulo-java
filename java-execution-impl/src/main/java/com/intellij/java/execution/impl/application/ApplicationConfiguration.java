@@ -52,8 +52,7 @@ import consulo.project.Project;
 import consulo.util.lang.BitUtil;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.virtualFileSystem.util.PathsList;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import java.util.Collection;
@@ -93,7 +92,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  public RunProfileState getState(@Nonnull final Executor executor, @Nonnull final ExecutionEnvironment env) throws ExecutionException {
+  public RunProfileState getState(final Executor executor, final ExecutionEnvironment env) throws ExecutionException {
     final JavaCommandLineState state = new JavaApplicationCommandLineState<>(this, env);
     JavaRunConfigurationModule module = getConfigurationModule();
     state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(), module.getSearchScope()));
@@ -101,7 +100,6 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @Nonnull
   public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
     SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<>();
     group.addEditor(ExecutionLocalize.runConfigurationConfigurationTabTitle().get(), new ApplicationConfigurable(getProject()));
@@ -217,13 +215,12 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  @Nonnull
   public Map<String, String> getEnvs() {
     return myEnvs;
   }
 
   @Override
-  public void setEnvs(@Nonnull final Map<String, String> envs) {
+  public void setEnvs(final Map<String, String> envs) {
     myEnvs.clear();
     myEnvs.putAll(envs);
   }
@@ -280,7 +277,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  public void readExternal(@Nonnull final Element element) {
+  public void readExternal(final Element element) {
     super.readExternal(element);
     JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
     DefaultJDOMExternalizer.readExternal(this, element);
@@ -289,7 +286,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
-  public void writeExternal(@Nonnull Element element) {
+  public void writeExternal(Element element) {
     super.writeExternal(element);
 
     JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
@@ -314,7 +311,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   public static class JavaApplicationCommandLineState<T extends ApplicationConfiguration> extends BaseJavaApplicationCommandLineState<T> {
-    public JavaApplicationCommandLineState(@Nonnull final T configuration, final ExecutionEnvironment environment) {
+    public JavaApplicationCommandLineState(final T configuration, final ExecutionEnvironment environment) {
       super(environment, configuration);
     }
 
@@ -358,7 +355,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
     }
 
     @Override
-    protected void buildProcessHandler(@Nonnull ProcessHandlerBuilder builder) throws ExecutionException {
+    protected void buildProcessHandler(ProcessHandlerBuilder builder) throws ExecutionException {
       super.buildProcessHandler(builder);
 
       if (DebuggerSettings.getInstance().KILL_PROCESS_IMMEDIATELY) {

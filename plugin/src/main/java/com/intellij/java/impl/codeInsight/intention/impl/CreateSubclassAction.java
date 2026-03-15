@@ -61,8 +61,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,13 +75,12 @@ public class CreateSubclassAction implements IntentionAction {
   private static final String IMPL_SUFFIX = "Impl";
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return myText;
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     CaretModel caretModel = editor.getCaretModel();
     int position = caretModel.getOffset();
     PsiElement element = file.findElementAt(position);
@@ -134,7 +132,7 @@ public class CreateSubclassAction implements IntentionAction {
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
     PsiClass psiClass = PsiTreeUtil.getParentOfType(element, PsiClass.class);
 
@@ -313,7 +311,7 @@ public class CreateSubclassAction implements IntentionAction {
   }
 
   @RequiredReadAction
-  protected static void chooseAndImplement(PsiClass psiClass, Project project, @Nonnull PsiClass targetClass, Editor editor) {
+  protected static void chooseAndImplement(PsiClass psiClass, Project project, PsiClass targetClass, Editor editor) {
     boolean hasNonTrivialConstructor = false;
     PsiMethod[] constructors = psiClass.getConstructors();
     for (PsiMethod constructor : constructors) {

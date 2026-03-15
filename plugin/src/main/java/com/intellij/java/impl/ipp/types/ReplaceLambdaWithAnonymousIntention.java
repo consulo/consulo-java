@@ -35,7 +35,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,24 +45,22 @@ import java.util.Map;
 public class ReplaceLambdaWithAnonymousIntention extends Intention {
     private static final Logger LOG = Logger.getInstance(ReplaceLambdaWithAnonymousIntention.class);
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.replaceLambdaWithAnonymousIntentionName();
     }
 
-    @Nonnull
     @Override
     protected PsiElementPredicate getElementPredicate() {
         return new LambdaPredicate();
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
     }
 
     @Override
-    protected void processIntention(Editor editor, @Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(Editor editor, PsiElement element) throws IncorrectOperationException {
         PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
         LOG.assertTrue(lambdaExpression != null);
         PsiParameter[] paramListCopy = ((PsiParameterList) lambdaExpression.getParameterList().copy())

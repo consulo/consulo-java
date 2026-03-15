@@ -29,30 +29,25 @@ import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizableStringList;
 import consulo.util.xml.serializer.JDOMExternalizer;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.*;
 
 public class MethodParameterInjection extends BaseInjection {
-  @Nonnull
   private String myClassName = "";
 
-  @Nonnull
   private final Map<String, MethodInfo> myParameterMap = new HashMap<String, MethodInfo>();
 
   public MethodParameterInjection() {
     super(JavaLanguageInjectionSupport.JAVA_SUPPORT_ID);
   }
 
-  @Nonnull
   public String getClassName() {
     return myClassName;
   }
 
-  public void setClassName(@Nonnull String className) {
+  public void setClassName(String className) {
     myClassName = className;
   }
 
@@ -67,7 +62,7 @@ public class MethodParameterInjection extends BaseInjection {
     return myParameterMap.values();
   }
 
-  public MethodParameterInjection copyFrom(@Nonnull BaseInjection o) {
+  public MethodParameterInjection copyFrom(BaseInjection o) {
     super.copyFrom(o);
     if (o instanceof MethodParameterInjection) {
       final MethodParameterInjection other = (MethodParameterInjection)o;
@@ -150,7 +145,6 @@ public class MethodParameterInjection extends BaseInjection {
     return result;
   }
 
-  @Nonnull
   public String getDisplayName() {
     final String className = getClassName();
     if (StringUtil.isEmpty(className)) return "<unnamed>";
@@ -173,7 +167,7 @@ public class MethodParameterInjection extends BaseInjection {
   }
 
   public static String fixSignature(final String signature, final boolean parameterNames) {
-    @NonNls final StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     final StringTokenizer st = new StringTokenizer(signature, "(,)");
     //noinspection ForLoopThatDoesntUseLoopVariable
     for (int i = 0; st.hasMoreTokens(); i++) {
@@ -202,8 +196,7 @@ public class MethodParameterInjection extends BaseInjection {
     return sb.toString();
   }
 
-  @Nonnull
-  private static String buildSignature(@Nonnull PsiMethod method) {
+  private static String buildSignature(PsiMethod method) {
     return PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS,
                                       PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.SHOW_FQ_CLASS_NAMES | PsiFormatUtil.SHOW_RAW_TYPE);
   }
@@ -217,7 +210,7 @@ public class MethodParameterInjection extends BaseInjection {
     if (type == null) return false;
     if (type instanceof PsiPrimitiveType) return false;
     if (project.isDefault()) {
-      @NonNls final String text = type.getPresentableText();
+      final String text = type.getPresentableText();
       if (text == null) return false;
       return text.equals(CommonClassNames.JAVA_LANG_STRING) || text.equals("java.lang.String...") || text.equals("java.lang.String[]");
     }
@@ -240,7 +233,7 @@ public class MethodParameterInjection extends BaseInjection {
   }
 
   public static String getParameterTypesString(final String signature) {
-    @NonNls final StringBuilder sb = new StringBuilder();
+    final StringBuilder sb = new StringBuilder();
     final StringTokenizer st = new StringTokenizer(signature, "(,)");
     //noinspection ForLoopThatDoesntUseLoopVariable
     for (int i = 0; st.hasMoreTokens(); i++) {
@@ -279,23 +272,20 @@ public class MethodParameterInjection extends BaseInjection {
   }
 
   public static class MethodInfo {
-    @Nonnull
     final String methodSignature;
-    @Nonnull
     final String methodName;
-    @Nonnull
     final boolean[] paramFlags;
 
     boolean returnFlag;
 
-    public MethodInfo(@Nonnull final String methodSignature, @Nonnull final boolean[] paramFlags, final boolean returnFlag) {
+    public MethodInfo(final String methodSignature, final boolean[] paramFlags, final boolean returnFlag) {
       this.methodSignature = methodSignature;
       this.paramFlags = paramFlags;
       this.returnFlag = returnFlag;
       methodName = calcMethodName(methodSignature);
     }
 
-    public MethodInfo(@Nonnull final String methodSignature, @Nonnull final String paramFlags) {
+    public MethodInfo(final String methodSignature, final String paramFlags) {
       this.methodSignature = methodSignature;
       final Pair<boolean[], Boolean> flags = parseFlags(paramFlags);
       returnFlag = flags.second.booleanValue();
@@ -303,17 +293,14 @@ public class MethodParameterInjection extends BaseInjection {
       methodName = calcMethodName(methodSignature);
     }
 
-    @Nonnull
     public String getMethodSignature() {
       return methodSignature;
     }
 
-    @Nonnull
     public String getMethodName() {
       return methodName;
     }
 
-    @Nonnull
     public boolean[] getParamFlags() {
       return paramFlags;
     }
@@ -345,7 +332,6 @@ public class MethodParameterInjection extends BaseInjection {
       return Pair.create(result, returnFlag);
     }
 
-    @NonNls
     private static String calcMethodName(final String methodSignature) {
       final String s = StringUtil.split(methodSignature, "(").get(0);
       return s.length() == 0 ? "<none>" : s;

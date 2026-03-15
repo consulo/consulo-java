@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a resource expression of enhanced try-with-resources statement introduced in JDK 9.
@@ -24,6 +23,5 @@ import jakarta.annotation.Nonnull;
  * @since 15
  */
 public interface PsiResourceExpression extends PsiResourceListElement {
-  @Nonnull
   PsiExpression getExpression();
 }

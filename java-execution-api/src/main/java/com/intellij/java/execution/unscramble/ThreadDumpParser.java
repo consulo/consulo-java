@@ -18,9 +18,8 @@ package com.intellij.java.execution.unscramble;
 import consulo.execution.unscramble.ThreadOperation;
 import consulo.execution.unscramble.ThreadState;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,7 +36,7 @@ public class ThreadDumpParser {
   private static final Pattern ourThreadStatePattern2 = Pattern.compile("java\\.lang\\.Thread\\.State: (.+)");
   private static final Pattern ourWaitingForLockPattern = Pattern.compile("- waiting (on|to lock) <(.+)>");
   private static final Pattern ourParkingToWaitForLockPattern = Pattern.compile("- parking to wait for  <(.+)>");
-  @NonNls private static final String PUMP_EVENT = "java.awt.EventDispatchThread.pumpOneEventForFilters";
+  private static final String PUMP_EVENT = "java.awt.EventDispatchThread.pumpOneEventForFilters";
   private static final Pattern ourIdleTimerThreadPattern = Pattern.compile("java.lang.Object.wait\\([^()]+\\)\\s+at java.util.TimerThread.mainLoop");
   private static final Pattern ourIdleSwingTimerThreadPattern = Pattern.compile("java.lang.Object.wait\\([^()]+\\)\\s+at javax.swing.TimerQueue.run");
 
@@ -50,7 +49,7 @@ public class ThreadDumpParser {
     ThreadState lastThreadState = null;
     boolean expectingThreadState = false;
     boolean haveNonEmptyStackTrace = false;
-    for(@NonNls String line: StringUtil.tokenize(threadDump, "\r\n")) {
+    for(String line: StringUtil.tokenize(threadDump, "\r\n")) {
       if (line.startsWith("============") || line.contains("Java-level deadlock")) {
         break;
       }
@@ -140,7 +139,7 @@ public class ThreadDumpParser {
   }
 
   public static boolean isKnownJdkThread(final ThreadState state) {
-    @NonNls String stackTrace = state.getStackTrace();
+    String stackTrace = state.getStackTrace();
     return stackTrace.contains("java.lang.ref.Reference$ReferenceHandler.run") ||
         stackTrace.contains("java.lang.ref.Finalizer$FinalizerThread.run") ||
         stackTrace.contains("sun.awt.AWTAutoShutdown.run") ||
@@ -151,7 +150,7 @@ public class ThreadDumpParser {
   }
 
   public static void inferThreadStateDetail(final ThreadState threadState) {
-    @NonNls String stackTrace = threadState.getStackTrace();
+    String stackTrace = threadState.getStackTrace();
     if (stackTrace.contains("at java.net.PlainSocketImpl.socketAccept") ||
         stackTrace.contains("at java.net.PlainDatagramSocketImpl.receive") ||
         stackTrace.contains("at java.net.SocketInputStream.socketRead") ||

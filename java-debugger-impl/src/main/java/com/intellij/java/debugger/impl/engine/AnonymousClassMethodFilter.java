@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiStatement;
 import consulo.util.lang.Range;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev

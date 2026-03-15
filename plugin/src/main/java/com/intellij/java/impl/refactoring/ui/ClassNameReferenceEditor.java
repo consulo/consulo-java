@@ -26,8 +26,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Function;
@@ -41,11 +40,11 @@ public class ClassNameReferenceEditor extends ReferenceEditorWithBrowseButton {
   private PsiClass mySelectedClass;
   private String myChooserTitle;
 
-  public ClassNameReferenceEditor(@Nonnull Project project, @Nullable PsiClass selectedClass) {
+  public ClassNameReferenceEditor(Project project, @Nullable PsiClass selectedClass) {
     this(project, selectedClass, null);
   }
 
-  public ClassNameReferenceEditor(@Nonnull final Project project, @Nullable PsiClass selectedClass,
+  public ClassNameReferenceEditor(final Project project, @Nullable PsiClass selectedClass,
                                   @Nullable final GlobalSearchScope resolveScope) {
     super(null, project, new Function<String,Document>() {
       public Document apply(String s) {

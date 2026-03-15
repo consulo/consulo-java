@@ -55,9 +55,7 @@ import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -204,7 +202,7 @@ public class MigrationPanel extends JPanel implements Disposable {
                                             return;
                                         }
                                         new WriteCommandAction(myProject) {
-                                            protected void run(@Nonnull Result result) throws Throwable {
+                                            protected void run(Result result) throws Throwable {
                                                 TypeMigrationProcessor.change(usages, myLabeler, myProject);
                                             }
                                         }.execute();
@@ -291,7 +289,7 @@ public class MigrationPanel extends JPanel implements Disposable {
             super.paintComponent(g);
         }
 
-        public Object getData(@NonNls final Key dataId) {
+        public Object getData(final Key dataId) {
             if (PsiElement.KEY == dataId) {
                 final DefaultMutableTreeNode[] selectedNodes = getSelectedNodes(DefaultMutableTreeNode.class, null);
                 return selectedNodes.length == 1 && selectedNodes[0].getUserObject() instanceof MigrationNode migrationNode
@@ -380,7 +378,7 @@ public class MigrationPanel extends JPanel implements Disposable {
             e.getPresentation().setEnabled(selectionPaths != null && selectionPaths.length > 0);
         }
 
-        public void actionPerformed(@Nonnull AnActionEvent e) {
+        public void actionPerformed(AnActionEvent e) {
             final TypeMigrationUsageInfo[] usages = getUsages(e);
             assert usages != null;
             for (TypeMigrationUsageInfo usageInfo : usages) {
@@ -393,7 +391,7 @@ public class MigrationPanel extends JPanel implements Disposable {
     private static class MigrationRootsTreeCellRenderer extends ColoredTreeCellRenderer {
         @RequiredReadAction
         public void customizeCellRenderer(
-            @Nonnull final JTree tree,
+            final JTree tree,
             final Object value,
             final boolean selected,
             final boolean expanded,

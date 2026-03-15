@@ -25,25 +25,21 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ExtendsThreadInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public String getID() {
     return "ClassExplicitlyExtendsThread";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.extendsThreadDisplayName();
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     PsiClass aClass = (PsiClass)infos[0];
     return aClass instanceof PsiAnonymousClass
@@ -71,7 +67,7 @@ public class ExtendsThreadInspection extends BaseInspection {
   private static class ExtendsThreadVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType() || aClass.isEnum()) {
         return;
       }

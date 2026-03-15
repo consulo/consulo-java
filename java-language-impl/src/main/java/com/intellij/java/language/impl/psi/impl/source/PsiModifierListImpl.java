@@ -25,7 +25,6 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.interner.Interner;
 import consulo.util.lang.BitUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -72,7 +71,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 
     @Override
     @RequiredReadAction
-    public boolean hasModifierProperty(@Nonnull String name) {
+    public boolean hasModifierProperty(String name) {
         ModifierCache modifierCache = myModifierCache;
         if (modifierCache == null || !modifierCache.isUpToDate()) {
             myModifierCache = modifierCache = calcModifiers();
@@ -203,7 +202,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 
     @Override
     @RequiredReadAction
-    public boolean hasExplicitModifier(@Nonnull String name) {
+    public boolean hasExplicitModifier(String name) {
         PsiModifierListStub stub = getGreenStub();
         if (stub != null) {
             return BitUtil.isSet(stub.getModifiersMask(), ModifierFlags.NAME_TO_MODIFIER_FLAG_MAP.getInt(name));
@@ -216,7 +215,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
 
     @Override
     @RequiredReadAction
-    public void setModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
+    public void setModifierProperty(String name, boolean value) throws IncorrectOperationException {
         checkSetModifierProperty(name, value);
 
         PsiElement parent = getParent();
@@ -303,19 +302,17 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     }
 
     @Override
-    public void checkSetModifierProperty(@Nonnull String name, boolean value) throws IncorrectOperationException {
+    public void checkSetModifierProperty(String name, boolean value) throws IncorrectOperationException {
         CheckUtil.checkWritable(this);
     }
 
     @Override
-    @Nonnull
     public PsiAnnotation[] getAnnotations() {
         PsiAnnotation[] own = getStubOrPsiChildren(JavaStubElementTypes.ANNOTATION, PsiAnnotation.ARRAY_FACTORY);
         List<PsiAnnotation> ext = PsiAugmentProvider.collectAugments(this, PsiAnnotation.class, null);
         return ArrayUtil.mergeArrayAndCollection(own, ext, PsiAnnotation.ARRAY_FACTORY);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiAnnotation[] getApplicableAnnotations() {
@@ -332,13 +329,12 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     }
 
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
+    public PsiAnnotation findAnnotation(String qualifiedName) {
         return PsiImplUtil.findAnnotation(this, qualifiedName);
     }
 
     @Override
-    @Nonnull
-    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
+    public PsiAnnotation addAnnotation(String qualifiedName) {
         return (PsiAnnotation)addAfter(
             JavaPsiFacade.getElementFactory(getProject()).createAnnotationFromText("@" + qualifiedName, this),
             null
@@ -346,7 +342,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor elemVisitor) {
             elemVisitor.visitModifierList(this);
         }
@@ -367,7 +363,7 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
         final List<String> modifiers;
         final long modCount;
 
-        ModifierCache(@Nonnull PsiFile file, @Nonnull Set<String> modifiers) {
+        ModifierCache(PsiFile file, Set<String> modifiers) {
             this.file = file;
             List<String> modifierList = new ArrayList<>(modifiers);
             Collections.sort(modifierList);

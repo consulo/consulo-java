@@ -19,7 +19,6 @@ package com.intellij.java.impl.psi.impl.beanProperties;
 import consulo.find.FindUsagesHandler;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.psi.PsiMethod;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 
@@ -37,7 +36,6 @@ public class BeanPropertyFindUsagesHandler extends FindUsagesHandler {
 
 
   @Override
-  @Nonnull
   public PsiElement[] getPrimaryElements() {
     ArrayList<PsiElement> elements = new ArrayList<PsiElement>(3);
     elements.add(myProperty.getPsiElement());

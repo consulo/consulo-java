@@ -1,4 +1,4 @@
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 // "Implement method 'foo'" "true"
 abstract class Test {

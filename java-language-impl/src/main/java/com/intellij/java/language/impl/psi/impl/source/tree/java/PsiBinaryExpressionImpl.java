@@ -31,7 +31,6 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.logging.Logger;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
 
 public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements PsiBinaryExpression {
@@ -45,12 +44,11 @@ public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements Psi
     this(JavaElementType.BINARY_EXPRESSION);
   }
 
-  protected PsiBinaryExpressionImpl(@Nonnull IElementType elementType) {
+  protected PsiBinaryExpressionImpl(IElementType elementType) {
     super(elementType);
   }
 
   @Override
-  @Nonnull
   public PsiExpression getLOperand() {
     return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.LOPERAND);
   }
@@ -61,19 +59,17 @@ public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements Psi
   }
 
   @Override
-  @Nonnull
   public PsiJavaToken getOperationSign() {
     return (PsiJavaToken) findChildByRoleAsPsiElement(ChildRole.OPERATION_SIGN);
   }
 
   @Override
-  @Nonnull
   public IElementType getOperationTokenType() {
     return getOperationSign().getTokenType();
   }
 
   @Override
-  public PsiJavaToken getTokenBeforeOperand(@Nonnull PsiExpression operand) {
+  public PsiJavaToken getTokenBeforeOperand(PsiExpression operand) {
     if (operand != getROperand()) {
       return null;
     }
@@ -153,7 +149,7 @@ public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements Psi
           JavaTokenType.PERC);
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitBinaryExpression(this);
     } else {
@@ -167,14 +163,13 @@ public class PsiBinaryExpressionImpl extends ExpressionPsiElement implements Psi
 
 
   @Override
-  public boolean processDeclarations(@Nonnull PsiScopeProcessor processor,
-                                     @Nonnull ResolveState state,
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
                                      PsiElement lastParent,
-                                     @Nonnull PsiElement place) {
+                                     PsiElement place) {
     return PsiPolyadicExpressionImpl.processDeclarations(this, processor, state, lastParent, place);
   }
 
-  @Nonnull
   @Override
   public PsiExpression[] getOperands() {
     PsiExpression rOperand = getROperand();

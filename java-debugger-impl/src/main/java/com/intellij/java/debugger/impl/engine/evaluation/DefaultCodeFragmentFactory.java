@@ -41,8 +41,7 @@ import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.PairFunction;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -139,7 +138,6 @@ public class DefaultCodeFragmentFactory extends CodeFragmentFactory {
   }
 
   @Override
-  @Nonnull
   public LanguageFileType getFileType() {
     return JavaFileType.INSTANCE;
   }

@@ -25,8 +25,7 @@ import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.PropertyKey;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public class JavaParserUtil {
@@ -119,7 +118,6 @@ public class JavaParserUtil {
     builder.putUserData(LANG_LEVEL_KEY, level);
   }
 
-  @Nonnull
   public static LanguageLevel getLanguageLevel(final PsiBuilder builder) {
     final LanguageLevel level = builder.getUserData(LANG_LEVEL_KEY);
     assert level != null : builder;
@@ -134,7 +132,6 @@ public class JavaParserUtil {
     return Boolean.TRUE.equals(builder.getUserData(DEEP_PARSE_BLOCKS_IN_STATEMENTS));
   }
 
-  @Nonnull
   public static PsiBuilder createBuilder(final ASTNode chameleon) {
     final PsiElement psi = chameleon.getPsi();
     assert psi != null : chameleon;
@@ -163,7 +160,6 @@ public class JavaParserUtil {
     return builder;
   }
 
-  @Nonnull
   public static PsiBuilder createBuilder(final LighterLazyParseableNode chameleon) {
     final PsiElement psi = chameleon.getContainingFile();
     assert psi != null : chameleon;
@@ -219,7 +215,7 @@ public class JavaParserUtil {
   }
 
   @Nullable
-  public static IElementType exprType(@Nullable final PsiBuilder.Marker marker) {
+  public static IElementType exprType(final PsiBuilder.@Nullable Marker marker) {
     return marker != null ? ((LighterASTNode) marker).getTokenType() : null;
   }
 
@@ -228,7 +224,7 @@ public class JavaParserUtil {
     builder.mark().error(message);
   }
 
-  public static void error(final PsiBuilder builder, final String message, @Nullable final PsiBuilder.Marker before) {
+  public static void error(final PsiBuilder builder, final String message, final PsiBuilder.@Nullable Marker before) {
     if (before == null) {
       error(builder, message);
     } else {

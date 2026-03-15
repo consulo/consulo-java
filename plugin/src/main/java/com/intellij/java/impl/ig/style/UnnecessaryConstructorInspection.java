@@ -27,7 +27,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 
@@ -39,12 +38,10 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
     public boolean ignoreAnnotations = false;
 
     @Override
-    @Nonnull
     public String getID() {
         return "RedundantNoArgConstructor";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.unnecessaryConstructorDisplayName();
@@ -57,7 +54,6 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.unnecessaryConstructorProblemDescriptor().get();
     }
@@ -73,7 +69,6 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
     }
 
     private static class UnnecessaryConstructorFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.unnecessaryConstructorRemoveQuickfix();
@@ -90,7 +85,7 @@ public class UnnecessaryConstructorInspection extends BaseInspection {
 
     private class UnnecessaryConstructorVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             PsiMethod[] constructors = aClass.getConstructors();
             if (constructors.length != 1) {
                 return;

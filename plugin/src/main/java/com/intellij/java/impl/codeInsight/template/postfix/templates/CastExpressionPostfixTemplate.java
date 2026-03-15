@@ -21,7 +21,6 @@ import consulo.codeEditor.Editor;
 import consulo.language.editor.postfixTemplate.PostfixTemplatesUtils;
 import consulo.language.editor.refactoring.postfixTemplate.PostfixTemplateWithExpressionSelector;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
 
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.IS_NON_VOID;
 import static com.intellij.java.impl.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils.selectorAllExpressionsWithCurrentOffset;
@@ -32,7 +31,7 @@ public class CastExpressionPostfixTemplate extends PostfixTemplateWithExpression
   }
 
   @Override
-  protected void expandForChooseExpression(@Nonnull PsiElement expression, @Nonnull Editor editor) {
+  protected void expandForChooseExpression(PsiElement expression, Editor editor) {
     PostfixTemplatesUtils.surround(new JavaWithCastSurrounder(), editor, expression);
   }
 }

@@ -23,9 +23,8 @@ import consulo.language.editor.refactoring.RenameRefactoring;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author dsl
@@ -47,12 +46,12 @@ public abstract class JavaRefactoringFactory {
   /**
    * Creates move destination for a specified package that preserves source folders for moved items.
    */
-  public abstract MoveDestination createSourceFolderPreservingMoveDestination(@Nonnull String targetPackageQualifiedName);
+  public abstract MoveDestination createSourceFolderPreservingMoveDestination(String targetPackageQualifiedName);
 
   /**
    * Creates move destination for a specified package that moves all items to a specifed source folder
    */
-  public abstract MoveDestination createSourceRootMoveDestination(@Nonnull String targetPackageQualifiedName, @Nonnull VirtualFile sourceRoot);
+  public abstract MoveDestination createSourceRootMoveDestination(String targetPackageQualifiedName, VirtualFile sourceRoot);
 
   public abstract MoveClassesOrPackagesRefactoring createMoveClassesOrPackages(PsiElement[] elements, MoveDestination moveDestination);
 

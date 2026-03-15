@@ -7,7 +7,6 @@ import consulo.language.Language;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.PsiManager;
 import consulo.language.impl.psi.LightElement;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +32,6 @@ public class LightParameterListBuilder extends LightElement implements PsiParame
     return "Light parameter list";
   }
 
-  @Nonnull
   @Override
   public PsiParameter[] getParameters() {
     if (myCachedParameters == null) {
@@ -58,7 +56,7 @@ public class LightParameterListBuilder extends LightElement implements PsiParame
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitParameterList(this);
     }

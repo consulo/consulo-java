@@ -22,25 +22,21 @@ import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class LoopStatementsThatDontLoopInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "LoopStatementThatDoesntLoop";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.loopStatementsThatDontLoopDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.loopStatementsThatDontLoopProblemDescriptor().get();
     }
@@ -55,7 +51,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
 
     private static class LoopStatementsThatDontLoopVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitForStatement(@Nonnull PsiForStatement statement) {
+        public void visitForStatement(PsiForStatement statement) {
             super.visitForStatement(statement);
             PsiStatement body = statement.getBody();
             if (body == null) {
@@ -72,7 +68,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
 
         @Override
         public void visitForeachStatement(
-            @Nonnull PsiForeachStatement statement
+            PsiForeachStatement statement
         ) {
             super.visitForeachStatement(statement);
             PsiStatement body = statement.getBody();
@@ -89,7 +85,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
         }
 
         @Override
-        public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+        public void visitWhileStatement(PsiWhileStatement statement) {
             super.visitWhileStatement(statement);
             PsiStatement body = statement.getBody();
             if (body == null) {
@@ -106,7 +102,7 @@ public class LoopStatementsThatDontLoopInspection extends BaseInspection {
 
         @Override
         public void visitDoWhileStatement(
-            @Nonnull PsiDoWhileStatement statement
+            PsiDoWhileStatement statement
         ) {
             super.visitDoWhileStatement(statement);
             PsiStatement body = statement.getBody();

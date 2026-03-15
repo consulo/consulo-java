@@ -18,7 +18,6 @@ package com.intellij.java.impl.codeInsight.generation.actions;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ActionImpl;
 import consulo.java.localize.JavaLocalize;
-import jakarta.annotation.Nonnull;
 
 import consulo.language.editor.action.CodeInsightActionHandler;
 import consulo.language.editor.impl.action.BaseCodeInsightAction;
@@ -34,7 +33,6 @@ public class GenerateSuperMethodCallAction extends BaseCodeInsightAction {
         super(JavaLocalize.actionGenerateSuperMethodCallText(), JavaLocalize.actionGenerateSuperMethodCallDescription());
     }
 
-    @Nonnull
     @Override
     protected CodeInsightActionHandler getHandler() {
         return new GenerateSuperMethodCallHandler();
@@ -42,7 +40,7 @@ public class GenerateSuperMethodCallAction extends BaseCodeInsightAction {
 
     @Override
     @RequiredReadAction
-    protected boolean isValidForFile(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiFile file) {
+    protected boolean isValidForFile(Project project, Editor editor, PsiFile file) {
         if (!(file instanceof PsiJavaFile)) {
             return false;
         }

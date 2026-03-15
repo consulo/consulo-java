@@ -23,17 +23,14 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class InstanceofCatchParameterInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.instanceofCatchParameterDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.instanceofCatchParameterProblemDescriptor().get();
     }
@@ -44,7 +41,7 @@ public class InstanceofCatchParameterInspection extends BaseInspection {
 
     private static class InstanceofCatchParameterVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitInstanceOfExpression(@Nonnull PsiInstanceOfExpression exp) {
+        public void visitInstanceOfExpression(PsiInstanceOfExpression exp) {
             super.visitInstanceOfExpression(exp);
             if (!ControlFlowUtils.isInCatchBlock(exp)) {
                 return;

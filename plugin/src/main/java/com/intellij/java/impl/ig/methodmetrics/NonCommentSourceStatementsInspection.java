@@ -20,7 +20,6 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class NonCommentSourceStatementsInspection
@@ -28,12 +27,10 @@ public class NonCommentSourceStatementsInspection
 
   private static final int DEFAULT_LIMIT = 30;
 
-  @Nonnull
   public String getID() {
     return "OverlyLongMethod";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.nonCommentSourceStatementsDisplayName();
   }
@@ -46,7 +43,6 @@ public class NonCommentSourceStatementsInspection
     return InspectionGadgetsLocalize.nonCommentSourceStatementsLimitOption().get();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     Integer statementCount = (Integer)infos[0];
     return InspectionGadgetsLocalize.nonCommentSourceStatementsProblemDescriptor(statementCount).get();
@@ -60,7 +56,7 @@ public class NonCommentSourceStatementsInspection
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitMethod(@Nonnull PsiMethod method) {
+    public void visitMethod(PsiMethod method) {
       // note: no call to super
       if (method.getNameIdentifier() == null) {
         return;

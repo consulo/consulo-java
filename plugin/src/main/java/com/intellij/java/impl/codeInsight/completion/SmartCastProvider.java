@@ -31,7 +31,6 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Collections;
 import java.util.List;
@@ -68,18 +67,18 @@ class SmartCastProvider implements CompletionProvider {
     @Override
     @RequiredReadAction
     public void addCompletions(
-        @Nonnull CompletionParameters parameters,
-        @Nonnull ProcessingContext context,
-        @Nonnull CompletionResultSet result
+        CompletionParameters parameters,
+        ProcessingContext context,
+        CompletionResultSet result
     ) {
         addCastVariants(parameters, result.getPrefixMatcher(), result, false);
     }
 
     @RequiredReadAction
     static void addCastVariants(
-        @Nonnull CompletionParameters parameters,
+        CompletionParameters parameters,
         PrefixMatcher matcher,
-        @Nonnull Consumer<? super LookupElement> result,
+        Consumer<? super LookupElement> result,
         boolean quick
     ) {
         if (!shouldSuggestCast(parameters)) {
@@ -134,7 +133,6 @@ class SmartCastProvider implements CompletionProvider {
         }
     }
 
-    @Nonnull
     @RequiredReadAction
     static List<ExpectedTypeInfo> getParenthesizedCastExpectationByOperandType(PsiElement position) {
         PsiElement parenthesisOwner = getParenthesisOwner(position);
@@ -231,7 +229,7 @@ class SmartCastProvider implements CompletionProvider {
             PsiTypeLookupItem.createLookupItem(type, parameters.getPosition())) {
 
             @Override
-            public void handleInsert(@Nonnull InsertionContext context) {
+            public void handleInsert(InsertionContext context) {
                 FeatureUsageTracker.getInstance().triggerFeatureUsed("editing.completion.smarttype.casting");
 
                 Editor editor = context.getEditor();

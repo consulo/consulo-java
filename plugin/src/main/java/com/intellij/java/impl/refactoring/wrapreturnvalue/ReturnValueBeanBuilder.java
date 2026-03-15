@@ -22,7 +22,6 @@ import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
 import com.intellij.java.language.psi.codeStyle.VariableKind;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ class ReturnValueBeanBuilder {
     }
 
     public String buildBeanClass() throws IOException {
-        @NonNls StringBuffer out = new StringBuffer(1024);
+        StringBuffer out = new StringBuffer(1024);
        
         if (packageName.length() > 0) out.append("package " + packageName + ';');
         out.append('\n');
@@ -86,9 +85,9 @@ class ReturnValueBeanBuilder {
         return out.toString();
     }
 
-    private void outputGetter(@NonNls StringBuffer out) {
+    private void outputGetter(StringBuffer out) {
         String typeText = valueType.getCanonicalText();
-        @NonNls String name = "value";
+        String name = "value";
         String capitalizedName = StringUtil.capitalize(name);
         out.append("\tpublic " + typeText + " get" + capitalizedName + "()\n");
         out.append("\t{\n");
@@ -98,15 +97,15 @@ class ReturnValueBeanBuilder {
         out.append('\n');
     }
 
-    private void outputField(@NonNls StringBuffer out) {
+    private void outputField(StringBuffer out) {
         String typeText = valueType.getCanonicalText();
       out.append('\t' + "private final " + typeText + ' ' + getFieldName("value") + ";\n");
     }
 
-    private void outputConstructor(@NonNls StringBuffer out) {
+    private void outputConstructor(StringBuffer out) {
         out.append("\tpublic " + className + '(');
         String typeText = valueType.getCanonicalText();
-        @NonNls String name = "value";
+        String name = "value";
         String parameterName =
                 JavaCodeStyleManager.getInstance(myProject).propertyNameToVariableName(name, VariableKind.PARAMETER);
         out.append(CodeStyleSettingsManager.getSettings(myProject).GENERATE_FINAL_PARAMETERS ? "final " : "");

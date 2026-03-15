@@ -39,9 +39,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -66,14 +64,12 @@ public class AutoUnboxingInspection extends BaseInspection {
         s_unboxingMethods.put("char", "charValue");
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.autoUnboxingDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.autoUnboxingProblemDescriptor().get();
     }
@@ -124,7 +120,6 @@ public class AutoUnboxingInspection extends BaseInspection {
     }
 
     private static class AutoUnboxingFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.autoUnboxingMakeUnboxingExplicitQuickfix();
@@ -264,7 +259,6 @@ public class AutoUnboxingInspection extends BaseInspection {
                 || (MethodCallUtils.isCallToMethod(callExpr, CommonClassNames.JAVA_LANG_FLOAT, null, "valueOf", PsiType.FLOAT) && PsiType.FLOAT.equals(type));
         }
 
-        @NonNls
         private static String computeConstantBooleanText(PsiExpression expression) {
             if (!(expression instanceof PsiReferenceExpression)) {
                 return null;
@@ -283,7 +277,7 @@ public class AutoUnboxingInspection extends BaseInspection {
             if (!CommonClassNames.JAVA_LANG_BOOLEAN.equals(qualifiedName)) {
                 return null;
             }
-            @NonNls String name = field.getName();
+            String name = field.getName();
             if ("TRUE".equals(name)) {
                 return "true";
             }

@@ -26,9 +26,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.editor.refactoring.introduce.inplace.AbstractInplaceIntroducer;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.LightPlatformTestCase;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
@@ -76,7 +75,7 @@ public abstract class AbstractJavaInplaceIntroduceTest extends AbstractInplaceIn
   }
 
   public interface MyIntroduceHandler {
-    boolean invokeImpl(Project project, @Nonnull PsiExpression selectedExpr, Editor editor);
+    boolean invokeImpl(Project project, PsiExpression selectedExpr, Editor editor);
     boolean invokeImpl(Project project, PsiLocalVariable localVariable, Editor editor);
     AbstractInplaceIntroducer getInplaceIntroducer();
   }

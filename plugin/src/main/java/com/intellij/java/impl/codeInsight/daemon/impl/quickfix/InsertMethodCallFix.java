@@ -26,9 +26,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
 
 public class InsertMethodCallFix implements SyntheticIntentionAction, LowPriorityAction {
   private final PsiMethodCallExpression myCall;
@@ -39,19 +37,18 @@ public class InsertMethodCallFix implements SyntheticIntentionAction, LowPriorit
     myMethodName = method.getName();
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return JavaQuickFixLocalize.insertSamMethodCallFixName(myMethodName);
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     return myCall.isValid() && PsiManager.getInstance(project).isInProject(myCall);
   }
 
   @Override
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+  public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
     PsiExpression methodExpression = myCall.getMethodExpression();
     PsiElementFactory factory = JavaPsiFacade.getInstance(project).getElementFactory();
     String replacement = methodExpression.getText() + "." + myMethodName;

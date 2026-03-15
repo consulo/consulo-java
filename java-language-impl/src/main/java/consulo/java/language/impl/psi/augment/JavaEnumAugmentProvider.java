@@ -23,7 +23,6 @@ import com.intellij.java.language.psi.augment.PsiAugmentProvider;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,10 +38,9 @@ public class JavaEnumAugmentProvider extends PsiAugmentProvider {
   public static final String VALUES_METHOD_NAME = "values";
   public static final String VALUE_OF_METHOD_NAME = "valueOf";
 
-  @Nonnull
   @Override
   @SuppressWarnings("unchecked")
-  public <Psi extends PsiElement> List<Psi> getAugments(@Nonnull PsiElement element, @Nonnull Class<Psi> type) {
+  public <Psi extends PsiElement> List<Psi> getAugments(PsiElement element, Class<Psi> type) {
     if (type == PsiMethod.class && element instanceof PsiClass && element.getUserData(FLAG) == Boolean.TRUE && ((PsiClass) element).isEnum()) {
       List<Psi> list = new ArrayList<Psi>(2);
 

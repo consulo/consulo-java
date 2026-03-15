@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.generate.config;
 
-import jakarta.annotation.Nonnull;
 
 import org.jetbrains.java.generate.psi.PsiAdapter;
 import consulo.codeEditor.Editor;
@@ -40,7 +39,7 @@ public class InsertAfterEqualsHashCodeStrategy implements InsertNewMethodStrateg
 	}
 
 	@Override
-	public PsiMethod insertNewMethod(PsiClass clazz, @Nonnull PsiMethod newMethod, Editor editor)
+	public PsiMethod insertNewMethod(PsiClass clazz, PsiMethod newMethod, Editor editor)
 	{
 		PsiMethod methodHashCode = PsiAdapter.findHashCodeMethod(clazz);
 		PsiMethod methodEquals = PsiAdapter.findEqualsMethod(clazz);

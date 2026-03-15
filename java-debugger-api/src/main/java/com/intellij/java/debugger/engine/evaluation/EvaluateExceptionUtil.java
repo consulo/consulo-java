@@ -19,7 +19,6 @@ import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.DeprecationInfo;
 import consulo.internal.com.sun.jdi.*;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author lex
@@ -60,7 +59,7 @@ public class EvaluateExceptionUtil {
         return new EvaluateException(message, th instanceof EvaluateException ? th.getCause() : th);
     }
 
-    public static EvaluateException createEvaluateException(@Nonnull LocalizeValue reason) {
+    public static EvaluateException createEvaluateException(LocalizeValue reason) {
         return new EvaluateException(reason.get(), null);
     }
 
@@ -70,7 +69,6 @@ public class EvaluateExceptionUtil {
         return new EvaluateException(reason, null);
     }
 
-    @Nonnull
     private static LocalizeValue reason(Throwable th) {
         if (th instanceof InvalidTypeException) {
             String originalReason = th.getMessage();

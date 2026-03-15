@@ -24,12 +24,11 @@
  */
 package org.osmorc.manifest.lang.psi;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.StubBasedPsiElement;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.osmorc.manifest.lang.psi.stub.ClauseStub;
 
 /**
@@ -51,7 +50,6 @@ public interface Clause extends PsiElement, StubBasedPsiElement<ClauseStub> {
    *
    * @return the directives of this clause
    */
-  @Nonnull
   Directive[] getDirectives();
 
   /**
@@ -61,7 +59,7 @@ public interface Clause extends PsiElement, StubBasedPsiElement<ClauseStub> {
    * @return the directive, or null if there is no such directive
    */
   @Nullable
-  Directive getDirectiveByName(@Nonnull String name);
+  Directive getDirectiveByName(String name);
 
   /**
    * Same as {@link #getText()} but filters out line breaks and trims whitespace around it.

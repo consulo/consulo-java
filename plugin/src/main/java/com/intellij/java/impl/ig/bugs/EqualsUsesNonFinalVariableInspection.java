@@ -25,26 +25,22 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 @ExtensionImpl
 public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern("[a-zA-Z_0-9.]+")
     public String getID() {
         return "NonFinalFieldReferenceInEquals";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.nonFinalFieldInEqualsDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.nonFinalFieldInEqualsProblemDescriptor().get();
     }
@@ -63,7 +59,7 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
         extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (MethodUtils.isEquals(method)) {
                 method.accept(new JavaRecursiveElementVisitor() {
 
@@ -74,7 +70,7 @@ public class EqualsUsesNonFinalVariableInspection extends BaseInspection {
 
                     @Override
                     public void visitReferenceExpression(
-                        @Nonnull PsiReferenceExpression expression
+                        PsiReferenceExpression expression
                     ) {
                         super.visitReferenceExpression(expression);
                         PsiElement element = expression.resolve();

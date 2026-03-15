@@ -3,14 +3,12 @@ package com.intellij.java.language.psi;
 
 import com.intellij.java.language.jvm.JvmAnnotation;
 import com.intellij.java.language.jvm.annotation.JvmNestedAnnotationValue;
-import jakarta.annotation.Nonnull;
 
 class PsiNestedAnnotationValue extends PsiAnnotationAttributeValue<PsiAnnotation> implements JvmNestedAnnotationValue {
-    PsiNestedAnnotationValue(@Nonnull PsiAnnotation value) {
+    PsiNestedAnnotationValue(PsiAnnotation value) {
         super(value);
     }
 
-    @Nonnull
     @Override
     public JvmAnnotation getValue() {
         return myElement;

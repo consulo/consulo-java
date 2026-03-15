@@ -15,8 +15,6 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
@@ -34,7 +32,6 @@ import consulo.internal.com.sun.jdi.*;
 public class HexRenderer extends NodeRendererImpl
 {
 	public static final
-	@NonNls
 	String UNIQUE_ID = "HexRenderer";
 	private static final Logger LOG = Logger.getInstance(HexRenderer.class);
 
@@ -51,7 +48,6 @@ public class HexRenderer extends NodeRendererImpl
 
 	@Override
 	public
-	@NonNls
 	String getName()
 	{
 		return "Hex";
@@ -94,7 +90,7 @@ public class HexRenderer extends NodeRendererImpl
 		}
 	}
 
-	static void appendHexValue(@Nonnull PrimitiveValue value, StringBuilder buf)
+	static void appendHexValue(PrimitiveValue value, StringBuilder buf)
 	{
 		if(value instanceof CharValue)
 		{

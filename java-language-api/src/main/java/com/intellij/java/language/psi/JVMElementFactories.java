@@ -18,8 +18,7 @@ package com.intellij.java.language.psi;
 import consulo.language.Language;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Medvedev Max
@@ -27,12 +26,11 @@ import jakarta.annotation.Nullable;
 @Deprecated
 public class JVMElementFactories {
   @Nullable
-  public static JVMElementFactory getFactory(@Nonnull Language language, @Nonnull Project project) {
+  public static JVMElementFactory getFactory(Language language, Project project) {
     return JVMElementFactoryProvider.forLanguage(project, language);
   }
 
-  @Nonnull
-  public static JVMElementFactory requireFactory(@Nonnull Language language, @Nonnull Project project) {
+  public static JVMElementFactory requireFactory(Language language, Project project) {
     return JVMElementFactoryProvider.forLanguageRequired(project, language);
   }
 }

@@ -32,8 +32,7 @@ import consulo.execution.debug.ui.XValueTree;
 import consulo.logging.Logger;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
         }
 
         @Override
-        public boolean isSelected(@Nonnull AnActionEvent e) {
+        public boolean isSelected(AnActionEvent e) {
             List<JavaValue> values = getSelectedValues(e);
             if (values.isEmpty()) {
                 return false;
@@ -72,7 +71,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
 
         @Override
         @RequiredUIAccess
-        public void setSelected(@Nonnull AnActionEvent e, boolean state) {
+        public void setSelected(AnActionEvent e, boolean state) {
             if (!state) {
                 return;
             }
@@ -91,7 +90,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
 
             process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
                 @Override
-                public void threadAction(@Nonnull SuspendContextImpl context) {
+                public void threadAction(SuspendContextImpl context) {
                     for (XValueNode node : selectedNodes) {
                         XValue container = node.getValueContainer();
                         if (container instanceof JavaValue javaValue) {
@@ -103,7 +102,6 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
         }
     }
 
-    @Nonnull
     @Override
     public AnAction[] getChildren(@Nullable AnActionEvent e) {
         return myChildren;
@@ -165,7 +163,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
 
     @Override
     @RequiredUIAccess
-    public void update(@Nonnull AnActionEvent event) {
+    public void update(AnActionEvent event) {
         if (!DebuggerAction.isFirstStart(event)) {
             return;
         }
@@ -193,7 +191,6 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
         });
     }
 
-    @Nonnull
     public static List<JavaValue> getSelectedValues(AnActionEvent event) {
         XValueTree tree = event.getData(XValueTree.KEY);
         List<XValueNode> selectedNodes = tree == null ? List.of() : tree.getSelectedNodes();

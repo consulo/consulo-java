@@ -16,12 +16,10 @@
 
 package com.intellij.java.language.impl.psi.controlFlow;
 
-import jakarta.annotation.Nonnull;
 
 public abstract class BranchingInstruction extends InstructionBase
 {
 	public int offset;
-	@Nonnull
 	public final Role role;
 
 	public enum Role
@@ -31,14 +29,14 @@ public abstract class BranchingInstruction extends InstructionBase
 		END
 	}
 
-	public BranchingInstruction(int offset, @Nonnull Role role)
+	public BranchingInstruction(int offset, Role role)
 	{
 		this.offset = offset;
 		this.role = role;
 	}
 
 	@Override
-	public void accept(@Nonnull ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
+	public void accept(ControlFlowInstructionVisitor visitor, int offset, int nextOffset)
 	{
 		visitor.visitBranchingInstruction(this, offset, nextOffset);
 	}

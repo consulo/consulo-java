@@ -5,11 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassHandler;
 import com.intellij.java.impl.refactoring.inline.InlineToAnonymousClassProcessor;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.JavaTestUtil;
 import com.intellij.java.language.psi.PsiCall;
 import com.intellij.java.language.psi.PsiClass;
@@ -27,7 +25,6 @@ import consulo.codeInsight.TargetElementUtilEx;
  */
 public abstract class InlineToAnonymousClassTest extends LightRefactoringTestCase
 {
-	@Nonnull
 	@Override
 	protected String getTestDataPath()
 	{
@@ -451,7 +448,7 @@ public abstract class InlineToAnonymousClassTest extends LightRefactoringTestCas
 	private void doTestNoInline(String expectedMessage) throws Exception
 	{
 		String name = getTestName(false);
-		@NonNls String fileName = "/refactoring/inlineToAnonymousClass/" + name + ".java";
+		String fileName = "/refactoring/inlineToAnonymousClass/" + name + ".java";
 		configureByFile(fileName);
 		PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
 		assertInstanceOf(element, PsiClass.class);
@@ -463,7 +460,7 @@ public abstract class InlineToAnonymousClassTest extends LightRefactoringTestCas
 	private void doTest(boolean inlineThisOnly, boolean searchInNonJavaFiles) throws Exception
 	{
 		String name = getTestName(false);
-		@NonNls String fileName = "/refactoring/inlineToAnonymousClass/" + name + ".java";
+		String fileName = "/refactoring/inlineToAnonymousClass/" + name + ".java";
 		configureByFile(fileName);
 		performAction(inlineThisOnly, searchInNonJavaFiles);
 		checkResultByFile(null, fileName + ".after", true);
@@ -481,7 +478,7 @@ public abstract class InlineToAnonymousClassTest extends LightRefactoringTestCas
 	private InlineToAnonymousClassProcessor prepareProcessor() throws Exception
 	{
 		String name = getTestName(false);
-		@NonNls String fileName = "/refactoring/inlineToAnonymousClass/" + name + ".java";
+		String fileName = "/refactoring/inlineToAnonymousClass/" + name + ".java";
 		configureByFile(fileName);
 		PsiElement element = TargetElementUtil.findTargetElement(myEditor, ContainerUtil.newHashSet(TargetElementUtilEx.ELEMENT_NAME_ACCEPTED, TargetElementUtilEx.REFERENCED_ELEMENT_ACCEPTED));
 		assertInstanceOf(element, PsiClass.class);

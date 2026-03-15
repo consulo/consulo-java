@@ -31,7 +31,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * User: anna
@@ -41,14 +40,13 @@ import jakarta.annotation.Nonnull;
 public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntentionAction {
   public static final Logger LOG = Logger.getInstance(RedundantLambdaParameterTypeIntention.class);
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Remove redundant types");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, @Nonnull PsiElement element) {
+  public boolean isAvailable(Project project, Editor editor, PsiElement element) {
     PsiParameterList parameterList = PsiTreeUtil.getParentOfType(element, PsiParameterList.class);
     if (parameterList == null) {
       return false;
@@ -124,9 +122,9 @@ public class RedundantLambdaParameterTypeIntention extends PsiElementBaseIntenti
   }
 
   @Override
-  public void invoke(@Nonnull Project project,
+  public void invoke(Project project,
                      Editor editor,
-                     @Nonnull PsiElement element) throws IncorrectOperationException {
+                     PsiElement element) throws IncorrectOperationException {
     PsiLambdaExpression lambdaExpression = PsiTreeUtil.getParentOfType(element, PsiLambdaExpression.class);
     removeTypes(lambdaExpression);
   }

@@ -19,7 +19,6 @@ import consulo.project.Project;
 import consulo.ide.impl.idea.packageDependencies.ui.UsagesPanel;
 import consulo.language.psi.PsiElement;
 import consulo.usage.UsageInfo;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author anna
@@ -42,7 +41,7 @@ public class MigrationConflictsPanel extends UsagesPanel
 	}
 
 	@Override
-	public void showUsages(@Nonnull PsiElement[] primaryElements, @Nonnull UsageInfo[] usageInfos)
+	public void showUsages(PsiElement[] primaryElements, UsageInfo[] usageInfos)
 	{
 		super.showUsages(primaryElements, usageInfos);
 	}

@@ -18,7 +18,6 @@ package com.intellij.java.compiler.impl;
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
 import consulo.compiler.CompilerMessageCategory;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +26,13 @@ public abstract class OutputParser {
   protected final List<ParserAction> myParserActions = new ArrayList<ParserAction>(10);
 
   public interface Callback {
-    @NonNls String getNextLine();
-    @NonNls String getCurrentLine();
+    String getNextLine();
+    String getCurrentLine();
     void pushBack(String line);
     void setProgressText(String text);
-    void fileProcessed(@NonNls String path);
-    void fileGenerated(@NonNls FileObject path);
-    void message(CompilerMessageCategory category, String message, @NonNls String url, int lineNum, int columnNum);
+    void fileProcessed(String path);
+    void fileGenerated(FileObject path);
+    void message(CompilerMessageCategory category, String message, String url, int lineNum, int columnNum);
   }
 
   public boolean processMessageLine(Callback callback) {

@@ -42,8 +42,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -52,14 +51,13 @@ import java.util.*;
  */
 @ExtensionImpl
 public class MoveJavaMemberHandler implements MoveMemberHandler {
-    @Nullable
     @Override
     @RequiredReadAction
-    public MoveMembersProcessor.MoveMembersUsageInfo getUsage(
-        @Nonnull PsiMember member,
-        @Nonnull PsiReference psiReference,
-        @Nonnull Set<PsiMember> membersToMove,
-        @Nonnull PsiClass targetClass
+    public MoveMembersProcessor.@Nullable MoveMembersUsageInfo getUsage(
+        PsiMember member,
+        PsiReference psiReference,
+        Set<PsiMember> membersToMove,
+        PsiClass targetClass
     ) {
         if (psiReference.getElement() instanceof PsiReferenceExpression refExpr) {
             PsiExpression qualifier = refExpr.getQualifierExpression();
@@ -114,12 +112,12 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
     @Override
     @RequiredReadAction
     public void checkConflictsOnUsage(
-        @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usageInfo,
+        MoveMembersProcessor.MoveMembersUsageInfo usageInfo,
         @Nullable String newVisibility,
         @Nullable PsiModifierList modifierListCopy,
-        @Nonnull PsiClass targetClass,
-        @Nonnull Set<PsiMember> membersToMove,
-        @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts
+        PsiClass targetClass,
+        Set<PsiMember> membersToMove,
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         PsiElement element = usageInfo.getElement();
         if (element == null) {
@@ -172,12 +170,12 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
     @Override
     @RequiredReadAction
     public void checkConflictsOnMember(
-        @Nonnull PsiMember member,
+        PsiMember member,
         @Nullable String newVisibility,
         @Nullable PsiModifierList modifierListCopy,
-        @Nonnull PsiClass targetClass,
-        @Nonnull Set<PsiMember> membersToMove,
-        @Nonnull MultiMap<PsiElement, LocalizeValue> conflicts
+        PsiClass targetClass,
+        Set<PsiMember> membersToMove,
+        MultiMap<PsiElement, LocalizeValue> conflicts
     ) {
         if (member instanceof PsiMethod method && hasMethod(targetClass, method)
             || member instanceof PsiField field && hasField(targetClass, field)) {
@@ -215,7 +213,7 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
 
     @Override
     @RequiredWriteAction
-    public boolean changeExternalUsage(@Nonnull MoveMembersOptions options, @Nonnull MoveMembersProcessor.MoveMembersUsageInfo usage) {
+    public boolean changeExternalUsage(MoveMembersOptions options, MoveMembersProcessor.MoveMembersUsageInfo usage) {
         PsiElement element = usage.getElement();
         if (element == null || !element.isValid()) {
             return true;
@@ -269,14 +267,13 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
         }
     }
 
-    @Nonnull
     @Override
     @RequiredWriteAction
     public PsiMember doMove(
-        @Nonnull MoveMembersOptions options,
-        @Nonnull PsiMember member,
+        MoveMembersOptions options,
+        PsiMember member,
         PsiElement anchor,
-        @Nonnull PsiClass targetClass
+        PsiClass targetClass
     ) {
         if (member instanceof PsiVariable variable) {
             variable.normalizeDeclaration();
@@ -307,14 +304,14 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
     }
 
     @Override
-    public void decodeContextInfo(@Nonnull PsiElement scope) {
+    public void decodeContextInfo(PsiElement scope) {
         ChangeContextUtil.decodeContextInfo(scope, null, null);
     }
 
     @Nullable
     @Override
     @RequiredReadAction
-    public PsiElement getAnchor(@Nonnull PsiMember member, @Nonnull final PsiClass targetClass, final Set<PsiMember> membersToMove) {
+    public PsiElement getAnchor(PsiMember member, final PsiClass targetClass, final Set<PsiMember> membersToMove) {
         if (member instanceof PsiField field && field.isStatic()) {
             final List<PsiField> afterFields = new ArrayList<>();
             PsiExpression psiExpression = field.getInitializer();
@@ -322,7 +319,7 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
                 psiExpression.accept(new JavaRecursiveElementWalkingVisitor() {
                     @Override
                     @RequiredReadAction
-                    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+                    public void visitReferenceExpression(PsiReferenceExpression expression) {
                         super.visitReferenceExpression(expression);
                         if (expression.resolve() instanceof PsiField psiField) {
                             if ((psiField.getContainingClass() == targetClass || membersToMove.contains(psiField))
@@ -354,7 +351,6 @@ public class MoveJavaMemberHandler implements MoveMemberHandler {
         return null;
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

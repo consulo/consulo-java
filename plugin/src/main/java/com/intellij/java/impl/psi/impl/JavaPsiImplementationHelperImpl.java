@@ -54,8 +54,7 @@ import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
@@ -212,7 +211,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
     @Nullable
     @Override
     @RequiredReadAction
-    public PsiElement getDefaultMemberAnchor(@Nonnull PsiClass aClass, @Nonnull PsiMember member) {
+    public PsiElement getDefaultMemberAnchor(PsiClass aClass, PsiMember member) {
         CodeStyleSettings settings = CodeStyleSettingsManager.getSettings(aClass.getProject());
         PsiElement anchor = myMemberOrderService.getAnchor(member, settings.getCommonSettings(JavaLanguage.INSTANCE), aClass);
 

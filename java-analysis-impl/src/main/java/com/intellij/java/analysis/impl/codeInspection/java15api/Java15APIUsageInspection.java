@@ -29,8 +29,7 @@ import consulo.util.lang.lazy.LazyValue;
 import consulo.util.lang.ref.SoftReference;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import javax.swing.*;
@@ -150,7 +149,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     }
 
     @Nullable
-    private static Set<String> getForbiddenApi(@Nonnull LanguageLevel languageLevel) {
+    private static Set<String> getForbiddenApi(LanguageLevel languageLevel) {
         if (!ourPresentableShortMessage.containsKey(languageLevel)) {
             return null;
         }
@@ -180,32 +179,28 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesLanguageLevelSpecificIssuesAndMigrationAids();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspection15DisplayName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return SHORT_NAME;
     }
 
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.ERROR;
     }
 
     @Override
-    public void readSettings(@Nonnull Element node) throws InvalidDataException {
+    public void readSettings(Element node) throws InvalidDataException {
         Element element = node.getChild(EFFECTIVE_LL);
         if (element != null) {
             myEffectiveLanguageLevel = LanguageLevel.valueOf(element.getAttributeValue("value"));
@@ -213,7 +208,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     }
 
     @Override
-    public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+    public void writeSettings(Element node) throws WriteExternalException {
         if (myEffectiveLanguageLevel != null) {
             Element llElement = new Element(EFFECTIVE_LL);
             llElement.setAttribute("value", myEffectiveLanguageLevel.toString());
@@ -222,9 +217,8 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     }
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         Object state
@@ -250,7 +244,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         }
 
         @Override
-        public void visitDocComment(@Nonnull PsiDocComment comment) {
+        public void visitDocComment(PsiDocComment comment) {
             // No references inside doc comment are of interest.
         }
 
@@ -301,13 +295,13 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
         @Override
         @RequiredReadAction
-        public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+        public void visitReferenceExpression(PsiReferenceExpression expression) {
             visitReferenceElement(expression);
         }
 
         @Override
         @RequiredReadAction
-        public void visitNameValuePair(@Nonnull PsiNameValuePair pair) {
+        public void visitNameValuePair(PsiNameValuePair pair) {
             super.visitNameValuePair(pair);
             PsiReference reference = pair.getReference();
             if (reference != null) {
@@ -327,7 +321,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
         @Override
         @RequiredReadAction
-        public void visitReferenceElement(@Nonnull PsiJavaCodeReferenceElement reference) {
+        public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
             super.visitReferenceElement(reference);
             PsiElement resolved = reference.resolve();
 
@@ -400,7 +394,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
         @Override
         @RequiredReadAction
-        public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+        public void visitNewExpression(PsiNewExpression expression) {
             super.visitNewExpression(expression);
             PsiMethod constructor = expression.resolveConstructor();
             Module module = expression.getModule();
@@ -417,7 +411,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
 
         @Override
         @RequiredReadAction
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             super.visitMethod(method);
             PsiAnnotation annotation = !method.isConstructor()
                 ? AnnotationUtil.findAnnotation(method, CommonClassNames.JAVA_LANG_OVERRIDE) : null;
@@ -468,7 +462,7 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
         return languageLevel.getDescription().get();
     }
 
-    public static LanguageLevel getLastIncompatibleLanguageLevel(@Nonnull PsiMember member, @Nonnull LanguageLevel languageLevel) {
+    public static LanguageLevel getLastIncompatibleLanguageLevel(PsiMember member, LanguageLevel languageLevel) {
         if (member instanceof PsiAnonymousClass) {
             return null;
         }
@@ -493,9 +487,9 @@ public class Java15APIUsageInspection extends AbstractBaseJavaLocalInspectionToo
     }
 
     private static LanguageLevel getLastIncompatibleLanguageLevelForSignature(
-        @Nonnull String signature,
-        @Nonnull LanguageLevel languageLevel,
-        @Nonnull Set<String> forbiddenApi
+        String signature,
+        LanguageLevel languageLevel,
+        Set<String> forbiddenApi
     ) {
         if (forbiddenApi.contains(signature)) {
             return languageLevel;

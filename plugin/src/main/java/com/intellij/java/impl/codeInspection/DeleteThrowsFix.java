@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author cdr
@@ -36,14 +35,13 @@ public class DeleteThrowsFix implements LocalQuickFix {
         myQuickFix = new MethodThrowsFix(method, exceptionClass, false, false);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return myQuickFix.getText();
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
         PsiElement element = descriptor.getPsiElement();
         if (element == null) {
             return;

@@ -30,7 +30,6 @@ import consulo.language.psi.stub.IndexSink;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 
@@ -42,19 +41,18 @@ public class JavaAnnotationElementType extends JavaStubElementType<PsiAnnotation
     super("ANNOTATION");
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new AnnotationElement();
   }
 
   @Override
-  public PsiAnnotation createPsi(@Nonnull PsiAnnotationStub stub) {
+  public PsiAnnotation createPsi(PsiAnnotationStub stub) {
     return getPsiFactory(stub).createAnnotation(stub);
   }
 
   @Override
-  public PsiAnnotation createPsi(@Nonnull ASTNode node) {
+  public PsiAnnotation createPsi(ASTNode node) {
     return new PsiAnnotationImpl(node);
   }
 
@@ -65,18 +63,17 @@ public class JavaAnnotationElementType extends JavaStubElementType<PsiAnnotation
   }
 
   @Override
-  public void serialize(@Nonnull PsiAnnotationStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiAnnotationStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeUTFFast(stub.getText());
   }
 
-  @Nonnull
   @Override
-  public PsiAnnotationStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiAnnotationStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     return new PsiAnnotationStubImpl(parentStub, dataStream.readUTFFast());
   }
 
   @Override
-  public void indexStub(@Nonnull PsiAnnotationStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiAnnotationStub stub, IndexSink sink) {
     String shortName = getReferenceShortName(stub.getText());
     if (!StringUtil.isEmptyOrSpaces(shortName)) {
       sink.occurrence(JavaStubIndexKeys.ANNOTATIONS, shortName);

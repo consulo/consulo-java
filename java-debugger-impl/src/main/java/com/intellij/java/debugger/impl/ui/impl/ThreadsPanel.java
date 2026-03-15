@@ -36,8 +36,6 @@ import consulo.ui.ex.action.DefaultActionGroup;
 import consulo.ui.ex.awt.ScrollPaneFactory;
 import consulo.ui.ex.awt.util.Alarm;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -45,7 +43,6 @@ import java.awt.event.KeyEvent;
 
 public class ThreadsPanel extends DebuggerTreePanel
 {
-	@NonNls
 	private static final String HELP_ID = "debugging.debugThreads";
 	private final Alarm myUpdateLabelsAlarm = new Alarm(Alarm.ThreadToUse.SWING_THREAD);
 	private static final int LABELS_UPDATE_DELAY_MS = 200;
@@ -80,7 +77,7 @@ public class ThreadsPanel extends DebuggerTreePanel
 		stateManager.addListener(new DebuggerContextListener()
 		{
 			@Override
-			public void changeEvent(@Nonnull DebuggerContextImpl newContext, DebuggerSession.Event event)
+			public void changeEvent(DebuggerContextImpl newContext, DebuggerSession.Event event)
 			{
 				if (DebuggerSession.Event.ATTACHED == event || DebuggerSession.Event.RESUME == event)
 				{

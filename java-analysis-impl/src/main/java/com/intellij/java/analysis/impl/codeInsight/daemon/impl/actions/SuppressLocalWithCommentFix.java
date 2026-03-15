@@ -21,14 +21,13 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
  */
 public class SuppressLocalWithCommentFix extends SuppressByJavaCommentFix {
-  public SuppressLocalWithCommentFix(@Nonnull HighlightDisplayKey key) {
+  public SuppressLocalWithCommentFix(HighlightDisplayKey key) {
     super(key);
   }
 
@@ -44,12 +43,11 @@ public class SuppressLocalWithCommentFix extends SuppressByJavaCommentFix {
   }
 
   @Override
-  protected void createSuppression(@Nonnull Project project, @Nonnull PsiElement element, @Nonnull PsiElement container)
+  protected void createSuppression(Project project, PsiElement element, PsiElement container)
     throws IncorrectOperationException {
     suppressWithComment(project, element, container);
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Suppress for statement with comment");

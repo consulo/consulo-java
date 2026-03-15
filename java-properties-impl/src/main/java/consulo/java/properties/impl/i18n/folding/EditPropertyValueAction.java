@@ -6,8 +6,7 @@ import consulo.language.editor.folding.EditorFoldingInfo;
 import consulo.language.psi.PsiElement;
 import consulo.util.dataholder.Key;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author VISTALL
@@ -19,12 +18,12 @@ public class EditPropertyValueAction {
   private static final Key<Boolean> EDITABLE_PROPERTY_VALUE = Key.create("editable.property.value");
 
   @Nullable
-  public static PsiElement getEditableElement(@Nonnull FoldRegion region) {
+  public static PsiElement getEditableElement(FoldRegion region) {
     PsiElement psiElement = EditorFoldingInfo.get(region.getEditor()).getPsiElement(region);
     return psiElement == null || psiElement.getUserData(EDITABLE_PROPERTY_VALUE) == null ? null : psiElement;
   }
 
-  public static void registerFoldedElement(@Nonnull PsiElement element, @Nonnull Document document) {
+  public static void registerFoldedElement(PsiElement element, Document document) {
     element.putUserData(EDITABLE_PROPERTY_VALUE, Boolean.TRUE);
     //EditPropertyValueTooltipManager.initializeForDocument(document);
   }

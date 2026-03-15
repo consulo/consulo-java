@@ -17,11 +17,10 @@ package com.intellij.java.execution.runners;
 
 import consulo.process.ProcessHandler;
 
-import jakarta.annotation.Nonnull;
 
 public interface ProcessProxy
 {
-	void attach(@Nonnull ProcessHandler processHandler);
+	void attach(ProcessHandler processHandler);
 
 	default boolean canSendBreak()
 	{

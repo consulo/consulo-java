@@ -43,8 +43,7 @@ import consulo.language.editor.parameterInfo.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.DumbService;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -70,7 +69,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   @Override
   @Nullable
-  public PsiExpressionList findElementForParameterInfo(@Nonnull CreateParameterInfoContext context) {
+  public PsiExpressionList findElementForParameterInfo(CreateParameterInfoContext context) {
     PsiExpressionList argumentList = findArgumentList(context.getFile(), context.getOffset(), context.getParameterListStart());
 
     if (argumentList != null) {
@@ -92,7 +91,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     return argumentList;
   }
 
-  private static PsiExpressionList findMethodsForArgumentList(CreateParameterInfoContext context, @Nonnull PsiExpressionList argumentList) {
+  private static PsiExpressionList findMethodsForArgumentList(CreateParameterInfoContext context, PsiExpressionList argumentList) {
     CandidateInfo[] candidates = getMethods(argumentList);
     if (candidates.length == 0) {
       return null;
@@ -103,18 +102,18 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   @Override
   @RequiredReadAction
-  public void showParameterInfo(@Nonnull PsiExpressionList element, @Nonnull CreateParameterInfoContext context) {
+  public void showParameterInfo(PsiExpressionList element, CreateParameterInfoContext context) {
     context.showHint(element, element.getTextRange().getStartOffset(), this);
   }
 
   @Override
-  public PsiExpressionList findElementForUpdatingParameterInfo(@Nonnull UpdateParameterInfoContext context) {
+  public PsiExpressionList findElementForUpdatingParameterInfo(UpdateParameterInfoContext context) {
     return findArgumentList(context.getFile(), context.getOffset(), context.getParameterListStart());
   }
 
   @Override
   @RequiredReadAction
-  public void updateParameterInfo(@Nonnull PsiExpressionList o, @Nonnull UpdateParameterInfoContext context) {
+  public void updateParameterInfo(PsiExpressionList o, UpdateParameterInfoContext context) {
     PsiElement parameterOwner = context.getParameterOwner();
     if (parameterOwner != o) {
       context.removeHint();
@@ -241,38 +240,32 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   @Override
-  @Nonnull
   public Class<PsiExpressionList> getArgumentListClass() {
     return PsiExpressionList.class;
   }
 
   @Override
-  @Nonnull
   public IElementType getActualParametersRBraceType() {
     return JavaTokenType.RBRACE;
   }
 
   @Override
-  @Nonnull
   public Set<Class<?>> getArgumentListAllowedParentClasses() {
     return ourArgumentListAllowedParentClassesSet;
   }
 
-  @Nonnull
   @Override
   public Set<? extends Class<?>> getArgListStopSearchClasses() {
     return ourStopSearch;
   }
 
   @Override
-  @Nonnull
   public IElementType getActualParameterDelimiterType() {
     return JavaTokenType.COMMA;
   }
 
   @Override
-  @Nonnull
-  public PsiExpression[] getActualParameters(@Nonnull PsiExpressionList psiExpressionList) {
+  public PsiExpression[] getActualParameters(PsiExpressionList psiExpressionList) {
     return psiExpressionList.getExpressions();
   }
 
@@ -364,9 +357,9 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   @RequiredReadAction
   public static String updateMethodPresentation(
-    @Nonnull PsiMethod method,
+    PsiMethod method,
     @Nullable PsiSubstitutor substitutor,
-    @Nonnull ParameterInfoUIContext context
+    ParameterInfoUIContext context
   ) {
     CodeInsightSettings settings = CodeInsightSettings.getInstance();
 
@@ -445,7 +438,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
   }
 
   @RequiredReadAction
-  private static void appendModifierList(@Nonnull StringBuilder buffer, @Nonnull PsiModifierListOwner owner) {
+  private static void appendModifierList(StringBuilder buffer, PsiModifierListOwner owner) {
     int lastSize = buffer.length();
 		Set<String> shownAnnotations = new HashSet<>();
     for (PsiAnnotation annotation : AnnotationUtil.getAllAnnotations(owner, false, null, !DumbService.isDumb(owner.getProject()))) {
@@ -477,7 +470,7 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
 
   @RequiredReadAction
   @Override
-  public void updateUI(Object p, @Nonnull ParameterInfoUIContext context) {
+  public void updateUI(Object p, ParameterInfoUIContext context) {
     if (p instanceof CandidateInfo info) {
       PsiMethod method = (PsiMethod) info.getElement();
       if (!method.isValid()) {
@@ -491,7 +484,6 @@ public class MethodParameterInfoHandler implements ParameterInfoHandlerWithTabAc
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

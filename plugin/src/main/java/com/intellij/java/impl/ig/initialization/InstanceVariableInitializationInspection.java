@@ -29,8 +29,7 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.editor.ImplicitUsageProvider;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -42,20 +41,17 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
      */
     public boolean m_ignorePrimitives = false;
 
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "InstanceVariableMayNotBeInitialized";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.instanceVariableMayNotBeInitializedDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         Boolean junitTestCase = (Boolean) infos[0];
         return junitTestCase
@@ -78,7 +74,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
 
     private class InstanceVariableInitializationVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             if (field.hasModifierProperty(PsiModifier.STATIC) || field.hasModifierProperty(PsiModifier.FINAL)) {
                 return;
             }
@@ -125,7 +121,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
         }
 
         @Nullable
-        private PsiMethod getSetupMethod(@Nonnull PsiClass aClass) {
+        private PsiMethod getSetupMethod(PsiClass aClass) {
             PsiMethod[] methods = aClass.findMethodsByName("setUp", false);
             for (PsiMethod method : methods) {
                 if (method.hasModifierProperty(PsiModifier.STATIC)) {
@@ -142,7 +138,7 @@ public class InstanceVariableInitializationInspection extends BaseInspection {
             return null;
         }
 
-        private static boolean isInitializedInInitializer(@Nonnull PsiField field) {
+        private static boolean isInitializedInInitializer(PsiField field) {
             PsiClass aClass = field.getContainingClass();
             if (aClass == null) {
                 return false;

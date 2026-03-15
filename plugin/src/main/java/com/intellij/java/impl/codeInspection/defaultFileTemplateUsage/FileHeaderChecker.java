@@ -35,7 +35,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.collection.primitive.ints.IntMaps;
 import consulo.util.collection.primitive.ints.IntObjectMap;
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -50,7 +49,7 @@ public class FileHeaderChecker {
     private static final Logger LOG = Logger.getInstance(FileHeaderChecker.class);
 
     @RequiredReadAction
-    static ProblemDescriptor checkFileHeader(@Nonnull PsiFile file, @Nonnull InspectionManager manager, boolean onTheFly) {
+    static ProblemDescriptor checkFileHeader(PsiFile file, InspectionManager manager, boolean onTheFly) {
         IntObjectMap<String> offsetToProperty = IntMaps.newIntObjectHashMap();
         FileTemplate defaultTemplate =
             FileTemplateManager.getInstance(file.getProject()).getDefaultTemplate(JavaTemplateUtil.FILE_HEADER_TEMPLATE_NAME);
@@ -99,7 +98,7 @@ public class FileHeaderChecker {
         ReplaceWithFileTemplateFix replaceTemplateFix = new ReplaceWithFileTemplateFix() {
             @Override
             @RequiredWriteAction
-            public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            public void applyFix(Project project, ProblemDescriptor descriptor) {
                 PsiElement element = descriptor.getPsiElement();
                 if (element == null) {
                     return;

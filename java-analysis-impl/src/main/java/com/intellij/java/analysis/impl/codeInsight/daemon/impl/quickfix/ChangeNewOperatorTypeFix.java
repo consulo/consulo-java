@@ -36,8 +36,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
     private final PsiType myType;
@@ -48,7 +47,6 @@ public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
         myExpression = expression;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.changeNewOperatorTypeText(
@@ -59,7 +57,7 @@ public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
     }
 
     @Override
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         return myType.isValid()
             && myExpression.isValid()
             && myExpression.getManager().isInProject(myExpression)
@@ -69,7 +67,7 @@ public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         if (!FileModificationService.getInstance().prepareFileForWrite(file)) {
             return;
         }
@@ -160,7 +158,7 @@ public class ChangeNewOperatorTypeFix implements SyntheticIntentionAction {
     }
 
     @RequiredReadAction
-    public static void register(@Nonnull HighlightInfo.Builder highlightInfo, PsiExpression expression, PsiType lType) {
+    public static void register(HighlightInfo.Builder highlightInfo, PsiExpression expression, PsiType lType) {
         if (!(PsiUtil.deparenthesizeExpression(expression) instanceof PsiNewExpression newExpr)) {
             return;
         }

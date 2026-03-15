@@ -21,13 +21,12 @@ import consulo.execution.runner.ExecutionEnvironment;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
 import consulo.util.io.FileUtil;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author nik
  */
 public class JarApplicationCommandLineState extends BaseJavaApplicationCommandLineState<JarApplicationConfiguration> {
-  public JarApplicationCommandLineState(@Nonnull final JarApplicationConfiguration configuration, final ExecutionEnvironment environment) {
+  public JarApplicationCommandLineState(final JarApplicationConfiguration configuration, final ExecutionEnvironment environment) {
     super(environment, configuration);
   }
 

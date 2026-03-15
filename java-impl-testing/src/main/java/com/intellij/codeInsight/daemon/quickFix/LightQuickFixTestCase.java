@@ -29,7 +29,6 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
 import org.intellij.lang.annotations.RegExp;
-import org.jetbrains.annotations.NonNls;
 import com.intellij.codeInsight.daemon.LightDaemonAnalyzerTestCase;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.intention.IntentionAction;
@@ -53,8 +52,8 @@ import consulo.ui.ex.awt.UIUtil;
 import junit.framework.ComparisonFailure;
 
 public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase {
-  @NonNls private static final String BEFORE_PREFIX = "before";
-  @NonNls private static final String AFTER_PREFIX = "after";
+  private static final String BEFORE_PREFIX = "before";
+  private static final String AFTER_PREFIX = "after";
 
   private static QuickFixTestCase myWrapper;
 
@@ -114,7 +113,7 @@ public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase 
     return parseActionHint(file, contents, " \"(.*)\" \"(true|false)\".*");
   }
 
-  public static Pair<String, Boolean> parseActionHint(final PsiFile file, String contents, @NonNls @RegExp String actionPattern) {
+  public static Pair<String, Boolean> parseActionHint(final PsiFile file, String contents, @RegExp String actionPattern) {
     PsiFile hostFile = InjectedLanguageManager.getInstance(LightPlatformTestCase.getProject()).getTopLevelFile(file);
 
     final Commenter commenter = LanguageCommenters.INSTANCE.forLanguage(hostFile.getLanguage());
@@ -205,7 +204,7 @@ public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase 
     File testDir = new File(testDirPath);
     final File[] files = testDir.listFiles(new FilenameFilter() {
       @Override
-      public boolean accept(File dir, @NonNls String name) {
+      public boolean accept(File dir, String name) {
         return name.startsWith(BEFORE_PREFIX);
       }
     });
@@ -322,5 +321,5 @@ public abstract class LightQuickFixTestCase extends LightDaemonAnalyzerTestCase 
     return CodeInsightTestFixtureImpl.getAvailableIntentions(editor, file);
   }
 
-  @NonNls protected String getBasePath() {return null;}
+  protected String getBasePath() {return null;}
 }

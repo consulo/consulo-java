@@ -27,14 +27,13 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class JavaExpressionSurrounder implements Surrounder {
     private static final Logger LOG = Logger.getInstance(JavaExpressionSurrounder.class);
 
     @Override
-    public boolean isApplicable(@Nonnull PsiElement[] elements) {
+    public boolean isApplicable(PsiElement[] elements) {
         LOG.assertTrue(elements.length == 1 && elements[0] instanceof PsiExpression);
         return isApplicable((PsiExpression)elements[0]);
     }
@@ -42,7 +41,7 @@ public abstract class JavaExpressionSurrounder implements Surrounder {
     public abstract boolean isApplicable(PsiExpression expr);
 
     @Override
-    public TextRange surroundElements(@Nonnull Project project, @Nonnull Editor editor, @Nonnull PsiElement[] elements)
+    public TextRange surroundElements(Project project, Editor editor, PsiElement[] elements)
         throws IncorrectOperationException {
         return surroundExpression(project, editor, (PsiExpression)elements[0]);
     }

@@ -35,8 +35,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,6 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
         myName = method.getName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return JavaQuickFixLocalize.fixParameterTypeText(myName, myParameterType.getCanonicalText());
@@ -65,10 +63,10 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
 
     @Override
     public boolean isAvailable(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        Project project,
+        PsiFile file,
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiMethod myMethod = (PsiMethod) startElement;
         return myMethod.isValid()
@@ -81,11 +79,11 @@ public class MethodParameterFix extends LocalQuickFixAndIntentionActionOnPsiElem
 
     @Override
     public void invoke(
-        @Nonnull Project project,
-        @Nonnull PsiFile file,
+        Project project,
+        PsiFile file,
         @Nullable Editor editor,
-        @Nonnull PsiElement startElement,
-        @Nonnull PsiElement endElement
+        PsiElement startElement,
+        PsiElement endElement
     ) {
         PsiMethod myMethod = (PsiMethod) startElement;
         if (!FileModificationService.getInstance().prepareFileForWrite(myMethod.getContainingFile())) {

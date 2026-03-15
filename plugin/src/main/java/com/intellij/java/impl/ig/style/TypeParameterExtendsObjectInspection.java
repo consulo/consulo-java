@@ -28,24 +28,20 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class TypeParameterExtendsObjectInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.typeParameterExtendsObjectDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getID() {
         return "TypeParameterExplicitlyExtendsObject";
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         Integer type = (Integer) infos[0];
         return type == 1
@@ -64,14 +60,13 @@ public class TypeParameterExtendsObjectInspection extends BaseInspection {
     }
 
     private static class ExtendsObjectFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.extendsObjectRemoveQuickfix();
         }
 
         @Override
-        public void doFix(@Nonnull Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
+        public void doFix(Project project, ProblemDescriptor descriptor) throws IncorrectOperationException {
             PsiElement identifier = descriptor.getPsiElement();
             PsiElement parent = identifier.getParent();
             if (parent instanceof PsiTypeParameter) {

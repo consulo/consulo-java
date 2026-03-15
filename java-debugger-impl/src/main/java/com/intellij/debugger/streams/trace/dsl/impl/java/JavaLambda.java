@@ -5,7 +5,6 @@ import consulo.execution.debug.stream.trace.dsl.Expression;
 import consulo.execution.debug.stream.trace.dsl.Lambda;
 import consulo.execution.debug.stream.trace.dsl.LambdaBody;
 import consulo.execution.debug.stream.trace.dsl.impl.TextExpression;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Vitaliy.Bibaev
@@ -14,30 +13,26 @@ public class JavaLambda implements Lambda {
     private final String variableName;
     private final JavaLambdaBody body;
 
-    public JavaLambda(@Nonnull String variableName, @Nonnull JavaLambdaBody body) {
+    public JavaLambda(String variableName, JavaLambdaBody body) {
         this.variableName = variableName;
         this.body = body;
     }
 
-    @Nonnull
     @Override
     public String getVariableName() {
         return variableName;
     }
 
-    @Nonnull
     @Override
     public LambdaBody getBody() {
         return body;
     }
 
-    @Nonnull
     @Override
-    public Expression call(@Nonnull String callName, @Nonnull Expression... args) {
+    public Expression call(String callName, Expression... args) {
         return new TextExpression("(" + toCode(0) + ")").call(callName, args);
     }
 
-    @Nonnull
     @Override
     public String toCode(int indent) {
         return IndentUtil.withIndent(variableName + " -> " + convert(body, indent), indent);

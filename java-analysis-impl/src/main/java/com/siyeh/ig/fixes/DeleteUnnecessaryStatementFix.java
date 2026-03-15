@@ -24,19 +24,16 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class DeleteUnnecessaryStatementFix extends InspectionGadgetsFix {
 
   private final String name;
 
-  public DeleteUnnecessaryStatementFix(@NonNls String name) {
+  public DeleteUnnecessaryStatementFix(String name) {
     this.name = name;
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.smthUnnecessaryRemoveQuickfix(name);
   }

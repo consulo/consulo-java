@@ -27,7 +27,6 @@ import consulo.language.psi.event.PsiTreeChangeEvent;
 import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.testFramework.PsiTestCase;
 
-import jakarta.annotation.Nonnull;
 
 import java.io.File;
 
@@ -64,12 +63,12 @@ public abstract class InvalidateClassFileTest extends PsiTestCase {
     final boolean[] notified = new boolean[] {false};
     PsiTreeChangeAdapter listener = new PsiTreeChangeAdapter() {
       @Override
-      public void childRemoved(@Nonnull PsiTreeChangeEvent event) {
+      public void childRemoved(PsiTreeChangeEvent event) {
         notified[0] = true;
       }
 
       @Override
-      public void childrenChanged(@Nonnull PsiTreeChangeEvent event) {
+      public void childrenChanged(PsiTreeChangeEvent event) {
         notified[0] = true;
       }
     };

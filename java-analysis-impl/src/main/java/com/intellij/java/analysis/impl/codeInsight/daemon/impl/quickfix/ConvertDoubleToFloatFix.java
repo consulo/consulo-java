@@ -29,8 +29,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author anna
@@ -43,7 +42,6 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
         myExpression = expression;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public LocalizeValue getText() {
@@ -52,7 +50,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
 
     @Override
     @RequiredReadAction
-    public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+    public boolean isAvailable(Project project, Editor editor, PsiFile file) {
         if (myExpression.isValid()) {
             if (!StringUtil.endsWithIgnoreCase(myExpression.getText(), "f")) {
                 PsiLiteralExpression expression = (PsiLiteralExpression)createFloatingPointExpression(project);
@@ -66,7 +64,7 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
 
     @Override
     @RequiredWriteAction
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
+    public void invoke(Project project, Editor editor, PsiFile file) throws IncorrectOperationException {
         myExpression.replace(createFloatingPointExpression(project));
     }
 
@@ -88,9 +86,9 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     }
 
     public static void registerIntentions(
-        @Nonnull JavaResolveResult[] candidates,
-        @Nonnull PsiExpressionList list,
-        @Nullable HighlightInfo.Builder hlBuilder,
+        JavaResolveResult[] candidates,
+        PsiExpressionList list,
+        HighlightInfo.@Nullable Builder hlBuilder,
         @Nullable TextRange fixRange
     ) {
         if (hlBuilder == null || candidates.length == 0) {
@@ -103,11 +101,11 @@ public class ConvertDoubleToFloatFix implements SyntheticIntentionAction {
     }
 
     private static void registerIntention(
-        @Nonnull PsiExpression[] expressions,
-        @Nonnull HighlightInfo.Builder hlBuilder,
+        PsiExpression[] expressions,
+        HighlightInfo.Builder hlBuilder,
         @Nullable TextRange fixRange,
-        @Nonnull JavaResolveResult candidate,
-        @Nonnull PsiElement context
+        JavaResolveResult candidate,
+        PsiElement context
     ) {
         if (!candidate.isStaticsScopeCorrect()) {
             return;

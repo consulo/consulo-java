@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.language.psi.PsiReference;
 import com.intellij.java.indexing.search.searches.MethodReferencesSearch;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 
@@ -29,7 +28,7 @@ import java.util.Collection;
  * Date: 10/15/12
  */
 public abstract class MethodReferencesFindUsagesTest extends LightDaemonAnalyzerTestCase {
-  @NonNls static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/methodRef/findUsages/";
+  static final String BASE_PATH = "/codeInsight/daemonCodeAnalyzer/lambda/methodRef/findUsages/";
   
   
 

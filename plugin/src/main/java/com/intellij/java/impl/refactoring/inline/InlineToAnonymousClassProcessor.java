@@ -37,8 +37,7 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewDescriptor;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -73,13 +72,11 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
         mySearchInNonJavaFiles = searchInNonJavaFiles;
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         return new InlineViewDescriptor(myClass);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -120,7 +117,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredReadAction
-    protected boolean isPreviewUsages(@Nonnull UsageInfo[] usages) {
+    protected boolean isPreviewUsages(UsageInfo[] usages) {
         if (super.isPreviewUsages(usages)) {
             return true;
         }
@@ -143,7 +140,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = getConflicts(refUsages.get());
         if (!conflicts.isEmpty()) {
             return showConflicts(conflicts, refUsages.get());
@@ -156,7 +153,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
         final MultiMap<PsiElement, LocalizeValue> result = new MultiMap<>();
         ReferencedElementsCollector collector = new ReferencedElementsCollector() {
             @Override
-            protected void checkAddMember(@Nonnull PsiMember member) {
+            protected void checkAddMember(PsiMember member) {
                 if (PsiTreeUtil.isAncestor(myClass, member, false)) {
                     return;
                 }
@@ -171,7 +168,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
         myClass.accept(new JavaRecursiveElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitParameter(@Nonnull PsiParameter parameter) {
+            public void visitParameter(PsiParameter parameter) {
                 super.visitParameter(parameter);
                 if (PsiUtil.resolveClassInType(parameter.getType()) != myClass) {
                     return;
@@ -201,7 +198,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
             }
 
             @Override
-            public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+            public void visitNewExpression(PsiNewExpression expression) {
                 super.visitNewExpression(expression);
                 if (PsiUtil.resolveClassInType(expression.getType()) != myClass) {
                     return;
@@ -214,7 +211,7 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
 
             @Override
             @RequiredReadAction
-            public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+            public void visitMethodCallExpression(PsiMethodCallExpression expression) {
                 super.visitMethodCallExpression(expression);
                 PsiReferenceExpression methodExpression = expression.getMethodExpression();
                 PsiExpression qualifierExpression = methodExpression.getQualifierExpression();
@@ -343,7 +340,6 @@ public class InlineToAnonymousClassProcessor extends BaseRefactoringProcessor {
         return superType;
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getCommandName() {
         return RefactoringLocalize.inlineToAnonymousCommandName(myClass.getQualifiedName());

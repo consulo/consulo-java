@@ -21,10 +21,8 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.impl.refactoring.changeSignature.ChangeSignatureProcessor;
 import com.intellij.java.impl.refactoring.changeSignature.ParameterInfoImpl;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +32,7 @@ public class MatchUtil {
   public static String getChangedSignature(Match match, PsiMethod method, boolean shouldBeStatic, String visibility) {
     PsiType returnType = match.getChangedReturnType(method);
     if (!match.myChangedParams.isEmpty() || returnType != null) {
-      @NonNls StringBuilder buffer = new StringBuilder();
+      StringBuilder buffer = new StringBuilder();
       buffer.append(visibility);
       if (buffer.length() > 0) {
         buffer.append(" ");
@@ -87,7 +85,7 @@ public class MatchUtil {
     return null;
   }
 
-  public static void changeSignature(@Nonnull Match match, @Nonnull PsiMethod psiMethod) {
+  public static void changeSignature(Match match, PsiMethod psiMethod) {
     PsiType expressionType = match.getChangedReturnType(psiMethod);
     if (expressionType == null && match.myChangedParams.isEmpty()) return;
     List<ParameterInfoImpl> newParameters = patchParams(match.myChangedParams, psiMethod);

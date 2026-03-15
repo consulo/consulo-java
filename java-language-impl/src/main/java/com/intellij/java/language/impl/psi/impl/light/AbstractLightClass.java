@@ -37,10 +37,8 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.lang.Pair;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -54,10 +52,8 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
         super(manager, JavaLanguage.INSTANCE);
     }
 
-    @Nonnull
     public abstract PsiClass getDelegate();
 
-    @Nonnull
     @Override
     public abstract PsiElement copy();
 
@@ -75,7 +71,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    public boolean hasModifierProperty(@Nonnull String name) {
+    public boolean hasModifierProperty(String name) {
         return getDelegate().hasModifierProperty(name);
     }
 
@@ -102,7 +98,6 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    @Nonnull
     public PsiTypeParameter[] getTypeParameters() {
         return getDelegate().getTypeParameters();
     }
@@ -141,13 +136,11 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    @Nonnull
     public PsiClassType[] getExtendsListTypes() {
         return PsiClassImplUtil.getExtendsListTypes(this);
     }
 
     @Override
-    @Nonnull
     public PsiClassType[] getImplementsListTypes() {
         return PsiClassImplUtil.getImplementsListTypes(this);
     }
@@ -158,56 +151,47 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
         return getDelegate().getSuperClass();
     }
 
-    @Nonnull
     @Override
     public PsiClass[] getInterfaces() {
         return getDelegate().getInterfaces();
     }
 
-    @Nonnull
     @Override
     public PsiElement getNavigationElement() {
         return getDelegate().getNavigationElement();
     }
 
     @Override
-    @Nonnull
     public PsiClass[] getSupers() {
         return getDelegate().getSupers();
     }
 
     @Override
-    @Nonnull
     public PsiClassType[] getSuperTypes() {
         return getDelegate().getSuperTypes();
     }
 
     @Override
-    @Nonnull
     public PsiField[] getFields() {
         return getDelegate().getFields();
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] getMethods() {
         return getDelegate().getMethods();
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] getConstructors() {
         return getDelegate().getConstructors();
     }
 
     @Override
-    @Nonnull
     public PsiClass[] getInnerClasses() {
         return getDelegate().getInnerClasses();
     }
 
     @Override
-    @Nonnull
     public PsiClassInitializer[] getInitializers() {
         return getDelegate().getInitializers();
     }
@@ -215,10 +199,10 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     @Override
     @RequiredReadAction
     public boolean processDeclarations(
-        @Nonnull PsiScopeProcessor processor,
-        @Nonnull ResolveState state,
+        PsiScopeProcessor processor,
+        ResolveState state,
         PsiElement lastParent,
-        @Nonnull PsiElement place
+        PsiElement place
     ) {
         return PsiClassImplUtil.processDeclarationsInClass(
             this,
@@ -233,19 +217,16 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    @Nonnull
     public PsiField[] getAllFields() {
         return getDelegate().getAllFields();
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] getAllMethods() {
         return getDelegate().getAllMethods();
     }
 
     @Override
-    @Nonnull
     public PsiClass[] getAllInnerClasses() {
         return getDelegate().getAllInnerClasses();
     }
@@ -263,25 +244,21 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findMethodsBySignature(PsiMethod patternMethod, boolean checkBases) {
         return PsiClassImplUtil.findMethodsBySignature(this, patternMethod, checkBases);
     }
 
     @Override
-    @Nonnull
     public PsiMethod[] findMethodsByName(String name, boolean checkBases) {
         return PsiClassImplUtil.findMethodsByName(this, name, checkBases);
     }
 
     @Override
-    @Nonnull
     public List<Pair<PsiMethod, PsiSubstitutor>> findMethodsAndTheirSubstitutorsByName(String name, boolean checkBases) {
         return PsiClassImplUtil.findMethodsAndTheirSubstitutorsByName(this, name, checkBases);
     }
 
     @Override
-    @Nonnull
     public List<Pair<PsiMethod, PsiSubstitutor>> getAllMethodsAndTheirSubstitutors() {
         return PsiClassImplUtil.getAllWithSubstitutorsByMap(this, PsiClassImplUtil.MemberType.METHOD);
     }
@@ -316,7 +293,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    public boolean isInheritor(@Nonnull PsiClass baseClass, boolean checkDeep) {
+    public boolean isInheritor(PsiClass baseClass, boolean checkDeep) {
         return getDelegate().isInheritor(baseClass, checkDeep);
     }
 
@@ -332,14 +309,13 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    @Nonnull
     public Collection<HierarchicalMethodSignature> getVisibleSignatures() {
         return getDelegate().getVisibleSignatures();
     }
 
     @Override
     @RequiredWriteAction
-    public PsiElement setName(@Nonnull String name) throws IncorrectOperationException {
+    public PsiElement setName(String name) throws IncorrectOperationException {
         return getDelegate().setName(name);
     }
 
@@ -356,7 +332,7 @@ public abstract class AbstractLightClass extends LightElement implements PsiClas
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor) {
             ((JavaElementVisitor)visitor).visitClass(this);
         }

@@ -35,7 +35,6 @@ import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.Set;
 
@@ -46,7 +45,7 @@ import java.util.Set;
 public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
     @Override
     @RequiredUIAccess
-    public PsiElement getTarget(@Nonnull DataContext dataContext) {
+    public PsiElement getTarget(DataContext dataContext) {
         Project project = dataContext.getData(Project.KEY);
         if (project == null) {
             return null;
@@ -96,21 +95,19 @@ public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
     }
 
     @Override
-    @Nonnull
     public HierarchyBrowser createHierarchyBrowser(PsiElement target) {
         return new TypeHierarchyBrowser(target.getProject(), (PsiClass)target);
     }
 
     @Override
     @RequiredReadAction
-    public void browserActivated(@Nonnull HierarchyBrowser hierarchyBrowser) {
+    public void browserActivated(HierarchyBrowser hierarchyBrowser) {
         TypeHierarchyBrowser browser = (TypeHierarchyBrowser)hierarchyBrowser;
         String typeName = browser.isInterface()
             ? TypeHierarchyBrowserBase.SUBTYPES_HIERARCHY_TYPE : TypeHierarchyBrowserBase.TYPE_HIERARCHY_TYPE;
         browser.changeView(typeName);
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

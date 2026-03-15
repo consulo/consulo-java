@@ -25,8 +25,7 @@ import consulo.xml.psi.xml.XmlAttribute;
 import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlTag;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -101,7 +100,6 @@ public class MethodPropertyReference extends BasicAttributeValueReference {
   }
 
   @Override
-  @Nonnull
   public Object[] getVariants() {
     return /*JspSpiUtil.getMethodPropertyReferenceVariants(this, resolveClass(), myReadable)*/PsiElement.EMPTY_ARRAY;
   }

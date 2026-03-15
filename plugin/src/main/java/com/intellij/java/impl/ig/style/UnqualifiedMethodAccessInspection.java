@@ -24,13 +24,11 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class UnqualifiedMethodAccessInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.unqualifiedMethodAccessDisplayName();
   }
@@ -41,7 +39,6 @@ public class UnqualifiedMethodAccessInspection extends BaseInspection {
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.unqualifiedMethodAccessProblemDescriptor().get();
   }
@@ -54,7 +51,7 @@ public class UnqualifiedMethodAccessInspection extends BaseInspection {
   private static class UnqualifiedMethodAccessVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitReferenceExpression(@Nonnull PsiReferenceExpression expression) {
+    public void visitReferenceExpression(PsiReferenceExpression expression) {
       super.visitReferenceExpression(expression);
       PsiExpression qualifierExpression = expression.getQualifierExpression();
       if (qualifierExpression != null) {

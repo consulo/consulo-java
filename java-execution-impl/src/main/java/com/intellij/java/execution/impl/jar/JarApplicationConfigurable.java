@@ -28,9 +28,8 @@ import consulo.ui.ex.awt.PanelWithAnchor;
 import consulo.ui.ex.awt.TextFieldWithBrowseButton;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.io.FileUtil;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 
 public class JarApplicationConfigurable extends SettingsEditor<JarApplicationConfiguration> implements PanelWithAnchor {
@@ -52,7 +51,7 @@ public class JarApplicationConfigurable extends SettingsEditor<JarApplicationCon
     myJrePathEditor.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
   }
 
-  public void applyEditorTo(@Nonnull final JarApplicationConfiguration configuration) throws ConfigurationException {
+  public void applyEditorTo(final JarApplicationConfiguration configuration) throws ConfigurationException {
     myCommonProgramParameters.applyTo(configuration);
     configuration.setAlternativeJrePath(myJrePathEditor.getJrePathOrName());
     configuration.setAlternativeJrePathEnabled(myJrePathEditor.isAlternativeJreSelected());
@@ -60,14 +59,13 @@ public class JarApplicationConfigurable extends SettingsEditor<JarApplicationCon
     configuration.setModule(myModuleComponent.getComponent().getSelectedModule());
   }
 
-  public void resetEditorFrom(@Nonnull final JarApplicationConfiguration configuration) {
+  public void resetEditorFrom(final JarApplicationConfiguration configuration) {
     myCommonProgramParameters.reset(configuration);
     myJarPathComponent.getComponent().setText(FileUtil.toSystemDependentName(configuration.getJarPath()));
     myJrePathEditor.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
     myModuleComponent.getComponent().setSelectedModule(configuration.getModule());
   }
 
-  @Nonnull
   public JComponent createEditor() {
     return myWholePanel;
   }

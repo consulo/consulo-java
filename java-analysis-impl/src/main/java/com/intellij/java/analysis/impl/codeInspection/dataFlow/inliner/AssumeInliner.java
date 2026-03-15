@@ -7,7 +7,6 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.siyeh.ig.callMatcher.CallMatcher;
 import com.siyeh.ig.psiutils.MethodCallUtils;
-import jakarta.annotation.Nonnull;
 
 /**
  * JUnit4 Assume.assumeNotNull is a vararg method and each passed null will make the call failing
@@ -17,7 +16,7 @@ public class AssumeInliner implements CallInliner
 	private static final CallMatcher ASSUME_NOT_NULL = CallMatcher.staticCall("org.junit.Assume", "assumeNotNull");
 
 	@Override
-	public boolean tryInlineCall(@Nonnull CFGBuilder builder, @Nonnull PsiMethodCallExpression call)
+	public boolean tryInlineCall(CFGBuilder builder, PsiMethodCallExpression call)
 	{
 		if(ASSUME_NOT_NULL.test(call) && MethodCallUtils.isVarArgCall(call))
 		{

@@ -26,10 +26,8 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
@@ -46,7 +44,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 	private Boolean myIsObsolete = null;
 	private Map<LocalVariable, Value> myAllValues;
 
-	public StackFrameProxyImpl(ThreadReferenceProxyImpl threadProxy, @Nonnull StackFrame frame, int fromBottomIndex /* 1-based */)
+	public StackFrameProxyImpl(ThreadReferenceProxyImpl threadProxy, StackFrame frame, int fromBottomIndex /* 1-based */)
 	{
 		super(threadProxy.getVirtualMachine());
 		myThreadProxy = threadProxy;
@@ -213,7 +211,6 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 
 	@Override
 	public
-	@NonNls
 	String toString()
 	{
 		try
@@ -304,7 +301,7 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 	}
 
 	@Nullable
-	public Value visibleValueByName(@Nonnull String name) throws EvaluateException
+	public Value visibleValueByName(String name) throws EvaluateException
 	{
 		LocalVariable variable = visibleVariableByNameInt(name);
 		return variable != null ? getValue(new LocalVariableProxyImpl(this, variable)) : null;

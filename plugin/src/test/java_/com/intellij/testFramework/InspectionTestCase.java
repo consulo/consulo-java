@@ -40,9 +40,7 @@ import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import consulo.util.collection.ArrayUtil;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.io.File;
 
 import static org.junit.Assert.assertNotNull;
@@ -70,45 +68,45 @@ public abstract class InspectionTestCase extends PsiTestCase {
     return (InspectionManagerEx)InspectionManager.getInstance(myProject);
   }
 
-  public void doTest(@NonNls String folderName, LocalInspectionTool tool) {
+  public void doTest(String folderName, LocalInspectionTool tool) {
     doTest(folderName, new LocalInspectionToolWrapper(tool));
   }
 
-  public void doTest(@NonNls String folderName, GlobalInspectionTool tool) {
+  public void doTest(String folderName, GlobalInspectionTool tool) {
     doTest(folderName, new GlobalInspectionToolWrapper(tool));
   }
 
-  public void doTest(@NonNls String folderName, GlobalInspectionTool tool, boolean checkRange) {
+  public void doTest(String folderName, GlobalInspectionTool tool, boolean checkRange) {
     doTest(folderName, new GlobalInspectionToolWrapper(tool), checkRange);
   }
 
-  public void doTest(@NonNls String folderName, GlobalInspectionTool tool, boolean checkRange, boolean runDeadCodeFirst) {
+  public void doTest(String folderName, GlobalInspectionTool tool, boolean checkRange, boolean runDeadCodeFirst) {
     doTest(folderName, new GlobalInspectionToolWrapper(tool), "java 1.4", checkRange, runDeadCodeFirst);
   }
 
-  public void doTest(@NonNls String folderName, InspectionToolWrapper tool) {
+  public void doTest(String folderName, InspectionToolWrapper tool) {
     doTest(folderName, tool, "java 1.4");
   }
 
-  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, boolean checkRange) {
+  public void doTest(String folderName, InspectionToolWrapper tool, boolean checkRange) {
     doTest(folderName, tool, "java 1.4", checkRange);
   }
 
-  public void doTest(@NonNls String folderName, LocalInspectionTool tool, @NonNls String jdkName) {
+  public void doTest(String folderName, LocalInspectionTool tool, String jdkName) {
     doTest(folderName, new LocalInspectionToolWrapper(tool), jdkName);
   }
 
-  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, @NonNls String jdkName) {
+  public void doTest(String folderName, InspectionToolWrapper tool, String jdkName) {
     doTest(folderName, tool, jdkName, false);
   }
 
-  public void doTest(@NonNls String folderName, InspectionToolWrapper tool, @NonNls String jdkName, boolean checkRange) {
+  public void doTest(String folderName, InspectionToolWrapper tool, String jdkName, boolean checkRange) {
     doTest(folderName, tool, jdkName, checkRange, false);
   }
 
-  public void doTest(@NonNls String folderName,
+  public void doTest(String folderName,
                      InspectionToolWrapper toolWrapper,
-                     @NonNls String jdkName,
+                     String jdkName,
                      boolean checkRange,
                      boolean runDeadCodeFirst,
                      InspectionToolWrapper... additional) {
@@ -118,15 +116,15 @@ public abstract class InspectionTestCase extends PsiTestCase {
     InspectionTestUtil.compareToolResults(context, toolWrapper, checkRange, testDir);
   }
 
-  protected void runTool(@NonNls String testDir, @NonNls String jdkName, InspectionToolWrapper tool) {
+  protected void runTool(String testDir, String jdkName, InspectionToolWrapper tool) {
     runTool(testDir, jdkName, false, tool);
   }
 
   protected GlobalInspectionContextImpl runTool(final String testDir,
                                                 final String jdkName,
                                                 boolean runDeadCodeFirst,
-                                                @Nonnull InspectionToolWrapper toolWrapper,
-                                                @Nonnull InspectionToolWrapper... additional) {
+                                                InspectionToolWrapper toolWrapper,
+                                                InspectionToolWrapper... additional) {
     final VirtualFile[] sourceDir = new VirtualFile[1];
     ApplicationManager.getApplication().runWriteAction(new Runnable() {
       @Override
@@ -151,7 +149,6 @@ public abstract class InspectionTestCase extends PsiTestCase {
     return globalContext;
   }
 
-  @Nonnull
   protected AnalysisScope createAnalysisScope(VirtualFile sourceDir) {
     PsiManager psiManager = PsiManager.getInstance(myProject);
     return new AnalysisScope(psiManager.findDirectory(sourceDir));
@@ -180,7 +177,6 @@ public abstract class InspectionTestCase extends PsiTestCase {
     super.setUp();
     ExtensionPoint<EntryPoint> point = Application.get().getExtensionPoint(JavaExtensionPoints.DEAD_CODE_EP_NAME);
     myUnusedCodeExtension = new EntryPoint() {
-      @Nonnull
       @Override
       public String getDisplayName() {
         return "duh";
@@ -240,7 +236,6 @@ public abstract class InspectionTestCase extends PsiTestCase {
   }
 
   @Override
-  @NonNls
   protected String getTestDataPath() {
     return "/inspection/";
   }

@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.annotation.Nonnull;
 import consulo.ui.ex.tree.PresentationData;
 import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.project.Project;
@@ -81,7 +80,6 @@ public class MigrationNode extends AbstractTreeNode<TypeMigrationUsageInfo> impl
 	}
 
 	@Override
-	@Nonnull
 	public Collection<? extends AbstractTreeNode> getChildren()
 	{
 		if(myCachedChildren == null)

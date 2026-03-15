@@ -24,8 +24,7 @@ import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
 import consulo.project.Project;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,6 @@ import java.util.Set;
 @ExtensionImpl
 public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool {
 
-    @Nonnull
     @Override
     public HighlightDisplayLevel getDefaultLevel() {
         return HighlightDisplayLevel.WARNING;
@@ -56,17 +54,17 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
     }
 
     @Override
-    public RefGraphAnnotator getAnnotator(@Nonnull RefManager refManager, @Nonnull Object state) {
+    public RefGraphAnnotator getAnnotator(RefManager refManager, Object state) {
         return new UnnecessaryModuleDependencyAnnotator(refManager);
     }
 
     @Override
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        Object state
     ) {
         if (refEntity instanceof RefModule) {
             RefModule refModule = (RefModule) refEntity;
@@ -100,20 +98,17 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
         return null;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.unnecessaryModuleDependencyDisplayName();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "UnnecessaryModuleDependencyInspection";
     }
@@ -127,7 +122,6 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
             myDependency = dependency;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return LocalizeValue.localizeTODO("Remove dependency");
@@ -135,7 +129,7 @@ public class UnnecessaryModuleDependencyInspection extends GlobalInspectionTool 
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
+        public void applyFix(Project project, CommonProblemDescriptor descriptor) {
             ModifiableRootModel model = ModuleRootManager.getInstance(myModule).getModifiableModel();
             for (OrderEntry entry : model.getOrderEntries()) {
                 if (entry instanceof ModuleOrderEntry) {

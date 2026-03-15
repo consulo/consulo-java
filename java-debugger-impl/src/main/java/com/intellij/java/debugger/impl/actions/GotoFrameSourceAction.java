@@ -23,13 +23,12 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.dataContext.DataContext;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author lex
  */
 public abstract class GotoFrameSourceAction extends DebuggerAction {
-    protected GotoFrameSourceAction(@Nonnull LocalizeValue text) {
+    protected GotoFrameSourceAction(LocalizeValue text) {
         super(text);
     }
 

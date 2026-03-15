@@ -25,22 +25,18 @@ import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class DriverManagerGetConnectionInspection extends BaseInspection {
 
-  @Nonnull
   public String getID() {
     return "CallToDriverManagerGetConnection";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.drivermanagerCallDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.drivermanagerCallProblemDescriptor().get();
   }
@@ -54,7 +50,7 @@ public class DriverManagerGetConnectionInspection extends BaseInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isDriverManagerGetConnection(expression)) {
         return;

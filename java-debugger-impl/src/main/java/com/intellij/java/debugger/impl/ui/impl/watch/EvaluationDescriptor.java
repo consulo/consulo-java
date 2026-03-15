@@ -15,8 +15,7 @@
  */
 package com.intellij.java.debugger.impl.ui.impl.watch;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.DebuggerContext;
@@ -181,7 +180,7 @@ public abstract class EvaluationDescriptor extends ValueDescriptorImpl
 		return new JavaValueModifier(value)
 		{
 			@Override
-			protected void setValueImpl(@Nonnull String expression, @Nonnull XModificationCallback callback)
+			protected void setValueImpl(String expression, XModificationCallback callback)
 			{
 				final EvaluationDescriptor evaluationDescriptor = EvaluationDescriptor.this;
 				if(evaluationDescriptor.canSetValue())

@@ -27,18 +27,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public class MethodMayBeSynchronizedInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.methodMayBeSynchronizedDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.methodMayBeSynchronizedProblemDescriptor().get();
   }
@@ -55,7 +52,6 @@ public class MethodMayBeSynchronizedInspection extends BaseInspection {
   private static class MethodMayBeSynchronizedQuickFix
     extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.methodMayBeSynchronizedQuickfix();
     }

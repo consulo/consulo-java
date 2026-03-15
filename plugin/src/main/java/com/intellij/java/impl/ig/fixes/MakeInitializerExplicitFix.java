@@ -24,12 +24,9 @@ import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public class MakeInitializerExplicitFix extends InspectionGadgetsFix {
 
-  @Nonnull
   public LocalizeValue getName() {
     return InspectionGadgetsLocalize.makeInitializationExplicitQuickfix();
   }
@@ -52,7 +49,6 @@ public class MakeInitializerExplicitFix extends InspectionGadgetsFix {
     field.setInitializer(initializer);
   }
 
-  @NonNls
   private static String getDefaultValue(PsiType type) {
     if (PsiType.INT.equals(type)) {
       return "0";

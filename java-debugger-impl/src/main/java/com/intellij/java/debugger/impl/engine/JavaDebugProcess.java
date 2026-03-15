@@ -62,8 +62,7 @@ import consulo.ui.ex.content.event.ContentManagerEvent;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,13 +78,13 @@ public class JavaDebugProcess extends XDebugProcess {
     private final JvmDropFrameActionHandler myDropFrameActionActionHandler;
     private final NodeManagerImpl myNodeManager;
 
-    public static JavaDebugProcess create(@Nonnull XDebugSession session, DebuggerSession javaSession) {
+    public static JavaDebugProcess create(XDebugSession session, DebuggerSession javaSession) {
         JavaDebugProcess res = new JavaDebugProcess(session, javaSession);
         javaSession.getProcess().setXDebugProcess(res);
         return res;
     }
 
-    protected JavaDebugProcess(@Nonnull XDebugSession session, DebuggerSession javaSession) {
+    protected JavaDebugProcess(XDebugSession session, DebuggerSession javaSession) {
         super(session);
         myJavaSession = javaSession;
         myEditorsProvider = new JavaDebuggerEditorsProvider();
@@ -229,7 +228,6 @@ public class JavaDebugProcess extends XDebugProcess {
         return myJavaSession;
     }
 
-    @Nonnull
     @Override
     public XDebuggerEditorsProvider getEditorsProvider() {
         return myEditorsProvider;
@@ -278,11 +276,10 @@ public class JavaDebugProcess extends XDebugProcess {
 
     @Override
     @RequiredUIAccess
-    public void runToPosition(@Nonnull XSourcePosition position) {
+    public void runToPosition(XSourcePosition position) {
         myJavaSession.runToCursor(position, false);
     }
 
-    @Nonnull
     @Override
     public XBreakpointHandler<?>[] getBreakpointHandlers() {
         return myBreakpointHandlers;
@@ -299,7 +296,6 @@ public class JavaDebugProcess extends XDebugProcess {
         return myJavaSession.getProcess().getProcessHandler();
     }
 
-    @Nonnull
     @Override
     public ExecutionConsole createConsole() {
         ExecutionConsole console = myJavaSession.getProcess().getExecutionResult().getExecutionConsole();
@@ -309,19 +305,17 @@ public class JavaDebugProcess extends XDebugProcess {
         return super.createConsole();
     }
 
-    @Nonnull
     @Override
     public XDebugTabLayouter createTabLayouter() {
         return new XDebugTabLayouter() {
             @Override
-            public void registerAdditionalContent(@Nonnull RunnerLayoutUi ui) {
+            public void registerAdditionalContent(RunnerLayoutUi ui) {
                 registerThreadsPanel(ui);
                 //registerMemoryViewPanel(ui);
             }
 
-            @Nonnull
             @Override
-            public Content registerConsoleContent(@Nonnull RunnerLayoutUi ui, @Nonnull ExecutionConsole console) {
+            public Content registerConsoleContent(RunnerLayoutUi ui, ExecutionConsole console) {
                 Content content = null;
                 if (console instanceof ExecutionConsoleEx consoleEx) {
                     consoleEx.buildUi(ui);
@@ -333,7 +327,7 @@ public class JavaDebugProcess extends XDebugProcess {
                 return content;
             }
 
-            private void registerThreadsPanel(@Nonnull RunnerLayoutUi ui) {
+            private void registerThreadsPanel(RunnerLayoutUi ui) {
                 ThreadsPanel panel = new ThreadsPanel(myJavaSession.getProject(), getDebuggerStateManager());
                 Content threadsContent = ui.createContent(
                     DebuggerContentInfo.THREADS_CONTENT,
@@ -362,7 +356,7 @@ public class JavaDebugProcess extends XDebugProcess {
                 }, threadsContent);
             }
 
-//            private void registerMemoryViewPanel(@Nonnull RunnerLayoutUi ui) {
+//            private void registerMemoryViewPanel(RunnerLayoutUi ui) {
 //                XDebugSession session = getSession();
 //                DebugProcessImpl process = myJavaSession.getProcess();
 //                InstancesTracker tracker = InstancesTracker.getInstance(myJavaSession.getProject());
@@ -407,9 +401,9 @@ public class JavaDebugProcess extends XDebugProcess {
 
     @Override
     public void registerAdditionalActions(
-        @Nonnull DefaultActionGroup leftToolbar,
-        @Nonnull DefaultActionGroup topToolbar,
-        @Nonnull DefaultActionGroup settings
+        DefaultActionGroup leftToolbar,
+        DefaultActionGroup topToolbar,
+        DefaultActionGroup settings
     ) {
         Constraints beforeRunner = new Constraints(Anchor.BEFORE, "Runner.Layout");
         leftToolbar.add(AnSeparator.getInstance(), beforeRunner);
@@ -433,7 +427,7 @@ public class JavaDebugProcess extends XDebugProcess {
         }
 
         @Override
-        public boolean isSelected(@Nonnull AnActionEvent e) {
+        public boolean isSelected(AnActionEvent e) {
             return myAutoModeEnabled;
         }
 
@@ -447,9 +441,7 @@ public class JavaDebugProcess extends XDebugProcess {
 
     private static class WatchLastMethodReturnValueAction extends ToggleAction {
         private volatile boolean myWatchesReturnValues;
-        @Nonnull
         private final LocalizeValue myText;
-        @Nonnull
         private final LocalizeValue myTextUnavailable;
 
         public WatchLastMethodReturnValueAction() {
@@ -461,7 +453,7 @@ public class JavaDebugProcess extends XDebugProcess {
 
         @RequiredUIAccess
         @Override
-        public void update(@Nonnull AnActionEvent e) {
+        public void update(AnActionEvent e) {
             super.update(e);
             Presentation presentation = e.getPresentation();
             DebugProcessImpl process = getCurrentDebugProcess(e.getData(Project.KEY));
@@ -476,7 +468,7 @@ public class JavaDebugProcess extends XDebugProcess {
         }
 
         @Override
-        public boolean isSelected(@Nonnull AnActionEvent e) {
+        public boolean isSelected(AnActionEvent e) {
             return myWatchesReturnValues;
         }
 
@@ -506,7 +498,6 @@ public class JavaDebugProcess extends XDebugProcess {
         return myNodeManager;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getCurrentStateMessage() {
         LocalizeValue description = myJavaSession.getStateDescription();

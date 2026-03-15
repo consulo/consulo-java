@@ -23,8 +23,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ArrayFactory;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.annotation.ElementType;
 import java.util.Arrays;
@@ -67,14 +66,12 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
 
         public static final TargetType[] EMPTY_ARRAY = {};
 
-        @Nonnull
         private final LocalizeValue myPresentableText;
 
-        TargetType(@Nonnull LocalizeValue presentableText) {
+        TargetType(LocalizeValue presentableText) {
             myPresentableText = presentableText;
         }
 
-        @Nonnull
         public LocalizeValue getPresentableText() {
             return myPresentableText;
         }
@@ -85,7 +82,6 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
      *
      * @return the parameter list instance.
      */
-    @Nonnull
     PsiAnnotationParameterList getParameterList();
 
     /**
@@ -155,11 +151,10 @@ public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, J
      * @return whether the annotation has the given qualified name. Specific languages may provide efficient implementation
      * that doesn't always create/resolve annotation reference.
      */
-    default boolean hasQualifiedName(@Nonnull String qualifiedName) {
+    default boolean hasQualifiedName(String qualifiedName) {
         return qualifiedName.equals(getQualifiedName());
     }
 
-    @Nonnull
     @Override
     default List<JvmAnnotationAttribute> getAttributes() {
         return Arrays.asList(getParameterList().getAttributes());

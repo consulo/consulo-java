@@ -32,30 +32,25 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
 
 @ExtensionImpl
 public class VarargParameterInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "VariableArgumentMethod";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.variableArgumentMethodDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.variableArgumentMethodProblemDescriptor().get();
     }
@@ -67,7 +62,6 @@ public class VarargParameterInspection extends BaseInspection {
     }
 
     private static class VarargParameterFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.variableArgumentMethodQuickfix();
@@ -118,7 +112,7 @@ public class VarargParameterInspection extends BaseInspection {
             PsiMethodCallExpression methodCallExpression = (PsiMethodCallExpression) referenceExpression.getParent();
             PsiExpressionList argumentList = methodCallExpression.getArgumentList();
             PsiExpression[] arguments = argumentList.getExpressions();
-            @NonNls StringBuilder builder = new StringBuilder("new ");
+            StringBuilder builder = new StringBuilder("new ");
             builder.append(arrayTypeText);
             builder.append("[]{");
             if (arguments.length > indexOfFirstVarargArgument) {
@@ -156,7 +150,7 @@ public class VarargParameterInspection extends BaseInspection {
     private static class VarargParameterVisitor extends BaseInspectionVisitor {
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             PsiParameterList parameterList = method.getParameterList();
             if (parameterList.getParametersCount() < 1) {
                 return;

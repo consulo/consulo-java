@@ -26,7 +26,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -65,7 +64,6 @@ public class StandardVariableNamesInspection extends BaseInspection {
     @SuppressWarnings("PublicField")
     public boolean ignoreParameterNameSameAsSuper = false;
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.standardVariableNamesDisplayName();
@@ -82,7 +80,6 @@ public class StandardVariableNamesInspection extends BaseInspection {
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiVariable variable = (PsiVariable) infos[0];
         String name = variable.getName();
@@ -109,7 +106,7 @@ public class StandardVariableNamesInspection extends BaseInspection {
 
     private class StandardVariableNamesVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitVariable(@Nonnull PsiVariable variable) {
+        public void visitVariable(PsiVariable variable) {
             super.visitVariable(variable);
             String variableName = variable.getName();
             String expectedType = s_expectedTypes.get(variableName);

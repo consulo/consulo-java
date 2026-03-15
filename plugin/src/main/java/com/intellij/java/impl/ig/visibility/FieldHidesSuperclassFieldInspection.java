@@ -27,7 +27,6 @@ import com.siyeh.ig.InspectionGadgetsFix;
 import com.intellij.java.impl.ig.fixes.RenameFix;
 import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -41,12 +40,10 @@ public class FieldHidesSuperclassFieldInspection extends BaseInspection {
    */
   public boolean m_ignoreInvisibleFields = true;
 
-  @Nonnull
   public String getID() {
     return "FieldNameHidesFieldInSuperclass";
   }
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.fieldNameHidesInSuperclassDisplayName();
   }
@@ -59,7 +56,6 @@ public class FieldHidesSuperclassFieldInspection extends BaseInspection {
     return true;
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.fieldNameHidesInSuperclassProblemDescriptor().get();
   }
@@ -77,7 +73,7 @@ public class FieldHidesSuperclassFieldInspection extends BaseInspection {
     extends BaseInspectionVisitor {
 
     @Override
-    public void visitField(@Nonnull PsiField field) {
+    public void visitField(PsiField field) {
       PsiClass aClass = field.getContainingClass();
       if (aClass == null) {
         return;

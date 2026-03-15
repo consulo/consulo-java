@@ -42,8 +42,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ThreeState;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 import org.jetbrains.annotations.Contract;
 
@@ -60,9 +59,8 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
     private static final Set<String> TRUE_OR_FALSE = Set.of("TRUE", "FALSE");
 
     @Override
-    @Nonnull
     public PsiElementVisitor buildVisitorImpl(
-        @Nonnull ProblemsHolder holder,
+        ProblemsHolder holder,
         boolean isOnTheFly,
         LocalInspectionToolSession session,
         DataFlowInspectionStateBase state
@@ -70,7 +68,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         return new JavaElementVisitor() {
             @Override
             @RequiredReadAction
-            public void visitClass(@Nonnull PsiClass aClass) {
+            public void visitClass(PsiClass aClass) {
                 if (aClass instanceof PsiTypeParameter) {
                     return;
                 }
@@ -108,7 +106,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
             @Override
             @RequiredReadAction
-            public void visitMethod(@Nonnull PsiMethod method) {
+            public void visitMethod(PsiMethod method) {
                 if (method.isConstructor()) {
                     return;
                 }
@@ -139,7 +137,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
             @Override
             @RequiredReadAction
-            public void visitMethodReferenceExpression(@Nonnull PsiMethodReferenceExpression expression) {
+            public void visitMethodReferenceExpression(PsiMethodReferenceExpression expression) {
                 super.visitMethodReferenceExpression(expression);
                 if (!state.REPORT_UNSOUND_WARNINGS) {
                     return;
@@ -157,7 +155,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             }
 
             @Override
-            public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+            public void visitIfStatement(PsiIfStatement statement) {
                 PsiExpression condition = PsiUtil.skipParenthesizedExprDown(statement.getCondition());
                 if (BoolUtils.isBooleanLiteral(condition)) {
                     holder.newProblem(JavaAnalysisLocalize.dataflowMessageConstantNoRef(condition.textMatches(PsiKeyword.TRUE) ? 1 : 0))
@@ -168,17 +166,17 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             }
 
             @Override
-            public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+            public void visitWhileStatement(PsiWhileStatement statement) {
                 checkLoopCondition(statement.getCondition());
             }
 
             @Override
-            public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+            public void visitDoWhileStatement(PsiDoWhileStatement statement) {
                 checkLoopCondition(statement.getCondition());
             }
 
             @Override
-            public void visitForStatement(@Nonnull PsiForStatement statement) {
+            public void visitForStatement(PsiForStatement statement) {
                 checkLoopCondition(statement.getCondition());
             }
 
@@ -259,7 +257,6 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         }
     }
 
-    @Nonnull
     protected List<LocalQuickFix> createCastFixes(
         PsiTypeCastExpression castExpression,
         PsiType realType,
@@ -269,7 +266,6 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         return Collections.emptyList();
     }
 
-    @Nonnull
     protected List<LocalQuickFix> createNPEFixes(
         PsiExpression qualifier,
         PsiExpression expression,
@@ -464,7 +460,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         });
     }
 
-    private static boolean isCondition(@Nonnull PsiExpression expression) {
+    private static boolean isCondition(PsiExpression expression) {
         PsiType type = expression.getType();
         if (type == null || !PsiType.BOOLEAN.isAssignableFrom(type)) {
             return false;
@@ -655,7 +651,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         });
     }
 
-    private void reportMutabilityViolations(ProblemsHolder holder, Set<PsiElement> violations, @Nonnull LocalizeValue message) {
+    private void reportMutabilityViolations(ProblemsHolder holder, Set<PsiElement> violations, LocalizeValue message) {
         for (PsiElement violation : violations) {
             holder.newProblem(message)
                 .range(violation)
@@ -889,15 +885,13 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             );
     }
 
-    @Nonnull
     private static LocalizeValue getContractMessage(List<? extends MethodContract> contracts) {
         return contracts.stream().allMatch(mc -> mc.getConditions().stream().allMatch(ContractValue::isBoundCheckingCondition))
             ? JavaAnalysisLocalize.dataflowMessageContractFailIndex()
             : JavaAnalysisLocalize.dataflowMessageContractFail();
     }
 
-    @Nonnull
-    private static PsiElement getElementToHighlight(@Nonnull PsiCall call) {
+    private static PsiElement getElementToHighlight(PsiCall call) {
         PsiJavaCodeReferenceElement ref;
         if (call instanceof PsiNewExpression newExpression) {
             ref = newExpression.getClassReference();
@@ -938,7 +932,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
     @RequiredReadAction
     private void reportNullableArgumentsPassedToNonAnnotated(
         ProblemReporter reporter,
-        @Nonnull LocalizeValue message,
+        LocalizeValue message,
         PsiExpression expression,
         PsiExpression top,
         DataFlowInspectionStateBase state
@@ -958,7 +952,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         ProblemReporter reporter,
         PsiExpression top,
         PsiExpression expression,
-        @Nonnull LocalizeValue message,
+        LocalizeValue message,
         DataFlowInspectionStateBase state
     ) {
         PsiField field = getAssignedField(top);
@@ -983,7 +977,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
     private void reportCallMayProduceNpe(
         ProblemReporter reporter,
-        @Nonnull LocalizeValue message,
+        LocalizeValue message,
         PsiMethodCallExpression callExpression,
         DataFlowInspectionStateBase state
     ) {
@@ -997,9 +991,9 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
     }
 
     private void reportFailingCasts(
-        @Nonnull ProblemReporter reporter,
-        @Nonnull DataFlowInstructionVisitor visitor,
-        @Nonnull Map<PsiExpression, ConstantResult> constantExpressions,
+        ProblemReporter reporter,
+        DataFlowInstructionVisitor visitor,
+        Map<PsiExpression, ConstantResult> constantExpressions,
         DataFlowInspectionStateBase state
     ) {
         visitor.getFailingCastExpressions().forKeyValue((typeCast, info) -> {
@@ -1222,7 +1216,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         ProblemReporter reporter,
         List<NullabilityProblem<?>> problems,
         Map<PsiExpression, ConstantResult> expressions,
-        @Nonnull PsiElement block, DataFlowInspectionStateBase state
+        PsiElement block, DataFlowInspectionStateBase state
     ) {
         PsiMethod method = getScopeMethod(block);
         if (method == null) {
@@ -1298,7 +1292,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         }
     }
 
-    private static boolean isAssertionEffectively(@Nonnull PsiElement anchor, ConstantResult result) {
+    private static boolean isAssertionEffectively(PsiElement anchor, ConstantResult result) {
         Object value = result.value();
         if (value instanceof Boolean booleanValue) {
             return isAssertionEffectively(anchor, booleanValue);
@@ -1306,7 +1300,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         return value == null && isAssertCallArgument(anchor, ContractValue.nullValue());
     }
 
-    private static boolean isAssertionEffectively(@Nonnull PsiElement anchor, boolean evaluatesToTrue) {
+    private static boolean isAssertionEffectively(PsiElement anchor, boolean evaluatesToTrue) {
         PsiElement parent;
         while (true) {
             parent = anchor.getParent();
@@ -1350,7 +1344,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         return isAssertCallArgument(anchor, ContractValue.booleanValue(evaluatesToTrue));
     }
 
-    private static boolean isAssertCallArgument(@Nonnull PsiElement anchor, @Nonnull ContractValue wantedConstraint) {
+    private static boolean isAssertCallArgument(PsiElement anchor, ContractValue wantedConstraint) {
         PsiElement parent = PsiUtil.skipParenthesizedExprUp(anchor.getParent());
         if (parent instanceof PsiExpressionList expressionList) {
             int index = ArrayUtil.indexOf(expressionList.getExpressions(), anchor);
@@ -1449,7 +1443,6 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         }
         final LocalizeValue text = fix.getText();
         return new LocalQuickFix() {
-            @Nonnull
             @Override
             public LocalizeValue getName() {
                 return text;
@@ -1457,7 +1450,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
 
             @Override
             @RequiredReadAction
-            public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            public void applyFix(Project project, ProblemDescriptor descriptor) {
                 PsiElement psiElement = descriptor.getPsiElement();
                 if (psiElement == null) {
                     return;
@@ -1477,7 +1470,6 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         };
     }
 
-    @Nonnull
     protected static LocalQuickFix createSimplifyToAssignmentFix() {
         return new SimplifyToAssignmentFix();
     }
@@ -1487,14 +1479,12 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesProbableBugs();
     }
 
     @Override
     public
-    @Nonnull
     String getShortName() {
         return SHORT_NAME;
     }
@@ -1504,7 +1494,6 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         FALSE(Boolean.FALSE),
         NULL(null),
         ZERO(0) {
-            @Nonnull
             @Override
             public String toString() {
                 return "0";
@@ -1522,14 +1511,12 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             return myValue;
         }
 
-        @Nonnull
         @Override
         public String toString() {
             return StringUtil.toLowerCase(name());
         }
 
-        @Nonnull
-        static ConstantResult fromDfType(@Nonnull DfType dfType) {
+        static ConstantResult fromDfType(DfType dfType) {
             if (dfType == DfTypes.NULL) {
                 return NULL;
             }
@@ -1545,8 +1532,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             return UNKNOWN;
         }
 
-        @Nonnull
-        static ConstantResult mergeValue(@Nullable ConstantResult state, @Nonnull DfaMemoryState memState, @Nullable DfaValue value) {
+        static ConstantResult mergeValue(@Nullable ConstantResult state, DfaMemoryState memState, @Nullable DfaValue value) {
             if (state == UNKNOWN || value == null) {
                 return UNKNOWN;
             }
@@ -1562,13 +1548,12 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
         private class MyProblemBuilder extends ProblemBuilderWrapper {
             private Boolean registered = null;
 
-            private MyProblemBuilder(@Nonnull ProblemBuilder subBuilder) {
+            private MyProblemBuilder(ProblemBuilder subBuilder) {
                 super(subBuilder);
             }
 
-            @Nonnull
             @Override
-            public ProblemBuilder range(@Nonnull PsiElement element) {
+            public ProblemBuilder range(PsiElement element) {
                 checkRegistered(element);
                 return super.range(element);
             }
@@ -1583,7 +1568,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
                 }
             }
 
-            private void checkRegistered(@Nonnull PsiElement element) {
+            private void checkRegistered(PsiElement element) {
                 if (registered != null) {
                     throw new IllegalStateException("Range was already set");
                 }
@@ -1600,7 +1585,7 @@ public abstract class DataFlowInspectionBase extends AbstractBaseJavaLocalInspec
             myScope = scope;
         }
 
-        public ProblemBuilder newProblem(@Nonnull LocalizeValue message) {
+        public ProblemBuilder newProblem(LocalizeValue message) {
             return new MyProblemBuilder(myHolder.newProblem(message));
         }
 

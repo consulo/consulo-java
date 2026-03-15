@@ -24,26 +24,21 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class RecordStoreResourceInspection extends BaseInspection {
-    @Nonnull
     @Override
     @Pattern(VALID_ID_PATTERN)
     public String getID() {
         return "RecordStoreOpenedButNotSafelyClosed";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.recordstoreOpenedNotSafelyClosedDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         PsiExpression expression = (PsiExpression) infos[0];
         PsiType type = expression.getType();
@@ -61,7 +56,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
             if (!isRecordStoreFactoryMethod(expression)) {
@@ -135,12 +130,12 @@ public class RecordStoreResourceInspection extends BaseInspection {
         }
 
         private static boolean isRecordStoreFactoryMethod(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             PsiReferenceExpression methodExpression =
                 expression.getMethodExpression();
             String methodName = methodExpression.getReferenceName();
-            @NonNls String openStore = "openRecordStore";
+            String openStore = "openRecordStore";
             if (!openStore.equals(methodName)) {
                 return false;
             }
@@ -153,7 +148,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
                 return false;
             }
             String className = containingClass.getQualifiedName();
-            @NonNls String recordStore =
+            String recordStore =
                 "javax.microedition.rms.RecordStore";
             return recordStore.equals(className);
         }
@@ -170,7 +165,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
         }
 
         @Override
-        public void visitElement(@Nonnull PsiElement element) {
+        public void visitElement(PsiElement element) {
             if (!containsClose) {
                 super.visitElement(element);
             }
@@ -178,7 +173,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression call
+            PsiMethodCallExpression call
         ) {
             if (containsClose) {
                 return;
@@ -187,7 +182,7 @@ public class RecordStoreResourceInspection extends BaseInspection {
             PsiReferenceExpression methodExpression =
                 call.getMethodExpression();
             String methodName = methodExpression.getReferenceName();
-            @NonNls String closeStore = "closeRecordStore";
+            String closeStore = "closeRecordStore";
             if (!closeStore.equals(methodName)) {
                 return;
             }

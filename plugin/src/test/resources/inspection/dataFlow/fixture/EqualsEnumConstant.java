@@ -1,4 +1,4 @@
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class TestIDEAWarn {
   void method(@Nullable MyEnum e) {

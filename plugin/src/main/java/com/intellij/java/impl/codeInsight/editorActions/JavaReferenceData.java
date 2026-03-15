@@ -17,7 +17,7 @@ package com.intellij.java.impl.codeInsight.editorActions;
 
 import consulo.logging.Logger;
 import consulo.util.lang.lazy.LazyValue;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.datatransfer.DataFlavor;
 import java.io.Serializable;

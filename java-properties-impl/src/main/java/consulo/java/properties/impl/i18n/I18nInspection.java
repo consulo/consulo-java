@@ -64,8 +64,7 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import javax.swing.*;
@@ -113,7 +112,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     private static final String SKIP_FOR_ENUM = "ignoreForEnumConstant";
 
     @Override
-    public void writeSettings(@Nonnull Element node) throws WriteExternalException {
+    public void writeSettings(Element node) throws WriteExternalException {
         super.writeSettings(node);
         if (ignoreForEnumConstants) {
             Element e = new Element("option");
@@ -124,7 +123,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    public void readSettings(@Nonnull Element node) throws InvalidDataException {
+    public void readSettings(Element node) throws InvalidDataException {
         super.readSettings(node);
         for (Object o : node.getChildren()) {
             if (o instanceof Element && Comparing.strEqual(node.getAttributeValue("name"), SKIP_FOR_ENUM)) {
@@ -139,13 +138,11 @@ public class I18nInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesInternationalizationIssues();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return CodeInsightLocalize.inspectionI18nDisplayName();
     }
@@ -157,7 +154,6 @@ public class I18nInspection extends BaseLocalInspectionTool {
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "HardCodedStringLiteral";
     }
@@ -342,8 +338,8 @@ public class I18nInspection extends BaseLocalInspectionTool {
     @Override
     @RequiredReadAction
     public ProblemDescriptor[] checkMethod(
-        @Nonnull PsiMethod method,
-        @Nonnull InspectionManager manager,
+        PsiMethod method,
+        InspectionManager manager,
         boolean isOnTheFly,
         Object state
     ) {
@@ -361,7 +357,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     @Nullable
     @Override
     @RequiredReadAction
-    public ProblemDescriptor[] checkClass(@Nonnull PsiClass aClass, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkClass(PsiClass aClass, InspectionManager manager, boolean isOnTheFly, Object state) {
         if (isClassNonNls(aClass)) {
             return null;
         }
@@ -380,7 +376,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     @Nullable
     @Override
     @RequiredReadAction
-    public ProblemDescriptor[] checkField(@Nonnull PsiField field, @Nonnull InspectionManager manager, boolean isOnTheFly, Object state) {
+    public ProblemDescriptor[] checkField(PsiField field, InspectionManager manager, boolean isOnTheFly, Object state) {
         PsiClass containingClass = field.getContainingClass();
         if (containingClass == null || isClassNonNls(containingClass)) {
             return null;
@@ -409,13 +405,12 @@ public class I18nInspection extends BaseLocalInspectionTool {
     private static LocalQuickFix createIntroduceConstantFix() {
         return new LocalQuickFix() {
             @Override
-            @Nonnull
             public LocalizeValue getName() {
                 return RefactoringLocalize.introduceConstantTitle();
             }
 
             @Override
-            public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+            public void applyFix(Project project, ProblemDescriptor descriptor) {
                 //do it later because it is invoked from write action
                 project.getApplication().invokeLater(
                     () -> {
@@ -453,15 +448,15 @@ public class I18nInspection extends BaseLocalInspectionTool {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
         }
 
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
         }
 
         @Override
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
         }
 
         @Override
@@ -532,10 +527,10 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
     @RequiredReadAction
     private boolean canBeI18ned(
-        @Nonnull Project project,
-        @Nonnull PsiLiteralExpression expression,
-        @Nonnull String value,
-        @Nonnull Set<PsiModifierListOwner> nonNlsTargets
+        Project project,
+        PsiLiteralExpression expression,
+        String value,
+        Set<PsiModifierListOwner> nonNlsTargets
     ) {
         if (ignoreForNonAlpha && !StringUtil.containsAlphaCharacters(value)) {
             return false;
@@ -643,7 +638,7 @@ public class I18nInspection extends BaseLocalInspectionTool {
     }
 
     @RequiredReadAction
-    private static boolean isClassNonNls(@Nonnull PsiClass clazz) {
+    private static boolean isClassNonNls(PsiClass clazz) {
         PsiDirectory directory = clazz.getContainingFile().getContainingDirectory();
         return directory != null && isPackageNonNls(JavaDirectoryService.getInstance().getPackage(directory));
     }
@@ -660,8 +655,8 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
     @RequiredReadAction
     private boolean isPassedToNonNlsVariable(
-        @Nonnull Project project,
-        @Nonnull PsiLiteralExpression expression,
+        Project project,
+        PsiLiteralExpression expression,
         Set<PsiModifierListOwner> nonNlsTargets
     ) {
         PsiExpression topLevel = JavaI18nUtil.getToplevelExpression(project, expression);
@@ -752,8 +747,8 @@ public class I18nInspection extends BaseLocalInspectionTool {
 
     @RequiredReadAction
     private static boolean isInNonNlsCall(
-        @Nonnull Project project,
-        @Nonnull PsiExpression expression,
+        Project project,
+        PsiExpression expression,
         Set<PsiModifierListOwner> nonNlsTargets
     ) {
         expression = JavaI18nUtil.getToplevelExpression(project, expression);

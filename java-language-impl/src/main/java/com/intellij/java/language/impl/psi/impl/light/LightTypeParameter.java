@@ -22,27 +22,24 @@ import com.intellij.java.language.psi.PsiTypeParameterListOwner;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
 
 public class LightTypeParameter extends LightClass implements PsiTypeParameter {
     public LightTypeParameter(PsiTypeParameter delegate) {
         super(delegate);
     }
 
-    @Nonnull
     @Override
     public PsiTypeParameter getDelegate() {
         return (PsiTypeParameter)super.getDelegate();
     }
 
-    @Nonnull
     @Override
     public PsiElement copy() {
         return new LightTypeParameter(getDelegate());
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor elementVisitor) {
             elementVisitor.visitTypeParameter(this);
         }
@@ -61,26 +58,23 @@ public class LightTypeParameter extends LightClass implements PsiTypeParameter {
         return getDelegate().getIndex();
     }
 
-    @Nonnull
     @Override
     public PsiAnnotation[] getAnnotations() {
         return getDelegate().getAnnotations();
     }
 
-    @Nonnull
     @Override
     public PsiAnnotation[] getApplicableAnnotations() {
         return getDelegate().getApplicableAnnotations();
     }
 
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
+    public PsiAnnotation findAnnotation(String qualifiedName) {
         return getDelegate().findAnnotation(qualifiedName);
     }
 
-    @Nonnull
     @Override
-    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
+    public PsiAnnotation addAnnotation(String qualifiedName) {
         return getDelegate().addAnnotation(qualifiedName);
     }
 

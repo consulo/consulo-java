@@ -40,7 +40,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -51,13 +50,12 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
   private static final String FIND_CONSTANT_FIELD_USAGES = "Find constant field usages...";
 
   @Override
-  @Nonnull
   public LocalizeValue getText() {
     return LocalizeValue.localizeTODO("Replace Implements with Static Import");
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     if (!(file instanceof PsiJavaFile)) return false;
 
     PsiElement element = file.findElementAt(editor.getCaretModel().getOffset());
@@ -104,7 +102,7 @@ public class ReplaceImplementsWithStaticImportAction extends BaseIntentionAction
   }
 
   @Override
-  public void invoke(@Nonnull final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
+  public void invoke(final Project project, Editor editor, final PsiFile file) throws IncorrectOperationException {
     if (!FileModificationService.getInstance().preparePsiElementForWrite(file)) return;
 
     int offset = editor.getCaretModel().getOffset();

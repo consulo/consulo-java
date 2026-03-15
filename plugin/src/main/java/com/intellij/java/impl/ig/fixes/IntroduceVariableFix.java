@@ -30,8 +30,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.concurrent.AsyncResult;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Bas Leijdekkers
@@ -44,7 +43,6 @@ public class IntroduceVariableFix extends InspectionGadgetsFix {
         myMayChangeSemantics = mayChangeSemantics;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return myMayChangeSemantics

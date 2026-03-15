@@ -15,10 +15,8 @@
  */
 package com.intellij.java.debugger.impl.ui.tree.render;
 
-import jakarta.annotation.Nonnull;
 
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 import consulo.logging.Logger;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
 
@@ -27,22 +25,18 @@ public final class BasicRendererProperties implements Cloneable
 	private static final Logger LOG = Logger.getInstance(BasicRendererProperties.class);
 
 	private static final
-	@NonNls
 	String NAME_OPTION = "NAME";
 	private String myName;
 
 	private static final
-	@NonNls
 	String ENABLED_OPTION = "ENABLED";
 	private boolean myEnabled;
 
 	private static final
-	@NonNls
 	String CLASSNAME_OPTION = "QUALIFIED_NAME";
 	private String myClassName;
 
 	private static final
-	@NonNls
 	String SHOW_TYPE_OPTION = "SHOW_TYPE";
 	private boolean myShowType = true;
 
@@ -124,7 +118,7 @@ public final class BasicRendererProperties implements Cloneable
 		}
 	}
 
-	public void writeExternal(@Nonnull Element element)
+	public void writeExternal(Element element)
 	{
 		if(myName != null)
 		{

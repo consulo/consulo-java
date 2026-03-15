@@ -4,7 +4,6 @@
  */
 package com.intellij.refactoring;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInsight.CodeInsightUtil;
@@ -15,7 +14,6 @@ import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjec
 import com.intellij.java.impl.refactoring.extractMethodObject.ExtractMethodObjectProcessor;
 
 public abstract class ExtractMethodObjectWithMultipleExitPointsTest extends LightRefactoringTestCase {
-  @Nonnull
   @Override
   protected String getTestDataPath() {
     return JavaTestUtil.getJavaTestDataPath();

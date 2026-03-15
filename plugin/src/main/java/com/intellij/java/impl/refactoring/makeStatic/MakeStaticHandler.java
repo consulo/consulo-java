@@ -43,8 +43,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class MakeStaticHandler implements RefactoringActionHandler
 {
@@ -53,7 +52,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 
 	@Override
 	@RequiredUIAccess
-	public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext)
+	public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext)
 	{
 		PsiElement element = dataContext.getData(PsiElement.KEY);
 		editor.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
@@ -87,7 +86,7 @@ public class MakeStaticHandler implements RefactoringActionHandler
 
 	@Override
 	@RequiredUIAccess
-	public void invoke(@Nonnull Project project, @Nonnull PsiElement[] elements, DataContext dataContext)
+	public void invoke(Project project, PsiElement[] elements, DataContext dataContext)
 	{
 		if (elements.length != 1 || !(elements[0] instanceof PsiTypeParameterListOwner))
 		{

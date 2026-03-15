@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl.descriptors.data;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.ui.impl.watch.UserExpressionDescriptorImpl;
@@ -40,7 +39,7 @@ public class UserExpressionData extends DescriptorData<UserExpressionDescriptor>
 		myText = text;
 	}
 
-	protected UserExpressionDescriptorImpl createDescriptorImpl(@Nonnull Project project)
+	protected UserExpressionDescriptorImpl createDescriptorImpl(Project project)
 	{
 		return new UserExpressionDescriptorImpl(project, myParentDescriptor, myTypeName, myName, myText, myEnumerationIndex);
 	}

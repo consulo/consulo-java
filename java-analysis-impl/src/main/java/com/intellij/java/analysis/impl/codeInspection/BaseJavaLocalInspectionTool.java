@@ -25,7 +25,6 @@ import consulo.language.editor.intention.SuppressIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Implement this abstract class in order to provide new inspection tool functionality. The major API limitation here is
@@ -42,11 +41,11 @@ public abstract class BaseJavaLocalInspectionTool<State> extends AbstractBaseJav
     }
 
     @Override
-    public boolean isSuppressedFor(@Nonnull PsiElement element) {
+    public boolean isSuppressedFor(PsiElement element) {
         return isSuppressedFor(element, this);
     }
 
-    public static boolean isSuppressedFor(@Nonnull PsiElement element, @Nonnull LocalInspectionTool tool) {
+    public static boolean isSuppressedFor(PsiElement element, LocalInspectionTool tool) {
         return BaseJavaBatchLocalInspectionTool.isSuppressedFor(element, tool);
     }
 }

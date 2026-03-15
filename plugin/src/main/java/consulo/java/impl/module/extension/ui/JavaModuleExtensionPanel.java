@@ -39,7 +39,6 @@ import consulo.ui.ex.action.ActionToolbarPosition;
 import consulo.ui.ex.awt.*;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.StringUtil;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import javax.swing.event.ChangeListener;
@@ -66,7 +65,7 @@ public class JavaModuleExtensionPanel extends JPanel {
     myLanguageLevelComboBox = new ComboBox<>();
     myLanguageLevelComboBox.setRenderer(new ColoredListCellRenderer<Object>() {
       @Override
-      protected void customizeCellRenderer(@Nonnull JList<?> jList, Object value, int i, boolean b, boolean b1) {
+      protected void customizeCellRenderer(JList<?> jList, Object value, int i, boolean b, boolean b1) {
         if (value == ObjectUtil.NULL) {
           append(TargetOptionsComponent.COMPILER_DEFAULT, SimpleTextAttributes.GRAY_ATTRIBUTES);
         } else if (value instanceof LanguageLevel) {

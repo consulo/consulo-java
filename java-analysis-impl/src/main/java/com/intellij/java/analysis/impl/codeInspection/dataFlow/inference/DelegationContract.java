@@ -28,8 +28,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Lists;
 import consulo.util.lang.ObjectUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
@@ -54,7 +53,6 @@ class DelegationContract implements PreContract {
     return negated;
   }
 
-  @Nonnull
   @Override
   public List<StandardMethodContract> toContracts(PsiMethod method, Supplier<PsiCodeBlock> body) {
     PsiMethodCallExpression call = ObjectUtil.tryCast(expression.restoreExpression(body.get()), PsiMethodCallExpression.class);
@@ -145,8 +143,7 @@ class DelegationContract implements PreContract {
     return null;
   }
 
-  @Nullable
-  private static StandardMethodContract.ValueConstraint getLiteralConstraint(PsiExpression argument) {
+  private static StandardMethodContract.@Nullable ValueConstraint getLiteralConstraint(PsiExpression argument) {
     if (argument instanceof PsiLiteralExpression) {
       return ContractInferenceInterpreter.getLiteralConstraint(argument.getFirstChild().getNode().getElementType());
     } else if (argument instanceof PsiNewExpression || argument instanceof PsiPolyadicExpression || argument instanceof PsiFunctionalExpression) {

@@ -14,10 +14,8 @@ import consulo.util.lang.MathUtil;
 import consulo.util.lang.ThreeState;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
-import org.jetbrains.annotations.Nls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -58,8 +56,7 @@ public abstract class LongRangeSet {
      * @param other set to subtract
      * @return a new set
      */
-    @Nonnull
-    public abstract LongRangeSet subtract(@Nonnull LongRangeSet other);
+    public abstract LongRangeSet subtract(LongRangeSet other);
 
     public LongRangeSet without(long value) {
         return subtract(point(value));
@@ -78,8 +75,7 @@ public abstract class LongRangeSet {
      * @param other other set to intersect with
      * @return a new set
      */
-    @Nonnull
-    public abstract LongRangeSet intersect(@Nonnull LongRangeSet other);
+    public abstract LongRangeSet intersect(LongRangeSet other);
 
     /**
      * Merge current set with other. May return bigger set if exact representation is impossible.
@@ -87,8 +83,7 @@ public abstract class LongRangeSet {
      * @param other other set to merge with
      * @return a new set
      */
-    @Nonnull
-    public abstract LongRangeSet unite(@Nonnull LongRangeSet other);
+    public abstract LongRangeSet unite(LongRangeSet other);
 
     /**
      * @return a minimal value contained in the set
@@ -132,7 +127,7 @@ public abstract class LongRangeSet {
      * @param other a sub-set candidate
      * @return true if current set contains all the values from other
      */
-    public abstract boolean contains(@Nonnull LongRangeSet other);
+    public abstract boolean contains(LongRangeSet other);
 
     /**
      * Creates a new set which contains all possible values satisfying given predicate regarding the current set.
@@ -175,10 +170,8 @@ public abstract class LongRangeSet {
     }
 
     public abstract
-    @Nls
     String getPresentationText(PsiType type);
 
-    @Nonnull
     LongRangeSet mulWiden(LongRangeSet other, boolean isLong) {
         if (Point.ZERO.equals(this)) {
             return this;
@@ -198,7 +191,6 @@ public abstract class LongRangeSet {
         return isLong ? Range.LONG_RANGE : Range.INT_RANGE;
     }
 
-    @Nonnull
     LongRangeSet plusWiden(LongRangeSet other, boolean isLong) {
         if (this instanceof Point && other instanceof Point) {
             long val1 = ((Point)this).myValue;
@@ -258,7 +250,6 @@ public abstract class LongRangeSet {
      * @param isLong whether {@link Math#abs(long)} is applied
      * @return a new range
      */
-    @Nonnull
     public abstract LongRangeSet abs(boolean isLong);
 
     /**
@@ -268,7 +259,6 @@ public abstract class LongRangeSet {
      * @param isLong whether result should be truncated to {@code int}
      * @return a new range
      */
-    @Nonnull
     public abstract LongRangeSet negate(boolean isLong);
 
     /**
@@ -279,7 +269,6 @@ public abstract class LongRangeSet {
      * @param isLong whether result should be truncated to {@code int}
      * @return a new range
      */
-    @Nonnull
     public abstract LongRangeSet plus(LongRangeSet other, boolean isLong);
 
     /**
@@ -289,7 +278,6 @@ public abstract class LongRangeSet {
      * @param isLong whether result should be truncated to {@code int}
      * @return a new range
      */
-    @Nonnull
     public LongRangeSet minus(LongRangeSet other, boolean isLong) {
         return plus(other.negate(isLong), isLong);
     }
@@ -302,7 +290,6 @@ public abstract class LongRangeSet {
      * @param other other set to perform bitwise-or with
      * @return a new range
      */
-    @Nonnull
     public LongRangeSet bitwiseOr(LongRangeSet other, boolean isLong) {
         if (this.isEmpty() || other.isEmpty()) {
             return empty();
@@ -319,7 +306,6 @@ public abstract class LongRangeSet {
      * @param other other set to perform bitwise-xor with
      * @return a new range
      */
-    @Nonnull
     public LongRangeSet bitwiseXor(LongRangeSet other, boolean isLong) {
         if (this.isEmpty() || other.isEmpty()) {
             return empty();
@@ -336,7 +322,6 @@ public abstract class LongRangeSet {
      * @param other other set to perform bitwise-and with
      * @return a new range
      */
-    @Nonnull
     public LongRangeSet bitwiseAnd(LongRangeSet other) {
         if (this.isEmpty() || other.isEmpty()) {
             return empty();
@@ -386,7 +371,6 @@ public abstract class LongRangeSet {
      *                treatment of {@code MIN_VALUE/-1} division; other division results do not depend on the resulting type.
      * @return a new range
      */
-    @Nonnull
     public LongRangeSet div(LongRangeSet divisor, boolean isLong) {
         if (divisor.isEmpty() || divisor.equals(Point.ZERO)) {
             return empty();
@@ -438,7 +422,6 @@ public abstract class LongRangeSet {
         return ((a ^ b) & (a ^ diff)) < 0;
     }
 
-    @Nonnull
     private static LongRangeSet divide(long dividendMin, long dividendMax, long divisorMin, long divisorMax, boolean isLong) {
         if (divisorMin == 0) {
             if (divisorMax == 0) {
@@ -473,7 +456,6 @@ public abstract class LongRangeSet {
      * @param isLong    whether the operation is performed on long type (if false, the int type is assumed).
      * @return a new range
      */
-    @Nonnull
     public LongRangeSet shiftLeft(LongRangeSet shiftSize, boolean isLong) {
         if (isEmpty() || shiftSize.isEmpty()) {
             return empty();
@@ -494,7 +476,6 @@ public abstract class LongRangeSet {
      * @param isLong    whether the operation is performed on long type (if false, the int type is assumed).
      * @return a new range
      */
-    @Nonnull
     public LongRangeSet shiftRight(LongRangeSet shiftSize, boolean isLong) {
         return doShiftRight(shiftSize, isLong, false);
     }
@@ -508,7 +489,6 @@ public abstract class LongRangeSet {
      * @param isLong    whether the operation is performed on long type (if false, the int type is assumed).
      * @return a new range
      */
-    @Nonnull
     public LongRangeSet unsignedShiftRight(LongRangeSet shiftSize, boolean isLong) {
         return doShiftRight(shiftSize, isLong, true);
     }
@@ -565,7 +545,6 @@ public abstract class LongRangeSet {
      * @param divisor divisor set to divide by
      * @return a new range
      */
-    @Nonnull
     abstract public LongRangeSet mod(LongRangeSet divisor);
 
     private static long[] splitAtZero(long[] ranges) {
@@ -714,7 +693,6 @@ public abstract class LongRangeSet {
     /**
      * @return a set containing all possible long values
      */
-    @Nonnull
     public static LongRangeSet all() {
         return Range.LONG_RANGE;
     }
@@ -884,7 +862,6 @@ public abstract class LongRangeSet {
         return null;
     }
 
-    @Nonnull
     public static LongRangeSet fromPsiElement(PsiModifierListOwner owner) {
         if (owner == null) {
             return all();
@@ -969,21 +946,18 @@ public abstract class LongRangeSet {
     static final class Empty extends LongRangeSet {
         static final LongRangeSet EMPTY = new Empty();
 
-        @Nonnull
         @Override
-        public LongRangeSet subtract(@Nonnull LongRangeSet other) {
+        public LongRangeSet subtract(LongRangeSet other) {
             return this;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet intersect(@Nonnull LongRangeSet other) {
+        public LongRangeSet intersect(LongRangeSet other) {
             return this;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet unite(@Nonnull LongRangeSet other) {
+        public LongRangeSet unite(LongRangeSet other) {
             return other;
         }
 
@@ -1008,7 +982,7 @@ public abstract class LongRangeSet {
         }
 
         @Override
-        public boolean contains(@Nonnull LongRangeSet other) {
+        public boolean contains(LongRangeSet other) {
             return other.isEmpty();
         }
 
@@ -1030,19 +1004,16 @@ public abstract class LongRangeSet {
             throw new IllegalArgumentException(type.toString());
         }
 
-        @Nonnull
         @Override
         public LongRangeSet abs(boolean isLong) {
             return this;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet negate(boolean isLong) {
             return this;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet plus(LongRangeSet other, boolean isLong) {
             return this;
@@ -1053,7 +1024,6 @@ public abstract class LongRangeSet {
             return this;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet mod(LongRangeSet divisor) {
             return empty();
@@ -1105,15 +1075,13 @@ public abstract class LongRangeSet {
             return cutoff < 1;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet subtract(@Nonnull LongRangeSet other) {
+        public LongRangeSet subtract(LongRangeSet other) {
             return other.contains(myValue) ? Empty.EMPTY : this;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet intersect(@Nonnull LongRangeSet other) {
+        public LongRangeSet intersect(LongRangeSet other) {
             return other.contains(myValue) ? this : Empty.EMPTY;
         }
 
@@ -1132,9 +1100,8 @@ public abstract class LongRangeSet {
             return myValue;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet unite(@Nonnull LongRangeSet other) {
+        public LongRangeSet unite(LongRangeSet other) {
             if (other.isEmpty() || other == this) {
                 return this;
             }
@@ -1207,7 +1174,7 @@ public abstract class LongRangeSet {
         }
 
         @Override
-        public boolean contains(@Nonnull LongRangeSet other) {
+        public boolean contains(LongRangeSet other) {
             return other.isEmpty() || equals(other);
         }
 
@@ -1235,19 +1202,16 @@ public abstract class LongRangeSet {
             return newValue == myValue ? this : point(newValue);
         }
 
-        @Nonnull
         @Override
         public LongRangeSet abs(boolean isLong) {
             return myValue >= 0 || myValue == minValue(isLong) ? this : point(-myValue);
         }
 
-        @Nonnull
         @Override
         public LongRangeSet negate(boolean isLong) {
             return myValue == minValue(isLong) ? this : point(-myValue);
         }
 
-        @Nonnull
         @Override
         public LongRangeSet plus(LongRangeSet other, boolean isLong) {
             if (other.isEmpty()) {
@@ -1315,7 +1279,6 @@ public abstract class LongRangeSet {
             return modRange(result.min(), result.max(), abs, 1L);
         }
 
-        @Nonnull
         @Override
         public LongRangeSet mod(LongRangeSet divisor) {
             if (divisor.isEmpty() || divisor.equals(ZERO)) {
@@ -1425,9 +1388,8 @@ public abstract class LongRangeSet {
             return diff < 0 || diff >= cutoff;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet subtract(@Nonnull LongRangeSet other) {
+        public LongRangeSet subtract(LongRangeSet other) {
             if (other.isEmpty()) {
                 return this;
             }
@@ -1495,9 +1457,8 @@ public abstract class LongRangeSet {
             return result;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet intersect(@Nonnull LongRangeSet other) {
+        public LongRangeSet intersect(LongRangeSet other) {
             if (other == this) {
                 return this;
             }
@@ -1535,9 +1496,8 @@ public abstract class LongRangeSet {
             return fromRanges(result, index);
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet unite(@Nonnull LongRangeSet other) {
+        public LongRangeSet unite(LongRangeSet other) {
             if (other.isEmpty() || other == this) {
                 return this;
             }
@@ -1632,7 +1592,7 @@ public abstract class LongRangeSet {
         }
 
         @Override
-        public boolean contains(@Nonnull LongRangeSet other) {
+        public boolean contains(LongRangeSet other) {
             return other.isEmpty() || other.min() >= myFrom && other.max() <= myTo;
         }
 
@@ -1668,7 +1628,6 @@ public abstract class LongRangeSet {
             throw new IllegalArgumentException(type.toString());
         }
 
-        @Nonnull
         private LongRangeSet mask(int size, PsiPrimitiveType type) {
             long addend = 1L << (size - 1);
             if (myFrom <= -addend && myTo >= addend - 1) {
@@ -1681,7 +1640,6 @@ public abstract class LongRangeSet {
             return plus(myFrom, myTo, addend, addend, true).bitwiseAnd(point(mask)).plus(point(-addend), true);
         }
 
-        @Nonnull
         @Override
         public LongRangeSet abs(boolean isLong) {
             if (myFrom >= 0) {
@@ -1716,7 +1674,6 @@ public abstract class LongRangeSet {
             }
         }
 
-        @Nonnull
         @Override
         public LongRangeSet negate(boolean isLong) {
             long minValue = minValue(isLong);
@@ -1734,7 +1691,6 @@ public abstract class LongRangeSet {
             return new Range(-myTo, -myFrom);
         }
 
-        @Nonnull
         @Override
         public LongRangeSet plus(LongRangeSet other, boolean isLong) {
             if (other.isEmpty()) {
@@ -1765,7 +1721,6 @@ public abstract class LongRangeSet {
             return isLong ? LONG_RANGE : INT_RANGE;
         }
 
-        @Nonnull
         private static LongRangeSet plus(long from1, long to1, long from2, long to2, boolean isLong) {
             long len1 = to1 - from1; // may overflow
             long len2 = to2 - from2; // may overflow
@@ -1794,7 +1749,6 @@ public abstract class LongRangeSet {
             }
         }
 
-        @Nonnull
         @Override
         public LongRangeSet mod(LongRangeSet divisor) {
             if (divisor.isEmpty() || divisor.equals(Point.ZERO)) {
@@ -1922,14 +1876,12 @@ public abstract class LongRangeSet {
 
         @Override
         public
-        @Nonnull
-        LongRangeSet subtract(@Nonnull LongRangeSet other) {
+        LongRangeSet subtract(LongRangeSet other) {
             return super.subtract(other);
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet intersect(@Nonnull LongRangeSet other) {
+        public LongRangeSet intersect(LongRangeSet other) {
             LongRangeSet intersection = super.intersect(other);
             if (intersection instanceof Range || intersection instanceof Point) {
                 long bits = myBits;
@@ -1992,9 +1944,8 @@ public abstract class LongRangeSet {
             return false;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet unite(@Nonnull LongRangeSet other) {
+        public LongRangeSet unite(LongRangeSet other) {
             if (other instanceof ModRange) {
                 ModRange modRange = (ModRange)other;
                 int lcm = lcm(modRange.myMod);
@@ -2024,7 +1975,7 @@ public abstract class LongRangeSet {
         }
 
         @Override
-        public boolean contains(@Nonnull LongRangeSet other) {
+        public boolean contains(LongRangeSet other) {
             if (other instanceof ModRange) {
                 ModRange modRange = (ModRange)other;
                 if (modRange.myFrom < myFrom || modRange.myTo > myTo) {
@@ -2044,7 +1995,6 @@ public abstract class LongRangeSet {
             return true;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet negate(boolean isLong) {
             LongRangeSet negated = super.negate(isLong);
@@ -2056,7 +2006,6 @@ public abstract class LongRangeSet {
             return negated;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet plus(LongRangeSet other, boolean isLong) {
             LongRangeSet set = super.plus(other, isLong);
@@ -2083,7 +2032,6 @@ public abstract class LongRangeSet {
             return range(min, max);
         }
 
-        @Nonnull
         @Override
         public LongRangeSet mod(LongRangeSet divisor) {
             if (divisor instanceof Point) {
@@ -2125,7 +2073,6 @@ public abstract class LongRangeSet {
         }
 
         private
-        @Nls
         String getSuffix() {
             LocalizeValue suffix;
             if (myMod == 2) {
@@ -2239,9 +2186,8 @@ public abstract class LongRangeSet {
             return result;
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet subtract(@Nonnull LongRangeSet other) {
+        public LongRangeSet subtract(LongRangeSet other) {
             if (other.isEmpty()) {
                 return this;
             }
@@ -2259,9 +2205,8 @@ public abstract class LongRangeSet {
             return fromRanges(result, index);
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet intersect(@Nonnull LongRangeSet other) {
+        public LongRangeSet intersect(LongRangeSet other) {
             if (other == this) {
                 return this;
             }
@@ -2274,9 +2219,8 @@ public abstract class LongRangeSet {
             return subtract(all().subtract(other));
         }
 
-        @Nonnull
         @Override
-        public LongRangeSet unite(@Nonnull LongRangeSet other) {
+        public LongRangeSet unite(LongRangeSet other) {
             if (!(other instanceof RangeSet)) {
                 return other.unite(this);
             }
@@ -2350,7 +2294,7 @@ public abstract class LongRangeSet {
         }
 
         @Override
-        public boolean contains(@Nonnull LongRangeSet other) {
+        public boolean contains(LongRangeSet other) {
             if (other.isEmpty() || other == this) {
                 return true;
             }
@@ -2426,7 +2370,6 @@ public abstract class LongRangeSet {
             return result;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet abs(boolean isLong) {
             LongRangeSet result = empty();
@@ -2436,7 +2379,6 @@ public abstract class LongRangeSet {
             return result;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet negate(boolean isLong) {
             LongRangeSet result = empty();
@@ -2446,7 +2388,6 @@ public abstract class LongRangeSet {
             return result;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet plus(LongRangeSet other, boolean isLong) {
             if (myRanges.length > 6) {
@@ -2470,7 +2411,6 @@ public abstract class LongRangeSet {
             return isLong ? Range.LONG_RANGE : Range.INT_RANGE;
         }
 
-        @Nonnull
         @Override
         public LongRangeSet mod(LongRangeSet divisor) {
             if (divisor.isEmpty()) {

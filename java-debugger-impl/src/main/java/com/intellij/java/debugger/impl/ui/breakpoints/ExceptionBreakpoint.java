@@ -54,14 +54,12 @@ import consulo.util.dataholder.Key;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 public class ExceptionBreakpoint extends Breakpoint<JavaExceptionBreakpointProperties> {
     private static final Logger LOG = Logger.getInstance(ExceptionBreakpoint.class);
 
     protected final static String READ_NO_CLASS_NAME = DebuggerBundle.message("error.absent.exception.breakpoint.class.name");
     public static final
-    @NonNls
     Key<ExceptionBreakpoint> CATEGORY = BreakpointCategory.lookup("exception_breakpoints");
 
     public ExceptionBreakpoint(Project project, XBreakpoint<JavaExceptionBreakpointProperties> xBreakpoint) {

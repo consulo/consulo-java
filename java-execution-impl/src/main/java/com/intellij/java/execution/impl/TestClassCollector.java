@@ -31,7 +31,7 @@ import consulo.util.nodep.classloader.UrlClassLoader;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.PathsList;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;

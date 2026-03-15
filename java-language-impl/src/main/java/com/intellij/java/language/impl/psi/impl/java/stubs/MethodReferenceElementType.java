@@ -27,7 +27,6 @@ import consulo.language.impl.ast.CompositeElement;
 import consulo.language.impl.ast.TreeElement;
 import consulo.util.lang.lazy.LazyValue;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public class MethodReferenceElementType extends FunctionalExpressionElementType<PsiMethodReferenceExpression> {
@@ -39,21 +38,20 @@ public class MethodReferenceElementType extends FunctionalExpressionElementType<
   }
 
   @Override
-  public PsiMethodReferenceExpression createPsi(@Nonnull ASTNode node) {
+  public PsiMethodReferenceExpression createPsi(ASTNode node) {
     return new PsiMethodReferenceExpressionImpl(node);
   }
 
   @Override
-  public PsiMethodReferenceExpression createPsi(@Nonnull FunctionalExpressionStub<PsiMethodReferenceExpression> stub) {
+  public PsiMethodReferenceExpression createPsi(FunctionalExpressionStub<PsiMethodReferenceExpression> stub) {
     return new PsiMethodReferenceExpressionImpl(stub);
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new CompositeElement(this) {
       @Override
-      public void replaceChildInternal(@Nonnull ASTNode child, @Nonnull TreeElement newElement) {
+      public void replaceChildInternal(ASTNode child, TreeElement newElement) {
         super.replaceChildInternal(child, JavaSourceUtil.addParenthToReplacedChild(child, newElement, getManager()));
       }
 
@@ -74,9 +72,8 @@ public class MethodReferenceElementType extends FunctionalExpressionElementType<
     };
   }
 
-  @Nonnull
   @Override
-  protected String getPresentableText(@Nonnull LighterAST tree, @Nonnull LighterASTNode funExpr) {
+  protected String getPresentableText(LighterAST tree, LighterASTNode funExpr) {
     return LightTreeUtil.toFilteredString(tree, funExpr, EXCLUDE_FROM_PRESENTABLE_TEXT.get());
   }
 }

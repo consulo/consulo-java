@@ -16,11 +16,8 @@
 
 package com.intellij.java.language.impl.psi.controlFlow;
 
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 public abstract class InstructionBase implements Instruction, Cloneable {
-  @Nonnull
   @Override
   public Instruction clone() {
     try {
@@ -30,6 +27,5 @@ public abstract class InstructionBase implements Instruction, Cloneable {
     }
   }
 
-  @NonNls
   public abstract String toString();
 }

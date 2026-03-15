@@ -18,7 +18,6 @@ package com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.c
 import java.util.List;
 import java.util.Set;
 
-import jakarta.annotation.Nonnull;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceSession;
@@ -35,7 +34,7 @@ public class ExpressionCompatibilityConstraint extends InputOutputConstraintForm
 	private final PsiExpression myExpression;
 	private PsiType myT;
 
-	public ExpressionCompatibilityConstraint(@Nonnull PsiExpression expression, @Nonnull PsiType type)
+	public ExpressionCompatibilityConstraint(PsiExpression expression, PsiType type)
 	{
 		myExpression = expression;
 		myT = type;

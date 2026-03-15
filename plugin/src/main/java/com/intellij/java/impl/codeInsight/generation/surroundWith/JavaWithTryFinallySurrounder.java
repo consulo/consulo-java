@@ -30,7 +30,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
 class JavaWithTryFinallySurrounder extends JavaStatementsSurrounder{
   @Override
@@ -55,7 +54,7 @@ class JavaWithTryFinallySurrounder extends JavaStatementsSurrounder{
       return null;
     }
 
-    @NonNls String text = "try{\n}finally{\n\n}";
+    String text = "try{\n}finally{\n\n}";
     PsiTryStatement tryStatement = (PsiTryStatement)factory.createStatementFromText(text, null);
     tryStatement = (PsiTryStatement)codeStyleManager.reformat(tryStatement);
 

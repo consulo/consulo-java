@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.psi;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * Represents a Java block statement (sequence of statements surrounded with curly braces).
@@ -26,6 +25,5 @@ public interface PsiBlockStatement extends PsiStatement {
    *
    * @return the code block instance.
    */
-  @Nonnull
   PsiCodeBlock getCodeBlock();
 }

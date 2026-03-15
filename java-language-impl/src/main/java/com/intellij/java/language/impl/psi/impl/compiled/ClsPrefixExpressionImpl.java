@@ -22,7 +22,6 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
 
 class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpression {
   private final ClsElementImpl myParent;
@@ -35,19 +34,16 @@ class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpress
     myOperand = ClsParsingUtil.psiToClsExpression(operand, this);
   }
 
-  @Nonnull
   @Override
   public PsiExpression getOperand() {
     return myOperand;
   }
 
-  @Nonnull
   @Override
   public PsiJavaToken getOperationSign() {
     return myOperator;
   }
 
-  @Nonnull
   @Override
   public IElementType getOperationTokenType() {
     return myOperator.getTokenType();
@@ -63,7 +59,6 @@ class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpress
     return myParent;
   }
 
-  @Nonnull
   @Override
   public PsiElement[] getChildren() {
     return new PsiElement[]{
@@ -78,17 +73,17 @@ class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpress
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append(getText());
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, JavaElementType.PREFIX_EXPRESSION);
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitPrefixExpression(this);
     } else {

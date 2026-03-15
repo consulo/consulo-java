@@ -23,7 +23,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 import org.intellij.lang.annotations.Pattern;
 
 import javax.swing.*;
@@ -35,20 +34,17 @@ public class EmptyStatementBodyInspection extends BaseInspection {
      */
     public boolean m_reportEmptyBlocks = true;
 
-    @Nonnull
     @Override
     @Pattern("[a-zA-Z_0-9.]+")
     public String getID() {
         return "StatementWithEmptyBody";
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.statementWithEmptyBodyDisplayName();
     }
 
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.statementWithEmptyBodyProblemDescriptor().get();
     }
@@ -68,25 +64,25 @@ public class EmptyStatementBodyInspection extends BaseInspection {
 
     private class EmptyStatementVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitDoWhileStatement(@Nonnull PsiDoWhileStatement statement) {
+        public void visitDoWhileStatement(PsiDoWhileStatement statement) {
             super.visitDoWhileStatement(statement);
             checkLoopStatement(statement);
         }
 
         @Override
-        public void visitWhileStatement(@Nonnull PsiWhileStatement statement) {
+        public void visitWhileStatement(PsiWhileStatement statement) {
             super.visitWhileStatement(statement);
             checkLoopStatement(statement);
         }
 
         @Override
-        public void visitForStatement(@Nonnull PsiForStatement statement) {
+        public void visitForStatement(PsiForStatement statement) {
             super.visitForStatement(statement);
             checkLoopStatement(statement);
         }
 
         @Override
-        public void visitForeachStatement(@Nonnull PsiForeachStatement statement) {
+        public void visitForeachStatement(PsiForeachStatement statement) {
             super.visitForeachStatement(statement);
             checkLoopStatement(statement);
         }
@@ -103,7 +99,7 @@ public class EmptyStatementBodyInspection extends BaseInspection {
         }
 
         @Override
-        public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+        public void visitIfStatement(PsiIfStatement statement) {
             super.visitIfStatement(statement);
       /*if (JspPsiUtil.isInJspFile(statement)) {
         return;

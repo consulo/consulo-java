@@ -25,7 +25,6 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -43,13 +42,11 @@ public class ExceptionInfoCache
 		mySearchScope = searchScope;
 	}
 
-	@Nonnull
 	public Project getProject()
 	{
 		return myProject;
 	}
 
-	@Nonnull
 	private PsiClass[] findClassesPreferringMyScope(String className)
 	{
 		JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(myProject);

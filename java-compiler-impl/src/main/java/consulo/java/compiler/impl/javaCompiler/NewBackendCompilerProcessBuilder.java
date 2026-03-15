@@ -30,7 +30,6 @@ import consulo.virtualFileSystem.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TServiceClient;
 
-import jakarta.annotation.Nonnull;
 import java.io.*;
 import java.util.List;
 
@@ -56,14 +55,12 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 	}
 
 	@RequiredReadAction
-	@Nonnull
 	@Override
 	public GeneralCommandLine buildCommandLine() throws IOException
 	{
 		return createNewStartupCommand(myModuleChunk, myOutputPath, myCompileContext, myJavaCompilerOptions);
 	}
 
-	@Nonnull
 	@Override
 	public ProcessHandler createProcess(GeneralCommandLine commandLine) throws ExecutionException
 	{
@@ -75,7 +72,6 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 		return myPort;
 	}
 
-	@Nonnull
 	@RequiredReadAction
 	private GeneralCommandLine createNewStartupCommand(ModuleChunk chunk,
 													   String outputPath,

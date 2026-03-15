@@ -28,27 +28,24 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.CopyPasteManager;
-import jakarta.annotation.Nonnull;
 
 import java.awt.datatransfer.StringSelection;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.SwapMethodCallArgumentsIntention", fileExtensions = "java", categories = {"Java", "Strings"})
 public class CopyConcatenatedStringToClipboardIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.copyConcatenatedStringToClipboardIntentionName();
     }
 
     @Override
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new SimpleStringConcatenationPredicate(false);
     }
 
     @Override
-    protected void processIntention(@Nonnull PsiElement element) throws IncorrectOperationException {
+    protected void processIntention(PsiElement element) throws IncorrectOperationException {
         if (!(element instanceof PsiPolyadicExpression)) {
             return;
         }

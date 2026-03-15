@@ -34,10 +34,8 @@ import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
-import jakarta.annotation.Nonnull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -49,7 +47,6 @@ import java.util.Set;
 public class  AnnotatedMacro extends Macro {
 
   @Override
-  @NonNls
   public String getName() {
     return "annotated";
   }
@@ -76,7 +73,7 @@ public class  AnnotatedMacro extends Macro {
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] expressions, ExpressionContext expressionContext) {
+  public Result calculateResult(Expression[] expressions, ExpressionContext expressionContext) {
     Query<PsiMember> psiMembers = findAnnotated(expressionContext, expressions);
 
     if (psiMembers != null) {
@@ -90,12 +87,12 @@ public class  AnnotatedMacro extends Macro {
   }
 
   @Override
-  public Result calculateQuickResult(@Nonnull Expression[] expressions, ExpressionContext expressionContext) {
+  public Result calculateQuickResult(Expression[] expressions, ExpressionContext expressionContext) {
     return calculateResult(expressions, expressionContext);
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     Query<PsiMember> query = findAnnotated(context, params);
 
     if (query != null) {

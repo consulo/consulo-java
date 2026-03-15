@@ -16,7 +16,6 @@
 package com.siyeh;
 
 import consulo.application.CommonBundle;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.lang.ref.Reference;
@@ -30,7 +29,7 @@ import java.util.ResourceBundle;
 public class IntentionPowerPackBundle {
   private static Reference<ResourceBundle> ourBundle;
 
-  @NonNls private static final String BUNDLE = "com.siyeh.IntentionPowerPackBundle";
+  private static final String BUNDLE = "com.siyeh.IntentionPowerPackBundle";
 
   private IntentionPowerPackBundle() {
   }

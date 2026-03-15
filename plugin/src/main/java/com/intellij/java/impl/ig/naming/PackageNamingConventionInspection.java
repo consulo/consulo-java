@@ -29,10 +29,8 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awt.event.DocumentAdapter;
 import consulo.util.xml.serializer.InvalidDataException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -53,7 +51,6 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 	/**
 	 * @noinspection PublicField
 	 */
-	@NonNls
 	public String m_regex = "[a-z]*";
 
 	/**
@@ -68,7 +65,6 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 
 	private Pattern m_regexPattern = Pattern.compile(m_regex);
 
-	@Nonnull
 	@Override
 	public LocalizeValue getDisplayName()
 	{
@@ -87,7 +83,7 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 		{
 			return null;
 		}
-		@NonNls String name = refEntity.getName();
+		String name = refEntity.getName();
 		if(name == null || "default package".equals(name))
 		{
 			return null;
@@ -117,7 +113,7 @@ public abstract class PackageNamingConventionInspection extends BaseGlobalInspec
 	}
 
 	@Override
-	public void readSettings(@Nonnull Element element) throws InvalidDataException
+	public void readSettings(Element element) throws InvalidDataException
 	{
 		super.readSettings(element);
 		m_regexPattern = Pattern.compile(m_regex);

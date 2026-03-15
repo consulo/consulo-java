@@ -36,8 +36,7 @@ import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -69,457 +68,351 @@ public abstract class QuickFixFactory {
         return ServiceManager.getService(QuickFixFactory.class);
     }
 
-    public abstract ModifierFixBuilder createModifierFixBuilder(@Nonnull PsiModifierList modifierList);
+    public abstract ModifierFixBuilder createModifierFixBuilder(PsiModifierList modifierList);
 
-    public abstract ModifierFixBuilder createModifierFixBuilder(@Nonnull PsiModifierListOwner owner);
+    public abstract ModifierFixBuilder createModifierFixBuilder(PsiModifierListOwner owner);
 
-    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createMethodReturnFix(
-        @Nonnull PsiMethod method,
-        @Nonnull PsiType toReturn,
+        PsiMethod method,
+        PsiType toReturn,
         boolean fixWholeHierarchy
     );
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(@Nonnull PsiMethod method, @Nonnull PsiClass toClass);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(PsiMethod method, PsiClass toClass);
 
-    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddMethodFix(
-        @Nonnull String methodText,
-        @Nonnull PsiClass toClass,
-        @Nonnull String... exceptions
+        String methodText,
+        PsiClass toClass,
+        String... exceptions
     );
 
     /**
      * @param psiElement psiClass or enum constant without class initializer
      */
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@Nonnull PsiElement psiElement);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(PsiElement psiElement);
 
-    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createAssignmentToComparisonFix(PsiAssignmentExpression expr);
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(@Nonnull PsiClass psiElement);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createImplementMethodsFix(PsiClass psiElement);
 
-    @Nonnull
     public abstract LocalQuickFixOnPsiElement createMethodThrowsFix(
-        @Nonnull PsiMethod method,
-        @Nonnull PsiClassType exceptionClass,
+        PsiMethod method,
+        PsiClassType exceptionClass,
         boolean shouldThrow,
         boolean showContainingClass
     );
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddDefaultConstructorFix(@Nonnull PsiClass aClass);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddDefaultConstructorFix(PsiClass aClass);
 
     @Nullable
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createAddConstructorFix(
-        @Nonnull PsiClass aClass,
-        @PsiModifier.ModifierConstant @Nonnull String modifier
+        PsiClass aClass,
+        @PsiModifier.ModifierConstant String modifier
     );
 
-    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createMethodParameterTypeFix(
-        @Nonnull PsiMethod method,
+        PsiMethod method,
         int index,
-        @Nonnull PsiType newType,
+        PsiType newType,
         boolean fixWholeHierarchy
     );
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(@Nonnull PsiClass aClass);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(PsiClass aClass);
 
-    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createMakeClassInterfaceFix(
-        @Nonnull PsiClass aClass,
+        PsiClass aClass,
         final boolean makeInterface
     );
 
-    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createExtendsListFix(
-        @Nonnull PsiClass aClass,
-        @Nonnull PsiClassType typeToExtendFrom,
+        PsiClass aClass,
+        PsiClassType typeToExtendFrom,
         boolean toAdd
     );
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createRemoveUnusedParameterFix(@Nonnull PsiParameter parameter);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createRemoveUnusedParameterFix(PsiParameter parameter);
 
-    @Nonnull
-    public abstract IntentionAction createRemoveUnusedVariableFix(@Nonnull PsiVariable variable);
+    public abstract IntentionAction createRemoveUnusedVariableFix(PsiVariable variable);
 
     @Nullable
     public abstract IntentionAction createCreateClassOrPackageFix(
-        @Nonnull PsiElement context,
-        @Nonnull String qualifiedName,
+        PsiElement context,
+        String qualifiedName,
         final boolean createClass,
         final String superClass
     );
 
     @Nullable
     public abstract IntentionAction createCreateClassOrInterfaceFix(
-        @Nonnull PsiElement context,
-        @Nonnull String qualifiedName,
+        PsiElement context,
+        String qualifiedName,
         final boolean createClass,
         final String superClass
     );
 
-    @Nonnull
     public abstract IntentionAction createCreateFieldOrPropertyFix(
-        @Nonnull PsiClass aClass,
-        @Nonnull String name,
-        @Nonnull PsiType type,
-        @Nonnull PropertyMemberType targetMember,
-        @Nonnull PsiAnnotation... annotations
+        PsiClass aClass,
+        String name,
+        PsiType type,
+        PropertyMemberType targetMember,
+        PsiAnnotation... annotations
     );
 
-    @Nonnull
     public abstract IntentionAction createSetupJDKFix();
 
-    @Nonnull
     public abstract IntentionAction createAddExceptionToCatchFix();
 
-    @Nonnull
-    public abstract IntentionAction createAddExceptionToThrowsFix(@Nonnull PsiElement element);
+    public abstract IntentionAction createAddExceptionToThrowsFix(PsiElement element);
 
-    @Nonnull
-    public abstract IntentionAction createAddExceptionFromFieldInitializerToConstructorThrowsFix(@Nonnull PsiElement element);
+    public abstract IntentionAction createAddExceptionFromFieldInitializerToConstructorThrowsFix(PsiElement element);
 
-    @Nonnull
-    public abstract IntentionAction createSurroundWithTryCatchFix(@Nonnull PsiElement element);
+    public abstract IntentionAction createSurroundWithTryCatchFix(PsiElement element);
 
-    @Nonnull
-    public abstract IntentionAction createGeneralizeCatchFix(@Nonnull PsiElement element, @Nonnull PsiClassType type);
+    public abstract IntentionAction createGeneralizeCatchFix(PsiElement element, PsiClassType type);
 
-    @Nonnull
     public abstract IntentionAction createChangeToAppendFix(
-        @Nonnull IElementType sign,
-        @Nonnull PsiType type,
-        @Nonnull PsiAssignmentExpression assignment
+        IElementType sign,
+        PsiType type,
+        PsiAssignmentExpression assignment
     );
 
-    @Nonnull
-    public abstract IntentionAction createAddTypeCastFix(@Nonnull PsiType type, @Nonnull PsiExpression expression);
+    public abstract IntentionAction createAddTypeCastFix(PsiType type, PsiExpression expression);
 
-    @Nonnull
-    public abstract IntentionAction createWrapExpressionFix(@Nonnull PsiType type, @Nonnull PsiExpression expression);
+    public abstract IntentionAction createWrapExpressionFix(PsiType type, PsiExpression expression);
 
-    @Nonnull
-    public abstract IntentionAction createReuseVariableDeclarationFix(@Nonnull PsiLocalVariable variable);
+    public abstract IntentionAction createReuseVariableDeclarationFix(PsiLocalVariable variable);
 
-    @Nonnull
     public abstract IntentionAction createConvertToStringLiteralAction();
 
-    @Nonnull
-    public abstract IntentionAction createDeleteCatchFix(@Nonnull PsiParameter parameter);
+    public abstract IntentionAction createDeleteCatchFix(PsiParameter parameter);
 
-    @Nonnull
-    public abstract IntentionAction createDeleteMultiCatchFix(@Nonnull PsiTypeElement element);
+    public abstract IntentionAction createDeleteMultiCatchFix(PsiTypeElement element);
 
-    @Nonnull
-    public abstract IntentionAction createConvertSwitchToIfIntention(@Nonnull PsiSwitchStatement statement);
+    public abstract IntentionAction createConvertSwitchToIfIntention(PsiSwitchStatement statement);
 
-    @Nonnull
-    public abstract IntentionAction createNegationBroadScopeFix(@Nonnull PsiPrefixExpression expr);
+    public abstract IntentionAction createNegationBroadScopeFix(PsiPrefixExpression expr);
 
-    @Nonnull
-    public abstract IntentionAction createCreateFieldFromUsageFix(@Nonnull PsiReferenceExpression place);
+    public abstract IntentionAction createCreateFieldFromUsageFix(PsiReferenceExpression place);
 
-    @Nonnull
-    public abstract IntentionAction createReplaceWithListAccessFix(@Nonnull PsiArrayAccessExpression expression);
+    public abstract IntentionAction createReplaceWithListAccessFix(PsiArrayAccessExpression expression);
 
-    @Nonnull
-    public abstract IntentionAction createAddNewArrayExpressionFix(@Nonnull PsiArrayInitializerExpression expression);
+    public abstract IntentionAction createAddNewArrayExpressionFix(PsiArrayInitializerExpression expression);
 
-    @Nonnull
-    public abstract IntentionAction createMoveCatchUpFix(@Nonnull PsiCatchSection section, @Nonnull PsiCatchSection section1);
+    public abstract IntentionAction createMoveCatchUpFix(PsiCatchSection section, PsiCatchSection section1);
 
-    @Nonnull
-    public abstract IntentionAction createRenameWrongRefFix(@Nonnull PsiReferenceExpression ref);
+    public abstract IntentionAction createRenameWrongRefFix(PsiReferenceExpression ref);
 
-    @Nonnull
     public abstract IntentionAction createRemoveQualifierFix(
-        @Nonnull PsiExpression qualifier,
-        @Nonnull PsiReferenceExpression expression,
-        @Nonnull PsiClass resolved
+        PsiExpression qualifier,
+        PsiReferenceExpression expression,
+        PsiClass resolved
     );
 
-    @Nonnull
-    public abstract IntentionAction createRemoveParameterListFix(@Nonnull PsiMethod parent);
+    public abstract IntentionAction createRemoveParameterListFix(PsiMethod parent);
 
-    @Nonnull
-    public abstract IntentionAction createShowModulePropertiesFix(@Nonnull PsiElement element);
+    public abstract IntentionAction createShowModulePropertiesFix(PsiElement element);
 
-    @Nonnull
-    public abstract IntentionAction createShowModulePropertiesFix(@Nonnull Module module);
+    public abstract IntentionAction createShowModulePropertiesFix(Module module);
 
-    @Nonnull
-    public abstract IntentionAction createIncreaseLanguageLevelFix(@Nonnull LanguageLevel level);
+    public abstract IntentionAction createIncreaseLanguageLevelFix(LanguageLevel level);
 
-    @Nonnull
-    public abstract IntentionAction createChangeParameterClassFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType type);
+    public abstract IntentionAction createChangeParameterClassFix(PsiClass aClass, PsiClassType type);
 
-    @Nonnull
     public abstract IntentionAction createReplaceInaccessibleFieldWithGetterSetterFix(
-        @Nonnull PsiElement element,
-        @Nonnull PsiMethod getter,
+        PsiElement element,
+        PsiMethod getter,
         boolean isSetter
     );
 
-    @Nonnull
     public abstract IntentionAction createSurroundWithArrayFix(@Nullable PsiCall methodCall, @Nullable PsiExpression expression);
 
-    @Nonnull
-    public abstract IntentionAction createImplementAbstractClassMethodsFix(@Nonnull PsiElement elementToHighlight);
+    public abstract IntentionAction createImplementAbstractClassMethodsFix(PsiElement elementToHighlight);
 
-    @Nonnull
-    public abstract IntentionAction createMoveClassToSeparateFileFix(@Nonnull PsiClass aClass);
+    public abstract IntentionAction createMoveClassToSeparateFileFix(PsiClass aClass);
 
-    @Nonnull
-    public abstract IntentionAction createRenameFileFix(@Nonnull String newName);
+    public abstract IntentionAction createRenameFileFix(String newName);
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createRenameElementFix(@Nonnull PsiNamedElement element);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createRenameElementFix(PsiNamedElement element);
 
-    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createRenameElementFix(
-        @Nonnull PsiNamedElement element,
-        @Nonnull String newName
+        PsiNamedElement element,
+        String newName
     );
 
-    @Nonnull
-    public abstract IntentionAction createChangeExtendsToImplementsFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType classToExtendFrom);
+    public abstract IntentionAction createChangeExtendsToImplementsFix(PsiClass aClass, PsiClassType classToExtendFrom);
 
-    @Nonnull
-    public abstract IntentionAction createCreateConstructorMatchingSuperFix(@Nonnull PsiClass aClass);
+    public abstract IntentionAction createCreateConstructorMatchingSuperFix(PsiClass aClass);
 
-    @Nonnull
-    public abstract IntentionAction createRemoveNewQualifierFix(@Nonnull PsiNewExpression expression, @Nullable PsiClass aClass);
+    public abstract IntentionAction createRemoveNewQualifierFix(PsiNewExpression expression, @Nullable PsiClass aClass);
 
-    @Nonnull
-    public abstract IntentionAction createSuperMethodReturnFix(@Nonnull PsiMethod superMethod, @Nonnull PsiType superMethodType);
+    public abstract IntentionAction createSuperMethodReturnFix(PsiMethod superMethod, PsiType superMethodType);
 
-    @Nonnull
-    public abstract IntentionAction createInsertNewFix(@Nonnull PsiMethodCallExpression call, @Nonnull PsiClass aClass);
+    public abstract IntentionAction createInsertNewFix(PsiMethodCallExpression call, PsiClass aClass);
 
-    @Nonnull
-    public abstract IntentionAction createAddMethodBodyFix(@Nonnull PsiMethod method);
+    public abstract IntentionAction createAddMethodBodyFix(PsiMethod method);
 
-    @Nonnull
-    public abstract IntentionAction createDeleteMethodBodyFix(@Nonnull PsiMethod method);
+    public abstract IntentionAction createDeleteMethodBodyFix(PsiMethod method);
 
-    @Nonnull
-    public abstract IntentionAction createInsertSuperFix(@Nonnull PsiMethod constructor);
+    public abstract IntentionAction createInsertSuperFix(PsiMethod constructor);
 
-    @Nonnull
-    public abstract IntentionAction createInsertThisFix(@Nonnull PsiMethod constructor);
+    public abstract IntentionAction createInsertThisFix(PsiMethod constructor);
 
-    @Nonnull
     public abstract IntentionAction createChangeMethodSignatureFromUsageFix(
-        @Nonnull PsiMethod targetMethod,
-        @Nonnull PsiExpression[] expressions,
-        @Nonnull PsiSubstitutor substitutor,
-        @Nonnull PsiElement context,
+        PsiMethod targetMethod,
+        PsiExpression[] expressions,
+        PsiSubstitutor substitutor,
+        PsiElement context,
         boolean changeAllUsages,
         int minUsagesNumberToShowDialog
     );
 
-    @Nonnull
     public abstract IntentionAction createChangeMethodSignatureFromUsageReverseOrderFix(
-        @Nonnull PsiMethod targetMethod,
-        @Nonnull PsiExpression[] expressions,
-        @Nonnull PsiSubstitutor substitutor,
-        @Nonnull PsiElement context,
+        PsiMethod targetMethod,
+        PsiExpression[] expressions,
+        PsiSubstitutor substitutor,
+        PsiElement context,
         boolean changeAllUsages,
         int minUsagesNumberToShowDialog
     );
 
-    @Nonnull
-    public abstract IntentionAction createCreateMethodFromUsageFix(@Nonnull PsiMethodCallExpression call);
+    public abstract IntentionAction createCreateMethodFromUsageFix(PsiMethodCallExpression call);
 
-    @Nonnull
     public abstract IntentionAction createCreateMethodFromUsageFix(PsiMethodReferenceExpression methodReferenceExpression);
 
-    @Nonnull
-    public abstract IntentionAction createCreateAbstractMethodFromUsageFix(@Nonnull PsiMethodCallExpression call);
+    public abstract IntentionAction createCreateAbstractMethodFromUsageFix(PsiMethodCallExpression call);
 
-    @Nonnull
-    public abstract IntentionAction createCreatePropertyFromUsageFix(@Nonnull PsiMethodCallExpression call);
+    public abstract IntentionAction createCreatePropertyFromUsageFix(PsiMethodCallExpression call);
 
-    @Nonnull
-    public abstract IntentionAction createCreateConstructorFromSuperFix(@Nonnull PsiMethodCallExpression call);
+    public abstract IntentionAction createCreateConstructorFromSuperFix(PsiMethodCallExpression call);
 
-    @Nonnull
-    public abstract IntentionAction createCreateConstructorFromThisFix(@Nonnull PsiMethodCallExpression call);
+    public abstract IntentionAction createCreateConstructorFromThisFix(PsiMethodCallExpression call);
 
-    @Nonnull
-    public abstract IntentionAction createCreateGetterSetterPropertyFromUsageFix(@Nonnull PsiMethodCallExpression call);
+    public abstract IntentionAction createCreateGetterSetterPropertyFromUsageFix(PsiMethodCallExpression call);
 
-    @Nonnull
-    public abstract IntentionAction createStaticImportMethodFix(@Nonnull PsiMethodCallExpression call);
+    public abstract IntentionAction createStaticImportMethodFix(PsiMethodCallExpression call);
 
-    @Nonnull
-    public abstract IntentionAction createReplaceAddAllArrayToCollectionFix(@Nonnull PsiMethodCallExpression call);
+    public abstract IntentionAction createReplaceAddAllArrayToCollectionFix(PsiMethodCallExpression call);
 
-    @Nonnull
-    public abstract IntentionAction createCreateConstructorFromCallFix(@Nonnull PsiConstructorCall call);
+    public abstract IntentionAction createCreateConstructorFromCallFix(PsiConstructorCall call);
 
-    @Nonnull
     public abstract List<IntentionAction> getVariableTypeFromCallFixes(
-        @Nonnull PsiMethodCallExpression call,
-        @Nonnull PsiExpressionList list
+        PsiMethodCallExpression call,
+        PsiExpressionList list
     );
 
-    @Nonnull
-    public abstract IntentionAction createAddReturnFix(@Nonnull PsiMethod method);
+    public abstract IntentionAction createAddReturnFix(PsiMethod method);
 
-    @Nonnull
-    public abstract IntentionAction createAddVariableInitializerFix(@Nonnull PsiVariable variable);
+    public abstract IntentionAction createAddVariableInitializerFix(PsiVariable variable);
 
-    @Nonnull
     public abstract IntentionAction createDeferFinalAssignmentFix(
-        @Nonnull PsiVariable variable,
-        @Nonnull PsiReferenceExpression expression
+        PsiVariable variable,
+        PsiReferenceExpression expression
     );
 
-    @Nonnull
-    public abstract IntentionAction createVariableAccessFromInnerClassFix(@Nonnull PsiVariable variable, @Nonnull PsiElement scope);
+    public abstract IntentionAction createVariableAccessFromInnerClassFix(PsiVariable variable, PsiElement scope);
 
-    @Nonnull
-    public abstract IntentionAction createCreateConstructorParameterFromFieldFix(@Nonnull PsiField field);
+    public abstract IntentionAction createCreateConstructorParameterFromFieldFix(PsiField field);
 
-    @Nonnull
-    public abstract IntentionAction createInitializeFinalFieldInConstructorFix(@Nonnull PsiField field);
+    public abstract IntentionAction createInitializeFinalFieldInConstructorFix(PsiField field);
 
-    @Nonnull
-    public abstract IntentionAction createRemoveTypeArgumentsFix(@Nonnull PsiElement variable);
+    public abstract IntentionAction createRemoveTypeArgumentsFix(PsiElement variable);
 
-    @Nonnull
     public abstract IntentionAction createChangeClassSignatureFromUsageFix(
-        @Nonnull PsiClass owner,
-        @Nonnull PsiReferenceParameterList parameterList
+        PsiClass owner,
+        PsiReferenceParameterList parameterList
     );
 
-    @Nonnull
     public abstract IntentionAction createReplacePrimitiveWithBoxedTypeAction(
-        @Nonnull PsiTypeElement element,
-        @Nonnull String typeName,
-        @Nonnull String boxedTypeName
+        PsiTypeElement element,
+        String typeName,
+        String boxedTypeName
     );
 
-    @Nonnull
-    public abstract IntentionAction createMakeVarargParameterLastFix(@Nonnull PsiParameter parameter);
+    public abstract IntentionAction createMakeVarargParameterLastFix(PsiParameter parameter);
 
-    @Nonnull
-    public abstract IntentionAction createMoveBoundClassToFrontFix(@Nonnull PsiClass aClass, @Nonnull PsiClassType type);
+    public abstract IntentionAction createMoveBoundClassToFrontFix(PsiClass aClass, PsiClassType type);
 
-    public abstract void registerPullAsAbstractUpFixes(@Nonnull PsiMethod method, @Nonnull QuickFixActionRegistrar registrar);
+    public abstract void registerPullAsAbstractUpFixes(PsiMethod method, QuickFixActionRegistrar registrar);
 
-    @Nonnull
-    public abstract IntentionAction createCreateAnnotationMethodFromUsageFix(@Nonnull PsiNameValuePair pair);
+    public abstract IntentionAction createCreateAnnotationMethodFromUsageFix(PsiNameValuePair pair);
 
-    @Nonnull
     public abstract IntentionAction createOptimizeImportsFix(boolean onTheFly);
 
-    public abstract void registerFixesForUnusedParameter(@Nonnull PsiParameter parameter, @Nonnull Object highlightInfo);
+    public abstract void registerFixesForUnusedParameter(PsiParameter parameter, Object highlightInfo);
 
-    @Nonnull
     public abstract IntentionAction createAddToDependencyInjectionAnnotationsFix(
-        @Nonnull Project project,
-        @Nonnull String qualifiedName,
-        @Nonnull String element
+        Project project,
+        String qualifiedName,
+        String element
     );
 
-    @Nonnull
-    public abstract IntentionAction createAddToImplicitlyWrittenFieldsFix(Project project, @Nonnull String qualifiedName);
+    public abstract IntentionAction createAddToImplicitlyWrittenFieldsFix(Project project, String qualifiedName);
 
-    @Nonnull
-    public abstract IntentionAction createCreateGetterOrSetterFix(boolean createGetter, boolean createSetter, @Nonnull PsiField field);
+    public abstract IntentionAction createCreateGetterOrSetterFix(boolean createGetter, boolean createSetter, PsiField field);
 
-    @Nonnull
-    public abstract IntentionAction createRenameToIgnoredFix(@Nonnull PsiNamedElement namedElement);
+    public abstract IntentionAction createRenameToIgnoredFix(PsiNamedElement namedElement);
 
-    @Nonnull
     public abstract IntentionAction createEnableOptimizeImportsOnTheFlyFix();
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(PsiElement element);
 
-    @Nonnull
-    public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(@Nonnull PsiElement element, @Nonnull LocalizeValue text);
+    public abstract LocalQuickFixAndIntentionActionOnPsiElement createDeleteFix(PsiElement element, LocalizeValue text);
 
-    @Nonnull
-    public abstract IntentionAction createDeleteSideEffectAwareFix(@Nonnull PsiExpressionStatement statement);
+    public abstract IntentionAction createDeleteSideEffectAwareFix(PsiExpressionStatement statement);
 
-    @Nonnull
-    public abstract IntentionAction createSafeDeleteFix(@Nonnull PsiElement element);
+    public abstract IntentionAction createSafeDeleteFix(PsiElement element);
 
     @Nullable
-    public abstract List<LocalQuickFix> registerOrderEntryFixes(@Nonnull PsiReference reference);
+    public abstract List<LocalQuickFix> registerOrderEntryFixes(PsiReference reference);
 
-    @Nonnull
     public abstract IntentionAction createAddMissingRequiredAnnotationParametersFix(
-        @Nonnull PsiAnnotation annotation,
-        @Nonnull PsiMethod[] annotationMethods,
-        @Nonnull Collection<String> missedElements
+        PsiAnnotation annotation,
+        PsiMethod[] annotationMethods,
+        Collection<String> missedElements
     );
 
-    @Nonnull
     public abstract IntentionAction createSurroundWithQuotesAnnotationParameterValueFix(
-        @Nonnull PsiAnnotationMemberValue value,
-        @Nonnull PsiType expectedType
+        PsiAnnotationMemberValue value,
+        PsiType expectedType
     );
 
-    @Nonnull
-    public abstract IntentionAction addMethodQualifierFix(@Nonnull PsiMethodCallExpression methodCall);
+    public abstract IntentionAction addMethodQualifierFix(PsiMethodCallExpression methodCall);
 
-    @Nonnull
-    public abstract IntentionAction createWrapWithAdapterFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
+    public abstract IntentionAction createWrapWithAdapterFix(@Nullable PsiType type, PsiExpression expression);
 
-    @Nonnull
-    public abstract IntentionAction createWrapWithOptionalFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
+    public abstract IntentionAction createWrapWithOptionalFix(@Nullable PsiType type, PsiExpression expression);
 
     @Nullable
-    public abstract IntentionAction createNotIterableForEachLoopFix(@Nonnull PsiExpression expression);
+    public abstract IntentionAction createNotIterableForEachLoopFix(PsiExpression expression);
 
-    @Nonnull
-    public abstract List<IntentionAction> createAddAnnotationAttributeNameFixes(@Nonnull PsiNameValuePair pair);
+    public abstract List<IntentionAction> createAddAnnotationAttributeNameFixes(PsiNameValuePair pair);
 
-    @Nonnull
     public abstract IntentionAction createCollectionToArrayFix(
-        @Nonnull PsiExpression collectionExpression,
-        @Nonnull PsiArrayType arrayType
+        PsiExpression collectionExpression,
+        PsiArrayType arrayType
     );
 
-    @Nonnull
-    public abstract IntentionAction createInsertMethodCallFix(@Nonnull PsiMethodCallExpression call, PsiMethod method);
+    public abstract IntentionAction createInsertMethodCallFix(PsiMethodCallExpression call, PsiMethod method);
 
-    @Nonnull
     public abstract LocalQuickFixAndIntentionActionOnPsiElement createAccessStaticViaInstanceFix(
         PsiReferenceExpression methodRef,
         JavaResolveResult result
     );
 
-    @Nonnull
-    public abstract IntentionAction createWrapStringWithFileFix(@Nullable PsiType type, @Nonnull PsiExpression expression);
+    public abstract IntentionAction createWrapStringWithFileFix(@Nullable PsiType type, PsiExpression expression);
 
-    @Nonnull
-    public abstract IntentionAction createAddMissingEnumBranchesFix(@Nonnull PsiSwitchBlock switchBlock, @Nonnull Set<String> missingCases);
+    public abstract IntentionAction createAddMissingEnumBranchesFix(PsiSwitchBlock switchBlock, Set<String> missingCases);
 
-    @Nonnull
-    public abstract IntentionAction createAddSwitchDefaultFix(@Nonnull PsiSwitchBlock switchBlock, @Nonnull LocalizeValue message);
+    public abstract IntentionAction createAddSwitchDefaultFix(PsiSwitchBlock switchBlock, LocalizeValue message);
 
-    @Nonnull
     public abstract IntentionAction createWrapSwitchRuleStatementsIntoBlockFix(PsiSwitchLabeledRuleStatement rule);
 
     @Deprecated
     @DeprecationInfo("Use #fixModifiers()...#build()")
-    @Nonnull
     @RequiredReadAction
     public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
-        @Nonnull PsiModifierList modifierList,
-        @PsiModifier.ModifierConstant @Nonnull String modifier,
+        PsiModifierList modifierList,
+        @PsiModifier.ModifierConstant String modifier,
         boolean shouldHave,
         boolean showContainingClass
     ) {
@@ -532,11 +425,10 @@ public abstract class QuickFixFactory {
 
     @Deprecated
     @DeprecationInfo("Use #fixModifiers()...#build()")
-    @Nonnull
     @RequiredReadAction
     public LocalQuickFixAndIntentionActionOnPsiElement createModifierListFix(
-        @Nonnull PsiModifierListOwner owner,
-        @PsiModifier.ModifierConstant @Nonnull String modifier,
+        PsiModifierListOwner owner,
+        @PsiModifier.ModifierConstant String modifier,
         boolean shouldHave,
         boolean showContainingClass
     ) {

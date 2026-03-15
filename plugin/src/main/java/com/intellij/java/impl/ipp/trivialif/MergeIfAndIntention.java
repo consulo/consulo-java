@@ -29,19 +29,15 @@ import consulo.language.editor.intention.IntentionMetaData;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MergeIfAndIntention", fileExtensions = "java", categories = {"Java", "Boolean"})
 public class MergeIfAndIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.mergeIfAndIntentionName();
     }
 
-    @Nonnull
     public PsiElementPredicate getElementPredicate() {
         return new MergeIfAndPredicate();
     }
@@ -87,7 +83,7 @@ public class MergeIfAndIntention extends Intention {
         if (childThenBranch == null) {
             return;
         }
-        @NonNls String statement = "if(" + parentConditionText + "&&" +
+        String statement = "if(" + parentConditionText + "&&" +
             childConditionText + ')' + childThenBranch.getText();
         replaceStatement(statement, parentStatement);
     }

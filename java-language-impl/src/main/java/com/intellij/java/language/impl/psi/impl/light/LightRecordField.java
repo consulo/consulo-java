@@ -14,29 +14,26 @@ import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.project.DumbService;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 public class LightRecordField extends LightField implements LightRecordMember {
     private final
-    @Nonnull
     PsiRecordComponent myRecordComponent;
 
     public LightRecordField(
-        @Nonnull PsiManager manager,
-        @Nonnull PsiField field,
-        @Nonnull PsiClass containingClass,
-        @Nonnull PsiRecordComponent component
+        PsiManager manager,
+        PsiField field,
+        PsiClass containingClass,
+        PsiRecordComponent component
     ) {
         super(manager, field, containingClass);
         myRecordComponent = component;
     }
 
     @Override
-    @Nonnull
     public PsiRecordComponent getRecordComponent() {
         return myRecordComponent;
     }
@@ -46,7 +43,6 @@ public class LightRecordField extends LightField implements LightRecordMember {
         return myRecordComponent.getTextOffset();
     }
 
-    @Nonnull
     @Override
     public PsiElement getNavigationElement() {
         return myRecordComponent.getNavigationElement();
@@ -68,7 +64,6 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
     @Override
     public
-    @Nonnull
     PsiType getType() {
         if (DumbService.isDumb(myRecordComponent.getProject())) {
             return myRecordComponent.getType();
@@ -84,20 +79,19 @@ public class LightRecordField extends LightField implements LightRecordMember {
     }
 
     @Override
-    @Nonnull
     public PsiAnnotation[] getAnnotations() {
         return getType().getAnnotations();
     }
 
     @Override
-    public boolean hasAnnotation(@Nonnull String fqn) {
+    public boolean hasAnnotation(String fqn) {
         PsiType type = getType();
         return type.hasAnnotation(fqn);
     }
 
     @Override
     @Nullable
-    public PsiAnnotation getAnnotation(@Nonnull String fqn) {
+    public PsiAnnotation getAnnotation(String fqn) {
         return getType().findAnnotation(fqn);
     }
 
@@ -118,7 +112,6 @@ public class LightRecordField extends LightField implements LightRecordMember {
 
     @Override
     public
-    @Nonnull
     SearchScope getUseScope() {
         PsiClass aClass = Objects.requireNonNull(getContainingClass());
         PsiClass containingClass = aClass.getContainingClass();

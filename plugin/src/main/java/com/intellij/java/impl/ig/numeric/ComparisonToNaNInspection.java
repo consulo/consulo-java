@@ -29,18 +29,14 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class ComparisonToNaNInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.comparisonToNanDisplayName();
   }
 
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiBinaryExpression comparison = (PsiBinaryExpression)infos[0];
     return JavaTokenType.EQEQ.equals(comparison.getOperationTokenType())
@@ -58,7 +54,6 @@ public class ComparisonToNaNInspection extends BaseInspection {
 
   private static class ComparisonToNaNFix extends InspectionGadgetsFix {
 
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.comparisonToNanReplaceQuickfix();
     }
@@ -95,7 +90,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
       else {
         negationText = "!";
       }
-      @NonNls String newExpressionText = negationText + typeText + ".isNaN(" + operandText + ')';
+      String newExpressionText = negationText + typeText + ".isNaN(" + operandText + ')';
       replaceExpression(comparison, newExpressionText);
     }
   }
@@ -103,7 +98,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
   private static class ComparisonToNaNVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       if (!ComparisonUtils.isEqualityComparison(expression)) {
         return;
@@ -126,7 +121,7 @@ public class ComparisonToNaNInspection extends BaseInspection {
         return false;
       }
       PsiReferenceExpression referenceExpression = (PsiReferenceExpression)expression;
-      @NonNls String referenceName = referenceExpression.getReferenceName();
+      String referenceName = referenceExpression.getReferenceName();
       if (!"NaN".equals(referenceName)) {
         return false;
       }

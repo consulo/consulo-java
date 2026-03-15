@@ -43,8 +43,7 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Trinity;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,16 +54,15 @@ import java.util.function.Consumer;
  */
 @ExtensionImpl
 public class ExceptionExFilterFactory implements ExceptionFilterFactory {
-  @Nonnull
   @Override
-  public Filter create(@Nonnull GlobalSearchScope searchScope) {
+  public Filter create(GlobalSearchScope searchScope) {
     return new MyFilter(searchScope);
   }
 
   private static class MyFilter implements Filter, FilterMixin {
     private final ExceptionInfoCache myCache;
 
-    public MyFilter(@Nonnull final GlobalSearchScope scope) {
+    public MyFilter(final GlobalSearchScope scope) {
       myCache = new ExceptionInfoCache(scope);
     }
 
@@ -79,7 +77,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
     }
 
     @Override
-    public void applyHeavyFilter(@Nonnull final Document copiedFragment, final int startOffset, int startLineNumber, @Nonnull final Consumer<? super AdditionalHighlight> consumer) {
+    public void applyHeavyFilter(final Document copiedFragment, final int startOffset, int startLineNumber, final Consumer<? super AdditionalHighlight> consumer) {
       Map<String, Trinity<TextRange, TextRange, TextRange>> visited = new HashMap<String, Trinity<TextRange, TextRange, TextRange>>();
       final Trinity<TextRange, TextRange, TextRange> emptyInfo = Trinity.create(null, null, null);
 
@@ -140,7 +138,6 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
         int off = startOffset + lineStartOffset;
         final ColorValue color = TargetAWT.from(UIUtil.getInactiveTextColor());
         consumer.accept(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset()) {
-          @Nonnull
           @Override
           public TextAttributes getTextAttributes(@Nullable TextAttributes source) {
             return new TextAttributes(null, null, color, EffectType.BOLD_DOTTED_LINE, Font.PLAIN);
@@ -149,7 +146,6 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
       }
     }
 
-    @Nonnull
     @Override
     public String getUpdateMessage() {
       return "Highlighting try blocks...";

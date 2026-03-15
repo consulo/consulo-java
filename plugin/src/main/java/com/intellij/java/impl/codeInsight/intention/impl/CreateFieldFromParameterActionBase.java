@@ -32,7 +32,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +45,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
   }
 
   @Override
-  public boolean isAvailable(@Nonnull Project project, Editor editor, PsiFile file) {
+  public boolean isAvailable(Project project, Editor editor, PsiFile file) {
     PsiParameter parameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (parameter == null || !isAvailable(parameter)) {
       return false;
@@ -61,7 +60,7 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
 
   @Override
   @RequiredUIAccess
-  public void invoke(@Nonnull Project project, Editor editor, PsiFile file) {
+  public void invoke(Project project, Editor editor, PsiFile file) {
     PsiParameter myParameter = FieldFromParameterUtils.findParameterAtCursor(file, editor);
     if (myParameter == null || !FileModificationService.getInstance().prepareFileForWrite(file)) return;
 
@@ -75,8 +74,8 @@ public abstract class CreateFieldFromParameterActionBase extends BaseIntentionAc
 
   @RequiredUIAccess
   private void processParameter(
-    @Nonnull Project project,
-    @Nonnull PsiParameter myParameter,
+    Project project,
+    PsiParameter myParameter,
     boolean isInteractive
   ) {
     PsiType type = getSubstitutedType(myParameter);

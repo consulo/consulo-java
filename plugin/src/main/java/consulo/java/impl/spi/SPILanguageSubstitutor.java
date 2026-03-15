@@ -27,8 +27,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.LanguageSubstitutor;
 import consulo.java.impl.roots.SpecialDirUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ import java.util.List;
 public class SPILanguageSubstitutor extends LanguageSubstitutor {
   @Nullable
   @Override
-  public Language getLanguage(@Nonnull VirtualFile file, @Nonnull Project project) {
+  public Language getLanguage(VirtualFile file, Project project) {
     Module moduleForPsiElement = ModuleUtilCore.findModuleForFile(file, project);
     if (moduleForPsiElement == null) {
       return null;
@@ -66,7 +65,6 @@ public class SPILanguageSubstitutor extends LanguageSubstitutor {
     return null;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

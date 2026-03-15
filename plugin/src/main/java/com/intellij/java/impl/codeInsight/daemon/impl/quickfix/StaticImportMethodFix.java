@@ -29,8 +29,7 @@ import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,23 +37,20 @@ import java.util.List;
 public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod> {
   private final SmartPsiElementPointer<PsiMethodCallExpression> myMethodCall;
 
-  public StaticImportMethodFix(@Nonnull PsiMethodCallExpression methodCallExpression) {
+  public StaticImportMethodFix(PsiMethodCallExpression methodCallExpression) {
     myMethodCall = SmartPointerManager.getInstance(methodCallExpression.getProject()).createSmartPsiElementPointer(methodCallExpression);
   }
 
-  @Nonnull
   @Override
   protected LocalizeValue getBaseText() {
     return JavaQuickFixLocalize.staticImportMethodText();
   }
 
-  @Nonnull
   @Override
   protected String getMemberPresentableText(PsiMethod method) {
     return PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS | PsiFormatUtilBase.SHOW_FQ_NAME, 0);
   }
 
-  @Nonnull
   @Override
   protected List<PsiMethod> getMembersToImport(boolean applicableOnly) {
     Project project = myMethodCall.getProject();
@@ -70,8 +66,7 @@ public class StaticImportMethodFix extends StaticImportMemberFix<PsiMethod> {
     return processor.getMembersToImport(applicableOnly);
   }
 
-  @Nonnull
-  protected StaticImportMethodQuestionAction<PsiMethod> createQuestionAction(List<PsiMethod> methodsToImport, @Nonnull Project project, Editor editor) {
+  protected StaticImportMethodQuestionAction<PsiMethod> createQuestionAction(List<PsiMethod> methodsToImport, Project project, Editor editor) {
     return new StaticImportMethodQuestionAction<>(project, editor, methodsToImport, myMethodCall);
   }
 

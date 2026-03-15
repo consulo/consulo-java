@@ -21,8 +21,7 @@ import consulo.language.codeStyle.CommonCodeStyleSettings;
 import consulo.language.codeStyle.IndentInfo;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class JDComment
 	private String myFirstLine = "/**";
 	private String myEndLine = "*/";
 
-	public JDComment(@Nonnull CommentFormatter formatter)
+	public JDComment(CommentFormatter formatter)
 	{
 		myFormatter = formatter;
 	}
@@ -62,7 +61,6 @@ public class JDComment
 		myMultiLineComment = value;
 	}
 
-	@Nonnull
 	protected String javadocContinuationIndent()
 	{
 		if(!myFormatter.getSettings().JD_INDENT_ON_CONTINUATION)
@@ -72,7 +70,6 @@ public class JDComment
 		return continuationIndent();
 	}
 
-	@Nonnull
 	protected String continuationIndent()
 	{
 		CodeStyleSettings settings = myFormatter.getSettings().getContainer();
@@ -81,7 +78,7 @@ public class JDComment
 	}
 
 	@Nullable
-	public String generate(@Nonnull String indent)
+	public String generate(String indent)
 	{
 		String prefix;
 
@@ -181,21 +178,21 @@ public class JDComment
 		return sb.toString();
 	}
 
-	protected void generateSpecial(@Nonnull String prefix, @Nonnull StringBuilder sb)
+	protected void generateSpecial(String prefix, StringBuilder sb)
 	{
 	}
 
-	public void setFirstCommentLine(@Nonnull String firstCommentLine)
+	public void setFirstCommentLine(String firstCommentLine)
 	{
 		myFirstLine = firstCommentLine;
 	}
 
-	public void setLastCommentLine(@Nonnull String lastCommentLine)
+	public void setLastCommentLine(String lastCommentLine)
 	{
 		myEndLine = lastCommentLine;
 	}
 
-	public void addSeeAlso(@Nonnull String seeAlso)
+	public void addSeeAlso(String seeAlso)
 	{
 		if(mySeeAlsoList == null)
 		{
@@ -204,7 +201,7 @@ public class JDComment
 		mySeeAlsoList.add(seeAlso);
 	}
 
-	public void addUnknownTag(@Nonnull String unknownTag)
+	public void addUnknownTag(String unknownTag)
 	{
 		if(myUnknownList == null)
 		{
@@ -213,7 +210,7 @@ public class JDComment
 		myUnknownList.add(unknownTag);
 	}
 
-	public void addSince(@Nonnull String since)
+	public void addSince(String since)
 	{
 		if(mySinceList == null)
 		{

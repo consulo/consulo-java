@@ -11,9 +11,8 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerDialog;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerImpl;
 import com.intellij.java.impl.refactoring.move.moveInner.MoveInnerProcessor;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  *  @author dsl
@@ -102,13 +101,13 @@ public abstract class MoveInnerTest extends MultiFileTestCase {
     });
   }
 
-  private PerformAction createAction(@NonNls String innerClassName,
-                                     @NonNls String newClassName,
+  private PerformAction createAction(String innerClassName,
+                                     String newClassName,
                                      boolean passOuterClass,
-                                     @NonNls String parameterName,
+                                     String parameterName,
                                      boolean searchInComments,
                                      boolean searchInNonJava,
-                                     @NonNls @Nullable String packageName) {
+                                     @Nullable String packageName) {
     return new MyPerformAction(innerClassName, newClassName, passOuterClass, parameterName, searchInComments, searchInNonJava, packageName);
   }
 

@@ -24,7 +24,6 @@
  */
 package org.osmorc.manifest.lang.psi.impl;
 
-import jakarta.annotation.Nonnull;
 
 import consulo.language.impl.psi.stub.StubBasedPsiElementBase;
 import consulo.language.ast.ASTNode;
@@ -38,7 +37,7 @@ import org.osmorc.manifest.lang.ManifestLanguage;
  */
 public abstract class ManifestElementBase<T extends StubElement> extends StubBasedPsiElementBase<T> {
 
-  protected ManifestElementBase(T stub, @Nonnull IStubElementType nodeType) {
+  protected ManifestElementBase(T stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
@@ -46,7 +45,6 @@ public abstract class ManifestElementBase<T extends StubElement> extends StubBas
     super(node);
   }
 
-  @Nonnull
   public Language getLanguage() {
     return ManifestLanguage.INSTANCE;
   }

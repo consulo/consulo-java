@@ -41,8 +41,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -61,12 +60,12 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
     @Override
     @RequiredReadAction
     public CommonProblemDescriptor[] checkElement(
-        @Nonnull RefEntity refEntity,
-        @Nonnull AnalysisScope scope,
-        @Nonnull InspectionManager manager,
-        @Nonnull GlobalInspectionContext globalContext,
-        @Nonnull ProblemDescriptionsProcessor processor,
-        @Nonnull Object state
+        RefEntity refEntity,
+        AnalysisScope scope,
+        InspectionManager manager,
+        GlobalInspectionContext globalContext,
+        ProblemDescriptionsProcessor processor,
+        Object state
     ) {
         if (refEntity instanceof RefMethod refMethod) {
             if (refMethod.isConstructor()
@@ -111,11 +110,11 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
     ) {
         manager.iterate(new RefJavaVisitor() {
             @Override
-            public void visitElement(@Nonnull RefEntity refEntity) {
+            public void visitElement(RefEntity refEntity) {
                 if (refEntity instanceof RefElement && processor.getDescriptions(refEntity) != null) {
                     refEntity.accept(new RefJavaVisitor() {
                         @Override
-                        public void visitMethod(@Nonnull RefMethod refMethod) {
+                        public void visitMethod(RefMethod refMethod) {
                             globalContext.enqueueMethodUsagesProcessor(refMethod, psiReference -> {
                                 processor.ignoreElement(refMethod);
                                 return false;
@@ -130,19 +129,16 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionLocalize.inspectionUnusedReturnValueDisplayName();
     }
 
     @Override
-    @Nonnull
     public LocalizeValue getGroupDisplayName() {
         return InspectionLocalize.groupNamesDeclarationRedundancy();
     }
 
     @Override
-    @Nonnull
     public String getShortName() {
         return "UnusedReturnValue";
     }
@@ -169,14 +165,13 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
         }
 
         @Override
-        @Nonnull
         public LocalizeValue getName() {
             return InspectionLocalize.inspectionUnusedReturnValueMakeVoidQuickfix();
         }
 
         @Override
         @RequiredWriteAction
-        public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
             PsiMethod psiMethod = null;
             if (myProcessor != null) {
                 RefElement refElement = (RefElement) myProcessor.getElement(descriptor);
@@ -194,7 +189,7 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
         }
 
         @RequiredWriteAction
-        private static void makeMethodHierarchyVoid(Project project, @Nonnull PsiMethod psiMethod) {
+        private static void makeMethodHierarchyVoid(Project project, PsiMethod psiMethod) {
             replaceReturnStatements(psiMethod);
             for (PsiMethod oMethod : OverridingMethodsSearch.search(psiMethod)) {
                 replaceReturnStatements(oMethod);
@@ -218,13 +213,13 @@ public class UnusedReturnValue extends GlobalJavaInspectionTool implements OldSt
         }
 
         @RequiredWriteAction
-        private static void replaceReturnStatements(@Nonnull PsiMethod method) {
+        private static void replaceReturnStatements(PsiMethod method) {
             PsiCodeBlock body = method.getBody();
             if (body != null) {
                 final List<PsiReturnStatement> returnStatements = new ArrayList<>();
                 body.accept(new JavaRecursiveElementWalkingVisitor() {
                     @Override
-                    public void visitReturnStatement(@Nonnull PsiReturnStatement statement) {
+                    public void visitReturnStatement(PsiReturnStatement statement) {
                         super.visitReturnStatement(statement);
                         returnStatements.add(statement);
                     }

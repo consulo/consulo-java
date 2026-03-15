@@ -23,7 +23,7 @@ import consulo.language.editor.refactoring.introduce.inplace.KeyboardComboSwitch
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;

@@ -34,7 +34,6 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.search.SearchRequestCollector;
 import consulo.project.DumbService;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -46,7 +45,7 @@ import java.util.function.Supplier;
 public class ConstructorReferencesSearchHelper {
     private final PsiManager myManager;
 
-    public ConstructorReferencesSearchHelper(@Nonnull PsiManager manager) {
+    public ConstructorReferencesSearchHelper(PsiManager manager) {
         myManager = manager;
     }
 
@@ -57,14 +56,14 @@ public class ConstructorReferencesSearchHelper {
      *    and so getProject would fail with an assertion that read action is required but not present.
      */
     public boolean processConstructorReferences(
-        @Nonnull Predicate<? super PsiReference> processor,
-        @Nonnull PsiMethod constructor,
-        @Nonnull PsiClass containingClass,
-        @Nonnull SearchScope searchScope,
-        @Nonnull Project project,
+        Predicate<? super PsiReference> processor,
+        PsiMethod constructor,
+        PsiClass containingClass,
+        SearchScope searchScope,
+        Project project,
         boolean ignoreAccessScope,
         boolean isStrictSignatureSearch,
-        @Nonnull SearchRequestCollector collector
+        SearchRequestCollector collector
     ) {
         boolean[] constructorCanBeCalledImplicitly = new boolean[1];
         boolean[] isEnum = new boolean[1];
@@ -153,10 +152,10 @@ public class ConstructorReferencesSearchHelper {
     }
 
     private static boolean processEnumReferences(
-        @Nonnull Predicate<? super PsiReference> processor,
-        @Nonnull PsiMethod constructor,
-        @Nonnull Project project,
-        @Nonnull PsiClass aClass
+        Predicate<? super PsiReference> processor,
+        PsiMethod constructor,
+        Project project,
+        PsiClass aClass
     ) {
         return MethodUsagesSearcher.resolveInReadAction(
             project,
@@ -175,10 +174,10 @@ public class ConstructorReferencesSearchHelper {
     }
 
     private static boolean process18MethodPointers(
-        @Nonnull Predicate<? super PsiReference> processor,
-        @Nonnull PsiMethod constructor,
-        @Nonnull Project project,
-        @Nonnull PsiClass aClass,
+        Predicate<? super PsiReference> processor,
+        PsiMethod constructor,
+        Project project,
+        PsiClass aClass,
         SearchScope searchScope
     ) {
         return ReferencesSearch.search(aClass, searchScope).forEach(reference -> {
@@ -197,14 +196,14 @@ public class ConstructorReferencesSearchHelper {
     }
 
     private boolean processSuperOrThis(
-        @Nonnull PsiClass inheritor,
-        @Nonnull PsiMethod constructor,
+        PsiClass inheritor,
+        PsiMethod constructor,
         boolean constructorCanBeCalledImplicitly,
-        @Nonnull SearchScope searchScope,
-        @Nonnull Project project,
+        SearchScope searchScope,
+        Project project,
         boolean isStrictSignatureSearch,
-        @Nonnull String superOrThisKeyword,
-        @Nonnull Predicate<? super PsiReference> processor
+        String superOrThisKeyword,
+        Predicate<? super PsiReference> processor
     ) {
         PsiMethod[] constructors = inheritor.getConstructors();
         if (constructors.length == 0 && constructorCanBeCalledImplicitly) {
@@ -251,11 +250,11 @@ public class ConstructorReferencesSearchHelper {
     }
 
     private boolean processImplicitConstructorCall(
-        @Nonnull PsiMember usage,
-        @Nonnull Predicate<? super PsiReference> processor,
-        @Nonnull PsiMethod constructor,
-        @Nonnull Project project,
-        @Nonnull PsiClass containingClass
+        PsiMember usage,
+        Predicate<? super PsiReference> processor,
+        PsiMethod constructor,
+        Project project,
+        PsiClass containingClass
     ) {
         if (containingClass instanceof PsiAnonymousClass) {
             return true;
@@ -283,13 +282,11 @@ public class ConstructorReferencesSearchHelper {
         }
 
         return processor.test(new LightMemberReference(myManager, usage, PsiSubstitutor.EMPTY) {
-            @Nonnull
             @Override
             public PsiElement getElement() {
                 return usage;
             }
 
-            @Nonnull
             @Override
             @RequiredReadAction
             public TextRange getRangeInElement() {

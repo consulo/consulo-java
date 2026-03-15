@@ -30,14 +30,13 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * User: anna
  */
 public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement implements PsiReference {
-  public SPIPackageOrClassReferenceElement(@Nonnull ASTNode node) {
+  public SPIPackageOrClassReferenceElement(ASTNode node) {
     super(node);
   }
 
@@ -52,7 +51,6 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return new TextRange(last.getStartOffsetInParent(), getTextLength());
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText() {
     return getText();
@@ -77,7 +75,7 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
   }
 
   @Override
-  public PsiElement bindToElement(@Nonnull PsiElement element) throws IncorrectOperationException {
+  public PsiElement bindToElement(PsiElement element) throws IncorrectOperationException {
     if (element instanceof PsiPackage) {
       return handleElementRename(((PsiPackage)element).getQualifiedName());
     } else if (element instanceof PsiClass) {
@@ -107,7 +105,6 @@ public class SPIPackageOrClassReferenceElement extends ASTWrapperPsiElement impl
     return this;
   }
 
-  @Nonnull
   @Override
   public Object[] getVariants() {
     return ArrayUtil.EMPTY_OBJECT_ARRAY;

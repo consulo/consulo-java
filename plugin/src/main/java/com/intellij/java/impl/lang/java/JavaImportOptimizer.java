@@ -36,7 +36,6 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.EmptyRunnable;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author max
@@ -46,7 +45,6 @@ public class JavaImportOptimizer implements ImportOptimizer {
   private static final Logger LOG = Logger.getInstance(JavaImportOptimizer.class);
 
   @Override
-  @Nonnull
   public Runnable processFile(final PsiFile file) {
     if (!(file instanceof PsiJavaFile)) {
       return EmptyRunnable.getInstance();
@@ -125,7 +123,6 @@ public class JavaImportOptimizer implements ImportOptimizer {
     return file instanceof PsiJavaFile;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

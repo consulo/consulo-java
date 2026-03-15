@@ -25,17 +25,14 @@ import com.siyeh.ig.psiutils.TypeUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class FloatingPointEqualityInspection extends BaseInspection {
 
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.floatingPointEqualityDisplayName();
   }
 
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.floatingPointEqualityProblemDescriptor().get();
   }
@@ -47,7 +44,7 @@ public class FloatingPointEqualityInspection extends BaseInspection {
   private static class FloatingPointEqualityComparisonVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitBinaryExpression(@Nonnull PsiBinaryExpression expression) {
+    public void visitBinaryExpression(PsiBinaryExpression expression) {
       super.visitBinaryExpression(expression);
       PsiExpression rhs = expression.getROperand();
       if (rhs == null) {

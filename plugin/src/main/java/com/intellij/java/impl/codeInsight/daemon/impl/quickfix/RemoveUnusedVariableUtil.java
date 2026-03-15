@@ -24,7 +24,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.language.util.IncorrectOperationException;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -167,7 +166,7 @@ public class RemoveUnusedVariableUtil {
     }
   }
 
-  static void collectReferences(@Nonnull PsiElement context, final PsiVariable variable, final List<PsiElement> references) {
+  static void collectReferences(PsiElement context, final PsiVariable variable, final List<PsiElement> references) {
     context.accept(new JavaRecursiveElementWalkingVisitor() {
       @Override public void visitReferenceExpression(PsiReferenceExpression expression) {
         if (expression.resolve() == variable) references.add(expression);

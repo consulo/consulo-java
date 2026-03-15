@@ -34,8 +34,7 @@ import consulo.ui.ex.action.AnAction;
 import consulo.ui.image.Image;
 import consulo.util.lang.Comparing;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -48,13 +47,13 @@ import java.util.Set;
 public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescriptor {
   @RequiredReadAction
   @Override
-  public LineMarkerInfo getLineMarkerInfo(@Nonnull PsiElement element) {
+  public LineMarkerInfo getLineMarkerInfo(PsiElement element) {
     return null; //do nothing
   }
 
   @RequiredReadAction
   @Override
-  public void collectSlowLineMarkers(@Nonnull List<PsiElement> elements, @Nonnull Collection<LineMarkerInfo> result) {
+  public void collectSlowLineMarkers(List<PsiElement> elements, Collection<LineMarkerInfo> result) {
     Set<PsiStatement> statements = new HashSet<>();
 
     for (PsiElement element : elements) {
@@ -70,7 +69,7 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
     }
   }
 
-  public static boolean isRecursiveMethodCall(@Nonnull PsiMethodCallExpression methodCall) {
+  public static boolean isRecursiveMethodCall(PsiMethodCallExpression methodCall) {
     PsiExpression qualifier = methodCall.getMethodExpression().getQualifierExpression();
     if (qualifier != null && !(qualifier instanceof PsiThisExpression)) {
       return false;
@@ -84,7 +83,6 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
     return Comparing.equal(method, methodCall.resolveMethod());
   }
 
-  @Nonnull
   @Override
   public LocalizeValue getName() {
     return LocalizeValue.localizeTODO("Recursive call");
@@ -96,14 +94,13 @@ public class RecursiveCallLineMarkerProvider extends LineMarkerProviderDescripto
     return AllIcons.Gutter.RecursiveMethod;
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;
   }
 
   private static class RecursiveMethodCallMarkerInfo extends LineMarkerInfo<PsiMethodCallExpression> {
-    private RecursiveMethodCallMarkerInfo(@Nonnull PsiMethodCallExpression methodCall) {
+    private RecursiveMethodCallMarkerInfo(PsiMethodCallExpression methodCall) {
       super(methodCall, methodCall.getTextRange(), AllIcons.Gutter.RecursiveMethod, Pass.LINE_MARKERS, FunctionUtil.constant("Recursive call"), null, GutterIconRenderer.Alignment.RIGHT);
     }
 

@@ -20,8 +20,6 @@
 package com.intellij.java.debugger.impl.jdi;
 
 import consulo.internal.com.sun.jdi.*;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +33,7 @@ public class ObjectReferenceProxyImpl extends JdiProxy {
   private Type myType;
   private Boolean myIsCollected = null;
 
-  public ObjectReferenceProxyImpl(VirtualMachineProxyImpl virtualMachineProxy, @Nonnull ObjectReference objectReference) {
+  public ObjectReferenceProxyImpl(VirtualMachineProxyImpl virtualMachineProxy, ObjectReference objectReference) {
     super(virtualMachineProxy);
     myObjectReference = objectReference;
   }
@@ -65,7 +63,6 @@ public class ObjectReferenceProxyImpl extends JdiProxy {
     return myType;
   }
 
-  @NonNls
   public String toString() {
     final ObjectReference objectReference = getObjectReference();
     //noinspection HardCodedStringLiteral

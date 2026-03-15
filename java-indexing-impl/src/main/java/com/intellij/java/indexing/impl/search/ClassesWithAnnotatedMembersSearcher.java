@@ -27,7 +27,6 @@ import consulo.application.util.query.QueryExecutor;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.util.query.QueryExecutorBase;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,8 +40,8 @@ public class ClassesWithAnnotatedMembersSearcher extends QueryExecutorBase<PsiCl
     implements ClassesWithAnnotatedMembersSearchExecutor {
     @Override
     public void processQuery(
-        @Nonnull ClassesWithAnnotatedMembersSearch.Parameters queryParameters,
-        @Nonnull Predicate<? super PsiClass> consumer
+        ClassesWithAnnotatedMembersSearch.Parameters queryParameters,
+        Predicate<? super PsiClass> consumer
     ) {
         SearchScope scope = queryParameters.getScope();
         for (QueryExecutor executor : Application.get().getExtensionList(ClassesWithAnnotatedMembersSearchExecutor.class)) {

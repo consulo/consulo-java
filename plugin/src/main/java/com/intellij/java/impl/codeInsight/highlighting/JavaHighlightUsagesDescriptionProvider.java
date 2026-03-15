@@ -25,7 +25,6 @@ import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author yole
@@ -33,7 +32,7 @@ import jakarta.annotation.Nonnull;
 @ExtensionImpl
 public class JavaHighlightUsagesDescriptionProvider implements ElementDescriptionProvider {
   @Override
-  public String getElementDescription(@Nonnull PsiElement element, @Nonnull ElementDescriptionLocation location) {
+  public String getElementDescription(PsiElement element, ElementDescriptionLocation location) {
     if (!(location instanceof HighlightUsagesDescriptionLocation)) return null;
 
     String elementName = null;

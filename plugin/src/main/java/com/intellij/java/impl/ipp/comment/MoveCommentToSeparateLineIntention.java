@@ -30,23 +30,20 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 @IntentionMetaData(ignoreId = "java.MoveCommentToSeparateLineIntention", fileExtensions = "java", categories = {"Java", "Comments"})
 public class MoveCommentToSeparateLineIntention extends Intention {
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return IntentionPowerPackLocalize.moveCommentToSeparateLineIntentionName();
     }
 
-    @Nonnull
     protected PsiElementPredicate getElementPredicate() {
         return new CommentOnLineWithSourcePredicate();
     }
 
-    public void processIntention(@Nonnull PsiElement element)
+    public void processIntention(PsiElement element)
         throws IncorrectOperationException {
         PsiComment selectedComment = (PsiComment) element;
         PsiElement elementToCheck = selectedComment;

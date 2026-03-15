@@ -28,8 +28,7 @@ import consulo.language.extension.LanguageOneToOne;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides text in the editor for Evaluate expression action
@@ -40,7 +39,7 @@ public interface EditorTextProvider extends LanguageExtension {
   ExtensionPointCacheKey<EditorTextProvider, ByLanguageValue<EditorTextProvider>> KEY = ExtensionPointCacheKey.create("EditorTextProvider", LanguageOneToOne.build());
 
   @Nullable
-  static EditorTextProvider forLanguage(@Nonnull Language language) {
+  static EditorTextProvider forLanguage(Language language) {
     return Application.get().getExtensionPoint(EditorTextProvider.class).getOrBuildCache(KEY).get(language);
   }
 

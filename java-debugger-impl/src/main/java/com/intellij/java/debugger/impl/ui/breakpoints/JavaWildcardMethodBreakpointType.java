@@ -27,8 +27,7 @@ import consulo.execution.debug.breakpoint.ui.XBreakpointCustomPropertiesPanel;
 import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.project.Project;
 import consulo.ui.image.Image;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 
@@ -41,13 +40,11 @@ public class JavaWildcardMethodBreakpointType extends JavaBreakpointTypeBase<Jav
         super("java-wildcard-method", DebuggerBundle.message("method.breakpoints.tab.title"));
     }
 
-    @Nonnull
     @Override
     public Image getEnabledIcon() {
         return ExecutionDebugIconGroup.breakpointBreakpointmethod();
     }
 
-    @Nonnull
     @Override
     public Image getDisabledIcon() {
         return ExecutionDebugIconGroup.breakpointBreakpointmethoddisabled();

@@ -28,7 +28,6 @@ import consulo.language.editor.surroundWith.SurroundDescriptor;
 import consulo.language.editor.surroundWith.Surrounder;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 import java.util.ArrayList;
@@ -58,7 +57,6 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
         myApplication = application;
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     public PsiElement[] getElementsToSurround(PsiFile file, int startOffset, int endOffset) {
@@ -74,7 +72,6 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
     }
 
     @Override
-    @Nonnull
     public Surrounder[] getSurrounders() {
         if (mySurrounders == null) {
             List<Surrounder> list = new ArrayList<>();
@@ -90,7 +87,6 @@ public class JavaExpressionSurroundDescriptor implements SurroundDescriptor {
         return false;
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

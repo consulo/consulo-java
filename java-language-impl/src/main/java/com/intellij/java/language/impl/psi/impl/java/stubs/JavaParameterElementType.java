@@ -18,7 +18,6 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 
 /**
@@ -29,25 +28,23 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
     super("PARAMETER");
   }
 
-  @Nonnull
   @Override
   public ASTNode createCompositeNode() {
     return new ParameterElement(JavaElementType.PARAMETER);
   }
 
   @Override
-  public PsiParameter createPsi(@Nonnull PsiParameterStub stub) {
+  public PsiParameter createPsi(PsiParameterStub stub) {
     return getPsiFactory(stub).createParameter(stub);
   }
 
   @Override
-  public PsiParameter createPsi(@Nonnull ASTNode node) {
+  public PsiParameter createPsi(ASTNode node) {
     return new PsiParameterImpl(node);
   }
 
-  @Nonnull
   @Override
-  public PsiParameterStub createStub(@Nonnull LighterAST tree, @Nonnull LighterASTNode node, @Nonnull StubElement parentStub) {
+  public PsiParameterStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub) {
     TypeInfo typeInfo = TypeInfo.create(tree, node, parentStub);
     LighterASTNode id = LightTreeUtil.requiredChildOfType(tree, node, JavaTokenType.IDENTIFIER);
     String name = RecordUtil.intern(tree.getCharTable(), id);
@@ -55,15 +52,14 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
   }
 
   @Override
-  public void serialize(@Nonnull PsiParameterStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiParameterStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
     TypeInfo.writeTYPE(dataStream, stub.getType());
     dataStream.writeByte(((PsiParameterStubImpl)stub).getFlags());
   }
 
-  @Nonnull
   @Override
-  public PsiParameterStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiParameterStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     String name = dataStream.readNameString();
     if (name == null)
       throw new IOException("corrupted indices");
@@ -73,6 +69,6 @@ public class JavaParameterElementType extends JavaStubElementType<PsiParameterSt
   }
 
   @Override
-  public void indexStub(@Nonnull PsiParameterStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiParameterStub stub, IndexSink sink) {
   }
 }

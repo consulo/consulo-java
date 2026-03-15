@@ -25,7 +25,6 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.util.lang.Range;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author egor
@@ -68,7 +67,7 @@ public class ClassInstanceMethodFilter extends ConstructorStepMethodFilter
 		return RequestHint.STOP;
 	}
 
-	static void setUpStepIntoBreakpoint(SuspendContextImpl context, @Nonnull StepIntoBreakpoint breakpoint, RequestHint hint)
+	static void setUpStepIntoBreakpoint(SuspendContextImpl context, StepIntoBreakpoint breakpoint, RequestHint hint)
 	{
 		DebugProcessImpl debugProcess = context.getDebugProcess();
 		BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(debugProcess.getProject()).getBreakpointManager();

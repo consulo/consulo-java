@@ -34,8 +34,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Pair;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +45,7 @@ public class DeclarationMover extends LineMover {
   private PsiEnumConstant myEnumToInsertSemicolonAfter;
 
   @Override
-  public void beforeMove(@Nonnull Editor editor, @Nonnull MoveInfo info, boolean down) {
+  public void beforeMove(Editor editor, MoveInfo info, boolean down) {
     super.beforeMove(editor, info, down);
 
     if (myEnumToInsertSemicolonAfter != null) {
@@ -67,7 +66,7 @@ public class DeclarationMover extends LineMover {
   }
 
   @Override
-  public boolean checkAvailable(@Nonnull Editor editor, @Nonnull PsiFile file, @Nonnull MoveInfo info, boolean down) {
+  public boolean checkAvailable(Editor editor, PsiFile file, MoveInfo info, boolean down) {
     if (!(file instanceof PsiJavaFile)) {
       return false;
     }
@@ -123,7 +122,7 @@ public class DeclarationMover extends LineMover {
     return true;
   }
 
-  private static LineRange memberRange(@Nonnull PsiElement member, Editor editor, LineRange lineRange) {
+  private static LineRange memberRange(PsiElement member, Editor editor, LineRange lineRange) {
     TextRange textRange = member.getTextRange();
     if (editor.getDocument().getTextLength() < textRange.getEndOffset()) return null;
     int startLine = editor.offsetToLogicalPosition(textRange.getStartOffset()).line;
@@ -133,7 +132,7 @@ public class DeclarationMover extends LineMover {
     return new LineRange(startLine, endLine);
   }
 
-  private static boolean isInsideDeclaration(@Nonnull PsiElement member,
+  private static boolean isInsideDeclaration(PsiElement member,
                                              int startLine,
                                              int endLine,
                                              LineRange lineRange,

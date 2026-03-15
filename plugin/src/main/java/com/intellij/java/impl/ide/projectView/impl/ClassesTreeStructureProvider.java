@@ -31,7 +31,7 @@ import consulo.project.ui.view.tree.PsiFileNode;
 import consulo.project.ui.view.tree.SelectableTreeStructureProvider;
 import consulo.project.ui.view.tree.ViewSettings;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
 

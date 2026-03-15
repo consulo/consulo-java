@@ -18,7 +18,6 @@ package com.intellij.java.impl.psi.formatter.java;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.annotation.Nonnull;
 import consulo.language.codeStyle.ASTBlock;
 import consulo.language.codeStyle.Alignment;
 import consulo.language.codeStyle.Block;
@@ -32,7 +31,7 @@ import consulo.document.util.TextRange;
 import consulo.language.codeStyle.ExtraRangesProvider;
 import consulo.language.codeStyle.NodeIndentRangesCalculator;
 import com.intellij.java.impl.psi.impl.source.codeStyle.ShiftIndentInsideHelper;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LeafBlock implements ASTBlock, ExtraRangesProvider
 {
@@ -62,7 +61,6 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@Nonnull
 	public TextRange getTextRange()
 	{
 		if(myStartOffset != -1)
@@ -73,7 +71,6 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@Nonnull
 	public List<Block> getSubBlocks()
 	{
 		return EMPTY_SUB_BLOCKS;
@@ -98,7 +95,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	public Spacing getSpacing(Block child1, @Nonnull Block child2)
+	public Spacing getSpacing(Block child1, Block child2)
 	{
 		return null;
 	}
@@ -109,7 +106,6 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 	}
 
 	@Override
-	@Nonnull
 	public ChildAttributes getChildAttributes(int newChildIndex)
 	{
 		return new ChildAttributes(getIndent(), null);
@@ -135,7 +131,7 @@ public class LeafBlock implements ASTBlock, ExtraRangesProvider
 
 	@Override
 	@Nullable
-	public List<TextRange> getExtraRangesToFormat(@Nonnull FormattingRangesInfo info)
+	public List<TextRange> getExtraRangesToFormat(FormattingRangesInfo info)
 	{
 		int startOffset = getTextRange().getStartOffset();
 		if(info.isOnInsertedLine(startOffset) && myNode.getTextLength() == 1 && myNode.textContains('}'))

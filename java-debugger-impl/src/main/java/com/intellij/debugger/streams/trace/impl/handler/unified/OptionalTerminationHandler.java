@@ -12,7 +12,6 @@ import consulo.execution.debug.stream.trace.impl.handler.unified.HandlerBase;
 import consulo.execution.debug.stream.trace.impl.handler.unified.TerminatorTraceHandler;
 import consulo.execution.debug.stream.wrapper.IntermediateStreamCall;
 import consulo.execution.debug.stream.wrapper.TerminatorStreamCall;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -24,28 +23,25 @@ public class OptionalTerminationHandler extends HandlerBase.Terminal {
     private final String resultExpression;
     private final TerminatorTraceHandler myTerminatorHandler;
 
-    public OptionalTerminationHandler(@Nonnull TerminatorStreamCall call,
-                                      @Nonnull String resultExpression,
-                                      @Nonnull Dsl dsl) {
+    public OptionalTerminationHandler(TerminatorStreamCall call,
+                                      String resultExpression,
+                                      Dsl dsl) {
         super(dsl);
         this.call = call;
         this.resultExpression = resultExpression;
         this.myTerminatorHandler = new TerminatorTraceHandler(call, dsl);
     }
 
-    @Nonnull
     @Override
     public List<VariableDeclaration> additionalVariablesDeclaration() {
         return myTerminatorHandler.additionalVariablesDeclaration();
     }
 
-    @Nonnull
     @Override
     public CodeBlock prepareResult() {
         return myTerminatorHandler.prepareResult();
     }
 
-    @Nonnull
     @Override
     public Expression getResultExpression() {
         Expression isPresent = dsl.newArray(dsl.getTypes().BOOLEAN(),
@@ -58,7 +54,6 @@ public class OptionalTerminationHandler extends HandlerBase.Terminal {
         return dsl.newArray(dsl.getTypes().ANY(), myTerminatorHandler.getResultExpression(), optionalData);
     }
 
-    @Nonnull
     @Override
     public List<IntermediateStreamCall> additionalCallsBefore() {
         return myTerminatorHandler.additionalCallsBefore();

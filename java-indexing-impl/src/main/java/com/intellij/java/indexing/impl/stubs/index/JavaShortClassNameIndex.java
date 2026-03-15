@@ -30,7 +30,6 @@ import consulo.language.psi.stub.StubIndexKey;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 
 @ExtensionImpl
@@ -46,14 +45,13 @@ public class JavaShortClassNameIndex extends StringStubIndexExtension<PsiClass> 
     return super.getVersion() + (FileBasedIndex.ourEnableTracingOfKeyHashToVirtualFileMapping ? 1 : 0);
   }
 
-  @Nonnull
   @Override
   public StubIndexKey<String, PsiClass> getKey() {
     return JavaStubIndexKeys.CLASS_SHORT_NAMES;
   }
 
   @Override
-  public Collection<PsiClass> get(@Nonnull final String s, @Nonnull final Project project, @Nonnull final ProjectAwareSearchScope scope) {
+  public Collection<PsiClass> get(final String s, final Project project, final ProjectAwareSearchScope scope) {
     return StubIndex.getElements(getKey(), s, project, new JavaSourceFilterScope(scope), PsiClass.class);
   }
 

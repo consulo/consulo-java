@@ -46,7 +46,6 @@ import consulo.usage.UsageViewDescriptor;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.MultiMap;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -54,14 +53,13 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
     private static final Logger LOG = Logger.getInstance(EncapsulateFieldsProcessor.class);
 
     private PsiClass myClass;
-    @Nonnull
     private final EncapsulateFieldsDescriptor myDescriptor;
     private final FieldDescriptor[] myFieldDescriptors;
 
     private Map<String, PsiMethod> myNameToGetter;
     private Map<String, PsiMethod> myNameToSetter;
 
-    public EncapsulateFieldsProcessor(Project project, @Nonnull EncapsulateFieldsDescriptor descriptor) {
+    public EncapsulateFieldsProcessor(Project project, EncapsulateFieldsDescriptor descriptor) {
         super(project);
         myDescriptor = descriptor;
         myFieldDescriptors = descriptor.getSelectedFields();
@@ -80,15 +78,13 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    @Nonnull
     @Override
-    protected UsageViewDescriptor createUsageViewDescriptor(@Nonnull UsageInfo[] usages) {
+    protected UsageViewDescriptor createUsageViewDescriptor(UsageInfo[] usages) {
         FieldDescriptor[] fields = new FieldDescriptor[myFieldDescriptors.length];
         System.arraycopy(myFieldDescriptors, 0, fields, 0, myFieldDescriptors.length);
         return new EncapsulateFieldsViewDescriptor(fields);
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected LocalizeValue getCommandName() {
@@ -97,7 +93,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredUIAccess
-    protected boolean preprocessUsages(@Nonnull SimpleReference<UsageInfo[]> refUsages) {
+    protected boolean preprocessUsages(SimpleReference<UsageInfo[]> refUsages) {
         MultiMap<PsiElement, LocalizeValue> conflicts = new MultiMap<>();
 
         checkExistingMethods(conflicts, true);
@@ -226,7 +222,6 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
         }
     }
 
-    @Nonnull
     @Override
     @RequiredReadAction
     protected UsageInfo[] findUsages() {
@@ -266,7 +261,7 @@ public class EncapsulateFieldsProcessor extends BaseRefactoringProcessor {
 
     @Override
     @RequiredWriteAction
-    protected void performRefactoring(@Nonnull UsageInfo[] usages) {
+    protected void performRefactoring(UsageInfo[] usages) {
         updateFieldVisibility();
         generateAccessors();
         processUsagesPerFile(usages);

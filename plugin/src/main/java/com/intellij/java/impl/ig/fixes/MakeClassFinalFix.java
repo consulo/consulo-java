@@ -35,7 +35,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author Bas Leijdekkers
@@ -48,7 +47,6 @@ public class MakeClassFinalFix extends InspectionGadgetsFix {
         className = aClass.getName();
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return InspectionGadgetsLocalize.makeClassFinalFixName(className);

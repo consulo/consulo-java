@@ -50,8 +50,7 @@ import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import java.util.*;
@@ -157,7 +156,7 @@ public abstract class DebuggerUtils {
     }
 
     @Nullable
-    public static Method findMethod(@Nonnull ReferenceType refType, String methodName, String methodSignature) {
+    public static Method findMethod(ReferenceType refType, String methodName, String methodSignature) {
         if (refType instanceof ArrayType) {
             // for array types methodByName() in JDI always returns empty list
             Method method =
@@ -211,7 +210,7 @@ public abstract class DebuggerUtils {
     }
 
     @Nullable
-    protected static ArrayClass getArrayClass(@Nonnull String className) {
+    protected static ArrayClass getArrayClass(String className) {
         boolean searchBracket = false;
         int dims = 0;
         int pos;
@@ -249,7 +248,7 @@ public abstract class DebuggerUtils {
         return new ArrayClass(className.substring(0, pos + 1), dims);
     }
 
-    public static boolean instanceOf(@Nonnull String subType, @Nonnull String superType, @Nullable Project project) {
+    public static boolean instanceOf(String subType, String superType, @Nullable Project project) {
         if (project == null) {
             return subType.equals(superType);
         }
@@ -273,7 +272,7 @@ public abstract class DebuggerUtils {
     }
 
     @Nullable
-    public static Type getSuperType(@Nullable Type subType, @Nonnull String superType) {
+    public static Type getSuperType(@Nullable Type subType, String superType) {
         if (subType == null) {
             return null;
         }
@@ -289,7 +288,7 @@ public abstract class DebuggerUtils {
         return getSuperTypeInt(subType, superType);
     }
 
-    private static boolean typeEquals(@Nonnull Type type, @Nonnull String typeName) {
+    private static boolean typeEquals(Type type, String typeName) {
         int genericPos = typeName.indexOf('<');
         if (genericPos > -1) {
             typeName = typeName.substring(0, genericPos);
@@ -297,7 +296,7 @@ public abstract class DebuggerUtils {
         return type.name().replace('$', '.').equals(typeName.replace('$', '.'));
     }
 
-    private static Type getSuperTypeInt(@Nonnull Type subType, @Nonnull String superType) {
+    private static Type getSuperTypeInt(Type subType, String superType) {
         if (typeEquals(subType, superType)) {
             return subType;
         }
@@ -364,13 +363,13 @@ public abstract class DebuggerUtils {
         return null;
     }
 
-    public static boolean instanceOf(@Nullable Type subType, @Nonnull String superType) {
+    public static boolean instanceOf(@Nullable Type subType, String superType) {
         return getSuperType(subType, superType) != null;
     }
 
     @Nullable
     @RequiredReadAction
-    public static PsiClass findClass(@Nonnull String className, @Nonnull Project project, GlobalSearchScope scope) {
+    public static PsiClass findClass(String className, Project project, GlobalSearchScope scope) {
         Application.get().assertReadAccessAllowed();
         try {
             if (getArrayClass(className) != null) {
@@ -398,7 +397,7 @@ public abstract class DebuggerUtils {
 
     @Nullable
     @RequiredReadAction
-    public static PsiType getType(@Nonnull String className, @Nonnull Project project) {
+    public static PsiType getType(String className, Project project) {
         Application.get().assertReadAccessAllowed();
 
         PsiManager psiManager = PsiManager.getInstance(project);
@@ -443,7 +442,7 @@ public abstract class DebuggerUtils {
         SimpleReference<Boolean> rv = new SimpleReference<>(Boolean.FALSE);
         element.accept(new JavaRecursiveElementWalkingVisitor() {
             @Override
-            public void visitPostfixExpression(@Nonnull PsiPostfixExpression expression) {
+            public void visitPostfixExpression(PsiPostfixExpression expression) {
                 rv.set(Boolean.TRUE);
             }
 
@@ -469,7 +468,7 @@ public abstract class DebuggerUtils {
             }
 
             @Override
-            public void visitPrefixExpression(@Nonnull PsiPrefixExpression expression) {
+            public void visitPrefixExpression(PsiPrefixExpression expression) {
                 IElementType op = expression.getOperationTokenType();
                 if (JavaTokenType.PLUSPLUS.equals(op) || JavaTokenType.MINUSMINUS.equals(op)) {
                     rv.set(Boolean.TRUE);
@@ -480,12 +479,12 @@ public abstract class DebuggerUtils {
             }
 
             @Override
-            public void visitAssignmentExpression(@Nonnull PsiAssignmentExpression expression) {
+            public void visitAssignmentExpression(PsiAssignmentExpression expression) {
                 rv.set(Boolean.TRUE);
             }
 
             @Override
-            public void visitCallExpression(@Nonnull PsiCallExpression callExpression) {
+            public void visitCallExpression(PsiCallExpression callExpression) {
                 rv.set(Boolean.TRUE);
                 //PsiMethod method = callExpression.resolveMethod();
                 //if (method == null || !isSimpleGetter(method)) {
@@ -504,7 +503,6 @@ public abstract class DebuggerUtils {
         return connection.isUseSockets() ? connection.getHostName() + ":" + connection.getAddress() : connection.getAddress();
     }
 
-    @Nonnull
     public static LocalizeValue getTransportName(RemoteConnection connection)
     {
         return connection.isUseSockets()
@@ -512,7 +510,6 @@ public abstract class DebuggerUtils {
             : JavaDebuggerLocalize.transportNameSharedMemory();
     }
 
-    @Nonnull
     public abstract TransportService.ListenKey findAvailableDebugAddress(int type) throws ExecutionException;
 
     @SuppressWarnings("SimplifiableIfStatement")
@@ -529,7 +526,7 @@ public abstract class DebuggerUtils {
         return point.anyMatchSafe(provider -> provider.isSynthetic(typeComponent));
     }
 
-    public static boolean isInsideSimpleGetter(@Nonnull PsiElement contextElement) {
+    public static boolean isInsideSimpleGetter(PsiElement contextElement) {
         for (SimplePropertyGetterProvider provider : SimplePropertyGetterProvider.EP_NAME.getExtensionList()) {
             if (provider.isInsideSimpleGetter(contextElement)) {
                 return true;
@@ -552,7 +549,7 @@ public abstract class DebuggerUtils {
         }
     }
 
-    public static @Nullable String tryExtractExceptionMessage(@Nonnull ObjectReference exception) {
+    public static @Nullable String tryExtractExceptionMessage(ObjectReference exception) {
         final ReferenceType type = exception.referenceType();
         final Field messageField = findField(type, "detailMessage");
         if (messageField == null) return null;
@@ -568,7 +565,7 @@ public abstract class DebuggerUtils {
      * Optimized version of {@link ReferenceType#fieldByName(String)}.
      * It does not gather all visible fields before checking so can return early
      */
-    public static @Nullable Field findField(@Nonnull ReferenceType type, @Nonnull String name) {
+    public static @Nullable Field findField(ReferenceType type, String name) {
         LinkedList<ReferenceType> types = new LinkedList<>();
         // first check classes
         while (type != null) {

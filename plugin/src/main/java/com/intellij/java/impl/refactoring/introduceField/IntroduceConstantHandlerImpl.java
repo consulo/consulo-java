@@ -41,8 +41,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,7 +74,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
 
     @Override
     @RequiredUIAccess
-    public void invoke(@Nonnull Project project, Editor editor, PsiFile file, DataContext dataContext) {
+    public void invoke(Project project, Editor editor, PsiFile file, DataContext dataContext) {
         if (!CommonRefactoringUtil.checkReadOnlyStatus(project, file)) {
             return;
         }
@@ -93,7 +92,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
 
     @Override
     @RequiredUIAccess
-    protected boolean invokeImpl(@Nonnull Project project, PsiLocalVariable localVariable, final Editor editor) {
+    protected boolean invokeImpl(Project project, PsiLocalVariable localVariable, final Editor editor) {
         PsiElement parent = localVariable.getParent();
         if (!(parent instanceof PsiDeclarationStatement)) {
             LocalizeValue message =
@@ -262,7 +261,6 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
         }
     }
 
-    @Nonnull
     @Override
     protected LocalizeValue getRefactoringName() {
         return REFACTORING_NAME;
@@ -312,7 +310,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
         }
 
         @Override
-        public void visitCallExpression(@Nonnull PsiCallExpression callExpression) {
+        public void visitCallExpression(PsiCallExpression callExpression) {
             super.visitCallExpression(callExpression);
             List<PsiClassType> checkedExceptions = ExceptionUtil.getThrownCheckedExceptions(callExpression);
             if (!checkedExceptions.isEmpty()) {
@@ -342,7 +340,7 @@ public class IntroduceConstantHandlerImpl extends BaseExpressionToFieldHandler i
     }
 
     @Override
-    public PsiClass getParentClass(@Nonnull PsiExpression initializerExpression) {
+    public PsiClass getParentClass(PsiExpression initializerExpression) {
         PsiType type = initializerExpression.getType();
 
         if (type != null && PsiUtil.isConstantExpression(initializerExpression)) {

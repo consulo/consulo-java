@@ -9,7 +9,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValueFactory;
 import com.intellij.java.language.psi.PsiMethodCallExpression;
 import com.intellij.java.language.psi.PsiType;
-import jakarta.annotation.Nonnull;
 
 /**
  * A binary operation that takes two types from the stack and returns
@@ -23,8 +22,7 @@ public class IsAssignableInstruction extends EvalInstruction
 	}
 
 	@Override
-	@Nonnull
-	public DfaValue eval(@Nonnull DfaValueFactory factory, @Nonnull DfaMemoryState state, @Nonnull DfaValue... arguments)
+	public DfaValue eval(DfaValueFactory factory, DfaMemoryState state, DfaValue... arguments)
 	{
 		PsiType superClass = DfConstantType.getConstantOfType(state.getDfType(arguments[1]), PsiType.class);
 		PsiType subClass = DfConstantType.getConstantOfType(state.getDfType(arguments[0]), PsiType.class);

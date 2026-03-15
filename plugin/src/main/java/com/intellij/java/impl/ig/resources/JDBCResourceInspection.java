@@ -23,8 +23,6 @@ import consulo.deadCodeNotWorking.impl.SingleCheckboxOptionsPanel;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.util.HashSet;
@@ -45,7 +43,6 @@ public class JDBCResourceInspection extends ResourceInspection {
       "java.sql.Statement",
       "java.sql.Statement",
     };
-  @NonNls
   private static final String[] creationMethodName =
     {
       "connect",
@@ -71,19 +68,16 @@ public class JDBCResourceInspection extends ResourceInspection {
   }
 
   @Override
-  @Nonnull
   public String getID() {
     return "JDBCResourceOpenedButNotSafelyClosed";
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.jdbcResourceOpenedNotClosedDisplayName();
   }
 
   @Override
-  @Nonnull
   public String buildErrorString(Object... infos) {
     PsiExpression expression = (PsiExpression)infos[0];
     PsiType type = expression.getType();
@@ -107,7 +101,7 @@ public class JDBCResourceInspection extends ResourceInspection {
 
     @Override
     public void visitMethodCallExpression(
-      @Nonnull PsiMethodCallExpression expression) {
+      PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       if (!isJDBCResourceCreation(expression)) {
         return;

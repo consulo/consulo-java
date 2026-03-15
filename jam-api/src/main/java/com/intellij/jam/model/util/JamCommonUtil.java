@@ -68,9 +68,7 @@ import consulo.xml.psi.xml.XmlAttributeValue;
 import consulo.xml.psi.xml.XmlFile;
 import consulo.xml.psi.xml.XmlTag;
 import consulo.xml.util.xml.*;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
@@ -81,7 +79,6 @@ import java.util.function.Supplier;
  * @author Gregory.Shrago
  */
 public class JamCommonUtil {
-  @NonNls
   public static final String VALUE_PARAMETER = "value";
 
   private static final HashingStrategy<PsiClass> HASHING_STRATEGY = new HashingStrategy<>() {
@@ -123,7 +120,6 @@ public class JamCommonUtil {
     );
   }
 
-  @Nonnull
   public static List<PsiClass> getSuperClassList(@Nullable final PsiClass firstClass) {
     final SmartList<PsiClass> list = new SmartList<>();
     processSuperClassList(firstClass, list, psiClass -> true);
@@ -132,7 +128,7 @@ public class JamCommonUtil {
 
   public static boolean processSuperClassList(
     @Nullable final PsiClass firstClass,
-    @Nonnull final Collection<PsiClass> supers,
+    final Collection<PsiClass> supers,
     final Processor<PsiClass> processor
   ) {
     for (PsiClass curClass = firstClass; curClass != null && !CommonClassNames.JAVA_LANG_OBJECT.equals(curClass.getQualifiedName()) && !supers.contains(curClass); curClass = curClass.getSuperClass()) {
@@ -209,7 +205,6 @@ public class JamCommonUtil {
     return ModuleUtilCore.findModuleForPsiElement(psiFile);
   }
 
-  @Nonnull
   public static PsiElement[] getTargetPsiElements(final CommonModelElement element) {
     final ArrayList<PsiElement> list = new ArrayList<>();
     // todo add new JAM or drop this functionality
@@ -283,8 +278,7 @@ public class JamCommonUtil {
   private static final Key<CachedValue<Module[]>> MODULE_DEPENDENCIES = Key.create("MODULE_DEPENDENCIES");
   private static final Key<CachedValue<Module[]>> MODULE_DEPENDENTS = Key.create("MODULE_DEPENDENTS");
 
-  @Nonnull
-  public static Module[] getAllModuleDependencies(@Nonnull final Module module) {
+  public static Module[] getAllModuleDependencies(final Module module) {
     CachedValue<Module[]> value = module.getUserData(MODULE_DEPENDENCIES);
     if (value == null) {
       module.putUserData(MODULE_DEPENDENCIES, value = CachedValuesManager.getManager(module.getProject()).createCachedValue(() -> {
@@ -295,8 +289,7 @@ public class JamCommonUtil {
     return value.getValue();
   }
 
-  @Nonnull
-  public static Module[] getAllDependentModules(@Nonnull final Module module) {
+  public static Module[] getAllDependentModules(final Module module) {
     CachedValue<Module[]> value = module.getUserData(MODULE_DEPENDENTS);
     if (value == null) {
       module.putUserData(MODULE_DEPENDENTS, value = CachedValuesManager.getManager(module.getProject()).createCachedValue(() -> {
@@ -344,7 +337,6 @@ public class JamCommonUtil {
     return result;
   }
 
-  @Nonnull
   public static Collection<PsiClass> getAnnotationTypesWithChildren(final String annotationName, final Module module) {
     final GlobalSearchScope scope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false);
     final PsiClass psiClass = JavaPsiFacade.getInstance(module.getProject()).findClass(annotationName, scope);
@@ -524,14 +516,14 @@ public class JamCommonUtil {
     }
     return new DeleteProvider() {
       @Override
-      public void deleteElement(@Nonnull DataContext dataContext) {
+      public void deleteElement(DataContext dataContext) {
         for (DeleteProvider provider : toRun) {
           provider.deleteElement(dataContext);
         }
       }
 
       @Override
-      public boolean canDeleteElement(@Nonnull DataContext dataContext) {
+      public boolean canDeleteElement(DataContext dataContext) {
         for (DeleteProvider provider : toRun) {
           if (!provider.canDeleteElement(dataContext)) {
             return false;

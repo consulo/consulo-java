@@ -15,12 +15,11 @@
  */
 package com.intellij.java.compiler.impl;
 
-import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Eugene Zhuravlev
  *         Date: Sep 24, 2005
  */
 public abstract class ParserAction {
-  public abstract boolean execute(@NonNls String line, final OutputParser.Callback callback);
+  public abstract boolean execute(String line, final OutputParser.Callback callback);
 }

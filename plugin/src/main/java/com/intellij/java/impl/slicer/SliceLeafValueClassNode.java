@@ -17,7 +17,6 @@ package com.intellij.java.impl.slicer;
 
 import consulo.project.Project;
 import consulo.ui.ex.SimpleTextAttributes;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 public class SliceLeafValueClassNode extends SliceLeafValueRootNode {
   private final String myClassName;
 
-  public SliceLeafValueClassNode(@Nonnull Project project, SliceNode root, String className) {
+  public SliceLeafValueClassNode(Project project, SliceNode root, String className) {
     super(project, root.getValue().getElement(), root, new ArrayList<SliceNode>(), root.getValue().params);
     myClassName = className;
   }

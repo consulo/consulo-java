@@ -25,7 +25,6 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
 import one.util.streamex.StreamEx;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 
 public class StatementExtractor {
@@ -49,7 +48,6 @@ public class StatementExtractor {
    * @param root              a root expression
    * @return an array of non-physical statements which represent the same logic as passed expressions
    */
-  @Nonnull
   public static PsiStatement[] generateStatements(List<PsiExpression> expressionsToKeep, PsiExpression root) {
     String statementsCode = generateStatementsText(expressionsToKeep, root);
     if (statementsCode.isEmpty()) {
@@ -65,8 +63,7 @@ public class StatementExtractor {
     return result.toString();
   }
 
-  @Nonnull
-  private static Node createNode(@Nonnull PsiExpression expression, @Nonnull PsiExpression root) {
+  private static Node createNode(PsiExpression expression, PsiExpression root) {
     Node result = new Expr(expression);
     PsiExpression parent;
     while (expression != root) {
@@ -85,8 +82,7 @@ public class StatementExtractor {
     return result;
   }
 
-  @Nonnull
-  private static Node foldNode(@Nonnull Node node, @Nonnull PsiExpression expression, @Nonnull PsiExpression parent) {
+  private static Node foldNode(Node node, PsiExpression expression, PsiExpression parent) {
     if (parent instanceof PsiPolyadicExpression) {
       PsiPolyadicExpression polyadic = (PsiPolyadicExpression) parent;
       IElementType type = polyadic.getOperationTokenType();
@@ -131,17 +127,14 @@ public class StatementExtractor {
 
   private static class Cond extends Node {
     private final
-    @Nonnull
     PsiExpression myCondition;
     private final
-    @Nonnull
     Node myThenBranch;
     private final
-    @Nonnull
     Node myElseBranch;
     private final int myLimit;
 
-    private Cond(@Nonnull PsiExpression anchor, @Nonnull PsiExpression condition, int limit, @Nonnull Node thenBranch, @Nonnull Node elseBranch) {
+    private Cond(PsiExpression anchor, PsiExpression condition, int limit, Node thenBranch, Node elseBranch) {
       super(anchor);
       myCondition = condition;
       myLimit = limit;
@@ -192,7 +185,7 @@ public class StatementExtractor {
   }
 
   private static class Expr extends Node {
-    private Expr(@Nonnull PsiExpression expression) {
+    private Expr(PsiExpression expression) {
       super(expression);
     }
 
@@ -208,13 +201,11 @@ public class StatementExtractor {
 
   private static class Cons extends Node {
     private final
-    @Nonnull
     Node myHead;
     private final
-    @Nonnull
     Node myTail;
 
-    private Cons(@Nonnull Node head, @Nonnull Node tail) {
+    private Cons(Node head, Node tail) {
       super(head.myAnchor);
       assert !(head instanceof Cons);
       myHead = head;

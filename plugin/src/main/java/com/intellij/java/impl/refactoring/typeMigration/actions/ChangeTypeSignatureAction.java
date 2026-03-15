@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring.typeMigration.actions;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ActionImpl;
 import consulo.java.localize.JavaLocalize;
-import jakarta.annotation.Nonnull;
 
 import consulo.dataContext.DataContext;
 import consulo.codeEditor.Editor;
@@ -49,7 +48,7 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction {
     }
 
     @Override
-    public boolean isEnabledOnElements(@Nonnull PsiElement[] elements) {
+    public boolean isEnabledOnElements(PsiElement[] elements) {
         if (elements.length > 1) {
             return false;
         }
@@ -66,10 +65,10 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction {
     @Override
     @RequiredReadAction
     protected boolean isAvailableOnElementInEditorAndFile(
-        @Nonnull PsiElement element,
-        @Nonnull Editor editor,
-        @Nonnull PsiFile file,
-        @Nonnull DataContext context
+        PsiElement element,
+        Editor editor,
+        PsiFile file,
+        DataContext context
     ) {
         int offset = TargetElementUtil.adjustOffset(file, editor.getDocument(), editor.getCaretModel().getOffset());
         PsiElement psiElement = file.findElementAt(offset);
@@ -81,7 +80,7 @@ public class ChangeTypeSignatureAction extends BaseRefactoringAction {
     }
 
     @Override
-    public RefactoringActionHandler getHandler(@Nonnull DataContext dataContext) {
+    public RefactoringActionHandler getHandler(DataContext dataContext) {
         return new ChangeTypeSignatureHandler();
     }
 }

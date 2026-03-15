@@ -25,7 +25,6 @@ import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.editor.rawHighlight.HighlightInfoType;
 import consulo.language.editor.rawHighlight.HighlightInfoTypeImpl;
-import jakarta.annotation.Nonnull;
 
 public interface JavaHighlightInfoTypes {
   HighlightInfoType JAVA_KEYWORD = new HighlightInfoTypeImpl(HighlightSeverity.INFORMATION, JavaHighlightingColors.KEYWORD);
@@ -58,7 +57,7 @@ public interface JavaHighlightInfoTypes {
   HighlightInfoType IMPLICIT_ANONYMOUS_CLASS_PARAMETER = new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, JavaHighlightingColors
       .IMPLICIT_ANONYMOUS_CLASS_PARAMETER_ATTRIBUTES);
 
-  static HighlightInfoType createSymbolTypeInfo(@Nonnull TextAttributesKey attributesKey) {
+  static HighlightInfoType createSymbolTypeInfo(TextAttributesKey attributesKey) {
     return new HighlightInfoTypeImpl(HighlightInfoType.SYMBOL_TYPE_SEVERITY, attributesKey, false);
   }
 }

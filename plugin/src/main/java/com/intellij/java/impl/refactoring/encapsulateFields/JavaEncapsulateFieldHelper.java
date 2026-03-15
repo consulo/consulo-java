@@ -30,10 +30,8 @@ import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.StringUtil;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Max Medvedev
@@ -43,9 +41,9 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
   private static final Logger LOG = Logger.getInstance(JavaEncapsulateFieldHelper.class);
 
   @Nullable
-  public EncapsulateFieldUsageInfo createUsage(@Nonnull EncapsulateFieldsDescriptor descriptor,
-                                               @Nonnull FieldDescriptor fieldDescriptor,
-                                               @Nonnull PsiReference reference) {
+  public EncapsulateFieldUsageInfo createUsage(EncapsulateFieldsDescriptor descriptor,
+                                               FieldDescriptor fieldDescriptor,
+                                               PsiReference reference) {
     if (!(reference instanceof PsiReferenceExpression)) return null;
 
     boolean findSet = descriptor.isToEncapsulateSet();
@@ -102,8 +100,8 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return false;
   }
 
-  public boolean processUsage(@Nonnull EncapsulateFieldUsageInfo usage,
-                              @Nonnull EncapsulateFieldsDescriptor descriptor,
+  public boolean processUsage(EncapsulateFieldUsageInfo usage,
+                              EncapsulateFieldsDescriptor descriptor,
                               PsiMethod setter,
                               PsiMethod getter) {
     PsiElement element = usage.getElement();
@@ -161,7 +159,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
               }
             }
 
-            @NonNls String text = "a" + opName + "b";
+            String text = "a" + opName + "b";
             PsiBinaryExpression binExpr = (PsiBinaryExpression)factory.createExpressionFromText(text, expr);
             binExpr.getLOperand().replace(getExpr);
             binExpr.getROperand().replace(assignment.getRExpression());
@@ -200,7 +198,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
           }
         }
 
-        @NonNls String text;
+        String text;
         if (sign == JavaTokenType.PLUSPLUS){
           text = "a+1";
         }
@@ -245,7 +243,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
                                                           PsiMethod setter) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(expr.getProject()).getElementFactory();
     String setterName = fieldDescriptor.getSetterName();
-    @NonNls String text = setterName + "(a)";
+    String text = setterName + "(a)";
     PsiExpression qualifier = expr.getQualifierExpression();
     if (qualifier != null){
       text = "q." + text;
@@ -270,7 +268,7 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
                                                           PsiMethod getter) throws IncorrectOperationException {
     PsiElementFactory factory = JavaPsiFacade.getInstance(expr.getProject()).getElementFactory();
     String getterName = fieldDescriptor.getGetterName();
-    @NonNls String text = getterName + "()";
+    String text = getterName + "()";
     PsiExpression qualifier = expr.getQualifierExpression();
     if (qualifier != null) {
       text = "q." + text;
@@ -318,27 +316,24 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     return methodCall;
   }
 
-  @Nonnull
   @Override
-  public PsiField[] getApplicableFields(@Nonnull PsiClass aClass) {
+  public PsiField[] getApplicableFields(PsiClass aClass) {
     return aClass.getFields();
   }
 
   @Override
-  @Nonnull
-  public String suggestSetterName(@Nonnull PsiField field) {
+  public String suggestSetterName(PsiField field) {
     return PropertyUtil.suggestSetterName(field);
   }
 
   @Override
-  @Nonnull
-  public String suggestGetterName(@Nonnull PsiField field) {
+  public String suggestGetterName(PsiField field) {
     return PropertyUtil.suggestGetterName(field);
   }
 
   @Override
   @Nullable
-  public PsiMethod generateMethodPrototype(@Nonnull PsiField field, @Nonnull String methodName, boolean isGetter) {
+  public PsiMethod generateMethodPrototype(PsiField field, String methodName, boolean isGetter) {
     PsiMethod prototype = isGetter
                           ? GenerateMembersUtil.generateGetterPrototype(field)
                           : GenerateMembersUtil.generateSetterPrototype(field);
@@ -351,7 +346,6 @@ public class JavaEncapsulateFieldHelper extends EncapsulateFieldHelper {
     }
   }
 
-  @Nonnull
   @Override
   public Language getLanguage() {
     return JavaLanguage.INSTANCE;

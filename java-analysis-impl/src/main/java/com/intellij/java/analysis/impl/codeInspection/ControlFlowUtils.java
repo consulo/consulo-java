@@ -23,10 +23,8 @@ import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 
 public class ControlFlowUtils {
 
@@ -123,7 +121,7 @@ public class ControlFlowUtils {
         }
     }
 
-    private static boolean doWhileStatementMayCompleteNormally(@Nonnull PsiDoWhileStatement loopStatement, @Nullable PsiMethod method) {
+    private static boolean doWhileStatementMayCompleteNormally(PsiDoWhileStatement loopStatement, @Nullable PsiMethod method) {
         final PsiExpression condition = loopStatement.getCondition();
         final Object value = ExpressionUtils.computeConstantExpression(condition);
         final PsiStatement body = loopStatement.getBody();
@@ -131,19 +129,19 @@ public class ControlFlowUtils {
             || statementContainsBreakToStatementOrAncestor(loopStatement) || statementContainsContinueToAncestor(loopStatement);
     }
 
-    private static boolean statementContainsBreakToStatementOrAncestor(@Nonnull PsiStatement statement) {
+    private static boolean statementContainsBreakToStatementOrAncestor(PsiStatement statement) {
         final BreakFinder breakFinder = new BreakFinder(statement, true);
         statement.accept(breakFinder);
         return breakFinder.breakFound();
     }
 
-    private static boolean whileStatementMayCompleteNormally(@Nonnull PsiWhileStatement loopStatement) {
+    private static boolean whileStatementMayCompleteNormally(PsiWhileStatement loopStatement) {
         final PsiExpression condition = loopStatement.getCondition();
         final Object value = ExpressionUtils.computeConstantExpression(condition);
         return value != Boolean.TRUE || statementIsBreakTarget(loopStatement) || statementContainsContinueToAncestor(loopStatement);
     }
 
-    private static boolean forStatementMayCompleteNormally(@Nonnull PsiForStatement loopStatement) {
+    private static boolean forStatementMayCompleteNormally(PsiForStatement loopStatement) {
         if (statementIsBreakTarget(loopStatement)) {
             return true;
         }
@@ -158,7 +156,7 @@ public class ControlFlowUtils {
         return Boolean.TRUE != value;
     }
 
-    private static boolean switchStatementMayCompleteNormally(@Nonnull PsiSwitchStatement switchStatement, @Nullable PsiMethod method) {
+    private static boolean switchStatementMayCompleteNormally(PsiSwitchStatement switchStatement, @Nullable PsiMethod method) {
         if (statementIsBreakTarget(switchStatement)) {
             return true;
         }
@@ -258,7 +256,7 @@ public class ControlFlowUtils {
         return aClass != null && aClass.isEnum();
     }
 
-    private static boolean tryStatementMayCompleteNormally(@Nonnull PsiTryStatement tryStatement, @Nullable PsiMethod method) {
+    private static boolean tryStatementMayCompleteNormally(PsiTryStatement tryStatement, @Nullable PsiMethod method) {
         final PsiCodeBlock finallyBlock = tryStatement.getFinallyBlock();
         if (finallyBlock != null) {
             if (!codeBlockMayCompleteNormally(finallyBlock, method)) {
@@ -278,7 +276,7 @@ public class ControlFlowUtils {
         return false;
     }
 
-    private static boolean ifStatementMayCompleteNormally(@Nonnull PsiIfStatement ifStatement, @Nullable PsiMethod method) {
+    private static boolean ifStatementMayCompleteNormally(PsiIfStatement ifStatement, @Nullable PsiMethod method) {
         final PsiExpression condition = ifStatement.getCondition();
         final Object value = ExpressionUtils.computeConstantExpression(condition);
         final PsiStatement thenBranch = ifStatement.getThenBranch();
@@ -303,7 +301,7 @@ public class ControlFlowUtils {
         return statementMayCompleteNormally(branch1, method) || statementMayCompleteNormally(branch2, method);
     }
 
-    private static boolean labeledStatementMayCompleteNormally(@Nonnull PsiLabeledStatement labeledStatement, @Nullable PsiMethod method) {
+    private static boolean labeledStatementMayCompleteNormally(PsiLabeledStatement labeledStatement, @Nullable PsiMethod method) {
         final PsiStatement statement = labeledStatement.getStatement();
         if (statement == null) {
             return false;
@@ -328,13 +326,13 @@ public class ControlFlowUtils {
         return true;
     }
 
-    private static boolean statementIsBreakTarget(@Nonnull PsiStatement statement) {
+    private static boolean statementIsBreakTarget(PsiStatement statement) {
         final BreakFinder breakFinder = new BreakFinder(statement, false);
         statement.accept(breakFinder);
         return breakFinder.breakFound();
     }
 
-    private static boolean statementContainsContinueToAncestor(@Nonnull PsiStatement statement) {
+    private static boolean statementContainsContinueToAncestor(PsiStatement statement) {
         PsiElement parent = statement.getParent();
         while (parent instanceof PsiLabeledStatement) {
             statement = (PsiStatement) parent;
@@ -345,19 +343,19 @@ public class ControlFlowUtils {
         return continueToAncestorFinder.continueToAncestorFound();
     }
 
-    public static boolean containsReturn(@Nonnull PsiElement element) {
+    public static boolean containsReturn(PsiElement element) {
         final ReturnFinder returnFinder = new ReturnFinder();
         element.accept(returnFinder);
         return returnFinder.returnFound();
     }
 
-    public static boolean statementIsContinueTarget(@Nonnull PsiStatement statement) {
+    public static boolean statementIsContinueTarget(PsiStatement statement) {
         final ContinueFinder continueFinder = new ContinueFinder(statement);
         statement.accept(continueFinder);
         return continueFinder.continueFound();
     }
 
-    public static boolean containsSystemExit(@Nonnull PsiElement element) {
+    public static boolean containsSystemExit(PsiElement element) {
         final SystemExitFinder systemExitFinder = new SystemExitFinder();
         element.accept(systemExitFinder);
         return systemExitFinder.exitFound();
@@ -373,7 +371,7 @@ public class ControlFlowUtils {
         return methodCallFinder.containsCallToMethod();
     }
 
-    public static boolean isInLoop(@Nonnull PsiElement element) {
+    public static boolean isInLoop(PsiElement element) {
         final PsiLoopStatement loopStatement = PsiTreeUtil.getParentOfType(element, PsiLoopStatement.class, true, PsiClass.class);
         if (loopStatement == null) {
             return false;
@@ -382,7 +380,7 @@ public class ControlFlowUtils {
         return body != null && PsiTreeUtil.isAncestor(body, element, true);
     }
 
-    public static boolean isInFinallyBlock(@Nonnull PsiElement element) {
+    public static boolean isInFinallyBlock(PsiElement element) {
         PsiElement currentElement = element;
         while (true) {
             final PsiTryStatement tryStatement =
@@ -402,19 +400,19 @@ public class ControlFlowUtils {
         }
     }
 
-    public static boolean isInCatchBlock(@Nonnull PsiElement element) {
+    public static boolean isInCatchBlock(PsiElement element) {
         return PsiTreeUtil.getParentOfType(element, PsiCatchSection.class, true, PsiClass.class) != null;
     }
 
-    public static boolean isInExitStatement(@Nonnull PsiExpression expression) {
+    public static boolean isInExitStatement(PsiExpression expression) {
         return isInReturnStatementArgument(expression) || isInThrowStatementArgument(expression);
     }
 
-    private static boolean isInReturnStatementArgument(@Nonnull PsiExpression expression) {
+    private static boolean isInReturnStatementArgument(PsiExpression expression) {
         return PsiTreeUtil.getParentOfType(expression, PsiReturnStatement.class) != null;
     }
 
-    public static boolean isInThrowStatementArgument(@Nonnull PsiExpression expression) {
+    public static boolean isInThrowStatementArgument(PsiExpression expression) {
         return PsiTreeUtil.getParentOfType(expression, PsiThrowStatement.class) != null;
     }
 
@@ -430,7 +428,7 @@ public class ControlFlowUtils {
         }
     }
 
-    public static boolean statementCompletesWithStatement(@Nonnull PsiElement containingStatement, @Nonnull PsiStatement statement) {
+    public static boolean statementCompletesWithStatement(PsiElement containingStatement, PsiStatement statement) {
         PsiElement statementToCheck = statement;
         while (true) {
             if (statementToCheck.equals(containingStatement)) {
@@ -452,7 +450,7 @@ public class ControlFlowUtils {
         }
     }
 
-    public static boolean blockCompletesWithStatement(@Nonnull PsiCodeBlock body, @Nonnull PsiStatement statement) {
+    public static boolean blockCompletesWithStatement(PsiCodeBlock body, PsiStatement statement) {
         PsiElement statementToCheck = statement;
         while (true) {
             if (statementToCheck == null) {
@@ -481,11 +479,11 @@ public class ControlFlowUtils {
     }
 
     @Nullable
-    private static PsiElement getContainingStatementOrBlock(@Nonnull PsiElement statement) {
+    private static PsiElement getContainingStatementOrBlock(PsiElement statement) {
         return PsiTreeUtil.getParentOfType(statement, PsiStatement.class, PsiCodeBlock.class);
     }
 
-    private static boolean statementIsLastInBlock(@Nonnull PsiCodeBlock block, @Nonnull PsiStatement statement) {
+    private static boolean statementIsLastInBlock(PsiCodeBlock block, PsiStatement statement) {
         for (PsiElement child = block.getLastChild(); child != null; child = child.getPrevSibling()) {
             if (!(child instanceof PsiStatement)) {
                 continue;
@@ -511,7 +509,7 @@ public class ControlFlowUtils {
         return getLastChildOfType(codeBlock, PsiStatement.class);
     }
 
-    private static <T extends PsiElement> T getLastChildOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass) {
+    private static <T extends PsiElement> T getLastChildOfType(@Nullable PsiElement element, Class<T> aClass) {
         if (element == null) {
             return null;
         }
@@ -532,7 +530,7 @@ public class ControlFlowUtils {
         return getOnlyChildOfType(codeBlock, PsiStatement.class);
     }
 
-    public static <T extends PsiElement> T getOnlyChildOfType(@Nullable PsiElement element, @Nonnull Class<T> aClass) {
+    public static <T extends PsiElement> T getOnlyChildOfType(@Nullable PsiElement element, Class<T> aClass) {
         if (element == null) {
             return null;
         }
@@ -555,7 +553,7 @@ public class ControlFlowUtils {
         return hasChildrenOfTypeCount(codeBlock, count, PsiStatement.class);
     }
 
-    public static <T extends PsiElement> boolean hasChildrenOfTypeCount(@Nullable PsiElement element, int count, @Nonnull Class<T> aClass) {
+    public static <T extends PsiElement> boolean hasChildrenOfTypeCount(@Nullable PsiElement element, int count, Class<T> aClass) {
         if (element == null) {
             return false;
         }
@@ -575,7 +573,7 @@ public class ControlFlowUtils {
         return hasStatementCount(codeBlock, 0);
     }
 
-    public static boolean methodAlwaysThrowsException(@Nonnull PsiMethod method) {
+    public static boolean methodAlwaysThrowsException(PsiMethod method) {
         final PsiCodeBlock body = method.getBody();
         if (body == null) {
             return true;
@@ -829,12 +827,12 @@ public class ControlFlowUtils {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass aClass) {
+        public void visitClass(PsiClass aClass) {
             // do nothing to keep from drilling into inner classes
         }
 
         @Override
-        public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+        public void visitMethodCallExpression(PsiMethodCallExpression expression) {
             if (m_found) {
                 return;
             }
@@ -843,7 +841,7 @@ public class ControlFlowUtils {
             if (method == null) {
                 return;
             }
-            @NonNls final String methodName = method.getName();
+            final String methodName = method.getName();
             if (!methodName.equals("exit")) {
                 return;
             }
@@ -868,7 +866,7 @@ public class ControlFlowUtils {
         }
 
         @Override
-        public void visitClass(@Nonnull PsiClass psiClass) {
+        public void visitClass(PsiClass psiClass) {
             // do nothing, to keep drilling into inner classes
         }
 
@@ -877,7 +875,7 @@ public class ControlFlowUtils {
         }
 
         @Override
-        public void visitReturnStatement(@Nonnull PsiReturnStatement returnStatement) {
+        public void visitReturnStatement(PsiReturnStatement returnStatement) {
             if (m_found) {
                 return;
             }
@@ -892,7 +890,7 @@ public class ControlFlowUtils {
         private final PsiStatement m_target;
         private final boolean myAncestor;
 
-        BreakFinder(@Nonnull PsiStatement target, boolean ancestor) {
+        BreakFinder(PsiStatement target, boolean ancestor) {
             m_target = target;
             myAncestor = ancestor;
         }
@@ -902,7 +900,7 @@ public class ControlFlowUtils {
         }
 
         @Override
-        public void visitBreakStatement(@Nonnull PsiBreakStatement statement) {
+        public void visitBreakStatement(PsiBreakStatement statement) {
             if (m_found) {
                 return;
             }
@@ -922,7 +920,7 @@ public class ControlFlowUtils {
         }
 
         @Override
-        public void visitIfStatement(@Nonnull PsiIfStatement statement) {
+        public void visitIfStatement(PsiIfStatement statement) {
             if (m_found) {
                 return;
             }
@@ -948,7 +946,7 @@ public class ControlFlowUtils {
         private boolean m_found;
         private final PsiStatement m_target;
 
-        private ContinueFinder(@Nonnull PsiStatement target) {
+        private ContinueFinder(PsiStatement target) {
             m_target = target;
         }
 
@@ -957,7 +955,7 @@ public class ControlFlowUtils {
         }
 
         @Override
-        public void visitContinueStatement(@Nonnull PsiContinueStatement statement) {
+        public void visitContinueStatement(PsiContinueStatement statement) {
             if (m_found) {
                 return;
             }

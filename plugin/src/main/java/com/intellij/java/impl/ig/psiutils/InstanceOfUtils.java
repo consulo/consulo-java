@@ -22,7 +22,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.analysis.impl.codeInspection.EquivalenceChecker;
 import com.siyeh.ig.psiutils.VariableAccessUtils;
-import jakarta.annotation.Nonnull;
 
 public class InstanceOfUtils {
 
@@ -53,7 +52,7 @@ public class InstanceOfUtils {
   }
 
   public static boolean hasAgreeingInstanceof(
-      @Nonnull PsiTypeCastExpression expression) {
+      PsiTypeCastExpression expression) {
     PsiType castType = expression.getType();
     PsiExpression operand = expression.getOperand();
     if (!(operand instanceof PsiReferenceExpression)) {

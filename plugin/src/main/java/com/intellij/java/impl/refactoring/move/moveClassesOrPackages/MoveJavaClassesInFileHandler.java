@@ -6,7 +6,6 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import com.intellij.java.language.impl.psi.impl.light.LightClass;
 import consulo.util.collection.ArrayUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import java.util.Map;
 public class MoveJavaClassesInFileHandler extends MoveAllClassesInFileHandler {
 
   @Override
-  public void processMoveAllClassesInFile(@Nonnull Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove) {
+  public void processMoveAllClassesInFile(Map<PsiClass, Boolean> allClasses, PsiClass psiClass, PsiElement... elementsToMove) {
     if (psiClass instanceof LightClass) return;
     PsiClassOwner containingFile = (PsiClassOwner)psiClass.getContainingFile();
     PsiClass[] classes = containingFile.getClasses();

@@ -21,8 +21,7 @@ import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 import consulo.util.lang.Range;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -33,7 +32,7 @@ public class LambdaSmartStepTarget extends SmartStepTarget {
     private final int myOrdinal;
 
     public LambdaSmartStepTarget(
-        @Nonnull PsiLambdaExpression lambda,
+        PsiLambdaExpression lambda,
         @Nullable String label,
         @Nullable PsiElement highlightElement,
         int ordinal,

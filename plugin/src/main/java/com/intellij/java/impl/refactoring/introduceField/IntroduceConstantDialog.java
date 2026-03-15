@@ -58,8 +58,6 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,9 +70,7 @@ import java.util.Set;
 
 class IntroduceConstantDialog extends DialogWrapper {
     private static final Logger LOG = Logger.getInstance(IntroduceConstantDialog.class);
-    @NonNls
     private static final String RECENTS_KEY = "IntroduceConstantDialog.RECENTS_KEY";
-    @NonNls
     protected static final String NONNLS_SELECTED_PROPERTY = "INTRODUCE_CONSTANT_NONNLS";
 
     private final Project myProject;
@@ -171,7 +167,6 @@ class IntroduceConstantDialog extends DialogWrapper {
         return myTypeSelector.getSelectedType();
     }
 
-    @Nonnull
     protected Action[] createActions() {
         return new Action[]{getOKAction(), getCancelAction(), getHelpAction()};
     }

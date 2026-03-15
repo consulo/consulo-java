@@ -8,7 +8,6 @@ import consulo.language.editor.completion.lookup.LookupItem;
 import consulo.language.editor.completion.lookup.LookupManager;
 import com.intellij.testFramework.PlatformTestUtil;
 import consulo.util.lang.function.ThrowableRunnable;
-import org.jetbrains.annotations.NonNls;
 
 @SuppressWarnings({"ALL"})
 public abstract class SecondSmartTypeCompletionTest extends LightFixtureCompletionTestCase {
@@ -178,7 +177,7 @@ public abstract class SecondSmartTypeCompletionTest extends LightFixtureCompleti
     checkResult();
   }
 
-  protected void checkResultByFile(@NonNls final String filePath)  {
+  protected void checkResultByFile(final String filePath)  {
     if (myItems != null) {
       //System.out.println("items = " + Arrays.asList(myItems));
     }

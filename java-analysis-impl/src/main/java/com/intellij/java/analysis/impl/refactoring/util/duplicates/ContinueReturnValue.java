@@ -20,7 +20,6 @@
  */
 package com.intellij.java.analysis.impl.refactoring.util.duplicates;
 
-import org.jetbrains.annotations.NonNls;
 
 public class ContinueReturnValue extends GotoReturnValue {
   public boolean isEquivalent(final ReturnValue other) {
@@ -28,7 +27,6 @@ public class ContinueReturnValue extends GotoReturnValue {
   }
 
 
-  @NonNls
   public String getGotoStatement() {
     return "if (a) continue;";
   }

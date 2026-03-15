@@ -33,7 +33,6 @@ import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.dataholder.Key;
-import jakarta.annotation.Nonnull;
 import jakarta.inject.Inject;
 
 import java.util.Set;
@@ -70,7 +69,7 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
 
     @Override
     @RequiredUIAccess
-    public void preExpand(@Nonnull PsiFile file, @Nonnull Editor editor) {
+    public void preExpand(PsiFile file, Editor editor) {
         UIAccess.assertIsUIThread();
 
         file.putUserData(ADDED_SEMICOLON, null);
@@ -90,7 +89,7 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
     }
 
     @Override
-    public void afterExpand(@Nonnull PsiFile file, @Nonnull Editor editor) {
+    public void afterExpand(PsiFile file, Editor editor) {
         SmartPsiElementPointer<PsiElement> pointer = file.getUserData(ADDED_SEMICOLON);
         if (pointer != null) {
             PsiElement addedSemicolon = pointer.getElement();
@@ -102,9 +101,8 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
         }
     }
 
-    @Nonnull
     @Override
-    public PsiFile preCheck(@Nonnull PsiFile copyFile, @Nonnull Editor realEditor, int currentOffset) {
+    public PsiFile preCheck(PsiFile copyFile, Editor realEditor, int currentOffset) {
         return myApplication.runReadAction((Supplier<PsiFile>) () -> {
             Document document = copyFile.getViewProvider().getDocument();
             assert document != null;
@@ -119,15 +117,14 @@ public class JavaPostfixTemplateProvider extends PostfixTemplateProvider {
         });
     }
 
-    public static void doNotDeleteSemicolon(@Nonnull PsiFile file) {
+    public static void doNotDeleteSemicolon(PsiFile file) {
         file.putUserData(ADDED_SEMICOLON, null);
     }
 
-    private static boolean isSemicolonNeeded(@Nonnull PsiFile file, @Nonnull Editor editor) {
+    private static boolean isSemicolonNeeded(PsiFile file, Editor editor) {
         return JavaCompletionContributor.semicolonNeeded(file, CompletionInitializationContext.calcStartOffset(editor.getCaretModel().getCurrentCaret()));
     }
 
-    @Nonnull
     @Override
     public Language getLanguage() {
         return JavaLanguage.INSTANCE;

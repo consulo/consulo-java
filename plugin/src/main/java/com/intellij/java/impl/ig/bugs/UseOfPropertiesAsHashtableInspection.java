@@ -29,19 +29,15 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
 @ExtensionImpl
 public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.propertiesObjectAsHashtableDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.propertiesObjectAsHashtableProblemDescriptor().get();
     }
@@ -75,7 +71,6 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
             this.put = put;
         }
 
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return put
@@ -96,7 +91,7 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
                 (PsiMethodCallExpression) grandParent;
             PsiReferenceExpression methodExpression =
                 methodCallExpression.getMethodExpression();
-            @NonNls StringBuilder newExpression = new StringBuilder();
+            StringBuilder newExpression = new StringBuilder();
             PsiExpression qualifierExpression =
                 methodExpression.getQualifierExpression();
             if (qualifierExpression != null) {
@@ -137,7 +132,7 @@ public class UseOfPropertiesAsHashtableInspection extends BaseInspection {
 
         @Override
         public void visitMethodCallExpression(
-            @Nonnull PsiMethodCallExpression expression
+            PsiMethodCallExpression expression
         ) {
             super.visitMethodCallExpression(expression);
             PsiReferenceExpression methodExpression =

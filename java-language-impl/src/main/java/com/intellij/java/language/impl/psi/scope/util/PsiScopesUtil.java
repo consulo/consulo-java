@@ -38,8 +38,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,15 +49,15 @@ public class PsiScopesUtil {
     private PsiScopesUtil() {
     }
 
-    public static boolean treeWalkUp(@Nonnull PsiScopeProcessor processor, @Nonnull PsiElement entrance, @Nullable PsiElement maxScope) {
+    public static boolean treeWalkUp(PsiScopeProcessor processor, PsiElement entrance, @Nullable PsiElement maxScope) {
         return treeWalkUp(processor, entrance, maxScope, ResolveState.initial());
     }
 
     public static boolean treeWalkUp(
-        @Nonnull PsiScopeProcessor processor,
-        @Nonnull PsiElement entrance,
+        PsiScopeProcessor processor,
+        PsiElement entrance,
         @Nullable PsiElement maxScope,
-        @Nonnull ResolveState state
+        ResolveState state
     ) {
         if (!entrance.isValid()) {
             LOG.error(new PsiInvalidElementAccessException(entrance));
@@ -95,9 +94,9 @@ public class PsiScopesUtil {
 
     @RequiredReadAction
     public static boolean walkChildrenScopes(
-        @Nonnull PsiElement thisElement,
-        @Nonnull PsiScopeProcessor processor,
-        @Nonnull ResolveState state,
+        PsiElement thisElement,
+        PsiScopeProcessor processor,
+        ResolveState state,
         PsiElement lastParent,
         PsiElement place
     ) {
@@ -161,8 +160,8 @@ public class PsiScopesUtil {
 
     @RequiredReadAction
     public static boolean resolveAndWalk(
-        @Nonnull PsiScopeProcessor processor,
-        @Nonnull PsiJavaCodeReferenceElement ref,
+        PsiScopeProcessor processor,
+        PsiJavaCodeReferenceElement ref,
         @Nullable PsiElement maxScope
     ) {
         return resolveAndWalk(processor, ref, maxScope, false);
@@ -170,8 +169,8 @@ public class PsiScopesUtil {
 
     @RequiredReadAction
     public static boolean resolveAndWalk(
-        @Nonnull PsiScopeProcessor processor,
-        @Nonnull PsiJavaCodeReferenceElement ref,
+        PsiScopeProcessor processor,
+        PsiJavaCodeReferenceElement ref,
         @Nullable PsiElement maxScope,
         boolean incompleteCode
     ) {
@@ -245,8 +244,8 @@ public class PsiScopesUtil {
 
     @RequiredReadAction
     public static void setupAndRunProcessor(
-        @Nonnull MethodsProcessor processor,
-        @Nonnull PsiCallExpression call,
+        MethodsProcessor processor,
+        PsiCallExpression call,
         boolean dummyImplicitConstructor
     )
         throws MethodProcessorSetupFailedException {
@@ -483,7 +482,7 @@ public class PsiScopesUtil {
 
     @RequiredReadAction
     private static boolean processQualifierType(
-        @Nonnull PsiType type,
+        PsiType type,
         MethodsProcessor processor,
         PsiManager manager,
         PsiMethodCallExpression call
@@ -513,9 +512,9 @@ public class PsiScopesUtil {
 
     @RequiredReadAction
     private static boolean processQualifierResult(
-        @Nonnull JavaResolveResult qualifierResult,
-        @Nonnull MethodsProcessor processor,
-        @Nonnull PsiMethodCallExpression methodCall
+        JavaResolveResult qualifierResult,
+        MethodsProcessor processor,
+        PsiMethodCallExpression methodCall
     ) throws MethodProcessorSetupFailedException {
         PsiElement resolve = qualifierResult.getElement();
 

@@ -20,28 +20,24 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
 
-import jakarta.annotation.Nonnull;
 
 import java.io.IOException;
 import java.util.*;
 
 public class CreateDefaultBranchFix extends BaseSwitchFix {
     private static final String PLACEHOLDER_NAME = "$EXPRESSION$";
-    @Nonnull
     private final LocalizeValue myMessage;
 
-    public CreateDefaultBranchFix(@Nonnull PsiSwitchBlock block, @Nonnull LocalizeValue message) {
+    public CreateDefaultBranchFix(PsiSwitchBlock block, LocalizeValue message) {
         super(block);
         myMessage = message;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getText() {
         return myMessage.orIfEmpty(getName());
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
         return LocalizeValue.localizeTODO("Insert 'default' branch");
@@ -78,7 +74,7 @@ public class CreateDefaultBranchFix extends BaseSwitchFix {
         adjustEditor(switchBlock);
     }
 
-    private static void adjustEditor(@Nonnull PsiSwitchBlock block) {
+    private static void adjustEditor(PsiSwitchBlock block) {
         PsiCodeBlock body = block.getBody();
         if (body == null) {
             return;

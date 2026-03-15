@@ -31,9 +31,7 @@ import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Comparing;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.NonNls;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -42,8 +40,7 @@ public class WeakestTypeFinder {
   private WeakestTypeFinder() {
   }
 
-  @Nonnull
-  public static Collection<PsiClass> calculateWeakestClassesNecessary(@Nonnull PsiElement variableOrMethod,
+  public static Collection<PsiClass> calculateWeakestClassesNecessary(PsiElement variableOrMethod,
                                                                       boolean useRighthandTypeAsWeakestTypeInAssignments,
                                                                       boolean useParameterizedTypeForCollectionMethods) {
     PsiType variableOrMethodType;
@@ -78,7 +75,7 @@ public class WeakestTypeFinder {
       }
       weakestTypeClasses.add(lowerBoundClass);
       PsiResourceVariable resourceVariable = (PsiResourceVariable) variableOrMethod;
-      @NonNls String methodCallText = resourceVariable.getName() + ".close()";
+      String methodCallText = resourceVariable.getName() + ".close()";
       PsiMethodCallExpression methodCallExpression =
           (PsiMethodCallExpression) facade.getElementFactory().createExpressionFromText(methodCallText, resourceVariable.getParent());
       if (!findWeakestType(methodCallExpression, weakestTypeClasses)) {
@@ -276,7 +273,7 @@ public class WeakestTypeFinder {
     if (!useParameterizedTypeForCollectionMethods) {
       return checkType(type, substitutor, weakestTypeClasses);
     }
-    @NonNls String methodName = method.getName();
+    String methodName = method.getName();
     if (HardcodedMethodConstants.REMOVE.equals(methodName) ||
         HardcodedMethodConstants.GET.equals(methodName) ||
         "containsKey".equals(methodName) ||
@@ -310,8 +307,8 @@ public class WeakestTypeFinder {
     return checkType(type, substitutor, weakestTypeClasses);
   }
 
-  private static boolean checkType(@Nullable PsiType type, @Nonnull PsiSubstitutor substitutor,
-                                   @Nonnull Collection<PsiClass> weakestTypeClasses) {
+  private static boolean checkType(@Nullable PsiType type, PsiSubstitutor substitutor,
+                                   Collection<PsiClass> weakestTypeClasses) {
     if (!(type instanceof PsiClassType)) {
       return false;
     }
@@ -485,7 +482,7 @@ public class WeakestTypeFinder {
     return false;
   }
 
-  private static boolean checkType(@Nullable PsiType type, @Nonnull Collection<PsiClass> weakestTypeClasses) {
+  private static boolean checkType(@Nullable PsiType type, Collection<PsiClass> weakestTypeClasses) {
     if (!(type instanceof PsiClassType)) {
       return false;
     }
@@ -528,7 +525,7 @@ public class WeakestTypeFinder {
     return null;
   }
 
-  private static void checkClass(@Nullable PsiClass aClass, @Nonnull Collection<PsiClass> weakestTypeClasses) {
+  private static void checkClass(@Nullable PsiClass aClass, Collection<PsiClass> weakestTypeClasses) {
     if (aClass == null) {
       return;
     }

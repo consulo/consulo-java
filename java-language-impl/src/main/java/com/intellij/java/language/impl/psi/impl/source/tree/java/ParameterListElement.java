@@ -29,9 +29,8 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.util.CharTable;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ParameterListElement extends CompositeElement implements Constants {
   private static final Logger LOG = Logger.getInstance(ParameterListElement.class);
@@ -82,7 +81,7 @@ public class ParameterListElement extends CompositeElement implements Constants 
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     final TreeElement oldLastNodeInsideParens = getLastNodeInsideParens();
     final TreeElement oldFirstNodeInsideParens = getFirstNodeInsideParens();
     if (child.getElementType() == PARAMETER) {

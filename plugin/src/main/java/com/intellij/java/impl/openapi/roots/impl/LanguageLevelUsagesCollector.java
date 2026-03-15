@@ -25,21 +25,18 @@ import consulo.module.content.ModuleRootManager;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
 @ExtensionImpl
 public class LanguageLevelUsagesCollector extends AbstractApplicationUsagesCollector {
-  @Nonnull
   @Override
   public String getGroupId() {
     return "consulo.java:language.level";
   }
 
   @Override
-  @Nonnull
-  public Set<UsageDescriptor> getProjectUsages(@Nonnull Project project) {
+  public Set<UsageDescriptor> getProjectUsages(Project project) {
     Set<String> languageLevels = new HashSet<String>();
     for (Module module : ModuleManager.getInstance(project).getModules()) {
       JavaModuleExtension extension = ModuleRootManager.getInstance(module).getExtension(JavaModuleExtension.class);

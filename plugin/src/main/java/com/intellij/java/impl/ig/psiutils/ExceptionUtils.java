@@ -19,8 +19,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.psiutils.BoolUtils;
 import consulo.language.psi.PsiElement;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -40,8 +39,7 @@ public class ExceptionUtils {
     s_genericExceptionTypes.add(CommonClassNames.JAVA_LANG_ERROR);
   }
 
-  @Nonnull
-  public static Set<PsiClassType> calculateExceptionsThrown(@Nonnull PsiElement element) {
+  public static Set<PsiClassType> calculateExceptionsThrown(PsiElement element) {
     ExceptionsThrownVisitor visitor = new ExceptionsThrownVisitor();
     element.accept(visitor);
     return visitor.getExceptionsThrown();
@@ -171,14 +169,14 @@ public class ExceptionUtils {
     private final Set<PsiClassType> m_exceptionsThrown = new HashSet(4);
 
     @Override
-    public void visitMethodCallExpression(@Nonnull PsiMethodCallExpression expression) {
+    public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       super.visitMethodCallExpression(expression);
       PsiMethod method = expression.resolveMethod();
       collectExceptionsThrown(method, m_exceptionsThrown);
     }
 
     @Override
-    public void visitNewExpression(@Nonnull PsiNewExpression expression) {
+    public void visitNewExpression(PsiNewExpression expression) {
       super.visitNewExpression(expression);
       PsiMethod method = expression.resolveMethod();
       collectExceptionsThrown(method, m_exceptionsThrown);
@@ -199,7 +197,7 @@ public class ExceptionUtils {
     }
 
     @Override
-    public void visitTryStatement(@Nonnull PsiTryStatement statement) {
+    public void visitTryStatement(PsiTryStatement statement) {
       Set<PsiType> exceptionsHandled = getExceptionTypesHandled(statement);
       PsiResourceList resourceList = statement.getResourceList();
       if (resourceList != null) {
@@ -236,7 +234,7 @@ public class ExceptionUtils {
       }
     }
 
-    private static void collectExceptionsThrown(@Nullable PsiMethod method, @Nonnull Set<PsiClassType> out) {
+    private static void collectExceptionsThrown(@Nullable PsiMethod method, Set<PsiClassType> out) {
       if (method == null) {
         return;
       }
@@ -259,7 +257,7 @@ public class ExceptionUtils {
       return false;
     }
 
-    private static Set<PsiType> getExceptionTypesHandled(@Nonnull PsiTryStatement statement) {
+    private static Set<PsiType> getExceptionTypesHandled(PsiTryStatement statement) {
       Set<PsiType> out = new HashSet<PsiType>(5);
       PsiParameter[] parameters = statement.getCatchBlockParameters();
       for (PsiParameter parameter : parameters) {
@@ -269,7 +267,6 @@ public class ExceptionUtils {
       return out;
     }
 
-    @Nonnull
     public Set<PsiClassType> getExceptionsThrown() {
       return m_exceptionsThrown;
     }

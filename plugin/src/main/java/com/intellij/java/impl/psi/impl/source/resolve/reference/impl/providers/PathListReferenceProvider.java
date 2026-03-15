@@ -24,7 +24,6 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.CharFilter;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author davdeev
@@ -32,8 +31,7 @@ import jakarta.annotation.Nonnull;
 public class PathListReferenceProvider extends PsiReferenceProvider {
 
   @Override
-  @Nonnull
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element, @Nonnull ProcessingContext context) {
+  public PsiReference[] getReferencesByElement(PsiElement element, ProcessingContext context) {
     return getReferencesByElement(element);
   }
 
@@ -41,7 +39,7 @@ public class PathListReferenceProvider extends PsiReferenceProvider {
     return true;
   }
 
-  public PsiReference[] getReferencesByElement(@Nonnull PsiElement element) {
+  public PsiReference[] getReferencesByElement(PsiElement element) {
 
     PsiReference[] result = PsiReference.EMPTY_ARRAY;
     ElementManipulator<PsiElement> manipulator = ElementManipulators.getManipulator(element);

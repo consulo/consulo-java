@@ -15,7 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.language.impl.parser.JavaParserUtil;
 import com.intellij.java.language.LanguageLevel;
@@ -23,7 +23,6 @@ import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
 import consulo.language.impl.ast.FileElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.impl.ast.TreeElement;
-import jakarta.annotation.Nonnull;
 
 /**
  * Dummy file element for using together with DummyHolder.
@@ -36,14 +35,14 @@ public class JavaDummyElement extends FileElement {
   private Throwable myParserError = null;
 
   public JavaDummyElement(@Nullable final CharSequence text,
-                          @Nonnull final JavaParserUtil.ParserWrapper parser,
-                          @Nonnull final LanguageLevel level) {
+                          final JavaParserUtil.ParserWrapper parser,
+                          final LanguageLevel level) {
     this(text, parser, level, false);
   }
 
   public JavaDummyElement(@Nullable final CharSequence text,
-                          @Nonnull final JavaParserUtil.ParserWrapper parser,
-                          @Nonnull final LanguageLevel level,
+                          final JavaParserUtil.ParserWrapper parser,
+                          final LanguageLevel level,
                           final boolean consumeAll) {
     super(JavaElementType.DUMMY_ELEMENT, text);
     myParser = parser;
@@ -51,7 +50,6 @@ public class JavaDummyElement extends FileElement {
     myConsumeAll = consumeAll;
   }
 
-  @Nonnull
   public JavaParserUtil.ParserWrapper getParser() {
     return myParser;
   }
@@ -60,7 +58,6 @@ public class JavaDummyElement extends FileElement {
     return myConsumeAll;
   }
 
-  @Nonnull
   public LanguageLevel getLanguageLevel() {
     return myLanguageLevel;
   }

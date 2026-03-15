@@ -20,8 +20,7 @@ import consulo.ui.image.Image;
 import consulo.util.lang.Range;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Eugene Zhuravlev
@@ -68,7 +67,6 @@ public abstract class SmartStepTarget {
         return null;
     }
 
-    @Nonnull
     public String getPresentation() {
         return StringUtil.notNullize(getLabel());
     }

@@ -11,11 +11,10 @@ import com.intellij.java.language.psi.PsiExpression;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public final class PrimitiveValueDescriptor extends InstanceValueDescriptor {
-  PrimitiveValueDescriptor(@Nonnull Project project, @Nullable Value value) {
+  PrimitiveValueDescriptor(Project project, @Nullable Value value) {
     super(project, value);
   }
 

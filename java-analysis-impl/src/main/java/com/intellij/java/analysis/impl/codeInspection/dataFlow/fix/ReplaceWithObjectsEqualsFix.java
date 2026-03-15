@@ -25,9 +25,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author peter
@@ -43,8 +41,6 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 		myReplacementText = replacementText;
 	}
 
-	@Nls
-	@Nonnull
 	@Override
 	public LocalizeValue getName()
 	{
@@ -52,7 +48,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	}
 
 	@Override
-	public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor)
+	public void applyFix(Project project, ProblemDescriptor descriptor)
 	{
 		PsiMethodCallExpression call = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
 		if(call == null)
@@ -72,7 +68,7 @@ public class ReplaceWithObjectsEqualsFix implements LocalQuickFix
 	}
 
 	@Nullable
-	public static ReplaceWithObjectsEqualsFix createFix(@Nonnull PsiMethodCallExpression call, @Nonnull PsiReferenceExpression methodExpression)
+	public static ReplaceWithObjectsEqualsFix createFix(PsiMethodCallExpression call, PsiReferenceExpression methodExpression)
 	{
 		if(!"equals".equals(methodExpression.getReferenceName()) || call.getArgumentList().getExpressions().length != 1 || !PsiUtil.getLanguageLevel(call).isAtLeast(LanguageLevel.JDK_1_7))
 		{

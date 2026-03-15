@@ -23,7 +23,6 @@ import consulo.language.psi.PsiManager;
 import com.intellij.testFramework.UsefulTestCase;
 import com.intellij.testFramework.builders.JavaModuleFixtureBuilder;
 import consulo.container.boot.ContainerPathManager;
-import org.jetbrains.annotations.NonNls;
 
 import java.io.File;
 
@@ -63,7 +62,6 @@ public abstract class JavaCodeInsightFixtureTestCase extends UsefulTestCase {
    *
    * @return relative path to the test data.
    */
-  @NonNls
   protected String getBasePath() {
     return "";
   }
@@ -73,7 +71,6 @@ public abstract class JavaCodeInsightFixtureTestCase extends UsefulTestCase {
    *
    * @return absolute path to the test data.
    */
-  @NonNls
   protected String getTestDataPath() {
     return ContainerPathManager.get().getHomePath().replace(File.separatorChar, '/') + getBasePath();
   }

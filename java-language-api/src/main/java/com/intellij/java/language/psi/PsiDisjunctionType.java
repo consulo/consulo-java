@@ -23,9 +23,7 @@ import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.application.util.CachedValuesManager;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -37,7 +35,7 @@ public class PsiDisjunctionType extends PsiType.Stub {
   private final List<PsiType> myTypes;
   private final CachedValue<PsiType> myLubCache;
 
-  public PsiDisjunctionType(@Nonnull List<PsiType> types, @Nonnull PsiManager psiManager) {
+  public PsiDisjunctionType(List<PsiType> types, PsiManager psiManager) {
     super(TypeAnnotationProvider.EMPTY);
 
     myManager = psiManager;
@@ -56,40 +54,33 @@ public class PsiDisjunctionType extends PsiType.Stub {
     }, false);
   }
 
-  @Nonnull
-  public static PsiType createDisjunction(@Nonnull List<PsiType> types, @Nonnull PsiManager psiManager) {
+  public static PsiType createDisjunction(List<PsiType> types, PsiManager psiManager) {
     assert !types.isEmpty();
     return types.size() == 1 ? types.get(0) : new PsiDisjunctionType(types, psiManager);
   }
 
-  @Nonnull
   public PsiType getLeastUpperBound() {
     return myLubCache.getValue();
   }
 
-  @Nonnull
   public List<PsiType> getDisjunctions() {
     return myTypes;
   }
 
-  @Nonnull
   public PsiDisjunctionType newDisjunctionType(final List<PsiType> types) {
     return new PsiDisjunctionType(types, myManager);
   }
 
-  @Nonnull
   @Override
   public String getPresentableText(final boolean annotated) {
     return StringUtil.join(myTypes, psiType -> psiType.getPresentableText(annotated), " | ");
   }
 
-  @Nonnull
   @Override
   public String getCanonicalText(final boolean annotated) {
     return StringUtil.join(myTypes, psiType -> psiType.getCanonicalText(annotated), " | ");
   }
 
-  @Nonnull
   @Override
   public String getInternalCanonicalText() {
     return StringUtil.join(myTypes, psiType -> psiType.getInternalCanonicalText(), " | ");
@@ -106,12 +97,12 @@ public class PsiDisjunctionType extends PsiType.Stub {
   }
 
   @Override
-  public boolean equalsToText(@Nonnull @NonNls final String text) {
+  public boolean equalsToText(final String text) {
     return Comparing.equal(text, getCanonicalText());
   }
 
   @Override
-  public <A> A accept(@Nonnull final PsiTypeVisitor<A> visitor) {
+  public <A> A accept(final PsiTypeVisitor<A> visitor) {
     return visitor.visitDisjunctionType(this);
   }
 
@@ -120,7 +111,6 @@ public class PsiDisjunctionType extends PsiType.Stub {
     return getLeastUpperBound().getResolveScope();
   }
 
-  @Nonnull
   @Override
   public PsiType[] getSuperTypes() {
     final PsiType lub = getLeastUpperBound();
@@ -159,7 +149,7 @@ public class PsiDisjunctionType extends PsiType.Stub {
     return true;
   }
 
-  public static List<PsiType> flattenAndRemoveDuplicates(@Nonnull List<? extends PsiType> types) {
+  public static List<PsiType> flattenAndRemoveDuplicates(List<? extends PsiType> types) {
     Set<PsiType> disjunctionSet = new LinkedHashSet<>();
     for (PsiType type : types) {
       flatten(disjunctionSet, type);

@@ -15,10 +15,9 @@
  */
 package com.intellij.jam;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import consulo.language.psi.PsiReference;
-import jakarta.annotation.Nonnull;
 
 /**
  * @author peter
@@ -45,7 +44,6 @@ public abstract class JamConverter<T> {
     throw new UnsupportedOperationException("toString() not supported for " + getClass());
   }
 
-  @Nonnull
   public PsiReference[] createReferences(JamStringAttributeElement<T> context) {
     return PsiReference.EMPTY_ARRAY;
   }

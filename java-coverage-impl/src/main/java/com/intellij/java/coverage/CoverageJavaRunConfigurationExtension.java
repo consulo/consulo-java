@@ -41,8 +41,7 @@ import consulo.project.ui.notification.Notifications;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
 
 import java.util.ArrayList;
@@ -56,20 +55,18 @@ import java.util.Map;
 public class CoverageJavaRunConfigurationExtension extends RunConfigurationExtension {
     @Override
     public void attachToProcess(
-        @Nonnull RunConfigurationBase configuration,
-        @Nonnull ProcessHandler handler,
+        RunConfigurationBase configuration,
+        ProcessHandler handler,
         RunnerSettings runnerSettings
     ) {
         CoverageDataManager.getInstance(configuration.getProject()).attachToProcess(handler, configuration, runnerSettings);
     }
 
     @Override
-    @Nullable
-    public Map.Entry<LocalizeValue, SettingsEditor> createEditor(@Nonnull RunConfigurationBase configuration) {
+    public Map.@Nullable Entry<LocalizeValue, SettingsEditor> createEditor(RunConfigurationBase configuration) {
         return Map.entry(ExecutionCoverageLocalize.coverageTabTitle(), new CoverageConfigurable(configuration));
     }
 
-    @Nonnull
     @Override
     public String getSerializationId() {
         return "coverage";
@@ -106,7 +103,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     }
 
     @Override
-    public void readExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws InvalidDataException {
+    public void readExternal(RunConfigurationBase runConfiguration, Element element) throws InvalidDataException {
         if (!isApplicableFor(runConfiguration)) {
             return;
         }
@@ -116,7 +113,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     }
 
     @Override
-    public void writeExternal(@Nonnull RunConfigurationBase runConfiguration, @Nonnull Element element) throws WriteExternalException {
+    public void writeExternal(RunConfigurationBase runConfiguration, Element element) throws WriteExternalException {
         if (!isApplicableFor(runConfiguration)) {
             return;
         }
@@ -125,7 +122,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     }
 
     @Override
-    public void extendCreatedConfiguration(@Nonnull RunConfigurationBase runJavaConfiguration, @Nonnull Location location) {
+    public void extendCreatedConfiguration(RunConfigurationBase runJavaConfiguration, Location location) {
         JavaCoverageEnabledConfiguration coverageEnabledConfiguration =
             JavaCoverageEnabledConfiguration.getFrom(runJavaConfiguration);
         assert coverageEnabledConfiguration != null;
@@ -143,7 +140,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     }
 
     @Override
-    public void validateConfiguration(@Nonnull RunConfigurationBase runJavaConfiguration, boolean isExecution)
+    public void validateConfiguration(RunConfigurationBase runJavaConfiguration, boolean isExecution)
         throws RuntimeConfigurationException {
     }
 
@@ -244,7 +241,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     }
 
     @Override
-    protected boolean isApplicableFor(@Nonnull RunConfigurationBase configuration) {
+    protected boolean isApplicableFor(RunConfigurationBase configuration) {
         return CoverageEnabledConfiguration.isApplicableTo(configuration);
     }
 

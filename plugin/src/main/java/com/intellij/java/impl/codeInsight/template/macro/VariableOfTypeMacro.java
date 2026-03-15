@@ -35,8 +35,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -56,20 +55,19 @@ public class VariableOfTypeMacro extends Macro {
   }
 
   @Override
-  @Nonnull
   public String getDefaultValue() {
     return "a";
   }
 
   @Override
-  public Result calculateResult(@Nonnull Expression[] params, ExpressionContext context) {
+  public Result calculateResult(Expression[] params, ExpressionContext context) {
     PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length == 0) return null;
     return new JavaPsiElementResult(vars[0]);
   }
 
   @Override
-  public LookupElement[] calculateLookupItems(@Nonnull Expression[] params, ExpressionContext context) {
+  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
     PsiElement[] vars = getVariables(params, context);
     if (vars == null || vars.length < 2) return null;
     Set<LookupElement> set = new LinkedHashSet<>();

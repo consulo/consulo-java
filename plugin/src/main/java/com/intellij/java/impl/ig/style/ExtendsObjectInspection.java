@@ -26,25 +26,21 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ExtendsObjectInspection extends BaseInspection {
 
   @Override
-  @Nonnull
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.extendsObjectDisplayName();
   }
 
   @Override
-  @Nonnull
   public String getID() {
     return "ClassExplicitlyExtendsObject";
   }
 
   @Override
-  @Nonnull
   protected String buildErrorString(Object... infos) {
     return InspectionGadgetsLocalize.extendsObjectProblemDescriptor().get();
   }
@@ -60,13 +56,12 @@ public class ExtendsObjectInspection extends BaseInspection {
   }
 
   private static class ExtendsObjectFix extends InspectionGadgetsFix {
-    @Nonnull
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.extendsObjectRemoveQuickfix();
     }
 
     @Override
-    public void doFix(@Nonnull Project project, ProblemDescriptor descriptor)
+    public void doFix(Project project, ProblemDescriptor descriptor)
       throws IncorrectOperationException {
       PsiElement extendClassIdentifier = descriptor.getPsiElement();
       PsiClass element =
@@ -95,7 +90,7 @@ public class ExtendsObjectInspection extends BaseInspection {
   private static class ExtendsObjectVisitor extends BaseInspectionVisitor {
 
     @Override
-    public void visitClass(@Nonnull PsiClass aClass) {
+    public void visitClass(PsiClass aClass) {
       if (aClass.isInterface() || aClass.isAnnotationType()) {
         return;
       }

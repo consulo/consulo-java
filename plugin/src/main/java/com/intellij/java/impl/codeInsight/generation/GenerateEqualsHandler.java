@@ -33,7 +33,6 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 
 import java.util.List;
 
@@ -123,11 +122,10 @@ public class GenerateEqualsHandler extends GenerateMembersHandlerBase {
     }
 
     @Override
-    protected boolean hasMembers(@Nonnull PsiClass aClass) {
+    protected boolean hasMembers(PsiClass aClass) {
         return hasNonStaticFields(aClass);
     }
 
-    @Nonnull
     @Override
     protected List<? extends GenerationInfo> generateMemberPrototypes(PsiClass aClass, ClassMember[] originalMembers)
         throws IncorrectOperationException {

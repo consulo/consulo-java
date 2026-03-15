@@ -40,9 +40,7 @@ import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import org.jetbrains.annotations.Nls;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.function.Supplier;
@@ -52,8 +50,6 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
   @SuppressWarnings("PublicField")
   public boolean onlyReportDirectoriesUnderSourceRoots = false;
 
-  @Nls
-  @Nonnull
   @Override
   public LocalizeValue getDisplayName() {
     return InspectionGadgetsLocalize.emptyDirectoryDisplayName();
@@ -68,10 +64,10 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
   @Override
   public void runInspection(
     AnalysisScope scope,
-    @Nonnull final InspectionManager manager,
+    final InspectionManager manager,
     final GlobalInspectionContext context,
-    @Nonnull final ProblemDescriptionsProcessor processor,
-    @Nonnull Object state
+    final ProblemDescriptionsProcessor processor,
+    Object state
   ) {
     final Project project = context.getProject();
     final ProjectFileIndex index = ProjectRootManager.getInstance(project).getFileIndex();
@@ -149,14 +145,13 @@ public abstract class EmptyDirectoryInspection extends BaseGlobalInspection {
       this.name = name;
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getName() {
       return InspectionGadgetsLocalize.emptyDirectoriesDeleteQuickfix(name);
     }
 
     @Override
-    public void applyFix(@Nonnull Project project, @Nonnull CommonProblemDescriptor descriptor) {
+    public void applyFix(Project project, CommonProblemDescriptor descriptor) {
       VirtualFile file = VirtualFileManager.getInstance().findFileByUrl(url);
       if (file == null) {
         return;

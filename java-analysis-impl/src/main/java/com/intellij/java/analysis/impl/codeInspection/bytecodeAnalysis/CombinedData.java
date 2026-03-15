@@ -3,7 +3,6 @@ package com.intellij.java.analysis.impl.codeInspection.bytecodeAnalysis;
 
 import consulo.internal.org.objectweb.asm.Type;
 import consulo.internal.org.objectweb.asm.tree.analysis.BasicValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -99,7 +98,6 @@ interface CombinedData
 			return originInsnIndex;
 		}
 
-		@Nonnull
 		Set<EKey> getKeysForParameter(int idx, ParamValueBasedDirection direction)
 		{
 			Set<EKey> keys = new HashSet<>();

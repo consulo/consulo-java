@@ -16,7 +16,6 @@
 package com.intellij.java.language.jvm;
 
 import com.intellij.java.language.jvm.types.JvmType;
-import jakarta.annotation.Nonnull;
 
 import java.lang.reflect.Parameter;
 
@@ -32,6 +31,5 @@ public interface JvmParameter extends JvmNamedElement, JvmModifiersOwner
 	 * @see Parameter#getParameterizedType
 	 * @see Parameter#getAnnotatedType
 	 */
-	@Nonnull
 	JvmType getType();
 }

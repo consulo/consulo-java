@@ -16,7 +16,6 @@
 package com.intellij.java.debugger.impl.ui.breakpoints;
 
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import jakarta.annotation.Nonnull;
 
 /**
 * @author Eugene Zhuravlev
@@ -34,7 +33,6 @@ public final class BreakpointDefaults {
     this.myIsConditionEnabled = conditionEnabled;
   }
 
-  @Nonnull
   public String getSuspendPolicy() {
     return mySuspendPolicy;
   }

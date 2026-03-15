@@ -19,7 +19,6 @@ import consulo.annotation.DeprecationInfo;
 import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.application.CommonBundle;
 import consulo.java.localize.JavaCompletionLocalize;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
 import java.lang.ref.Reference;
@@ -35,7 +34,7 @@ import java.util.ResourceBundle;
 public class CompletionBundle {
   private static Reference<ResourceBundle> ourBundle;
 
-  @NonNls private static final String BUNDLE = "messages.CompletionBundle";
+  private static final String BUNDLE = "messages.CompletionBundle";
 
   private CompletionBundle() {
   }

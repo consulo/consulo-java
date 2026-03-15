@@ -23,7 +23,6 @@ import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import java.util.*;
 
@@ -32,13 +31,11 @@ public class ComparatorMethodParameterNotUsedInspection
     extends BaseInspection {
 
     @Override
-    @Nonnull
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.comparatorMethodParameterNotUsedDisplayName();
     }
 
     @Override
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.comparatorMethodParameterNotUsedProblemDescriptor().get();
     }
@@ -90,7 +87,7 @@ public class ComparatorMethodParameterNotUsedInspection
 
             private final Set<PsiParameter> parameters;
 
-            ParameterAccessVisitor(@Nonnull PsiParameter[] parameters) {
+            ParameterAccessVisitor(PsiParameter[] parameters) {
                 this.parameters = new HashSet(Arrays.asList(parameters));
             }
 

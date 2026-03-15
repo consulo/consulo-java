@@ -20,7 +20,6 @@ import consulo.project.ui.view.tree.AbstractTreeNode;
 import consulo.application.progress.ProgressIndicator;
 import consulo.project.Project;
 
-import jakarta.annotation.Nonnull;
 import javax.swing.*;
 import java.util.Collection;
 import java.util.Collections;
@@ -33,7 +32,7 @@ public class SliceRootNode extends SliceNode
 {
 	private final SliceUsage myRootUsage;
 
-	public SliceRootNode(@Nonnull Project project, @Nonnull DuplicateMap targetEqualUsages, SliceUsage rootUsage)
+	public SliceRootNode(Project project, DuplicateMap targetEqualUsages, SliceUsage rootUsage)
 	{
 		super(project, SliceUsage.createRootUsage(rootUsage.getElement().getContainingFile(), rootUsage.params), targetEqualUsages);
 		myRootUsage = rootUsage;
@@ -45,7 +44,6 @@ public class SliceRootNode extends SliceNode
 		myCachedChildren = Collections.singletonList(node);
 	}
 
-	@Nonnull
 	@Override
 	SliceRootNode copy()
 	{
@@ -57,7 +55,6 @@ public class SliceRootNode extends SliceNode
 	}
 
 	@Override
-	@Nonnull
 	public Collection<? extends AbstractTreeNode<?>> getChildren()
 	{
 		if(myCachedChildren == null)
@@ -67,9 +64,8 @@ public class SliceRootNode extends SliceNode
 		return myCachedChildren;
 	}
 
-	@Nonnull
 	@Override
-	public List<? extends AbstractTreeNode> getChildrenUnderProgress(@Nonnull ProgressIndicator progress)
+	public List<? extends AbstractTreeNode> getChildrenUnderProgress(ProgressIndicator progress)
 	{
 		return (List<? extends AbstractTreeNode>) getChildren();
 	}
@@ -92,8 +88,8 @@ public class SliceRootNode extends SliceNode
 
 
 	@Override
-	public void customizeCellRenderer(@Nonnull SliceUsageCellRenderer renderer,
-			@Nonnull JTree tree,
+	public void customizeCellRenderer(SliceUsageCellRenderer renderer,
+			JTree tree,
 			Object value,
 			boolean selected,
 			boolean expanded,

@@ -27,8 +27,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFileManager;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -39,9 +38,8 @@ import java.util.Arrays;
 @ExtensionImpl
 public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutputDirectoriesProvider {
 
-  @Nonnull
   @Override
-  public String[] getOutputDirectories(@Nonnull Project project, @Nonnull Module module) {
+  public String[] getOutputDirectories(Project project, Module module) {
     JavaCompilerConfiguration javaCompilerConfiguration = JavaCompilerConfiguration.getInstance(project);
     if (!javaCompilerConfiguration.getAnnotationProcessingConfiguration(module).isEnabled()) {
       return ArrayUtil.EMPTY_STRING_ARRAY;

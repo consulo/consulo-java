@@ -24,17 +24,14 @@ import com.siyeh.ig.psiutils.CollectionUtils;
 import com.siyeh.localize.InspectionGadgetsLocalize;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class PublicStaticCollectionFieldInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.publicStaticCollectionFieldDisplayName();
     }
 
-    @Nonnull
     protected String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.publicStaticCollectionFieldProblemDescriptor().get();
     }
@@ -45,7 +42,7 @@ public class PublicStaticCollectionFieldInspection extends BaseInspection {
 
     private static class PublicStaticCollectionFieldVisitor extends BaseInspectionVisitor {
         @Override
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             super.visitField(field);
             if (!field.hasModifierProperty(PsiModifier.PUBLIC)) {
                 return;

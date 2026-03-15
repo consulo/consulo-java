@@ -29,8 +29,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author Jeka
@@ -40,7 +39,6 @@ public class ConflictsUtil {
     private ConflictsUtil() {
     }
 
-    @Nonnull
     public static PsiElement getContainer(PsiElement place) {
         PsiElement parent = place;
         while (true) {

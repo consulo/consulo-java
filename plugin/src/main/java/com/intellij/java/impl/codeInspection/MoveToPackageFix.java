@@ -37,7 +37,6 @@ import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
-import jakarta.annotation.Nonnull;
 
 public class MoveToPackageFix implements LocalQuickFix {
   private static final Logger LOG = Logger.getInstance(MoveToPackageFix.class);
@@ -48,7 +47,6 @@ public class MoveToPackageFix implements LocalQuickFix {
   }
 
   @Override
-  @Nonnull
   public LocalizeValue getName() {
     return JavaQuickFixLocalize.moveClassToPackageText(myTargetPackage);
   }
@@ -63,7 +61,7 @@ public class MoveToPackageFix implements LocalQuickFix {
   }
 
   @Override
-  public void applyFix(@Nonnull Project project, @Nonnull ProblemDescriptor descriptor) {
+  public void applyFix(Project project, ProblemDescriptor descriptor) {
     PsiElement element = descriptor.getPsiElement();
     if (element == null) return;
     PsiFile myFile = element.getContainingFile();

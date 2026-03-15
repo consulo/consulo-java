@@ -23,10 +23,8 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.language.editor.intention.IntentionAction;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import jakarta.annotation.Nonnull;
-import org.jetbrains.annotations.NonNls;
 
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @ExtensionAPI(ComponentScope.PROJECT)
@@ -55,11 +53,9 @@ public abstract class ResourceBundleManager {
   }
 
   @Nullable
-  @NonNls
   public abstract String getTemplateName();
 
   @Nullable
-  @NonNls
   public abstract String getConcatenationTemplateName();
 
   public abstract boolean isActive(PsiFile context) throws ResourceBundleNotFoundException;
@@ -84,7 +80,7 @@ public abstract class ResourceBundleManager {
   }
 
   @Nullable
-  public String suggestPropertyKey(@Nonnull final String value) {
+  public String suggestPropertyKey(final String value) {
     return null;
   }
 

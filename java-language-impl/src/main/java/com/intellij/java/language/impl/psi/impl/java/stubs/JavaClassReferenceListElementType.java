@@ -30,7 +30,6 @@ import consulo.language.psi.stub.StubOutputStream;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
@@ -38,17 +37,17 @@ import java.util.List;
  * @author max
  */
 public abstract class JavaClassReferenceListElementType extends JavaStubElementType<PsiClassReferenceListStub, PsiReferenceList> {
-  public JavaClassReferenceListElementType(@Nonnull String id) {
+  public JavaClassReferenceListElementType(String id) {
     super(id, true);
   }
 
   @Override
-  public PsiReferenceList createPsi(@Nonnull PsiClassReferenceListStub stub) {
+  public PsiReferenceList createPsi(PsiClassReferenceListStub stub) {
     return getPsiFactory(stub).createClassReferenceList(stub);
   }
 
   @Override
-  public PsiReferenceList createPsi(@Nonnull ASTNode node) {
+  public PsiReferenceList createPsi(ASTNode node) {
     return new PsiReferenceListImpl(node);
   }
 
@@ -58,8 +57,7 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
     return new PsiClassReferenceListStubImpl(type, parentStub, getTexts(tree, node));
   }
 
-  @Nonnull
-  private static String[] getTexts(@Nonnull LighterAST tree, @Nonnull LighterASTNode node) {
+  private static String[] getTexts(LighterAST tree, LighterASTNode node) {
     List<LighterASTNode> refs = LightTreeUtil.getChildrenOfType(tree, node, JavaElementType.JAVA_CODE_REFERENCE);
     String[] texts = ArrayUtil.newStringArray(refs.size());
     for (int i = 0; i < refs.size(); i++) {
@@ -69,7 +67,7 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
   }
 
   @Override
-  public void serialize(@Nonnull PsiClassReferenceListStub stub, @Nonnull StubOutputStream dataStream) throws IOException {
+  public void serialize(PsiClassReferenceListStub stub, StubOutputStream dataStream) throws IOException {
     String[] names = stub.getReferencedNames();
     dataStream.writeVarInt(names.length);
     for (String name : names) {
@@ -77,9 +75,8 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
     }
   }
 
-  @Nonnull
   @Override
-  public PsiClassReferenceListStub deserialize(@Nonnull StubInputStream dataStream, StubElement parentStub) throws IOException {
+  public PsiClassReferenceListStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     int len = dataStream.readVarInt();
     String[] names = ArrayUtil.newStringArray(len);
     for (int i = 0; i < names.length; i++) {
@@ -89,7 +86,7 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
   }
 
   @Override
-  public void indexStub(@Nonnull PsiClassReferenceListStub stub, @Nonnull IndexSink sink) {
+  public void indexStub(PsiClassReferenceListStub stub, IndexSink sink) {
     PsiReferenceList.Role role = stub.getRole();
     if (role == PsiReferenceList.Role.EXTENDS_LIST || role == PsiReferenceList.Role.IMPLEMENTS_LIST) {
       String[] names = stub.getReferencedNames();
@@ -115,8 +112,7 @@ public abstract class JavaClassReferenceListElementType extends JavaStubElementT
     }
   }
 
-  @Nonnull
-  public static PsiReferenceList.Role elementTypeToRole(@Nonnull IElementType type) {
+  public static PsiReferenceList.Role elementTypeToRole(IElementType type) {
     if (type == JavaStubElementTypes.EXTENDS_BOUND_LIST) return PsiReferenceList.Role.EXTENDS_BOUNDS_LIST;
     if (type == JavaStubElementTypes.EXTENDS_LIST) return PsiReferenceList.Role.EXTENDS_LIST;
     if (type == JavaStubElementTypes.IMPLEMENTS_LIST) return PsiReferenceList.Role.IMPLEMENTS_LIST;

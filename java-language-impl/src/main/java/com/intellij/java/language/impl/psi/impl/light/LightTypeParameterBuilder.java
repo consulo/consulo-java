@@ -6,21 +6,20 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.PsiTypeParameterListOwner;
 import consulo.language.psi.PsiElementVisitor;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class LightTypeParameterBuilder extends LightPsiClassBuilder implements PsiTypeParameter {
     private final PsiTypeParameterListOwner myOwner;
     private final int myIndex;
 
-    public LightTypeParameterBuilder(@Nonnull String name, PsiTypeParameterListOwner owner, int index) {
+    public LightTypeParameterBuilder(String name, PsiTypeParameterListOwner owner, int index) {
         super(owner, name);
         myOwner = owner;
         myIndex = index;
     }
 
     @Override
-    public void accept(@Nonnull PsiElementVisitor visitor) {
+    public void accept(PsiElementVisitor visitor) {
         if (visitor instanceof JavaElementVisitor elemVisitor) {
             elemVisitor.visitTypeParameter(this);
         }
@@ -41,26 +40,23 @@ public class LightTypeParameterBuilder extends LightPsiClassBuilder implements P
     }
 
     @Override
-    @Nonnull
     public PsiAnnotation[] getAnnotations() {
         return getModifierList().getAnnotations();
     }
 
     @Override
-    @Nonnull
     public PsiAnnotation[] getApplicableAnnotations() {
         return getModifierList().getApplicableAnnotations();
     }
 
     @Nullable
     @Override
-    public PsiAnnotation findAnnotation(@Nonnull String qualifiedName) {
+    public PsiAnnotation findAnnotation(String qualifiedName) {
         return getModifierList().findAnnotation(qualifiedName);
     }
 
-    @Nonnull
     @Override
-    public PsiAnnotation addAnnotation(@Nonnull String qualifiedName) {
+    public PsiAnnotation addAnnotation(String qualifiedName) {
         return getModifierList().addAnnotation(qualifiedName);
     }
 }

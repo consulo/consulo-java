@@ -18,7 +18,6 @@ package com.intellij.java.impl.javadoc;
 import com.intellij.java.language.psi.PsiKeyword;
 import consulo.configurable.Configurable;
 import consulo.localize.LocalizeValue;
-import jakarta.annotation.Nonnull;
 
 import javax.swing.*;
 import java.io.File;
@@ -144,7 +143,6 @@ public final class JavadocConfigurable implements Configurable {
         return directory.replace('/', File.separatorChar);
     }
 
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return LocalizeValue.empty();

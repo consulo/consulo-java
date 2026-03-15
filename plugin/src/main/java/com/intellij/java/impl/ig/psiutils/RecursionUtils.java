@@ -20,7 +20,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.ast.IElementType;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 
-import jakarta.annotation.Nonnull;
 
 public class RecursionUtils {
 
@@ -211,7 +210,7 @@ public class RecursionUtils {
     return endsInImplicitReturn;
   }
 
-  public static boolean methodMayRecurse(@Nonnull PsiMethod method) {
+  public static boolean methodMayRecurse(PsiMethod method) {
     RecursionVisitor recursionVisitor = new RecursionVisitor(method);
     method.accept(recursionVisitor);
     return recursionVisitor.isRecursive();
@@ -646,7 +645,7 @@ public class RecursionUtils {
   }
 
   public static boolean methodDefinitelyRecurses(
-      @Nonnull PsiMethod method) {
+      PsiMethod method) {
     PsiCodeBlock body = method.getBody();
     return body != null &&
         !codeBlockMayReturnBeforeRecursing(body, method, true);

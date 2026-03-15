@@ -63,8 +63,7 @@ import consulo.ui.ex.action.CustomShortcutSet;
 import consulo.ui.ex.awt.*;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -104,8 +103,8 @@ public class CreateTestDialog extends DialogWrapper {
 
   @RequiredUIAccess
   public CreateTestDialog(
-    @Nonnull Project project,
-    @Nonnull LocalizeValue title,
+    Project project,
+    LocalizeValue title,
     PsiClass targetClass,
     PsiJavaPackage targetPackage,
     Module targetModule
@@ -197,7 +196,7 @@ public class CreateTestDialog extends DialogWrapper {
     );
 
     new AnAction() {
-      public void actionPerformed(@Nonnull AnActionEvent e) {
+      public void actionPerformed(AnActionEvent e) {
         myTargetPackageField.getButton().doClick();
       }
     }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK)),
@@ -265,7 +264,6 @@ public class CreateTestDialog extends DialogWrapper {
     return getClass().getName();
   }
 
-  @Nonnull
   protected Action[] createActions() {
     return new Action[]{
         getOKAction(),

@@ -45,18 +45,15 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
-import jakarta.annotation.Nonnull;
 
 @ExtensionImpl
 public class ProtectedMemberInFinalClassInspection extends BaseInspection {
-    @Nonnull
     @Override
     public LocalizeValue getDisplayName() {
         return InspectionGadgetsLocalize.protectedMemberInFinalClassDisplayName();
     }
 
     @Override
-    @Nonnull
     public String buildErrorString(Object... infos) {
         return InspectionGadgetsLocalize.protectedMemberInFinalClassProblemDescriptor().get();
     }
@@ -66,7 +63,6 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
         return new RemoveModifierFix((String) infos[0]);
     }
 
-    @Nonnull
     @Override
     protected InspectionGadgetsFix[] buildFixes(Object... infos) {
         return new InspectionGadgetsFix[]{
@@ -76,7 +72,6 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     }
 
     private static class MakePrivateFix extends InspectionGadgetsFix {
-        @Nonnull
         @Override
         public LocalizeValue getName() {
             return InspectionGadgetsLocalize.makePrivateQuickfix();
@@ -174,7 +169,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
     private static class ProtectedMemberInFinalClassVisitor extends BaseInspectionVisitor {
         @Override
         @RequiredReadAction
-        public void visitMethod(@Nonnull PsiMethod method) {
+        public void visitMethod(PsiMethod method) {
             if (!method.isProtected()) {
                 return;
             }
@@ -190,7 +185,7 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
 
         @Override
         @RequiredReadAction
-        public void visitField(@Nonnull PsiField field) {
+        public void visitField(PsiField field) {
             if (!field.isProtected()) {
                 return;
             }

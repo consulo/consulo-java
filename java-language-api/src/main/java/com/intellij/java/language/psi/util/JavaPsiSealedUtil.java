@@ -9,8 +9,7 @@ import consulo.application.util.CachedValueProvider;
 import consulo.language.psi.PsiModificationTracker;
 import consulo.language.psi.SyntaxTraverser;
 import consulo.language.psi.util.LanguageCachedValueUtil;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -40,7 +39,7 @@ public final class JavaPsiSealedUtil {
      * @return all permitted classes of psiClass. Note that if there are inheritors which are erroneously not listed
      * in the permit list, they won't be returned.
      */
-    public static @Nonnull Collection<PsiClass> getPermittedClasses(@Nonnull PsiClass psiClass) {
+    public static Collection<PsiClass> getPermittedClasses(PsiClass psiClass) {
         return LanguageCachedValueUtil.getCachedValue(psiClass, () -> {
             PsiReferenceList permitsList = psiClass.getPermitsList();
             Collection<PsiClass> results;
@@ -69,7 +68,7 @@ public final class JavaPsiSealedUtil {
      * @param psiClass PSI class to find all (direct and indirect) permitted classes for
      * @return all (direct and indirect) permitted classes for
      */
-    public static Set<PsiClass> getAllPermittedClasses(@Nonnull PsiClass psiClass) {
+    public static Set<PsiClass> getAllPermittedClasses(PsiClass psiClass) {
         return LanguageCachedValueUtil.getCachedValue(psiClass, () -> {
             Set<PsiClass> result = new HashSet<>();
             Set<PsiClass> visitedClasses = new HashSet<>();

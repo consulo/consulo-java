@@ -19,12 +19,11 @@ import consulo.application.dumb.DumbAware;
 import consulo.execution.ui.console.Filter;
 import consulo.language.psi.scope.GlobalSearchScope;
 
-import jakarta.annotation.Nonnull;
 
 public class ExceptionFilter implements Filter, DumbAware {
   private final ExceptionInfoCache myCache;
 
-  public ExceptionFilter(@Nonnull final GlobalSearchScope scope) {
+  public ExceptionFilter(final GlobalSearchScope scope) {
     myCache = new ExceptionInfoCache(scope);
   }
 

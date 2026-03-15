@@ -23,7 +23,6 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 
-import jakarta.annotation.Nonnull;
 
 /**
  * @author ven
@@ -32,7 +31,7 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   private final ClsElementImpl myParent;
   private final PsiAnnotationMemberValue[] myInitializers;
 
-  public ClsArrayInitializerMemberValueImpl(@Nonnull ClsElementImpl parent, @Nonnull PsiAnnotationMemberValue[] initializers) {
+  public ClsArrayInitializerMemberValueImpl(ClsElementImpl parent, PsiAnnotationMemberValue[] initializers) {
     myParent = parent;
     myInitializers = initializers;
   }
@@ -45,7 +44,7 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+  public void appendMirrorText(int indentLevel, StringBuilder buffer) {
     buffer.append('{');
     for (int i = 0; i < myInitializers.length; i++) {
       if (i > 0) buffer.append(", ");
@@ -55,13 +54,12 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+  public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
     setMirrors(getInitializers(), SourceTreeToPsiMap.<PsiArrayInitializerMemberValue>treeToPsiNotNull(element).getInitializers());
   }
 
   @Override
-  @Nonnull
   public PsiElement[] getChildren() {
     return myInitializers;
   }
@@ -72,7 +70,7 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor) visitor).visitAnnotationArrayInitializer(this);
     } else {
@@ -81,7 +79,6 @@ public class ClsArrayInitializerMemberValueImpl extends ClsElementImpl implement
   }
 
   @Override
-  @Nonnull
   public PsiAnnotationMemberValue[] getInitializers() {
     return myInitializers;
   }

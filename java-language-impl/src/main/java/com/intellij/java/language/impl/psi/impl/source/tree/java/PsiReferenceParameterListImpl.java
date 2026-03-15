@@ -27,7 +27,6 @@ import consulo.language.impl.psi.CompositePsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.CharTable;
 import consulo.logging.Logger;
-import jakarta.annotation.Nonnull;
 
 /**
  *  @author dsl
@@ -41,7 +40,6 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  @Nonnull
   public PsiTypeElement[] getTypeParameterElements() {
     return getChildrenAsPsiElements(JavaElementType.TYPE, PsiTypeElement.ARRAY_FACTORY);
   }
@@ -61,7 +59,6 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  @Nonnull
   public PsiType[] getTypeArguments() {
     return PsiImplUtil.typesByReferenceParameterList(this);
   }
@@ -166,7 +163,7 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  public void deleteChildInternal(@Nonnull ASTNode child) {
+  public void deleteChildInternal(ASTNode child) {
     if (child.getElementType() == JavaElementType.TYPE){
       ASTNode next = PsiImplUtil.skipWhitespaceAndComments(child.getTreeNext());
       if (next != null && next.getElementType() == JavaTokenType.COMMA){
@@ -196,7 +193,7 @@ public class PsiReferenceParameterListImpl extends CompositePsiElement implement
   }
 
   @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
+  public void accept(PsiElementVisitor visitor) {
     if (visitor instanceof JavaElementVisitor) {
       ((JavaElementVisitor)visitor).visitReferenceParameterList(this);
     }

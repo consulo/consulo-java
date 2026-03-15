@@ -18,8 +18,7 @@ package com.intellij.java.debugger;
 import java.util.List;
 import java.util.Set;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import com.intellij.java.debugger.engine.JSR45PositionManager;
 import com.intellij.java.debugger.engine.jdi.VirtualMachineProxy;
@@ -56,8 +55,7 @@ public interface PositionManager
 	 * @throws NoDataException if the location is not in the code managed by this {@code PositionManager}
 	 * @see VirtualMachineProxy#classesByName
 	 */
-	@Nonnull
-	List<ReferenceType> getAllClasses(@Nonnull SourcePosition classPosition) throws NoDataException;
+	List<ReferenceType> getAllClasses(SourcePosition classPosition) throws NoDataException;
 
 	/**
 	 * Returns the list of bytecode locations in a specific class corresponding to the specified position in the source code.
@@ -68,8 +66,7 @@ public interface PositionManager
 	 * @throws NoDataException if the location is not in the code managed by this {@code PositionManager}
 	 * @see ReferenceType#locationsOfLine(int)
 	 */
-	@Nonnull
-	List<Location> locationsOfLine(@Nonnull ReferenceType type, @Nonnull SourcePosition position) throws NoDataException;
+	List<Location> locationsOfLine(ReferenceType type, SourcePosition position) throws NoDataException;
 
 	/**
 	 * Called to request the JVM to notify the debugger engine when a class corresponding to a breakpoint location is loaded.
@@ -82,7 +79,7 @@ public interface PositionManager
 	 * @throws NoDataException if the position is not in the code managed by this {@code PositionManager}
 	 */
 	@Nullable
-	ClassPrepareRequest createPrepareRequest(@Nonnull ClassPrepareRequestor requestor, @Nonnull SourcePosition position) throws NoDataException;
+	ClassPrepareRequest createPrepareRequest(ClassPrepareRequestor requestor, SourcePosition position) throws NoDataException;
 
 	/**
 	 * Return file types this position manager accepts
