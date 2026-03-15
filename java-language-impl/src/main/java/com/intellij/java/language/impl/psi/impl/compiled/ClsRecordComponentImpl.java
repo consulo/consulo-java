@@ -4,8 +4,6 @@ package com.intellij.java.language.impl.psi.impl.compiled;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiRecordComponentStub;
 import com.intellij.java.language.psi.*;
-import consulo.application.util.AtomicNotNullLazyValue;
-import consulo.application.util.NotNullLazyValue;
 import consulo.content.scope.SearchScope;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
@@ -16,16 +14,18 @@ import consulo.language.psi.stub.StubElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.ObjectUtil;
-
+import consulo.util.lang.lazy.LazyValue;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
+import java.util.function.Supplier;
+
 public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRecordComponentStub> implements PsiRecordComponent {
-  private final NotNullLazyValue<PsiTypeElement> myType;
+  private final Supplier<PsiTypeElement> myType;
 
   public ClsRecordComponentImpl(@Nonnull PsiRecordComponentStub stub) {
     super(stub);
-    myType = AtomicNotNullLazyValue.createValue(() -> new ClsTypeElementImpl(this, getStub().getType()));
+    myType = LazyValue.atomicNotNull(() -> new ClsTypeElementImpl(this, getStub().getType()));
   }
 
   @Override
@@ -47,7 +47,7 @@ public final class ClsRecordComponentImpl extends ClsRepositoryPsiElement<PsiRec
   @Override
   @Nonnull
   public PsiTypeElement getTypeElement() {
-    return myType.getValue();
+    return myType.get();
   }
 
   @Override

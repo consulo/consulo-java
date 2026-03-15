@@ -26,61 +26,71 @@ import jakarta.annotation.Nonnull;
  * @author ven
  */
 public class ClsAnnotationParameterListImpl extends ClsElementImpl implements PsiAnnotationParameterList {
-  private final PsiAnnotation myParent;
-  private final ClsNameValuePairImpl[] myAttributes;
+    private final PsiAnnotation myParent;
+    private final ClsNameValuePairImpl[] myAttributes;
 
-  public ClsAnnotationParameterListImpl(@Nonnull PsiAnnotation parent, @Nonnull PsiNameValuePair[] psiAttributes) {
-    myParent = parent;
-    myAttributes = new ClsNameValuePairImpl[psiAttributes.length];
-    for (int i = 0; i < myAttributes.length; i++) {
-      String name = psiAttributes[i].getName();
-      PsiAnnotationMemberValue value = psiAttributes[i].getValue();
-      assert value != null : "name=" + name + " value" + value;
-      myAttributes[i] = new ClsNameValuePairImpl(this, name, value);
+    public ClsAnnotationParameterListImpl(@Nonnull PsiAnnotation parent, @Nonnull PsiNameValuePair[] psiAttributes) {
+        myParent = parent;
+        myAttributes = new ClsNameValuePairImpl[psiAttributes.length];
+        for (int i = 0; i < myAttributes.length; i++) {
+            String name = psiAttributes[i].getName();
+            PsiAnnotationMemberValue value = psiAttributes[i].getValue();
+            assert value != null : "name=" + name + " value" + value;
+            myAttributes[i] = new ClsNameValuePairImpl(this, name, value);
+        }
     }
-  }
 
-  @Override
-  public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
-    if (myAttributes.length != 0) {
-      buffer.append("(");
-      for (int i = 0; i < myAttributes.length; i++) {
-        if (i > 0) buffer.append(", ");
-        myAttributes[i].appendMirrorText(indentLevel, buffer);
-      }
-      buffer.append(")");
+    @Override
+    public String getText() {
+        final StringBuilder buffer = new StringBuilder();
+        appendMirrorText(0, buffer);
+        return buffer.toString();
     }
-  }
 
-  @Override
-  public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, null);
-    setMirrors(myAttributes, SourceTreeToPsiMap.<PsiAnnotationParameterList>treeToPsiNotNull(element).getAttributes());
-  }
-
-  @Override
-  @Nonnull
-  public PsiElement[] getChildren() {
-    return myAttributes;
-  }
-
-  @Override
-  public PsiElement getParent() {
-    return myParent;
-  }
-
-  @Override
-  public void accept(@Nonnull PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitAnnotationParameterList(this);
-    } else {
-      visitor.visitElement(this);
+    @Override
+    public void appendMirrorText(int indentLevel, @Nonnull StringBuilder buffer) {
+        if (myAttributes.length != 0) {
+            buffer.append("(");
+            for (int i = 0; i < myAttributes.length; i++) {
+                if (i > 0) {
+                    buffer.append(", ");
+                }
+                myAttributes[i].appendMirrorText(indentLevel, buffer);
+            }
+            buffer.append(")");
+        }
     }
-  }
 
-  @Override
-  @Nonnull
-  public PsiNameValuePair[] getAttributes() {
-    return myAttributes;
-  }
+    @Override
+    public void setMirror(@Nonnull TreeElement element) throws InvalidMirrorException {
+        setMirrorCheckingType(element, null);
+        setMirrors(myAttributes, SourceTreeToPsiMap.<PsiAnnotationParameterList>treeToPsiNotNull(element).getAttributes());
+    }
+
+    @Override
+    @Nonnull
+    public PsiElement[] getChildren() {
+        return myAttributes;
+    }
+
+    @Override
+    public PsiElement getParent() {
+        return myParent;
+    }
+
+    @Override
+    public void accept(@Nonnull PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor) {
+            ((JavaElementVisitor) visitor).visitAnnotationParameterList(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
+
+    @Override
+    @Nonnull
+    public PsiNameValuePair[] getAttributes() {
+        return myAttributes;
+    }
 }

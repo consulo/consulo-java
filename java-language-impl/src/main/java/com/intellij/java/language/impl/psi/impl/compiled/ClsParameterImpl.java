@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiParameterStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiParameterStubImpl;
@@ -35,7 +34,6 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.project.DumbService;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.lazy.LazyValue;
-
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 
@@ -47,13 +45,7 @@ public class ClsParameterImpl extends ClsRepositoryPsiElement<PsiParameterStub> 
 
   public ClsParameterImpl(@Nonnull PsiParameterStub thisStub) {
     super(thisStub);
-    myType = LazyValue.atomicNotNull(() ->
-    {
-      PsiParameterStub stub = getStub();
-      String typeText = TypeInfo.createTypeText(stub.getType());
-      assert typeText != null : stub;
-      return new ClsTypeElementImpl(ClsParameterImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
-    });
+    myType = LazyValue.atomicNotNull(() -> new ClsTypeElementImpl(this, getStub().getType()));
   }
 
   @Override

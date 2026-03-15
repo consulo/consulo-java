@@ -49,12 +49,7 @@ public class ClsFieldImpl extends ClsMemberImpl<PsiFieldStub> implements PsiFiel
 
     public ClsFieldImpl(@Nonnull PsiFieldStub stub) {
         super(stub);
-        myTypeElement = LazyValue.atomicNotNull(() -> {
-            PsiFieldStub s = getStub();
-            String typeText = s.getType().text();
-            assert typeText != null : s;
-            return new ClsTypeElementImpl(ClsFieldImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
-        });
+        myTypeElement = LazyValue.atomicNotNull(() -> new ClsTypeElementImpl(this, getStub().getType()));
 
         myInitializer = LazyValue.nullable(() -> {
             String initializerText = getStub().getInitializerText();
