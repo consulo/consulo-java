@@ -64,6 +64,13 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         RunProfileState state,
         ExecutionEnvironment environment
     ) throws ExecutionException {
+        if (state instanceof RemoteConnectionCreator remoteConnectionCreator) {
+            RemoteConnection connection = remoteConnectionCreator.createRemoteConnection(environment);
+            if (connection != null) {
+                return attachVirtualMachine(state, environment, connection, remoteConnectionCreator.isPollConnection());
+            }
+        }
+
         if (state instanceof JavaCommandLine commandLine) {
             OwnJavaParameters parameters = commandLine.getJavaParameters();
             runCustomPatchers(parameters, environment.getExecutor(), environment.getRunProfile());
@@ -76,10 +83,12 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
             );
             return attachVirtualMachine(state, environment, connection, true);
         }
+
         if (state instanceof PatchedRunnableState) {
             RemoteConnection connection = doPatch(new OwnJavaParameters(), environment.getRunnerSettings());
             return attachVirtualMachine(state, environment, connection, true);
         }
+
         if (state instanceof RemoteState remoteState) {
             RemoteConnection connection = createRemoteDebugConnection(remoteState, environment.getRunnerSettings());
             return attachVirtualMachine(state, environment, connection, false);

@@ -23,62 +23,73 @@ import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerBuilder;
 import consulo.process.cmd.GeneralCommandLine;
+import org.jspecify.annotations.Nullable;
 
 
-public abstract class JavaCommandLineState extends CommandLineState implements JavaCommandLine {
-  private OwnJavaParameters myParams;
+public abstract class JavaCommandLineState extends CommandLineState implements JavaCommandLine, RemoteConnectionCreator {
+    private OwnJavaParameters myParams;
 
-  protected JavaCommandLineState(ExecutionEnvironment environment) {
-    super(environment);
-  }
-
-  @Override
-  public OwnJavaParameters getJavaParameters() throws ExecutionException {
-    if (myParams == null) {
-      myParams = createJavaParameters();
+    protected JavaCommandLineState(ExecutionEnvironment environment) {
+        super(environment);
     }
-    return myParams;
-  }
 
-  public void clear() {
-    myParams = null;
-  }
-
-  protected void buildProcessHandler(ProcessHandlerBuilder builder) throws ExecutionException {
-    if (ansiColoringEnabled()) {
-      builder.colored();
+    @Override
+    public OwnJavaParameters getJavaParameters() throws ExecutionException {
+        if (myParams == null) {
+            myParams = createJavaParameters();
+        }
+        return myParams;
     }
-  }
 
-  protected void setupProcessHandler(ProcessHandler handler) {
-    ProcessTerminatedListener.attach(handler);
-  }
-
-  @Override
-  protected final ProcessHandler startProcess() throws ExecutionException {
-    ProcessHandlerBuilder builder = ProcessHandlerBuilder.create(createCommandLine());
-    buildProcessHandler(builder);
-
-    ProcessHandler handler = builder.build();
-    setupProcessHandler(handler);
-    return handler;
-  }
-
-  protected boolean ansiColoringEnabled() {
-    return true;
-  }
-
-  protected abstract OwnJavaParameters createJavaParameters() throws ExecutionException;
-
-  protected GeneralCommandLine createCommandLine() throws ExecutionException {
-    OwnJavaParameters javaParameters = getJavaParameters();
-    if (!javaParameters.isDynamicClasspath()) {
-      javaParameters.setUseDynamicClasspath(getEnvironment().getProject());
+    public void clear() {
+        myParams = null;
     }
-    return javaParameters.toCommandLine();
-  }
 
-  public boolean shouldAddJavaProgramRunnerActions() {
-    return true;
-  }
+    protected void buildProcessHandler(ProcessHandlerBuilder builder) throws ExecutionException {
+        if (ansiColoringEnabled()) {
+            builder.colored();
+        }
+    }
+
+    protected void setupProcessHandler(ProcessHandler handler) {
+        ProcessTerminatedListener.attach(handler);
+    }
+
+    @Override
+    protected final ProcessHandler startProcess() throws ExecutionException {
+        ProcessHandlerBuilder builder = ProcessHandlerBuilder.create(createCommandLine());
+        buildProcessHandler(builder);
+
+        ProcessHandler handler = builder.build();
+        setupProcessHandler(handler);
+        return handler;
+    }
+
+    protected boolean ansiColoringEnabled() {
+        return true;
+    }
+
+    @Override
+    public @Nullable RemoteConnection createRemoteConnection(ExecutionEnvironment environment) {
+        return null;
+    }
+
+    @Override
+    public boolean isPollConnection() {
+        return true;
+    }
+
+    protected abstract OwnJavaParameters createJavaParameters() throws ExecutionException;
+
+    protected GeneralCommandLine createCommandLine() throws ExecutionException {
+        OwnJavaParameters javaParameters = getJavaParameters();
+        if (!javaParameters.isDynamicClasspath()) {
+            javaParameters.setUseDynamicClasspath(getEnvironment().getProject());
+        }
+        return javaParameters.toCommandLine();
+    }
+
+    public boolean shouldAddJavaProgramRunnerActions() {
+        return true;
+    }
 }
