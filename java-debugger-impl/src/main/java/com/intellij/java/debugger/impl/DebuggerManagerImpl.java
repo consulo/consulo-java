@@ -397,7 +397,7 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         String address = "";
         if (StringUtil.isEmptyOrSpaces(debugPort)) {
             try {
-                address = DebuggerUtils.getInstance().findAvailableDebugAddress(transport).address();
+                address = DebuggerUtils.getInstance().findAvailableDebugAddress(useSockets);
             }
             catch (ExecutionException e) {
                 if (checkValidity) {

@@ -16,83 +16,70 @@
  */
 package com.intellij.java.debugger.impl.apiAdapters;
 
+import com.intellij.java.debugger.impl.settings.DebuggerSettings;
+import consulo.internal.com.sun.jdi.connect.spi.TransportService;
+import consulo.java.debugger.impl.apiAdapters.TransportClassDelegates;
+import consulo.logging.Logger;
+import consulo.process.ExecutionException;
+import consulo.util.collection.ArrayUtil;
+
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+public class TransportServiceWrapper {
+    private static final Logger LOGGER = Logger.getInstance(TransportServiceWrapper.class);
 
-import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import consulo.process.ExecutionException;
-import consulo.logging.Logger;
-import consulo.util.collection.ArrayUtil;
-import consulo.internal.com.sun.jdi.connect.spi.TransportService;
-import consulo.java.debugger.impl.apiAdapters.TransportClassDelegates;
+    public static TransportServiceWrapper createTransportService(int type) throws ExecutionException {
+        Class<?> transportClass = null;
+        switch (type) {
+            case DebuggerSettings.SOCKET_TRANSPORT:
+                transportClass = TransportClassDelegates.getSocketTransportServiceClass();
+                break;
+            case DebuggerSettings.SHMEM_TRANSPORT:
+                transportClass = TransportClassDelegates.getSharedMemoryTransportServiceClass();
+                if (transportClass == null) {
+                    transportClass = TransportClassDelegates.getSocketTransportServiceClass();
+                }
+                break;
+        }
 
-public class TransportServiceWrapper
-{
-	private static final Logger LOGGER = Logger.getInstance(TransportServiceWrapper.class);
+        try {
+            return new TransportServiceWrapper(transportClass);
+        }
+        catch (Exception e) {
+            throw new ExecutionException(e.getClass().getName() + " : " + e.getMessage());
+        }
+    }
 
-	public static TransportServiceWrapper createTransportService(int type) throws ExecutionException
-	{
-		Class<?> transportClass = null;
-		switch(type)
-		{
-			case DebuggerSettings.SOCKET_TRANSPORT:
-				transportClass = TransportClassDelegates.getSocketTransportServiceClass();
-				break;
-			case DebuggerSettings.SHMEM_TRANSPORT:
-				transportClass = TransportClassDelegates.getSharedMemoryTransportServiceClass();
-				if(transportClass == null)
-				{
-					transportClass = TransportClassDelegates.getSocketTransportServiceClass();
-				}
-				break;
-		}
+    private final TransportService myDelegateObject;
+    private final Class<?> myDelegateClass;
 
-		try
-		{
-			return new TransportServiceWrapper(transportClass);
-		}
-		catch(Exception e)
-		{
-			throw new ExecutionException(e.getClass().getName() + " : " + e.getMessage());
-		}
-	}
+    private TransportServiceWrapper(Class<?> delegateClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
+        InstantiationException {
+        myDelegateClass = delegateClass;
+        final Constructor constructor = delegateClass.getDeclaredConstructor(ArrayUtil.EMPTY_CLASS_ARRAY);
+        constructor.setAccessible(true);
+        myDelegateObject = (TransportService) constructor.newInstance(ArrayUtil.EMPTY_OBJECT_ARRAY);
+    }
 
-	private final TransportService myDelegateObject;
-	private final Class<?> myDelegateClass;
+    public TransportService.ListenKey startListening() throws IOException {
+        return myDelegateObject.startListening();
+    }
 
-	private TransportServiceWrapper(Class<?> delegateClass) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException,
-			InstantiationException
-	{
-		myDelegateClass = delegateClass;
-		final Constructor constructor = delegateClass.getDeclaredConstructor(ArrayUtil.EMPTY_CLASS_ARRAY);
-		constructor.setAccessible(true);
-		myDelegateObject = (TransportService) constructor.newInstance(ArrayUtil.EMPTY_OBJECT_ARRAY);
-	}
+    public void stopListening(final TransportService.ListenKey listenKey) throws IOException {
+        myDelegateObject.stopListening(listenKey);
+    }
 
-	public TransportService.ListenKey startListening() throws IOException
-	{
-		return myDelegateObject.startListening();
-	}
+    public String transportId() {
+        if (myDelegateClass == TransportClassDelegates.getSharedMemoryTransportServiceClass()) {
+            return "dt_shmem";
+        }
+        else if (myDelegateClass == TransportClassDelegates.getSocketTransportServiceClass()) {
+            return "dt_socket";
+        }
 
-	public void stopListening(final TransportService.ListenKey listenKey) throws IOException
-	{
-		myDelegateObject.stopListening(listenKey);
-	}
-
-	public String transportId()
-	{
-		if(myDelegateClass == TransportClassDelegates.getSharedMemoryTransportServiceClass())
-		{
-			return "dt_shmem";
-		}
-		else if(myDelegateClass == TransportClassDelegates.getSocketTransportServiceClass())
-		{
-			return "dt_socket";
-		}
-
-		LOGGER.error("Unknown service: " + myDelegateClass.getName());
-		return "<unknown>";
-	}
+        LOGGER.error("Unknown service: " + myDelegateClass.getName());
+        return "<unknown>";
+    }
 }

@@ -167,7 +167,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
     private static RemoteConnection doPatch(OwnJavaParameters javaParameters, RunnerSettings settings) throws ExecutionException {
         GenericDebuggerRunnerSettings debuggerSettings = ((GenericDebuggerRunnerSettings)settings);
         if (StringUtil.isEmpty(debuggerSettings.getDebugPort())) {
-            debuggerSettings.setDebugPort(DebuggerUtils.getInstance().findAvailableDebugAddress(debuggerSettings.getTransport()).address());
+            debuggerSettings.setDebugPort(DebuggerUtils.getInstance().findAvailableDebugAddress(debuggerSettings.getTransport() == DebuggerSettings.SOCKET_TRANSPORT));
         }
         return DebuggerManagerImpl.createDebugParameters(javaParameters, debuggerSettings, false);
     }

@@ -118,7 +118,7 @@ public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<
 
         if (!portSpecified) {
             try {
-                setPort(DebuggerUtils.getInstance().findAvailableDebugAddress(getTransport()).address());
+                setPort(DebuggerUtils.getInstance().findAvailableDebugAddress(getTransport() == DebuggerSettings.SOCKET_TRANSPORT));
             }
             catch (ExecutionException e) {
                 LOGGER.info(e);

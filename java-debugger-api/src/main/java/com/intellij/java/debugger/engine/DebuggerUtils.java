@@ -35,7 +35,6 @@ import consulo.component.extension.ExtensionPoint;
 import consulo.dataContext.DataContext;
 import consulo.ide.ServiceManager;
 import consulo.internal.com.sun.jdi.*;
-import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiCodeFragment;
 import consulo.language.psi.PsiElement;
@@ -50,8 +49,8 @@ import consulo.project.Project;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
-import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -510,7 +509,7 @@ public abstract class DebuggerUtils {
             : JavaDebuggerLocalize.transportNameSharedMemory();
     }
 
-    public abstract TransportService.ListenKey findAvailableDebugAddress(int type) throws ExecutionException;
+    public abstract String findAvailableDebugAddress(boolean useSockets) throws ExecutionException;
 
     @SuppressWarnings("SimplifiableIfStatement")
     public static boolean isSynthetic(TypeComponent typeComponent) {
