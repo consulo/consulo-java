@@ -5,7 +5,6 @@ import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.codeEditor.Editor;
 import consulo.java.localize.JavaLocalize;
 import consulo.language.editor.codeVision.CodeVisionRelativeOrdering;
 import consulo.language.editor.impl.codeVision.ReferencesCodeVisionProvider;
@@ -14,7 +13,6 @@ import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 @ExtensionImpl
@@ -36,10 +34,6 @@ public class JavaReferencesCodeVisionProvider extends ReferencesCodeVisionProvid
         JavaTelescope.UsagesHint usagesHint = JavaTelescope.usagesHint((PsiMember) element, file);
         if (usagesHint == null) return null;
         return usagesHint.hint().get();
-    }
-
-    @Override
-    public void handleClick(Editor editor, PsiElement psiElement, MouseEvent mouseEvent) {
     }
 
     @Override
