@@ -1,3 +1,11 @@
+code.vision.implementations.hint:
+    text: "{0, choice, 1#1 Implementation|2#{0,number} Implementations}"
+code.vision.inheritors.hint:
+    text: "{0, choice, 1#1 Inheritor|2#{0,number} Inheritors}"
+code.vision.overrides.hint:
+    text: "{0, choice, 1#1 Override|2#{0,number} Overrides}"
+usages.telescope:
+    text: "{0, choice, 1#1 Usage|2#{0,number} Usages}"
 action.anonymous.to.inner.description:
     text: Convert anonymous class into an inner class
 action.anonymous.to.inner.text:
