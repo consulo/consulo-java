@@ -8,11 +8,9 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiTypeParameter;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.codeEditor.Editor;
 import consulo.language.Language;
 import consulo.language.psi.PsiElement;
-
-import java.awt.event.MouseEvent;
+import consulo.versionControlSystem.codeVision.VcsCodeVisionCurlyBracketLanguageContext;
 
 @ExtensionImpl
 public class JavaVcsCodeVisionContext extends VcsCodeVisionCurlyBracketLanguageContext {
@@ -20,10 +18,6 @@ public class JavaVcsCodeVisionContext extends VcsCodeVisionCurlyBracketLanguageC
     @Override
     public boolean isAccepted(PsiElement element) {
         return element instanceof PsiMethod || (element instanceof PsiClass && !(element instanceof PsiTypeParameter));
-    }
-
-    @Override
-    public void handleClick(MouseEvent mouseEvent, Editor editor, PsiElement element) {
     }
 
     @Override
