@@ -480,7 +480,7 @@ public class MethodCandidateInfo extends CandidateInfo {
 
     public static CurrentCandidateProperties getCurrentMethod(PsiElement context) {
         Map<PsiElement, CurrentCandidateProperties> currentMethodCandidates = CURRENT_CANDIDATE.get();
-        return currentMethodCandidates != null ? currentMethodCandidates.get(context) : null;
+        return currentMethodCandidates != null && context != null ? currentMethodCandidates.get(context) : null;
     }
 
     public static void updateSubstitutor(PsiElement context, PsiSubstitutor newSubstitutor) {
