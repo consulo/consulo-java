@@ -314,6 +314,12 @@ public class PsiModifierListImpl extends JavaStubPsiElement<PsiModifierListStub>
     }
 
     @Override
+    public boolean hasAnnotations() {
+        return getStubOrPsiChild(JavaStubElementTypes.ANNOTATION) != null ||
+            !PsiAugmentProvider.collectAugments(this, PsiAnnotation.class, null).isEmpty();
+    }
+
+    @Override
     @RequiredReadAction
     public PsiAnnotation[] getApplicableAnnotations() {
         PsiAnnotation.TargetType[] targets = AnnotationTargetUtil.getTargetsForLocation(this);
