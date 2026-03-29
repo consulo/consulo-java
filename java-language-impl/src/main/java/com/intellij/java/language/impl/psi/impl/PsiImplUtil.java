@@ -905,4 +905,25 @@ public class PsiImplUtil {
             return module.getContainingFile().getVirtualFile();
         }
     }
+
+    @RequiredReadAction
+    public static boolean isTypeQualifierOfStaticMember(PsiJavaCodeReferenceElement ref) {
+        PsiElement parent = ref.getParent();
+        while (parent instanceof PsiJavaCodeReferenceElement) {
+            PsiJavaCodeReferenceElement referenceElement = (PsiJavaCodeReferenceElement) parent;
+            PsiElement qualified = referenceElement.resolve();
+            if (qualified instanceof PsiMember) {
+                if (((PsiMember) qualified).hasModifierProperty(PsiModifier.STATIC)) {
+                    return true;
+                }
+            }
+            if (qualified instanceof PsiClass) {
+                parent = parent.getParent();
+            }
+            else {
+                break;
+            }
+        }
+        return false;
+    }
 }

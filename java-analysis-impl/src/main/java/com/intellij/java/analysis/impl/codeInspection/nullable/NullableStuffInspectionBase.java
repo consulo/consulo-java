@@ -80,7 +80,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                 if (aClass.isRecord()) {
                     PsiMethod constructor = JavaPsiRecordUtil.findCanonicalConstructor(aClass);
                     if (constructor instanceof SyntheticElement) {
-                        checkParameters(constructor, holder, List.of(), manager);
+                        checkParameters(constructor, holder, List.of(), manager, state);
                     }
                 }
                 checkConflictingContainerAnnotations(holder, aClass.getModifierList());
@@ -150,7 +150,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
 
             @Override
             public void visitMethodReferenceExpression(@NotNull PsiMethodReferenceExpression expression) {
-                checkMethodReference(expression, holder);
+                checkMethodReference(expression, holder, state);
 
                 JavaResolveResult result = expression.advancedResolve(false);
                 PsiElement target = result.getElement();
@@ -252,7 +252,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                 PsiType targetType = wrapper.targetType();
                 PsiType type = wrapper.type();
                 PsiModifierListOwner listOwner = wrapper.listOwner();
-                checkRedundantInContainerScope(wrapper);
+                checkRedundantInContainerScope(wrapper, state);
                 if (type != null &&
                     wrapper.nullability() == Nullability.NOT_NULL &&
                     PsiUtil.resolveClassInClassTypeOnly(type) instanceof PsiTypeParameter) {
@@ -625,7 +625,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
         builder.register();
     }
 
-    private @Nullable String checkIndirectInheritance(@NotNull PsiClass psiClass, @NotNull PsiClass intf) {
+    private @Nullable String checkIndirectInheritance(@NotNull PsiClass psiClass, @NotNull PsiClass intf, NullableStuffInspectionState state) {
         PsiSubstitutor substitutor = TypeConversionUtil.getSuperClassSubstitutor(intf, psiClass, PsiSubstitutor.EMPTY);
         for (PsiMethod intfMethod : intf.getAllMethods()) {
             PsiClass intfMethodClass = intfMethod.getContainingClass();
@@ -633,7 +633,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                 JavaOverridingMethodsSearcher.findOverridingMethod(psiClass, intfMethod, intfMethodClass);
             PsiClass overridingMethodClass = overridingMethod == null ? null : overridingMethod.getContainingClass();
             if (overridingMethodClass != null && overridingMethodClass != psiClass) {
-                String error = checkIndirectInheritance(intfMethod, intfMethodClass, overridingMethod, overridingMethodClass, substitutor);
+                String error = checkIndirectInheritance(intfMethod, intfMethodClass, overridingMethod, overridingMethodClass, substitutor, state);
                 if (error != null) {
                     return error;
                 }
@@ -646,12 +646,13 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                                                       PsiClass intfMethodClass,
                                                       PsiMethod overridingMethod,
                                                       PsiClass overridingMethodClass,
-                                                      PsiSubstitutor substitutor) {
-        if (isNullableOverridingNotNull(Annotated.from(overridingMethod), intfMethod)) {
+                                                      PsiSubstitutor substitutor,
+                                                      NullableStuffInspectionState state) {
+        if (isNullableOverridingNotNull(Annotated.from(overridingMethod), intfMethod, state)) {
             return JavaAnalysisBundle.message("inspection.message.nullable.method.implements.non.null.method",
                 overridingMethod.getName(), overridingMethodClass.getName(), intfMethodClass.getName());
         }
-        if (isNonAnnotatedOverridingNotNull(overridingMethod, intfMethod)) {
+        if (isNonAnnotatedOverridingNotNull(overridingMethod, intfMethod, state)) {
             return JavaAnalysisBundle.message("inspection.message.non.annotated.method.implements.non.null.method",
                 overridingMethod.getName(), overridingMethodClass.getName(), intfMethodClass.getName());
         }
@@ -663,15 +664,15 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
             for (int i = 0; i < overridingParameters.length; i++) {
                 PsiParameter parameter = overridingParameters[i];
                 List<PsiParameter> supers = Collections.singletonList(superParameters[i]);
-                if (findNullableSuperForNotNullParameter(parameter, supers, substitutor) != null) {
+                if (findNullableSuperForNotNullParameter(parameter, supers, substitutor, state) != null) {
                     return JavaAnalysisBundle.message("inspection.message.non.null.parameter.should.not.override.nullable.parameter",
                         parameter.getName(), overridingMethod.getName(), overridingMethodClass.getName(), intfMethodClass.getName());
                 }
-                if (findNotNullSuperForNonAnnotatedParameter(manager, parameter, supers) != null) {
+                if (findNotNullSuperForNonAnnotatedParameter(manager, parameter, super, states) != null) {
                     return JavaAnalysisBundle.message("inspection.message.non.annotated.parameter.should.not.override.non.null.parameter",
                         parameter.getName(), overridingMethod.getName(), overridingMethodClass.getName(), intfMethodClass.getName());
                 }
-                if (isNotNullParameterOverridingNonAnnotated(manager, parameter, supers, substitutor)) {
+                if (isNotNullParameterOverridingNonAnnotated(manager, parameter, supers, substitutor, state)) {
                     return JavaAnalysisBundle.message("inspection.message.non.null.parameter.should.not.override.non.annotated.parameter",
                         parameter.getName(), overridingMethod.getName(), overridingMethodClass.getName(), intfMethodClass.getName());
                 }
@@ -721,7 +722,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
         PsiIdentifier nameIdentifier = getter == null ? null : getter.getNameIdentifier();
         if (nameIdentifier != null && nameIdentifier.isPhysical()) {
             if (PropertyUtil.getFieldOfGetter(getter) == field) {
-                AddAnnotationModCommandAction getterAnnoFix = new AddAnnotationModCommandAction(anno, getter, ArrayUtilRt.toStringArray(annoToRemove));
+                AddAnnotationModCommandAction getterAnnoFix = new AddAnnotationModCommandAction(anno, getter, ArrayUtil.toStringArray(annoToRemove));
                 if (satte.REPORT_NOT_ANNOTATED_GETTER) {
                     if (!hasNullability(manager, getter) && !TypeConversionUtil.isPrimitiveAndNotNull(getter.getReturnType())) {
                         reportProblem(holder, nameIdentifier, getterAnnoFix, "inspection.nullable.problems.annotated.field.getter.not.annotated",
