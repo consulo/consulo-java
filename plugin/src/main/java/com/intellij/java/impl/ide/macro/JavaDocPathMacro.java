@@ -20,6 +20,7 @@ import com.intellij.java.impl.javadoc.JavadocGenerationManager;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.localize.IdeLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.pathMacro.Macro;
 import consulo.project.Project;
 
@@ -27,24 +28,27 @@ import java.io.File;
 
 @ExtensionImpl
 public final class JavaDocPathMacro extends Macro {
-  public String getName() {
-    return "JavaDocPath";
-  }
-
-  public String getDescription() {
-    return IdeLocalize.macroJavadocOutputDirectory().get();
-  }
-
-  public String expand(DataContext dataContext) {
-    Project project = dataContext.getData(Project.KEY);
-    if (project == null) {
-      return null;
+    @Override
+    public String getName() {
+        return "JavaDocPath";
     }
-    JavadocGenerationManager manager = project.getComponent(JavadocGenerationManager.class);
-    if (manager == null) {
-      return null;
+
+    @Override
+    public LocalizeValue getDescription() {
+        return IdeLocalize.macroJavadocOutputDirectory();
     }
-    JavadocConfiguration configuration = manager.getConfiguration();
-    return configuration.OUTPUT_DIRECTORY == null ? null : configuration.OUTPUT_DIRECTORY.replace('/', File.separatorChar);
-  }
+
+    @Override
+    public String expand(DataContext dataContext) {
+        Project project = dataContext.getData(Project.KEY);
+        if (project == null) {
+            return null;
+        }
+        JavadocGenerationManager manager = project.getComponent(JavadocGenerationManager.class);
+        if (manager == null) {
+            return null;
+        }
+        JavadocConfiguration configuration = manager.getConfiguration();
+        return configuration.OUTPUT_DIRECTORY == null ? null : configuration.OUTPUT_DIRECTORY.replace('/', File.separatorChar);
+    }
 }

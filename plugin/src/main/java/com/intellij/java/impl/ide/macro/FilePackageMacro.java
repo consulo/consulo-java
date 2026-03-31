@@ -23,32 +23,42 @@ import consulo.dataContext.DataContext;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.pathMacro.Macro;
 import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
 public final class FilePackageMacro extends Macro {
-  public String getName() {
-    return "FilePackage";
-  }
+    @Override
+    public String getName() {
+        return "FilePackage";
+    }
 
-  public String getDescription() {
-    return IdeLocalize.macroFilePackage().get();
-  }
+    @Override
+    public LocalizeValue getDescription() {
+        return IdeLocalize.macroFilePackage();
+    }
 
-  @RequiredReadAction
-  public String expand(DataContext dataContext) {
-    PsiJavaPackage aPackage = getFilePackage(dataContext);
-    if (aPackage == null) return null;
-    return aPackage.getName();
-  }
+    @Override
+    @RequiredReadAction
+    public String expand(DataContext dataContext) {
+        PsiJavaPackage aPackage = getFilePackage(dataContext);
+        if (aPackage == null) {
+            return null;
+        }
+        return aPackage.getName();
+    }
 
-  @Nullable
-  static PsiJavaPackage getFilePackage(DataContext dataContext) {
-    PsiFile psiFile = dataContext.getData(PsiFile.KEY);
-    if (psiFile == null) return null;
-    PsiDirectory containingDirectory = psiFile.getContainingDirectory();
-    if (containingDirectory == null || !containingDirectory.isValid()) return null;
-    return JavaDirectoryService.getInstance().getPackage(containingDirectory);
-  }
+    @Nullable
+    static PsiJavaPackage getFilePackage(DataContext dataContext) {
+        PsiFile psiFile = dataContext.getData(PsiFile.KEY);
+        if (psiFile == null) {
+            return null;
+        }
+        PsiDirectory containingDirectory = psiFile.getContainingDirectory();
+        if (containingDirectory == null || !containingDirectory.isValid()) {
+            return null;
+        }
+        return JavaDirectoryService.getInstance().getPackage(containingDirectory);
+    }
 }
