@@ -18,6 +18,7 @@ package com.intellij.java.impl.ide.macro;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.localize.IdeLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
 import consulo.pathMacro.Macro;
 import consulo.project.Project;
@@ -28,21 +29,30 @@ import consulo.virtualFileSystem.VirtualFile;
  */
 @ExtensionImpl
 public final class ClasspathEntryMacro extends Macro {
-  public String getName() {
-    return "ClasspathEntry";
-  }
+    @Override
+    public String getName() {
+        return "ClasspathEntry";
+    }
 
-  public String getDescription() {
-    return IdeLocalize.macroClasspathEntry().get();
-  }
+    @Override
+    public LocalizeValue getDescription() {
+        return IdeLocalize.macroClasspathEntry();
+    }
 
-  public String expand(DataContext dataContext) {
-    Project project = dataContext.getData(Project.KEY);
-    if (project == null) return null;
-    VirtualFile file = dataContext.getData(VirtualFile.KEY);
-    if (file == null) return null;
-    VirtualFile classRoot = ProjectRootManager.getInstance(project).getFileIndex().getClassRootForFile(file);
-    if (classRoot == null) return null;
-    return getPath(classRoot);
-  }
+    @Override
+    public String expand(DataContext dataContext) {
+        Project project = dataContext.getData(Project.KEY);
+        if (project == null) {
+            return null;
+        }
+        VirtualFile file = dataContext.getData(VirtualFile.KEY);
+        if (file == null) {
+            return null;
+        }
+        VirtualFile classRoot = ProjectRootManager.getInstance(project).getFileIndex().getClassRootForFile(file);
+        if (classRoot == null) {
+            return null;
+        }
+        return getPath(classRoot);
+    }
 }

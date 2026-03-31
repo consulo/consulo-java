@@ -19,21 +19,27 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.localize.IdeLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.pathMacro.Macro;
 
 @ExtensionImpl
 public class FileFQPackage extends Macro {
-  public String expand(DataContext dataContext) {
-    PsiJavaPackage aPackage = FilePackageMacro.getFilePackage(dataContext);
-    if (aPackage == null) return null;
-    return aPackage.getQualifiedName();
-  }
+    @Override
+    public String expand(DataContext dataContext) {
+        PsiJavaPackage aPackage = FilePackageMacro.getFilePackage(dataContext);
+        if (aPackage == null) {
+            return null;
+        }
+        return aPackage.getQualifiedName();
+    }
 
-  public String getDescription() {
-    return IdeLocalize.macroFileFullyQualifiedPackage().get();
-  }
+    @Override
+    public LocalizeValue getDescription() {
+        return IdeLocalize.macroFileFullyQualifiedPackage();
+    }
 
-  public String getName() {
-    return "FileFQPackage";
-  }
+    @Override
+    public String getName() {
+        return "FileFQPackage";
+    }
 }

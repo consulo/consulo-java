@@ -22,45 +22,50 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.pathMacro.Macro;
 
 @ExtensionImpl
 public final class FileClassMacro extends Macro {
-  public String getName() {
-    return "FileClass";
-  }
-
-  public String getDescription() {
-    return IdeLocalize.macroClassName().get();
-  }
-
-  @RequiredReadAction
-  public String expand(DataContext dataContext) {
-    //Project project = (Project)dataContext.getData(DataConstants.PROJECT);
-    //if (project == null) {
-    //  return null;
-    //}
-    //VirtualFile file = (VirtualFile)dataContext.getData(DataConstantsEx.VIRTUAL_FILE);
-    //if (file == null) {
-    //  return null;
-    //}
-    //PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-    //if (!(psiFile instanceof PsiJavaFile)) {
-    //  return null;
-    //}
-    PsiFile javaFile = dataContext.getData(PsiFile.KEY);
-    if (!(javaFile instanceof PsiJavaFile)) return null;
-    PsiClass[] classes = ((PsiJavaFile) javaFile).getClasses();
-    if (classes.length == 1) {
-      return classes[0].getQualifiedName();
+    @Override
+    public String getName() {
+        return "FileClass";
     }
-    String fileName = javaFile.getVirtualFile().getNameWithoutExtension();
-    for (PsiClass aClass : classes) {
-      String name = aClass.getName();
-      if (fileName.equals(name)) {
-        return aClass.getQualifiedName();
-      }
+
+    @Override
+    public LocalizeValue getDescription() {
+        return IdeLocalize.macroClassName();
     }
-    return null;
-  }
+
+    @Override
+    @RequiredReadAction
+    public String expand(DataContext dataContext) {
+        //Project project = (Project)dataContext.getData(DataConstants.PROJECT);
+        //if (project == null) {
+        //    return null;
+        //}
+        //VirtualFile file = (VirtualFile)dataContext.getData(DataConstantsEx.VIRTUAL_FILE);
+        //if (file == null) {
+        //    return null;
+        //}
+        //PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        //if (!(psiFile instanceof PsiJavaFile)) {
+        //    return null;
+        //}
+        if (!(dataContext.getData(PsiFile.KEY) instanceof PsiJavaFile javaFile)) {
+            return null;
+        }
+        PsiClass[] classes = javaFile.getClasses();
+        if (classes.length == 1) {
+            return classes[0].getQualifiedName();
+        }
+        String fileName = javaFile.getVirtualFile().getNameWithoutExtension();
+        for (PsiClass aClass : classes) {
+            String name = aClass.getName();
+            if (fileName.equals(name)) {
+                return aClass.getQualifiedName();
+            }
+        }
+        return null;
+    }
 }
