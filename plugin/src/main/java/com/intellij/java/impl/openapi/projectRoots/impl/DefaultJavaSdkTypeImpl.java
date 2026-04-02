@@ -138,7 +138,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
 
     /**
-     * @implNote do not check JAVA_HOME, {@link #getEnviromentVariables(Platform)}
+     * @implNote do not check JAVA_HOME, {@link #getEnvironmentVariables(Platform)}
      */
     @Override
     public Collection<String> suggestHomePaths() {
@@ -179,6 +179,11 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
 
     @Override
     public Set<String> getEnviromentVariables(Platform platform) {
+        return Set.of("JAVA_HOME");
+    }
+
+    @Override
+    public Set<String> getEnvironmentVariables(Platform platform) {
         return Set.of("JAVA_HOME");
     }
 
