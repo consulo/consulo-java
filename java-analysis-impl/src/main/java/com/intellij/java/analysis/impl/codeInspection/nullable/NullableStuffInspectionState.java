@@ -41,6 +41,12 @@ public class NullableStuffInspectionState implements InspectionToolState<Nullabl
   public boolean REPORT_NULLS_PASSED_TO_NON_ANNOTATED_METHOD = true;
   public boolean REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER = true;
 
+  public boolean REPORT_NULLABILITY_ANNOTATION_ON_LOCALS = true;
+  public boolean REPORT_NOT_NULL_TO_NULLABLE_CONFLICTS_IN_ASSIGNMENTS = false;
+  public boolean REPORT_NOT_ANNOTATED_INSTANTIATION_NOT_NULL_TYPE = false;
+
+  public boolean REPORT_REDUNDANT_NULLABILITY_ANNOTATION_IN_THE_SCOPE_OF_ANNOTATED_CONTAINER = true;
+
   @Nullable
   @Override
   public UnnamedConfigurable createConfigurable() {

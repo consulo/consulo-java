@@ -66,4 +66,11 @@ public interface PsiAnnotationOwner {
      * @return newly added annotation
      */
     PsiAnnotation addAnnotation(String qualifiedName);
+
+    /**
+     * @return true if there is at least one annotation attached to the element.
+     */
+    default boolean hasAnnotations() {
+        return getAnnotations().length > 0;
+    }
 }
