@@ -178,11 +178,6 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
 
     @Override
-    public Set<String> getEnviromentVariables(Platform platform) {
-        return Set.of("JAVA_HOME");
-    }
-
-    @Override
     public Set<String> getEnvironmentVariables(Platform platform) {
         return Set.of("JAVA_HOME");
     }
