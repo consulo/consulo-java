@@ -19,7 +19,8 @@ import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.annotation.DeprecationInfo;
 import consulo.content.bundle.BundleHolder;
 import consulo.ide.setting.ShowSettingsUtil;
-import consulo.java.execution.JavaExecutionBundle;
+import consulo.java.execution.localize.JavaExecutionLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.module.ui.awt.SdkComboBox;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.awt.LabeledComponent;
@@ -48,9 +49,15 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor {
   public JrePathEditor() {
     BundleHolder model = ShowSettingsUtil.getInstance().getSdksModel();
 
-    mySdkComboBox = new SdkComboBox(model, id -> id instanceof JavaSdkType, null, "Auto Select", PlatformIconGroup.actionsFind());
+    mySdkComboBox = new SdkComboBox(
+      model,
+      id -> id instanceof JavaSdkType,
+      null,
+      LocalizeValue.localizeTODO("Auto Select"),
+      PlatformIconGroup.actionsFind()
+    );
 
-    myLabeledComponent = LabeledComponent.create(mySdkComboBox, JavaExecutionBundle.message("run.configuration.jre.label"));
+    myLabeledComponent = LabeledComponent.create(mySdkComboBox, JavaExecutionLocalize.runConfigurationJreLabel().get());
 
     setContent(myLabeledComponent);
   }
