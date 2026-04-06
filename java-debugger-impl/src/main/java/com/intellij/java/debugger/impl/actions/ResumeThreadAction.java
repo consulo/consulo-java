@@ -97,7 +97,7 @@ public class ResumeThreadAction extends DebuggerAction {
             }
         }
         Presentation presentation = e.getPresentation();
-        presentation.setTextValue(text);
+        presentation.setText(text);
         presentation.setVisible(visible);
         presentation.setEnabled(enabled);
     }

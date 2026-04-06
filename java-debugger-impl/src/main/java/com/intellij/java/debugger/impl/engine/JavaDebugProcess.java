@@ -459,11 +459,11 @@ public class JavaDebugProcess extends XDebugProcess {
             DebugProcessImpl process = getCurrentDebugProcess(e.getData(Project.KEY));
             if (process == null || process.canGetMethodReturnValue()) {
                 presentation.setEnabled(true);
-                presentation.setTextValue(myText);
+                presentation.setText(myText);
             }
             else {
                 presentation.setEnabled(false);
-                presentation.setTextValue(myTextUnavailable);
+                presentation.setText(myTextUnavailable);
             }
         }
 

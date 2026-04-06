@@ -113,7 +113,7 @@ public class InferNullityAnnotationsAction extends BaseAnalysisAction {
                     if (virtualFile != null) {
                         progressIndicator.setText2(ProjectUtil.calcRelativeToProjectPath(virtualFile, project));
                     }
-                    progressIndicator.setTextValue(AnalysisScopeLocalize.scanningScopeProgressTitle());
+                    progressIndicator.setText(AnalysisScopeLocalize.scanningScopeProgressTitle());
                 }
                 if (!(file instanceof PsiJavaFile)) {
                     return;

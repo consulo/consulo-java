@@ -35,7 +35,7 @@ public class EditFrameSourceAction extends GotoFrameSourceAction {
     @RequiredUIAccess
     public void update(AnActionEvent e) {
         super.update(e);
-        e.getPresentation().setTextValue(
+        e.getPresentation().setText(
             ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getTextValue()
         );
     }

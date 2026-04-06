@@ -26,6 +26,6 @@ import consulo.java.localize.JavaLocalize;
 public class GenerateToStringAction extends BaseGenerateAction {
     public GenerateToStringAction() {
         super(new GenerateToStringActionHandlerImpl(), JavaLocalize.actionGenerateToStringText());
-        getTemplatePresentation().setDescriptionValue(JavaLocalize.actionGenerateToStringDescription());
+        getTemplatePresentation().setDescription(JavaLocalize.actionGenerateToStringDescription());
     }
 }

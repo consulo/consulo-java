@@ -35,7 +35,7 @@ public final class OverrideMethodAction extends OverrideImplementMethodAction {
         boolean enabled = toOverride > 0;
         presentation.setEnabledAndVisible(enabled);
         if (enabled) {
-            presentation.setTextValue(toOverride == 1 ? IdeLocalize.actionOverrideMethod() : IdeLocalize.actionOverrideMethods());
+            presentation.setText(toOverride == 1 ? IdeLocalize.actionOverrideMethod() : IdeLocalize.actionOverrideMethods());
         }
     }
 }

@@ -121,7 +121,7 @@ public class EditSourceAction extends DebuggerAction {
         else {
             presentation.setEnabled(false);
         }
-        e.getPresentation().setTextValue(
+        e.getPresentation().setText(
             ActionManager.getInstance().getAction(IdeActions.ACTION_EDIT_SOURCE).getTemplatePresentation().getTextValue()
         );
     }

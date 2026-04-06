@@ -108,9 +108,8 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             return;
         }
 
-        presentation.setEnabled(true);
-        presentation.setVisible(true);
-        presentation.setTextValue(JavaCompilerLocalize.actionRunAptText());
+        presentation.setEnabledAndVisible(true);
+        presentation.setText(JavaCompilerLocalize.actionRunAptText());
 
         FileSetCompileScope scope = ReadAction.compute(() -> getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY)));
         if (moduleContext == null && scope == null) {
@@ -119,7 +118,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         }
 
         if (moduleContext != null) {
-            presentation.setTextValue(JavaCompilerLocalize.actionRunAptModuleText(trimName(moduleContext.getName())));
+            presentation.setText(JavaCompilerLocalize.actionRunAptModuleText(trimName(moduleContext.getName())));
         }
         else {
             PsiJavaPackage aPackage = null;
@@ -139,7 +138,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
 
             if (aPackage != null) {
                 String name = aPackage.getQualifiedName();
-                presentation.setTextValue(
+                presentation.setText(
                     StringUtil.isNotEmpty(name)
                         ? JavaCompilerLocalize.actionRunApt0Text(trimName(name))
                         : JavaCompilerLocalize.actionRunAptDefaultText()
@@ -149,7 +148,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
                 VirtualFile file = files.iterator().next();
                 FileType fileType = file.getFileType();
                 if (CompilerManager.getInstance(project).isCompilableFileType(fileType)) {
-                    presentation.setTextValue(JavaCompilerLocalize.actionRunApt0Text(trimName(file.getName())));
+                    presentation.setText(JavaCompilerLocalize.actionRunApt0Text(trimName(file.getName())));
                 }
                 else {
                     presentation.setEnabled(false);
@@ -158,7 +157,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
                 }
             }
             else {
-                presentation.setTextValue(JavaCompilerLocalize.actionRunAptSelectedFilesText());
+                presentation.setText(JavaCompilerLocalize.actionRunAptSelectedFilesText());
             }
         }
     }
