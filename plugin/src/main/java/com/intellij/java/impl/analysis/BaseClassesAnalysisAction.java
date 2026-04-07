@@ -51,7 +51,7 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
             @Override
             public void run(ProgressIndicator indicator) {
                 indicator.setIndeterminate(true);
-                indicator.setTextValue(AnalysisScopeLocalize.checkingClassFiles());
+                indicator.setText(AnalysisScopeLocalize.checkingClassFiles());
 
                 CompilerManager compilerManager = CompilerManager.getInstance((Project)getProject());
                 boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());

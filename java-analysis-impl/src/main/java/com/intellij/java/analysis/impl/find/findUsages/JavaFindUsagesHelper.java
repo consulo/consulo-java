@@ -290,7 +290,7 @@ public class JavaFindUsagesHelper {
             for (PsiClass aClass : classes) {
                 if (progress != null) {
                     String name = AccessRule.read(aClass::getName);
-                    progress.setTextValue(FindLocalize.findSearchingForReferencesToClassProgress(name));
+                    progress.setText(FindLocalize.findSearchingForReferencesToClassProgress(name));
                 }
                 ProgressManager.checkCanceled();
                 boolean success = ReferencesSearch.search(
