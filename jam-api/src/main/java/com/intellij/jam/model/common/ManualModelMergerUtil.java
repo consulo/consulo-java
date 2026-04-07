@@ -29,7 +29,7 @@ import consulo.language.psi.PsiTarget;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.util.collection.ContainerUtil;
-import consulo.xml.psi.xml.XmlTag;
+import consulo.xml.language.psi.XmlTag;
 import consulo.xml.util.xml.DomElement;
 import consulo.xml.util.xml.DomUtil;
 import consulo.xml.util.xml.GenericValue;

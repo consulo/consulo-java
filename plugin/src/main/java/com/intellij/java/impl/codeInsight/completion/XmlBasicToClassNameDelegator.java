@@ -22,7 +22,7 @@ import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.xml.codeInsight.completion.XmlCompletionContributor;
-import consulo.xml.lang.xml.XMLLanguage;
+import consulo.xml.language.XMLLanguage;
 
 import java.util.function.Consumer;
 

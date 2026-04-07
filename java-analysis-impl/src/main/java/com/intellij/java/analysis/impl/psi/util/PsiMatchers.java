@@ -26,8 +26,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.util.PsiMatcherExpression;
 import consulo.util.collection.ArrayUtil;
-import consulo.xml.psi.xml.XmlTag;
-
+import consulo.xml.language.psi.XmlTag;
 
 public class PsiMatchers {
 

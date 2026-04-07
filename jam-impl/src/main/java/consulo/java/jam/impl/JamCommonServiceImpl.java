@@ -24,7 +24,7 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.java.jam.util.JamCommonService;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.xml.psi.xml.XmlFile;
+import consulo.xml.language.psi.XmlFile;
 import jakarta.inject.Singleton;
 
 /**

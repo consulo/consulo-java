@@ -10,9 +10,9 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.pointer.VirtualFilePointer;
 import consulo.virtualFileSystem.pointer.VirtualFilePointerListener;
 import consulo.virtualFileSystem.pointer.VirtualFilePointerManager;
-import consulo.xml.psi.xml.XmlDocument;
-import consulo.xml.psi.xml.XmlFile;
 
+import consulo.xml.language.psi.XmlDocument;
+import consulo.xml.language.psi.XmlFile;
 import org.jspecify.annotations.Nullable;
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;

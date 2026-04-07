@@ -22,8 +22,8 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
-import consulo.xml.psi.xml.XmlTag;
 
+import consulo.xml.language.psi.XmlTag;
 import org.jspecify.annotations.Nullable;
 
 public interface CommonModelElement {

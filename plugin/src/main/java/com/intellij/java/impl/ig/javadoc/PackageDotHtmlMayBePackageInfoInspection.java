@@ -42,10 +42,10 @@ import consulo.undoRedo.UndoConfirmationPolicy;
 import consulo.util.concurrent.AsyncResult;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.xml.language.psi.XmlFile;
+import consulo.xml.language.psi.XmlTag;
+import consulo.xml.language.psi.XmlTagValue;
 import consulo.xml.psi.html.HtmlTag;
-import consulo.xml.psi.xml.XmlFile;
-import consulo.xml.psi.xml.XmlTag;
-import consulo.xml.psi.xml.XmlTagValue;
 import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl

@@ -31,7 +31,7 @@ import consulo.language.ast.TokenType;
 import consulo.language.editor.highlight.LanguageVersionableSyntaxHighlighter;
 import consulo.language.lexer.Lexer;
 import consulo.language.version.LanguageVersion;
-import consulo.xml.psi.xml.XmlTokenType;
+import consulo.xml.language.psi.XmlTokenType;
 
 import java.util.HashMap;
 import java.util.Map;

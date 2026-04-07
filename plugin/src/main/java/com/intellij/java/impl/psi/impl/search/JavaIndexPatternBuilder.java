@@ -26,8 +26,8 @@ import consulo.language.ast.TokenSet;
 import consulo.language.lexer.Lexer;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.search.IndexPatternBuilder;
-import consulo.xml.psi.xml.XmlElementType;
-import consulo.xml.psi.xml.XmlTokenType;
+import consulo.xml.language.psi.XmlElementType;
+import consulo.xml.language.psi.XmlTokenType;
 import org.jspecify.annotations.Nullable;
 
 /**

@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import com.intellij.xml.util.XmlPsiUtil;
 import com.intellij.xml.util.XmlUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
@@ -42,8 +43,8 @@ import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.xml.javaee.ExternalResourceManager;
-import consulo.xml.psi.xml.XmlEntityDecl;
-import consulo.xml.psi.xml.XmlFile;
+import consulo.xml.language.psi.XmlEntityDecl;
+import consulo.xml.language.psi.XmlFile;
 import org.jspecify.annotations.Nullable;
 
 import java.net.MalformedURLException;
@@ -207,7 +208,7 @@ public class ConvertToBasicLatinAction extends PsiElementBaseIntentionAction {
 
       ourEntities = new HashMap<>();
       Pattern pattern = Pattern.compile("&#(\\d+);");
-      XmlUtil.processXmlElements(
+      XmlPsiUtil.processXmlElements(
         file,
         element -> {
           if (element instanceof XmlEntityDecl entity) {

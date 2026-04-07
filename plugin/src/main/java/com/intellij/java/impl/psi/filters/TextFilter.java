@@ -17,7 +17,7 @@ package com.intellij.java.impl.psi.filters;
 
 import com.intellij.java.language.psi.PsiType;
 import consulo.language.psi.filter.PlainTextFilter;
-import consulo.xml.psi.xml.XmlTag;
+import consulo.xml.language.psi.XmlTag;
 
 /**
  * Created by IntelliJ IDEA.

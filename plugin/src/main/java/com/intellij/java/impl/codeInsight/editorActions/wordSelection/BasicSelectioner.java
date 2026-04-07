@@ -21,8 +21,8 @@ import consulo.language.editor.action.ExtendWordSelectionHandlerBase;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiWhiteSpace;
-import consulo.xml.psi.xml.XmlElement;
-import consulo.xml.psi.xml.XmlToken;
+import consulo.xml.language.psi.XmlElement;
+import consulo.xml.language.psi.XmlToken;
 
 public abstract class BasicSelectioner extends ExtendWordSelectionHandlerBase {
 

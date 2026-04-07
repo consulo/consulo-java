@@ -20,8 +20,8 @@ import consulo.component.util.ModificationTracker;
 import consulo.disposer.Disposable;
 import consulo.language.psi.PsiFile;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.xml.psi.xml.XmlFile;
 
+import consulo.xml.language.psi.XmlFile;
 import org.jspecify.annotations.Nullable;
 
 /**

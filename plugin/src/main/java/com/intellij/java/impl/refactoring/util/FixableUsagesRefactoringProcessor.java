@@ -15,7 +15,6 @@
  */
 package com.intellij.java.impl.refactoring.util;
 
-import com.intellij.xml.util.XmlUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
@@ -27,6 +26,7 @@ import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
+import consulo.util.lang.StringUtil;
 import consulo.util.lang.ref.SimpleReference;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public abstract class FixableUsagesRefactoringProcessor extends BaseRefactoringP
         for (UsageInfo info : refUsages.get()) {
             LocalizeValue conflict = ((FixableUsageInfo)info).getConflictMessage();
             if (conflict != null) {
-                conflicts.putValue(info.getElement(), conflict.map(XmlUtil::escape));
+                conflicts.putValue(info.getElement(), conflict.map(StringUtil::escapeXml));
             }
         }
     }
