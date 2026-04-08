@@ -22,15 +22,14 @@ import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.references.PropertyReference;
-import com.intellij.xml.util.XmlUtil;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.java.analysis.impl.util.JavaI18nUtil;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ProcessingContext;
-import consulo.xml.psi.xml.XmlAttribute;
-import consulo.xml.psi.xml.XmlAttributeValue;
-import consulo.xml.psi.xml.XmlTag;
+import consulo.xml.language.psi.XmlAttribute;
+import consulo.xml.language.psi.XmlAttributeValue;
+import consulo.xml.language.psi.XmlTag;
 import jakarta.inject.Inject;
 
 import java.util.Arrays;
@@ -94,7 +93,7 @@ public class PropertiesReferenceProvider extends PsiReferenceProviderByType {
       final XmlAttribute attribute = (XmlAttribute)element.getParent();
       if ("key".equals(attribute.getName())) {
         final XmlTag parent = attribute.getParent();
-        if ("message".equals(parent.getLocalName()) && Arrays.binarySearch(XmlUtil.JSTL_FORMAT_URIS, parent.getNamespace()) >= 0) {
+        if ("message".equals(parent.getLocalName()) && Arrays.binarySearch(JSTLXmlUtil.JSTL_FORMAT_URIS, parent.getNamespace()) >= 0) {
           propertyRefWithPrefix = true;
         }
       }

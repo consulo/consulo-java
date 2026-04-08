@@ -21,7 +21,7 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.filter.ElementFilter;
 import consulo.util.lang.reflect.ReflectionUtil;
-import consulo.xml.psi.xml.XmlToken;
+import consulo.xml.language.psi.XmlToken;
 
 /**
  * Created by IntelliJ IDEA.

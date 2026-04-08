@@ -17,10 +17,10 @@ import consulo.language.editor.TargetElementUtilExtender;
 import consulo.language.inject.InjectedLanguageManager;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.xml.psi.xml.XmlAttribute;
-import consulo.xml.psi.xml.XmlAttributeValue;
-import consulo.xml.psi.xml.XmlTag;
-import consulo.xml.psi.xml.XmlText;
+import consulo.xml.language.psi.XmlAttribute;
+import consulo.xml.language.psi.XmlAttributeValue;
+import consulo.xml.language.psi.XmlTag;
+import consulo.xml.language.psi.XmlText;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;

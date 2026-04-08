@@ -20,10 +20,10 @@ import com.intellij.java.language.psi.util.PropertyUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.language.util.IncorrectOperationException;
+import consulo.xml.language.psi.XmlAttribute;
+import consulo.xml.language.psi.XmlAttributeValue;
+import consulo.xml.language.psi.XmlTag;
 import consulo.xml.psi.impl.source.resolve.reference.impl.providers.BasicAttributeValueReference;
-import consulo.xml.psi.xml.XmlAttribute;
-import consulo.xml.psi.xml.XmlAttributeValue;
-import consulo.xml.psi.xml.XmlTag;
 
 import org.jspecify.annotations.Nullable;
 

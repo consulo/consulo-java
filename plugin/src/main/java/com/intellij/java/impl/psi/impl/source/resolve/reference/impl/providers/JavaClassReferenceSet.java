@@ -23,7 +23,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.path.CustomizableReferenceProvider;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ArrayUtil;
-import consulo.xml.lang.xml.XMLLanguage;
+import consulo.xml.language.XMLLanguage;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;

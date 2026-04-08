@@ -36,7 +36,7 @@ import consulo.language.util.CharTable;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.virtualFileSystem.fileType.FileType;
-import consulo.xml.psi.xml.XmlTokenType;
+import consulo.xml.language.psi.XmlTokenType;
 
 public class ShiftIndentInsideHelper {
   private static final Logger LOG = Logger.getInstance("#com.intellij.psi.impl.source.codeStyle.Helper");

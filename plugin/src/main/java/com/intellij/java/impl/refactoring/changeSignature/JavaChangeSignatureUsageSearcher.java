@@ -42,7 +42,7 @@ import consulo.usage.UsageInfo;
 import consulo.usage.UsageViewUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
-import consulo.xml.psi.xml.XmlElement;
+import consulo.xml.language.psi.XmlElement;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -27,8 +27,7 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
 import consulo.util.lang.CharArrayUtil;
 import consulo.util.lang.StringUtil;
-import consulo.xml.psi.XmlRecursiveElementVisitor;
-import consulo.xml.psi.xml.*;
+import consulo.xml.language.psi.*;
 
 /**
  * @author lesya

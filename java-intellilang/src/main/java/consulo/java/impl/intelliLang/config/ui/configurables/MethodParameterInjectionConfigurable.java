@@ -18,6 +18,7 @@ package consulo.java.impl.intelliLang.config.ui.configurables;
 import consulo.java.impl.intelliLang.config.MethodParameterInjection;
 import consulo.java.impl.intelliLang.config.ui.MethodParameterPanel;
 import consulo.language.inject.advanced.ui.InjectionConfigurable;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 public class MethodParameterInjectionConfigurable extends InjectionConfigurable<MethodParameterInjection, MethodParameterPanel> {
@@ -25,11 +26,13 @@ public class MethodParameterInjectionConfigurable extends InjectionConfigurable<
     super(injection, treeUpdater, project);
   }
 
+  @Override
   protected MethodParameterPanel createOptionsPanelImpl() {
     return new MethodParameterPanel(myInjection, myProject);
   }
 
-  public String getBannerSlogan() {
-    return "Edit Method Parameter Injection";
+  @Override
+  public LocalizeValue getBannerSlogan() {
+    return LocalizeValue.localizeTODO("Edit Method Parameter Injection");
   }
 }

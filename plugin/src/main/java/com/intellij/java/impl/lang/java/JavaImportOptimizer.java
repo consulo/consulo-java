@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.java.impl.lang.java;
 
 import com.google.common.collect.HashMultiset;
@@ -24,6 +23,7 @@ import com.intellij.java.language.psi.PsiImportStatement;
 import com.intellij.java.language.psi.PsiImportStaticStatement;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.Document;
 import consulo.language.Language;
@@ -32,10 +32,10 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.util.lang.EmptyRunnable;
-
 
 /**
  * @author max
@@ -45,12 +45,12 @@ public class JavaImportOptimizer implements ImportOptimizer {
   private static final Logger LOG = Logger.getInstance(JavaImportOptimizer.class);
 
   @Override
-  public Runnable processFile(final PsiFile file) {
-    if (!(file instanceof PsiJavaFile)) {
+  public Runnable processFile(PsiFile file) {
+    if (!(file instanceof PsiJavaFile javaFile)) {
       return EmptyRunnable.getInstance();
     }
     Project project = file.getProject();
-    final PsiImportList newImportList = JavaCodeStyleManager.getInstance(project).prepareOptimizeImportsResult((PsiJavaFile) file);
+    PsiImportList newImportList = JavaCodeStyleManager.getInstance(project).prepareOptimizeImportsResult(javaFile);
     if (newImportList == null) {
       return EmptyRunnable.getInstance();
     }
@@ -60,6 +60,7 @@ public class JavaImportOptimizer implements ImportOptimizer {
       private int myImportsRemoved;
 
       @Override
+      @RequiredWriteAction
       public void run() {
         try {
           PsiDocumentManager manager = PsiDocumentManager.getInstance(file.getProject());
@@ -67,7 +68,7 @@ public class JavaImportOptimizer implements ImportOptimizer {
           if (document != null) {
             manager.commitDocument(document);
           }
-          PsiImportList oldImportList = ((PsiJavaFile) file).getImportList();
+          PsiImportList oldImportList = javaFile.getImportList();
           assert oldImportList != null;
           Multiset<PsiElement> oldImports = HashMultiset.create();
           for (PsiImportStatement statement : oldImportList.getImportStatements()) {
@@ -99,9 +100,9 @@ public class JavaImportOptimizer implements ImportOptimizer {
       }
 
       @Override
-      public String getUserNotificationInfo() {
+      public LocalizeValue getUserNotificationInfo() {
         if (myImportsRemoved == 0) {
-          return "rearranged imports";
+          return LocalizeValue.localizeTODO("rearranged imports");
         }
         StringBuilder notification = new StringBuilder("removed ").append(myImportsRemoved).append(" import");
         if (myImportsRemoved > 1) {
@@ -113,7 +114,7 @@ public class JavaImportOptimizer implements ImportOptimizer {
             notification.append('s');
           }
         }
-        return notification.toString();
+        return LocalizeValue.localizeTODO(notification.toString());
       }
     };
   }

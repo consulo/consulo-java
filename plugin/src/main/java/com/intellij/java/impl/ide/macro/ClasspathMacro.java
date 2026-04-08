@@ -18,23 +18,29 @@ package com.intellij.java.impl.ide.macro;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.ide.localize.IdeLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.layer.OrderEnumerator;
 import consulo.pathMacro.Macro;
 import consulo.project.Project;
 
 @ExtensionImpl
 public final class ClasspathMacro extends Macro {
-  public String getName() {
-    return "Classpath";
-  }
+    @Override
+    public String getName() {
+        return "Classpath";
+    }
 
-  public String getDescription() {
-    return IdeLocalize.macroProjectClasspath().get();
-  }
+    @Override
+    public LocalizeValue getDescription() {
+        return IdeLocalize.macroProjectClasspath();
+    }
 
-  public String expand(DataContext dataContext) {
-    Project project = dataContext.getData(Project.KEY);
-    if (project == null) return null;
-    return OrderEnumerator.orderEntries(project).getPathsList().getPathsString();
-  }
+    @Override
+    public String expand(DataContext dataContext) {
+        Project project = dataContext.getData(Project.KEY);
+        if (project == null) {
+            return null;
+        }
+        return OrderEnumerator.orderEntries(project).getPathsList().getPathsString();
+    }
 }

@@ -24,7 +24,7 @@ import consulo.language.editor.action.ExtendWordSelectionHandler;
 import consulo.language.psi.PsiComment;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.xml.lang.xml.XMLLanguage;
+import consulo.xml.language.XMLLanguage;
 
 import java.util.Arrays;
 import java.util.Collections;

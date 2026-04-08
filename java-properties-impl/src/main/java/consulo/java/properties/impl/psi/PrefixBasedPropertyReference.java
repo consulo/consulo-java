@@ -18,13 +18,12 @@ package consulo.java.properties.impl.psi;
 import com.intellij.lang.properties.IProperty;
 import com.intellij.lang.properties.PropertiesBundle;
 import com.intellij.lang.properties.references.PropertyReference;
-import com.intellij.xml.util.XmlUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
-import consulo.xml.psi.xml.XmlAttributeValue;
-import consulo.xml.psi.xml.XmlTag;
 
+import consulo.xml.language.psi.XmlAttributeValue;
+import consulo.xml.language.psi.XmlTag;
 import org.jspecify.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Set;
@@ -85,7 +84,7 @@ public class PrefixBasedPropertyReference extends PropertyReference {
         final XmlTag curParentTag = (XmlTag) curParent;
 
         if ("bundle".equals(curParentTag.getLocalName()) &&
-            Arrays.binarySearch(XmlUtil.JSTL_FORMAT_URIS, curParentTag.getNamespace()) >= 0) {
+            Arrays.binarySearch(JSTLXmlUtil.JSTL_FORMAT_URIS, curParentTag.getNamespace()) >= 0) {
           final String attributeValue = curParentTag.getAttributeValue(PREFIX_ATTR_NAME);
 
           if (attributeValue != null && attributeValue.length() > 0) {
