@@ -104,7 +104,7 @@ public class CreateClassDialog extends DialogWrapper {
     init();
 
     if (!myClassNameEditable) {
-      setTitle(CodeInsightLocalize.dialogCreateClassName(StringUtil.capitalize(kind.getDescription()), targetClassName));
+      setTitle(CodeInsightLocalize.dialogCreateClassName(kind.getDescription().capitalize(), targetClassName));
     }
     else {
       myInformationLabel.setText(CodeInsightLocalize.dialogCreateClassLabel(kind.getDescription()).get());

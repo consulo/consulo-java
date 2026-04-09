@@ -17,7 +17,6 @@ package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
-import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.fileEditor.FileEditorManager;
 import consulo.fileEditor.history.IdeDocumentHistory;
@@ -30,50 +29,48 @@ import consulo.localize.LocalizeValue;
 import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
-import consulo.util.lang.StringUtil;
+import consulo.ui.annotation.RequiredUIAccess;
 
 /**
  * @author Mike
  */
 public class CreateClassFromUsageFix extends CreateClassFromUsageBaseFix implements SyntheticIntentionAction {
-
   public CreateClassFromUsageFix(PsiJavaCodeReferenceElement refElement, CreateClassKind kind) {
     super(kind, refElement);
   }
 
   @Override
   public LocalizeValue getText(String varName) {
-    return JavaQuickFixLocalize.createClassFromUsageText(StringUtil.capitalize(myKind.getDescription()), varName);
+    return JavaQuickFixLocalize.createClassFromUsageText(myKind.getDescription().capitalize(), varName);
   }
 
+  @RequiredUIAccess
   @Override
-  public void invoke(final Project project, Editor editor, PsiFile file) {
-    final PsiJavaCodeReferenceElement element = getRefElement();
+  public void invoke(Project project, Editor editor, PsiFile file) {
+    PsiJavaCodeReferenceElement element = getRefElement();
     assert element != null;
     if (!FileModificationService.getInstance().preparePsiElementForWrite(element)) return;
     String superClassName = getSuperClassName(element);
-    final PsiClass aClass = CreateFromUsageUtils.createClass(element, myKind, superClassName);
+    PsiClass aClass = CreateFromUsageUtils.createClass(element, myKind, superClassName);
     if (aClass == null) return;
 
-    ApplicationManager.getApplication().runWriteAction(
-      new Runnable() {
-        @Override
-        public void run() {
-          PsiJavaCodeReferenceElement refElement = element;
-          try {
-            refElement = (PsiJavaCodeReferenceElement)refElement.bindToElement(aClass);
-          }
-          catch (IncorrectOperationException e) {
-            LOG.error(e);
-          }
-
-          IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
-
-          OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(refElement.getProject()).builder(aClass.getContainingFile().getVirtualFile()).offset(aClass.getTextOffset()).build();
-          FileEditorManager.getInstance(aClass.getProject()).openTextEditor(descriptor, true);
-        }
+    project.getApplication().runWriteAction(() -> {
+      PsiJavaCodeReferenceElement refElement = element;
+      try {
+        refElement = (PsiJavaCodeReferenceElement)refElement.bindToElement(aClass);
       }
-    );
+      catch (IncorrectOperationException e) {
+        LOG.error(e);
+      }
+
+      IdeDocumentHistory.getInstance(project).includeCurrentPlaceAsChangePlace();
+
+      OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(refElement.getProject())
+          .builder(aClass.getContainingFile().getVirtualFile())
+          .offset(aClass.getTextOffset())
+          .build();
+      FileEditorManager.getInstance(aClass.getProject()).openTextEditor(descriptor, true);
+    });
   }
 
   @Override
