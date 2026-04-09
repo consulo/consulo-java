@@ -311,7 +311,7 @@ public class ManifestFileUtil {
 
     public static FileChooserDescriptor createDescriptorForManifestDirectory() {
         FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
-        descriptor.withTitleValue(LocalizeValue.localizeTODO("Select Directory for META-INF/MANIFEST.MF file"));
+        descriptor.withTitle(LocalizeValue.localizeTODO("Select Directory for META-INF/MANIFEST.MF file"));
         return descriptor;
     }
 

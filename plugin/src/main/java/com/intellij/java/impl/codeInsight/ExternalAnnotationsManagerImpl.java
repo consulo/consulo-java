@@ -24,7 +24,6 @@ import com.intellij.java.language.psi.PsiNameValuePair;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.AllIcons;
 import consulo.application.Application;
 import consulo.application.Result;
 import consulo.application.util.function.Processor;
@@ -65,6 +64,7 @@ import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
 import consulo.module.content.layer.orderEntry.ModuleExtensionWithSdkOrderEntry;
 import consulo.module.content.layer.orderEntry.ModuleOrderEntry;
 import consulo.module.content.layer.orderEntry.OrderEntry;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.DumbService;
 import consulo.project.Project;
@@ -86,6 +86,7 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
+import consulo.util.lang.xml.XmlStringUtil;
 import consulo.virtualFileSystem.ReadonlyStatusHandler;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;
@@ -234,8 +235,8 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     @Nullable final PsiNameValuePair[] value
   ) {
     FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
-    descriptor.withTitleValue(ProjectLocalize.externalAnnotationsRootChooserTitle(entry.getPresentableName()));
-    descriptor.withDescriptionValue(ProjectLocalize.externalAnnotationsRootChooserDescription());
+    descriptor.withTitle(ProjectLocalize.externalAnnotationsRootChooserTitle(entry.getPresentableName()));
+    descriptor.withDescription(ProjectLocalize.externalAnnotationsRootChooserDescription());
     final VirtualFile newRoot = IdeaFileChooser.chooseFile(descriptor, project, null);
     if (newRoot == null) {
       notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
@@ -313,7 +314,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
 
         @Override
         public Image getIconFor(VirtualFile aValue) {
-          return AllIcons.Modules.Annotation;
+          return PlatformIconGroup.modulesAnnotation();
         }
       }).showInBestPositionFor(DataManager.getInstance().getDataContext());
     } else {
@@ -708,7 +709,7 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
       text = "  <annotation name=\'" + annotationFQName + "\'>\n" + StringUtil.join(
         values,
         pair -> "<val" + (pair.getName() != null ? " name=\"" + pair.getName() + "\"" : "") +
-          " val=\"" + StringUtil.escapeXml(pair.getValue().getText()) + "\"/>",
+          " val=\"" + XmlStringUtil.escapeAttr(pair.getValue().getText(), '"') + "\"/>",
         "    \n"
       ) + "  </annotation>";
     } else {

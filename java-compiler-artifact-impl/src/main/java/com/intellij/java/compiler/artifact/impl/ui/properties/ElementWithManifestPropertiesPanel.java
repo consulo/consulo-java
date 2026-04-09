@@ -91,7 +91,7 @@ public abstract class ElementWithManifestPropertiesPanel<E extends CompositeElem
                     .MANIFEST_FILE_NAME));
             }
         };
-        descriptor.withTitleValue(LocalizeValue.localizeTODO("Specify Path to MANIFEST.MF file"));
+        descriptor.withTitle(LocalizeValue.localizeTODO("Specify Path to MANIFEST.MF file"));
         final VirtualFile file = IdeaFileChooser.chooseFile(descriptor, myContext.getProject(), null);
         if (file == null) {
             return;
