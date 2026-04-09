@@ -328,7 +328,7 @@ public class CreateFromUsageUtils {
     PsiDirectory targetDirectory;
     if (!ApplicationManager.getApplication().isUnitTestMode()) {
       Project project = manager.getProject();
-      LocalizeValue title = JavaQuickFixLocalize.createClassTitle(StringUtil.capitalize(classKind.getDescription()));
+      LocalizeValue title = JavaQuickFixLocalize.createClassTitle(classKind.getDescription().capitalize());
 
       CreateClassDialog dialog = new CreateClassDialog(project, title, name, aPackage.getQualifiedName(), classKind, false, module){
         @Override

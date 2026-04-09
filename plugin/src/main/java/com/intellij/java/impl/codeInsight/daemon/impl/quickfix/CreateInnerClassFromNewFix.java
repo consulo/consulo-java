@@ -37,7 +37,7 @@ public class CreateInnerClassFromNewFix extends CreateClassFromNewFix {
 
   @Override
   public LocalizeValue getText(String varName) {
-    return JavaQuickFixLocalize.createInnerClassFromUsageText(StringUtil.capitalize(CreateClassKind.CLASS.getDescription()), varName);
+    return JavaQuickFixLocalize.createInnerClassFromUsageText(CreateClassKind.CLASS.getDescription().capitalize(), varName);
   }
 
   @Override
