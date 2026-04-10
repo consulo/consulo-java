@@ -22,40 +22,61 @@ import consulo.language.editor.FileModificationService;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.language.psi.SmartPointerManager;
+import consulo.language.psi.SmartPsiElementPointer;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole
  */
 public class RemoveAnnotationQuickFix implements LocalQuickFix {
-  private static final Logger LOG = Logger.getInstance(RemoveAnnotationQuickFix.class);
-  private final PsiAnnotation myAnnotation;
-  private final PsiModifierListOwner myListOwner;
+    private static final Logger LOG = Logger.getInstance(RemoveAnnotationQuickFix.class);
+    private final SmartPsiElementPointer<PsiAnnotation> myAnnotation;
+    private final SmartPsiElementPointer<PsiModifierListOwner> myListOwner;
+    private final boolean myRemoveInheritors;
 
-  public RemoveAnnotationQuickFix(PsiAnnotation annotation, final PsiModifierListOwner listOwner) {
-    myAnnotation = annotation;
-    myListOwner = listOwner;
-  }
-
-  @Override
-  public LocalizeValue getName() {
-    return CodeInsightLocalize.removeAnnotation();
-  }
-
-  @Override
-  public void applyFix(Project project, ProblemDescriptor descriptor) {
-    if (myAnnotation.isPhysical()) {
-      try {
-        if (!FileModificationService.getInstance().preparePsiElementForWrite(myAnnotation)) return;
-        myAnnotation.delete();
-      } catch (IncorrectOperationException e) {
-        LOG.error(e);
-      }
-    } else {
-      ExternalAnnotationsManager.getInstance(project).deannotate(myListOwner, myAnnotation.getQualifiedName());
+    public RemoveAnnotationQuickFix(@NotNull PsiAnnotation annotation, @Nullable PsiModifierListOwner listOwner) {
+        this(annotation, listOwner, false);
     }
-  }
+
+    public RemoveAnnotationQuickFix(@NotNull PsiAnnotation annotation, @Nullable PsiModifierListOwner listOwner, boolean removeInheritors) {
+        Project project = annotation.getProject();
+        SmartPointerManager pm = SmartPointerManager.getInstance(project);
+        myAnnotation = pm.createSmartPsiElementPointer(annotation);
+        myListOwner = listOwner == null ? null : pm.createSmartPsiElementPointer(listOwner);
+        myRemoveInheritors = removeInheritors;
+    }
+
+    @Override
+    public LocalizeValue getName() {
+        return CodeInsightLocalize.removeAnnotation();
+    }
+
+    @Override
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
+        PsiAnnotation annotation = myAnnotation.getElement();
+        if (annotation == null) {
+            return;
+        }
+
+        if (annotation.isPhysical()) {
+            try {
+                if (!FileModificationService.getInstance().preparePsiElementForWrite(annotation)) {
+                    return;
+                }
+                annotation.delete();
+            }
+            catch (IncorrectOperationException e) {
+                LOG.error(e);
+            }
+        }
+        else {
+            ExternalAnnotationsManager.getInstance(project).deannotate(myListOwner.getElement(), annotation.getQualifiedName());
+        }
+    }
 }

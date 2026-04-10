@@ -1,0 +1,10 @@
+{
+  "extraKnownMarketplaces": {
+    "consulo-skills": {
+      "source": {
+        "source": "github",
+        "repo": "consulo/claude-skills"
+      }
+    }
+  }
+}

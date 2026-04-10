@@ -8,6 +8,8 @@ add.explicit.type.arguments:
     text: Add explicit type arguments
 annotate.as.safevarargs:
     text: Annotate as @SafeVarargs
+annotation.on.static.member.qualifying.type.family.name:
+    text: Move annotation
 annotate.overridden.methods.parameters:
     text: Annotate overridden method parameters as ''@{0}''
 annotate.overridden.methods.parameters.family.name:
@@ -30,6 +32,8 @@ change.visibility.level:
     text: Make {0} {1}
 comparision.between.object.and.primitive:
     text: Comparision between Object and primitive is illegal and is accepted in java 7 only
+conflicting.nullability.annotations:
+    text: Conflicting nullability annotations
 contract.return.validator.incompatible.return.parameter.type:
     text: return type ''{0}'' must be convertible from parameter type ''{1}''
 contract.return.validator.method.return.incompatible.with.method.containing.class:
@@ -686,12 +690,46 @@ inspection.nullable.problems.annotated.field.setter.parameter.conflict:
     text: Setter parameter for @{0} field is annotated @{1}
 inspection.nullable.problems.annotated.field.setter.parameter.not.annotated:
     text: Setter parameter for @{0} field might be annotated @{0} itself
+inspection.nullable.problems.applied.to.package:
+    text: Annotation on fully-qualified name must be placed before the last component
+inspection.nullable.problems.at.class:
+    text: Nullability annotation is not applicable to classes
+inspection.nullable.problems.at.constructor:
+    text: Nullability annotation is not applicable to constructors
+inspection.nullable.problems.at.enum.constant:
+    text: Nullability annotation is not applicable to enum constants
+inspection.nullable.problems.at.local.variable:
+    text: Nullability annotation is not applicable to local variables
+inspection.nullable.problems.at.reference.list:
+    text: Nullability annotation is not applicable to extends/implements clause
+inspection.nullable.problems.at.throws:
+    text: Nullability annotation is not applicable to 'throws' clause
+inspection.nullable.problems.at.type.parameter:
+    text: Nullability annotation is not applicable to type parameters
+inspection.nullable.problems.at.wildcard:
+    text: Nullability annotation is not applicable to wildcard type
+inspection.nullable.problems.constructor.not.compatible.non.null.type.argument:
+    text: Constructor is not compatible with a non-null type argument
 inspection.nullable.problems.method.overrides.NotNull:
     text: Not annotated method overrides method annotated with @{0}
+inspection.nullable.problems.nullable.instantiation.of.notnull:
+    text: Non-null type parameter ''{0}'' cannot be instantiated with @{1} type
+inspection.nullable.problems.nullable.instantiation.of.notnull.container:
+    text: Non-null type parameter ''{0}'' cannot be instantiated under @{1}
+inspection.nullable.problems.outer.type:
+    text: Outer type is inherently non-null
 inspection.nullable.problems.parameter.overrides.NotNull:
     text: Not annotated parameter overrides @{0} parameter
 inspection.nullable.problems.primitive.type.annotation:
     text: Primitive type members cannot be annotated
+inspection.nullable.problems.receiver.annotation:
+    text: Receiver parameter is inherently non-null
+inspection.nullable.problems.redundant.annotation.inherited.notnull:
+    text: 'Redundant nullability annotation: type parameter upper bound is already non-null'
+inspection.nullable.problems.redundant.annotation.under.container:
+    text: Redundant nullability annotation in the scope of @{0}
+inspection.nullable.problems.turn.off.redundant.annotation.under.container:
+    text: Don't report redundant nullability annotation in the scope of annotated container
 inspection.numeric.overflow.display.name:
     text: Numeric overflow
 inspection.objects.equals.can.be.simplified.display.name:
@@ -816,6 +854,12 @@ instance.member.guarded.by.static.ref.loc:
     text: 'Instance member guarded by static #ref #loc'
 intention.add.annotation.family:
     text: Add annotation
+intention.add.type.annotation.family:
+    text: Add type annotation
+intention.family.name.move.annotation.to.array:
+    text: Move annotation to array type
+intention.family.name.move.annotation.to.upper.bound:
+    text: Move annotation to upper bound
 intention.name.qualify.expression:
     text: Qualify {0} expression with ''{1}''
 intention.text.remove.annotation:
@@ -1068,3 +1112,17 @@ vararg.method.call.with.50.poly.arguments:
     text: Vararg method call with 50+ poly arguments may cause compilation and analysis slowdown
 visible.for.testing.makes.little.sense.on.test.only.code:
     text: '@VisibleForTesting makes little sense on @TestOnly code'
+complex.problem.with.nullability:
+    text: <html><body>Incompatible type arguments due to nullability{0}</body></html>
+assigning.a.class.with.nullable.elements:
+    text: <html><body>Assigning a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
+assigning.a.class.with.notnull.elements:
+    text: <html><body>Assigning a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>
+overriding.a.class.with.nullable.elements:
+    text: <html><body>Overriding a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
+overriding.a.class.with.notnull.elements:
+    text: <html><body>Overriding a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>
+returning.a.class.with.nullable.arguments:
+    text: <html><body>Returning a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
+returning.a.class.with.notnull.arguments:
+    text: <html><body>Returning a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>
