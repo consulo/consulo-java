@@ -129,8 +129,9 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
         if (module == null) {
             return getDefaultAnnotation(nullability);
         }
+        GlobalSearchScope moduleScope = GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module);
         for (String annotation : annotations) {
-            if (JavaLibraryUtil.hasLibraryClass(module, annotation)) {
+            if (JavaPsiFacade.getInstance(module.getProject()).findClass(annotation, moduleScope) != null) {
                 return annotation;
             }
         }

@@ -73,6 +73,24 @@ public final class DfaPsiUtil {
         return getElementNullability(resultType, owner, true);
     }
 
+
+    /**
+     * Returns nullability of variable or method. This method takes into account various sources of nullability information,
+     * like method annotations, type annotations, container annotations, inferred annotations, or external annotations.
+     *
+     * @param resultType concrete type of particular variable access or method call (an instantiation of generic method return type,
+     *                   or variable type), if known.
+     * @param owner      method or variable to get its nullability
+     * @return nullability of the owner; {@link Nullability#UNKNOWN} is both parameters are null.
+     * @deprecated behaves like {@link #getElementNullabilityForWrite(PsiType, PsiModifierListOwner)}.
+     * Use either {@link #getElementNullabilityForWrite(PsiType, PsiModifierListOwner)}
+     * or {@link #getElementNullabilityForRead(PsiType, PsiModifierListOwner)} instead.
+     */
+    @Deprecated
+    public static @NotNull Nullability getElementNullability(@Nullable PsiType resultType, @Nullable PsiModifierListOwner owner) {
+        return getElementNullability(resultType, owner, false);
+    }
+
     private static @NotNull Nullability getElementNullability(@Nullable PsiType resultType,
                                                               @Nullable PsiModifierListOwner owner,
                                                               boolean forRead) {

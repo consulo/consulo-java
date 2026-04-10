@@ -59,19 +59,24 @@ public class RemoveAnnotationQuickFix implements LocalQuickFix {
 
     @Override
     public void applyFix(Project project, ProblemDescriptor descriptor) {
-        if (myAnnotation.isPhysical()) {
+        PsiAnnotation annotation = myAnnotation.getElement();
+        if (annotation == null) {
+            return;
+        }
+
+        if (annotation.isPhysical()) {
             try {
-                if (!FileModificationService.getInstance().preparePsiElementForWrite(myAnnotation)) {
+                if (!FileModificationService.getInstance().preparePsiElementForWrite(annotation)) {
                     return;
                 }
-                myAnnotation.delete();
+                annotation.delete();
             }
             catch (IncorrectOperationException e) {
                 LOG.error(e);
             }
         }
         else {
-            ExternalAnnotationsManager.getInstance(project).deannotate(myListOwner, myAnnotation.getQualifiedName());
+            ExternalAnnotationsManager.getInstance(project).deannotate(myListOwner.getElement(), annotation.getQualifiedName());
         }
     }
 }

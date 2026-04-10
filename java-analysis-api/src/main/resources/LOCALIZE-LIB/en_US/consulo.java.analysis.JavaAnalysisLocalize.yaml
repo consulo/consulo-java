@@ -8,6 +8,8 @@ add.explicit.type.arguments:
     text: Add explicit type arguments
 annotate.as.safevarargs:
     text: Annotate as @SafeVarargs
+annotation.on.static.member.qualifying.type.family.name:
+    text: Move annotation
 annotate.overridden.methods.parameters:
     text: Annotate overridden method parameters as ''@{0}''
 annotate.overridden.methods.parameters.family.name:
@@ -852,6 +854,12 @@ instance.member.guarded.by.static.ref.loc:
     text: 'Instance member guarded by static #ref #loc'
 intention.add.annotation.family:
     text: Add annotation
+intention.add.type.annotation.family:
+    text: Add type annotation
+intention.family.name.move.annotation.to.array:
+    text: Move annotation to array type
+intention.family.name.move.annotation.to.upper.bound:
+    text: Move annotation to upper bound
 intention.name.qualify.expression:
     text: Qualify {0} expression with ''{1}''
 intention.text.remove.annotation:

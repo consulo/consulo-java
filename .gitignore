@@ -7,3 +7,4 @@
 target/
 dependency-reduced-pom.xml
 plugin/sandbox
+.claude/settings.local.json

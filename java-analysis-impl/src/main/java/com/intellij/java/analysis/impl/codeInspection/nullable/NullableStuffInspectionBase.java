@@ -3,7 +3,9 @@ package com.intellij.java.analysis.impl.codeInspection.nullable;
 
 import com.intellij.java.analysis.codeInspection.AbstractBaseJavaLocalInspectionTool;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationFix;
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MoveAnnotationOnStaticMemberQualifyingTypeFix;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
+import com.intellij.java.analysis.impl.codeInsight.intention.AddTypeAnnotationFix;
 import com.intellij.java.analysis.impl.codeInspection.RemoveAnnotationQuickFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.MethodCallInstruction;
@@ -148,12 +150,10 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                     && typeElement.acceptsAnnotations()) {
                     fix = new AddTypeAnnotationFix(typeElement, manager.getDefaultAnnotation(Nullability.NULLABLE, expression), notNulls);
                 }
-                holder.problem(
-                        expression,
-                        JavaAnalysisLocalize.inspectionNullableProblemsConstructorNotCompatibleNonNullTypeArgument()
-                    )
-                    .maybeFix(fix)
-                    .register();
+                holder.newProblem(JavaAnalysisLocalize.inspectionNullableProblemsConstructorNotCompatibleNonNullTypeArgument())
+                    .range(expression)
+                    .withOptionalFix(fix)
+                    .create();
             }
 
             @Override
@@ -306,7 +306,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                         annotation,
                         listOwner,
                         JavaAnalysisLocalize.inspectionNullableProblemsPrimitiveTypeAnnotation(),
-                        LocalQuickFix.notNullElements(additionalFix)
+                        additionalFix == null ? LocalQuickFix.EMPTY_ARRAY : new LocalQuickFix[]{additionalFix}
                     );
                 }
                 if (type instanceof PsiClassType classType) {
@@ -316,26 +316,24 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                         PsiElement parent = context.getParent();
                         if (parent instanceof PsiJavaCodeReferenceElement) {
                             if (outerCtx.resolve() instanceof PsiPackage) {
-                                ModCommandAction action = new MoveAnnotationOnStaticMemberQualifyingTypeFix(annotation);
                                 reportIncorrectLocation(
                                     holder,
                                     annotation,
                                     listOwner,
                                     JavaAnalysisLocalize.inspectionNullableProblemsAppliedToPackage(),
-                                    LocalQuickFix.from(action)
+                                    new MoveAnnotationOnStaticMemberQualifyingTypeFix()
                                 );
                             }
                             else {
                                 // If outer is qualifier of static member then don't report problem as it is already reported
                                 // as ANNOTATION_NOT_ALLOWED_STATIC which contains exactly the same fix "Move annotation".
                                 if (!PsiImplUtil.isTypeQualifierOfStaticMember(outerCtx)) {
-                                    ModCommandAction action = new MoveAnnotationOnStaticMemberQualifyingTypeFix(annotation);
                                     reportIncorrectLocation(
                                         holder,
                                         annotation,
                                         listOwner,
                                         JavaAnalysisLocalize.inspectionNullableProblemsOuterType(),
-                                        LocalQuickFix.from(action)
+                                        new MoveAnnotationOnStaticMemberQualifyingTypeFix()
                                     );
                                 }
                             }
@@ -438,16 +436,15 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
             private void reportRedundantInContainerScope(PsiAnnotation annotation, NullabilityAnnotationInfo containerInfo) {
                 PsiJavaCodeReferenceElement containerName = containerInfo.getAnnotation().getNameReferenceElement();
                 if (containerName != null) {
-                    LocalQuickFix updateOptionFix = LocalQuickFix.from(
-                        new UpdateInspectionOptionFix(
-                            NullableStuffInspectionBase.this,
-                            "REPORT_REDUNDANT_NULLABILITY_ANNOTATION_IN_THE_SCOPE_OF_ANNOTATED_CONTAINER",
-                            JavaAnalysisLocalize.inspectionNullableProblemsTurnOffRedundantAnnotationUnderContainer(),
-                            false
-                        ));
+                    LocalQuickFix updateOptionFix = new UpdateInspectionOptionFix<>(
+                        NullableStuffInspectionBase.this,
+                        JavaAnalysisLocalize.inspectionNullableProblemsTurnOffRedundantAnnotationUnderContainer(),
+                        (NullableStuffInspectionState state) ->
+                            state.REPORT_REDUNDANT_NULLABILITY_ANNOTATION_IN_THE_SCOPE_OF_ANNOTATED_CONTAINER = false
+                    );
                     reportProblem(holder,
                         annotation,
-                        LocalQuickFix.notNullElements(new RemoveAnnotationQuickFix(annotation, null), updateOptionFix),
+                        new LocalQuickFix[]{new RemoveAnnotationQuickFix(annotation, null), updateOptionFix},
                         JavaAnalysisLocalize.inspectionNullableProblemsRedundantAnnotationUnderContainer(containerName.getReferenceName())
                     );
                 }
@@ -529,11 +526,9 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                     && list == psiClass.getImplementsList()
                     && reference.resolve() instanceof PsiClass intf
                     && intf.isInterface()) {
-                    LocalizeValue error = checkIndirectInheritance(psiClass, intf);
-                    if (error.isNotEmpty()) {
-                        holder.newProblem(error)
-                            .range(reference)
-                            .create();
+                    LocalizeValue error = checkIndirectInheritance(psiClass, intf, state);
+                    if (error != null && error.isNotEmpty()) {
+                        holder.newProblem(error).range(reference).create();
                     }
                 }
             }
@@ -561,13 +556,12 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
                                 List<LocalQuickFix> fixes = new ArrayList<>();
                                 if (annotationClass != null &&
                                     AnnotationTargetUtil.findAnnotationTarget(annotationClass, PsiAnnotation.TargetType.TYPE_USE) != null) {
-                                    fixes.add(LocalQuickFix.from(new AddTypeAnnotationFix(
+                                    fixes.add(new AddTypeAnnotationFix(
                                         typeArgument,
                                         annotationToAdd,
                                         manager.getNullables()
-                                    )));
+                                    ));
                                 }
-                                fixes.add(LocalQuickFix.from(createAnnotateAsNullMarkedFix(typeArgument, manager.getNullables())));
                                 ProblemHighlightType level =
                                     nullability == TypeNullability.UNKNOWN && !state.REPORT_NOT_ANNOTATED_INSTANTIATION_NOT_NULL_TYPE
                                         ? ProblemHighlightType.INFORMATION
@@ -712,7 +706,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
     }
 
     private void checkConflictingContainerAnnotations(ProblemsHolder holder, @Nullable PsiModifierList list) {
-        if (list == null || !list.hasAnnotations()) {
+        if (list == null || list.getAnnotations().length == 0) {
             return;
         }
         NullableNotNullManager manager = NullableNotNullManager.getInstance(holder.getProject());
@@ -746,6 +740,11 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
         reportProblem(holder, anchor, fixes, message, message);
     }
 
+    @Override
+    public InspectionToolState<? extends NullableStuffInspectionState> createStateProvider() {
+        return new NullableStuffInspectionState();
+    }
+
     protected void reportProblem(
         ProblemsHolder holder,
         PsiElement anchor,
@@ -753,13 +752,13 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
         LocalizeValue description,
         LocalizeValue tooltip
     ) {
-        ProblemsHolder.ProblemBuilder builder = holder.problem(anchor, description)
-            .tooltip(tooltip)
-            .highlight(ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
+        ProblemBuilder builder = holder.newProblem(description)
+            .range(anchor)
+            .highlightType(ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
         for (LocalQuickFix quickFix : fixes) {
-            builder.fix(quickFix);
+            builder.withFix(quickFix);
         }
-        builder.register();
+        builder.create();
     }
 
     @RequiredReadAction
@@ -895,8 +894,8 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
         PsiIdentifier nameIdentifier = getter == null ? null : getter.getNameIdentifier();
         if (nameIdentifier != null && nameIdentifier.isPhysical()) {
             if (PropertyUtil.getFieldOfGetter(getter) == field) {
-                AddAnnotationModCommandAction getterAnnoFix =
-                    new AddAnnotationModCommandAction(anno, getter, ArrayUtil.toStringArray(annoToRemove));
+                AddAnnotationPsiFix getterAnnoFix =
+                    new AddAnnotationPsiFix(anno, getter, ArrayUtil.toStringArray(annoToRemove));
                 if (state.REPORT_NOT_ANNOTATED_GETTER) {
                     if (!hasNullability(manager, getter) && !TypeConversionUtil.isPrimitiveAndNotNull(getter.getReturnType())) {
                         reportProblem(
@@ -1025,7 +1024,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
             reportProblem(
                 holder,
                 nameIdentifier,
-                AddAnnotationModCommandAction.createAddNotNullFix(field),
+                AddAnnotationPsiFix.createAddNotNullFix(field),
                 JavaAnalysisLocalize.zeroFieldIsAlwaysInitializedNotNull(getPresentableAnnoName(field))
             );
         }
@@ -1271,7 +1270,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
     private static @Nullable LocalQuickFix createFixForNonAnnotatedOverridesNotNull(PsiMethod method) {
         NullableNotNullManager nullableManager = getNullityManager(method);
         return isAnnotatingApplicable(method, nullableManager.getDefaultNotNull())
-            ? LocalQuickFix.from(AddAnnotationModCommandAction.createAddNotNullFix(method))
+            ? AddAnnotationPsiFix.createAddNotNullFix(method)
             : null;
     }
 
@@ -1317,7 +1316,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
 
             List<PsiParameter> superParameters = getSuperParameters(superMethods, parameters, i);
 
-            checkSuperParameterAnnotations(holder, nullableManager, parameter, superParameters);
+            checkSuperParameterAnnotations(holder, nullableManager, parameter, superParameters, state);
 
             checkNullLiteralArgumentOfNotNullParameterUsages(method, holder, nullableManager, i, parameter, state);
         }
@@ -1360,7 +1359,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
         PsiParameter notNullSuper = findNotNullSuperForNonAnnotatedParameter(nullableManager, parameter, superParameters, state);
         if (notNullSuper != null) {
             LocalQuickFix fix = isAnnotatingApplicable(parameter, nullableManager.getDefaultAnnotation(Nullability.NOT_NULL, parameter))
-                ? LocalQuickFix.from(AddAnnotationModCommandAction.createAddNotNullFix(parameter))
+                ? AddAnnotationPsiFix.createAddNotNullFix(parameter)
                 : null;
             reportProblem(
                 holder,
@@ -1640,7 +1639,7 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
 
     @RequiredReadAction
     public static boolean shouldSkipOverriderAsGenerated(PsiMethod overriding) {
-        if (Registry.is("idea.report.nullity.missing.in.generated.overriders")) {
+        if (Boolean.TRUE) {
             return false;
         }
 
@@ -1734,7 +1733,9 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
 
         @Override
         public LocalizeValue getName() {
-            return JavaAnalysisLocalize.inspectionAnnotateOverriddenMethodNullableQuickfixName(/*Short name of annotation here*/);
+            return JavaAnalysisLocalize.inspectionAnnotateOverriddenMethodNullableQuickfixName(
+                myNullability == Nullability.NOT_NULL ? "NotNull" : "Nullable"
+            );
         }
     }
 
