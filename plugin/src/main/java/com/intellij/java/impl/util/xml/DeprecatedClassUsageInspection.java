@@ -29,7 +29,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.ResolvingHint;
 import consulo.localize.LocalizeValue;
 import consulo.util.collection.ArrayUtil;
-import consulo.xml.codeInspection.XmlSuppressableInspectionTool;
+import consulo.xml.editor.XmlSuppressableInspectionTool;
 import consulo.xml.language.XMLLanguage;
 import consulo.xml.language.psi.XmlAttribute;
 import consulo.xml.language.psi.XmlAttributeValue;

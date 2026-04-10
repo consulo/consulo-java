@@ -20,7 +20,7 @@ import consulo.language.impl.psi.DelegatePsiTarget;
 import consulo.language.pom.PomRenameableTarget;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
-import consulo.xml.util.xml.ElementPresentationManager;
+import consulo.xml.dom.ElementPresentationManager;
 
 /**
  * @author Gregory.Shrago

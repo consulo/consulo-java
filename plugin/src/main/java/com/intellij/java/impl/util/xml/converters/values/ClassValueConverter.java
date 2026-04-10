@@ -30,11 +30,11 @@ import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.xml.util.xml.ConvertContext;
-import consulo.xml.util.xml.Converter;
-import consulo.xml.util.xml.CustomReferenceConverter;
-import consulo.xml.util.xml.GenericDomValue;
 
+import consulo.xml.dom.ConvertContext;
+import consulo.xml.dom.Converter;
+import consulo.xml.dom.CustomReferenceConverter;
+import consulo.xml.dom.GenericDomValue;
 import org.jspecify.annotations.Nullable;
 
 @ServiceAPI(ComponentScope.APPLICATION)

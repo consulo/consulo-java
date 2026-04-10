@@ -8,7 +8,7 @@ open module consulo.java.analysis.impl {
   requires transitive consulo.java.language.impl;
   requires transitive consulo.java.indexing.impl;
 
-  requires com.intellij.xml;
+  requires com.intellij.xml.api;
 
   requires consulo.language.editor.impl;
 

@@ -23,8 +23,8 @@ import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.xml.dom.DomElement;
 import consulo.xml.language.psi.XmlElement;
-import consulo.xml.util.xml.DomElement;
 
 import org.jspecify.annotations.Nullable;
 

@@ -23,7 +23,7 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
-import consulo.xml.util.xml.ConverterManager;
+import consulo.xml.dom.ConverterManager;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 

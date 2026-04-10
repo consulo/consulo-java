@@ -16,7 +16,7 @@
 
 package com.intellij.jam.model.common;
 
-import consulo.xml.util.xml.DomElement;
+import consulo.xml.dom.DomElement;
 
 public interface CommonDomModelElement extends CommonModelElement, DomElement {
 }

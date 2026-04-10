@@ -20,7 +20,7 @@ import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.library.ui.FileTypeBasedRootFilter;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.xml.ide.highlighter.XmlFileType;
+import consulo.xml.language.XmlFileType;
 
 @ExtensionImpl
 public class AnnotationsRootFilter extends FileTypeBasedRootFilter {

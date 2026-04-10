@@ -63,11 +63,11 @@ import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.reflect.ReflectionUtil;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.xml.dom.*;
 import consulo.xml.language.psi.XmlAttribute;
 import consulo.xml.language.psi.XmlAttributeValue;
 import consulo.xml.language.psi.XmlFile;
 import consulo.xml.language.psi.XmlTag;
-import consulo.xml.util.xml.*;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.annotation.ElementType;

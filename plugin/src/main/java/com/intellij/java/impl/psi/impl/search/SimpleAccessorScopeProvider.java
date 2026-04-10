@@ -21,7 +21,7 @@ import consulo.content.scope.SearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.xml.ide.highlighter.XHtmlFileType;
-import consulo.xml.ide.highlighter.XmlFileType;
+import consulo.xml.language.XmlFileType;
 
 @ExtensionImpl
 public class SimpleAccessorScopeProvider implements CustomPropertyScopeProvider {

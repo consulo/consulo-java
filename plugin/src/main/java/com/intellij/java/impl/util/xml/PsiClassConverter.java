@@ -24,8 +24,7 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
-import consulo.xml.util.xml.*;
-
+import consulo.xml.dom.*;
 import org.jspecify.annotations.Nullable;
 
 /**

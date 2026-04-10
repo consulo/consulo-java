@@ -21,8 +21,8 @@ import com.intellij.java.language.psi.ref.AnnotationAttributeChildLink;
 import consulo.language.psi.PsiElementRef;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.xml.util.xml.GenericValue;
 
+import consulo.xml.dom.GenericValue;
 import org.jspecify.annotations.Nullable;
 
 /**

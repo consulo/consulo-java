@@ -23,13 +23,13 @@ import com.intellij.java.language.psi.util.PsiTypesUtil;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
-import consulo.util.lang.function.Condition;
-import consulo.xml.util.xml.*;
+import consulo.xml.dom.*;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * @author Dmitry Avdeev
@@ -42,12 +42,7 @@ public class ClassMappingNameConverter extends ResolvingConverter.StringConverte
     DomElement parent = context.getInvocationElement().getParent();
     assert parent != null;
     List<DomElement> children = DomUtil.getDefinedChildren(parent, true, true);
-    DomElement classElement = ContainerUtil.find(children, new Condition<DomElement>() {
-      @Override
-      public boolean value(DomElement domElement) {
-        return domElement.getAnnotation(MappingClass.class) != null;
-      }
-    });
+    DomElement classElement = ContainerUtil.find(children, domElement -> domElement.getAnnotation(MappingClass.class) != null);
     if (classElement == null) return Collections.emptyList();
     Object value = ((GenericDomValue) classElement).getValue();
     if (value == null) return Collections.emptyList();

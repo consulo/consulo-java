@@ -20,7 +20,7 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.ref.AnnotationAttributeChildLink;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementRef;
-import consulo.xml.util.xml.MutableGenericValue;
+import consulo.xml.dom.MutableGenericValue;
 import org.jspecify.annotations.Nullable;
 
 /**

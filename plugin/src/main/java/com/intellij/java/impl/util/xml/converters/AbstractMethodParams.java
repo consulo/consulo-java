@@ -16,8 +16,8 @@
 package com.intellij.java.impl.util.xml.converters;
 
 import com.intellij.java.language.psi.PsiType;
-import consulo.xml.util.xml.DomElement;
-import consulo.xml.util.xml.GenericDomValue;
+import consulo.xml.dom.DomElement;
+import consulo.xml.dom.GenericDomValue;
 
 import java.util.List;
 

@@ -23,8 +23,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.PsiReference;
 import consulo.util.collection.ContainerUtil;
-import consulo.xml.util.xml.ElementPresentationManager;
-
+import consulo.xml.dom.ElementPresentationManager;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;

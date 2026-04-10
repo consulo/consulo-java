@@ -24,10 +24,10 @@ import consulo.logging.Logger;
 import consulo.ui.image.Image;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.StringUtil;
-import consulo.xml.util.xml.DomElement;
-import consulo.xml.util.xml.DomUtil;
-import consulo.xml.util.xml.ElementPresentationManager;
-import consulo.xml.util.xml.ModelMergerUtil;
+import consulo.xml.dom.DomElement;
+import consulo.xml.dom.DomUtil;
+import consulo.xml.dom.ElementPresentationManager;
+import consulo.xml.dom.ModelMergerUtil;
 
 import java.util.List;
 

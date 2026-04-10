@@ -29,11 +29,11 @@ import consulo.language.psi.PsiTarget;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.util.collection.ContainerUtil;
+import consulo.xml.dom.DomElement;
+import consulo.xml.dom.DomUtil;
+import consulo.xml.dom.GenericValue;
+import consulo.xml.dom.MergedObject;
 import consulo.xml.language.psi.XmlTag;
-import consulo.xml.util.xml.DomElement;
-import consulo.xml.util.xml.DomUtil;
-import consulo.xml.util.xml.GenericValue;
-import consulo.xml.util.xml.MergedObject;
 
 import org.jspecify.annotations.Nullable;
 import java.util.*;

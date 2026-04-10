@@ -18,13 +18,12 @@ package com.intellij.jam.model.common;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.PsiPackage;
-import consulo.xml.util.xml.GenericValue;
+import consulo.xml.dom.GenericValue;
 
 /**
  * @author peter
  */
-public abstract class ReadOnlyGenericValue<T> implements GenericValue<T>
-{
+public abstract class ReadOnlyGenericValue<T> implements GenericValue<T> {
 
   public static GenericValue<?> NULL = getInstance(null);
   public static <T> GenericValue<T> nullInstance() { return (GenericValue<T>)NULL; }

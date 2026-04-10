@@ -20,8 +20,8 @@ import com.intellij.java.impl.util.xml.converters.values.ClassValueConverter;
 import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
-import consulo.xml.util.xml.ConvertContext;
-import consulo.xml.util.xml.GenericDomValue;
+import consulo.xml.dom.ConvertContext;
+import consulo.xml.dom.GenericDomValue;
 import jakarta.inject.Singleton;
 
 

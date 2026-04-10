@@ -27,7 +27,7 @@ import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.content.scope.ProjectScopes;
-import consulo.xml.util.xml.*;
+import consulo.xml.dom.*;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;

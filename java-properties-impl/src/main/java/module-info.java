@@ -7,7 +7,7 @@ open module consulo.java.properties.impl {
   requires consulo.java.language.impl;
 
   requires com.intellij.properties;
-  requires com.intellij.xml;
+  requires com.intellij.xml.api;
 
   // TODO remove in future
   requires java.desktop;

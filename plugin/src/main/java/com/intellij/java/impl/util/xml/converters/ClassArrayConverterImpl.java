@@ -27,11 +27,10 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
 import consulo.module.Module;
 import consulo.project.Project;
-import consulo.xml.util.xml.ConvertContext;
-import consulo.xml.util.xml.GenericDomValue;
+import consulo.xml.dom.ConvertContext;
+import consulo.xml.dom.GenericDomValue;
 import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
-
 
 import java.util.ArrayList;
 import java.util.List;

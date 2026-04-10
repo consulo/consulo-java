@@ -17,7 +17,7 @@ package com.intellij.jam.view;
 
 import com.intellij.jam.model.common.CommonModelElement;
 import consulo.language.psi.PsiElement;
-import consulo.xml.util.xml.DomElement;
+import consulo.xml.dom.DomElement;
 
 import java.util.Collection;
 
@@ -31,7 +31,6 @@ public abstract class JamDeleteHandler {
 
   public void addPsiElements(final CommonModelElement element, final Collection<PsiElement> result) {
   }
-
 
   public boolean onChildrenDelete(final DomElement domElement) {
     return false;

@@ -21,11 +21,11 @@ import consulo.component.extension.Extensions;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.function.Condition;
-import consulo.xml.util.xml.Converter;
-import consulo.xml.util.xml.GenericDomValue;
-import consulo.xml.util.xml.converters.values.BooleanValueConverter;
+import consulo.xml.dom.Converter;
+import consulo.xml.dom.GenericDomValue;
+import consulo.xml.dom.convert.BooleanValueConverter;
+import consulo.xml.dom.convert.NumberValueConverter;
 import consulo.xml.util.xml.converters.values.CharacterValueConverter;
-import consulo.xml.util.xml.converters.values.NumberValueConverter;
 
 import org.jspecify.annotations.Nullable;
 import java.math.BigDecimal;

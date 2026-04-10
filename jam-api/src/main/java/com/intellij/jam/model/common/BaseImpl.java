@@ -24,11 +24,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
-import consulo.xml.util.xml.DomElement;
-import consulo.xml.util.xml.DomManager;
-import consulo.xml.util.xml.DomTarget;
-import consulo.xml.util.xml.DomUtil;
-
+import consulo.xml.dom.*;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -41,7 +37,7 @@ public abstract class BaseImpl implements CommonDomModelElement {
   }
 
   public PsiElement getIdentifyingPsiElement() {
-    final DomTarget target = DomTarget.getTarget(this);
+    final DomTarget target = DomService.getInstance().getTarget(this);
     return target == null? getXmlElement() : PomService.convertToPsi(target);
   }
 

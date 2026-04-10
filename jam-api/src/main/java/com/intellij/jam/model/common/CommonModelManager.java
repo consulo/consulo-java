@@ -19,8 +19,8 @@ import com.intellij.jam.view.DeleteHandler;
 import com.intellij.jam.view.JamDeleteHandler;
 import com.intellij.jam.view.JamUserResponse;
 import consulo.ide.ServiceManager;
-import consulo.xml.util.xml.DomElement;
 
+import consulo.xml.dom.DomElement;
 import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 

@@ -95,7 +95,7 @@ import consulo.virtualFileSystem.event.VirtualFileEvent;
 import consulo.virtualFileSystem.event.VirtualFileListener;
 import consulo.virtualFileSystem.event.VirtualFileMoveEvent;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import consulo.xml.ide.highlighter.XmlFileType;
+import consulo.xml.language.XmlFileType;
 import consulo.xml.language.psi.XmlDocument;
 import consulo.xml.language.psi.XmlElementFactory;
 import consulo.xml.language.psi.XmlFile;

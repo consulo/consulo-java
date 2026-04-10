@@ -6,7 +6,7 @@ import com.intellij.java.impl.util.xml.ui.PsiTypeControl;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.xml.dom.DomUIControlsProvider;
+import consulo.xml.util.xml.ui.DomUIControlsProvider;
 import consulo.xml.util.xml.ui.DomUIFactory;
 
 /**
