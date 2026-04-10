@@ -1036,7 +1036,7 @@ public class BackendCompilerWrapper
 		final LocalizeValue msg = moduleName != null
       ? CompilerLocalize.statisticsFilesClassesModule(myStatistics.getFilesCount(), myStatistics.getClassesCount(), moduleName)
 			: CompilerLocalize.statisticsFilesClasses(myStatistics.getFilesCount(), myStatistics.getClassesCount());
-		myCompileContext.getProgressIndicator().setText2Value(msg);
+		myCompileContext.getProgressIndicator().setText2(msg);
 		//myCompileContext.getProgressIndicator().setFraction(1.0* myProcessedFilesCount /myTotalFilesToCompile);
 	}
 

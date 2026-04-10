@@ -34,7 +34,6 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.undoRedo.CommandProcessor;
-import consulo.util.lang.StringUtil;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -47,14 +46,13 @@ import static com.intellij.java.impl.codeInsight.daemon.impl.quickfix.CreateClas
  * @author ven
  */
 public class CreateInnerClassFromUsageFix extends CreateClassFromUsageBaseFix implements SyntheticIntentionAction {
-
   public CreateInnerClassFromUsageFix(PsiJavaCodeReferenceElement refElement, CreateClassKind kind) {
     super(kind, refElement);
   }
 
   @Override
   public LocalizeValue getText(String varName) {
-    return JavaQuickFixLocalize.createInnerClassFromUsageText(StringUtil.capitalize(myKind.getDescription()), varName);
+    return JavaQuickFixLocalize.createInnerClassFromUsageText(myKind.getDescription().capitalize(), varName);
   }
 
   @Override

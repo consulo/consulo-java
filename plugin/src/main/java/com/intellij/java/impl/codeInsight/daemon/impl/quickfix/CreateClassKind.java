@@ -44,22 +44,12 @@ public enum CreateClassKind implements ClassKind {
     }
 
     @Override
-    public String getDescription() {
-        return getDescriptionValue().get();
-    }
-
-    @Override
-    public LocalizeValue getDescriptionValue() {
+    public LocalizeValue getDescription() {
         return myKind.subject();
     }
 
     @Override
-    public LocalizeValue getDescriptionAccusativeValue() {
+    public LocalizeValue getDescriptionAccusative() {
         return myKind.object();
-    }
-
-    @Override
-    public String getDescriptionAccusative() {
-        return getDescriptionAccusativeValue().get();
     }
 }

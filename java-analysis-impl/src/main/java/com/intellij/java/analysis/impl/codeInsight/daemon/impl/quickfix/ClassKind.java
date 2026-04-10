@@ -22,15 +22,9 @@ import consulo.localize.LocalizeValue;
  * @since 2014-05-28
  */
 public interface ClassKind {
-    LocalizeValue getDescriptionValue();
+    LocalizeValue getDescription();
 
-    String getDescription();
-
-    default LocalizeValue getDescriptionAccusativeValue() {
-        return getDescriptionValue();
-    }
-
-    default String getDescriptionAccusative() {
+    default LocalizeValue getDescriptionAccusative() {
         return getDescription();
     }
 }

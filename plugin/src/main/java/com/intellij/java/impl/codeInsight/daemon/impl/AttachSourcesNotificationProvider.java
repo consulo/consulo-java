@@ -33,7 +33,7 @@ import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
 import consulo.fileChooser.IdeaFileChooser;
 import consulo.fileEditor.*;
-import consulo.java.impl.JavaBundle;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
 import consulo.localize.LocalizeValue;
@@ -54,15 +54,14 @@ import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListSeparator;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.util.TextWithMnemonic;
-import consulo.util.collection.ContainerUtil;
 import consulo.util.concurrent.AsyncResult;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFilePathUtil;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
-import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
+import org.jspecify.annotations.Nullable;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -115,7 +114,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			return builder;
 		}
 
-		String text = JavaBundle.message("class.file.decompiled.text");
+		String text = JavaLocalize.classFileDecompiledText().get();
 		String classInfo = getClassFileInfo(file);
 		if (classInfo != null)
 		{
@@ -186,10 +185,13 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		}
 		else
 		{
-			builder.withAction(LocalizeValue.localizeTODO(JavaBundle.message("class.file.open.source.action")), (e) -> {
-				OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(myProject).builder(sourceFile).build();
-				FileEditorManager.getInstance(myProject).openTextEditor(descriptor, true);
-			});
+			builder.withAction(
+				JavaLocalize.classFileOpenSourceAction(),
+				(e) -> {
+					OpenFileDescriptor descriptor = OpenFileDescriptorFactory.getInstance(myProject).builder(sourceFile).build();
+					FileEditorManager.getInstance(myProject).openTextEditor(descriptor, true);
+				}
+			);
 		}
 
 		return builder;
@@ -286,6 +288,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		}
 
 		@Override
+		@RequiredUIAccess
 		public AsyncResult<Void> perform(List<LibraryOrderEntry> orderEntriesContainingFile, ComponentEvent<Component> e)
 		{
 			List<Library.ModifiableModel> modelsToCommit = new ArrayList<>();
@@ -359,8 +362,8 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		public AsyncResult<Void> perform(List<LibraryOrderEntry> libraries, ComponentEvent<Component> e)
 		{
 			FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createMultipleJavaPathDescriptor();
-			descriptor.withTitleValue(ProjectLocalize.libraryAttachSourcesAction());
-			descriptor.withDescriptionValue(ProjectLocalize.libraryAttachSourcesDescription());
+			descriptor.withTitle(ProjectLocalize.libraryAttachSourcesAction());
+			descriptor.withDescription(ProjectLocalize.libraryAttachSourcesDescription());
 			Library firstLibrary = libraries.get(0).getLibrary();
 			VirtualFile[] roots = firstLibrary != null ? firstLibrary.getFiles(BinariesOrderRootType.getInstance()) : VirtualFile.EMPTY_ARRAY;
 			VirtualFile[] candidates =
@@ -383,9 +386,9 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			else
 			{
 				librariesToAppendSourcesTo.put(null, null);
-				String title = JavaBundle.message("library.choose.one.to.attach");
-				List<LibraryOrderEntry> entries = ContainerUtil.newArrayList(librariesToAppendSourcesTo.values());
-				JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<LibraryOrderEntry>(title, entries)
+				LocalizeValue title = JavaLocalize.libraryChooseOneToAttach();
+				List<LibraryOrderEntry> entries = new ArrayList<>(librariesToAppendSourcesTo.values());
+				JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<LibraryOrderEntry>(title.get(), entries)
 				{
 					@Override
 					public ListSeparator getSeparatorAbove(LibraryOrderEntry value)

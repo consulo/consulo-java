@@ -34,7 +34,7 @@ public final class ImplementMethodAction extends OverrideImplementMethodAction {
     protected final void update(Presentation presentation, int toImplement, int toOverride) {
         if (toImplement > 0) {
             presentation.setEnabledAndVisible(true);
-            presentation.setTextValue(toImplement == 1 ? IdeLocalize.actionImplementMethod() : IdeLocalize.actionImplementMethods());
+            presentation.setText(toImplement == 1 ? IdeLocalize.actionImplementMethod() : IdeLocalize.actionImplementMethods());
         }
         else {
             presentation.setEnabledAndVisible(false);

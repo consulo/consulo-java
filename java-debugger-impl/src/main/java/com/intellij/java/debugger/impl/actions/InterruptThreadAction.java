@@ -97,7 +97,7 @@ public class InterruptThreadAction extends DebuggerAction {
             }
         }
         Presentation presentation = e.getPresentation();
-        presentation.setTextValue(JavaDebuggerLocalize.actionInterruptThreadText());
+        presentation.setText(JavaDebuggerLocalize.actionInterruptThreadText());
         presentation.setVisible(visible);
         presentation.setEnabled(enabled);
     }

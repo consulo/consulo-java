@@ -38,7 +38,7 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
 
     public BaseGenerateAction(CodeInsightActionHandler handler, LocalizeValue text) {
         myHandler = handler;
-        getTemplatePresentation().setTextValue(text);
+        getTemplatePresentation().setText(text);
     }
 
     @Override
