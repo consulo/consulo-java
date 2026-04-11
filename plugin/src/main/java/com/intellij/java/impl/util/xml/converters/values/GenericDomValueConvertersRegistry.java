@@ -16,22 +16,22 @@
 package com.intellij.java.impl.util.xml.converters.values;
 
 import com.intellij.java.language.psi.PsiType;
-import consulo.component.extension.ExtensionPointName;
-import consulo.component.extension.Extensions;
+import consulo.component.extension.ExtensionPoint;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.function.Condition;
 import consulo.xml.dom.Converter;
 import consulo.xml.dom.GenericDomValue;
 import consulo.xml.dom.convert.BooleanValueConverter;
+import consulo.xml.dom.convert.CharacterValueConverter;
 import consulo.xml.dom.convert.NumberValueConverter;
-import consulo.xml.util.xml.converters.values.CharacterValueConverter;
 
 import org.jspecify.annotations.Nullable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * User: Sergey.Vasiliev
@@ -41,18 +41,16 @@ public class GenericDomValueConvertersRegistry {
   public interface Provider {
     Converter getConverter();
 
-    Condition<Pair<PsiType, GenericDomValue>> getCondition();
+    Predicate<Pair<PsiType, GenericDomValue>> getCondition();
   }
 
-  public void registerFromExtensions(ExtensionPointName<Provider> extensionPointName) {
-    Provider[] providers = Extensions.getExtensions(extensionPointName);
+  public void registerFromExtensions(ExtensionPoint<Provider> providers) {
     for (Provider provider : providers) {
       registerConverter(provider.getConverter(), provider.getCondition());
     }
   }
 
-  private final Map<Condition<Pair<PsiType, GenericDomValue>>, Converter<?>> myConditionConverters =
-      new LinkedHashMap<Condition<Pair<PsiType, GenericDomValue>>, Converter<?>>();
+  private final Map<Predicate<Pair<PsiType, GenericDomValue>>, Converter<?>> myConditionConverters = new LinkedHashMap<>();
 
   public void registerDefaultConverters() {
     registerBooleanConverters();
@@ -103,22 +101,18 @@ public class GenericDomValueConvertersRegistry {
   }
 
   public void registerConverter(Converter<?> provider, final PsiType type) {
-    registerConverter(provider, new Condition<Pair<PsiType, GenericDomValue>>() {
-      public boolean value(Pair<PsiType, GenericDomValue> pair) {
-        return Comparing.equal(pair.getFirst(), type);
-      }
-    });
+    registerConverter(provider, pair -> Comparing.equal(pair.getFirst(), type));
   }
 
-  public void registerConverter(Converter<?> provider, Condition<Pair<PsiType, GenericDomValue>> condition) {
+  public void registerConverter(Converter<?> provider, Predicate<Pair<PsiType, GenericDomValue>> condition) {
     myConditionConverters.put(condition, provider);
   }
 
   @Nullable
   public Converter<?> getConverter(GenericDomValue domValue, @Nullable PsiType type) {
     Pair<PsiType, GenericDomValue> pair = new Pair<PsiType, GenericDomValue>(type, domValue);
-    for (Condition<Pair<PsiType, GenericDomValue>> condition : myConditionConverters.keySet()) {
-      if (condition.value(pair)) {
+    for (Predicate<Pair<PsiType, GenericDomValue>> condition : myConditionConverters.keySet()) {
+      if (condition.test(pair)) {
         return myConditionConverters.get(condition);
       }
     }
@@ -127,11 +121,7 @@ public class GenericDomValueConvertersRegistry {
 
   public void registerConverter(Converter<?> provider, Class type) {
     final String name = type.getCanonicalName();
-    registerConverter(provider, new Condition<Pair<PsiType, GenericDomValue>>() {
-      public boolean value(Pair<PsiType, GenericDomValue> pair) {
-        return pair.first != null && Comparing.equal(name, pair.first.getCanonicalText());
-      }
-    });
+    registerConverter(provider, pair -> pair.first != null && Comparing.equal(name, pair.first.getCanonicalText()));
   }
 
 }
