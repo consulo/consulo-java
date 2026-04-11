@@ -17,13 +17,13 @@ package com.intellij.java.impl.codeInsight.generation.surroundWith;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
+import consulo.html.language.HTMLLanguage;
 import consulo.language.Language;
 import consulo.language.editor.surroundWith.SurroundWithRangeAdjuster;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiWhiteSpace;
-import consulo.xml.lang.html.HTMLLanguage;
-import consulo.xml.lang.xhtml.XHTMLLanguage;
+import consulo.xhtml.language.XHTMLLanguage;
 import consulo.xml.language.XMLLanguage;
 
 /**

@@ -28,6 +28,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
 import consulo.fileEditor.FileEditorManager;
+import consulo.html.language.psi.HtmlTag;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiDirectory;
@@ -45,7 +46,6 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.language.psi.XmlFile;
 import consulo.xml.language.psi.XmlTag;
 import consulo.xml.language.psi.XmlTagValue;
-import consulo.xml.psi.html.HtmlTag;
 import org.jspecify.annotations.Nullable;
 
 @ExtensionImpl
@@ -188,10 +188,9 @@ public class PackageDotHtmlMayBePackageInfoInspection extends BaseInspection {
             }
             PsiElement[] children = rootTag.getChildren();
             for (PsiElement child : children) {
-                if (!(child instanceof HtmlTag)) {
+                if (!(child instanceof HtmlTag htmlTag)) {
                     continue;
                 }
-                HtmlTag htmlTag = (HtmlTag) child;
                 String name = htmlTag.getName();
                 if ("body".equals(name)) {
                     XmlTagValue value = htmlTag.getValue();

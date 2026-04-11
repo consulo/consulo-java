@@ -18,8 +18,12 @@ open module consulo.java {
 
     requires velocity.engine.core;
 
-    requires com.intellij.xml;
+    requires com.intellij.xml.api;
+    requires com.intellij.xml.editor.api;
+    requires com.intellij.xml.html.api;
 
+    // TODO remove in future after we will use xml api
+    requires com.intellij.xml;
 
     // TODO remove in future
     requires consulo.ide.impl;

@@ -20,7 +20,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.content.scope.SearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
-import consulo.xml.ide.highlighter.XHtmlFileType;
+import consulo.xhtml.language.XHtmlFileType;
 import consulo.xml.language.XmlFileType;
 
 @ExtensionImpl
