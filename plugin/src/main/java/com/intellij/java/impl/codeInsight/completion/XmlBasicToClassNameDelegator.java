@@ -21,7 +21,7 @@ import consulo.language.editor.completion.*;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
-import consulo.xml.codeInsight.completion.XmlCompletionContributor;
+import consulo.xml.editor.completion.XmlCompletionUtil;
 import consulo.xml.language.XMLLanguage;
 
 import java.util.function.Consumer;
@@ -58,7 +58,7 @@ public class XmlBasicToClassNameDelegator extends CompletionContributor {
           if (classElement != null) {
             classElement.setAutoCompletionPolicy(AutoCompletionPolicy.NEVER_AUTOCOMPLETE);
           }
-          lookupElement.putUserData(XmlCompletionContributor.WORD_COMPLETION_COMPATIBLE, Boolean.TRUE); //todo think of a less dirty interaction
+          lookupElement.putUserData(XmlCompletionUtil.WORD_COMPLETION_COMPATIBLE, Boolean.TRUE); //todo think of a less dirty interaction
           result.passResult(completionResult);
         }
       });
