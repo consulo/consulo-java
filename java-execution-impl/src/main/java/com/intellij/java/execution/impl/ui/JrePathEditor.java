@@ -18,7 +18,7 @@ package com.intellij.java.execution.impl.ui;
 import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.annotation.DeprecationInfo;
 import consulo.content.bundle.BundleHolder;
-import consulo.ide.setting.ShowSettingsUtil;
+import consulo.content.bundle.SdkModelFactory;
 import consulo.java.execution.localize.JavaExecutionLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.module.ui.awt.SdkComboBox;
@@ -47,7 +47,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor {
    * This constructor can be used in UI forms
    */
   public JrePathEditor() {
-    BundleHolder model = ShowSettingsUtil.getInstance().getSdksModel();
+    BundleHolder model = SdkModelFactory.getInstance().getOrCreateModel();
 
     mySdkComboBox = new SdkComboBox(
       model,
