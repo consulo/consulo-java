@@ -16,6 +16,7 @@
 package com.intellij.java.impl.openapi.roots.libraries;
 
 import com.intellij.java.language.impl.JavaClassFileType;
+import com.intellij.java.language.projectRoots.LibrariesHelper;
 import consulo.annotation.component.ServiceImpl;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
