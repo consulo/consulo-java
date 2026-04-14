@@ -11,6 +11,18 @@ module consulo.java.compiler.impl {
     requires notnull.compiler;
     requires consulo.java.rt.common;
 
+    requires consulo.compiler.api;
+    requires consulo.execution.api;
+    requires consulo.execution.test.api;
+    requires consulo.process.api;
+    requires consulo.ui.ex.api;
+    requires consulo.code.editor.api;
+    requires consulo.language.editor.api;
+    requires consulo.project.ui.api;
+    requires consulo.project.ui.view.api;
+    requires consulo.ide.api;
+    requires consulo.language.editor.refactoring.api;
+
     requires org.apache.thrift;
     requires org.apache.commons.lang3;
     requires org.slf4j;

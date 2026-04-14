@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import consulo.application.ApplicationManager;
 import consulo.undoRedo.CommandProcessor;
-import consulo.ide.ServiceManager;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.language.impl.DebugUtil;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
@@ -110,7 +109,7 @@ public abstract class AbstractReparseTestCase extends PsiTestCase
 					@Override
 					public void run()
 					{
-						BlockSupport blockSupport = ServiceManager.getService(myProject, BlockSupport.class);
+						BlockSupport blockSupport = myProject.getInstance(BlockSupport.class);
 						try
 						{
 							blockSupport.reparseRange(myDummyFile, myInsertOffset - length, myInsertOffset, s);

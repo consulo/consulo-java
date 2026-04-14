@@ -22,7 +22,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.function.Processor;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiInvalidElementAccessException;
 import consulo.language.psi.PsiManager;
@@ -62,7 +61,7 @@ public class JamService {
   }
 
   public static JamService getJamService(Project p) {
-    return ServiceManager.getService(p, JamService.class);
+    return p.getInstance(JamService.class);
   }
 
   public static void processMembers(PsiClass psiClass,

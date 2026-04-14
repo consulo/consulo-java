@@ -8,7 +8,6 @@ import consulo.execution.coverage.BaseCoverageAnnotator;
 import consulo.execution.coverage.CoverageDataManager;
 import consulo.execution.coverage.CoverageSuite;
 import consulo.execution.coverage.CoverageSuitesBundle;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
@@ -46,7 +45,7 @@ public class JavaCoverageAnnotator extends BaseCoverageAnnotator {
     }
 
     public static JavaCoverageAnnotator getInstance(Project project) {
-        return ServiceManager.getService(project, JavaCoverageAnnotator.class);
+        return project.getInstance(JavaCoverageAnnotator.class);
     }
 
     @Nullable

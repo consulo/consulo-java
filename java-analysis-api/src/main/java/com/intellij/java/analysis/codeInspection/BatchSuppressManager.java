@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
 import consulo.language.psi.PsiElement;
@@ -32,7 +32,7 @@ public interface BatchSuppressManager {
   String SUPPRESS_INSPECTIONS_ANNOTATION_NAME = "java.lang.SuppressWarnings";
 
   public static BatchSuppressManager getInstance() {
-    return ServiceManager.getService(BatchSuppressManager.class);
+    return Application.get().getInstance(BatchSuppressManager.class);
   }
 
   @Deprecated

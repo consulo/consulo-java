@@ -8,7 +8,6 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.codeEditor.Editor;
 import consulo.compiler.ModuleCompilerPathsManager;
-import consulo.ide.ServiceManager;
 import consulo.ide.impl.idea.codeInsight.documentation.DockablePopupManager;
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.util.Textifier;
@@ -53,7 +52,7 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
   private static final String BYTECODE_AUTO_UPDATE_ENABLED = "BYTE_CODE_AUTO_UPDATE_ENABLED";
 
   public static ByteCodeViewerManager getInstance(Project project) {
-    return ServiceManager.getService(project, ByteCodeViewerManager.class);
+    return project.getInstance(ByteCodeViewerManager.class);
   }
 
   @Inject

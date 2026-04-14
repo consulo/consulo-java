@@ -5,6 +5,14 @@
 module consulo.java.manifest {
 	requires transitive consulo.java.language.impl;
 
+	requires consulo.language.impl;
+	requires consulo.code.editor.api;
+	requires consulo.color.scheme.api;
+	requires consulo.file.editor.api;
+	requires consulo.language.editor.api;
+	requires consulo.language.editor.ui.api;
+	requires consulo.ui.ex.awt.api;
+
 	// TODO remove in future
 	requires java.desktop;
 

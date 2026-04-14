@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.editor.refactoring.RenameRefactoring;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
@@ -32,7 +31,7 @@ import org.jspecify.annotations.Nullable;
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class JavaRefactoringFactory {
   public static JavaRefactoringFactory getInstance(Project project) {
-    return ServiceManager.getService(project, JavaRefactoringFactory.class);
+    return project.getInstance(JavaRefactoringFactory.class);
   }
 
   public abstract RenameRefactoring createRename(PsiElement element, String newName);

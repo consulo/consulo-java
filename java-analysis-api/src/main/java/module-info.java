@@ -5,6 +5,10 @@
 module consulo.java.analysis.api {
     requires transitive consulo.java.language.api;
 
+    requires consulo.language.editor.api;
+    requires consulo.language.editor.refactoring.api;
+    requires consulo.datacontext.api;
+
     exports com.intellij.java.analysis;
     exports com.intellij.java.analysis.codeInsight.daemon;
     exports com.intellij.java.analysis.codeInsight.guess;

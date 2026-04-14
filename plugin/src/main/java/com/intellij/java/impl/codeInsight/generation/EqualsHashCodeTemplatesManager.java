@@ -24,7 +24,7 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.Couple;
 import consulo.util.lang.StringUtil;
@@ -47,7 +47,7 @@ import java.util.Set;
 @ServiceImpl
 public class EqualsHashCodeTemplatesManager extends TemplatesManager {
   public static EqualsHashCodeTemplatesManager getInstance() {
-    return ServiceManager.getService(EqualsHashCodeTemplatesManager.class);
+    return Application.get().getInstance(EqualsHashCodeTemplatesManager.class);
   }
 
   private static final String DEFAULT_EQUALS = "/com/intellij/java/impl/codeInsight/generation/defaultEquals.vm";

@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiMigration;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiManager;
 import consulo.logging.Logger;
 import consulo.project.Project;
@@ -34,7 +33,7 @@ public class PsiMigrationManager {
   private static final Logger LOG = Logger.getInstance(PsiMigrationManager.class);
 
   public static PsiMigrationManager getInstance(Project project) {
-    return ServiceManager.getService(project, PsiMigrationManager.class);
+    return project.getInstance(PsiMigrationManager.class);
   }
 
   private final Project myProject;

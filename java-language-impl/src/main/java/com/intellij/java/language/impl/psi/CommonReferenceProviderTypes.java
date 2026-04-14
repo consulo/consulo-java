@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.psi.ReferenceProviderType;
 import consulo.project.Project;
 
@@ -36,7 +36,7 @@ public abstract class CommonReferenceProviderTypes {
   }
 
   public static CommonReferenceProviderTypes getInstance() {
-    return ServiceManager.getService(CommonReferenceProviderTypes.class);
+    return Application.get().getInstance(CommonReferenceProviderTypes.class);
   }
 
   public static final ReferenceProviderType PROPERTIES_FILE_KEY_PROVIDER = new ReferenceProviderType("Properties File Key Provider");

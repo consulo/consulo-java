@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.ast.ASTNode;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
@@ -34,7 +33,7 @@ import org.jspecify.annotations.Nullable;
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class JavaPsiImplementationHelper {
   public static JavaPsiImplementationHelper getInstance(Project project) {
-    return ServiceManager.getService(project, JavaPsiImplementationHelper.class);
+    return project.getInstance(JavaPsiImplementationHelper.class);
   }
 
   public abstract PsiClass getOriginalClass(PsiClass psiClass);

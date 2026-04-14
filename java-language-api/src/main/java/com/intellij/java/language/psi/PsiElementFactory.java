@@ -23,7 +23,6 @@ import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
-import consulo.ide.ServiceManager;
 import consulo.language.parser.PsiBuilder;
 import consulo.language.parser.PsiParser;
 import consulo.project.Project;
@@ -53,7 +52,7 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
   }
 
   static PsiElementFactory getInstance(Project project) {
-    return ServiceManager.getService(project, PsiElementFactory.class);
+    return project.getInstance(PsiElementFactory.class);
   }
 
   /**

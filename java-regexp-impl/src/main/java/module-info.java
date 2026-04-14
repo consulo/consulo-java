@@ -6,4 +6,6 @@ module consulo.java.regexp.impl {
   requires consulo.java.language.api;
   requires consulo.java.intelliLang;
   requires com.intellij.regexp;
+  requires consulo.language.editor.api;
+  requires consulo.language.inject.advanced.api;
 }

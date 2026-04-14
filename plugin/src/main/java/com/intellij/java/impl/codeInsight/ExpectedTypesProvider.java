@@ -33,7 +33,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
-import consulo.ide.ServiceManager;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.completion.lookup.CommaTailType;
 import consulo.language.editor.completion.lookup.TailType;
@@ -67,7 +66,7 @@ public class ExpectedTypesProvider {
     private static final Logger LOG = Logger.getInstance(ExpectedTypesProvider.class);
 
     public static ExpectedTypesProvider getInstance(Project project) {
-        return ServiceManager.getService(project, ExpectedTypesProvider.class);
+        return project.getInstance(ExpectedTypesProvider.class);
     }
 
     private static final int MAX_COUNT = 50;

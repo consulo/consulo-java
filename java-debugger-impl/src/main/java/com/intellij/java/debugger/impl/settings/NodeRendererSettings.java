@@ -41,7 +41,7 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.disposer.Disposable;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
@@ -127,7 +127,7 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
     }
 
     public static NodeRendererSettings getInstance() {
-        return ServiceManager.getService(NodeRendererSettings.class);
+        return Application.get().getInstance(NodeRendererSettings.class);
     }
 
     public void setAlternateCollectionViewsEnabled(boolean enabled) {

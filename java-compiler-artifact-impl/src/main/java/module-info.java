@@ -3,8 +3,9 @@
  * @since 2022-12-06
  */
 module consulo.java.compiler.artifact.impl {
-    requires consulo.ide.api;
     requires consulo.java.language.impl;
+    requires consulo.compiler.artifact.api;
+    requires consulo.ui.ex.awt.api;
 
     // TODO remove in future
     requires java.desktop;

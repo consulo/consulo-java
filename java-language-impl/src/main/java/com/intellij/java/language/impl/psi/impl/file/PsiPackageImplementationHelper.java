@@ -17,7 +17,7 @@ package com.intellij.java.language.impl.psi.impl.file;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -40,6 +40,6 @@ public abstract class PsiPackageImplementationHelper {
   public abstract Object[] getDirectoryCachedValueDependencies(PsiJavaPackage cachedValueProvider);
 
   public static PsiPackageImplementationHelper getInstance() {
-    return ServiceManager.getService(PsiPackageImplementationHelper.class);
+    return Application.get().getInstance(PsiPackageImplementationHelper.class);
   }
 }

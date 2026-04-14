@@ -18,7 +18,6 @@ package com.intellij.java.language.codeInsight;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
 import jakarta.inject.Singleton;
@@ -61,7 +60,7 @@ public class ConcurrencyAnnotationsManager {
   }
 
   public static ConcurrencyAnnotationsManager getInstance(Project project) {
-    return ServiceManager.getService(project, ConcurrencyAnnotationsManager.class);
+    return project.getInstance(ConcurrencyAnnotationsManager.class);
   }
 
   public List<String> getImmutableAnnotations() {

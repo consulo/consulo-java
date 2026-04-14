@@ -22,7 +22,7 @@ import consulo.annotation.DeprecationInfo;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.ast.IElementType;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.LocalQuickFixAndIntentionActionOnPsiElement;
@@ -65,7 +65,7 @@ public abstract class QuickFixFactory {
     }
 
     public static QuickFixFactory getInstance() {
-        return ServiceManager.getService(QuickFixFactory.class);
+        return Application.get().getInstance(QuickFixFactory.class);
     }
 
     public abstract ModifierFixBuilder createModifierFixBuilder(PsiModifierList modifierList);

@@ -26,7 +26,7 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.editor.inspection.SuppressQuickFix;
 import consulo.language.editor.intention.SuppressIntentionAction;
 import consulo.language.editor.rawHighlight.HighlightDisplayKey;
@@ -37,7 +37,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class SuppressManager {
   public static SuppressManager getInstance() {
-    return ServiceManager.getService(SuppressManager.class);
+    return Application.get().getInstance(SuppressManager.class);
   }
 
   public static boolean isSuppressedInspectionName(PsiLiteralExpression expression) {

@@ -19,7 +19,7 @@ package com.intellij.java.impl.util.xml.converters.values;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.xml.dom.Converter;
 import consulo.xml.dom.CustomReferenceConverter;
 
@@ -27,6 +27,6 @@ import consulo.xml.dom.CustomReferenceConverter;
 public abstract class ClassArrayConverter extends Converter<PsiClass> implements CustomReferenceConverter {
 
    public static ClassArrayConverter getClassArrayConverter() {
-    return ServiceManager.getService(ClassArrayConverter.class);
+    return Application.get().getInstance(ClassArrayConverter.class);
   }
 }

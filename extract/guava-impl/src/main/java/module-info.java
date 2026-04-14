@@ -4,6 +4,10 @@
  */
 module consulo.java.guava.impl {
     requires consulo.java.language.impl;
+    requires consulo.language.impl;
+    requires consulo.code.editor.api;
+    requires consulo.language.editor.api;
+    requires consulo.language.editor.ui.api;
     // TODO remove in future
     requires java.desktop;
 

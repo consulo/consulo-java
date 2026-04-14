@@ -16,7 +16,7 @@
 package org.jetbrains.java.generate.inspection;
 
 import com.intellij.java.language.psi.PsiClass;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.editor.inspection.LocalQuickFix;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -50,7 +50,7 @@ public class GenerateToStringQuickFix implements LocalQuickFix {
     if (clazz == null) {
       return; // no class to fix
     }
-    GenerateToStringActionHandler handler = ServiceManager.getService(GenerateToStringActionHandler.class);
+    GenerateToStringActionHandler handler = Application.get().getInstance(GenerateToStringActionHandler.class);
     handler.executeActionQuickFix(project, clazz);
   }
 }

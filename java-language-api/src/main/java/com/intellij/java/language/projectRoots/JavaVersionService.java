@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.psi.PsiElement;
 
 
@@ -29,7 +29,7 @@ import consulo.language.psi.PsiElement;
 @ServiceAPI(ComponentScope.APPLICATION)
 public class JavaVersionService {
     public static JavaVersionService getInstance() {
-        return ServiceManager.getService(JavaVersionService.class);
+        return Application.get().getInstance(JavaVersionService.class);
     }
 
     @RequiredReadAction

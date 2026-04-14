@@ -16,7 +16,6 @@ import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.application.util.RecursionGuard;
 import consulo.application.util.RecursionManager;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.AnyPsiChangeListener;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
@@ -43,7 +42,7 @@ import java.util.function.Function;
 @ServiceImpl
 public class JavaResolveCache {
   private static final Logger LOG = Logger.getInstance(JavaResolveCache.class);
-  private static final NotNullLazyKey<JavaResolveCache, Project> INSTANCE_KEY = ServiceManager.createLazyKey(JavaResolveCache.class);
+  private static final NotNullLazyKey<JavaResolveCache, Project> INSTANCE_KEY = NotNullLazyKey.create(JavaResolveCache.class.getName(), p -> p.getInstance(JavaResolveCache.class));
 
   public static JavaResolveCache getInstance(Project project) {
     return INSTANCE_KEY.getValue(project);

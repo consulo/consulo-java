@@ -24,7 +24,7 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import jakarta.inject.Singleton;
 
 import java.io.IOException;
@@ -40,7 +40,7 @@ import java.io.IOException;
 @ServiceImpl
 public class GetterTemplatesManager extends TemplatesManager {
   public static GetterTemplatesManager getInstance() {
-    return ServiceManager.getService(GetterTemplatesManager.class);
+    return Application.get().getInstance(GetterTemplatesManager.class);
   }
 
   private static final String DEFAULT = "defaultGetter.vm";

@@ -7,7 +7,7 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.logging.Logger;
 import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
 import consulo.util.xml.serializer.XmlSerializationException;
@@ -33,7 +33,7 @@ public class JavaSmartKeysSettings implements PersistentStateComponent<Element> 
   private static final Logger LOGGER = Logger.getInstance(JavaSmartKeysSettings.class);
 
   public static JavaSmartKeysSettings getInstance() {
-    return ServiceManager.getService(JavaSmartKeysSettings.class);
+    return Application.get().getInstance(JavaSmartKeysSettings.class);
   }
 
   public boolean JAVADOC_GENERATE_CLOSING_TAG = true;

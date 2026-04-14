@@ -5,7 +5,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.disposer.Disposable;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.AnyPsiChangeListener;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
@@ -25,7 +24,7 @@ public final class ControlFlowFactory implements Disposable {
   // psiElements hold weakly, controlFlows softly
   private final Map<PsiElement, ConcurrentList<ControlFlowContext>> cachedFlows = Maps.newConcurrentWeakKeySoftValueHashMap();
 
-  private static final NotNullLazyKey<ControlFlowFactory, Project> INSTANCE_KEY = ServiceManager.createLazyKey(ControlFlowFactory.class);
+  private static final NotNullLazyKey<ControlFlowFactory, Project> INSTANCE_KEY = NotNullLazyKey.create(ControlFlowFactory.class.getName(), p -> p.getInstance(ControlFlowFactory.class));
 
   public static ControlFlowFactory getInstance(Project project) {
     return INSTANCE_KEY.getValue(project);

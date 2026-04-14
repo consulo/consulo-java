@@ -23,7 +23,7 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import jakarta.inject.Singleton;
 
 /**
@@ -42,7 +42,7 @@ import jakarta.inject.Singleton;
 @ServiceImpl
 public class GenerateToStringContext implements PersistentStateComponent<Config> {
   public static GenerateToStringContext getInstance() {
-    return ServiceManager.getService(GenerateToStringContext.class);
+    return Application.get().getInstance(GenerateToStringContext.class);
   }
 
   private Config config = new Config();

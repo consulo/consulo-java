@@ -7,7 +7,7 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
@@ -28,7 +28,7 @@ import jakarta.inject.Singleton;
 @ServiceImpl
 public class JavaCodeInsightSettings implements PersistentStateComponent<JavaCodeInsightSettings> {
   public static JavaCodeInsightSettings getInstance() {
-    return ServiceManager.getService(JavaCodeInsightSettings.class);
+    return Application.get().getInstance(JavaCodeInsightSettings.class);
   }
 
   public boolean USE_INSTANCEOF_ON_EQUALS_PARAMETER = false;

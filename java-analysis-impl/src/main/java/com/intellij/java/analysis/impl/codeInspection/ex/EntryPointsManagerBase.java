@@ -28,7 +28,6 @@ import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.disposer.Disposer;
-import consulo.ide.ServiceManager;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.impl.inspection.reference.RefElementImpl;
 import consulo.language.editor.impl.inspection.reference.SmartRefElementPointerImpl;
@@ -94,7 +93,7 @@ public abstract class EntryPointsManagerBase extends EntryPointsManager implemen
   }
 
   public static EntryPointsManagerBase getInstance(Project project) {
-    return (EntryPointsManagerBase) ServiceManager.getService(project, EntryPointsManager.class);
+    return (EntryPointsManagerBase) project.getInstance(EntryPointsManager.class);
   }
 
   @Override

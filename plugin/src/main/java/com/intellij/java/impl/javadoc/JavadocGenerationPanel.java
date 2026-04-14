@@ -71,10 +71,10 @@ final class JavadocGenerationPanel extends JPanel {
 
     //noinspection UseOfObsoleteCollectionType
     Hashtable<Integer, JLabel> labelTable = new Hashtable<Integer, JLabel>();
-    labelTable.put(new Integer(1), new JLabel(PsiKeyword.PUBLIC));
-    labelTable.put(new Integer(2), new JLabel(PsiKeyword.PROTECTED));
-    labelTable.put(new Integer(3), new JLabel(PsiKeyword.PACKAGE));
-    labelTable.put(new Integer(4), new JLabel(PsiKeyword.PRIVATE));
+    labelTable.put(Integer.valueOf(1), new JLabel(PsiKeyword.PUBLIC));
+    labelTable.put(Integer.valueOf(2), new JLabel(PsiKeyword.PROTECTED));
+    labelTable.put(Integer.valueOf(3), new JLabel(PsiKeyword.PACKAGE));
+    labelTable.put(Integer.valueOf(4), new JLabel(PsiKeyword.PRIVATE));
 
     myScopeSlider.setMaximum(4);
     myScopeSlider.setMinimum(1);

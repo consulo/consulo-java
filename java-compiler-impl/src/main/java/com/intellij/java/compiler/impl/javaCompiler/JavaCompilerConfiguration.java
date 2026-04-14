@@ -11,7 +11,6 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
@@ -39,7 +38,7 @@ import java.util.*;
 @ServiceImpl
 public class JavaCompilerConfiguration implements PersistentStateComponent<Element> {
     public static JavaCompilerConfiguration getInstance(Project project) {
-        return ServiceManager.getService(project, JavaCompilerConfiguration.class);
+        return project.getInstance(JavaCompilerConfiguration.class);
     }
 
     public static final String ANNOTATION_PROCESSING = "annotation-processing";

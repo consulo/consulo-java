@@ -11,6 +11,15 @@ module consulo.java.coverage.impl {
     requires consulo.java.debugger.api;
     requires consulo.java.debugger.impl;
 
+    requires consulo.ide.impl;
+    requires consulo.execution.coverage.api;
+    requires consulo.compiler.api;
+    requires consulo.execution.api;
+    requires consulo.process.api;
+    requires consulo.project.ui.api;
+    requires consulo.ui.ex.api;
+    requires consulo.language.editor.refactoring.api;
+
     requires org.jacoco.core;
 
     // TODO remove in future

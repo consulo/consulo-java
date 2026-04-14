@@ -19,7 +19,7 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.psi.scope.GlobalSearchScope;
 
 import org.jspecify.annotations.Nullable;
@@ -30,7 +30,7 @@ import org.jspecify.annotations.Nullable;
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class JavaClassSupers {
   public static JavaClassSupers getInstance() {
-    return ServiceManager.getService(JavaClassSupers.class);
+    return Application.get().getInstance(JavaClassSupers.class);
   }
 
   /**

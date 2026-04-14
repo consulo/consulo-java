@@ -33,7 +33,6 @@ import consulo.application.Application;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.component.extension.ExtensionPoint;
 import consulo.dataContext.DataContext;
-import consulo.ide.ServiceManager;
 import consulo.internal.com.sun.jdi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.PsiCodeFragment;
@@ -596,7 +595,7 @@ public abstract class DebuggerUtils {
     }
 
     public static DebuggerUtils getInstance() {
-        return ServiceManager.getService(DebuggerUtils.class);
+        return Application.get().getInstance(DebuggerUtils.class);
     }
 
     public abstract PsiExpression substituteThis(

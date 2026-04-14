@@ -24,7 +24,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.util.IncorrectOperationException;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 
 import org.jspecify.annotations.Nullable;
 import java.util.Map;
@@ -32,7 +32,7 @@ import java.util.Map;
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class JavaDirectoryService {
   public static JavaDirectoryService getInstance() {
-    return ServiceManager.getService(JavaDirectoryService.class);
+    return Application.get().getInstance(JavaDirectoryService.class);
   }
 
   /**

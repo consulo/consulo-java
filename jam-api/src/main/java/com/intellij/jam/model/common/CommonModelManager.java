@@ -18,7 +18,7 @@ package com.intellij.jam.model.common;
 import com.intellij.jam.view.DeleteHandler;
 import com.intellij.jam.view.JamDeleteHandler;
 import com.intellij.jam.view.JamUserResponse;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 
 import consulo.xml.dom.DomElement;
 import org.jspecify.annotations.Nullable;
@@ -29,7 +29,7 @@ import java.util.Collection;
  */
 public abstract class CommonModelManager {
   public static CommonModelManager getInstance() {
-    return ServiceManager.getService(CommonModelManager.class);
+    return Application.get().getInstance(CommonModelManager.class);
   }
 
   public abstract void deleteModelElement(CommonModelElement element, JamUserResponse response);

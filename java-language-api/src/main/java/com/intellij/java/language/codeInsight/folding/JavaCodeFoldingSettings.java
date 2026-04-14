@@ -18,12 +18,12 @@ package com.intellij.java.language.codeInsight.folding;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class JavaCodeFoldingSettings {
   public static JavaCodeFoldingSettings getInstance() {
-    return ServiceManager.getService(JavaCodeFoldingSettings.class);
+    return Application.get().getInstance(JavaCodeFoldingSettings.class);
   }
 
   public abstract boolean isCollapseImports();

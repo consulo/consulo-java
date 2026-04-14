@@ -2011,7 +2011,7 @@ public class TypeConversionUtil {
           new Caster() {
             @Override
             public Object cast(Object operand) {
-              return new Float((Double) operand);
+              return (float) (double) (Double) operand;
             }
           },
           new Caster() {

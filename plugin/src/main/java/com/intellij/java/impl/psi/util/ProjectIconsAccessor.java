@@ -24,7 +24,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.disposer.Disposable;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.*;
 import consulo.language.psi.path.FileReference;
 import consulo.project.Project;
@@ -56,7 +55,7 @@ public class ProjectIconsAccessor implements Disposable
 {
 	public static ProjectIconsAccessor getInstance(Project project)
 	{
-		return ServiceManager.getService(project, ProjectIconsAccessor.class);
+		return project.getInstance(ProjectIconsAccessor.class);
 	}
 
 	private static final int ICON_MAX_ICON_DIMENSION = Image.DEFAULT_ICON_SIZE;

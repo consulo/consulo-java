@@ -19,7 +19,6 @@ import consulo.application.util.CachedValuesManager;
 import consulo.application.util.ConcurrentFactoryMap;
 import consulo.application.util.registry.Registry;
 import consulo.component.util.ModificationTracker;
-import consulo.ide.ServiceManager;
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.language.file.light.LightVirtualFile;
 import consulo.language.psi.*;
@@ -73,7 +72,7 @@ public class ProjectBytecodeAnalysis {
   private final NullableNotNullManager myNullabilityManager;
 
   public static ProjectBytecodeAnalysis getInstance(Project project) {
-    return ServiceManager.getService(project, ProjectBytecodeAnalysis.class);
+    return project.getInstance(ProjectBytecodeAnalysis.class);
   }
 
   @Inject

@@ -22,7 +22,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.application.util.RecursionGuard;
 import consulo.application.util.RecursionManager;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import org.jspecify.annotations.Nullable;
@@ -43,7 +42,7 @@ public interface PsiResolveHelper {
     }
 
     public static PsiResolveHelper getInstance(Project project) {
-      return ServiceManager.getService(project, PsiResolveHelper.class);
+      return project.getInstance(PsiResolveHelper.class);
     }
   }
 

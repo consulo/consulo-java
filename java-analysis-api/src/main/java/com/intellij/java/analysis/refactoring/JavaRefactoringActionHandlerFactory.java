@@ -18,7 +18,7 @@ package com.intellij.java.analysis.refactoring;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.dataContext.DataContext;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiElement;
@@ -29,7 +29,7 @@ import consulo.language.editor.refactoring.action.RefactoringActionHandler;
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class JavaRefactoringActionHandlerFactory {
   public static JavaRefactoringActionHandlerFactory getInstance() {
-    return ServiceManager.getService(JavaRefactoringActionHandlerFactory.class);
+    return Application.get().getInstance(JavaRefactoringActionHandlerFactory.class);
   }
 
   /**

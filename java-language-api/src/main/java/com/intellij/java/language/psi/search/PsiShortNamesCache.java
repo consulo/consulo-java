@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.stub.IdFilter;
@@ -46,7 +45,7 @@ public abstract class PsiShortNamesCache {
      */
 
     public static PsiShortNamesCache getInstance(Project project) {
-        return ServiceManager.getService(project, PsiShortNamesCache.class);
+        return project.getInstance(PsiShortNamesCache.class);
     }
 
     /**

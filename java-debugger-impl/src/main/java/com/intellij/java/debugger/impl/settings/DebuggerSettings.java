@@ -24,7 +24,7 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.disposer.Disposable;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.logging.Logger;
 import consulo.proxy.EventDispatcher;
 import consulo.util.lang.StringUtil;
@@ -121,7 +121,7 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
 	}
 
 	public static DebuggerSettings getInstance() {
-		return ServiceManager.getService(DebuggerSettings.class);
+		return Application.get().getInstance(DebuggerSettings.class);
 	}
 
 	public void setSteppingFilters(ClassFilter[] steppingFilters) {

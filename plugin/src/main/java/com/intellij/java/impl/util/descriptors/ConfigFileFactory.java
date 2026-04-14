@@ -18,7 +18,7 @@ package com.intellij.java.impl.util.descriptors;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 
@@ -31,7 +31,7 @@ import org.jspecify.annotations.Nullable;
 public abstract class ConfigFileFactory {
 
   public static ConfigFileFactory getInstance() {
-    return ServiceManager.getService(ConfigFileFactory.class);
+    return Application.get().getInstance(ConfigFileFactory.class);
   }
 
 

@@ -3,8 +3,6 @@
  * @since 2022-12-02
  */
 open module consulo.java {
-    requires consulo.ide.api;
-
     requires transitive consulo.java.analysis.impl;
     requires transitive consulo.java.compiler.impl;
     requires transitive consulo.java.debugger.api;

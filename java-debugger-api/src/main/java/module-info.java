@@ -3,10 +3,13 @@
  * @since 03/12/2022
  */
 module consulo.java.debugger.api {
-	requires transitive consulo.ide.api;
 	requires transitive consulo.java.execution.api;
 	requires transitive consulo.java.language.api;
 
+	requires consulo.code.editor.api;
+	requires consulo.execution.api;
+	requires consulo.file.editor.api;
+	requires consulo.process.api;
 	requires consulo.internal.jdi;
 
 	exports com.intellij.java.debugger;

@@ -23,7 +23,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.collection.ArrayUtil;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import org.jetbrains.annotations.Contract;
 
@@ -40,7 +39,7 @@ import static consulo.util.lang.ObjectUtil.notNull;
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class PsiNameHelper {
   public static PsiNameHelper getInstance(Project project) {
-    return ServiceManager.getService(project, PsiNameHelper.class);
+    return project.getInstance(PsiNameHelper.class);
   }
 
   /**

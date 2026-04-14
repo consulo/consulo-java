@@ -21,7 +21,7 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.configuration.RunConfigurationExtensionsManager;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.logging.Logger;
 import jakarta.inject.Singleton;
 
@@ -41,7 +41,7 @@ public class JavaRunConfigurationExtensionManager extends RunConfigurationExtens
   }
 
   public static JavaRunConfigurationExtensionManager getInstance() {
-    return ServiceManager.getService(JavaRunConfigurationExtensionManager.class);
+    return Application.get().getInstance(JavaRunConfigurationExtensionManager.class);
   }
 
   public static void checkConfigurationIsValid(RunConfigurationBase configuration) throws RuntimeConfigurationException {

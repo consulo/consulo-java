@@ -21,7 +21,7 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 import jakarta.inject.Singleton;
 
@@ -40,7 +40,7 @@ public class ThreadsViewSettings implements PersistentStateComponent<ThreadsView
   public boolean SHOW_ARGUMENTS_TYPES = false;
 
   public static ThreadsViewSettings getInstance() {
-    return ServiceManager.getService(ThreadsViewSettings.class);
+    return Application.get().getInstance(ThreadsViewSettings.class);
   }
 
   @Override

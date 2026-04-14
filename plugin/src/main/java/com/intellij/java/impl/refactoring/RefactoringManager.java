@@ -21,7 +21,6 @@ import consulo.annotation.component.ServiceImpl;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import com.intellij.java.impl.refactoring.migration.MigrationManager;
 
@@ -32,7 +31,7 @@ public class RefactoringManager {
   private final MigrationManager myMigrateManager;
 
   public static RefactoringManager getInstance(Project project) {
-    return ServiceManager.getService(project, RefactoringManager.class);
+    return project.getInstance(RefactoringManager.class);
   }
 
   @Inject

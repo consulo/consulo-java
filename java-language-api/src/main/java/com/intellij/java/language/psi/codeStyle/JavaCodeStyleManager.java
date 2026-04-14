@@ -18,7 +18,6 @@ package com.intellij.java.language.psi.codeStyle;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.editor.refactoring.rename.SuggestedNameInfo;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -37,7 +36,7 @@ import java.util.Collection;
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class JavaCodeStyleManager {
   public static JavaCodeStyleManager getInstance(Project project) {
-    return ServiceManager.getService(project, JavaCodeStyleManager.class);
+    return project.getInstance(JavaCodeStyleManager.class);
   }
 
   public static final int DO_NOT_ADD_IMPORTS = 0x1000;

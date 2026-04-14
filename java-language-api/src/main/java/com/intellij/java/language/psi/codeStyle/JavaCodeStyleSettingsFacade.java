@@ -17,7 +17,6 @@ package com.intellij.java.language.psi.codeStyle;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 
 /**
@@ -41,6 +40,6 @@ public abstract class JavaCodeStyleSettingsFacade {
 
 
   public static JavaCodeStyleSettingsFacade getInstance(Project project) {
-    return ServiceManager.getService(project, JavaCodeStyleSettingsFacade.class);
+    return project.getInstance(JavaCodeStyleSettingsFacade.class);
   }
 }

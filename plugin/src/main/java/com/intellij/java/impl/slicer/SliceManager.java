@@ -28,7 +28,6 @@ import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
-import consulo.ide.ServiceManager;
 import consulo.language.editor.refactoring.util.RefactoringDescriptionLocation;
 import consulo.language.editor.ui.scope.AnalysisUIOptions;
 import consulo.language.psi.ElementDescriptionUtil;
@@ -69,7 +68,7 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
   }
 
   public static SliceManager getInstance(Project project) {
-    return ServiceManager.getService(project, SliceManager.class);
+    return project.getInstance(SliceManager.class);
   }
 
   @Inject

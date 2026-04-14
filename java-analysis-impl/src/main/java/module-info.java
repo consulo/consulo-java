@@ -3,7 +3,6 @@
  * @since 03/12/2022
  */
 open module consulo.java.analysis.impl {
-  requires transitive consulo.ide.api;
   requires transitive consulo.java.analysis.api;
   requires transitive consulo.java.language.impl;
   requires transitive consulo.java.indexing.impl;
@@ -11,6 +10,11 @@ open module consulo.java.analysis.impl {
   requires com.intellij.xml.api;
 
   requires consulo.language.editor.impl;
+  requires consulo.language.impl;
+  requires consulo.ui.ex.awt.api;
+  requires consulo.find.api;
+  requires consulo.usage.api;
+  requires consulo.language.editor.refactoring.api;
 
   requires one.util.streamex;
 

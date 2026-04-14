@@ -23,7 +23,7 @@ package com.intellij.java.analysis.codeInspection.reference;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefEntity;
 import consulo.language.editor.inspection.reference.RefManager;
@@ -71,7 +71,7 @@ public abstract class RefJavaUtil {
   }
 
   public static RefJavaUtil getInstance() {
-    return ServiceManager.getService(RefJavaUtil.class);
+    return Application.get().getInstance(RefJavaUtil.class);
   }
 
   public abstract boolean isCallToSuperMethod(PsiExpression expression, PsiMethod method);

@@ -20,7 +20,7 @@ import com.intellij.java.impl.util.xml.DomJavaUtil;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
@@ -41,7 +41,7 @@ import org.jspecify.annotations.Nullable;
 public abstract class ClassValueConverter extends Converter<PsiClass> implements CustomReferenceConverter {
 
   public static ClassValueConverter getClassValueConverter() {
-    return ServiceManager.getService(ClassValueConverter.class);
+    return Application.get().getInstance(ClassValueConverter.class);
   }
 
   public PsiClass fromString(@Nullable String s, ConvertContext context) {

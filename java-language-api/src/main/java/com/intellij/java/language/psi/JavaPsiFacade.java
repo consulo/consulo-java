@@ -18,7 +18,6 @@ package com.intellij.java.language.psi;
 import consulo.annotation.DeprecationInfo;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
@@ -33,7 +32,7 @@ import java.util.Collection;
  */
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class JavaPsiFacade {
-  private static final NotNullLazyKey<JavaPsiFacade, Project> INSTANCE_KEY = ServiceManager.createLazyKey(JavaPsiFacade.class);
+  private static final NotNullLazyKey<JavaPsiFacade, Project> INSTANCE_KEY = NotNullLazyKey.create(JavaPsiFacade.class.getName(), p -> p.getInstance(JavaPsiFacade.class));
 
   public static JavaPsiFacade getInstance(Project project) {
     return INSTANCE_KEY.getValue(project);

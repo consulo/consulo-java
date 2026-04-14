@@ -22,7 +22,7 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.util.xml.serializer.XmlSerializerUtil;
 import jakarta.inject.Singleton;
 
@@ -118,7 +118,7 @@ public class JavaRefactoringSettings implements PersistentStateComponent<JavaRef
   public boolean RENAME_OVERLOADS = true;
 
   public static JavaRefactoringSettings getInstance() {
-    return ServiceManager.getService(JavaRefactoringSettings.class);
+    return Application.get().getInstance(JavaRefactoringSettings.class);
   }
 
   public boolean isToRenameInheritors() {

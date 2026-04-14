@@ -20,7 +20,7 @@
 
   <parent>
     <groupId>consulo</groupId>
-    <artifactId>arch.ide-api-provided</artifactId>
+    <artifactId>arch.bind.java</artifactId>
     <version>3-SNAPSHOT</version>
     <relativePath/>
   </parent>
@@ -61,6 +61,18 @@
 
   <dependencies>
     <dependency>
+      <groupId>consulo</groupId>
+      <artifactId>consulo-language-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>consulo</groupId>
+      <artifactId>consulo-application-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>consulo.java-java.language.api</artifactId>
       <version>${project.version}</version>
@@ -69,6 +81,30 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>consulo.java-java.execution.api</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>consulo</groupId>
+      <artifactId>consulo-code-editor-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>consulo</groupId>
+      <artifactId>consulo-execution-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>consulo</groupId>
+      <artifactId>consulo-file-editor-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>consulo</groupId>
+      <artifactId>consulo-process-api</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>consulo.internal</groupId>

@@ -25,7 +25,6 @@ import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
-import consulo.ide.ServiceManager;
 import consulo.language.editor.CodeInsightSettings;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
@@ -59,7 +58,7 @@ public class JavaProjectCodeInsightSettings implements PersistentStateComponent<
   public List<String> excludedNames = new ArrayList<>();
 
   public static JavaProjectCodeInsightSettings getSettings(Project project) {
-    return ServiceManager.getService(project, JavaProjectCodeInsightSettings.class);
+    return project.getInstance(JavaProjectCodeInsightSettings.class);
   }
 
   public boolean isExcluded(String name) {

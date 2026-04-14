@@ -3,7 +3,16 @@
  * @since 02/12/2022
  */
 open module consulo.java.language.api {
-  requires transitive consulo.ide.api;
+  requires transitive consulo.language.api;
+  requires transitive consulo.application.api;
+
+  requires consulo.language.editor.api;
+  requires consulo.execution.api;
+  requires consulo.compiler.api;
+  requires consulo.process.api;
+  requires consulo.file.template.api;
+  requires consulo.language.editor.refactoring.api;
+  requires consulo.language.impl;
 
   requires kava.beans;
 

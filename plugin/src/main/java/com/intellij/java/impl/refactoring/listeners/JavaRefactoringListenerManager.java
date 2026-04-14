@@ -18,7 +18,6 @@ package com.intellij.java.impl.refactoring.listeners;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.project.Project;
-import consulo.ide.ServiceManager;
 
 /**
  * @author yole
@@ -38,6 +37,6 @@ public abstract class JavaRefactoringListenerManager {
   public abstract void removeMoveMembersListener(MoveMemberListener moveMembersListener);
 
   public static JavaRefactoringListenerManager getInstance(Project project) {
-    return ServiceManager.getService(project, JavaRefactoringListenerManager.class);
+    return project.getInstance(JavaRefactoringListenerManager.class);
   }
 }

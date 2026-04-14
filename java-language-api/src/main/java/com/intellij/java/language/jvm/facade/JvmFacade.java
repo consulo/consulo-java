@@ -20,7 +20,6 @@ import static consulo.util.collection.ContainerUtil.getFirstItem;
 import java.util.List;
 
 
-import consulo.ide.ServiceManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 
@@ -33,7 +32,7 @@ public interface JvmFacade
 
 	static JvmFacade getInstance(Project project)
 	{
-		return ServiceManager.getService(project, JvmFacade.class);
+		return project.getInstance(JvmFacade.class);
 	}
 
 	/**

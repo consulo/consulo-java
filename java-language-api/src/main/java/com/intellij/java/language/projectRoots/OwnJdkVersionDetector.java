@@ -6,7 +6,7 @@ package com.intellij.java.language.projectRoots;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.application.util.JavaVersion;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.platform.CpuArchitecture;
 import org.jspecify.annotations.Nullable;
 
@@ -19,7 +19,7 @@ public abstract class OwnJdkVersionDetector {
     }
 
     public static OwnJdkVersionDetector getInstance() {
-        return ServiceManager.getService(OwnJdkVersionDetector.class);
+        return Application.get().getInstance(OwnJdkVersionDetector.class);
     }
 
     @Nullable

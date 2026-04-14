@@ -18,7 +18,6 @@ package com.intellij.java.language.util;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.editor.ui.TreeFileChooser;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -35,7 +34,7 @@ import java.util.function.Predicate;
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class TreeClassChooserFactory {
   public static TreeClassChooserFactory getInstance(Project project) {
-    return ServiceManager.getService(project, TreeClassChooserFactory.class);
+    return project.getInstance(TreeClassChooserFactory.class);
   }
 
   public abstract TreeClassChooser createWithInnerClassesScopeChooser(String title, GlobalSearchScope scope, final ClassFilter classFilter, @Nullable PsiClass initialClass);

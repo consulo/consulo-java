@@ -6,6 +6,11 @@ module consulo.java.execution.api {
 	requires transitive consulo.java.language.api;
 
 	requires consulo.util.nodep;
+	requires consulo.execution.api;
+	requires consulo.code.editor.api;
+	requires consulo.color.scheme.api;
+	requires consulo.datacontext.api;
+	requires consulo.ui.ex.awt.api;
 
 	exports com.intellij.java.execution;
 	exports com.intellij.java.execution.configurations;

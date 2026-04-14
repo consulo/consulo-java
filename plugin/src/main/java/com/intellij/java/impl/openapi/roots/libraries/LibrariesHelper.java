@@ -17,7 +17,7 @@ package com.intellij.java.impl.openapi.roots.libraries;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.content.library.Library;
 import consulo.virtualFileSystem.VirtualFile;
 
@@ -30,7 +30,7 @@ import java.util.List;
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class LibrariesHelper {
   public static LibrariesHelper getInstance() {
-    return ServiceManager.getService(LibrariesHelper.class);
+    return Application.get().getInstance(LibrariesHelper.class);
   }
 
   public abstract boolean isClassAvailableInLibrary(Library library, String fqn);

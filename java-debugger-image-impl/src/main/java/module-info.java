@@ -8,6 +8,10 @@ module consulo.java.debugger.image.impl {
   requires consulo.internal.jdi;
   requires consulo.java.rt.common;
 
+  requires consulo.ide.impl;
+  requires consulo.execution.debug.api;
+  requires consulo.ui.ex.awt.api;
+
   // TODO remove it in future
   requires java.desktop;
 }

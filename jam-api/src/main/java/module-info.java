@@ -8,6 +8,12 @@ module consulo.java.jam.api {
     requires transitive com.intellij.xml.api;
     requires transitive com.intellij.xml.dom.api;
 
+    requires consulo.language.impl;
+    requires consulo.ui.ex.awt.api;
+    requires consulo.ui.ex.api;
+    requires consulo.language.editor.api;
+    requires consulo.language.editor.refactoring.api;
+
     // TODO remove in future
     requires java.desktop;
 

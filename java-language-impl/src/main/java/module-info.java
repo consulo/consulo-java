@@ -8,6 +8,20 @@ open module consulo.java.language.impl {
 
     requires consulo.language.impl;
 
+    requires consulo.build.ui.api;
+    requires consulo.code.editor.api;
+    requires consulo.color.scheme.api;
+    requires consulo.compiler.api;
+    requires consulo.container.api;
+    requires consulo.external.system.api;
+    requires consulo.file.template.api;
+    requires consulo.index.io;
+    requires consulo.language.editor.api;
+    requires consulo.ui.ex.api;
+    requires consulo.ui.ex.awt.api;
+    requires consulo.undo.redo.api;
+    requires consulo.language.editor.refactoring.api;
+
     requires one.util.streamex;
     requires transitive asm.tree;
     requires transitive asm.commons;

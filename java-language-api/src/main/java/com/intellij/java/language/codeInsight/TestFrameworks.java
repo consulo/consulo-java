@@ -21,7 +21,7 @@ import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.application.util.CachedValueProvider;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.psi.PsiModificationTracker;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 
@@ -36,7 +36,7 @@ import java.util.Set;
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class TestFrameworks {
   public static TestFrameworks getInstance() {
-    return ServiceManager.getService(TestFrameworks.class);
+    return Application.get().getInstance(TestFrameworks.class);
   }
 
   public abstract boolean isTestClass(PsiClass psiClass);

@@ -17,7 +17,6 @@ package com.intellij.java.language.psi.javadoc;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 
@@ -33,7 +32,7 @@ public interface JavadocManager {
     }
 
     public static JavadocManager getInstance(Project project) {
-      return ServiceManager.getService(project, JavadocManager.class);
+      return project.getInstance(JavadocManager.class);
     }
   }
   

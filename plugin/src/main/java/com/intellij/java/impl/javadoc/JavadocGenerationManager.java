@@ -25,7 +25,6 @@ import consulo.component.persist.StoragePathMacros;
 import consulo.execution.executor.DefaultRunExecutor;
 import consulo.execution.runner.ExecutionEnvironmentBuilder;
 import consulo.execution.ui.awt.ExecutionErrorDialog;
-import consulo.ide.ServiceManager;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.process.ExecutionException;
@@ -44,7 +43,7 @@ public final class JavadocGenerationManager implements PersistentStateComponent<
   private final Project myProject;
 
   public static JavadocGenerationManager getInstance(Project project) {
-    return ServiceManager.getService(project, JavadocGenerationManager.class);
+    return project.getInstance(JavadocGenerationManager.class);
   }
 
   @Inject

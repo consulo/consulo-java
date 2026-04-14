@@ -19,7 +19,6 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.util.dataholder.NotNullLazyKey;
 import org.jetbrains.annotations.Contract;
@@ -38,7 +37,7 @@ import org.jspecify.annotations.Nullable;
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class InferredAnnotationsManager {
   private static final NotNullLazyKey<InferredAnnotationsManager, Project> INSTANCE_KEY =
-    ServiceManager.createLazyKey(InferredAnnotationsManager.class);
+    NotNullLazyKey.create(InferredAnnotationsManager.class.getName(), p -> p.getInstance(InferredAnnotationsManager.class));
 
   public static InferredAnnotationsManager getInstance(Project project) {
     return INSTANCE_KEY.getValue(project);

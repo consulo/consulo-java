@@ -22,7 +22,6 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import jakarta.inject.Singleton;
 
@@ -38,7 +37,7 @@ public class SliceToolwindowSettings implements PersistentStateComponent<SliceTo
   private boolean isAutoScroll;
 
   public static SliceToolwindowSettings getInstance(Project project) {
-    return ServiceManager.getService(project, SliceToolwindowSettings.class);
+    return project.getInstance(SliceToolwindowSettings.class);
   }
 
   public boolean isPreview() {

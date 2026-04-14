@@ -19,7 +19,6 @@ package com.intellij.java.debugger.impl.ui;
 import com.intellij.java.debugger.impl.DebuggerSession;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 
 
@@ -29,7 +28,7 @@ import consulo.project.Project;
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class HotSwapUI {
   public static HotSwapUI getInstance(Project project) {
-    return ServiceManager.getService(project, HotSwapUI.class);
+    return project.getInstance(HotSwapUI.class);
   }
 
   public abstract void reloadChangedClasses(DebuggerSession session, boolean compileBeforeHotswap);

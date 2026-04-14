@@ -19,7 +19,7 @@ package consulo.java.jam.util;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.language.psi.PsiElement;
 
 /**
@@ -29,7 +29,7 @@ import consulo.language.psi.PsiElement;
 @ServiceAPI(ComponentScope.APPLICATION)
 public interface JamCommonService {
   static JamCommonService getInstance() {
-    return ServiceManager.getService(JamCommonService.class);
+    return Application.get().getInstance(JamCommonService.class);
   }
 
   @RequiredReadAction

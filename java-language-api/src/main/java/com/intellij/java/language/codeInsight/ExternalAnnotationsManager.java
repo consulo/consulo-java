@@ -20,7 +20,6 @@ import com.intellij.java.language.psi.PsiModifierListOwner;
 import com.intellij.java.language.psi.PsiNameValuePair;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.ide.ServiceManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
@@ -66,7 +65,7 @@ public abstract class ExternalAnnotationsManager {
   }
 
   private static final NotNullLazyKey<ExternalAnnotationsManager, Project> INSTANCE_KEY =
-    ServiceManager.createLazyKey(ExternalAnnotationsManager.class);
+    NotNullLazyKey.create(ExternalAnnotationsManager.class.getName(), p -> p.getInstance(ExternalAnnotationsManager.class));
 
   public static ExternalAnnotationsManager getInstance(Project project) {
     return INSTANCE_KEY.getValue(project);

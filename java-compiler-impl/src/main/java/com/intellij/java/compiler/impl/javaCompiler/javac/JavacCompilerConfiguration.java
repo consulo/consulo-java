@@ -22,7 +22,6 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.project.macro.ProjectPathMacroManager;
 import consulo.util.xml.serializer.XmlSerializerUtil;
@@ -40,7 +39,7 @@ import jakarta.inject.Singleton;
 @ServiceImpl
 public class JavacCompilerConfiguration implements PersistentStateComponent<JpsJavaCompilerOptions> {
   public static JpsJavaCompilerOptions getInstance(Project project) {
-    final JavacCompilerConfiguration service = ServiceManager.getService(project, JavacCompilerConfiguration.class);
+    final JavacCompilerConfiguration service = project.getInstance(JavacCompilerConfiguration.class);
     return service.mySettings;
   }
 

@@ -24,7 +24,7 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import jakarta.inject.Singleton;
 
 import java.io.IOException;
@@ -50,7 +50,7 @@ public class ToStringTemplatesManager extends TemplatesManager {
   private static final String DEFAULT_GUAVA_18 = "DefaultGuava18.vm";
 
   public static TemplatesManager getInstance() {
-    return ServiceManager.getService(ToStringTemplatesManager.class);
+    return Application.get().getInstance(ToStringTemplatesManager.class);
   }
 
   @Override

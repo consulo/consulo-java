@@ -22,7 +22,7 @@ import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.ide.ServiceManager;
+import consulo.application.Application;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
@@ -45,7 +45,7 @@ public class ViewsGeneralSettings implements PersistentStateComponent<Element> {
   public boolean AUTOSCROLL_TO_NEW_LOCALS = true;
 
   public static ViewsGeneralSettings getInstance() {
-    return ServiceManager.getService(ViewsGeneralSettings.class);
+    return Application.get().getInstance(ViewsGeneralSettings.class);
   }
 
   public void loadState(Element element) {

@@ -21,7 +21,6 @@ import com.intellij.java.language.psi.PsiType;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.document.util.TextRange;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import consulo.util.collection.MultiMap;
 
@@ -30,7 +29,7 @@ import java.util.List;
 @ServiceAPI(ComponentScope.PROJECT)
 public abstract class GuessManager {
   public static GuessManager getInstance(Project project) {
-    return ServiceManager.getService(project, GuessManager.class);
+    return project.getInstance(GuessManager.class);
   }
 
   public abstract PsiType[] guessContainerElementType(PsiExpression containerExpr, TextRange rangeToIgnore);

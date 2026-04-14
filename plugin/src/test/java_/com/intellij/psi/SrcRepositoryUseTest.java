@@ -26,7 +26,6 @@ import com.intellij.testFramework.PsiTestUtil;
 import consulo.application.ApplicationManager;
 import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
-import consulo.ide.ServiceManager;
 import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.editor.refactoring.rename.RenameProcessor;
@@ -659,7 +658,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
     TextRange classRange = aClass.getTextRange();
     String text = aClass.getText();
 
-    BlockSupport blockSupport = ServiceManager.getService(myProject, BlockSupport.class);
+    BlockSupport blockSupport = myProject.getInstance(BlockSupport.class);
     PsiFile psiFile = aClass.getContainingFile();
     blockSupport.reparseRange(psiFile, classRange.getStartOffset(), classRange.getEndOffset(), "");
     LOG.assertTrue(!aClass.isValid());

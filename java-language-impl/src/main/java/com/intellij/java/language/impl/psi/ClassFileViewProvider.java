@@ -17,7 +17,6 @@ package com.intellij.java.language.impl.psi;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.compiled.ClsFileImpl;
-import consulo.ide.ServiceManager;
 import consulo.internal.org.objectweb.asm.ClassReader;
 import consulo.internal.org.objectweb.asm.ClassVisitor;
 import consulo.internal.org.objectweb.asm.Opcodes;
@@ -54,7 +53,7 @@ public class ClassFileViewProvider extends SingleRootFileViewProvider {
 
   @Override
   protected PsiFile createFile(Project project, VirtualFile file, FileType fileType) {
-    FileIndexFacade fileIndex = ServiceManager.getService(project, FileIndexFacade.class);
+    FileIndexFacade fileIndex = project.getInstance(FileIndexFacade.class);
     if (!fileIndex.isInLibraryClasses(file) && fileIndex.isInSource(file) || fileIndex.isExcludedFile(file)) {
       return new PsiBinaryFileImpl(getManager(), this);
     }

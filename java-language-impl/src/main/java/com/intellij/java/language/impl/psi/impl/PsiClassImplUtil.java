@@ -36,7 +36,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.application.progress.ProgressIndicatorProvider;
 import consulo.application.util.*;
 import consulo.content.scope.SearchScope;
-import consulo.ide.ServiceManager;
 import consulo.language.content.FileIndexFacade;
 import consulo.language.impl.psi.ResolveScopeManager;
 import consulo.language.psi.*;
@@ -1180,7 +1179,7 @@ public class PsiClassImplUtil {
             return compareClassSeqNumber(aClass, (PsiClass) another);
         }
 
-        final FileIndexFacade fileIndex = ServiceManager.getService(file1.getProject(), FileIndexFacade.class);
+        final FileIndexFacade fileIndex = file1.getProject().getInstance(FileIndexFacade.class);
         final VirtualFile vfile1 = file1.getViewProvider().getVirtualFile();
         final VirtualFile vfile2 = file2.getViewProvider().getVirtualFile();
         boolean lib1 = fileIndex.isInLibraryClasses(vfile1);

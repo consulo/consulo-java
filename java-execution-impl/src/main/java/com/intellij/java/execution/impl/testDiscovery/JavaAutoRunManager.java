@@ -27,7 +27,6 @@ import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.execution.test.autotest.AbstractAutoTestManager;
 import consulo.execution.test.autotest.AutoTestWatcher;
-import consulo.ide.ServiceManager;
 import consulo.project.Project;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -39,7 +38,7 @@ import jakarta.inject.Singleton;
 @ServiceImpl
 public class JavaAutoRunManager extends AbstractAutoTestManager {
   public static JavaAutoRunManager getInstance(Project project) {
-    return ServiceManager.getService(project, JavaAutoRunManager.class);
+    return project.getInstance(JavaAutoRunManager.class);
   }
 
   @Inject
