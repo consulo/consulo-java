@@ -5,6 +5,11 @@
 open module consulo.java.intelliLang {
     // TODO drop in future
     requires consulo.ide.impl;
+    requires consulo.ide.api;
+    requires consulo.language.inject.advanced.api;
+    requires consulo.language.editor.refactoring.api;
+    requires consulo.compiler.api;
+    requires consulo.ui.ex.api;
 
     requires consulo.java.language.impl;
     requires consulo.java.compiler.impl;

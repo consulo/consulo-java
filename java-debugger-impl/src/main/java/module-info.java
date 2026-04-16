@@ -9,6 +9,14 @@ open module consulo.java.debugger.impl {
     requires consulo.java.analysis.impl;
     requires consulo.java.compiler.api;
     requires consulo.java.rt.common;
+    requires consulo.ide.api;
+    requires consulo.execution.debug.api;
+    requires consulo.language.editor.refactoring.api;
+    requires consulo.language.inject.advanced.api;
+    requires consulo.ui.ex.api;
+    requires consulo.compiler.api;
+    requires consulo.language.editor.ui.api;
+    requires consulo.external.system.api;
 
     // TODO remove in future
     requires java.desktop;

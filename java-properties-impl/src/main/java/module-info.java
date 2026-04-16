@@ -5,6 +5,11 @@
 open module consulo.java.properties.impl {
   requires consulo.java.analysis.impl;
   requires consulo.java.language.impl;
+  requires consulo.ide.api;
+  requires consulo.language.editor.refactoring.api;
+  requires consulo.language.impl;
+  requires consulo.ui.ex.api;
+  requires consulo.file.template.api;
 
   requires com.intellij.properties;
   requires com.intellij.xml.api;

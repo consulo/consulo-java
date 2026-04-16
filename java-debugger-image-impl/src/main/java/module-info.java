@@ -9,6 +9,8 @@ module consulo.java.debugger.image.impl {
   requires consulo.java.rt.common;
 
   requires consulo.ide.impl;
+  requires consulo.ide.api;
+  requires consulo.ui.api;
   requires consulo.execution.debug.api;
   requires consulo.ui.ex.awt.api;
 
