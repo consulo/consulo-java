@@ -16,7 +16,6 @@ import java.util.Properties;
 import consulo.fileTemplate.impl.internal.CustomFileTemplate;
 import com.intellij.java.language.impl.codeInsight.template.JavaTemplateUtil;
 import consulo.module.content.ModuleRootManager;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;

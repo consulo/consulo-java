@@ -40,7 +40,6 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.codeEditor.Editor;
 import consulo.project.Project;
 import consulo.util.lang.Pair;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.io.CharsetToolkit;
 import consulo.language.psi.PsiFile;

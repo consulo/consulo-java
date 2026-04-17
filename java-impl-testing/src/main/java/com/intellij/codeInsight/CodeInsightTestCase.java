@@ -61,9 +61,7 @@ import consulo.module.content.layer.ContentEntry;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.module.content.ModuleRootManager;
 import consulo.util.dataholder.Key;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiDocumentManager;
@@ -188,7 +186,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 		}
 		final VirtualFile vFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(tempFile);
 		assert vFile != null;
-		consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(vFile, text);
+		VirtualFileUtil.saveText(vFile, text);
 
 		final VirtualFile vdir = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(dir);
 
@@ -418,7 +416,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	private EditorInfo copyContent(final VirtualFile from, final VirtualFile to, final List<OutputStream> streamsToClose) throws IOException
 	{
 		byte[] content = from.getFileType().isBinary() ? from.contentsToByteArray() : null;
-		final String fileText = from.getFileType().isBinary() ? null : StringUtil.convertLineSeparators(consulo.ide.impl.idea.openapi.vfs.VfsUtil.loadText(from));
+		final String fileText = from.getFileType().isBinary() ? null : StringUtil.convertLineSeparators(VirtualFileUtil.loadText(from));
 
 		EditorInfo editorInfo = fileText != null ? new EditorInfo(fileText) : null;
 		String newFileText = fileText != null ? editorInfo.getNewFileText() : null;
@@ -472,7 +470,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 	{
 		if(newFileText != null)
 		{
-			consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(newVFile, newFileText);
+			VirtualFileUtil.saveText(newVFile, newFileText);
 		}
 		else
 		{
@@ -603,7 +601,7 @@ public abstract class CodeInsightTestCase extends PsiTestCase
 				String ft = null;
 				try
 				{
-					ft = VfsUtil.loadText(vFile);
+					ft = VirtualFileUtil.loadText(vFile);
 				}
 				catch(IOException e)
 				{

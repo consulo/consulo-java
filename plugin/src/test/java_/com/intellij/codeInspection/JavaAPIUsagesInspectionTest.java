@@ -35,6 +35,7 @@ import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
 import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.InspectionTestCase;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 public abstract class JavaAPIUsagesInspectionTest extends InspectionTestCase {
   @Override
@@ -94,7 +95,7 @@ public abstract class JavaAPIUsagesInspectionTest extends InspectionTestCase {
     };
     VirtualFile srcFile = StandardFileSystems.jar().findFileByPath("c:/program files/java/jdk1.6.0_12/src.zip!/");
     assert srcFile != null;
-    VfsUtilCore.iterateChildrenRecursively(srcFile, VirtualFileFilter.ALL, contentIterator);
+    VirtualFileUtil.iterateChildrenRecursively(srcFile, VirtualFileFilter.ALL, contentIterator);
   }
 /*
   @Override

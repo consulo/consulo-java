@@ -28,7 +28,6 @@ import com.intellij.openapi.roots.CompilerModuleExtension;
 import com.intellij.openapi.roots.CompilerProjectExtension;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ModuleRootModificationUtil;
-import com.intellij.openapi.vfs.VfsUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiFile;
@@ -128,7 +127,7 @@ public class CompilerTester {
 
   public void touch(VirtualFile file) throws IOException {
     file.setBinaryContent(file.contentsToByteArray(), -1, file.getTimeStamp() + 1);
-    File ioFile = VfsUtil.virtualToIoFile(file);
+    File ioFile = VirtualFileUtil.virtualToIoFile(file);
     assert ioFile.setLastModified(ioFile.lastModified() - 100000);
     file.refresh(false, false);
   }
@@ -139,7 +138,7 @@ public class CompilerTester {
       public void run() {
         try {
           final VirtualFile virtualFile = file.getVirtualFile();
-          VfsUtil.saveText(ObjectUtils.assertNotNull(virtualFile), text);
+          VirtualFileUtil.saveText(ObjectUtils.assertNotNull(virtualFile), text);
         }
         catch (IOException e) {
           throw new RuntimeException(e);
@@ -206,7 +205,7 @@ public class CompilerTester {
           if (myExternalMake) {
             getProject().save();
             CompilerTestUtil.saveApplicationSettings();
-            File ioFile = VfsUtil.virtualToIoFile(myModule.getModuleFile());
+            File ioFile = VirtualFileUtil.virtualToIoFile(myModule.getModuleFile());
             if (!ioFile.exists()) {
               getProject().save();
               assert ioFile.exists() : "File does not exist: " + ioFile.getPath();

@@ -17,7 +17,7 @@ package com.intellij.refactoring;
 
 import com.intellij.JavaTestUtil;
 import consulo.document.FileDocumentManager;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;

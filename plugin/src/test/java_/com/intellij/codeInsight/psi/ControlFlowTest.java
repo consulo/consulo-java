@@ -1,7 +1,7 @@
 package com.intellij.codeInsight.psi;
 
 import com.intellij.java.language.impl.psi.controlFlow.*;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;

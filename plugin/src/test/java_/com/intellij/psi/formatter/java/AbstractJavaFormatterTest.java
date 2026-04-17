@@ -35,7 +35,7 @@ import consulo.undoRedo.CommandProcessor;
 import consulo.document.Document;
 import consulo.document.impl.DocumentImpl;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;

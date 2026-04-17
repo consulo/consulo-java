@@ -26,9 +26,7 @@ import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
 import consulo.content.OrderRootType;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.jdom.JDOMUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.psi.*;
 import consulo.language.impl.internal.psi.PsiManagerImpl;
@@ -98,7 +96,7 @@ public abstract class PsiTestCase extends ModuleTestCase
 			}
 
 			final VirtualFile vFile = vDir.createChildData(vDir, fileName);
-			VfsUtil.saveText(vFile, text);
+			VirtualFileUtil.saveText(vFile, text);
 			Assert.assertNotNull(vFile);
 			final PsiFile file = myPsiManager.findFile(vFile);
 			Assert.assertNotNull(file);
@@ -116,7 +114,7 @@ public abstract class PsiTestCase extends ModuleTestCase
 		final VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(filePath.replace(File.separatorChar, '/'));
 		Assert.assertNotNull("file " + filePath + " not found", vFile);
 
-		String fileText = VfsUtil.loadText(vFile);
+		String fileText = VirtualFileUtil.loadText(vFile);
 		fileText = StringUtil.convertLineSeparators(fileText);
 
 		int offset = fileText.indexOf(marker);

@@ -34,7 +34,6 @@ import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.content.bundle.Sdk;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.language.LangBundle;
 import consulo.language.ast.ASTNode;

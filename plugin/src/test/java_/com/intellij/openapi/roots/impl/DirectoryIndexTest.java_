@@ -448,11 +448,11 @@ public class DirectoryIndexTest extends IdeaTestCase {
       public void run() {
         ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
         rootModel.getContentEntries()[0]
-          .addExcludeFolder(VfsUtilCore.pathToUrl(FileUtil.toSystemIndependentName(f.getParentFile().getParent())));
+          .addExcludeFolder(VirtualFileUtil.pathToUrl(FileUtil.toSystemIndependentName(f.getParentFile().getParent())));
         rootModel.commit();
 
         rootModel = ModuleRootManager.getInstance(myModule2).getModifiableModel();
-        rootModel.addContentEntry(VfsUtilCore.pathToUrl(FileUtil.toSystemIndependentName(f.getPath())));
+        rootModel.addContentEntry(VirtualFileUtil.pathToUrl(FileUtil.toSystemIndependentName(f.getPath())));
         rootModel.commit();
 
         assertTrue(f.getPath(), f.exists() || f.mkdirs());

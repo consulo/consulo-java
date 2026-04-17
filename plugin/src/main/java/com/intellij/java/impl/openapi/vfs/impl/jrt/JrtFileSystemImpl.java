@@ -5,9 +5,10 @@ import com.intellij.java.language.vfs.jrt.JrtFileSystem;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.Application;
 import consulo.application.ApplicationManager;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
+import consulo.platform.Platform;
 import consulo.util.collection.Maps;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.NewVirtualFile;
@@ -38,7 +39,8 @@ public class JrtFileSystemImpl extends BaseArchiveFileSystem implements JrtFileS
   @Override
   public String normalize(String path) {
     int p = path.indexOf(SEPARATOR);
-    return p > 0 ? FileUtil.normalize(path.substring(0, p)) + path.substring(p) : super.normalize(path);
+    boolean isWindows = Platform.current().os().isWindows();
+    return p > 0 ? FileUtil.normalize(path.substring(0, p), isWindows) + path.substring(p) : super.normalize(path);
   }
 
   @Override

@@ -25,7 +25,6 @@ import consulo.document.event.DocumentEvent;
 import consulo.document.event.DocumentListener;
 import consulo.codeEditor.event.EditorEventMulticaster;
 import consulo.document.FileDocumentManager;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.impl.psi.PsiFileImpl;
 import consulo.language.impl.ast.FileElement;
@@ -38,6 +37,7 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import consulo.ide.impl.idea.util.FileContentUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -271,7 +271,7 @@ public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
 
   public void testReplaceFile() throws IOException {
     VirtualFile vfile = myRoot.createChildData(this, "X.java");
-    VfsUtil.saveText(vfile, "public class X { public int X; }");
+    VirtualFileUtil.saveText(vfile, "public class X { public int X; }");
 
     PsiClass aClass = myJavaFacade.findClass("X", GlobalSearchScope.allScope(getProject()));
     assertNotNull(aClass);
@@ -299,7 +299,7 @@ public abstract class SmartPsiElementPointersTest extends CodeInsightTestCase {
 
   public void testCreatePointerDoesNotLoadPsiTree() throws IOException {
     VirtualFile vfile = myRoot.createChildData(this, "X.java");
-    VfsUtil.saveText(vfile, "public class X { public int X; }");
+    VirtualFileUtil.saveText(vfile, "public class X { public int X; }");
 
     PsiClass aClass = myJavaFacade.findClass("X", GlobalSearchScope.allScope(getProject()));
     assertNotNull(aClass);

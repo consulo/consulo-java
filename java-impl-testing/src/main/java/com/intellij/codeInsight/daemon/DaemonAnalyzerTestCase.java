@@ -54,7 +54,6 @@ import consulo.module.content.ModuleRootManager;
 import consulo.project.startup.StartupManager;
 import consulo.util.lang.Pair;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.*;
 import consulo.language.editor.inspection.scheme.InspectionProfileManager;
 import consulo.language.editor.inspection.scheme.InspectionProjectProfileManager;
@@ -541,7 +540,7 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 				File dir;
 				if(files.length > 0)
 				{
-					dir = VfsUtilCore.virtualToIoFile(files[0]);
+					dir = VirtualFileUtil.virtualToIoFile(files[0]);
 				}
 				else
 				{
@@ -554,7 +553,7 @@ public abstract class DaemonAnalyzerTestCase extends CodeInsightTestCase
 				FileUtil.createIfDoesntExist(file);
 				VirtualFile vFile = LocalFileSystem.getInstance().refreshAndFindFileByPath(file.getCanonicalPath().replace(File.separatorChar, '/'));
 				Assert.assertNotNull(vFile);
-				consulo.ide.impl.idea.openapi.vfs.VfsUtil.saveText(vFile, text);
+				VirtualFileUtil.saveText(vFile, text);
 				PsiJavaFile psiFile = (PsiJavaFile) myPsiManager.findFile(vFile);
 				Assert.assertNotNull(psiFile);
 				PsiClass psiClass = psiFile.getClasses()[0];
