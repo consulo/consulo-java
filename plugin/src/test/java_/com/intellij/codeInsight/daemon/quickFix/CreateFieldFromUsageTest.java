@@ -3,10 +3,10 @@ package com.intellij.codeInsight.daemon.quickFix;
 import com.intellij.java.language.JavaLanguage;
 import consulo.application.Result;
 import consulo.language.editor.WriteCommandAction;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.codeStyle.CommonCodeStyleSettings;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 /**
  * @author ven
@@ -41,7 +41,7 @@ public abstract class CreateFieldFromUsageTest extends LightQuickFixTestCase{
       @Override
       protected void run(Result result) throws Exception {
         VirtualFile foo = getSourceRoot().createChildDirectory(this, "foo").createChildData(this, "Foo.java");
-        VfsUtil.saveText(foo, "package foo; public class Foo { public void put(Object key, Object value) {} }");
+        VirtualFileUtil.saveText(foo, "package foo; public class Foo { public void put(Object key, Object value) {} }");
       }
     }.execute();
 

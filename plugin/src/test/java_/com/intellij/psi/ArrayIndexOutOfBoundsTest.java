@@ -23,7 +23,6 @@ import consulo.language.ast.ASTNode;
 import consulo.application.ApplicationManager;
 import consulo.undoRedo.CommandProcessor;
 import consulo.document.FileDocumentManager;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.editor.refactoring.rename.RenameProcessor;
@@ -31,6 +30,8 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import consulo.logging.Logger;
+import consulo.util.io.FileUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -81,8 +82,10 @@ public abstract class ArrayIndexOutOfBoundsTest extends PsiTestCase {
       @Override
       public void run() {
         try {
-          FileUtil.copyDir(new File(JavaTestUtil.getJavaTestDataPath() + "/psi/arrayIndexOutOfBounds/src"),
-                           VfsUtilCore.virtualToIoFile(myProjectRoot));
+          FileUtil.copyDir(
+            new File(JavaTestUtil.getJavaTestDataPath() + "/psi/arrayIndexOutOfBounds/src"),
+            VirtualFileUtil.virtualToIoFile(myProjectRoot)
+          );
         }
         catch (IOException e) {
           LOG.error(e);

@@ -14,9 +14,8 @@ import consulo.document.FileDocumentManager;
 import consulo.module.content.layer.ContentEntry;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.module.content.ModuleRootManager;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -25,6 +24,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import consulo.java.impl.module.extension.JavaModuleExtensionImpl;
 import consulo.java.impl.module.extension.JavaMutableModuleExtensionImpl;
 import consulo.roots.ContentFolderScopes;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 /**
  * @author max
@@ -55,7 +55,7 @@ public abstract class SCR14423Test extends PsiTestCase {
 
           myPackDir = mySrcDir1.createChildDirectory(null, "p");
           VirtualFile file1 = myPackDir.createChildData(null, "A.java");
-          VfsUtil.saveText(file1, "package p; public class A{ public void foo(); }");
+          VirtualFileUtil.saveText(file1, "package p; public class A{ public void foo(); }");
 
           PsiTestUtil.addContentRoot(myModule, myPrjDir1);
           PsiTestUtil.addSourceRoot(myModule, mySrcDir1);
@@ -122,7 +122,7 @@ public abstract class SCR14423Test extends PsiTestCase {
         FileDocumentManager.getInstance().saveAllDocuments();
         PsiClass psiClass = myJavaFacade.findClass("p.A");
         VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
-        File ioFile = VfsUtil.virtualToIoFile(vFile);
+        File ioFile = VirtualFileUtil.virtualToIoFile(vFile);
         ioFile.setLastModified(5);
 
         LocalFileSystem.getInstance().refresh(false);

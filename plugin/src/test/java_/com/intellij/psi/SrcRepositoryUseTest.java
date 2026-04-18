@@ -26,8 +26,6 @@ import com.intellij.testFramework.PsiTestUtil;
 import consulo.application.ApplicationManager;
 import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.language.editor.refactoring.rename.RenameProcessor;
 import consulo.language.impl.ast.CompositeElement;
 import consulo.language.impl.internal.psi.diff.BlockSupport;
@@ -41,6 +39,7 @@ import consulo.module.content.layer.ModifiableRootModel;
 import consulo.roots.ContentFolderScopes;
 import consulo.roots.impl.ProductionContentFolderTypeProvider;
 import consulo.util.dataholder.Key;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileFilter;
 
@@ -733,7 +732,7 @@ public abstract class SrcRepositoryUseTest extends PsiTestCase{
                 contentEntry.removeFolder(sourceFolder);
               }
               VirtualFile contentRoot = contentEntry.getFile();
-              if (contentRoot != null && VfsUtilCore.isAncestor(contentRoot, newSourceRoot, false)) {
+              if (contentRoot != null && VirtualFileUtil.isAncestor(contentRoot, newSourceRoot, false)) {
                 contentEntry.addFolder(newSourceRoot, ProductionContentFolderTypeProvider.getInstance());
                 contentToChangeFound = true;
               }

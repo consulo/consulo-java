@@ -25,12 +25,13 @@ import com.intellij.openapi.module.ModuleManager;
 import com.intellij.openapi.roots.*;
 import com.intellij.openapi.roots.ex.ProjectRootManagerEx;
 import com.intellij.openapi.util.EmptyRunnable;
-import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.vfs.*;
 import com.intellij.testFramework.IdeaTestCase;
 import com.intellij.testFramework.PlatformTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.util.containers.ContainerUtil;
+import consulo.util.io.FileUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -448,11 +449,11 @@ public class DirectoryIndexTest extends IdeaTestCase {
       public void run() {
         ModifiableRootModel rootModel = ModuleRootManager.getInstance(myModule).getModifiableModel();
         rootModel.getContentEntries()[0]
-          .addExcludeFolder(VfsUtilCore.pathToUrl(FileUtil.toSystemIndependentName(f.getParentFile().getParent())));
+          .addExcludeFolder(VirtualFileUtil.pathToUrl(FileUtil.toSystemIndependentName(f.getParentFile().getParent())));
         rootModel.commit();
 
         rootModel = ModuleRootManager.getInstance(myModule2).getModifiableModel();
-        rootModel.addContentEntry(VfsUtilCore.pathToUrl(FileUtil.toSystemIndependentName(f.getPath())));
+        rootModel.addContentEntry(VirtualFileUtil.pathToUrl(FileUtil.toSystemIndependentName(f.getPath())));
         rootModel.commit();
 
         assertTrue(f.getPath(), f.exists() || f.mkdirs());

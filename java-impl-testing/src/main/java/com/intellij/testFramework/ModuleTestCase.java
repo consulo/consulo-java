@@ -27,8 +27,8 @@ import consulo.application.WriteAction;
 import consulo.language.editor.WriteCommandAction;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.ref.Ref;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.ide.impl.idea.util.Consumer;
@@ -132,7 +132,7 @@ public abstract class ModuleTestCase extends IdeaTestCase
 	{
 		final Ref<Module> result = Ref.create();
 
-		/*VfsUtilCore.visitChildrenRecursively(rootDir, new VirtualFileVisitor()
+		/*VirtualFileUtil.visitChildrenRecursively(rootDir, new VirtualFileVisitor()
 		{
 			@Override
 			public boolean visitFile(@NotNull VirtualFile file)

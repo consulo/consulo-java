@@ -27,8 +27,7 @@ import java.util.jar.JarOutputStream;
 
 import com.intellij.JavaTestUtil;
 import com.intellij.java.impl.codeInsight.javadoc.JavaDocExternalFilter;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtilRt;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import com.intellij.testFramework.LightCodeInsightTestCase;
 
@@ -43,13 +42,13 @@ public abstract class RefConvertorsTest extends LightCodeInsightTestCase {
   @Override
   protected void setUp() throws Exception {
     super.setUp();
-    String tempDirectory = FileUtilRt.getTempDirectory();
+    String tempDirectory = FileUtil.getTempDirectory();
     myExtractedImagesDir = new File(tempDirectory, "quick_doc_dir");
   }
 
   @Override
   protected void tearDown() throws Exception {
-    FileUtilRt.delete(myExtractedImagesDir);
+    FileUtil.delete(myExtractedImagesDir);
     super.tearDown();
   }
 

@@ -9,14 +9,14 @@ import consulo.application.ApplicationManager;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 /**
  * @author max
@@ -53,7 +53,7 @@ public abstract class SCR20733Test extends PsiTestCase
 
 					myPackDir = mySrcDir1.createChildDirectory(null, "p");
 					VirtualFile file1 = myPackDir.createChildData(null, "A.java");
-					VfsUtil.saveText(file1, "package p; public class A{ public void foo(); }");
+					VirtualFileUtil.saveText(file1, "package p; public class A{ public void foo(); }");
 
 					PsiTestUtil.addContentRoot(myModule, myPrjDir1);
 					PsiTestUtil.addSourceRoot(myModule, mySrcDir1);

@@ -26,8 +26,7 @@ import com.intellij.codeInsight.CodeInsightTestCase;
 import consulo.ide.impl.idea.ide.todo.TodoConfiguration;
 import consulo.ide.impl.idea.ide.todo.TodoIndexPatternProvider;
 import consulo.document.FileDocumentManager;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
@@ -43,6 +42,7 @@ import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.PsiTestUtil;
 import consulo.util.collection.ArrayUtil;
 import consulo.language.psi.stub.FileBasedIndex;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 public abstract class IdCacheTest extends CodeInsightTestCase{
 
@@ -85,7 +85,7 @@ public abstract class IdCacheTest extends CodeInsightTestCase{
 
   public void testUpdateCache2() throws Exception {
     VirtualFile child = myRootDir.findChild("1.java");
-    VfsUtil.saveText(child, "xxx");
+    VirtualFileUtil.saveText(child, "xxx");
 
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
     FileDocumentManager.getInstance().saveAllDocuments();
@@ -158,7 +158,7 @@ public abstract class IdCacheTest extends CodeInsightTestCase{
 
     checkCache(cache, todocache);
 
-    VfsUtil.saveText(child, "xxx");
+    VirtualFileUtil.saveText(child, "xxx");
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
     GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);
@@ -202,7 +202,7 @@ public abstract class IdCacheTest extends CodeInsightTestCase{
     checkCache(cache, todocache);
 
     VirtualFile child = myRootDir.createChildData(null, "4.java");
-    VfsUtil.saveText(child, "xxx //todo");
+    VirtualFileUtil.saveText(child, "xxx //todo");
     PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
     GlobalSearchScope scope = GlobalSearchScope.projectScope(myProject);

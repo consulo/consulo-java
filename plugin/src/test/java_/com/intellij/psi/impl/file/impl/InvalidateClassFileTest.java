@@ -17,7 +17,7 @@ package com.intellij.psi.impl.file.impl;
 
 import com.intellij.JavaTestUtil;
 import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.VirtualFileManager;

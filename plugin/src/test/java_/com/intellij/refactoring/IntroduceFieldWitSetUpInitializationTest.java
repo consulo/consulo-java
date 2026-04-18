@@ -1,21 +1,16 @@
 /*
  * Copyright (c) 2000-2007 JetBrains s.r.o. All Rights Reserved.
  */
-
-/*
- * User: anna
- * Date: 17-Oct-2007
- */
 package com.intellij.refactoring;
 
 import java.io.File;
 
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.junit.Before;
 import com.intellij.JavaTestUtil;
 import com.intellij.codeInsight.CodeInsightTestCase;
 import consulo.module.Module;
 import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiLocalVariable;
@@ -25,6 +20,10 @@ import com.intellij.java.impl.refactoring.introduceField.BaseExpressionToFieldHa
 import com.intellij.java.impl.refactoring.introduceField.LocalToFieldHandler;
 import com.intellij.util.PathUtil;
 
+/**
+ * @author anna
+ * @since 2007-10-17
+ */
 public abstract class IntroduceFieldWitSetUpInitializationTest extends CodeInsightTestCase {
   @Override
   protected String getTestDataPath() {
@@ -34,7 +33,7 @@ public abstract class IntroduceFieldWitSetUpInitializationTest extends CodeInsig
   @Override
   protected Module createModule(String name) {
     Module module = super.createModule(name);
-    String url = VfsUtil.getUrlForLibraryRoot(new File(PathUtil.getJarPathForClass(Before.class)));
+    String url = VirtualFileUtil.getUrlForLibraryRoot(new File(PathUtil.getJarPathForClass(Before.class)));
     ModuleRootModificationUtil.addModuleLibrary(module, url);
     return module;
   }

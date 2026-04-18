@@ -31,13 +31,13 @@ import consulo.logging.Logger;
 import consulo.component.extension.ExtensionPoint;
 import consulo.content.bundle.Sdk;
 import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiUtilCore;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import consulo.util.collection.ArrayUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;
 
@@ -189,7 +189,7 @@ public abstract class InspectionTestCase extends PsiTestCase {
 
       @Override
       public boolean isEntryPoint(PsiElement psiElement) {
-        return ext_src != null && VfsUtilCore.isAncestor(ext_src, PsiUtilCore.getVirtualFile(psiElement), false);
+        return ext_src != null && VirtualFileUtil.isAncestor(ext_src, PsiUtilCore.getVirtualFile(psiElement), false);
       }
 
       @Override

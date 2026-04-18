@@ -5,13 +5,13 @@ import java.io.IOException;
 
 import consulo.application.ApplicationManager;
 import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 /**
  * @author max
@@ -65,6 +65,6 @@ public abstract class SCR19174Test extends PsiTestCase {
 
   private void touchFileSync() throws IOException {
     myVFile = myDir.createChildData(null, "A.java");
-    VfsUtil.saveText(myVFile, "package p; public class A{ public void foo(); }");
+    VirtualFileUtil.saveText(myVFile, "package p; public class A{ public void foo(); }");
   }
 }

@@ -15,7 +15,6 @@ import consulo.application.ApplicationManager;
 import consulo.module.Module;
 import consulo.module.content.layer.ModifiableRootModel;
 import consulo.module.content.ModuleRootManager;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.testFramework.UsefulTestCase;
@@ -25,6 +24,7 @@ import com.intellij.testFramework.fixtures.IdeaProjectTestFixture;
 import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 public abstract class SuppressExternalTest extends UsefulTestCase {
   protected CodeInsightTestFixture myFixture;
@@ -59,7 +59,7 @@ public abstract class SuppressExternalTest extends UsefulTestCase {
       public void run() {
         Module module = myFixture.getModule();
         ModifiableRootModel model = ModuleRootManager.getInstance(module).getModifiableModel();
-        String url = VfsUtilCore.pathToUrl(myFixture.getTempDirPath() + "/content/anno");
+        String url = VirtualFileUtil.pathToUrl(myFixture.getTempDirPath() + "/content/anno");
         //model.getModuleExtensionOld(JavaModuleExternalPaths.class).setExternalAnnotationUrls(new String[]{url});
         model.commit();
       }
