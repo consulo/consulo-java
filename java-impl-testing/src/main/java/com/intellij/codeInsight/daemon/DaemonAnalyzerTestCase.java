@@ -80,6 +80,8 @@ import consulo.logging.Logger;
 import consulo.ui.UIAccess;
 import consulo.util.collection.primitive.ints.IntList;
 import consulo.util.collection.primitive.ints.IntLists;
+import consulo.util.io.FileUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import org.junit.Assert;
 

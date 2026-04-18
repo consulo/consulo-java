@@ -37,6 +37,7 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.PsiUtilCore;
 import com.intellij.testFramework.fixtures.impl.CodeInsightTestFixtureImpl;
 import consulo.util.collection.ArrayUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
 import org.jdom.Element;
 

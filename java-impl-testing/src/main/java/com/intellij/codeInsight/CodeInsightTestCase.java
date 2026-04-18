@@ -75,6 +75,8 @@ import com.intellij.testFramework.PsiTestData;
 import com.intellij.testFramework.PsiTestUtil;
 import com.intellij.testFramework.VfsTestUtil;
 import consulo.util.collection.ArrayUtil;
+import consulo.util.io.FileUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.ide.impl.idea.util.Function;
 import consulo.util.collection.ContainerUtil;
 import consulo.fileEditor.text.TextEditorProvider;

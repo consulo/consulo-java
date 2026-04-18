@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
+import consulo.util.io.FileUtil;
 import com.intellij.testFramework.IdeaTestCase;
 import com.intellij.testFramework.PsiTestUtil;
 import consulo.ide.impl.idea.util.properties.EncodingAwareProperties;

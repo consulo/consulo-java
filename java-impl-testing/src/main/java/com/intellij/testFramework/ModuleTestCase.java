@@ -27,6 +27,7 @@ import consulo.application.WriteAction;
 import consulo.language.editor.WriteCommandAction;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.ref.Ref;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;

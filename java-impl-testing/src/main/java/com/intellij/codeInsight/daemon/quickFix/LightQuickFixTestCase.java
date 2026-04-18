@@ -42,6 +42,7 @@ import consulo.project.Project;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
 import consulo.util.io.CharsetToolkit;
+import consulo.util.io.FileUtil;
 import consulo.language.psi.PsiFile;
 import com.intellij.testFramework.LightPlatformCodeInsightTestCase;
 import com.intellij.testFramework.LightPlatformTestCase;

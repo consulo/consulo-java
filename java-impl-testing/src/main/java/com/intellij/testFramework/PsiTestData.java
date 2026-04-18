@@ -23,6 +23,7 @@ import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizable;
 import consulo.util.xml.serializer.WriteExternalException;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 
 /**
