@@ -1,13 +1,13 @@
 package com.intellij.java.impl.codeInspection.unnecessaryModuleDependency;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.inspection.reference.RefElement;
 import consulo.language.editor.inspection.reference.RefGraphAnnotator;
 import consulo.language.editor.inspection.reference.RefManager;
 import consulo.language.editor.inspection.reference.RefModule;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.util.dataholder.Key;
 import consulo.language.psi.PsiElement;
+import consulo.module.Module;
+import consulo.util.dataholder.Key;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,12 +26,13 @@ public class UnnecessaryModuleDependencyAnnotator extends RefGraphAnnotator {
   }
 
   @Override
+  @RequiredReadAction
   public void onMarkReferenced(RefElement refWhat, RefElement refFrom, boolean referencedFromClassInitializer) {
     PsiElement onElement = refWhat.getElement();
     PsiElement fromElement = refFrom.getElement();
     if (onElement != null && fromElement!= null){
-      Module onModule = ModuleUtil.findModuleForPsiElement(onElement);
-      Module fromModule = ModuleUtil.findModuleForPsiElement(fromElement);
+      Module onModule = onElement.getModule();
+      Module fromModule = fromElement.getModule();
       if (onModule != null && fromModule != null && onModule != fromModule){
         RefModule refModule = myManager.getRefModule(fromModule);
         if (refModule != null) {

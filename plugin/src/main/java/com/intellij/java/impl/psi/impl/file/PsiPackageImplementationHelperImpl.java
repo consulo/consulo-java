@@ -18,11 +18,11 @@ package com.intellij.java.impl.psi.impl.file;
 import com.intellij.java.language.impl.psi.NonClasspathClassFinder;
 import com.intellij.java.language.impl.psi.impl.file.PsiPackageImplementationHelper;
 import com.intellij.java.language.psi.PsiJavaPackage;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.fileEditor.FileEditorManager;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
@@ -73,6 +73,7 @@ public class PsiPackageImplementationHelperImpl extends PsiPackageImplementation
     });
   }
 
+  @RequiredReadAction
   private static PsiDirectory[] suggestMostAppropriateDirectories(PsiJavaPackage psiPackage) {
     Project project = psiPackage.getProject();
     PsiDirectory[] directories = null;
@@ -81,7 +82,7 @@ public class PsiPackageImplementationHelperImpl extends PsiPackageImplementation
       Document document = editor.getDocument();
       PsiFile psiFile = PsiDocumentManager.getInstance(project).getPsiFile(document);
       if (psiFile != null) {
-        Module module = ModuleUtil.findModuleForPsiElement(psiFile);
+        Module module = psiFile.getModule();
         if (module != null) {
           directories = psiPackage.getDirectories(GlobalSearchScope.moduleWithDependenciesScope(module));
         }

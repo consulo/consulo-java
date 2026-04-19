@@ -19,16 +19,15 @@ import com.intellij.java.language.psi.JavaDirectoryService;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiLiteralExpression;
-import consulo.module.Module;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
-import consulo.module.content.ModuleRootManager;
-import consulo.util.lang.function.Condition;
 import consulo.document.util.TextRange;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.*;
 import consulo.language.psi.path.FileReference;
 import consulo.language.psi.path.FileReferenceSet;
 import consulo.language.util.ProcessingContext;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.util.lang.function.Condition;
+import consulo.virtualFileSystem.VirtualFile;
 
 import java.util.*;
 
@@ -82,7 +81,7 @@ public class FilePathReferenceProvider extends PsiReferenceProvider {
             systemItems.addAll(getRoots(forModule, true));
           }
         } else {
-          systemItems.addAll(getRoots(ModuleUtil.findModuleForPsiElement(getElement()), true));
+          systemItems.addAll(getRoots(getElement().getModule(), true));
         }
         return systemItems;
       }
