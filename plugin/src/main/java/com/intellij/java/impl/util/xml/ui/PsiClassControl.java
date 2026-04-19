@@ -24,12 +24,12 @@ import com.intellij.java.language.util.ClassFilter;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.document.Document;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.language.editor.intention.IntentionFilterOwner;
 import consulo.language.editor.ui.awt.EditorTextField;
 import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.util.ModuleUtilCore;
 import consulo.project.Project;
 import consulo.ui.ex.localize.UILocalize;
 import consulo.xml.dom.DomElement;
@@ -67,7 +67,7 @@ public class PsiClassControl extends EditorTextFieldControl<PsiClassPanel> {
     PsiCodeFragmentImpl fragment = (PsiCodeFragmentImpl) PsiDocumentManager.getInstance(project).getPsiFile(document);
     assert fragment != null;
     fragment.setIntentionActionsFilter(IntentionFilterOwner.IntentionActionsFilter.EVERYTHING_AVAILABLE);
-    fragment.putUserData(ModuleUtil.KEY_MODULE, getDomWrapper().getExistingDomElement().getModule());
+    fragment.putUserData(ModuleUtilCore.KEY_MODULE, getDomWrapper().getExistingDomElement().getModule());
     return initReferenceEditorWithBrowseButton(boundedComponent, editor, this);
   }
 
