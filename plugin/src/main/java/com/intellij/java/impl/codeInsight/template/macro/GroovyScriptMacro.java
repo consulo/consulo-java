@@ -24,6 +24,7 @@ import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.macro.Macro;
+import consulo.localize.LocalizeValue;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -33,25 +34,29 @@ import java.util.Set;
  */
 @ExtensionImpl
 public class GroovyScriptMacro extends Macro {
-  @Override
-  public String getName() {
-    return "groovyScript";
-  }
+    @Override
+    public String getName() {
+        return "groovyScript";
+    }
 
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroGroovyScript().get();
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroGroovyScript();
+    }
 
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    if (params.length == 0) return null;
-    Object o = runIt(params, context);
-    if (o != null) return new TextResult(o.toString());
-    return null;
-  }
+    @Override
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        if (params.length == 0) {
+            return null;
+        }
+        Object o = runIt(params, context);
+        if (o != null) {
+            return new TextResult(o.toString());
+        }
+        return null;
+    }
 
-  private static Object runIt(Expression[] params, ExpressionContext context) {
+    private static Object runIt(Expression[] params, ExpressionContext context) {
    /*
    TODO [VISTALL] groovy depend
       try {
@@ -88,22 +93,22 @@ public class GroovyScriptMacro extends Macro {
     } catch (Exception e) {
       return new TextResult(StringUtil.convertLineSeparators(e.getLocalizedMessage()));
     }    */
-    return null;
-  }
-
-  @Override
-  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
-    return calculateResult(params, context);
-  }
-
-  @Override
-  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
-    Object o = runIt(params, context);
-    if (o != null) {
-      Set<LookupElement> set = new LinkedHashSet<>();
-      set.add(LookupElementBuilder.create(o.toString()));
-      return set.toArray(new LookupElement[set.size()]);
+        return null;
     }
-    return LookupElement.EMPTY_ARRAY;
-  }
+
+    @Override
+    public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
+        return calculateResult(params, context);
+    }
+
+    @Override
+    public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
+        Object o = runIt(params, context);
+        if (o != null) {
+            Set<LookupElement> set = new LinkedHashSet<>();
+            set.add(LookupElementBuilder.create(o.toString()));
+            return set.toArray(new LookupElement[set.size()]);
+        }
+        return LookupElement.EMPTY_ARRAY;
+    }
 }

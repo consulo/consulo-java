@@ -28,6 +28,7 @@ import consulo.language.editor.template.ExpressionContext;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 /**
@@ -35,77 +36,87 @@ import consulo.project.Project;
  */
 @ExtensionImpl
 public class IterableComponentTypeMacro extends Macro {
-  @Override
-  public String getName() {
-    return "iterableComponentType";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroIterableComponentType().get();
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "a";
-  }
-
-  @Override
-  @RequiredReadAction
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    if (params.length != 1) return null;
-    Result result = params[0].calculateResult(context);
-    if (result == null) return null;
-
-    Project project = context.getProject();
-
-    PsiExpression expr = MacroUtil.resultToPsiExpression(result, context);
-    if (expr == null) return null;
-    PsiType type = expr.getType();
-
-
-    if (type instanceof PsiArrayType arrayType) {
-      return new PsiTypeResult(arrayType.getComponentType(), project);
+    @Override
+    public String getName() {
+        return "iterableComponentType";
     }
 
-    if (type instanceof PsiClassType classType) {
-      PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
-      PsiClass aClass = resolveResult.getElement();
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroIterableComponentType();
+    }
 
-      if (aClass != null) {
-        PsiClass iterableClass = JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_ITERABLE, aClass.getResolveScope());
-        if (iterableClass != null) {
-          PsiSubstitutor substitutor = TypeConversionUtil.getClassSubstitutor(iterableClass, aClass, resolveResult.getSubstitutor());
-          if (substitutor != null) {
-            PsiType parameterType = substitutor.substitute(iterableClass.getTypeParameters()[0]);
-            if (parameterType instanceof PsiCapturedWildcardType capturedWildcardType) {
-              parameterType = capturedWildcardType.getWildcard();
-            }
-            if (parameterType != null) {
-              if (parameterType instanceof PsiWildcardType wildcardType) {
-                if (wildcardType.isExtends()) {
-                  return new PsiTypeResult(wildcardType.getBound(), project);
-                }
-                else return null;
-              }
-              return new PsiTypeResult(parameterType, project);
-            }
-          }
+    @Override
+    public String getDefaultValue() {
+        return "a";
+    }
+
+    @Override
+    @RequiredReadAction
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        if (params.length != 1) {
+            return null;
         }
-      }
+        Result result = params[0].calculateResult(context);
+        if (result == null) {
+            return null;
+        }
+
+        Project project = context.getProject();
+
+        PsiExpression expr = MacroUtil.resultToPsiExpression(result, context);
+        if (expr == null) {
+            return null;
+        }
+        PsiType type = expr.getType();
+
+
+        if (type instanceof PsiArrayType arrayType) {
+            return new PsiTypeResult(arrayType.getComponentType(), project);
+        }
+
+        if (type instanceof PsiClassType classType) {
+            PsiClassType.ClassResolveResult resolveResult = classType.resolveGenerics();
+            PsiClass aClass = resolveResult.getElement();
+
+            if (aClass != null) {
+                PsiClass iterableClass =
+                    JavaPsiFacade.getInstance(project).findClass(CommonClassNames.JAVA_LANG_ITERABLE, aClass.getResolveScope());
+                if (iterableClass != null) {
+                    PsiSubstitutor substitutor =
+                        TypeConversionUtil.getClassSubstitutor(iterableClass, aClass, resolveResult.getSubstitutor());
+                    if (substitutor != null) {
+                        PsiType parameterType = substitutor.substitute(iterableClass.getTypeParameters()[0]);
+                        if (parameterType instanceof PsiCapturedWildcardType capturedWildcardType) {
+                            parameterType = capturedWildcardType.getWildcard();
+                        }
+                        if (parameterType != null) {
+                            if (parameterType instanceof PsiWildcardType wildcardType) {
+                                if (wildcardType.isExtends()) {
+                                    return new PsiTypeResult(wildcardType.getBound(), project);
+                                }
+                                else {
+                                    return null;
+                                }
+                            }
+                            return new PsiTypeResult(parameterType, project);
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
-    return null;
-  }
+    @Override
+    @RequiredReadAction
+    public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
+        return calculateResult(params, context);
+    }
 
-  @Override
-  @RequiredReadAction
-  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
-    return calculateResult(params, context);
-  }
-
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

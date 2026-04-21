@@ -20,9 +20,9 @@ import com.intellij.java.impl.codeInsight.template.JavaEditorTemplateUtilImpl;
 import com.intellij.java.impl.codeInsight.template.JavaPsiElementResult;
 import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.document.util.TextRange;
-import consulo.language.editor.CodeInsightBundle;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.template.Expression;
@@ -32,94 +32,107 @@ import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.util.collection.ContainerUtil;
-
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @ExtensionImpl
 public class VariableOfTypeMacro extends Macro {
-
-  @Override
-  public String getName() {
-    return "variableOfType";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroVariableOfType().get();
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "a";
-  }
-
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    PsiElement[] vars = getVariables(params, context);
-    if (vars == null || vars.length == 0) return null;
-    return new JavaPsiElementResult(vars[0]);
-  }
-
-  @Override
-  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
-    PsiElement[] vars = getVariables(params, context);
-    if (vars == null || vars.length < 2) return null;
-    Set<LookupElement> set = new LinkedHashSet<>();
-    for (PsiElement var : vars) {
-      JavaEditorTemplateUtilImpl.addElementLookupItem(set, var);
+    @Override
+    public String getName() {
+        return "variableOfType";
     }
-    return set.toArray(new LookupElement[set.size()]);
-  }
 
-  @Nullable
-  protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
-    if (params.length != 1) return null;
-    Result result = params[0].calculateResult(context);
-    if (result == null) return null;
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroVariableOfType();
+    }
 
-    Project project = context.getProject();
-    int offset = context.getStartOffset();
+    @Override
+    public String getDefaultValue() {
+        return "a";
+    }
 
-    ArrayList<PsiElement> array = new ArrayList<PsiElement>();
-    PsiType type = MacroUtil.resultToPsiType(result, context);
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-    PsiElement place = file.findElementAt(offset);
-
-    PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
-    PsiManager manager = PsiManager.getInstance(project);
-    for (PsiVariable var : variables) {
-      if (var instanceof PsiField field && var.hasModifierProperty(PsiModifier.STATIC)) {
-        PsiClass varClass = field.getContainingClass();
-        PsiClass placeClass = PsiTreeUtil.getParentOfType(place, PsiClass.class);
-        if (!manager.areElementsEquivalent(varClass, placeClass)) continue;
-      }
-      else if (var instanceof PsiLocalVariable) {
-        TextRange range = var.getNameIdentifier().getTextRange();
-        if (range != null && range.contains(offset)) {
-          continue;
+    @Override
+    @RequiredReadAction
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        PsiElement[] vars = getVariables(params, context);
+        if (vars == null || vars.length == 0) {
+            return null;
         }
-      }
-
-      PsiType type1 = VariableTypeCalculator.getVarTypeAt(var, place);
-      if (type == null || type.isAssignableFrom(type1)) {
-        array.add(var);
-      }
+        return new JavaPsiElementResult(vars[0]);
     }
 
-    PsiExpression[] expressions = MacroUtil.getStandardExpressionsOfType(place, type);
-    ContainerUtil.addAll(array, expressions);
-    return PsiUtilCore.toPsiElementArray(array);
-  }
+    @Override
+    @RequiredReadAction
+    public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
+        PsiElement[] vars = getVariables(params, context);
+        if (vars == null || vars.length < 2) {
+            return null;
+        }
+        Set<LookupElement> set = new LinkedHashSet<>();
+        for (PsiElement var : vars) {
+            JavaEditorTemplateUtilImpl.addElementLookupItem(set, var);
+        }
+        return set.toArray(new LookupElement[set.size()]);
+    }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Nullable
+    @RequiredReadAction
+    protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
+        if (params.length != 1) {
+            return null;
+        }
+        Result result = params[0].calculateResult(context);
+        if (result == null) {
+            return null;
+        }
+
+        Project project = context.getProject();
+        int offset = context.getStartOffset();
+
+        List<PsiElement> array = new ArrayList<>();
+        PsiType type = MacroUtil.resultToPsiType(result, context);
+        PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+        PsiElement place = file.findElementAt(offset);
+
+        PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
+        PsiManager manager = PsiManager.getInstance(project);
+        for (PsiVariable var : variables) {
+            if (var instanceof PsiField field && var.hasModifierProperty(PsiModifier.STATIC)) {
+                PsiClass varClass = field.getContainingClass();
+                PsiClass placeClass = PsiTreeUtil.getParentOfType(place, PsiClass.class);
+                if (!manager.areElementsEquivalent(varClass, placeClass)) {
+                    continue;
+                }
+            }
+            else if (var instanceof PsiLocalVariable) {
+                TextRange range = var.getNameIdentifier().getTextRange();
+                if (range != null && range.contains(offset)) {
+                    continue;
+                }
+            }
+
+            PsiType type1 = VariableTypeCalculator.getVarTypeAt(var, place);
+            if (type == null || type.isAssignableFrom(type1)) {
+                array.add(var);
+            }
+        }
+
+        PsiExpression[] expressions = MacroUtil.getStandardExpressionsOfType(place, type);
+        ContainerUtil.addAll(array, expressions);
+        return PsiUtilCore.toPsiElementArray(array);
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }
 

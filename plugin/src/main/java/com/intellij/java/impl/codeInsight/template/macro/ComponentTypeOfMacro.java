@@ -32,88 +32,89 @@ import consulo.language.editor.template.PsiElementResult;
 import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
+import consulo.localize.LocalizeValue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ExtensionImpl
 public class ComponentTypeOfMacro extends Macro {
-  @Override
-  public String getName() {
-    return "componentTypeOf";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroComponentTypeOfArray().get();
-  }
-
-  @Override
-  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
-    if (params.length != 1) {
-      return null;
-    }
-    LookupElement[] lookupItems = params[0].calculateLookupItems(context);
-    if (lookupItems == null) {
-      return null;
+    @Override
+    public String getName() {
+        return "componentTypeOf";
     }
 
-    List<LookupElement> result = new ArrayList<>();
-    for (LookupElement element : lookupItems) {
-      PsiTypeLookupItem lookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
-      if (lookupItem != null) {
-        PsiType psiType = lookupItem.getType();
-        if (psiType instanceof PsiArrayType arrayType) {
-          result.add(PsiTypeLookupItem.createLookupItem(arrayType.getComponentType(), null));
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroComponentTypeOfArray();
+    }
+
+    @Override
+    public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
+        if (params.length != 1) {
+            return null;
         }
-      }
+        LookupElement[] lookupItems = params[0].calculateLookupItems(context);
+        if (lookupItems == null) {
+            return null;
+        }
+
+        List<LookupElement> result = new ArrayList<>();
+        for (LookupElement element : lookupItems) {
+            PsiTypeLookupItem lookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
+            if (lookupItem != null) {
+                PsiType psiType = lookupItem.getType();
+                if (psiType instanceof PsiArrayType arrayType) {
+                    result.add(PsiTypeLookupItem.createLookupItem(arrayType.getComponentType(), null));
+                }
+            }
+        }
+
+        return lookupItems;
     }
 
-    return lookupItems;
-  }
+    @Override
+    @RequiredReadAction
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        if (params.length != 1) {
+            return null;
+        }
+        Result result = params[0].calculateResult(context);
+        if (result == null) {
+            return null;
+        }
 
-  @Override
-  @RequiredReadAction
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    if (params.length != 1) {
-      return null;
-    }
-    Result result = params[0].calculateResult(context);
-    if (result == null) {
-      return null;
-    }
+        if (result instanceof PsiTypeResult typeResult) {
+            PsiType type = typeResult.getType();
+            if (type instanceof PsiArrayType arrayType) {
+                return new PsiTypeResult(arrayType.getComponentType(), context.getProject());
+            }
+        }
 
-    if (result instanceof PsiTypeResult typeResult) {
-      PsiType type = typeResult.getType();
-      if (type instanceof PsiArrayType arrayType) {
-        return new PsiTypeResult(arrayType.getComponentType(), context.getProject());
-      }
-    }
-
-    PsiExpression expr = MacroUtil.resultToPsiExpression(result, context);
-    PsiType type = expr == null ? MacroUtil.resultToPsiType(result, context) : expr.getType();
-    if (type instanceof PsiArrayType arrayType) {
-      return new PsiTypeResult(arrayType.getComponentType(), context.getProject());
-    }
-
-    LookupElement[] elements = params[0].calculateLookupItems(context);
-    if (elements != null) {
-      for (LookupElement element : elements) {
-        PsiTypeLookupItem typeLookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
-        if (typeLookupItem != null) {
-          PsiType psiType = typeLookupItem.getType();
-          if (psiType instanceof PsiArrayType arrayType) {
+        PsiExpression expr = MacroUtil.resultToPsiExpression(result, context);
+        PsiType type = expr == null ? MacroUtil.resultToPsiType(result, context) : expr.getType();
+        if (type instanceof PsiArrayType arrayType) {
             return new PsiTypeResult(arrayType.getComponentType(), context.getProject());
-          }
         }
-      }
+
+        LookupElement[] elements = params[0].calculateLookupItems(context);
+        if (elements != null) {
+            for (LookupElement element : elements) {
+                PsiTypeLookupItem typeLookupItem = element.as(PsiTypeLookupItem.CLASS_CONDITION_KEY);
+                if (typeLookupItem != null) {
+                    PsiType psiType = typeLookupItem.getType();
+                    if (psiType instanceof PsiArrayType arrayType) {
+                        return new PsiTypeResult(arrayType.getComponentType(), context.getProject());
+                    }
+                }
+            }
+        }
+
+        return new PsiElementResult(null);
     }
 
-    return new PsiElementResult(null);
-  }
-
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

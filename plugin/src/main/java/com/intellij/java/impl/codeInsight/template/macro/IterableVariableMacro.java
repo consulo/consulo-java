@@ -29,6 +29,7 @@ import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import org.jspecify.annotations.Nullable;
@@ -41,60 +42,62 @@ import java.util.List;
  */
 @ExtensionImpl
 public class IterableVariableMacro extends VariableTypeMacroBase {
-  private static final Logger LOG = Logger.getInstance(IterableVariableMacro.class);
+    private static final Logger LOG = Logger.getInstance(IterableVariableMacro.class);
 
-  @Override
-  public String getName() {
-    return "iterableVariable";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroIterableVariable().get();
-  }
-
-  @Override
-  @Nullable
-  @RequiredReadAction
-  protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
-    if (params.length != 0) {
-      return null;
+    @Override
+    public String getName() {
+        return "iterableVariable";
     }
 
-    List<PsiElement> result = new ArrayList<>();
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroIterableVariable();
+    }
 
-
-    Project project = context.getProject();
-    int offset = context.getStartOffset();
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-    assert file != null;
-    PsiElement place = file.findElementAt(offset);
-    PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
-    GlobalSearchScope scope = file.getResolveScope();
-
-    PsiType iterableType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_ITERABLE, scope);
-    PsiType mapType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_UTIL_MAP, scope);
-
-    PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
-    for (PsiVariable var : variables) {
-      PsiElement parent = var.getParent();
-      if (parent instanceof PsiForeachStatement && parent == PsiTreeUtil.getParentOfType(place, PsiForeachStatement.class)) {
-        continue;
-      }
-
-      PsiType type = VariableTypeCalculator.getVarTypeAt(var, place);
-      if (type instanceof PsiArrayType || iterableType.isAssignableFrom(type)) {
-        result.add(var);
-      } else if (mapType.isAssignableFrom(type)) {
-        try {
-          result.add(elementFactory.createExpressionFromText(var.getName() + ".keySet()", var.getParent()));
-          result.add(elementFactory.createExpressionFromText(var.getName() + ".values()", var.getParent()));
-          result.add(elementFactory.createExpressionFromText(var.getName() + ".entrySet()", var.getParent()));
-        } catch (IncorrectOperationException e) {
-          LOG.error(e);
+    @Override
+    @Nullable
+    @RequiredReadAction
+    protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
+        if (params.length != 0) {
+            return null;
         }
-      }
+
+        List<PsiElement> result = new ArrayList<>();
+
+
+        Project project = context.getProject();
+        int offset = context.getStartOffset();
+        PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+        assert file != null;
+        PsiElement place = file.findElementAt(offset);
+        PsiElementFactory elementFactory = JavaPsiFacade.getInstance(project).getElementFactory();
+        GlobalSearchScope scope = file.getResolveScope();
+
+        PsiType iterableType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_LANG_ITERABLE, scope);
+        PsiType mapType = elementFactory.createTypeByFQClassName(CommonClassNames.JAVA_UTIL_MAP, scope);
+
+        PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
+        for (PsiVariable var : variables) {
+            PsiElement parent = var.getParent();
+            if (parent instanceof PsiForeachStatement && parent == PsiTreeUtil.getParentOfType(place, PsiForeachStatement.class)) {
+                continue;
+            }
+
+            PsiType type = VariableTypeCalculator.getVarTypeAt(var, place);
+            if (type instanceof PsiArrayType || iterableType.isAssignableFrom(type)) {
+                result.add(var);
+            }
+            else if (mapType.isAssignableFrom(type)) {
+                try {
+                    result.add(elementFactory.createExpressionFromText(var.getName() + ".keySet()", var.getParent()));
+                    result.add(elementFactory.createExpressionFromText(var.getName() + ".values()", var.getParent()));
+                    result.add(elementFactory.createExpressionFromText(var.getName() + ".entrySet()", var.getParent()));
+                }
+                catch (IncorrectOperationException e) {
+                    LOG.error(e);
+                }
+            }
+        }
+        return PsiUtilCore.toPsiElementArray(result);
     }
-    return PsiUtilCore.toPsiElementArray(result);
-  }
 }

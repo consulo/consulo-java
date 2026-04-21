@@ -27,39 +27,42 @@ import consulo.language.editor.template.ExpressionContext;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 import java.util.ArrayList;
 
 @ExtensionImpl
 public class ArrayVariableMacro extends VariableTypeMacroBase {
-  @Override
-  public String getName() {
-    return "arrayVariable";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroArrayVariable().get();
-  }
-
-  @Override
-  @RequiredReadAction
-  protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
-    if (params.length != 0) return null;
-
-    Project project = context.getProject();
-    int offset = context.getStartOffset();
-    ArrayList<PsiVariable> array = new ArrayList<>();
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-    PsiElement place = file.findElementAt(offset);
-    PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
-    for (PsiVariable variable : variables) {
-      PsiType type = VariableTypeCalculator.getVarTypeAt(variable, place);
-      if (type instanceof PsiArrayType) {
-        array.add(variable);
-      }
+    @Override
+    public String getName() {
+        return "arrayVariable";
     }
-    return array.toArray(new PsiVariable[array.size()]);
-  }
+
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroArrayVariable();
+    }
+
+    @Override
+    @RequiredReadAction
+    protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
+        if (params.length != 0) {
+            return null;
+        }
+
+        Project project = context.getProject();
+        int offset = context.getStartOffset();
+        ArrayList<PsiVariable> array = new ArrayList<>();
+        PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+        PsiElement place = file.findElementAt(offset);
+        PsiVariable[] variables = MacroUtil.getVariablesVisibleAt(place, "");
+        for (PsiVariable variable : variables) {
+            PsiType type = VariableTypeCalculator.getVarTypeAt(variable, place);
+            if (type instanceof PsiArrayType) {
+                array.add(variable);
+            }
+        }
+        return array.toArray(new PsiVariable[array.size()]);
+    }
 }

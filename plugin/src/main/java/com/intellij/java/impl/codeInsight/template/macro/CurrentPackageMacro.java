@@ -27,41 +27,39 @@ import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 /**
- * Created by IntelliJ IDEA.
- * User: ven
- * Date: May 13, 2003
- * Time: 8:36:42 PM
- * To change this template use Options | File Templates.
+ * @author ven
+ * @since 2003-05-13
  */
 @ExtensionImpl
 public class CurrentPackageMacro extends Macro {
-  @Override
-  public String getName() {
-    return "currentPackage";
-  }
+    @Override
+    public String getName() {
+        return "currentPackage";
+    }
 
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroCurrentPackage().get();
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroCurrentPackage();
+    }
 
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    Project project = context.getProject();
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-    return file instanceof PsiJavaFile javaFile ? new TextResult(javaFile.getPackageName()) : new TextResult("");
-  }
+    @Override
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        Project project = context.getProject();
+        PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+        return file instanceof PsiJavaFile javaFile ? new TextResult(javaFile.getPackageName()) : new TextResult("");
+    }
 
-  @Override
-  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
-    return calculateResult(params, context);
-  }
+    @Override
+    public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
+        return calculateResult(params, context);
+    }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.java.impl.codeInsight.template.macro;
 
 import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
@@ -33,6 +32,7 @@ import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jspecify.annotations.Nullable;
 
@@ -44,81 +44,85 @@ import java.util.Set;
  * @author Maxim.Mossienko
  */
 @ExtensionImpl
-public class  AnnotatedMacro extends Macro {
-
-  @Override
-  public String getName() {
-    return "annotated";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return "annotated(\"annotation qname\")";
-  }
-
-  @Nullable
-  private static Query<PsiMember> findAnnotated(ExpressionContext context, Expression[] params) {
-    if (params == null || params.length == 0) return null;
-    PsiManager instance = PsiManager.getInstance(context.getProject());
-
-    String paramResult = params[0].calculateResult(context).toString();
-    if (paramResult == null) return null;
-    GlobalSearchScope scope = GlobalSearchScope.allScope(context.getProject());
-    PsiClass myBaseClass = JavaPsiFacade.getInstance(instance.getProject()).findClass(paramResult,  scope);
-
-    if (myBaseClass != null) {
-      return AnnotatedMembersSearch.search(myBaseClass, scope);
+public class AnnotatedMacro extends Macro {
+    @Override
+    public String getName() {
+        return "annotated";
     }
-    return null;
-  }
 
-  @Override
-  public Result calculateResult(Expression[] expressions, ExpressionContext expressionContext) {
-    Query<PsiMember> psiMembers = findAnnotated(expressionContext, expressions);
-
-    if (psiMembers != null) {
-      PsiMember member = psiMembers.findFirst();
-
-      if (member != null) {
-        return new TextResult(member instanceof PsiClass ? ((PsiClass)member).getQualifiedName():member.getName());
-      }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return LocalizeValue.localizeTODO("annotated(\"annotation qname\")");
     }
-    return null;
-  }
 
-  @Override
-  public Result calculateQuickResult(Expression[] expressions, ExpressionContext expressionContext) {
-    return calculateResult(expressions, expressionContext);
-  }
+    @Nullable
+    private static Query<PsiMember> findAnnotated(ExpressionContext context, Expression[] params) {
+        if (params == null || params.length == 0) {
+            return null;
+        }
+        PsiManager instance = PsiManager.getInstance(context.getProject());
 
-  @Override
-  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
-    Query<PsiMember> query = findAnnotated(context, params);
+        String paramResult = params[0].calculateResult(context).toString();
+        if (paramResult == null) {
+            return null;
+        }
+        GlobalSearchScope scope = GlobalSearchScope.allScope(context.getProject());
+        PsiClass myBaseClass = JavaPsiFacade.getInstance(instance.getProject()).findClass(paramResult, scope);
 
-    if (query != null) {
-      Set<LookupElement> set = new LinkedHashSet<LookupElement>();
-      String secondParamValue = params.length > 1 ? params[1].calculateResult(context).toString() : null;
-      boolean isShortName = secondParamValue != null && !Boolean.valueOf(secondParamValue);
-      Project project = context.getProject();
-      PsiClass findInClass = secondParamValue != null
-                                   ? JavaPsiFacade.getInstance(project).findClass(secondParamValue, GlobalSearchScope.allScope(project))
-                                   : null;
-
-      for (PsiMember object : query.findAll()) {
-        if (findInClass != null && !object.getContainingClass().equals(findInClass)) continue;
-        boolean isClazz = object instanceof PsiClass;
-        String name = isShortName || !isClazz ? object.getName() : ((PsiClass) object).getQualifiedName();
-        set.add(LookupElementBuilder.create(name));
-      }
-
-      return set.toArray(new LookupElement[set.size()]);
+        if (myBaseClass != null) {
+            return AnnotatedMembersSearch.search(myBaseClass, scope);
+        }
+        return null;
     }
-    return LookupElement.EMPTY_ARRAY;
-  }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public Result calculateResult(Expression[] expressions, ExpressionContext expressionContext) {
+        Query<PsiMember> psiMembers = findAnnotated(expressionContext, expressions);
 
+        if (psiMembers != null) {
+            PsiMember member = psiMembers.findFirst();
+
+            if (member != null) {
+                return new TextResult(member instanceof PsiClass ? ((PsiClass) member).getQualifiedName() : member.getName());
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Result calculateQuickResult(Expression[] expressions, ExpressionContext expressionContext) {
+        return calculateResult(expressions, expressionContext);
+    }
+
+    @Override
+    public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
+        Query<PsiMember> query = findAnnotated(context, params);
+
+        if (query != null) {
+            Set<LookupElement> set = new LinkedHashSet<>();
+            String secondParamValue = params.length > 1 ? params[1].calculateResult(context).toString() : null;
+            boolean isShortName = secondParamValue != null && !Boolean.valueOf(secondParamValue);
+            Project project = context.getProject();
+            PsiClass findInClass = secondParamValue != null
+                ? JavaPsiFacade.getInstance(project).findClass(secondParamValue, GlobalSearchScope.allScope(project))
+                : null;
+
+            for (PsiMember object : query.findAll()) {
+                if (findInClass != null && !object.getContainingClass().equals(findInClass)) {
+                    continue;
+                }
+                boolean isClazz = object instanceof PsiClass;
+                String name = isShortName || !isClazz ? object.getName() : ((PsiClass) object).getQualifiedName();
+                set.add(LookupElementBuilder.create(name));
+            }
+
+            return set.toArray(new LookupElement[set.size()]);
+        }
+        return LookupElement.EMPTY_ARRAY;
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

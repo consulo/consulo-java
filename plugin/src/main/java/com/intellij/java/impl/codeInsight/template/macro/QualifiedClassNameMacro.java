@@ -28,35 +28,35 @@ import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 
 @ExtensionImpl
 public class QualifiedClassNameMacro extends Macro {
-
-  @Override
-  public String getName() {
-    return "qualifiedClassName";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroQualifiedClassName().get();
-  }
-
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    PsiElement place = context.getPsiElementAtStartOffset();
-    while (place != null){
-      if (place instanceof PsiClass psiClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)){
-        return new TextResult(psiClass.getQualifiedName());
-      }
-      place = place.getParent();
+    @Override
+    public String getName() {
+        return "qualifiedClassName";
     }
 
-    return null;
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroQualifiedClassName();
+    }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        PsiElement place = context.getPsiElementAtStartOffset();
+        while (place != null) {
+            if (place instanceof PsiClass psiClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)) {
+                return new TextResult(psiClass.getQualifiedName());
+            }
+            place = place.getParent();
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

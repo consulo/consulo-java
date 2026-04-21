@@ -19,6 +19,7 @@ import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.impl.codeInsight.template.macro.MacroUtil;
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.template.*;
 import consulo.language.editor.template.context.TemplateContextType;
@@ -26,57 +27,62 @@ import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-
 
 @ExtensionImpl
 public class TypeOfVariableMacro extends Macro {
-  @Override
-  public String getName() {
-    return "typeOfVariable";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return "typeOfVariable(VAR)";
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "A";
-  }
-
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    if (params.length == 0) return null;
-
-    Project project = context.getProject();
-    Result result = params[0].calculateQuickResult(context);
-    if (result instanceof PsiElementResult) {
-      PsiElement element = ((PsiElementResult)result).getElement();
-      if (element instanceof PsiVariable) {
-        return new PsiTypeResult(((PsiVariable)element).getType(), project);
-      }
-    } else if (result instanceof TextResult) {
-      PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-      PsiElement place = file.findElementAt(context.getStartOffset());
-      PsiVariable[] vars = MacroUtil.getVariablesVisibleAt(place, "");
-      String name = result.toString();
-      for (PsiVariable var : vars) {
-        if (name.equals(var.getName())) return new PsiTypeResult(var.getType(), project);
-      }
+    @Override
+    public String getName() {
+        return "typeOfVariable";
     }
-    return null;
-  }
 
-  @Override
-  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
-    return calculateResult(params, context);
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return LocalizeValue.of("typeOfVariable(VAR)");
+    }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public String getDefaultValue() {
+        return "A";
+    }
 
+    @Override
+    @RequiredReadAction
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        if (params.length == 0) {
+            return null;
+        }
+
+        Project project = context.getProject();
+        Result result = params[0].calculateQuickResult(context);
+        if (result instanceof PsiElementResult elementResult) {
+            if (elementResult.getElement() instanceof PsiVariable variable) {
+                return new PsiTypeResult(variable.getType(), project);
+            }
+        }
+        else if (result instanceof TextResult) {
+            PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+            PsiElement place = file.findElementAt(context.getStartOffset());
+            PsiVariable[] vars = MacroUtil.getVariablesVisibleAt(place, "");
+            String name = result.toString();
+            for (PsiVariable var : vars) {
+                if (name.equals(var.getName())) {
+                    return new PsiTypeResult(var.getType(), project);
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    @RequiredReadAction
+    public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
+        return calculateResult(params, context);
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }
