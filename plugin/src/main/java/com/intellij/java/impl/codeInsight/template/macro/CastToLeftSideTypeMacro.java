@@ -34,56 +34,58 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 @ExtensionImpl
 public class CastToLeftSideTypeMacro extends Macro {
-  @Override
-  public String getName() {
-    return "castToLeftSideType";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroCastToLeftSideType().get();
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "(A)";
-  }
-
-  @Override
-  @RequiredReadAction
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    int offset = context.getStartOffset();
-    Project project = context.getProject();
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-    PsiElement element = file.findElementAt(offset);
-    element = PsiTreeUtil.getParentOfType(element, PsiAssignmentExpression.class, PsiVariable.class);
-    PsiType leftType = null;
-    PsiExpression rightSide = null;
-    if (element instanceof PsiAssignmentExpression assignment) {
-      leftType  = assignment.getLExpression().getType();
-      rightSide = assignment.getRExpression();
-    } else if (element instanceof PsiVariable var) {
-      leftType = var.getType();
-      rightSide = var.getInitializer();
+    @Override
+    public String getName() {
+        return "castToLeftSideType";
     }
 
-    while (rightSide instanceof PsiTypeCastExpression typeCastExpression) {
-      rightSide = typeCastExpression.getOperand();
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroCastToLeftSideType();
     }
 
-    if (leftType != null && rightSide != null && rightSide.getType() != null && !leftType.isAssignableFrom(rightSide.getType())) {
-        return new TextResult("("+ leftType.getCanonicalText() + ")");
+    @Override
+    public String getDefaultValue() {
+        return "(A)";
     }
 
-    return new TextResult("");
-  }
+    @Override
+    @RequiredReadAction
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        int offset = context.getStartOffset();
+        Project project = context.getProject();
+        PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+        PsiElement element = file.findElementAt(offset);
+        element = PsiTreeUtil.getParentOfType(element, PsiAssignmentExpression.class, PsiVariable.class);
+        PsiType leftType = null;
+        PsiExpression rightSide = null;
+        if (element instanceof PsiAssignmentExpression assignment) {
+            leftType = assignment.getLExpression().getType();
+            rightSide = assignment.getRExpression();
+        }
+        else if (element instanceof PsiVariable var) {
+            leftType = var.getType();
+            rightSide = var.getInitializer();
+        }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+        while (rightSide instanceof PsiTypeCastExpression typeCastExpression) {
+            rightSide = typeCastExpression.getOperand();
+        }
+
+        if (leftType != null && rightSide != null && rightSide.getType() != null && !leftType.isAssignableFrom(rightSide.getType())) {
+            return new TextResult("(" + leftType.getCanonicalText() + ")");
+        }
+
+        return new TextResult("");
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

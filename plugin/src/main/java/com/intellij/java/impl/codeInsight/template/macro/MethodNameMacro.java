@@ -28,44 +28,46 @@ import consulo.language.editor.template.Result;
 import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
+import consulo.language.localize.LanguageLocalize;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 
 @ExtensionImpl
 public class MethodNameMacro extends Macro {
-
-  @Override
-  public String getName() {
-    return "methodName";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroMethodname().get();
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "a";
-  }
-
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    PsiElement place = context.getPsiElementAtStartOffset();
-    while (place != null){
-      if (place instanceof PsiMethod){
-        return new TextResult(((PsiMethod)place).getName());
-      } else if (place instanceof PsiClassInitializer classInitializer) {
-        return classInitializer.hasModifierProperty(PsiModifier.STATIC)
-          ? new TextResult(LangBundle.message("java.terms.static.initializer"))
-          : new TextResult(LangBundle.message("java.terms.instance.initializer"));
-      }
-      place = place.getParent();
+    @Override
+    public String getName() {
+        return "methodName";
     }
-    return null;
-  }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroMethodname();
+    }
+
+    @Override
+    public String getDefaultValue() {
+        return "a";
+    }
+
+    @Override
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        PsiElement place = context.getPsiElementAtStartOffset();
+        while (place != null) {
+            if (place instanceof PsiMethod method) {
+                return new TextResult(method.getName());
+            }
+            else if (place instanceof PsiClassInitializer classInitializer) {
+                return classInitializer.isStatic()
+                    ? new TextResult(LanguageLocalize.javaTermsStaticInitializer().get())
+                    : new TextResult(LanguageLocalize.javaTermsInstanceInitializer().get());
+            }
+            place = place.getParent();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

@@ -30,57 +30,59 @@ import consulo.language.editor.template.TextResult;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 
 @ExtensionImpl
 public class ClassNameMacro extends Macro {
+    @Override
+    public String getName() {
+        return "className";
+    }
 
-  @Override
-  public String getName() {
-    return "className";
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroClassname();
+    }
 
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroClassname().get();
-  }
+    @Override
+    @RequiredReadAction
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        int templateStartOffset = context.getTemplateStartOffset();
+        int offset = templateStartOffset > 0 ? context.getTemplateStartOffset() - 1 : context.getTemplateStartOffset();
+        PsiElement place = context.getPsiElementAtStartOffset();
+        PsiClass aClass = null;
 
-  @Override
-  @RequiredReadAction
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    int templateStartOffset = context.getTemplateStartOffset();
-    int offset = templateStartOffset > 0 ? context.getTemplateStartOffset() - 1 : context.getTemplateStartOffset();
-    PsiElement place = context.getPsiElementAtStartOffset();
-    PsiClass aClass = null;
-
-    while (place != null) {
-      if (place instanceof PsiClass placeClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)) {
-        aClass = placeClass;
-        // if className() is evaluated outside of the body of inner class, return name of its outer class instead (IDEADEV-19865)
-        PsiElement lBrace = aClass.getLBrace();
-        if (lBrace != null && offset < lBrace.getTextOffset() && aClass.getContainingClass() != null) {
-          aClass = aClass.getContainingClass();
+        while (place != null) {
+            if (place instanceof PsiClass placeClass && !(place instanceof PsiAnonymousClass) && !(place instanceof PsiTypeParameter)) {
+                aClass = placeClass;
+                // if className() is evaluated outside of the body of inner class, return name of its outer class instead (IDEADEV-19865)
+                PsiElement lBrace = aClass.getLBrace();
+                if (lBrace != null && offset < lBrace.getTextOffset() && aClass.getContainingClass() != null) {
+                    aClass = aClass.getContainingClass();
+                }
+                break;
+            }
+            if (place instanceof PsiJavaFile javaFile) {
+                PsiClass[] classes = javaFile.getClasses();
+                aClass = classes.length != 0 ? classes[0] : null;
+                break;
+            }
+            place = place.getParent();
         }
-        break;
-      }
-      if (place instanceof PsiJavaFile javaFile) {
-        PsiClass[] classes = javaFile.getClasses();
-        aClass = classes.length != 0 ? classes[0] : null;
-        break;
-      }
-      place = place.getParent();
+
+        if (aClass == null) {
+            return null;
+        }
+        String result = aClass.getName();
+        while (aClass.getContainingClass() != null && aClass.getContainingClass().getName() != null) {
+            result = aClass.getContainingClass().getName() + "$" + result;
+            aClass = aClass.getContainingClass();
+        }
+        return new TextResult(result);
     }
 
-    if (aClass == null) return null;
-    String result = aClass.getName();
-    while (aClass.getContainingClass() != null && aClass.getContainingClass().getName() != null) {
-      result = aClass.getContainingClass().getName() + "$" + result;
-      aClass = aClass.getContainingClass();
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
     }
-    return new TextResult(result);
-  }
-
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
 }

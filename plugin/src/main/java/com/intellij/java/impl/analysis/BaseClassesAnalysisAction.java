@@ -33,10 +33,12 @@ import consulo.ui.ex.awt.UIUtil;
  * @author mike
  */
 public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
-    protected BaseClassesAnalysisAction(LocalizeValue actionText,
-                                        LocalizeValue actionDescription,
-                                        LocalizeValue title,
-                                        LocalizeValue analysisNoon) {
+    protected BaseClassesAnalysisAction(
+        LocalizeValue actionText,
+        LocalizeValue actionDescription,
+        LocalizeValue title,
+        LocalizeValue analysisNoon
+    ) {
         super(actionText, actionDescription, title, analysisNoon);
     }
 
@@ -53,13 +55,13 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
                 indicator.setIndeterminate(true);
                 indicator.setText(AnalysisScopeLocalize.checkingClassFiles());
 
-                CompilerManager compilerManager = CompilerManager.getInstance((Project)getProject());
+                CompilerManager compilerManager = CompilerManager.getInstance((Project) getProject());
                 boolean upToDate = compilerManager.isUpToDate(compilerManager.createProjectCompileScope());
 
                 project.getApplication().invokeLater(() -> {
                     if (!upToDate) {
                         int i = Messages.showYesNoCancelDialog(
-                            (Project)getProject(),
+                            (Project) getProject(),
                             AnalysisScopeLocalize.recompileConfirmationMessage().get(),
                             AnalysisScopeLocalize.projectIsOutOfDate().get(),
                             UIUtil.getWarningIcon()
@@ -89,7 +91,7 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
             @Override
             public NotificationInfo getNotificationInfo() {
                 return new NotificationInfo(
-                    LocalizeValue.localizeTODO("Analysis"),
+                    "Analysis",
                     LocalizeValue.localizeTODO("\"" + getTitle() + "\" Analysis Finished"),
                     LocalizeValue.empty()
                 );
@@ -105,11 +107,14 @@ public abstract class BaseClassesAnalysisAction extends BaseAnalysisAction {
     @RequiredReadAction
     private void compileAndAnalyze(Project project, AnalysisScope scope) {
         CompilerManager compilerManager = CompilerManager.getInstance(project);
-        compilerManager.make(compilerManager.createProjectCompileScope(), (aborted, errors, warnings, compileContext) -> {
-            if (aborted || errors != 0) {
-                return;
+        compilerManager.make(
+            compilerManager.createProjectCompileScope(),
+            (aborted, errors, warnings, compileContext) -> {
+                if (aborted || errors != 0) {
+                    return;
+                }
+                project.getApplication().invokeLater(() -> doAnalyze(project, scope));
             }
-            project.getApplication().invokeLater(() -> doAnalyze(project, scope));
-        });
+        );
     }
 }

@@ -18,7 +18,6 @@ package com.intellij.java.impl.codeInsight.highlighting;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.ide.impl.idea.codeInsight.highlighting.HighlightUsagesHandler;
@@ -27,6 +26,7 @@ import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.navigation.ItemPresentation;
 
 import java.util.Arrays;
@@ -99,7 +99,9 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
             else {
                 name = "";
             }
-            myHintText = CodeInsightBundle.message("no.methods.overriding.0.are.found", classes.size(), name);
+            myHintText = LocalizeValue.localizeTODO(
+                CodeInsightBundle.message("no.methods.overriding.0.are.found", classes.size(), name)
+            );
         }
         else {
             addOccurrence(myTarget);
@@ -107,7 +109,7 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
             myStatusText = CodeInsightLocalize.statusBarOverriddenMethodsHighlightedMessage(
                 methodCount,
                 HighlightUsagesHandler.getShortcutText()
-            ).get();
+            );
         }
     }
 }

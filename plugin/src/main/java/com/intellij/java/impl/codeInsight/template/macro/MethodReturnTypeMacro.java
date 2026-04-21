@@ -25,44 +25,42 @@ import consulo.language.editor.template.Result;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
-
+import consulo.localize.LocalizeValue;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class MethodReturnTypeMacro extends Macro {
-  @Override
-  public String getName() {
-    return "methodReturnType";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return "methodReturnType()";
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "a";
-  }
-
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    PsiElement place = context.getPsiElementAtStartOffset();
-    while(place != null){
-      if (place instanceof PsiMethod){
-        return new PsiTypeResult(((PsiMethod)place).getReturnType(), place.getProject());
-      }
-      place = place.getParent();
+    @Override
+    public String getName() {
+        return "methodReturnType";
     }
-    return null;
-  }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return LocalizeValue.localizeTODO("methodReturnType()");
+    }
 
+    @Override
+    public String getDefaultValue() {
+        return "a";
+    }
 
+    @Override
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        PsiElement place = context.getPsiElementAtStartOffset();
+        while (place != null) {
+            if (place instanceof PsiMethod method) {
+                return new PsiTypeResult(method.getReturnType(), place.getProject());
+            }
+            place = place.getParent();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }
