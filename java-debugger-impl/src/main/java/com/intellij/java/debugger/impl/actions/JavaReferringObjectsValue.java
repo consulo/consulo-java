@@ -34,6 +34,7 @@ import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ObjectReference;
 import consulo.internal.com.sun.jdi.Value;
+import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 import org.jspecify.annotations.Nullable;
 
@@ -80,10 +81,10 @@ public class JavaReferringObjectsValue extends JavaValue {
 
                 List<ObjectReference> references;
                 try {
-                    references = ((ObjectReference)value).referringObjects(MAX_REFERRING);
+                    references = ((ObjectReference) value).referringObjects(MAX_REFERRING);
                 }
                 catch (ObjectCollectedException e) {
-                    node.setErrorMessage(JavaDebuggerLocalize.evaluationErrorObjectCollected().get());
+                    node.setErrorMessage(JavaDebuggerLocalize.evaluationErrorObjectCollected());
                     return;
                 }
 
@@ -169,10 +170,9 @@ public class JavaReferringObjectsValue extends JavaValue {
                     public void setFullValueEvaluator(XFullValueEvaluator fullValueEvaluator) {
                     }
 
-                    @Nullable
                     @Override
-                    public String getName() {
-                        return null;
+                    public LocalizeValue getName() {
+                        return LocalizeValue.empty();
                     }
 
                     @Nullable

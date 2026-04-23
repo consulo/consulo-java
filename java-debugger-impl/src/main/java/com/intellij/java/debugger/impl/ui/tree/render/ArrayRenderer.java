@@ -41,7 +41,6 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.PsiExpression;
-import consulo.application.AllIcons;
 import consulo.dataContext.DataContext;
 import consulo.dataContext.DataManager;
 import consulo.execution.debug.breakpoint.XExpression;
@@ -58,6 +57,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
@@ -103,7 +103,8 @@ public class ArrayRenderer extends NodeRendererImpl {
     }
 
     @Override
-    public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException {
+    public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener)
+        throws EvaluateException {
         return ClassRenderer.calcLabel(descriptor);
     }
 
@@ -139,7 +140,10 @@ public class ArrayRenderer extends NodeRendererImpl {
                         continue;
                     }
 
-                    DebuggerTreeNode arrayItemNode = nodeManager.createNode(descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(), array, idx), evaluationContext);
+                    DebuggerTreeNode arrayItemNode = nodeManager.createNode(
+                        descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(), array, idx),
+                        evaluationContext
+                    );
 
                     builder.addChildren(Collections.singletonList(arrayItemNode), false);
                     added++;
@@ -153,15 +157,30 @@ public class ArrayRenderer extends NodeRendererImpl {
 
             if (added == 0) {
                 if (myStartIndex == 0 && arrayLength - 1 <= myEndIndex) {
-                    builder.setMessage(JavaDebuggerLocalize.messageNodeAllElementsNull().get(), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
+                    builder.setMessage(
+                        JavaDebuggerLocalize.messageNodeAllElementsNull(),
+                        null,
+                        SimpleTextAttributes.REGULAR_ATTRIBUTES,
+                        null
+                    );
                 }
                 else {
-                    builder.setMessage(JavaDebuggerLocalize.messageNodeAllArrayElementsNull(myStartIndex, myEndIndex).get(), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
+                    builder.setMessage(
+                        JavaDebuggerLocalize.messageNodeAllArrayElementsNull(myStartIndex, myEndIndex),
+                        null,
+                        SimpleTextAttributes.REGULAR_ATTRIBUTES,
+                        null
+                    );
                 }
             }
             else {
                 if (hiddenNulls) {
-                    builder.setMessage(JavaDebuggerLocalize.messageNodeElementsNullHidden().get(), null, SimpleTextAttributes.REGULAR_ATTRIBUTES, null);
+                    builder.setMessage(
+                        JavaDebuggerLocalize.messageNodeElementsNullHidden(),
+                        null,
+                        SimpleTextAttributes.REGULAR_ATTRIBUTES,
+                        null
+                    );
                 }
                 if (!myForced && idx < end) {
                     builder.tooManyChildren(end - idx);
@@ -198,7 +217,10 @@ public class ArrayRenderer extends NodeRendererImpl {
 
         PsiElementFactory elementFactory = JavaPsiFacade.getInstance(node.getProject()).getElementFactory();
         try {
-            return elementFactory.createExpressionFromText("this[" + descriptor.getIndex() + "]", elementFactory.getArrayClass(LanguageLevel.HIGHEST));
+            return elementFactory.createExpressionFromText(
+                "this[" + descriptor.getIndex() + "]",
+                elementFactory.getArrayClass(LanguageLevel.HIGHEST)
+            );
         }
         catch (IncorrectOperationException e) {
             LOG.error(e);
@@ -233,8 +255,16 @@ public class ArrayRenderer extends NodeRendererImpl {
             NodeManagerImpl nodeManager = (NodeManagerImpl) builder.getNodeManager();
             NodeDescriptorFactory descriptorFactory = builder.getDescriptorManager();
 
-            builder.setMessage(JavaDebuggerLocalize.messageNodeFiltered().get() + " " + myExpression.getExpression(), AllIcons.General.Filter, SimpleTextAttributes.REGULAR_ATTRIBUTES,
-                FILTER_HYPERLINK);
+            builder.setMessage(
+                LocalizeValue.join(
+                    JavaDebuggerLocalize.messageNodeFiltered(),
+                    LocalizeValue.space(),
+                    LocalizeValue.of(myExpression.getExpression())
+                ),
+                PlatformIconGroup.generalFilter(),
+                SimpleTextAttributes.REGULAR_ATTRIBUTES,
+                FILTER_HYPERLINK
+            );
 
             if (myEntriesLimit <= 0) {
                 myEntriesLimit = 1;
@@ -263,15 +293,19 @@ public class ArrayRenderer extends NodeRendererImpl {
                     ErrorsValueGroup errorsGroup = null;
                     for (int idx = myStartIndex; idx < arrayLength; idx++) {
                         try {
-                            if (DebuggerUtilsEx.evaluateBoolean(cachedEvaluator.getEvaluator(evaluationContext.getProject()), (EvaluationContextImpl) evaluationContext.createEvaluationContext(array
-                                .getValue(idx)))) {
-
-                                DebuggerTreeNode arrayItemNode = nodeManager.createNode(descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(), array, idx), evaluationContext);
+                            if (DebuggerUtilsEx.evaluateBoolean(
+                                cachedEvaluator.getEvaluator(evaluationContext.getProject()),
+                                (EvaluationContextImpl) evaluationContext.createEvaluationContext(array.getValue(idx))
+                            )) {
+                                DebuggerTreeNode arrayItemNode = nodeManager.createNode(
+                                    descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(), array, idx),
+                                    evaluationContext
+                                );
 
                                 builder.addChildren(Collections.singletonList(arrayItemNode), false);
                                 added++;
                                 //if (added > ENTRIES_LIMIT) {
-                                //  break;
+                                //    break;
                                 //}
                             }
                         }
@@ -280,9 +314,14 @@ public class ArrayRenderer extends NodeRendererImpl {
                                 errorsGroup = new ErrorsValueGroup();
                                 builder.addChildren(XValueChildrenList.bottomGroup(errorsGroup), false);
                             }
-                            JavaValue childValue = JavaValue.create(null, (ValueDescriptorImpl) descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(), array, idx), (
-                                (EvaluationContextImpl) evaluationContext), nodeManager, false);
-                            errorsGroup.addErrorValue(e.getMessage(), childValue);
+                            JavaValue childValue = JavaValue.create(
+                                null,
+                                (ValueDescriptorImpl) descriptorFactory.getArrayItemDescriptor(builder.getParentDescriptor(), array, idx),
+                                (EvaluationContextImpl) evaluationContext,
+                                nodeManager,
+                                false
+                            );
+                            errorsGroup.addErrorValue(LocalizeValue.ofNullable(e.getMessage()), childValue);
                         }
                     }
                 }
@@ -290,25 +329,30 @@ public class ArrayRenderer extends NodeRendererImpl {
                 builder.addChildren(Collections.emptyList(), true);
 
                 //if (added != 0 && END_INDEX < arrayLength - 1) {
-                //  builder.setRemaining(arrayLength - 1 - END_INDEX);
+                //    builder.setRemaining(arrayLength - 1 - END_INDEX);
                 //}
             }
         }
 
-        public static final XDebuggerTreeNodeHyperlink FILTER_HYPERLINK = new XDebuggerTreeNodeHyperlink(LocalizeValue.localizeTODO(" clear")) {
-            @Override
-            public void onClick(MouseEvent e) {
-                DataContext context = DataManager.getInstance().getDataContext(e.getComponent());
+        public static final XDebuggerTreeNodeHyperlink FILTER_HYPERLINK =
+            new XDebuggerTreeNodeHyperlink(LocalizeValue.localizeTODO(" clear")) {
+                @Override
+                public void onClick(MouseEvent e) {
+                    DataContext context = DataManager.getInstance().getDataContext(e.getComponent());
 
-                XValueTree valueTree = context.getData(XValueTree.KEY);
-                if (valueTree != null) {
-                    XValueNode node = valueTree.getSelectedNode();
-                    if (node != null) {
-                        ArrayAction.setArrayRenderer(NodeRendererSettings.getInstance().getArrayRenderer(), node, DebuggerManagerEx.getInstanceEx(valueTree.getProject()).getContext());
+                    XValueTree valueTree = context.getData(XValueTree.KEY);
+                    if (valueTree != null) {
+                        XValueNode node = valueTree.getSelectedNode();
+                        if (node != null) {
+                            ArrayAction.setArrayRenderer(
+                                NodeRendererSettings.getInstance().getArrayRenderer(),
+                                node,
+                                DebuggerManagerEx.getInstanceEx(valueTree.getProject()).getContext()
+                            );
+                        }
                     }
+                    e.consume();
                 }
-                e.consume();
-            }
-        };
+            };
     }
 }
