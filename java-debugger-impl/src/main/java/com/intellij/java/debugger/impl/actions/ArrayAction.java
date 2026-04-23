@@ -30,7 +30,6 @@ import consulo.configurable.Configurable;
 import consulo.execution.debug.frame.XValue;
 import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.ui.XValueTree;
-import consulo.ide.setting.ShowSettingsUtil;
 import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
@@ -75,7 +74,7 @@ public abstract class ArrayAction extends DebuggerAction {
         //if (index > 0) {
         //    title = title + " " + label.substring(index);
         //}
-        createNewRenderer(node, renderer, debuggerContext, LocalizeValue.ofNullable(node.getName())).doWhenDone(newRenderer -> setArrayRenderer(
+        createNewRenderer(node, renderer, debuggerContext, node.getName()).doWhenDone(newRenderer -> setArrayRenderer(
             newRenderer,
             node,
             debuggerContext
@@ -89,8 +88,8 @@ public abstract class ArrayAction extends DebuggerAction {
         LocalizeValue title
     );
 
-    @RequiredUIAccess
     @Override
+    @RequiredUIAccess
     public void update(AnActionEvent e) {
         boolean enable = false;
         List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
@@ -128,7 +127,7 @@ public abstract class ArrayAction extends DebuggerAction {
             return;
         }
 
-        ValueDescriptorImpl descriptor = ((JavaValue)container).getDescriptor();
+        ValueDescriptorImpl descriptor = ((JavaValue) container).getDescriptor();
 
         DebugProcessImpl debugProcess = debuggerContext.getDebugProcess();
         if (debugProcess != null) {
@@ -137,13 +136,13 @@ public abstract class ArrayAction extends DebuggerAction {
                 public void contextAction(SuspendContextImpl suspendContext) throws Exception {
                     Renderer lastRenderer = descriptor.getLastRenderer();
                     if (lastRenderer instanceof ArrayRenderer) {
-                        ((JavaValue)container).setRenderer(newRenderer, node);
+                        ((JavaValue) container).setRenderer(newRenderer, node);
                         Application.get().invokeLater(() -> node.getTree().expand(node));
                     }
                     else if (lastRenderer instanceof CompoundNodeRenderer compoundRenderer) {
                         if (compoundRenderer.getChildrenRenderer() instanceof ExpressionChildrenRenderer) {
                             ExpressionChildrenRenderer.setPreferableChildrenRenderer(descriptor, newRenderer);
-                            ((JavaValue)container).reBuild(node);
+                            ((JavaValue) container).reBuild(node);
                         }
                     }
                 }
