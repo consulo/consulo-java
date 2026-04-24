@@ -20,7 +20,6 @@ import com.intellij.java.impl.refactoring.PackageWrapper;
 import consulo.document.event.DocumentAdapter;
 import consulo.document.event.DocumentEvent;
 import consulo.ide.impl.idea.ide.util.DirectoryChooser;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.language.editor.ui.awt.EditorComboBox;
 import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.PsiManager;
@@ -34,8 +33,8 @@ import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
 import consulo.virtualFileSystem.VirtualFile;
-
 import org.jspecify.annotations.Nullable;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -88,7 +87,7 @@ public abstract class DestinationFolderComboBox extends ComboboxWithBrowseButton
         if (element == NULL_WRAPPER) return LEAVE_IN_SAME_SOURCE_ROOT;
         if (element instanceof DirectoryChooser.ItemWrapper) {
           VirtualFile virtualFile = ((DirectoryChooser.ItemWrapper) element).getDirectory().getVirtualFile();
-          Module module = ModuleUtil.findModuleForFile(virtualFile, project);
+          Module module = ModuleUtilCore.findModuleForFile(virtualFile, project);
           if (module != null) {
             return module.getName();
           }

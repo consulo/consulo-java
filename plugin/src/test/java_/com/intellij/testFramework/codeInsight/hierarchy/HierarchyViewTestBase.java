@@ -19,7 +19,6 @@ import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
 import consulo.application.util.function.Computable;
 import consulo.util.jdom.JDOMUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 
 /**
  * Checks tree structure for Type Hierarchy (Ctrl+H), Call Hierarchy (Ctrl+Alt+H), Method Hierarchy (Ctrl+Shift+H).

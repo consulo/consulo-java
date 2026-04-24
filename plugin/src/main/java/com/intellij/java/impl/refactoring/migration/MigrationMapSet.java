@@ -148,9 +148,7 @@ public class MigrationMapSet {
         File deletedFiles = new File(dir, "deleted.txt");
         if (deletedFiles.isFile()) {
             try {
-                myDeletedMaps.addAll(Arrays.asList(
-                    consulo.ide.impl.idea.openapi.util.io.FileUtil.loadFile(deletedFiles, true).split("\n")
-                ));
+                myDeletedMaps.addAll(Arrays.asList(FileUtil.loadFile(deletedFiles, true).split("\n")));
             }
             catch (IOException e) {
                 LOG.error(e);

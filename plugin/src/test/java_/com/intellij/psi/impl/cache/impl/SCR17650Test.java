@@ -7,13 +7,12 @@ import java.io.IOException;
 
 import consulo.application.ApplicationManager;
 import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtilCore;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.PsiTestCase;
 import com.intellij.testFramework.PsiTestUtil;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 /**
  * @author max
@@ -41,8 +40,8 @@ public abstract class SCR17650Test extends PsiTestCase {
           myDir = rootVFile.createChildDirectory(null, "contentAndLibrary");
 
           VirtualFile file1 = myDir.createChildData(null, "A.java");
-          VfsUtil.saveText(file1, "package p; public class A{ public void foo(); }");
-          VfsUtilCore.copyFile(null, getClassFile(), myDir);
+          VirtualFileUtil.saveText(file1, "package p; public class A{ public void foo(); }");
+          VirtualFileUtil.copyFile(null, getClassFile(), myDir);
 
           PsiTestUtil.addSourceRoot(myModule, myDir);
           ModuleRootModificationUtil.addModuleLibrary(myModule, myDir.getUrl());

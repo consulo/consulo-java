@@ -18,7 +18,7 @@ import com.intellij.java.language.codeInsight.AnnotationUtil;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsListener;
 import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import consulo.language.editor.intention.IntentionAction;
@@ -38,7 +38,6 @@ import consulo.content.OrderRootType;
 import consulo.content.library.Library;
 import consulo.content.library.LibraryTable;
 import consulo.util.lang.Trinity;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
 import consulo.util.io.StreamUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.java.language.psi.JavaPsiFacade;
@@ -59,6 +58,7 @@ import com.intellij.testFramework.fixtures.IdeaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.JavaTestFixtureFactory;
 import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import consulo.component.messagebus.MessageBusConnection;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 public abstract class AddAnnotationFixTest extends UsefulTestCase {
   private CodeInsightTestFixture myFixture;
@@ -107,9 +107,9 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
         Library library = libraryTable.createLibrary("test");
 
         Library.ModifiableModel libraryModel = library.getModifiableModel();
-        libraryModel.addRoot(VfsUtil.pathToUrl(myFixture.getTempDirPath() + "/lib"), OrderRootType.SOURCES);
+        libraryModel.addRoot(VirtualFileUtil.pathToUrl(myFixture.getTempDirPath() + "/lib"), OrderRootType.SOURCES);
         for (String annotationsDir : annotationsDirs) {
-          libraryModel.addRoot(VfsUtil.pathToUrl(myFixture.getTempDirPath() + annotationsDir), AnnotationOrderRootType.getInstance());
+          libraryModel.addRoot(VirtualFileUtil.pathToUrl(myFixture.getTempDirPath() + annotationsDir), AnnotationOrderRootType.getInstance());
         }
         libraryModel.commit();
         model.commit();
@@ -409,7 +409,7 @@ public abstract class AddAnnotationFixTest extends UsefulTestCase {
         VirtualFile file = LocalFileSystem.getInstance().findFileByPath(myFixture.getTempDirPath() + "/content/anno/p/annotations.xml");
         assert file != null;
         String newText = "  " + StreamUtil.readText(file.getInputStream()) + "      "; // adding newspace to the beginning and end of file
-        FileUtil.writeToFile(VfsUtil.virtualToIoFile(file), newText); // writing using java.io.File to make this change external
+        FileUtil.writeToFile(VirtualFileUtil.virtualToIoFile(file), newText); // writing using java.io.File to make this change external
         file.refresh(false, false);
       }
     }.execute();

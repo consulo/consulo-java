@@ -25,77 +25,69 @@ import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeDescriptorProvider;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.StaticDescriptorImpl;
-import consulo.application.AllIcons;
 import consulo.execution.debug.frame.XCompositeNode;
 import consulo.execution.debug.frame.XValueChildrenList;
 import consulo.execution.debug.frame.XValueGroup;
 import consulo.internal.com.sun.jdi.Field;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 import org.jspecify.annotations.Nullable;
 
 /**
  * @author egor
  */
-public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvider
-{
-	private final StaticDescriptorImpl myStaticDescriptor;
-	private final EvaluationContextImpl myEvaluationContext;
-	private final NodeManagerImpl myNodeManager;
+public class JavaStaticGroup extends XValueGroup implements NodeDescriptorProvider {
+    private final StaticDescriptorImpl myStaticDescriptor;
+    private final EvaluationContextImpl myEvaluationContext;
+    private final NodeManagerImpl myNodeManager;
 
-	public JavaStaticGroup(
-			StaticDescriptorImpl staticDescriptor, EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager)
-	{
-		super(staticDescriptor.getName());
-		myStaticDescriptor = staticDescriptor;
-		myEvaluationContext = evaluationContext;
-		myNodeManager = nodeManager;
-	}
+    public JavaStaticGroup(StaticDescriptorImpl staticDescriptor, EvaluationContextImpl evaluationContext, NodeManagerImpl nodeManager) {
+        super(LocalizeValue.localizeTODO(staticDescriptor.getName()));
+        myStaticDescriptor = staticDescriptor;
+        myEvaluationContext = evaluationContext;
+        myNodeManager = nodeManager;
+    }
 
-	@Override
-	public String getSeparator()
-	{
-		return "";
-	}
+    @Override
+    public String getSeparator() {
+        return "";
+    }
 
-	@Nullable
-	@Override
-	public Image getIcon()
-	{
-		return AllIcons.Nodes.Static;
-	}
+    @Nullable
+    @Override
+    public Image getIcon() {
+        return PlatformIconGroup.nodesStatic();
+    }
 
-	@Override
-	public NodeDescriptorImpl getDescriptor()
-	{
-		return myStaticDescriptor;
-	}
+    @Override
+    public NodeDescriptorImpl getDescriptor() {
+        return myStaticDescriptor;
+    }
 
-	@Override
-	public void computeChildren(final XCompositeNode node)
-	{
-		myEvaluationContext.getDebugProcess().getManagerThread().schedule(new SuspendContextCommandImpl(myEvaluationContext.getSuspendContext())
-		{
-			@Override
-			public void contextAction() throws Exception
-			{
-				final XValueChildrenList children = new XValueChildrenList();
+    @Override
+    public void computeChildren(final XCompositeNode node) {
+        myEvaluationContext.getDebugProcess()
+            .getManagerThread()
+            .schedule(new SuspendContextCommandImpl(myEvaluationContext.getSuspendContext()) {
+                @Override
+                public void contextAction() throws Exception {
+                    XValueChildrenList children = new XValueChildrenList();
 
-				final ReferenceType refType = myStaticDescriptor.getType();
-				List<Field> fields = refType.allFields();
-				for(Field field : fields)
-				{
-					if(field.isStatic())
-					{
-						final FieldDescriptorImpl fieldDescriptor = myNodeManager.getFieldDescriptor(myStaticDescriptor, null, field);
-						children.add(JavaValue.create(fieldDescriptor, myEvaluationContext, myNodeManager));
-						//final DebuggerTreeNodeImpl node = myNodeManager.createNode(fieldDescriptor, myEvaluationContext);
-						//myChildren.add(node);
-					}
-				}
+                    ReferenceType refType = myStaticDescriptor.getType();
+                    List<Field> fields = refType.allFields();
+                    for (Field field : fields) {
+                        if (field.isStatic()) {
+                            FieldDescriptorImpl fieldDescriptor = myNodeManager.getFieldDescriptor(myStaticDescriptor, null, field);
+                            children.add(JavaValue.create(fieldDescriptor, myEvaluationContext, myNodeManager));
+                            //final DebuggerTreeNodeImpl node = myNodeManager.createNode(fieldDescriptor, myEvaluationContext);
+                            //myChildren.add(node);
+                        }
+                    }
 
-				node.addChildren(children, true);
-			}
-		});
-	}
+                    node.addChildren(children, true);
+                }
+            });
+    }
 }

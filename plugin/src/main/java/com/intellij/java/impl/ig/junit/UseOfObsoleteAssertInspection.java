@@ -21,7 +21,7 @@ import com.siyeh.ig.BaseInspection;
 import com.siyeh.ig.BaseInspectionVisitor;
 import com.siyeh.ig.InspectionGadgetsFix;
 import com.siyeh.localize.InspectionGadgetsLocalize;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -57,11 +57,11 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
   }
 
   private static class UseOfObsoleteAssertVisitor extends BaseInspectionVisitor {
-
     @Override
+    @RequiredReadAction
     public void visitMethodCallExpression(PsiMethodCallExpression expression) {
       Project project = expression.getProject();
-      Module module = ModuleUtil.findModuleForPsiElement(expression);
+      Module module = expression.getModule();
       if (module == null) {
         return;
       }
@@ -71,7 +71,7 @@ public abstract class UseOfObsoleteAssertInspection extends BaseInspection {
         return;
       }
       PsiMethod psiMethod = expression.resolveMethod();
-      if (psiMethod == null || !psiMethod.hasModifierProperty(PsiModifier.STATIC)) {
+      if (psiMethod == null || !psiMethod.isStatic()) {
         return;
       }
       PsiClass containingClass = psiMethod.getContainingClass();

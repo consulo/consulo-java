@@ -22,6 +22,7 @@ import consulo.language.editor.template.Expression;
 import consulo.language.editor.template.ExpressionContext;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
+import consulo.localize.LocalizeValue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,30 +33,32 @@ import java.util.List;
  */
 @ExtensionImpl
 public class SuggestFirstVariableNameMacro extends VariableOfTypeMacro {
-  @Override
-  public String getName() {
-    return "suggestFirstVariableName";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroSuggestFirstVariableName().get();
-  }
-
-  @Override
-  @RequiredReadAction
-  protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
-    PsiElement[] variables = super.getVariables(params, context);
-    if (variables == null) return null;
-    List<PsiElement> result = new ArrayList<>();
-    List<String> skip = Arrays.asList("true", "false", "this", "super");
-    for (PsiElement variable : variables) {
-      if (!skip.contains(variable.getText())) {
-        result.add(variable);
-      }
+    @Override
+    public String getName() {
+        return "suggestFirstVariableName";
     }
-    return PsiUtilCore.toPsiElementArray(result);
-  }
+
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroSuggestFirstVariableName();
+    }
+
+    @Override
+    @RequiredReadAction
+    protected PsiElement[] getVariables(Expression[] params, ExpressionContext context) {
+        PsiElement[] variables = super.getVariables(params, context);
+        if (variables == null) {
+            return null;
+        }
+        List<PsiElement> result = new ArrayList<>();
+        List<String> skip = Arrays.asList("true", "false", "this", "super");
+        for (PsiElement variable : variables) {
+            if (!skip.contains(variable.getText())) {
+                result.add(variable);
+            }
+        }
+        return PsiUtilCore.toPsiElementArray(result);
+    }
 }
 
 

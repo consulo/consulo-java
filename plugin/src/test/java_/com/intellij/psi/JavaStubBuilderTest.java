@@ -25,7 +25,7 @@ import java.security.SecureRandom;
 import com.intellij.java.language.psi.PsiJavaFile;
 import org.jspecify.annotations.Nullable;
 import consulo.language.ast.FileASTNode;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.language.impl.DebugUtil;
 import com.intellij.java.language.impl.psi.impl.source.JavaLightStubBuilder;
 import consulo.language.psi.stub.StubElement;

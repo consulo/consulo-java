@@ -22,9 +22,9 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import consulo.virtualFileSystem.LocalFileSystem;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jspecify.annotations.Nullable;
 import consulo.util.lang.StringUtil;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiReference;
 
@@ -40,7 +40,7 @@ public abstract class ResolveTestCase extends PsiTestCase {
     VirtualFile vFile = LocalFileSystem.getInstance().findFileByPath(fullPath.replace(File.separatorChar, '/'));
     assertNotNull("file " + filePath + " not found", vFile);
 
-    String fileText = StringUtil.convertLineSeparators(VfsUtil.loadText(vFile));
+    String fileText = StringUtil.convertLineSeparators(VirtualFileUtil.loadText(vFile));
 
     String fileName = vFile.getName();
 

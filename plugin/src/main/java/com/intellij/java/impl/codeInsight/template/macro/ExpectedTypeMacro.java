@@ -23,6 +23,7 @@ import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.psi.PsiExpression;
 import com.intellij.java.language.psi.PsiIdentifier;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.completion.CompletionUtilCore;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -36,6 +37,7 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.ReparseRangeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jspecify.annotations.Nullable;
 
@@ -44,75 +46,83 @@ import java.util.Set;
 
 @ExtensionImpl
 public class ExpectedTypeMacro extends Macro {
-
-  @Override
-  public String getName() {
-    return "expectedType";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroExpectedType().get();
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "A";
-  }
-
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    PsiType[] types = getExpectedTypes(params, context);
-    if (types == null || types.length == 0) return null;
-    return new PsiTypeResult(types[0], context.getProject());
-  }
-
-  @Override
-  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
-    PsiType[] types = getExpectedTypes(params, context);
-    if (types == null || types.length < 2) return null;
-    Set<LookupElement> set = new LinkedHashSet<>();
-    for (PsiType type : types) {
-      JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);
+    @Override
+    public String getName() {
+        return "expectedType";
     }
-    return set.toArray(new LookupElement[set.size()]);
-  }
 
-  @Nullable
-  private static PsiType[] getExpectedTypes(Expression[] params, ExpressionContext context) {
-    if (params.length != 0) return null;
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroExpectedType();
+    }
 
-    Project project = context.getProject();
-    PsiType[] types = null;
+    @Override
+    public String getDefaultValue() {
+        return "A";
+    }
 
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-    assert file != null;
-    PsiFile fileCopy = (PsiFile)file.copy();
-    ReparseRangeUtil.reparseRange(
-      fileCopy,
-      context.getTemplateStartOffset(),
-      context.getTemplateEndOffset(),
-      CompletionUtilCore.DUMMY_IDENTIFIER
-    );
-    
-    PsiElement element = fileCopy.findElementAt(context.getTemplateStartOffset());
-
-    if (element instanceof PsiIdentifier && element.getParent() instanceof PsiExpression parentExpression) {
-      ExpectedTypeInfo[] infos = ExpectedTypesProvider.getExpectedTypes(parentExpression, true);
-      if (infos.length > 0) {
-        types = new PsiType[infos.length];
-        for (int i = 0; i < infos.length; i++) {
-          ExpectedTypeInfo info = infos[i];
-          types[i] = info.getType();
+    @Override
+    @RequiredReadAction
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        PsiType[] types = getExpectedTypes(params, context);
+        if (types == null || types.length == 0) {
+            return null;
         }
-      }
+        return new PsiTypeResult(types[0], context.getProject());
     }
 
-    return types;
-  }
+    @Override
+    @RequiredReadAction
+    public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
+        PsiType[] types = getExpectedTypes(params, context);
+        if (types == null || types.length < 2) {
+            return null;
+        }
+        Set<LookupElement> set = new LinkedHashSet<>();
+        for (PsiType type : types) {
+            JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);
+        }
+        return set.toArray(new LookupElement[set.size()]);
+    }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Nullable
+    @RequiredReadAction
+    private static PsiType[] getExpectedTypes(Expression[] params, ExpressionContext context) {
+        if (params.length != 0) {
+            return null;
+        }
+
+        Project project = context.getProject();
+        PsiType[] types = null;
+
+        PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+        assert file != null;
+        PsiFile fileCopy = (PsiFile) file.copy();
+        ReparseRangeUtil.reparseRange(
+            fileCopy,
+            context.getTemplateStartOffset(),
+            context.getTemplateEndOffset(),
+            CompletionUtilCore.DUMMY_IDENTIFIER
+        );
+
+        PsiElement element = fileCopy.findElementAt(context.getTemplateStartOffset());
+
+        if (element instanceof PsiIdentifier && element.getParent() instanceof PsiExpression parentExpression) {
+            ExpectedTypeInfo[] infos = ExpectedTypesProvider.getExpectedTypes(parentExpression, true);
+            if (infos.length > 0) {
+                types = new PsiType[infos.length];
+                for (int i = 0; i < infos.length; i++) {
+                    ExpectedTypeInfo info = infos[i];
+                    types[i] = info.getType();
+                }
+            }
+        }
+
+        return types;
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

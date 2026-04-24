@@ -6,9 +6,8 @@ import consulo.document.Document;
 import consulo.language.file.FileTypeManager;
 import consulo.ide.impl.idea.openapi.fileTypes.ex.FileTypeManagerEx;
 import consulo.ide.impl.idea.openapi.roots.ModuleRootModificationUtil;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.impl.internal.psi.PsiTreeChangeEventImpl;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -17,6 +16,7 @@ import com.intellij.testFramework.PsiTestUtil;
 import consulo.ide.impl.idea.util.WaitFor;
 import consulo.ide.impl.idea.util.io.ReadOnlyAttributeUtil;
 import consulo.logging.Logger;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 
 import java.io.File;
@@ -425,14 +425,14 @@ public abstract class PsiEventsTest extends PsiTestCase {
   public void testChangeFile() throws Exception {
     FileManager fileManager = myPsiManager.getFileManager();
     VirtualFile file = myPrjDir1.createChildData(null, "a.txt");
-    VfsUtil.saveText(file, "aaa");
+    VirtualFileUtil.saveText(file, "aaa");
     PsiFile psiFile = fileManager.findFile(file);
     psiFile.getText();
 
     EventsTestListener listener = new EventsTestListener();
     myPsiManager.addPsiTreeChangeListener(listener,getTestRootDisposable());
 
-    VfsUtil.saveText(file, "bbb");
+    VirtualFileUtil.saveText(file, "bbb");
     PsiDocumentManager.getInstance(getProject()).commitAllDocuments();
 
     /*

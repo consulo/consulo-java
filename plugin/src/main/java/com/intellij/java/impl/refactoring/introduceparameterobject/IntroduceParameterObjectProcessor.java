@@ -36,7 +36,6 @@ import com.intellij.java.language.psi.util.TypeConversionUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
-import consulo.ide.impl.idea.openapi.module.ModuleUtil;
 import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
@@ -340,7 +339,7 @@ public class IntroduceParameterObjectProcessor extends FixableUsagesRefactoringP
                     directory = myMoveDestination.getTargetDirectory(containingDirectory);
                 }
                 else {
-                    Module module = ModuleUtil.findModuleForPsiElement(containingFile);
+                    Module module = containingFile.getModule();
                     directory = PackageUtil.findOrCreateDirectoryForPackage(module, packageName, containingDirectory, true, true);
                 }
 

@@ -34,63 +34,65 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 
 @ExtensionImpl
 public class SuggestIndexNameMacro extends Macro {
-  @Override
-  public String getName() {
-    return "suggestIndexName";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroSuggestIndexName().get();
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "a";
-  }
-
-  @Override
-  @RequiredReadAction
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    if (params.length != 0) return null;
-
-    Project project = context.getProject();
-    int offset = context.getStartOffset();
-
-    PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
-    PsiElement place = file.findElementAt(offset);
-    PsiVariable[] vars = MacroUtil.getVariablesVisibleAt(place, "");
-  ChooseLetterLoop:
-    for (char letter = 'i'; letter <= 'z'; letter++){
-      for (PsiVariable var : vars) {
-        PsiIdentifier identifier = var.getNameIdentifier();
-        if (identifier == null || place.equals(identifier)) continue;
-        if (var instanceof PsiLocalVariable) {
-          PsiElement parent = var.getParent();
-          if (parent instanceof PsiDeclarationStatement) {
-            if (PsiTreeUtil.isAncestor(parent, place, false) &&
-                var.getTextRange().getStartOffset() > place.getTextRange().getStartOffset()) {
-              continue;
-            }
-          }
-        }
-        String name = identifier.getText();
-        if (name.length() == 1 && name.charAt(0) == letter) {
-          continue ChooseLetterLoop;
-        }
-      }
-      return new TextResult("" + letter);
+    @Override
+    public String getName() {
+        return "suggestIndexName";
     }
 
-    return null;
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroSuggestIndexName();
+    }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public String getDefaultValue() {
+        return "a";
+    }
+
+    @Override
+    @RequiredReadAction
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        if (params.length != 0) {
+            return null;
+        }
+
+        Project project = context.getProject();
+        int offset = context.getStartOffset();
+
+        PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(context.getEditor().getDocument());
+        PsiElement place = file.findElementAt(offset);
+        PsiVariable[] vars = MacroUtil.getVariablesVisibleAt(place, "");
+        ChooseLetterLoop:
+        for (char letter = 'i'; letter <= 'z'; letter++) {
+            for (PsiVariable var : vars) {
+                PsiIdentifier identifier = var.getNameIdentifier();
+                if (identifier == null || place.equals(identifier)) {
+                    continue;
+                }
+                if (var instanceof PsiLocalVariable
+                    && var.getParent() instanceof PsiDeclarationStatement decl
+                    && PsiTreeUtil.isAncestor(decl, place, false)
+                    && var.getTextRange().getStartOffset() > place.getTextRange().getStartOffset()) {
+                    continue;
+                }
+                String name = identifier.getText();
+                if (name.length() == 1 && name.charAt(0) == letter) {
+                    continue ChooseLetterLoop;
+                }
+            }
+            return new TextResult("" + letter);
+        }
+
+        return null;
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

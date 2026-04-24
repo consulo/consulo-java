@@ -15,7 +15,6 @@
  */
 package com.intellij.codeInsight.daemon;
 
-import consulo.ide.impl.idea.openapi.vfs.VfsUtil;
 import consulo.language.editor.rawHighlight.HighlightInfo;
 import consulo.language.editor.inspection.LocalInspectionTool;
 import com.intellij.java.impl.codeInspection.accessStaticViaInstance.AccessStaticViaInstance;
@@ -48,6 +47,7 @@ import com.intellij.psi.xml.XmlToken;
 import com.intellij.psi.xml.XmlTokenType;
 import com.intellij.testFramework.IdeaTestUtil;
 import consulo.java.analysis.codeInspection.JavaExtensionPoints;
+import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jdom.Element;
 
 import java.io.IOException;
@@ -275,7 +275,7 @@ public abstract class LightAdvHighlightingTest extends LightDaemonAnalyzerTestCa
         VirtualFile vFile = txt.getVirtualFile();
         assertNotNull(txt.toString(), vFile);
         try {
-          VfsUtil.saveText(vFile, "XXX");
+          VirtualFileUtil.saveText(vFile, "XXX");
         }
         catch (IOException e) {
           throw new RuntimeException(e);

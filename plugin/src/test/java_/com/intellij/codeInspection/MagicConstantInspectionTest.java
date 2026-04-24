@@ -30,7 +30,7 @@ import com.intellij.java.impl.codeInspection.magicConstant.MagicConstantInspecti
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkModificator;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
-import consulo.ide.impl.idea.openapi.util.io.FileUtil;
+import consulo.util.io.FileUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import com.intellij.testFramework.InspectionTestCase;

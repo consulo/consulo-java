@@ -24,46 +24,46 @@ import consulo.language.editor.template.*;
 import consulo.language.editor.template.context.TemplateContextType;
 import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ExtensionImpl
 public class MethodParametersMacro extends Macro {
-
-  @Override
-  public String getName() {
-    return "methodParameters";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return CodeInsightLocalize.macroMethodParameters().get();
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "a";
-  }
-
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    PsiElement place = context.getPsiElementAtStartOffset();
-    while (place != null){
-      if (place instanceof PsiMethod method) {
-        List<Result> result = new ArrayList<>();
-        for (PsiParameter parameter : method.getParameterList().getParameters()) {
-          result.add(new TextResult(parameter.getName()));
-        }
-        return new ListResult(result);
-      }
-      place = place.getParent();
+    @Override
+    public String getName() {
+        return "methodParameters";
     }
-    return null;
-  }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return CodeInsightLocalize.macroMethodParameters();
+    }
+
+    @Override
+    public String getDefaultValue() {
+        return "a";
+    }
+
+    @Override
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        PsiElement place = context.getPsiElementAtStartOffset();
+        while (place != null) {
+            if (place instanceof PsiMethod method) {
+                List<Result> result = new ArrayList<>();
+                for (PsiParameter parameter : method.getParameterList().getParameters()) {
+                    result.add(new TextResult(parameter.getName()));
+                }
+                return new ListResult(result);
+            }
+            place = place.getParent();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }

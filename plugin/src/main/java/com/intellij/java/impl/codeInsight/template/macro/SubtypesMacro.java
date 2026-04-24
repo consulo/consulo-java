@@ -20,6 +20,7 @@ import com.intellij.java.impl.codeInsight.template.JavaCodeContextType;
 import com.intellij.java.impl.codeInsight.template.JavaEditorTemplateUtilImpl;
 import com.intellij.java.language.impl.codeInsight.template.macro.PsiTypeResult;
 import com.intellij.java.language.psi.PsiType;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.util.matcher.PrefixMatcher;
 import consulo.language.editor.completion.lookup.LookupElement;
@@ -31,64 +32,69 @@ import consulo.language.editor.template.macro.Macro;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.function.Consumer;
 
 @ExtensionImpl
 public class SubtypesMacro extends Macro {
-  @Override
-  public String getName() {
-    return "subtypes";
-  }
-
-  @Override
-  public String getPresentableName() {
-    return "subtypes(TYPE)";
-  }
-
-  @Override
-  public String getDefaultValue() {
-    return "A";
-  }
-
-  @Override
-  public Result calculateResult(Expression[] params, ExpressionContext context) {
-    if (params.length == 0) return null;
-    return params[0].calculateQuickResult(context);
-  }
-
-  @Override
-  public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
-    return calculateResult(params, context);
-  }
-
-  @Override
-  public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
-    if (params.length == 0) return LookupElement.EMPTY_ARRAY;
-    Result paramResult = params[0].calculateQuickResult(context);
-    if (paramResult instanceof PsiTypeResult) {
-      PsiType type = ((PsiTypeResult)paramResult).getType();
-      PsiFile file = PsiDocumentManager.getInstance(context.getProject()).getPsiFile(context.getEditor().getDocument());
-      PsiElement element = file.findElementAt(context.getStartOffset());
-
-      final Set<LookupElement> set = new LinkedHashSet<LookupElement>();
-      JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);
-      CodeInsightUtil.processSubTypes(type, element, false, PrefixMatcher.ALWAYS_TRUE, new Consumer<PsiType>() {
-        @Override
-        public void accept(PsiType psiType) {
-          JavaEditorTemplateUtilImpl.addTypeLookupItem(set, psiType);
-        }
-      });
-      return set.toArray(new LookupElement[set.size()]);
+    @Override
+    public String getName() {
+        return "subtypes";
     }
-    return LookupElement.EMPTY_ARRAY;
-  }
 
-  @Override
-  public boolean isAcceptableInContext(TemplateContextType context) {
-    return context instanceof JavaCodeContextType;
-  }
+    @Override
+    public LocalizeValue getPresentableName() {
+        return LocalizeValue.of("subtypes(TYPE)");
+    }
 
+    @Override
+    public String getDefaultValue() {
+        return "A";
+    }
+
+    @Override
+    public Result calculateResult(Expression[] params, ExpressionContext context) {
+        if (params.length == 0) {
+            return null;
+        }
+        return params[0].calculateQuickResult(context);
+    }
+
+    @Override
+    public Result calculateQuickResult(Expression[] params, ExpressionContext context) {
+        return calculateResult(params, context);
+    }
+
+    @Override
+    @RequiredReadAction
+    public LookupElement[] calculateLookupItems(Expression[] params, ExpressionContext context) {
+        if (params.length == 0) {
+            return LookupElement.EMPTY_ARRAY;
+        }
+        Result paramResult = params[0].calculateQuickResult(context);
+        if (paramResult instanceof PsiTypeResult typeResult) {
+            PsiType type = typeResult.getType();
+            PsiFile file = PsiDocumentManager.getInstance(context.getProject()).getPsiFile(context.getEditor().getDocument());
+            PsiElement element = file.findElementAt(context.getStartOffset());
+
+            Set<LookupElement> set = new LinkedHashSet<>();
+            JavaEditorTemplateUtilImpl.addTypeLookupItem(set, type);
+            CodeInsightUtil.processSubTypes(
+                type,
+                element,
+                false,
+                PrefixMatcher.ALWAYS_TRUE,
+                psiType -> JavaEditorTemplateUtilImpl.addTypeLookupItem(set, psiType)
+            );
+            return set.toArray(new LookupElement[set.size()]);
+        }
+        return LookupElement.EMPTY_ARRAY;
+    }
+
+    @Override
+    public boolean isAcceptableInContext(TemplateContextType context) {
+        return context instanceof JavaCodeContextType;
+    }
 }
