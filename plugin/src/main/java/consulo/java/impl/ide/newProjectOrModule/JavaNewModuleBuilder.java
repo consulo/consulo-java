@@ -34,7 +34,7 @@ import java.util.function.Consumer;
  * @author VISTALL
  * @since 05.06.14
  */
-@ExtensionImpl
+@ExtensionImpl(id = "jvm")
 public class JavaNewModuleBuilder implements NewModuleBuilder {
   @Override
   public void setupContext(NewModuleContext context) {
