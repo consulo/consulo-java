@@ -1,7 +1,7 @@
 package consulo.java.impl.ide.newProjectOrModule;
 
 import consulo.content.bundle.Sdk;
-import consulo.ide.newModule.NewModuleWizardContextBase;
+import consulo.module.creation.NewModuleWizardContextBase;
 
 /**
  * @author VISTALL

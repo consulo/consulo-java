@@ -20,12 +20,12 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
 import consulo.content.bundle.Sdk;
-import consulo.ide.newModule.*;
 import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.language.content.ProductionContentFolderTypeProvider;
 import consulo.localize.LocalizeValue;
 import consulo.module.content.layer.ContentEntry;
 import consulo.module.content.layer.ModifiableRootModel;
+import consulo.module.creation.scratch.*;
 import consulo.ui.ex.wizard.WizardStep;
 
 import java.util.function.Consumer;

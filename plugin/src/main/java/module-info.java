@@ -54,6 +54,7 @@ open module consulo.java {
     requires consulo.version.control.system.api;
     requires consulo.web.browser.api;
     requires consulo.bookmark.ui.view.api;
+    requires consulo.module.creation.api;
 
     // TODO remove in future
     requires java.desktop;
