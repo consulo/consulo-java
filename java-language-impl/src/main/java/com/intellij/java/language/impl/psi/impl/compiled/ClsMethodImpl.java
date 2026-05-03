@@ -43,34 +43,25 @@ import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.util.lang.StringUtil;
 
+import consulo.util.lang.lazy.LazyValue;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAnnotationMethod {
-    private final NotNullLazyValue<PsiTypeElement> myReturnType;
-    private final NotNullLazyValue<PsiAnnotationMemberValue> myDefaultValue;
+    private final Supplier<PsiTypeElement> myReturnType;
+    private final Supplier<PsiAnnotationMemberValue> myDefaultValue;
 
     public ClsMethodImpl(PsiMethodStub stub) {
         super(stub);
 
-        myReturnType = isConstructor() ? null : new AtomicNotNullLazyValue<>() {
-            @Override
-            protected PsiTypeElement compute() {
-                PsiMethodStub stub = getStub();
-                String typeText = stub.getReturnTypeText().text();
-                assert typeText != null : stub;
-                return new ClsTypeElementImpl(ClsMethodImpl.this, typeText, ClsTypeElementImpl.VARIANCE_NONE);
-            }
-        };
+        myReturnType = isConstructor() ? null : LazyValue.atomicNotNull(() -> new ClsTypeElementImpl(this, getStub().getReturnTypeText()));
 
         final String text = getStub().getDefaultValueText();
-        myDefaultValue = StringUtil.isEmptyOrSpaces(text) ? null : new AtomicNotNullLazyValue<>() {
-            @Override
-            protected PsiAnnotationMemberValue compute() {
-                return ClsParsingUtil.createMemberValueFromText(text, getManager(), ClsMethodImpl.this);
-            }
-        };
+        myDefaultValue = StringUtil.isEmptyOrSpaces(text) ? null : LazyValue.atomicNotNull(() -> {
+            return ClsParsingUtil.createMemberValueFromText(text, getManager(), ClsMethodImpl.this);
+        });
     }
 
     @Override
@@ -129,7 +120,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
 
     @Override
     public PsiTypeElement getReturnTypeElement() {
-        return myReturnType != null ? myReturnType.getValue() : null;
+        return myReturnType != null ? myReturnType.get() : null;
     }
 
     @Override
@@ -175,7 +166,7 @@ public class ClsMethodImpl extends ClsMemberImpl<PsiMethodStub> implements PsiAn
 
     @Override
     public PsiAnnotationMemberValue getDefaultValue() {
-        return myDefaultValue != null ? myDefaultValue.getValue() : null;
+        return myDefaultValue != null ? myDefaultValue.get() : null;
     }
 
     @Override
