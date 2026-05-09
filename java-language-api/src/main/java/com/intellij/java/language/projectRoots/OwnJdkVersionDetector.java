@@ -5,9 +5,9 @@ package com.intellij.java.language.projectRoots;
 
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
-import consulo.application.util.JavaVersion;
 import consulo.application.Application;
 import consulo.platform.CpuArchitecture;
+import consulo.platform.JavaVersion;
 import org.jspecify.annotations.Nullable;
 
 /**

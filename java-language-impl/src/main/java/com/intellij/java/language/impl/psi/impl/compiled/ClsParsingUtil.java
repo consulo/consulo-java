@@ -23,7 +23,6 @@ import com.intellij.java.language.impl.psi.impl.source.JavaDummyElement;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.util.JavaVersion;
 import consulo.internal.org.objectweb.asm.Opcodes;
 import consulo.language.impl.psi.DummyHolder;
 import consulo.language.impl.psi.DummyHolderFactory;
@@ -33,6 +32,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.util.IncorrectOperationException;
 import consulo.logging.Logger;
+import consulo.platform.JavaVersion;
 import consulo.util.lang.StringUtil;
 
 import org.jspecify.annotations.Nullable;

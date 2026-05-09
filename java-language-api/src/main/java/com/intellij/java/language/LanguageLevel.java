@@ -2,12 +2,12 @@
 // Copyright 2000-2023 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language;
 
-import consulo.application.util.JavaVersion;
 import consulo.component.util.pointer.Named;
 import consulo.component.util.pointer.NamedPointer;
 import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.java.language.psi.JavaLanguageVersion;
 import consulo.localize.LocalizeValue;
+import consulo.platform.JavaVersion;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.StringUtil;

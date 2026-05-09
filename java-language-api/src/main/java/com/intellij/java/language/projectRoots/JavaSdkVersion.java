@@ -2,7 +2,7 @@
 package com.intellij.java.language.projectRoots;
 
 import com.intellij.java.language.LanguageLevel;
-import consulo.application.util.JavaVersion;
+import consulo.platform.JavaVersion;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
