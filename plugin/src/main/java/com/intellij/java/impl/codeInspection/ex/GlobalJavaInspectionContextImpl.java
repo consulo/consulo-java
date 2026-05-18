@@ -213,7 +213,7 @@ public class GlobalJavaInspectionContextImpl extends GlobalJavaInspectionContext
 					{
 						Library library = libraryOrderEntry.getLibrary();
 						if (library == null
-							|| library.getFiles(BinariesOrderRootType.getInstance()).length < library.getUrls(BinariesOrderRootType.getInstance()).length)
+							|| library.getFiles(BinariesOrderRootType.ID).length < library.getUrls(BinariesOrderRootType.ID).length)
 						{
 							System.err.println(
 								InspectionLocalize.offlineInspectionsLibraryWasNotResolved(libraryOrderEntry.getPresentableName(), module.getName()).get()

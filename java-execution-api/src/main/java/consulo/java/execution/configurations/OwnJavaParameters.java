@@ -96,7 +96,7 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
 
   private void configureJavaLibraryPath(OrderEnumerator enumerator) {
     PathsList pathsList = new PathsList();
-    enumerator.runtimeOnly().withoutSdk().roots(NativeLibraryOrderRootType.getInstance()).collectPaths(pathsList);
+    enumerator.runtimeOnly().withoutSdk().roots(NativeLibraryOrderRootType.ID).collectPaths(pathsList);
     if (!pathsList.getPathList().isEmpty()) {
       ParametersList vmParameters = getVMParametersList();
       if (vmParameters.hasProperty(JAVA_LIBRARY_PATH_PROPERTY)) {
@@ -202,14 +202,14 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     OrderRootsEnumerator rootsEnumerator = enumerator.classes();
     if ((classPathType & JDK_ONLY) != 0) {
       rootsEnumerator = rootsEnumerator.usingCustomRootProvider(
-        e -> e instanceof ModuleExtensionWithSdkOrderEntry ? jdkRoots(jdk) : e.getFiles(BinariesOrderRootType.getInstance())
+        e -> e instanceof ModuleExtensionWithSdkOrderEntry ? jdkRoots(jdk) : e.getFiles(BinariesOrderRootType.ID)
       );
     }
     return rootsEnumerator;
   }
 
   private static VirtualFile[] jdkRoots(Sdk jdk) {
-    return Arrays.stream(jdk.getRootProvider().getFiles(BinariesOrderRootType.getInstance()))
+    return Arrays.stream(jdk.getRootProvider().getFiles(BinariesOrderRootType.ID))
       .filter(f -> !JModFileType.isModuleRoot(f) && !JrtFileSystem.isModuleRoot(f))
       .toArray(VirtualFile[]::new);
   }

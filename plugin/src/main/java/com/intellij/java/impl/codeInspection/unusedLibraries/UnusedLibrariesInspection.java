@@ -124,8 +124,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
             for (OrderEntry entry : moduleRootManager.getOrderEntries()) {
                 if (entry instanceof LibraryOrderEntry libraryOrderEntry &&
                     !libraryOrderEntry.isExported() && libraryOrderEntry.getScope() != DependencyScope.RUNTIME) {
-                    Set<VirtualFile> files =
-                        consulo.ide.impl.idea.util.containers.ContainerUtil.set(entry.getFiles(BinariesOrderRootType.getInstance()));
+                    Set<VirtualFile> files = Set.of(entry.getFiles(BinariesOrderRootType.ID));
                     boolean allRootsUnused = usedRoots == null || !files.removeAll(usedRoots);
                     if (allRootsUnused) {
                         result.add(manager.createProblemDescriptor(
@@ -284,7 +283,7 @@ public abstract class UnusedLibrariesInspection extends GlobalInspectionTool imp
                         if (library != null) {
                             Library.ModifiableModel modifiableModel = library.getModifiableModel();
                             for (VirtualFile file : myFiles) {
-                                modifiableModel.removeRoot(file.getUrl(), BinariesOrderRootType.getInstance());
+                                modifiableModel.removeRoot(file.getUrl(), BinariesOrderRootType.ID);
                             }
                             modifiableModel.commit();
                         }

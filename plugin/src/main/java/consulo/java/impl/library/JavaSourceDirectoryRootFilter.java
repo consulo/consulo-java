@@ -4,6 +4,7 @@ import com.intellij.java.language.impl.JavaFileType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.content.library.ui.FileTypeBasedRootFilter;
+import consulo.localize.LocalizeValue;
 
 /**
  * @author VISTALL
@@ -12,6 +13,6 @@ import consulo.content.library.ui.FileTypeBasedRootFilter;
 @ExtensionImpl
 public class JavaSourceDirectoryRootFilter extends FileTypeBasedRootFilter {
   public JavaSourceDirectoryRootFilter() {
-    super(SourcesOrderRootType.getInstance(), true, JavaFileType.INSTANCE, "java source archive directory");
+    super(SourcesOrderRootType.ID, true, JavaFileType.INSTANCE, LocalizeValue.localizeTODO("java source archive directory"));
   }
 }

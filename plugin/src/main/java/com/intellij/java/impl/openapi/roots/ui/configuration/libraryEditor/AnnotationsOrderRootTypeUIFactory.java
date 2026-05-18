@@ -28,6 +28,7 @@ import consulo.content.bundle.Sdk;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.ide.ui.OrderRootTypeUIFactory;
 import consulo.ide.ui.SdkPathEditor;
+import consulo.java.language.localize.JavaCoreLocalize;
 import consulo.ui.image.Image;
 
 
@@ -45,11 +46,11 @@ public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory
 
   @Override
   public String getOrderRootTypeId() {
-    return "javaExternalAnnotations";
+    return AnnotationOrderRootType.ID;
   }
 
   @Override
   public SdkPathEditor createPathEditor(Sdk sdk) {
-    return new SdkPathEditor(JavaCoreBundle.message("sdk.configure.external.annotations.tab"), AnnotationOrderRootType.getInstance(), new FileChooserDescriptor(false, true, true, false, true, false), sdk);
+    return new SdkPathEditor(JavaCoreLocalize.sdkConfigureExternalAnnotationsTab(), AnnotationOrderRootType.ID, new FileChooserDescriptor(false, true, true, false, true, false), sdk);
   }
 }

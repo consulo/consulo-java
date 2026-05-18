@@ -24,6 +24,7 @@ import consulo.ide.ui.OrderRootTypeUIFactory;
 import consulo.ide.ui.SdkPathEditor;
 import consulo.java.impl.JavaBundle;
 import consulo.java.language.impl.JavaIcons;
+import consulo.java.localize.JavaLocalize;
 import consulo.ui.image.Image;
 
 
@@ -36,18 +37,18 @@ public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFacto
 
   @Override
   public String getNodeText() {
-    return JavaBundle.message("project.roots.native.library.node.text");
+    return JavaLocalize.projectRootsNativeLibraryNodeText().get();
   }
 
   @Override
   public String getOrderRootTypeId() {
-    return "javaNative";
+    return NativeLibraryOrderRootType.ID;
   }
 
   @Override
   public SdkPathEditor createPathEditor(Sdk sdk) {
-    return new SdkPathEditor(getNodeText(),
-                             NativeLibraryOrderRootType.getInstance(),
+    return new SdkPathEditor(JavaLocalize.projectRootsNativeLibraryNodeText(),
+                             NativeLibraryOrderRootType.ID,
                              new FileChooserDescriptor(true, false, true, false, true, false),
                              sdk);
   }

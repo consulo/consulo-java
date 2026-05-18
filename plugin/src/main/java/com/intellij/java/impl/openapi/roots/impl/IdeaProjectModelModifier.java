@@ -82,7 +82,7 @@ public class IdeaProjectModelModifier extends JavaProjectModelModifier {
           Library library = LibraryUtil.createLibrary(LibraryTablesRegistrar.getInstance().getLibraryTable(myProject), descriptor.getPresentableName());
           Library.ModifiableModel model = library.getModifiableModel();
           for (String url : urls) {
-            model.addRoot(url, BinariesOrderRootType.getInstance());
+            model.addRoot(url, BinariesOrderRootType.ID);
           }
           model.commit();
           for (Module module : modules) {

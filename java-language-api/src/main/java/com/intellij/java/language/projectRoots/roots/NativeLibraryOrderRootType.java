@@ -23,11 +23,9 @@ import consulo.content.OrderRootType;
  */
 @ExtensionImpl
 public class NativeLibraryOrderRootType extends OrderRootType {
-    public static OrderRootType getInstance() {
-        return getOrderRootType(NativeLibraryOrderRootType.class);
-    }
+    public static final String ID = "javaNative";
 
     public NativeLibraryOrderRootType() {
-        super("javaNative");
+        super(ID);
     }
 }

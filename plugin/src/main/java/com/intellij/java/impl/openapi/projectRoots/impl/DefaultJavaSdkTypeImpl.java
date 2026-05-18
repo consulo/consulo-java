@@ -74,6 +74,13 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     private static final String OPENJDK_VERSION_PREFIX = "openjdk version ";
     public static final Key<Boolean> KEY = Key.create("JavaSdk");
 
+    private static final Set<String> ourRootTypeIds = Set.of(
+        BinariesOrderRootType.ID,
+        SourcesOrderRootType.ID,
+        DocumentationOrderRootType.ID,
+        AnnotationOrderRootType.ID
+    );
+
     public DefaultJavaSdkTypeImpl() {
         super("JDK", ProjectLocalize.sdkJavaName(), JavaPsiImplIconGroup.java());
     }
@@ -325,7 +332,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
                 if (jmodFile != null) {
                     VirtualFile classesDir = jmodFile.findChild("classes");
                     if (classesDir != null) {
-                        sdkModificator.addRoot(classesDir, BinariesOrderRootType.getInstance());
+                        sdkModificator.addRoot(classesDir, BinariesOrderRootType.ID);
                     }
                 }
             }
@@ -335,14 +342,14 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
             List<String> modules = readModulesFromReleaseFile(jdkHome);
             if (modules != null) {
                 for (String module : modules) {
-                    sdkModificator.addRoot(jrtBaseUrl + module, BinariesOrderRootType.getInstance());
+                    sdkModificator.addRoot(jrtBaseUrl + module, BinariesOrderRootType.ID);
                 }
             }
             else {
                 VirtualFile jrt = VirtualFileManager.getInstance().findFileByUrl(jrtBaseUrl);
                 if (jrt != null) {
                     for (VirtualFile virtualFile : jrt.getChildren()) {
-                        sdkModificator.addRoot(virtualFile.getUrl(), BinariesOrderRootType.getInstance());
+                        sdkModificator.addRoot(virtualFile.getUrl(), BinariesOrderRootType.ID);
                     }
                 }
             }
@@ -351,7 +358,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
             addJavaFxSources(jdkHome, sdkModificator);
 
             for (VirtualFile aClass : findClasses(jdkHome, false)) {
-                sdkModificator.addRoot(aClass, BinariesOrderRootType.getInstance());
+                sdkModificator.addRoot(aClass, BinariesOrderRootType.ID);
             }
         }
 
@@ -369,18 +376,18 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
                 VirtualFile[] children = srcZipFile.getChildren();
                 for (VirtualFile child : children) {
                     if (child.isDirectory()) {
-                        sdkModificator.addRoot(child, SourcesOrderRootType.getInstance());
+                        sdkModificator.addRoot(child, SourcesOrderRootType.ID);
                     }
                 }
             }
             else {
-                sdkModificator.addRoot(srcZipFile, SourcesOrderRootType.getInstance());
+                sdkModificator.addRoot(srcZipFile, SourcesOrderRootType.ID);
             }
         }
 
         VirtualFile docs = findDocs(jdkHome, "docs/api");
         if (docs != null) {
-            sdkModificator.addRoot(docs, DocumentationOrderRootType.getInstance());
+            sdkModificator.addRoot(docs, DocumentationOrderRootType.ID);
         }
         else if (Platform.current().os().isMac()) {
             VirtualFile commonDocs = findDocs(jdkHome, "docs");
@@ -391,7 +398,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
                 }
             }
             if (commonDocs != null) {
-                sdkModificator.addRoot(commonDocs, DocumentationOrderRootType.getInstance());
+                sdkModificator.addRoot(commonDocs, DocumentationOrderRootType.ID);
             }
 
             VirtualFile appleDocs = findDocs(jdkHome, "appledocs");
@@ -399,13 +406,13 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
                 appleDocs = findInJar(new File(jdkHome, "appledocs.jar"), "appledoc/api");
             }
             if (appleDocs != null) {
-                sdkModificator.addRoot(appleDocs, DocumentationOrderRootType.getInstance());
+                sdkModificator.addRoot(appleDocs, DocumentationOrderRootType.ID);
             }
 
             if (commonDocs == null && appleDocs == null && noSources) {
                 String url = getDefaultDocumentationUrl(sdk);
                 if (url != null) {
-                    sdkModificator.addRoot(VirtualFileManager.getInstance().findFileByUrl(url), DocumentationOrderRootType.getInstance());
+                    sdkModificator.addRoot(VirtualFileManager.getInstance().findFileByUrl(url), DocumentationOrderRootType.ID);
                 }
             }
         }
@@ -458,7 +465,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
             return false;
         }
 
-        OrderRootType annoType = AnnotationOrderRootType.getInstance();
+        String annoType = AnnotationOrderRootType.ID;
         modificator.removeRoot(jarFile, annoType);
         modificator.addRoot(jarFile, annoType);
         return true;
@@ -579,7 +586,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
         if (archiveRootForLocalFile == null) {
             return;
         }
-        sdkModificator.addRoot(archiveRootForLocalFile, SourcesOrderRootType.getInstance());
+        sdkModificator.addRoot(archiveRootForLocalFile, SourcesOrderRootType.ID);
     }
 
     @Nullable
@@ -603,10 +610,7 @@ public class DefaultJavaSdkTypeImpl extends DefaultJavaSdkType {
     }
 
     @Override
-    public boolean isRootTypeApplicable(OrderRootType type) {
-        return type == BinariesOrderRootType.getInstance()
-            || type == SourcesOrderRootType.getInstance()
-            || type == DocumentationOrderRootType.getInstance()
-            || type == AnnotationOrderRootType.getInstance();
+    public boolean isRootTypeApplicable(String type) {
+        return ourRootTypeIds.contains(type);
     }
 }

@@ -19,6 +19,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicator;
 import consulo.content.base.DocumentationOrderRootType;
 import consulo.content.library.ui.RootDetector;
+import consulo.localize.LocalizeValue;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import consulo.virtualFileSystem.util.VirtualFileVisitor;
@@ -30,7 +31,7 @@ import java.util.List;
 @ExtensionImpl
 public class JavadocRootDetector extends RootDetector {
     public JavadocRootDetector() {
-        super(DocumentationOrderRootType.getInstance(), false, "JavaDocs");
+        super(DocumentationOrderRootType.ID, false, LocalizeValue.localizeTODO("JavaDocs"));
     }
 
     @Override

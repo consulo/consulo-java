@@ -150,7 +150,7 @@ public abstract class OrderEntryFix implements SyntheticIntentionAction, LocalQu
                     if (library == null) {
                         continue;
                     }
-                    VirtualFile[] files = library.getFiles(BinariesOrderRootType.getInstance());
+                    VirtualFile[] files = library.getFiles(BinariesOrderRootType.ID);
                     if (files.length == 0) {
                         continue;
                     }

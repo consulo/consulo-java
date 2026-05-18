@@ -20,6 +20,7 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.progress.ProgressIndicator;
 import consulo.content.base.SourcesOrderRootType;
 import consulo.content.library.ui.RootDetector;
+import consulo.localize.LocalizeValue;
 import consulo.virtualFileSystem.VirtualFile;
 
 import java.util.Collection;
@@ -27,7 +28,7 @@ import java.util.Collection;
 @ExtensionImpl
 public class JavaSourceRootDetector extends RootDetector {
   public JavaSourceRootDetector() {
-    super(SourcesOrderRootType.getInstance(), false, "java sources");
+    super(SourcesOrderRootType.ID, false, LocalizeValue.localizeTODO("java sources"));
   }
 
   @Override

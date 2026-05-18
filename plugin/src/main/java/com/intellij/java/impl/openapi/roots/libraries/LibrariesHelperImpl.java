@@ -37,7 +37,7 @@ import java.util.List;
 public class LibrariesHelperImpl extends LibrariesHelper {
   @Override
   public VirtualFile findJarByClass(Library library, String fqn) {
-    return library == null ? null : findRootByClass(Arrays.asList(library.getFiles(BinariesOrderRootType.getInstance())), fqn);
+    return library == null ? null : findRootByClass(Arrays.asList(library.getFiles(BinariesOrderRootType.ID)), fqn);
   }
 
   @Nullable
@@ -53,7 +53,7 @@ public class LibrariesHelperImpl extends LibrariesHelper {
 
   @Override
   public boolean isClassAvailableInLibrary(Library library, String fqn) {
-    String[] urls = library.getUrls(BinariesOrderRootType.getInstance());
+    String[] urls = library.getUrls(BinariesOrderRootType.ID);
     return isClassAvailable(urls, fqn);
   }
 

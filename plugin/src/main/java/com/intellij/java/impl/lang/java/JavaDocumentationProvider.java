@@ -771,7 +771,7 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
 
         for (OrderEntry orderEntry : fileIndex.getOrderEntriesForFile(virtualFile)) {
-            String[] files = orderEntry.getUrls(DocumentationOrderRootType.getInstance());
+            String[] files = orderEntry.getUrls(DocumentationOrderRootType.ID);
             List<String> httpRoot = PlatformDocumentationUtil.getHttpRoots(files, relPath);
             if (httpRoot != null) {
                 return httpRoot;

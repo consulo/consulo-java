@@ -305,7 +305,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 					continue;
 				}
 				Library.ModifiableModel model = library.getModifiableModel();
-				model.addRoot(root, SourcesOrderRootType.getInstance());
+				model.addRoot(root, SourcesOrderRootType.ID);
 				modelsToCommit.add(model);
 			}
 			if (modelsToCommit.isEmpty())
@@ -325,7 +325,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 		@Nullable
 		private VirtualFile findRoot(Library library)
 		{
-			for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance()))
+			for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.ID))
 			{
 				if (VirtualFileUtil.isAncestor(classesRoot, myClassFile, true))
 				{
@@ -365,7 +365,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 			descriptor.withTitle(ProjectLocalize.libraryAttachSourcesAction());
 			descriptor.withDescription(ProjectLocalize.libraryAttachSourcesDescription());
 			Library firstLibrary = libraries.get(0).getLibrary();
-			VirtualFile[] roots = firstLibrary != null ? firstLibrary.getFiles(BinariesOrderRootType.getInstance()) : VirtualFile.EMPTY_ARRAY;
+			VirtualFile[] roots = firstLibrary != null ? firstLibrary.getFiles(BinariesOrderRootType.ID) : VirtualFile.EMPTY_ARRAY;
 			VirtualFile[] candidates =
 				IdeaFileChooser.chooseFiles(descriptor, myProject, roots.length == 0 ? null : VirtualFilePathUtil.getLocalFile(roots[0]));
 			final VirtualFile[] files = PathUIUtils.scanAndSelectDetectedJavaSourceRoots(TargetAWT.to(e.getComponent()), candidates);
@@ -435,7 +435,7 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 				Library.ModifiableModel model = library.getModifiableModel();
 				for (VirtualFile virtualFile : files)
 				{
-					model.addRoot(virtualFile, SourcesOrderRootType.getInstance());
+					model.addRoot(virtualFile, SourcesOrderRootType.ID);
 				}
 				model.commit();
 			});

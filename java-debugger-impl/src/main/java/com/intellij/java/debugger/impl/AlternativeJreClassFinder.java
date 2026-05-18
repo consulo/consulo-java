@@ -86,11 +86,11 @@ public class AlternativeJreClassFinder extends NonClasspathClassFinder {
     }
 
     private static Collection<VirtualFile> getClassRoots(Sdk jre) {
-        return Arrays.asList(jre.getRootProvider().getFiles(BinariesOrderRootType.getInstance()));
+        return Arrays.asList(jre.getRootProvider().getFiles(BinariesOrderRootType.ID));
     }
 
     public static Collection<VirtualFile> getSourceRoots(Sdk jre) {
-        return Arrays.asList(jre.getRootProvider().getFiles(SourcesOrderRootType.getInstance()));
+        return Arrays.asList(jre.getRootProvider().getFiles(SourcesOrderRootType.ID));
     }
 
     public static GlobalSearchScope getSearchScope(Sdk jre) {

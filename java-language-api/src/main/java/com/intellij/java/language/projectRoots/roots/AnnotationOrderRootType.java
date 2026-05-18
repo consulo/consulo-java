@@ -34,12 +34,10 @@ import java.util.List;
  */
 @ExtensionImpl
 public class AnnotationOrderRootType extends OrderRootType {
-    public static OrderRootType getInstance() {
-        return getOrderRootType(AnnotationOrderRootType.class);
-    }
+    public static final String ID = "javaExternalAnnotations";
 
     public AnnotationOrderRootType() {
-        super("javaExternalAnnotations");
+        super(ID);
     }
 
     public static VirtualFile[] getFiles(OrderEntry entry) {
@@ -48,7 +46,7 @@ public class AnnotationOrderRootType extends OrderRootType {
             @Override
             public List<VirtualFile> visitOrderEntry(OrderEntry orderEntry, List<VirtualFile> value) {
                 if (orderEntry instanceof OrderEntryWithTracking) {
-                    Collections.addAll(value, orderEntry.getFiles(getInstance()));
+                    Collections.addAll(value, orderEntry.getFiles(AnnotationOrderRootType.ID));
                 }
                 return value;
             }
@@ -63,7 +61,7 @@ public class AnnotationOrderRootType extends OrderRootType {
             @Override
             public List<String> visitOrderEntry(OrderEntry orderEntry, List<String> value) {
                 if (orderEntry instanceof OrderEntryWithTracking) {
-                    Collections.addAll(value, orderEntry.getUrls(getInstance()));
+                    Collections.addAll(value, orderEntry.getUrls(AnnotationOrderRootType.ID));
                 }
                 return value;
             }

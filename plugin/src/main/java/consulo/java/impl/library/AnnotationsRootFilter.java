@@ -19,13 +19,14 @@ import com.intellij.java.language.codeInsight.ExternalAnnotationsManager;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.content.library.ui.FileTypeBasedRootFilter;
+import consulo.localize.LocalizeValue;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.xml.language.XmlFileType;
 
 @ExtensionImpl
 public class AnnotationsRootFilter extends FileTypeBasedRootFilter {
   public AnnotationsRootFilter() {
-    super(AnnotationOrderRootType.getInstance(), false, XmlFileType.INSTANCE, "java external annotations");
+    super(AnnotationOrderRootType.ID, false, XmlFileType.INSTANCE, LocalizeValue.localizeTODO("java external annotations"));
   }
 
   @Override

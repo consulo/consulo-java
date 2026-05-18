@@ -140,7 +140,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
             if (!(orderEntry instanceof OrderEntryWithTracking)) {
                 continue;
             }
-            for (VirtualFile root : orderEntry.getFiles(SourcesOrderRootType.getInstance())) {
+            for (VirtualFile root : orderEntry.getFiles(SourcesOrderRootType.ID)) {
                 VirtualFile source = root.findFileByRelativePath(relativePath);
                 if (source != null && source.isValid()) {
                     PsiFile psiSource = clsFile.getManager().findFile(source);
@@ -169,7 +169,7 @@ public class JavaPsiImplementationHelperImpl extends JavaPsiImplementationHelper
             if (orderEntries.isEmpty()) {
                 LOG.error("Inconsistent: " + DirectoryIndex.getInstance(myProject).getInfoForFile(folder).toString());
             }
-            VirtualFile[] files = orderEntries.get(0).getFiles(BinariesOrderRootType.getInstance());
+            VirtualFile[] files = orderEntries.get(0).getFiles(BinariesOrderRootType.ID);
             for (VirtualFile rootFile : files) {
                 VirtualFile classFile = rootFile.findFileByRelativePath(relativePath);
                 if (classFile != null) {

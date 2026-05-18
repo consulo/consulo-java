@@ -163,7 +163,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
         PackagingElementFactory factory = PackagingElementFactory.getInstance(myContext.getProject());
         for (Library library : libraries) {
             if (LibraryPackagingElement.getKindForLibrary(library).containsDirectoriesWithClasses()) {
-                for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance())) {
+                for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.ID)) {
                     if (classesRoot.isInLocalFileSystem()) {
                         archive.addOrFindChild(factory.createDirectoryCopyWithParentDirectories(classesRoot.getPath(), "/"));
                     }
@@ -195,7 +195,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
     ) {
         for (Library library : libraries) {
             if (LibraryPackagingElement.getKindForLibrary(library).containsJarFiles()) {
-                for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.getInstance())) {
+                for (VirtualFile classesRoot : library.getFiles(BinariesOrderRootType.ID)) {
                     if (classesRoot.isInLocalFileSystem()) {
                         archive.addOrFindChild(factory.createDirectoryCopyWithParentDirectories(classesRoot.getPath(), "/"));
                     }

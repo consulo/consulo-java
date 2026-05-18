@@ -580,13 +580,13 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
       Library library = libraryOrderEntry.getLibrary();
       LOG.assertTrue(library != null);
       Library.ModifiableModel model = library.getModifiableModel();
-      model.addRoot(vFile, AnnotationOrderRootType.getInstance());
+      model.addRoot(vFile, AnnotationOrderRootType.ID);
       model.commit();
     } else if (entry instanceof ModuleExtensionWithSdkOrderEntry moduleExtensionWithSdkOrderEntry) {
       Sdk sdk = moduleExtensionWithSdkOrderEntry.getSdk();
       LOG.assertTrue(sdk != null);
       SdkModificator sdkModificator = sdk.getSdkModificator();
-      sdkModificator.addRoot(vFile, AnnotationOrderRootType.getInstance());
+      sdkModificator.addRoot(vFile, AnnotationOrderRootType.ID);
       sdkModificator.commitChanges();
     }
     dropCache();
