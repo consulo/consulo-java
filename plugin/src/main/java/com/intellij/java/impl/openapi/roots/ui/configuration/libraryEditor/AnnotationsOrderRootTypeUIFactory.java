@@ -20,37 +20,39 @@
  */
 package com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor;
 
-import com.intellij.java.language.JavaCoreBundle;
 import com.intellij.java.language.projectRoots.roots.AnnotationOrderRootType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
+import consulo.content.base.DocumentationOrderRootType;
 import consulo.content.bundle.Sdk;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.ide.ui.OrderRootTypeUIFactory;
 import consulo.ide.ui.SdkPathEditor;
 import consulo.java.language.localize.JavaCoreLocalize;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 
 
-@ExtensionImpl
+@ExtensionImpl(id = AnnotationOrderRootType.ID, order = "after " + DocumentationOrderRootType.ID)
 public class AnnotationsOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
-  @Override
-  public Image getIcon() {
-    return AllIcons.Modules.Annotation;
-  }
+    @Override
+    public Image getIcon() {
+        return PlatformIconGroup.modulesAnnotation();
+    }
 
-  @Override
-  public String getNodeText() {
-    return JavaCoreBundle.message("sdk.configure.external.annotations.tab");
-  }
+    @Override
+    public LocalizeValue getNodeText() {
+        return JavaCoreLocalize.sdkConfigureExternalAnnotationsTab();
+    }
 
-  @Override
-  public String getOrderRootTypeId() {
-    return AnnotationOrderRootType.ID;
-  }
+    @Override
+    public String getOrderRootTypeId() {
+        return AnnotationOrderRootType.ID;
+    }
 
-  @Override
-  public SdkPathEditor createPathEditor(Sdk sdk) {
-    return new SdkPathEditor(JavaCoreLocalize.sdkConfigureExternalAnnotationsTab(), AnnotationOrderRootType.ID, new FileChooserDescriptor(false, true, true, false, true, false), sdk);
-  }
+    @Override
+    public SdkPathEditor createPathEditor(Sdk sdk) {
+        return new SdkPathEditor(getNodeText(), AnnotationOrderRootType.ID, new FileChooserDescriptor(false, true, true, false, true, false), sdk);
+    }
 }

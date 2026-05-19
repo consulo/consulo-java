@@ -18,26 +18,29 @@ package com.intellij.java.impl.openapi.roots.ui.configuration.libraryEditor;
 
 import com.intellij.java.language.projectRoots.roots.NativeLibraryOrderRootType;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.content.base.BinariesOrderRootType;
 import consulo.content.bundle.Sdk;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.ide.ui.OrderRootTypeUIFactory;
 import consulo.ide.ui.SdkPathEditor;
 import consulo.java.impl.JavaBundle;
 import consulo.java.language.impl.JavaIcons;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.java.localize.JavaLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.ui.image.Image;
 
 
-@ExtensionImpl
+@ExtensionImpl(id = NativeLibraryOrderRootType.ID, order = "after " + BinariesOrderRootType.ID)
 public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFactory {
   @Override
   public Image getIcon() {
-    return JavaIcons.Nodes.NativeLibrariesFolder;
+    return JavaPsiImplIconGroup.nodesNativelibrariesfolder();
   }
 
   @Override
-  public String getNodeText() {
-    return JavaLocalize.projectRootsNativeLibraryNodeText().get();
+  public LocalizeValue getNodeText() {
+    return JavaLocalize.projectRootsNativeLibraryNodeText();
   }
 
   @Override
@@ -47,7 +50,7 @@ public class NativeLibraryOrderRootTypeUIFactory implements OrderRootTypeUIFacto
 
   @Override
   public SdkPathEditor createPathEditor(Sdk sdk) {
-    return new SdkPathEditor(JavaLocalize.projectRootsNativeLibraryNodeText(),
+    return new SdkPathEditor(getNodeText(),
                              NativeLibraryOrderRootType.ID,
                              new FileChooserDescriptor(true, false, true, false, true, false),
                              sdk);
