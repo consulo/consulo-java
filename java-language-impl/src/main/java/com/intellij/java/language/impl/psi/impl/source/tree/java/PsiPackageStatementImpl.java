@@ -15,115 +15,78 @@
  */
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
-import consulo.language.ast.ASTNode;
-import consulo.logging.Logger;
+import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
+import com.intellij.java.language.impl.psi.impl.java.stubs.PsiPackageStatementStub;
+import com.intellij.java.language.impl.psi.impl.source.JavaStubPsiElement;
+import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
 import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.java.language.psi.JavaTokenType;
-import consulo.language.psi.PsiElementVisitor;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.psi.PsiModifierList;
 import com.intellij.java.language.psi.PsiPackageStatement;
-import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
-import consulo.language.impl.psi.CompositePsiElement;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
-import consulo.language.impl.ast.TreeUtil;
-import consulo.language.ast.ChildRoleBase;
-import consulo.language.ast.IElementType;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
+import consulo.language.ast.ASTNode;
+import consulo.language.impl.ast.CompositeElement;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
+import org.jspecify.annotations.Nullable;
 
-public class PsiPackageStatementImpl extends CompositePsiElement implements PsiPackageStatement
-{
-	private static final Logger LOG = Logger.getInstance(PsiPackageStatementImpl.class);
+public class PsiPackageStatementImpl extends JavaStubPsiElement<PsiPackageStatementStub> implements PsiPackageStatement {
+    public PsiPackageStatementImpl(PsiPackageStatementStub stub) {
+        super(stub, JavaStubElementTypes.PACKAGE_STATEMENT);
+    }
 
-	public PsiPackageStatementImpl()
-	{
-		super(JavaElementType.PACKAGE_STATEMENT);
-	}
+    public PsiPackageStatementImpl(ASTNode node) {
+        super(node);
+    }
 
-	@Override
-	public PsiJavaCodeReferenceElement getPackageReference()
-	{
-		return (PsiJavaCodeReferenceElement) findChildByRoleAsPsiElement(ChildRole.PACKAGE_REFERENCE);
-	}
+    @Override
+    public CompositeElement getNode() {
+        return (CompositeElement) super.getNode();
+    }
 
-	@Override
-	public String getPackageName()
-	{
-		PsiJavaCodeReferenceElement ref = getPackageReference();
-		return ref == null ? null : JavaSourceUtil.getReferenceText(ref);
-	}
+    @Override
+    public PsiJavaCodeReferenceElement getPackageReference() {
+        return (PsiJavaCodeReferenceElement) getNode().findChildByRoleAsPsiElement(ChildRole.PACKAGE_REFERENCE);
+    }
 
-	@Override
-	public PsiModifierList getAnnotationList()
-	{
-		return (PsiModifierList) findChildByRoleAsPsiElement(ChildRole.MODIFIER_LIST);
-	}
+    @Override
+    public String getPackageName() {
+        PsiPackageStatementStub stub = getGreenStub();
+        if (stub != null) {
+            return stub.getPackageName();
+        }
+        PsiJavaCodeReferenceElement ref = getPackageReference();
+        return ref == null ? "" : JavaSourceUtil.getReferenceText(ref);
+    }
 
-	@Override
-	public ASTNode findChildByRole(int role)
-	{
-		LOG.assertTrue(ChildRole.isUnique(role));
-		switch(role)
-		{
-			default:
-				return null;
+    @Override
+    public PsiModifierList getAnnotationList() {
+        return getStubOrPsiChild(JavaStubElementTypes.MODIFIER_LIST);
+    }
 
-			case ChildRole.PACKAGE_KEYWORD:
-				return findChildByType(JavaTokenType.PACKAGE_KEYWORD);
+    @Override
+    public @Nullable PsiDocComment getDocComment() {
+        if (!"package-info.java".equals(getContainingFile().getName())) {
+            return null;
+        }
+        PsiElement sibling = PsiTreeUtil.skipWhitespacesBackward(this);
+        return sibling instanceof PsiDocComment ? (PsiDocComment) sibling : null;
+    }
 
-			case ChildRole.PACKAGE_REFERENCE:
-				return findChildByType(JavaElementType.JAVA_CODE_REFERENCE);
+    @Override
+    public void accept(PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor) {
+            ((JavaElementVisitor) visitor).visitPackageStatement(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
 
-			case ChildRole.CLOSING_SEMICOLON:
-				return TreeUtil.findChildBackward(this, JavaTokenType.SEMICOLON);
-
-			case ChildRole.MODIFIER_LIST:
-				return findChildByType(JavaElementType.MODIFIER_LIST);
-		}
-	}
-
-	@Override
-	public int getChildRole(ASTNode child)
-	{
-		LOG.assertTrue(child.getTreeParent() == this);
-		IElementType i = child.getElementType();
-		if(i == JavaTokenType.PACKAGE_KEYWORD)
-		{
-			return ChildRole.PACKAGE_KEYWORD;
-		}
-		else if(i == JavaElementType.JAVA_CODE_REFERENCE)
-		{
-			return ChildRole.PACKAGE_REFERENCE;
-		}
-		else if(i == JavaTokenType.SEMICOLON)
-		{
-			return ChildRole.CLOSING_SEMICOLON;
-		}
-		else if(i == JavaElementType.MODIFIER_LIST)
-		{
-			return ChildRole.MODIFIER_LIST;
-		}
-		else
-		{
-			return ChildRoleBase.NONE;
-		}
-	}
-
-	@Override
-	public void accept(PsiElementVisitor visitor)
-	{
-		if(visitor instanceof JavaElementVisitor)
-		{
-			((JavaElementVisitor) visitor).visitPackageStatement(this);
-		}
-		else
-		{
-			visitor.visitElement(this);
-		}
-	}
-
-	public String toString()
-	{
-		return "PsiPackageStatement:" + getPackageName();
-	}
+    @Override
+    public String toString() {
+        return "PsiPackageStatement:" + getPackageName();
+    }
 }

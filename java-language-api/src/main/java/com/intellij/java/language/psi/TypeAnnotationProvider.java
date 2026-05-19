@@ -1,20 +1,7 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.psi;
 
+import java.util.Objects;
 
 /**
  * An object that returns annotations for {@link PsiType}. Since computing type annotations might be computationally expensive sometimes,
@@ -25,30 +12,65 @@ package com.intellij.java.language.psi;
  * @see PsiType#PsiType(TypeAnnotationProvider)
  */
 public interface TypeAnnotationProvider {
-  TypeAnnotationProvider EMPTY = new TypeAnnotationProvider() {
-    @Override
-    public PsiAnnotation[] getAnnotations() {
-      return PsiAnnotation.EMPTY_ARRAY;
+    TypeAnnotationProvider EMPTY = new TypeAnnotationProvider() {
+        @Override
+        public PsiAnnotation[] getAnnotations() {
+            return PsiAnnotation.EMPTY_ARRAY;
+        }
+
+        @Override
+        public boolean hasAnnotations() {
+            return false;
+        }
+
+        @Override
+        public String toString() {
+            return "EMPTY";
+        }
+    };
+
+    PsiAnnotation[] getAnnotations();
+
+    /**
+     * @return true if this provider has annotations.
+     */
+    default boolean hasAnnotations() {
+        return getAnnotations().length > 0;
     }
-  };
 
-  PsiAnnotation[] getAnnotations();
-
-
-  class Static implements TypeAnnotationProvider {
-    private final PsiAnnotation[] myAnnotations;
-
-    private Static(PsiAnnotation[] annotations) {
-      myAnnotations = annotations;
+    /**
+     * @param owner owner for annotations in this provider
+     * @return a provider whose annotations are updated to return the supplied owner.
+     * May return itself if changing the owner is not supported, or owner is already set for all the annotations.
+     */
+    default TypeAnnotationProvider withOwner(PsiAnnotationOwner owner) {
+        return this;
     }
 
-    @Override
-    public PsiAnnotation[] getAnnotations() {
-      return myAnnotations;
-    }
+    final class Static implements TypeAnnotationProvider {
+        private final PsiAnnotation[] myAnnotations;
 
-    public static TypeAnnotationProvider create(PsiAnnotation[] annotations) {
-      return annotations.length == 0 ? EMPTY : new Static(annotations);
+        private Static(PsiAnnotation[] annotations) {
+            myAnnotations = annotations;
+        }
+
+        @Override
+        public PsiAnnotation[] getAnnotations() {
+            return myAnnotations;
+        }
+
+        @Override
+        public boolean hasAnnotations() {
+            // Array is always non-empty
+            return true;
+        }
+
+        public static TypeAnnotationProvider create(PsiAnnotation[] annotations) {
+            if (annotations.length == 0) return EMPTY;
+            for (PsiAnnotation annotation : annotations) {
+                Objects.requireNonNull(annotation);
+            }
+            return new Static(annotations);
+        }
     }
-  }
 }

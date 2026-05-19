@@ -37,7 +37,6 @@ import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.scope.DelegatingGlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
-import consulo.language.psi.util.PsiTreeUtil;
 import consulo.logging.Logger;
 import consulo.module.extension.ModuleExtension;
 import consulo.util.collection.ArrayFactory;
@@ -51,11 +50,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Queryable {
     private static final Logger LOGGER = Logger.getInstance(PsiPackageImpl.class);
-    
+
     private final JavaPsiFacade myJavaPsiFacade;
 
     private volatile CachedValue<PsiModifierList> myAnnotationList;
@@ -104,7 +104,7 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 
     @Override
     public PsiPackageImpl getParentPackage() {
-        return (PsiPackageImpl)super.getParentPackage();
+        return (PsiPackageImpl) super.getParentPackage();
     }
 
 
@@ -324,32 +324,28 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
     }
 
     private class PackageAnnotationValueProvider implements CachedValueProvider<PsiModifierList> {
-        private final Object[] OOCB_DEPENDENCY = {PsiModificationTracker.MODIFICATION_COUNT};
-
         @Override
         @RequiredReadAction
         public Result<PsiModifierList> compute() {
-            List<PsiModifierList> list = new ArrayList<>();
-            for (PsiDirectory directory : getDirectories()) {
-                PsiFile file = directory.findFile(PACKAGE_INFO_FILE);
-                if (file != null) {
-                    PsiPackageStatement stmt = PsiTreeUtil.getChildOfType(file, PsiPackageStatement.class);
-                    if (stmt != null) {
-                        PsiModifierList modifierList = stmt.getAnnotationList();
-                        if (modifierList != null) {
-                            list.add(modifierList);
-                        }
+            List<PsiModifierList> modifiers = new ArrayList<>();
+            Consumer<PsiFile> processFile = file -> {
+                if (file instanceof PsiJavaFile) {
+                    PsiPackageStatement statement = ((PsiJavaFile) file).getPackageStatement();
+                    if (statement != null) {
+                        ContainerUtil.addIfNotNull(modifiers, statement.getAnnotationList());
                     }
                 }
+            };
+            for (PsiDirectory directory : getDirectories()) {
+                processFile.accept(directory.findFile(PACKAGE_INFO_FILE));
             }
 
-            JavaPsiFacade facade = getFacade();
-            GlobalSearchScope scope = allScope();
-            for (PsiClass aClass : facade.findClasses(getQualifiedName() + ".package-info", scope)) {
-                ContainerUtil.addIfNotNull(list, aClass.getModifierList());
+            for (PsiClass aClass : getFacade().findClasses(getQualifiedName() + ".package-info", allScope())) {
+                processFile.accept(aClass.getContainingFile());
             }
 
-            return new Result<>(list.isEmpty() ? null : new PsiCompositeModifierList(getManager(), list), OOCB_DEPENDENCY);
+            PsiCompositeModifierList result = modifiers.isEmpty() ? null : new PsiCompositeModifierList(getManager(), modifiers);
+            return new Result<>(result, PsiModificationTracker.MODIFICATION_COUNT);
         }
     }
 

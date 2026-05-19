@@ -24,6 +24,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.meta.MetaDataService;
 import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.navigation.Navigatable;
 import consulo.util.lang.lazy.LazyValue;
@@ -34,7 +35,7 @@ import java.util.function.Supplier;
 /**
  * @author ven
  */
-public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub> implements PsiAnnotation, Navigatable {
+public class ClsAnnotationImpl extends ClsRepositoryPsiElement<PsiAnnotationStub> implements PsiAnnotation, Navigatable, PsiMetaOwner {
   private final Supplier<ClsJavaCodeReferenceElementImpl> myReferenceElement;
   private final Supplier<ClsAnnotationParameterListImpl> myParameterList;
 

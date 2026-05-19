@@ -34,7 +34,7 @@ import java.util.List;
  *
  * @author ven
  */
-public interface PsiAnnotation extends PsiAnnotationMemberValue, PsiMetaOwner, JvmAnnotation {
+public interface PsiAnnotation extends PsiAnnotationMemberValue,  JvmAnnotation {
     /**
      * The empty array of PSI annotations which can be reused to avoid unnecessary allocations.
      */

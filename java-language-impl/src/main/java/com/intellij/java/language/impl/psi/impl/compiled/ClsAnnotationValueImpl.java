@@ -23,6 +23,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.meta.MetaDataService;
 import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.navigation.Navigatable;
 
 import org.jspecify.annotations.Nullable;
@@ -30,7 +31,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * @author ven
  */
-abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnotation, Navigatable {
+abstract class ClsAnnotationValueImpl extends ClsElementImpl implements PsiAnnotation, Navigatable, PsiMetaOwner {
   private final ClsElementImpl myParent;
   private final ClsJavaCodeReferenceElementImpl myReferenceElement;
   private final ClsAnnotationParameterListImpl myParameterList;

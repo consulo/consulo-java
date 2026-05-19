@@ -3,70 +3,66 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.*;
 
-public abstract class StubPsiFactory
-{
-	public abstract PsiClass createClass(PsiClassStub stub);
+public abstract class StubPsiFactory {
+    public abstract PsiClass createClass(PsiClassStub stub);
 
-	public abstract PsiAnnotation createAnnotation(PsiAnnotationStub stub);
+    public abstract PsiAnnotation createAnnotation(PsiAnnotationStub stub);
 
-	public abstract PsiClassInitializer createClassInitializer(PsiClassInitializerStub stub);
+    public abstract PsiClassInitializer createClassInitializer(PsiClassInitializerStub stub);
 
-	public abstract PsiReferenceList createClassReferenceList(PsiClassReferenceListStub stub);
+    public abstract PsiReferenceList createClassReferenceList(PsiClassReferenceListStub stub);
 
-	public abstract PsiField createField(PsiFieldStub stub);
+    public abstract PsiField createField(PsiFieldStub stub);
 
-	public abstract PsiImportList createImportList(PsiImportListStub stub);
+    public abstract PsiImportList createImportList(PsiImportListStub stub);
 
-	public abstract PsiImportStatementBase createImportStatement(PsiImportStatementStub stub);
+    public abstract PsiImportStatementBase createImportStatement(PsiImportStatementStub stub);
 
-	public abstract PsiMethod createMethod(PsiMethodStub stub);
+    public abstract PsiMethod createMethod(PsiMethodStub stub);
 
-	public abstract PsiModifierList createModifierList(PsiModifierListStub stub);
+    public abstract PsiModifierList createModifierList(PsiModifierListStub stub);
 
-	public abstract PsiParameter createParameter(PsiParameterStub stub);
+    public abstract PsiParameter createParameter(PsiParameterStub stub);
 
-	public abstract PsiParameterList createParameterList(PsiParameterListStub stub);
+    public abstract PsiParameterList createParameterList(PsiParameterListStub stub);
 
-	public abstract PsiTypeParameter createTypeParameter(PsiTypeParameterStub stub);
+    public abstract PsiTypeParameter createTypeParameter(PsiTypeParameterStub stub);
 
-	public abstract PsiTypeParameterList createTypeParameterList(PsiTypeParameterListStub stub);
+    public abstract PsiTypeParameterList createTypeParameterList(PsiTypeParameterListStub stub);
 
-	public abstract PsiAnnotationParameterList createAnnotationParameterList(PsiAnnotationParameterListStub stub);
+    public abstract PsiAnnotationParameterList createAnnotationParameterList(PsiAnnotationParameterListStub stub);
 
-	public abstract PsiNameValuePair createNameValuePair(PsiNameValuePairStub stub);
+    public abstract PsiNameValuePair createNameValuePair(PsiNameValuePairStub stub);
 
-	public PsiJavaModule createModule(PsiJavaModuleStub stub)
-	{
-		return null;
-	}
+    public PsiPackageStatement createPackageStatement(PsiPackageStatementStub stub) {
+        return null;
+    }
 
-	public PsiRequiresStatement createRequiresStatement(PsiRequiresStatementStub stub)
-	{
-		return null;
-	}
+    public PsiJavaModule createModule(PsiJavaModuleStub stub) {
+        return null;
+    }
 
-	public PsiPackageAccessibilityStatement createPackageAccessibilityStatement(PsiPackageAccessibilityStatementStub stub)
-	{
-		return null;
-	}
+    public PsiRequiresStatement createRequiresStatement(PsiRequiresStatementStub stub) {
+        return null;
+    }
 
-	public PsiUsesStatement createUsesStatement(PsiUsesStatementStub stub)
-	{
-		return null;
-	}
+    public PsiPackageAccessibilityStatement createPackageAccessibilityStatement(PsiPackageAccessibilityStatementStub stub) {
+        return null;
+    }
 
-	public PsiProvidesStatement createProvidesStatement(PsiProvidesStatementStub stub)
-	{
-		return null;
-	}
+    public PsiUsesStatement createUsesStatement(PsiUsesStatementStub stub) {
+        return null;
+    }
 
-	public PsiRecordComponent createRecordComponent(PsiRecordComponentStub stub)
-	{
-		return null;
-	}
+    public PsiProvidesStatement createProvidesStatement(PsiProvidesStatementStub stub) {
+        return null;
+    }
 
-	public PsiRecordHeader createRecordHeader(PsiRecordHeaderStub stub)
-	{
-		return null;
-	}
+    public PsiRecordComponent createRecordComponent(PsiRecordComponentStub stub) {
+        return null;
+    }
+
+    public PsiRecordHeader createRecordHeader(PsiRecordHeaderStub stub) {
+        return null;
+    }
 }

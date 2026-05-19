@@ -101,7 +101,7 @@ public interface JavaElementType {
   IElementType REFERENCE_PARAMETER_LIST =
     new JavaCompositeElementType("REFERENCE_PARAMETER_LIST", PsiReferenceParameterListImpl::new, true);
   IElementType JAVA_CODE_REFERENCE = new JavaCompositeElementType("JAVA_CODE_REFERENCE", PsiJavaCodeReferenceElementImpl::new);
-  IElementType PACKAGE_STATEMENT = new JavaCompositeElementType("PACKAGE_STATEMENT", PsiPackageStatementImpl::new);
+  IElementType PACKAGE_STATEMENT = JavaStubElementTypes.PACKAGE_STATEMENT;
   IElementType LOCAL_VARIABLE = new JavaCompositeElementType("LOCAL_VARIABLE", PsiLocalVariableImpl::new);
   IElementType REFERENCE_EXPRESSION = new JavaCompositeElementType("REFERENCE_EXPRESSION", PsiReferenceExpressionImpl::new);
   IElementType THIS_EXPRESSION = new JavaCompositeElementType("THIS_EXPRESSION", PsiThisExpressionImpl::new);

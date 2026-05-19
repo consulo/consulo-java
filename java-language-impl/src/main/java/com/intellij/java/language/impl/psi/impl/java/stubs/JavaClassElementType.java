@@ -143,7 +143,8 @@ public abstract class JavaClassElementType extends JavaStubElementType<PsiClassS
                                                    false,
                                                    hasDocComment,
                                                    isRecord,
-                                                   isImplicit);
+                                                   isImplicit,
+                                                   false);
     final JavaClassElementType type = typeForClass(isAnonymous, isEnumConst, isImplicit);
     return new PsiClassStubImpl<>(type, parentStub, qualifiedName, name, baseRef, flags);
   }

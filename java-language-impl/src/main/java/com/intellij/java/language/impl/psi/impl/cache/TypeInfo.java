@@ -1,6 +1,7 @@
-// Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.impl.psi.impl.cache;
 
+import com.intellij.java.language.impl.psi.impl.compiled.SignatureParsing;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiClassStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.CommonClassNames;
@@ -9,17 +10,18 @@ import consulo.language.ast.*;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.psi.stub.StubInputStream;
 import consulo.language.psi.stub.StubOutputStream;
-import consulo.util.collection.primitive.objects.ObjectIntMap;
-import consulo.util.collection.primitive.objects.ObjectMaps;
 import consulo.util.lang.StringUtil;
-import org.jspecify.annotations.Nullable;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import one.util.streamex.StreamEx;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
 
 import static consulo.util.lang.BitUtil.clear;
 import static consulo.util.lang.BitUtil.isSet;
+import static java.util.Objects.requireNonNull;
 
 /**
  * Represents a type encoded inside a stub tree
@@ -30,33 +32,21 @@ public /*sealed*/ abstract class TypeInfo {
     public static final TypeInfo[] EMPTY_ARRAY = {};
 
     private static final String[] ourIndexFrequentType;
-    private static final ObjectIntMap<String> ourFrequentTypeIndex;
+    private static final Object2IntMap<String> ourFrequentTypeIndex;
     private static final int ourTypeLengthMask;
 
     static {
         int typeLengthMask = 0;
         ourIndexFrequentType = new String[]{
             "",
-            "boolean",
-            "byte",
-            "char",
-            "double",
-            "float",
-            "int",
-            "long",
-            "null",
-            "short",
-            "void",
-            CommonClassNames.JAVA_LANG_OBJECT_SHORT,
-            CommonClassNames.JAVA_LANG_OBJECT,
-            CommonClassNames.JAVA_LANG_STRING_SHORT,
-            CommonClassNames.JAVA_LANG_STRING
+            "boolean", "byte", "char", "double", "float", "int", "long", "null", "short", "void",
+            CommonClassNames.JAVA_LANG_OBJECT, CommonClassNames.JAVA_LANG_STRING
         };
 
-        ourFrequentTypeIndex = ObjectMaps.newObjectIntHashMap();
+        ourFrequentTypeIndex = new Object2IntOpenHashMap<>();
         for (int i = 0; i < ourIndexFrequentType.length; i++) {
             String type = ourIndexFrequentType[i];
-            ourFrequentTypeIndex.putInt(type, i);
+            ourFrequentTypeIndex.put(type, i);
             assert type.length() < 32;
             typeLengthMask |= (1 << type.length());
         }
@@ -141,8 +131,6 @@ public /*sealed*/ abstract class TypeInfo {
         LONG("long"),
         SHORT("short"),
         VOID("void"),
-        OBJECT("Object"),
-        STRING("String"),
         WILDCARD("?");
 
         private final @Nullable String text;
@@ -210,6 +198,46 @@ public /*sealed*/ abstract class TypeInfo {
                     throw new IllegalStateException();
             }
         }
+
+        @Override
+        void appendAnnotatedText(TypeAnnotationContainer container, StringBuilder sb) {
+            switch (getKind()) {
+                case EXTENDS:
+                    container.appendImmediateText(sb);
+                    sb.append("? extends ");
+                    myChild.appendAnnotatedText(container.forBound(), sb);
+                    break;
+                case SUPER:
+                    container.appendImmediateText(sb);
+                    sb.append("? super ");
+                    myChild.appendAnnotatedText(container.forBound(), sb);
+                    break;
+                case ARRAY:
+                    int arrayCount = 1;
+                    TypeAnnotationContainer curContainer = container.forArrayElement();
+                    TypeInfo child = myChild;
+                    while (child instanceof DerivedTypeInfo && child.getKind() == TypeKind.ARRAY) {
+                        child = ((DerivedTypeInfo) child).child();
+                        arrayCount++;
+                        curContainer = curContainer.forArrayElement();
+                    }
+                    child.appendAnnotatedText(curContainer, sb);
+                    curContainer = container;
+                    for (int i = 0; i < arrayCount; i++) {
+                        curContainer.appendImmediateText(sb);
+                        sb.append("[]");
+                        curContainer = curContainer.forArrayElement();
+                    }
+                    break;
+                case ELLIPSIS:
+                    myChild.appendAnnotatedText(container.forArrayElement(), sb);
+                    container.appendImmediateText(sb);
+                    sb.append("...");
+                    break;
+                default:
+                    throw new IllegalStateException();
+            }
+        }
     }
 
     /**
@@ -229,14 +257,13 @@ public /*sealed*/ abstract class TypeInfo {
         }
 
         public RefTypeInfo(String name, @Nullable RefTypeInfo outer, TypeInfo[] components) {
-            super(
-                outer != null
-                    ? (
-                        components.length == 0
-                            ? (outer.getKind() == TypeKind.REF ? TypeKind.INNER_SIMPLE : TypeKind.INNER)
-                            : TypeKind.INNER_GENERIC
-                    )
-                    : (components.length == 0 ? TEXT_TO_KIND.getOrDefault(name, TypeKind.REF) : TypeKind.GENERIC));
+            super(outer != null ?
+                (components.length == 0 ?
+                    (outer.getKind() == TypeKind.REF ? TypeKind.INNER_SIMPLE : TypeKind.INNER) : TypeKind.INNER_GENERIC) :
+                (components.length == 0 ?
+                    // Check prefix to spare hashCode computation
+                    (name.startsWith("java.") ? TEXT_TO_KIND.getOrDefault(name, TypeKind.REF) : TypeKind.REF) :
+                    TypeKind.GENERIC));
             myName = name;
             myComponents = components;
             myOuter = outer;
@@ -268,8 +295,32 @@ public /*sealed*/ abstract class TypeInfo {
         }
 
         @Override
-        public int innerDepth() {
-            return myOuter != null ? myOuter.innerDepth() + 1 : 0;
+        void appendAnnotatedText(TypeAnnotationContainer container, StringBuilder sb) {
+            if (myOuter != null) {
+                myOuter.appendAnnotatedText(container.forEnclosingClass(), sb);
+                sb.append(".");
+            }
+            container.appendImmediateText(sb);
+            sb.append(myName);
+            if (myComponents.length > 0) {
+                sb.append("<");
+                for (int i = 0; i < myComponents.length; i++) {
+                    if (i > 0) {
+                        sb.append(",");
+                    }
+                    myComponents[i].appendAnnotatedText(container.forTypeArgument(i), sb);
+                }
+                sb.append(">");
+            }
+        }
+
+        String jvmName() {
+            return myOuter == null ? myName.replace('.', '/') : myOuter.jvmName() + "$" + myName;
+        }
+
+        @Override
+        public int innerDepth(SignatureParsing.TypeInfoProvider provider) {
+            return myOuter != null && !provider.isKnownStatic(jvmName()) ? myOuter.innerDepth(provider) + 1 : 0;
         }
 
         public RefTypeInfo withComponents(List<TypeInfo> components) {
@@ -294,7 +345,7 @@ public /*sealed*/ abstract class TypeInfo {
         /**
          * @return outer type; null if this type is not an inner type
          */
-        public @Nullable TypeInfo outerType() {
+        public @Nullable RefTypeInfo outerType() {
             return myOuter;
         }
     }
@@ -328,6 +379,17 @@ public /*sealed*/ abstract class TypeInfo {
         return text(false);
     }
 
+    public String annotatedText() {
+        StringBuilder sb = new StringBuilder();
+        appendAnnotatedText(getTypeAnnotations(), sb);
+        return sb.toString();
+    }
+
+    void appendAnnotatedText(TypeAnnotationContainer container, StringBuilder sb) {
+        container.appendImmediateText(sb);
+        sb.append(kind.text);
+    }
+
     /**
      * @return type kind
      */
@@ -338,7 +400,7 @@ public /*sealed*/ abstract class TypeInfo {
     /**
      * @return depth of the inner type (how many enclosing types it has)
      */
-    public int innerDepth() {
+    public int innerDepth(SignatureParsing.TypeInfoProvider provider) {
         return 0;
     }
 
@@ -393,13 +455,16 @@ public /*sealed*/ abstract class TypeInfo {
     /* factories and serialization */
 
     /**
-     * @return return type of the constructor (null-type)
+     * @return return the type of the constructor (null-type)
      */
     public static TypeInfo createConstructorType() {
         return TypeInfo.SimpleTypeInfo.NULL;
     }
 
     /**
+     * @param tree       tree structure
+     * @param element    element (variable, parameter, field, method, etc.) to create a type for.
+     * @param parentStub parent stub element for context
      * @return type created from {@link LighterAST}
      */
     public static TypeInfo create(LighterAST tree, LighterASTNode element, StubElement<?> parentStub) {
@@ -408,9 +473,9 @@ public /*sealed*/ abstract class TypeInfo {
         LighterASTNode typeElement = null;
 
         if (element.getTokenType() == JavaElementType.ENUM_CONSTANT) {
-            return ((PsiClassStubImpl<?>)parentStub).getQualifiedNameTypeInfo();
+            return ((PsiClassStubImpl<?>) parentStub).getQualifiedNameTypeInfo();
         }
-        for (LighterASTNode child : tree.getChildren(element)) {
+        for (final LighterASTNode child : tree.getChildren(element)) {
             IElementType type = child.getTokenType();
             if (type == JavaElementType.TYPE) {
                 typeElement = child;
@@ -436,21 +501,18 @@ public /*sealed*/ abstract class TypeInfo {
             typeInfo = typeInfo.arrayOf();
         }
         byte[] prefix = new byte[arrayCount];
-        Arrays.fill(prefix, TypeAnnotationContainer.Collector.ARRAY_ELEMENT);
-        TypeAnnotationContainer.Collector collector = new TypeAnnotationContainer.Collector(typeInfo);
+        Arrays.fill(prefix, ExplicitTypeAnnotationContainer.Collector.ARRAY_ELEMENT);
+        ExplicitTypeAnnotationContainer.Collector collector = new ExplicitTypeAnnotationContainer.Collector(typeInfo);
         collectAnnotations(typeInfo, collector, tree, typeElement, prefix);
         collector.install();
         return typeInfo;
     }
 
-    private static void collectAnnotations(
-        TypeInfo info,
-        TypeAnnotationContainer.Collector collector,
-        LighterAST tree,
-        LighterASTNode element,
-        byte[] prefix
-    ) {
-        // TODO: support bounds, generics and enclosing types
+    private static void collectAnnotations(TypeInfo info,
+                                           ExplicitTypeAnnotationContainer.Collector collector,
+                                           LighterAST tree,
+                                           LighterASTNode element,
+                                           byte[] prefix) {
         int arrayCount = 0;
         List<LighterASTNode> children = tree.getChildren(element);
         for (LighterASTNode child : children) {
@@ -466,17 +528,20 @@ public /*sealed*/ abstract class TypeInfo {
             if (tokenType == JavaTokenType.EXTENDS_KEYWORD || tokenType == JavaTokenType.SUPER_KEYWORD) {
                 bound = true;
             }
-            if (tokenType == JavaElementType.TYPE && info instanceof DerivedTypeInfo derivedTypeInfo) {
+            else if (tokenType == JavaElementType.JAVA_CODE_REFERENCE && info instanceof RefTypeInfo) {
+                collectAnnotationsFromReference((RefTypeInfo) info, collector, tree, child, prefix);
+            }
+            else if (tokenType == JavaElementType.TYPE && info instanceof DerivedTypeInfo) {
                 byte[] newPrefix;
                 if (bound) {
                     newPrefix = Arrays.copyOf(prefix, prefix.length + 1);
-                    newPrefix[prefix.length] = TypeAnnotationContainer.Collector.WILDCARD_BOUND;
+                    newPrefix[prefix.length] = ExplicitTypeAnnotationContainer.Collector.WILDCARD_BOUND;
                 }
                 else {
                     newPrefix = Arrays.copyOf(prefix, prefix.length + arrayCount);
-                    Arrays.fill(newPrefix, prefix.length, newPrefix.length, TypeAnnotationContainer.Collector.ARRAY_ELEMENT);
+                    Arrays.fill(newPrefix, prefix.length, newPrefix.length, ExplicitTypeAnnotationContainer.Collector.ARRAY_ELEMENT);
                 }
-                collectAnnotations(derivedTypeInfo.child(), collector, tree, child, newPrefix);
+                collectAnnotations(((DerivedTypeInfo) info).child(), collector, tree, child, newPrefix);
             }
             else if (tokenType == JavaTokenType.LBRACKET) {
                 nestingLevel++;
@@ -484,31 +549,61 @@ public /*sealed*/ abstract class TypeInfo {
             else if (tokenType == JavaElementType.ANNOTATION) {
                 String anno = LightTreeUtil.toFilteredString(tree, child, null);
                 byte[] typePath = Arrays.copyOf(prefix, prefix.length + nestingLevel);
-                Arrays.fill(typePath, prefix.length, typePath.length, TypeAnnotationContainer.Collector.ARRAY_ELEMENT);
+                Arrays.fill(typePath, prefix.length, typePath.length, ExplicitTypeAnnotationContainer.Collector.ARRAY_ELEMENT);
                 collector.add(typePath, anno);
             }
         }
     }
 
-    private static final TokenSet PRIMITIVE_TYPES = TokenSet.create(
-        JavaTokenType.INT_KEYWORD,
-        JavaTokenType.CHAR_KEYWORD,
-        JavaTokenType.LONG_KEYWORD,
-        JavaTokenType.DOUBLE_KEYWORD,
-        JavaTokenType.FLOAT_KEYWORD,
-        JavaTokenType.SHORT_KEYWORD,
-        JavaTokenType.BOOLEAN_KEYWORD,
-        JavaTokenType.BYTE_KEYWORD,
-        JavaTokenType.VOID_KEYWORD
-    );
+    private static void collectAnnotationsFromReference(RefTypeInfo info,
+                                                        ExplicitTypeAnnotationContainer.Collector collector,
+                                                        LighterAST tree,
+                                                        LighterASTNode child,
+                                                        byte[] prefix) {
+        List<LighterASTNode> refChildren = tree.getChildren(child);
+        for (LighterASTNode refChild : refChildren) {
+            IElementType refTokenType = refChild.getTokenType();
+            if (refTokenType == JavaElementType.JAVA_CODE_REFERENCE) {
+                RefTypeInfo outerType = info.outerType();
+                if (outerType != null) {
+                    byte[] newPrefix = Arrays.copyOf(prefix, prefix.length + 1);
+                    newPrefix[prefix.length] = ExplicitTypeAnnotationContainer.Collector.ENCLOSING_CLASS;
+                    collectAnnotationsFromReference(outerType, collector, tree, refChild, newPrefix);
+                }
+            }
+            else if (refTokenType == JavaElementType.REFERENCE_PARAMETER_LIST) {
+                List<LighterASTNode> subTypes = LightTreeUtil.getChildrenOfType(tree, refChild, JavaElementType.TYPE);
+                if (!subTypes.isEmpty()) {
+                    for (int i = 0; i < subTypes.size(); i++) {
+                        TypeInfo componentInfo = info.genericComponent(i);
+                        if (componentInfo != null) {
+                            byte[] newPrefix = Arrays.copyOf(prefix, prefix.length + 2);
+                            newPrefix[prefix.length] = ExplicitTypeAnnotationContainer.Collector.TYPE_ARGUMENT;
+                            newPrefix[prefix.length + 1] = (byte) i;
+                            collectAnnotations(componentInfo, collector, tree, subTypes.get(i), newPrefix);
+                        }
+                    }
+                }
+            }
+            else if (refTokenType == JavaElementType.ANNOTATION) {
+                collector.add(prefix, LightTreeUtil.toFilteredString(tree, refChild, null));
+            }
+        }
+    }
 
-    private static TypeInfo fromTypeElement(LighterAST tree, LighterASTNode typeElement) {
+    private static final TokenSet PRIMITIVE_TYPES =
+        TokenSet.create(JavaTokenType.INT_KEYWORD, JavaTokenType.CHAR_KEYWORD, JavaTokenType.LONG_KEYWORD,
+            JavaTokenType.DOUBLE_KEYWORD, JavaTokenType.FLOAT_KEYWORD, JavaTokenType.SHORT_KEYWORD,
+            JavaTokenType.BOOLEAN_KEYWORD, JavaTokenType.BYTE_KEYWORD, JavaTokenType.VOID_KEYWORD);
+
+    private static TypeInfo fromTypeElement(LighterAST tree,
+                                                     LighterASTNode typeElement) {
         TypeInfo info = null;
         TypeKind derivedKind = null;
         for (LighterASTNode child : tree.getChildren(typeElement)) {
             IElementType tokenType = child.getTokenType();
             if (PRIMITIVE_TYPES.contains(tokenType)) {
-                info = new SimpleTypeInfo(TEXT_TO_KIND.get(((LighterASTTokenNode)child).getText().toString()));
+                info = new SimpleTypeInfo(TEXT_TO_KIND.get(((LighterASTTokenNode) child).getText().toString()));
             }
             else if (tokenType == JavaElementType.TYPE) {
                 info = fromTypeElement(tree, child);
@@ -529,10 +624,10 @@ public /*sealed*/ abstract class TypeInfo {
                 info = new SimpleTypeInfo(TypeKind.WILDCARD); // may be overwritten
             }
             if (tokenType == JavaTokenType.LBRACKET) {
-                info = Objects.requireNonNull(info).arrayOf();
+                info = requireNonNull(info).arrayOf();
             }
             else if (tokenType == JavaTokenType.ELLIPSIS) {
-                info = Objects.requireNonNull(info).arrayOf().withEllipsis();
+                info = requireNonNull(info).arrayOf().withEllipsis();
             }
         }
         if (info == null) {
@@ -552,7 +647,7 @@ public /*sealed*/ abstract class TypeInfo {
                 info = fromCodeReference(tree, child);
             }
             else if (tokenType == JavaTokenType.IDENTIFIER) {
-                String text = ((LighterASTTokenNode)child).getText().toString();
+                String text = ((LighterASTTokenNode) child).getText().toString();
                 info = new RefTypeInfo(text, info);
             }
             else if (tokenType == JavaElementType.REFERENCE_PARAMETER_LIST) {
@@ -573,20 +668,6 @@ public /*sealed*/ abstract class TypeInfo {
 
     public DerivedTypeInfo arrayOf() {
         return new DerivedTypeInfo(TypeKind.ARRAY, this);
-    }
-
-    /**
-     * @param text     type text
-     * @param ellipsis if true, then the last array component will be replaced with an ellipsis
-     * @return the type created from the text
-     * @deprecated avoid using it, as this method cannot correctly process inner types and actually requires parsing.
-     * Instead, create the type structure explicitly, using the corresponding constructors of {@link SimpleTypeInfo}, {@link RefTypeInfo} and
-     * {@link DerivedTypeInfo}.
-     */
-    @Deprecated
-    public static TypeInfo fromString(@Nullable String text, boolean ellipsis) {
-        TypeInfo typeInfo = fromString(text);
-        return ellipsis ? typeInfo.withEllipsis() : typeInfo;
     }
 
     public static TypeInfo fromString(@Nullable String text) {
@@ -636,7 +717,7 @@ public /*sealed*/ abstract class TypeInfo {
                             if (text.charAt(prevGeneric + 1) != '.') {
                                 throw new IllegalArgumentException("Malformed type: " + text);
                             }
-                            outer = (RefTypeInfo)fromString(text.substring(0, prevGeneric + 1));
+                            outer = (RefTypeInfo) fromString(text.substring(0, prevGeneric + 1));
                             name = text.substring(prevGeneric + 2, pos);
                         }
                         else {
@@ -664,20 +745,20 @@ public /*sealed*/ abstract class TypeInfo {
         RefTypeInfo outer = null;
         switch (kind) {
             case REF:
-                info = new RefTypeInfo(Objects.requireNonNull(record.readNameString()));
+                info = new RefTypeInfo(requireNonNull(record.readNameString()));
                 break;
             case INNER_SIMPLE:
-                outer = new RefTypeInfo(Objects.requireNonNull(record.readNameString()));
-                info = new RefTypeInfo(Objects.requireNonNull(record.readNameString()), outer);
+                outer = new RefTypeInfo(requireNonNull(record.readNameString()));
+                info = new RefTypeInfo(requireNonNull(record.readNameString()), outer);
                 break;
             case INNER:
-                outer = (RefTypeInfo)readTYPE(record);
-                info = new RefTypeInfo(Objects.requireNonNull(record.readNameString()), outer);
+                outer = (RefTypeInfo) readTYPE(record);
+                info = new RefTypeInfo(requireNonNull(record.readNameString()), outer);
                 break;
             case INNER_GENERIC:
-                outer = (RefTypeInfo)readTYPE(record);
+                outer = (RefTypeInfo) readTYPE(record);
             case GENERIC:
-                String name = Objects.requireNonNull(record.readNameString());
+                String name = requireNonNull(record.readNameString());
                 byte count = record.readByte();
                 TypeInfo[] components = new TypeInfo[count];
                 for (int i = 0; i < count; i++) {
@@ -692,29 +773,29 @@ public /*sealed*/ abstract class TypeInfo {
                 info = new DerivedTypeInfo(kind, readTYPE(record));
                 break;
             default:
-                info = kind.isReference() ? new RefTypeInfo(Objects.requireNonNull(kind.text)) : new SimpleTypeInfo(kind);
+                info = kind.isReference() ? new RefTypeInfo(requireNonNull(kind.text)) : new SimpleTypeInfo(kind);
         }
-        info.setTypeAnnotations(hasTypeAnnotations ? TypeAnnotationContainer.readTypeAnnotations(record) : TypeAnnotationContainer.EMPTY);
+        info.setTypeAnnotations(hasTypeAnnotations ? ExplicitTypeAnnotationContainer.readTypeAnnotations(record) : TypeAnnotationContainer.EMPTY);
         return info;
     }
 
     public static void writeTYPE(StubOutputStream dataStream, TypeInfo typeInfo) throws IOException {
-        boolean hasTypeAnnotations = typeInfo.myTypeAnnotations != null && !typeInfo.myTypeAnnotations.isEmpty();
+        boolean hasTypeAnnotations = typeInfo.myTypeAnnotations instanceof ExplicitTypeAnnotationContainer;
         dataStream.writeByte(typeInfo.kind.ordinal() | (hasTypeAnnotations ? HAS_TYPE_ANNOTATIONS : 0));
 
-        if (typeInfo instanceof DerivedTypeInfo derivedTypeInfo) {
-            writeTYPE(dataStream, derivedTypeInfo.myChild);
+        if (typeInfo instanceof DerivedTypeInfo) {
+            writeTYPE(dataStream, ((DerivedTypeInfo) typeInfo).myChild);
         }
-        else if (typeInfo instanceof RefTypeInfo refTypeInfo && typeInfo.kind.text == null) {
+        else if (typeInfo instanceof RefTypeInfo && typeInfo.kind.text == null) {
             if (typeInfo.kind == TypeKind.INNER_SIMPLE) {
-                dataStream.writeName(Objects.requireNonNull(refTypeInfo.myOuter).myName);
+                dataStream.writeName(requireNonNull(((RefTypeInfo) typeInfo).myOuter).myName);
             }
             if (typeInfo.kind == TypeKind.INNER || typeInfo.kind == TypeKind.INNER_GENERIC) {
-                writeTYPE(dataStream, Objects.requireNonNull(refTypeInfo.myOuter));
+                writeTYPE(dataStream, requireNonNull(((RefTypeInfo) typeInfo).myOuter));
             }
-            dataStream.writeName(refTypeInfo.myName);
+            dataStream.writeName(((RefTypeInfo) typeInfo).myName);
             if (typeInfo.kind == TypeKind.INNER_GENERIC || typeInfo.kind == TypeKind.GENERIC) {
-                TypeInfo[] components = refTypeInfo.myComponents;
+                TypeInfo[] components = ((RefTypeInfo) typeInfo).myComponents;
                 dataStream.writeByte(components.length);
                 for (TypeInfo component : components) {
                     writeTYPE(dataStream, component);
@@ -722,18 +803,8 @@ public /*sealed*/ abstract class TypeInfo {
             }
         }
         if (hasTypeAnnotations) {
-            TypeAnnotationContainer.writeTypeAnnotations(dataStream, typeInfo.myTypeAnnotations);
+            ExplicitTypeAnnotationContainer.writeTypeAnnotations(dataStream, (ExplicitTypeAnnotationContainer) typeInfo.myTypeAnnotations);
         }
-    }
-
-    /**
-     * @return type text without annotations
-     * @deprecated Use simply {@link TypeInfo#text()}
-     */
-    @Nullable
-    @Deprecated
-    public static String createTypeText(TypeInfo typeInfo) {
-        return typeInfo.text();
     }
 
     public static String internFrequentType(String type) {

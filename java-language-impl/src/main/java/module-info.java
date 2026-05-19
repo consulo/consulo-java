@@ -28,6 +28,8 @@ open module consulo.java.language.impl {
     requires transitive asm.util;
     requires transitive asm;
 
+    requires it.unimi.dsi.fastutil;
+
     // TODO remove in future
     requires java.desktop;
 

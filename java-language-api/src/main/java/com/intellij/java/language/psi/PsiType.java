@@ -47,7 +47,7 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
     @SuppressWarnings("StaticInitializerReferencesSubClass")
     public static final PsiPrimitiveType VOID = new PsiPrimitiveType("void", CommonClassNames.JAVA_LANG_VOID);
     @SuppressWarnings("StaticInitializerReferencesSubClass")
-    public static final PsiPrimitiveType NULL = new PsiPrimitiveType("null", (String)null);
+    public static final PsiPrimitiveType NULL = new PsiPrimitiveType("null", (String) null);
 
     public static final PsiType[] EMPTY_ARRAY = new PsiType[0];
     public static final ArrayFactory<PsiType> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiType[count];
@@ -78,8 +78,8 @@ public abstract class PsiType implements PsiAnnotationOwner, Cloneable, JvmType 
         }
 
         try {
-            PsiType copy = (PsiType)clone();
-            copy.myAnnotationProvider = provider;
+            PsiType copy = (PsiType) clone();
+            copy.myAnnotationProvider = provider.withOwner(copy);
             return copy;
         }
         catch (CloneNotSupportedException e) {

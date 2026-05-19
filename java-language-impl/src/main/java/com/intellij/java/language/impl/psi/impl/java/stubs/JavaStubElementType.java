@@ -15,63 +15,63 @@
  */
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
-import consulo.language.ast.ASTNode;
 import com.intellij.java.language.JavaLanguage;
+import consulo.language.ast.ASTNode;
+import consulo.language.ast.ICompositeElementType;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.stub.ILightStubElementType;
 import consulo.language.psi.stub.PsiFileStub;
 import consulo.language.psi.stub.StubElement;
-import consulo.language.ast.ICompositeElementType;
 
 /**
  * @author max
  */
 public abstract class JavaStubElementType<StubT extends StubElement, PsiT extends PsiElement>
     extends ILightStubElementType<StubT, PsiT> implements ICompositeElementType {
-  private final boolean myLeftBound;
+    private final boolean myLeftBound;
 
-  protected JavaStubElementType(final String debugName) {
-    this(debugName, false);
-  }
-
-  protected JavaStubElementType(final String debugName, final boolean leftBound) {
-    super(debugName, JavaLanguage.INSTANCE);
-    myLeftBound = leftBound;
-  }
-
-  @Override
-  public String getExternalId() {
-    return "java." + toString();
-  }
-
-  protected StubPsiFactory getPsiFactory(StubT stub) {
-    return getFileStub(stub).getPsiFactory();
-  }
-
-  public boolean isCompiled(StubT stub) {
-    return getFileStub(stub).isCompiled();
-  }
-
-  private PsiJavaFileStub getFileStub(StubT stub) {
-    StubElement parent = stub;
-    while (!(parent instanceof PsiFileStub)) {
-      parent = parent.getParentStub();
+    protected JavaStubElementType(final String debugName) {
+        this(debugName, false);
     }
 
-    return (PsiJavaFileStub)parent;
-  }
+    protected JavaStubElementType(final String debugName, final boolean leftBound) {
+        super(debugName, JavaLanguage.INSTANCE);
+        myLeftBound = leftBound;
+    }
 
-  @SuppressWarnings("MethodOverloadsMethodOfSuperclass")
-  public abstract PsiT createPsi(ASTNode node);
+    @Override
+    public String getExternalId() {
+        return "java." + toString();
+    }
 
-  @Override
-  public final StubT createStub(final PsiT psi, final StubElement parentStub) {
-    final String message = "Should not be called. Element=" + psi + "; class" + psi.getClass() + "; file=" + (psi.isValid() ? psi.getContainingFile() : "-");
-    throw new UnsupportedOperationException(message);
-  }
+    protected StubPsiFactory getPsiFactory(StubT stub) {
+        return getFileStub(stub).getPsiFactory();
+    }
 
-  @Override
-  public boolean isLeftBound() {
-    return myLeftBound;
-  }
+    public static boolean isCompiled(StubElement<?> stub) {
+        return getFileStub(stub).isCompiled();
+    }
+
+    public static PsiJavaFileStub getFileStub(StubElement<?> stub) {
+        StubElement<?> parent = stub;
+        while (!(parent instanceof PsiFileStub)) {
+            parent = parent.getParentStub();
+        }
+
+        return (PsiJavaFileStub) parent;
+    }
+
+    @SuppressWarnings("MethodOverloadsMethodOfSuperclass")
+    public abstract PsiT createPsi(ASTNode node);
+
+    @Override
+    public final StubT createStub(final PsiT psi, final StubElement parentStub) {
+        final String message = "Should not be called. Element=" + psi + "; class" + psi.getClass() + "; file=" + (psi.isValid() ? psi.getContainingFile() : "-");
+        throw new UnsupportedOperationException(message);
+    }
+
+    @Override
+    public boolean isLeftBound() {
+        return myLeftBound;
+    }
 }

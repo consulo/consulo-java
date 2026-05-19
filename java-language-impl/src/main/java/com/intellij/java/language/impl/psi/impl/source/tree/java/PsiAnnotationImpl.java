@@ -27,6 +27,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.meta.MetaDataService;
 import consulo.language.psi.meta.PsiMetaData;
+import consulo.language.psi.meta.PsiMetaOwner;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.StringUtil;
@@ -36,7 +37,7 @@ import org.jspecify.annotations.Nullable;
 /**
  * @author ven
  */
-public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> implements PsiAnnotation {
+public class PsiAnnotationImpl extends JavaStubPsiElement<PsiAnnotationStub> implements PsiAnnotation, PsiMetaOwner {
   private static final PairFunction<Project, String, PsiAnnotation> ANNOTATION_CREATOR =
     (project, text) -> JavaPsiFacade.getInstance(project).getElementFactory().createAnnotationFromText(text,
                                                                                                        null);

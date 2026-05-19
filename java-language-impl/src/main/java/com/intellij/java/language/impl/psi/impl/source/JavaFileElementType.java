@@ -22,7 +22,6 @@ import com.intellij.java.language.impl.parser.JavaParserUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaFileStub;
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiJavaFileStubImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.JavaFileElement;
-import consulo.index.io.StringRef;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.LighterASTNode;
 import consulo.language.parser.PsiBuilder;
@@ -36,79 +35,77 @@ import java.io.IOException;
  * @author max
  */
 public class JavaFileElementType extends ILightStubFileElementType<PsiJavaFileStub> {
-  public static final int STUB_VERSION = 53;
+    public static final int STUB_VERSION = 57;
 
-  public JavaFileElementType() {
-    super("java.FILE", JavaLanguage.INSTANCE);
-  }
+    public JavaFileElementType() {
+        super("java.FILE", JavaLanguage.INSTANCE);
+    }
 
-  @Override
-  public LightStubBuilder getBuilder() {
-    return new JavaLightStubBuilder();
-  }
+    @Override
+    public LightStubBuilder getBuilder() {
+        return new JavaLightStubBuilder();
+    }
 
-  @Override
-  public int getStubVersion() {
-    return STUB_VERSION;
-  }
+    @Override
+    public int getStubVersion() {
+        return STUB_VERSION;
+    }
 
-  @Override
-  public boolean shouldBuildStubFor(final VirtualFile file) {
-    return isInSourceContent(file);
-  }
+    @Override
+    public boolean shouldBuildStubFor(final VirtualFile file) {
+        return isInSourceContent(file);
+    }
 
-  public static boolean isInSourceContent(VirtualFile file) {
-    final VirtualFile dir = file.getParent();
-    return dir == null || dir.getUserData(LanguageLevel.KEY) != null;
-  }
+    public static boolean isInSourceContent(VirtualFile file) {
+        final VirtualFile dir = file.getParent();
+        return dir == null || dir.getUserData(LanguageLevel.KEY) != null;
+    }
 
-  @Override
-  public ASTNode createNode(final CharSequence text) {
-    return new JavaFileElement(text);
-  }
+    @Override
+    public ASTNode createNode(final CharSequence text) {
+        return new JavaFileElement(text);
+    }
 
-  @Override
-  public FlyweightCapableTreeStructure<LighterASTNode> parseContentsLight(final ASTNode chameleon) {
-    final PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
-    doParse(builder);
-    return builder.getLightTree();
-  }
+    @Override
+    public FlyweightCapableTreeStructure<LighterASTNode> parseContentsLight(final ASTNode chameleon) {
+        final PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
+        doParse(builder);
+        return builder.getLightTree();
+    }
 
-  @Override
-  public ASTNode parseContents(final ASTNode chameleon) {
-    final PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
-    doParse(builder);
-    return builder.getTreeBuilt().getFirstChildNode();
-  }
+    @Override
+    public ASTNode parseContents(final ASTNode chameleon) {
+        final PsiBuilder builder = JavaParserUtil.createBuilder(chameleon);
+        doParse(builder);
+        return builder.getTreeBuilt().getFirstChildNode();
+    }
 
-  private void doParse(final PsiBuilder builder) {
-    final PsiBuilder.Marker root = builder.mark();
-    JavaParser.INSTANCE.getFileParser().parse(builder);
-    root.done(this);
-  }
+    private void doParse(final PsiBuilder builder) {
+        final PsiBuilder.Marker root = builder.mark();
+        JavaParser.INSTANCE.getFileParser().parse(builder);
+        root.done(this);
+    }
 
-  @Override
-  public String getExternalId() {
-    return "java.FILE";
-  }
+    @Override
+    public String getExternalId() {
+        return "java.FILE";
+    }
 
-  @Override
-  public void serialize(PsiJavaFileStub stub, StubOutputStream dataStream) throws IOException {
-    dataStream.writeBoolean(stub.isCompiled());
-    LanguageLevel level = stub.getLanguageLevel();
-    dataStream.writeByte(level != null ? level.ordinal() : -1);
-    dataStream.writeName(stub.getPackageName());
-  }
+    @Override
+    public void serialize(PsiJavaFileStub stub, StubOutputStream dataStream) throws IOException {
+        dataStream.writeBoolean(stub.isCompiled());
+        LanguageLevel level = stub.getLanguageLevel();
+        dataStream.writeByte(level != null ? level.ordinal() : -1);
+    }
 
-  @Override
-  public PsiJavaFileStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
-    boolean compiled = dataStream.readBoolean();
-    int level = dataStream.readByte();
-    StringRef packageName = dataStream.readName();
-    return new PsiJavaFileStubImpl(null, StringRef.toString(packageName), level >= 0 ? LanguageLevel.values()[level] : null, compiled);
-  }
+    @Override
+    public PsiJavaFileStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
+        boolean compiled = dataStream.readBoolean();
+        int level = dataStream.readByte();
+        return new PsiJavaFileStubImpl(null, level >= 0 ? LanguageLevel.values()[level] : null, compiled);
+    }
 
-  @Override
-  public void indexStub(PsiJavaFileStub stub, IndexSink sink) {
-  }
+    @Override
+    public void indexStub(PsiJavaFileStub stub, IndexSink sink) {
+    }
 }

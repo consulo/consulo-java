@@ -7,10 +7,10 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.JavaTypeNullabilityUtil;
 import consulo.language.psi.PsiElement;
 import consulo.util.lang.ObjectUtil;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-
+///
 /// Encapsulates information related to a nullability annotation.
 ///
 @NullMarked

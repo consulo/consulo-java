@@ -5,6 +5,7 @@ import com.intellij.java.language.impl.psi.impl.cache.TypeAnnotationContainer;
 import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
 import com.intellij.java.language.impl.psi.impl.compiled.ClsJavaCodeReferenceElementImpl;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaClassReferenceListElementType;
+import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiClassReferenceListStub;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassReferenceType;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaCodeReferenceElementImpl;
@@ -43,15 +44,15 @@ public class PsiClassReferenceListStubImpl extends StubBase<PsiReferenceList> im
   }
 
   private boolean shouldSkipSoleObject() {
-    final boolean compiled = ((JavaClassReferenceListElementType)getStubType()).isCompiled(this);
-    return compiled && myInfos.length == 1 && myInfos[0].getKind() == TypeInfo.TypeKind.JAVA_LANG_OBJECT &&
-      myInfos[0].getTypeAnnotations().isEmpty();
+      final boolean compiled = JavaStubElementType.isCompiled(this);
+      return compiled && myInfos.length == 1 && myInfos[0].getKind() == TypeInfo.TypeKind.JAVA_LANG_OBJECT &&
+          myInfos[0].getTypeAnnotations() == TypeAnnotationContainer.EMPTY;
   }
 
   private PsiClassType[] createTypes() {
     PsiClassType[] types = myInfos.length == 0 ? PsiClassType.EMPTY_ARRAY : new PsiClassType[myInfos.length];
 
-    final boolean compiled = ((JavaClassReferenceListElementType)getStubType()).isCompiled(this);
+    final boolean compiled = JavaClassReferenceListElementType.isCompiled(this);
     if (compiled) {
       if (shouldSkipSoleObject()) return PsiClassType.EMPTY_ARRAY;
       for (int i = 0; i < types.length; i++) {
