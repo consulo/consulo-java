@@ -288,7 +288,23 @@ public class JavaSharedImplUtil {
         }
     }
 
-    private static class FilteringTypeAnnotationProvider implements TypeAnnotationProvider {
+    public static TypeAnnotationProvider filteringTypeAnnotationProvider(PsiAnnotation[] candidates,
+                                                                                  TypeAnnotationProvider originalProvider) {
+        if (candidates.length == 0) return originalProvider;
+        return new FilteringTypeAnnotationProvider(candidates, originalProvider);
+    }
+
+
+    public static PsiType annotate(PsiType type,
+                                            PsiModifierList modifierList,
+                                            PsiAnnotation[] annotations) {
+        TypeAnnotationProvider original =
+            modifierList.getParent() instanceof PsiMethod ? type.getAnnotationProvider() : TypeAnnotationProvider.EMPTY;
+        TypeAnnotationProvider provider = new FilteringTypeAnnotationProvider(annotations, original);
+        return type.annotate(provider);
+    }
+
+    private static final class FilteringTypeAnnotationProvider implements TypeAnnotationProvider {
         private final PsiAnnotation[] myCandidates;
         private final TypeAnnotationProvider myOriginalProvider;
         private volatile PsiAnnotation[] myCache;
@@ -302,9 +318,13 @@ public class JavaSharedImplUtil {
         public PsiAnnotation[] getAnnotations() {
             PsiAnnotation[] result = myCache;
             if (result == null) {
-                List<PsiAnnotation> filtered = JBIterable.of(myCandidates).filter(annotation -> AnnotationTargetUtil.isTypeAnnotation(annotation)).append(myOriginalProvider.getAnnotations())
+                List<PsiAnnotation> filtered = JBIterable.of(myCandidates)
+                    .filter(annotation ->
+                        !annotation.isValid() || // avoid exceptions in the next line, enable isValid checks at more specific call sites
+                            AnnotationTargetUtil.isTypeAnnotation(annotation))
+                    .append(myOriginalProvider.getAnnotations())
                     .toList();
-                myCache = result = filtered.isEmpty() ? PsiAnnotation.EMPTY_ARRAY : filtered.toArray(new PsiAnnotation[filtered.size()]);
+                myCache = result = filtered.isEmpty() ? PsiAnnotation.EMPTY_ARRAY : filtered.toArray(PsiAnnotation.EMPTY_ARRAY);
             }
             return result;
         }

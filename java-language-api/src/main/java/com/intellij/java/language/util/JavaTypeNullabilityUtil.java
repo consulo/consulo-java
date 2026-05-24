@@ -8,6 +8,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.language.psi.PsiElement;
 import consulo.util.collection.ContainerUtil;
+import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
@@ -27,6 +28,24 @@ public final class JavaTypeNullabilityUtil {
      */
     public static TypeNullability getTypeNullability(PsiClassType type) {
         return getTypeNullability(type, null, !isLocal(type));
+    }
+
+    private static boolean shouldIgnoreContainer(PsiClassType classType) {
+        PsiElement context = classType.getPsiContext();
+        return context instanceof PsiJavaCodeReferenceElement &&
+            context.getParent() instanceof PsiTypeElement &&
+            shouldIgnoreContainer(context.getParent().getParent());
+    }
+
+    /**
+     * @param element type element owner to check
+     * @return true if for this type owner, the container annotation like {@code @NullMarked} should be ignored
+     * (for example, if the element is a local variable)
+     */
+    @Contract(value = "null -> false", pure = true)
+    public static boolean shouldIgnoreContainer(@Nullable PsiElement element) {
+        return element instanceof PsiLocalVariable ||
+            element instanceof PsiParameter && !(element.getParent() instanceof PsiParameterList);
     }
 
     private static TypeNullability getTypeNullability(PsiClassType type,

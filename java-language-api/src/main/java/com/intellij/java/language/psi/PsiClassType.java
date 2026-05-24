@@ -1,21 +1,8 @@
-/*
- * Copyright 2000-2017 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.psi;
 
 import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.codeInsight.TypeNullability;
 import com.intellij.java.language.jvm.JvmTypeDeclaration;
 import com.intellij.java.language.jvm.types.JvmReferenceType;
 import com.intellij.java.language.jvm.types.JvmSubstitutor;
@@ -25,8 +12,8 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ArrayFactory;
-import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -37,340 +24,367 @@ import java.util.Objects;
  * @author max
  */
 public abstract class PsiClassType extends PsiType implements JvmReferenceType {
-  public static final PsiClassType[] EMPTY_ARRAY = new PsiClassType[0];
-  public static final ArrayFactory<PsiClassType> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiClassType[count];
+    public static final PsiClassType[] EMPTY_ARRAY = new PsiClassType[0];
+    public static final ArrayFactory<PsiClassType> ARRAY_FACTORY = count -> count == 0 ? EMPTY_ARRAY : new PsiClassType[count];
 
-  protected final LanguageLevel myLanguageLevel;
+    protected final LanguageLevel myLanguageLevel;
 
-  protected PsiClassType(LanguageLevel languageLevel) {
-    this(languageLevel, PsiAnnotation.EMPTY_ARRAY);
-  }
-
-  protected PsiClassType(LanguageLevel languageLevel, PsiAnnotation[] annotations) {
-    super(annotations);
-    myLanguageLevel = languageLevel;
-  }
-
-  public PsiClassType(LanguageLevel languageLevel, TypeAnnotationProvider provider) {
-    super(provider);
-    myLanguageLevel = languageLevel;
-  }
-
-  @Override
-  public PsiClassType annotate(TypeAnnotationProvider provider) {
-    return (PsiClassType)super.annotate(provider);
-  }
-
-  /**
-   * Resolves the class reference and returns the resulting class.
-   *
-   * @return the class instance, or null if the reference resolve failed.
-   */
-  @Nullable
-  public abstract PsiClass resolve();
-
-  /**
-   * Returns the non-qualified name of the class referenced by the type.
-   *
-   * @return the name of the class.
-   */
-  public abstract String getClassName();
-
-  /**
-   * Returns the list of type arguments for the type.
-   *
-   * @return the array of type arguments, or an empty array if the type does not point to a generic class or interface.
-   */
-  public abstract PsiType[] getParameters();
-
-  public int getParameterCount() {
-    return getParameters().length;
-  }
-
-  public boolean equals(Object obj) {
-    if (this == obj) return true;
-    if (!(obj instanceof PsiClassType)) {
-      return obj instanceof PsiCapturedWildcardType &&
-        ((PsiCapturedWildcardType)obj).getLowerBound().equalsToText(CommonClassNames.JAVA_LANG_OBJECT) &&
-        equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
-    }
-    PsiClassType otherClassType = (PsiClassType)obj;
-
-    String className = getClassName();
-    String otherClassName = otherClassType.getClassName();
-    if (!Objects.equals(className, otherClassName)) return false;
-
-    if (getParameterCount() != otherClassType.getParameterCount()) return false;
-
-    final ClassResolveResult result = resolveGenerics();
-    final ClassResolveResult otherResult = otherClassType.resolveGenerics();
-    if (result == otherResult) return true;
-
-    final PsiClass aClass = result.getElement();
-    final PsiClass otherClass = otherResult.getElement();
-    if (aClass == null || otherClass == null) {
-      return aClass == otherClass;
-    }
-    return aClass.getManager().areElementsEquivalent(aClass, otherClass) && PsiUtil.equalOnEquivalentClasses(this,
-                                                                                                             aClass,
-                                                                                                             otherClassType,
-                                                                                                             otherClass);
-  }
-
-  /**
-   * Checks if the class type has any parameters with no substituted arguments.
-   *
-   * @return true if the class type has non-substituted parameters, false otherwise
-   */
-  public boolean hasParameters() {
-    final ClassResolveResult resolveResult = resolveGenerics();
-    PsiClass aClass = resolveResult.getElement();
-    if (aClass == null) {
-      return false;
-    }
-    boolean hasParams = false;
-    for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(aClass)) {
-      if (resolveResult.getSubstitutor().substitute(parameter) == null) {
-        return false;
-      }
-      hasParams = true;
-    }
-    return hasParams;
-  }
-
-  /**
-   * Checks if the class type has any parameters which are not unbounded wildcards (and not extends-wildcard with the same bound as corresponding type parameter bound)
-   * and do not have substituted arguments.
-   *
-   * @return true if the class type has nontrivial non-substituted parameters, false otherwise
-   */
-  public boolean hasNonTrivialParameters() {
-    final ClassResolveResult resolveResult = resolveGenerics();
-    PsiClass aClass = resolveResult.getElement();
-    if (aClass == null) {
-      return false;
-    }
-    for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(aClass)) {
-      PsiType type = resolveResult.getSubstitutor().substitute(parameter);
-      if (type != null) {
-        if (!(type instanceof PsiWildcardType)) {
-          return true;
-        }
-        final PsiType bound = ((PsiWildcardType)type).getBound();
-        if (bound != null) {
-          if (((PsiWildcardType)type).isExtends()) {
-            final PsiClass superClass = parameter.getSuperClass();
-            if (superClass != null && PsiUtil.resolveClassInType(bound) == superClass) {
-              continue;
-            }
-          }
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  public int hashCode() {
-    final String className = getClassName();
-    if (className == null) {
-      return 0;
-    }
-    return className.hashCode();
-  }
-
-  @Override
-  public PsiType[] getSuperTypes() {
-    ClassResolveResult resolveResult = resolveGenerics();
-    PsiClass aClass = resolveResult.getElement();
-    if (aClass == null) {
-      return EMPTY_ARRAY;
+    protected PsiClassType(LanguageLevel languageLevel) {
+        this(languageLevel, PsiAnnotation.EMPTY_ARRAY);
     }
 
-    PsiClassType[] superTypes = aClass.getSuperTypes();
-    PsiType[] substitutionResults = createArray(superTypes.length);
-    for (int i = 0; i < superTypes.length; i++) {
-      substitutionResults[i] = resolveResult.getSubstitutor().substitute(superTypes[i]);
+    protected PsiClassType(LanguageLevel languageLevel, PsiAnnotation[] annotations) {
+        super(annotations);
+        myLanguageLevel = languageLevel;
     }
-    return substitutionResults;
-  }
 
-  /**
-   * Checks whether the specified resolve result represents a raw type. <br>
-   * Raw type is a class type for a class <i>with type parameters</i> which does not assign
-   * any value to them. If a class does not have any type parameters, it cannot generate any raw type.
-   */
-  public static boolean isRaw(ClassResolveResult resolveResult) {
-    PsiClass psiClass = resolveResult.getElement();
-    return psiClass != null && PsiUtil.isRawSubstitutor(psiClass, resolveResult.getSubstitutor());
-  }
+    public PsiClassType(LanguageLevel languageLevel, TypeAnnotationProvider provider) {
+        super(provider);
+        myLanguageLevel = languageLevel;
+    }
 
-  /**
-   * Checks whether this type is a raw type. <br>
-   * Raw type is a class type for a class <i>with type parameters</i> which does not assign
-   * any value to them. If a class does not have any type parameters, it cannot generate any raw type.
-   */
-  public boolean isRaw() {
-    return isRaw(resolveGenerics());
-  }
-
-  /**
-   * Returns the resolve result containing the class referenced by the class type and the
-   * substitutor which can substitute the values of type arguments used in the class type
-   * declaration.
-   *
-   * @return the resolve result instance.
-   */
-  public abstract ClassResolveResult resolveGenerics();
-
-  /**
-   * Returns the raw type (with no values assigned to type parameters) corresponding to this type.
-   *
-   * @return the raw type instance.
-   */
-  public abstract PsiClassType rawType();
-
-  /**
-   * Overrides {@link PsiType#getResolveScope()} to narrow specify @NotNull.
-   */
-  @Override
-  public abstract GlobalSearchScope getResolveScope();
-
-
-  @Override
-  public <A> A accept(PsiTypeVisitor<A> visitor) {
-    return visitor.visitClassType(this);
-  }
-
-  public abstract LanguageLevel getLanguageLevel();
-
-  /**
-   * Functional style setter preserving original type's language level
-   *
-   * @param languageLevel level to obtain class type with
-   * @return type with requested language level
-   */
-  @Contract(pure = true)
-  public abstract PsiClassType setLanguageLevel(LanguageLevel languageLevel);
-
-  @Override
-  public String getName() {
-    return getClassName();
-  }
-
-  /**
-   * If class-type is created from the explicit reference in the code returns that reference.
-   *
-   * @return reference which the type is created from. Returns null if not applicable.
-   */
-  @Nullable
-  public PsiElement getPsiContext() {
-    return null;
-  }
-
-  @Nullable
-  @Override
-  public JvmTypeResolveResult resolveType() {
-    ClassResolveResult resolveResult = resolveGenerics();
-    PsiClass clazz = resolveResult.getElement();
-    return clazz == null ? null : new JvmTypeResolveResult() {
-
-      private final JvmSubstitutor mySubstitutor = new PsiJvmConversionHelper.PsiJvmSubstitutor(resolveResult.getSubstitutor());
-
-      @Override
-      public JvmTypeDeclaration getDeclaration() {
-        return clazz;
-      }
-
-      @Override
-      public JvmSubstitutor getSubstitutor() {
-        return mySubstitutor;
-      }
-    };
-  }
-
-  @Override
-  public Iterable<JvmType> typeArguments() {
-    return Arrays.asList(getParameters());
-  }
-
-  /**
-   * Represents the result of resolving a reference to a Java class.
-   */
-  public interface ClassResolveResult extends JavaResolveResult {
     @Override
-    PsiClass getElement();
+    public PsiClassType annotate(TypeAnnotationProvider provider) {
+        return (PsiClassType) super.annotate(provider);
+    }
+
+    @Override
+    public PsiClassType withNullability(TypeNullability nullability) {
+        return this;
+    }
 
     /**
-     * @return human-readable inference error if resolve of the class type involves type inference.
-     * Currently, the only possibility for this is inference in deconstruction pattern.
+     * Resolves the class reference and returns the resulting class.
+     *
+     * @return the class instance, or null if the reference resolve failed.
      */
-    @Nullable
-    default String getInferenceError() {
-      return null;
+    @Override
+    public abstract @Nullable PsiClass resolve();
+
+    /**
+     * Returns the non-qualified name of the class referenced by the type.
+     *
+     * @return the name of the class.
+     */
+    public abstract String getClassName();
+
+    /**
+     * Returns the list of type arguments for the type.
+     *
+     * @return the array of type arguments, or an empty array if the type does not point to a generic class or interface.
+     */
+    public abstract PsiType[] getParameters();
+
+    public int getParameterCount() {
+        return getParameters().length;
     }
 
-    ClassResolveResult EMPTY = new ClassResolveResult() {
-      @Override
-      public PsiClass getElement() {
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof PsiClassType)) {
+            return obj instanceof PsiCapturedWildcardType &&
+                ((PsiCapturedWildcardType) obj).getLowerBound().equalsToText(CommonClassNames.JAVA_LANG_OBJECT) &&
+                equalsToText(CommonClassNames.JAVA_LANG_OBJECT);
+        }
+        PsiClassType otherClassType = (PsiClassType) obj;
+
+        String className = getClassName();
+        String otherClassName = otherClassType.getClassName();
+        if (!Objects.equals(className, otherClassName)) {
+            return false;
+        }
+
+        if (getParameterCount() != otherClassType.getParameterCount()) {
+            return false;
+        }
+
+        ClassResolveResult result = resolveGenerics();
+        ClassResolveResult otherResult = otherClassType.resolveGenerics();
+        if (result == otherResult) {
+            return true;
+        }
+
+        final PsiClass aClass = result.getElement();
+        final PsiClass otherClass = otherResult.getElement();
+        if (aClass == null || otherClass == null) {
+            return aClass == otherClass;
+        }
+        if (!aClass.getManager().areElementsEquivalent(aClass, otherClass)) {
+            return false;
+        }
+        if (PsiCapturedWildcardType.isCapture()) {
+            result = result.resolveWithCapturedTopLevelWildcards();
+            otherResult = otherResult.resolveWithCapturedTopLevelWildcards();
+        }
+        return PsiUtil.equalOnEquivalentClasses(result.getSubstitutor(), aClass, otherResult.getSubstitutor(), otherClass);
+    }
+
+    /**
+     * Checks if the class type has any parameters with no substituted arguments.
+     *
+     * @return true if the class type has non-substituted parameters, false otherwise
+     */
+    public boolean hasParameters() {
+        final ClassResolveResult resolveResult = resolveGenerics();
+        PsiClass aClass = resolveResult.getElement();
+        if (aClass == null) {
+            return false;
+        }
+        boolean hasParams = false;
+        PsiSubstitutor substitutor = null;
+        for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(aClass)) {
+            if (substitutor == null) {
+                substitutor = resolveResult.getSubstitutor();
+                if (!substitutor.hasRawSubstitution()) {
+                    return true;
+                }
+            }
+            if (substitutor.substitute(parameter) == null) {
+                return false;
+            }
+            hasParams = true;
+        }
+        return hasParams;
+    }
+
+    /**
+     * Checks if the class type has any parameters which are not unbounded wildcards (and not extends-wildcard with the same bound as corresponding type parameter bound)
+     * and do not have substituted arguments.
+     *
+     * @return true if the class type has nontrivial non-substituted parameters, false otherwise
+     */
+    public boolean hasNonTrivialParameters() {
+        final ClassResolveResult resolveResult = resolveGenerics();
+        PsiClass aClass = resolveResult.getElement();
+        if (aClass == null) {
+            return false;
+        }
+        for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(aClass)) {
+            PsiType type = resolveResult.getSubstitutor().substitute(parameter);
+            if (type != null) {
+                if (!(type instanceof PsiWildcardType)) {
+                    return true;
+                }
+                final PsiType bound = ((PsiWildcardType) type).getBound();
+                if (bound != null) {
+                    if (((PsiWildcardType) type).isExtends()) {
+                        final PsiClass superClass = parameter.getSuperClass();
+                        if (superClass != null && PsiUtil.resolveClassInType(bound) == superClass) {
+                            continue;
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        final String className = getClassName();
+        if (className == null) {
+            return 0;
+        }
+        return className.hashCode();
+    }
+
+    @Override
+    public PsiType[] getSuperTypes() {
+        ClassResolveResult resolveResult = resolveGenerics();
+        PsiClass aClass = resolveResult.getElement();
+        if (aClass == null) {
+            return EMPTY_ARRAY;
+        }
+
+        PsiClassType[] superTypes = aClass.getSuperTypes();
+        PsiType[] substitutionResults = createArray(superTypes.length);
+        for (int i = 0; i < superTypes.length; i++) {
+            substitutionResults[i] = resolveResult.getSubstitutor().substitute(superTypes[i]);
+        }
+        return substitutionResults;
+    }
+
+    /**
+     * Checks whether the specified resolve result represents a raw type. <br>
+     * Raw type is a class type for a class <i>with type parameters</i> which does not assign
+     * any value to them. If a class does not have any type parameters, it cannot generate any raw type.
+     */
+    public static boolean isRaw(ClassResolveResult resolveResult) {
+        PsiClass psiClass = resolveResult.getElement();
+        return psiClass != null && PsiUtil.isRawSubstitutor(psiClass, resolveResult.getSubstitutor());
+    }
+
+    /**
+     * Checks whether this type is a raw type. <br>
+     * Raw type is a class type for a class <i>with type parameters</i> which does not assign
+     * any value to them. If a class does not have any type parameters, it cannot generate any raw type.
+     */
+    public boolean isRaw() {
+        return isRaw(resolveGenerics());
+    }
+
+    /**
+     * Returns the resolve result containing the class referenced by the class type and the
+     * substitutor which can substitute the values of type arguments used in the class type
+     * declaration.
+     *
+     * @return the resolve result instance.
+     */
+    public abstract ClassResolveResult resolveGenerics();
+
+    /**
+     * Returns the raw type (with no values assigned to type parameters) corresponding to this type.
+     *
+     * @return the raw type instance.
+     */
+    public abstract PsiClassType rawType();
+
+    /**
+     * Overrides {@link PsiType#getResolveScope()} to narrow specify @NotNull.
+     */
+    @Override
+    public abstract GlobalSearchScope getResolveScope();
+
+
+    @Override
+    public <A> A accept(PsiTypeVisitor<A> visitor) {
+        return visitor.visitClassType(this);
+    }
+
+    public abstract LanguageLevel getLanguageLevel();
+
+    /**
+     * Functional style setter preserving original type's language level
+     *
+     * @param languageLevel level to obtain class type with
+     * @return type with requested language level
+     */
+    @Contract(pure = true)
+    public abstract PsiClassType setLanguageLevel(LanguageLevel languageLevel);
+
+    @Override
+    public String getName() {
+        return getClassName();
+    }
+
+    /**
+     * If class-type is created from the explicit reference in the code returns that reference.
+     *
+     * @return reference which the type is created from. Returns null if not applicable.
+     */
+    public @Nullable PsiElement getPsiContext() {
         return null;
-      }
-
-      @Override
-      public PsiSubstitutor getSubstitutor() {
-        return PsiSubstitutor.EMPTY;
-      }
-
-      @Override
-      public boolean isValidResult() {
-        return false;
-      }
-
-      @Override
-      public boolean isAccessible() {
-        return false;
-      }
-
-      @Override
-      public boolean isStaticsScopeCorrect() {
-        return false;
-      }
-
-      @Override
-      public PsiElement getCurrentFileResolveScope() {
-        return null;
-      }
-
-      @Override
-      public boolean isPackagePrefixPackageReference() {
-        return false;
-      }
-    };
-  }
-
-  public abstract static class Stub extends PsiClassType {
-    protected Stub(LanguageLevel languageLevel, PsiAnnotation[] annotations) {
-      super(languageLevel, annotations);
-    }
-
-    protected Stub(LanguageLevel languageLevel, TypeAnnotationProvider annotations) {
-      super(languageLevel, annotations);
     }
 
     @Override
-    public final String getPresentableText() {
-      return getPresentableText(false);
+    public @Nullable JvmTypeResolveResult resolveType() {
+        ClassResolveResult resolveResult = resolveGenerics();
+        PsiClass clazz = resolveResult.getElement();
+        return clazz == null ? null : new JvmTypeResolveResult() {
+
+            private final JvmSubstitutor mySubstitutor = new PsiJvmSubstitutor(clazz.getProject(), resolveResult.getSubstitutor());
+
+            @Override
+            public JvmTypeDeclaration getDeclaration() {
+                return clazz;
+            }
+
+            @Override
+            public JvmSubstitutor getSubstitutor() {
+                return mySubstitutor;
+            }
+        };
     }
 
     @Override
-    public abstract String getPresentableText(boolean annotated);
-
-    @Override
-    public final String getCanonicalText() {
-      return getCanonicalText(false);
+    public Iterable<JvmType> typeArguments() {
+        return Arrays.asList(getParameters());
     }
 
-    @Override
-    public abstract String getCanonicalText(boolean annotated);
-  }
+    /**
+     * Represents the result of resolving a reference to a Java class.
+     */
+    public interface ClassResolveResult extends JavaResolveResult {
+        @Override
+        PsiClass getElement();
+
+        /**
+         * @return human-readable inference error if resolve of the class type involves type inference.
+         * Currently, the only possibility for this is inference in deconstruction pattern.
+         */
+        default @Nullable String getInferenceError() {
+            return null;
+        }
+
+        default ClassResolveResult resolveWithCapturedTopLevelWildcards() {
+            return PsiUtil.captureTopLevelWildcards(this);
+        }
+
+        ClassResolveResult EMPTY = new ClassResolveResult() {
+            @Override
+            public PsiClass getElement() {
+                return null;
+            }
+
+            @Override
+            public PsiSubstitutor getSubstitutor() {
+                return PsiSubstitutor.EMPTY;
+            }
+
+            @Override
+            public boolean isValidResult() {
+                return false;
+            }
+
+            @Override
+            public boolean isAccessible() {
+                return false;
+            }
+
+            @Override
+            public boolean isStaticsScopeCorrect() {
+                return false;
+            }
+
+            @Override
+            public PsiElement getCurrentFileResolveScope() {
+                return null;
+            }
+
+            @Override
+            public boolean isPackagePrefixPackageReference() {
+                return false;
+            }
+        };
+    }
+
+    public abstract static class Stub extends PsiClassType {
+        protected Stub(LanguageLevel languageLevel, PsiAnnotation[] annotations) {
+            super(languageLevel, annotations);
+        }
+
+        protected Stub(LanguageLevel languageLevel, TypeAnnotationProvider annotations) {
+            super(languageLevel, annotations);
+        }
+
+        @Override
+        public final String getPresentableText() {
+            return getPresentableText(false);
+        }
+
+        @Override
+        public abstract String getPresentableText(boolean annotated);
+
+        @Override
+        public final String getCanonicalText() {
+            return getCanonicalText(false);
+        }
+
+        @Override
+        public abstract String getCanonicalText(boolean annotated);
+    }
 }

@@ -39,7 +39,7 @@
     </MavenSettings>
     <ConfigurationWrapper RunnerId="Debug" />
     <method>
-      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="package" />
+      <option name="Maven.BeforeRunTask" enabled="true" file="$PROJECT_DIR$/pom.xml" goal="-T 1C package" />
     </method>
   </configuration>
 </component>

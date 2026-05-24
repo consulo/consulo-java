@@ -323,7 +323,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
       }
       substitutorMap.put(parameter, null);
     }
-    return PsiSubstitutorImpl.createSubstitutor(substitutorMap);
+    return PsiSubstitutor.createSubstitutor(substitutorMap);
   }
 
   @Override
@@ -335,7 +335,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
       }
       substitutorMap.put(parameter, null);
     }
-    return PsiSubstitutorImpl.createSubstitutor(substitutorMap).putAll(baseSubstitutor);
+    return PsiSubstitutor.createSubstitutor(substitutorMap).putAll(baseSubstitutor);
   }
 
   @Override
@@ -358,7 +358,7 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 
   @Override
   public PsiSubstitutor createSubstitutor(final Map<PsiTypeParameter, PsiType> map) {
-    return PsiSubstitutorImpl.createSubstitutor(map);
+    return PsiSubstitutor.createSubstitutor(map);
   }
 
   @Nullable

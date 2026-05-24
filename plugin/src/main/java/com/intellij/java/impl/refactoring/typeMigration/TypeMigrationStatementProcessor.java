@@ -665,7 +665,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor {
         realMap.putAll(evalSubstitutor.getSubstitutionMap());
       }
 
-      myType = PsiSubstitutorImpl.createSubstitutor(realMap).substitute(myTypeEvaluator.getType(var));
+      myType = PsiSubstitutor.createSubstitutor(realMap).substitute(myTypeEvaluator.getType(var));
       myChanged = !(myOriginType == null || myType == null) && !myType.equals(myOriginType);
     }
 
@@ -741,7 +741,7 @@ class TypeMigrationStatementProcessor extends JavaRecursiveElementVisitor {
     if (required == PsiSubstitutor.EMPTY) {
       return actual;
     }
-    PsiSubstitutor result = PsiSubstitutorImpl.createSubstitutor(actual.getSubstitutionMap());
+    PsiSubstitutor result = PsiSubstitutor.createSubstitutor(actual.getSubstitutionMap());
     for (Map.Entry<PsiTypeParameter, PsiType> e : required.getSubstitutionMap().entrySet()) {
       PsiTypeParameter typeParameter = e.getKey();
       PsiType requiredType = e.getValue();

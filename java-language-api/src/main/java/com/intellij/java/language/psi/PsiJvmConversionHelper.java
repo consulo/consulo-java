@@ -176,24 +176,4 @@ class PsiJvmConversionHelper {
 
     return null;
   }
-
-  static class PsiJvmSubstitutor implements JvmSubstitutor {
-
-    private final
-    PsiSubstitutor mySubstitutor;
-
-    PsiJvmSubstitutor(PsiSubstitutor substitutor) {
-      mySubstitutor = substitutor;
-    }
-
-    @Nullable
-    @Override
-    public JvmType substitute(JvmTypeParameter typeParameter) {
-      if (!(typeParameter instanceof PsiTypeParameter)) {
-        return null;
-      }
-      PsiTypeParameter psiTypeParameter = ((PsiTypeParameter) typeParameter);
-      return mySubstitutor.substitute(psiTypeParameter);
-    }
-  }
 }
