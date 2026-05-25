@@ -1276,6 +1276,7 @@ public class GenericsHighlightUtil {
             }
 
             LOG.assertTrue(varParameter.isVarArgs());
+            System.out.println(varParameter.isVarArgs() + " " + varParameter.getType().getClass());
             PsiEllipsisType ellipsisType = (PsiEllipsisType) varParameter.getType();
             PsiType componentType = ellipsisType.getComponentType();
             if (JavaGenericsUtil.isReifiableType(componentType)) {

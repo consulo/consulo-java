@@ -18,6 +18,7 @@ package com.intellij.java.language.impl.psi.impl.source.tree;
 import com.intellij.java.language.codeInsight.AnnotationTargetUtil;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.cache.TypeInfo;
+import com.intellij.java.language.impl.psi.impl.source.PsiTypeElementImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.ast.ASTNode;
@@ -53,13 +54,15 @@ public class JavaSharedImplUtil {
 
     public static PsiType getType(PsiTypeElement typeElement, PsiElement anchor, @Nullable PsiAnnotation stopAt) {
         PsiType type = typeElement.getType();
+        boolean ellipsisType = type instanceof PsiEllipsisType;
 
         List<PsiAnnotation[]> allAnnotations = collectAnnotations(anchor, stopAt);
-        if (allAnnotations == null) {
-            return null;
-        }
-        for (PsiAnnotation[] annotations : allAnnotations) {
-            type = type.createArrayType().annotate(TypeAnnotationProvider.Static.create(annotations));
+        if (allAnnotations == null) return null;
+        for (int i = 0, size = allAnnotations.size(); i < size; i++) {
+            type = ((ellipsisType && i == size - 1) ?
+                new PsiEllipsisType(type).withContainerNullability(PsiTypeElementImpl.findContainerNullabilityContext(typeElement)) :
+                type.createArrayType().withContainerNullability(PsiTypeElementImpl.findContainerNullabilityContext(typeElement)))
+                .annotate(TypeAnnotationProvider.Static.create(allAnnotations.get(i)));
         }
 
         return type;

@@ -1,82 +1,96 @@
-/*
- * Copyright 2000-2016 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.psi;
 
+import com.intellij.java.language.codeInsight.TypeNullability;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents the type of a variable arguments array passed as a method parameter.
- *
- * @author ven
  */
 public class PsiEllipsisType extends PsiArrayType {
-  public PsiEllipsisType(PsiType componentType) {
-    super(componentType);
-  }
+    public PsiEllipsisType(PsiType componentType) {
+        super(componentType);
+    }
 
-  public PsiEllipsisType(PsiType componentType, PsiAnnotation[] annotations) {
-    super(componentType, annotations);
-  }
+    public PsiEllipsisType(PsiType componentType, PsiAnnotation[] annotations) {
+        super(componentType, annotations);
+    }
 
-  public PsiEllipsisType(PsiType componentType, TypeAnnotationProvider provider) {
-    super(componentType, provider);
-  }
+    public PsiEllipsisType(PsiType componentType, TypeAnnotationProvider provider) {
+        super(componentType, provider);
+    }
 
-  /**
-   * @deprecated use {@link #annotate(TypeAnnotationProvider)} (to be removed in IDEA 18)
-   */
-  public static PsiType createEllipsis(PsiType componentType, PsiAnnotation[] annotations) {
-    return new PsiEllipsisType(componentType, annotations);
-  }
+    private PsiEllipsisType(PsiType componentType,
+                            TypeAnnotationProvider provider,
+                            @Nullable TypeNullability nullability,
+                            @Nullable PsiModifierListOwner containerNullabilityOwner) {
+        super(componentType, provider, nullability, containerNullabilityOwner);
+    }
 
-  @Override
-  public String getPresentableText(boolean annotated) {
-    return getText(getComponentType().getPresentableText(), "...", false, annotated);
-  }
+    @Override
+    public String getPresentableText(boolean annotated) {
+        return getText(getDeepComponentType().getPresentableText(annotated), "...", false, annotated);
+    }
 
-  @Override
-  public String getCanonicalText(boolean annotated) {
-    return getText(getComponentType().getCanonicalText(annotated), "...", true, annotated);
-  }
+    @Override
+    public String getCanonicalText(boolean annotated) {
+        return getText(getDeepComponentType().getCanonicalText(annotated), "...", true, annotated);
+    }
 
-  @Override
-  public String getInternalCanonicalText() {
-    return getText(getComponentType().getInternalCanonicalText(), "...", true, true);
-  }
+    @Override
+    public String getInternalCanonicalText() {
+        return getText(getDeepComponentType().getInternalCanonicalText(), "...", true, true);
+    }
 
-  @Override
-  public boolean equalsToText(String text) {
-    return text.endsWith("...") && getComponentType().equalsToText(text.substring(0, text.length() - 3)) || super.equalsToText(text);
-  }
+    @Override
+    public boolean equalsToText(String text) {
+        return text.endsWith("...") && getComponentType().equalsToText(text.substring(0, text.length() - 3)) ||
+            super.equalsToText(text);
+    }
 
-  /**
-   * Converts the ellipsis type to an array type with the same component type.
-   *
-   * @return the array type instance.
-   */
-  public PsiType toArrayType() {
-    return new PsiArrayType(getComponentType(), getAnnotationProvider());
-  }
+    @Override
+    public PsiType withContainerNullability(@Nullable PsiModifierListOwner containerNullabilityContext) {
+        if (containerNullabilityContext == myContainerNullabilityContext) {
+            return this;
+        }
+        return new PsiEllipsisType(getComponentType(), getAnnotationProvider(), myNullability, containerNullabilityContext);
+    }
 
-  @Override
-  public <A> A accept(PsiTypeVisitor<A> visitor) {
-    return visitor.visitEllipsisType(this);
-  }
+    @Override
+    public PsiType withContainerNullability(@Nullable PsiArrayType arrayType) {
+        if (arrayType == null && myContainerNullabilityContext == null) {
+            return this;
+        }
+        if (arrayType != null && arrayType.myContainerNullabilityContext == myContainerNullabilityContext) {
+            return this;
+        }
+        return new PsiEllipsisType(getComponentType(), getAnnotationProvider(), myNullability,
+            arrayType != null ? arrayType.myContainerNullabilityContext : null);
+    }
 
-  @Override
-  public int hashCode() {
-    return super.hashCode() * 5;
-  }
+    @Override
+    public PsiEllipsisType withNullability(TypeNullability nullability) {
+        return new PsiEllipsisType(getComponentType(), getAnnotationProvider(), nullability, this.myContainerNullabilityContext);
+    }
+
+    /**
+     * Converts the ellipsis type to an array type with the same component type.
+     *
+     * @return the array type instance.
+     */
+    @Contract(pure = true)
+    public PsiType toArrayType() {
+        return new PsiArrayType(getComponentType(), getAnnotationProvider());
+    }
+
+    @Override
+    public <A> A accept(PsiTypeVisitor<A> visitor) {
+        return visitor.visitEllipsisType(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode() * 5;
+    }
 }
