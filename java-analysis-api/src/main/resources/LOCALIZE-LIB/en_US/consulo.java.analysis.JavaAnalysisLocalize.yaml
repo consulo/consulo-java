@@ -8,18 +8,22 @@ add.explicit.type.arguments:
     text: Add explicit type arguments
 annotate.as.safevarargs:
     text: Annotate as @SafeVarargs
-annotation.on.static.member.qualifying.type.family.name:
-    text: Move annotation
 annotate.overridden.methods.parameters:
     text: Annotate overridden method parameters as ''@{0}''
 annotate.overridden.methods.parameters.family.name:
     text: Annotate overridden method parameters
+annotation.on.static.member.qualifying.type.family.name:
+    text: Move annotation
 anonymous.ref.loc.can.be.replaced.with.0:
     text: 'Anonymous #ref #loc can be replaced with {0}'
 anonymous.ref.loc.can.be.replaced.with.lambda:
     text: 'Anonymous #ref #loc can be replaced with lambda'
 arguments.count.mismatch:
     text: Expected {0} arguments but found {1}
+assigning.a.class.with.notnull.elements:
+    text: <html><body>Assigning a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>
+assigning.a.class.with.nullable.elements:
+    text: <html><body>Assigning a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
 assigning.a.collection.of.nullable.elements:
     text: Assigning a collection of nullable elements into a collection of non-null elements
 call.to.method.code.ref.code.outside.of.declared.guards.loc:
@@ -32,6 +36,8 @@ change.visibility.level:
     text: Make {0} {1}
 comparision.between.object.and.primitive:
     text: Comparision between Object and primitive is illegal and is accepted in java 7 only
+complex.problem.with.nullability:
+    text: <html><body>Incompatible type arguments due to nullability{0}</body></html>
 conflicting.nullability.annotations:
     text: Conflicting nullability annotations
 contract.return.validator.incompatible.return.parameter.type:
@@ -944,6 +950,10 @@ nullable.stuff.problems.overridden.method.parameters.are.not.annotated:
     text: Overridden method parameters are not annotated
 nullable.stuff.problems.overridden.methods.are.not.annotated:
     text: Overridden methods are not annotated
+overriding.a.class.with.notnull.elements:
+    text: <html><body>Overriding a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>
+overriding.a.class.with.nullable.elements:
+    text: <html><body>Overriding a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
 parameter.can.be.null:
     text: Parameter can be null
 parameter.is.always.not.null:
@@ -1004,6 +1014,10 @@ report.when.interface.is.not.annotated.with.functional.interface:
     text: Report when interface is not annotated with @FunctionalInterface
 required.type:
     text: Required type
+returning.a.class.with.notnull.arguments:
+    text: <html><body>Returning a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>
+returning.a.class.with.nullable.arguments:
+    text: <html><body>Returning a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
 scope.package:
     text: Package {0}
 searching.for.overriding.methods:
@@ -1112,17 +1126,3 @@ vararg.method.call.with.50.poly.arguments:
     text: Vararg method call with 50+ poly arguments may cause compilation and analysis slowdown
 visible.for.testing.makes.little.sense.on.test.only.code:
     text: '@VisibleForTesting makes little sense on @TestOnly code'
-complex.problem.with.nullability:
-    text: <html><body>Incompatible type arguments due to nullability{0}</body></html>
-assigning.a.class.with.nullable.elements:
-    text: <html><body>Assigning a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
-assigning.a.class.with.notnull.elements:
-    text: <html><body>Assigning a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>
-overriding.a.class.with.nullable.elements:
-    text: <html><body>Overriding a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
-overriding.a.class.with.notnull.elements:
-    text: <html><body>Overriding a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>
-returning.a.class.with.nullable.arguments:
-    text: <html><body>Returning a class with nullable type arguments when a class with not-null type arguments is expected{0}</body></html>
-returning.a.class.with.notnull.arguments:
-    text: <html><body>Returning a class with not-null type arguments when a class with nullable type arguments is expected{0}</body></html>

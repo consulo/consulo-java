@@ -130,12 +130,12 @@ element.local.variable.nominative:
     text: local variable
 element.method.accusative:
     text: method
-element.method.nominative:
-    text: method
 element.method.call.accusative:
     text: method call
 element.method.call.nominative:
     text: method call
+element.method.nominative:
+    text: method
 element.module.accusative:
     text: module
 element.module.nominative:
@@ -158,12 +158,12 @@ element.receiver.parameter.nominative:
     text: receiver parameter
 element.record.accusative:
     text: record
-element.record.nominative:
-    text: record
 element.record.component.accusative:
     text: record component
 element.record.component.nominative:
     text: record component
+element.record.nominative:
+    text: record
 element.snippet.body.accusative:
     text: snippet body
 element.snippet.body.nominative:
