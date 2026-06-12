@@ -17,11 +17,14 @@ package com.intellij.java.language.impl.psi.impl.compiled;
 
 import consulo.util.lang.StringUtil;
 import consulo.language.psi.PsiElement;
+import consulo.language.psi.util.PsiTreeUtil;
 import com.intellij.java.language.psi.PsiReferenceParameterList;
 import com.intellij.java.language.psi.PsiType;
 import com.intellij.java.language.psi.PsiTypeElement;
 import com.intellij.java.language.impl.psi.impl.cache.TypeAnnotationContainer;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,7 +49,7 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 
 		for(int i = 0; i < length; i++)
 		{
-			String s = classParameters[length - i - 1];
+			String s = classParameters[i];
 			char variance = ClsTypeElementImpl.VARIANCE_NONE;
 			final Matcher extendsMatcher = EXTENDS_PREFIX.matcher(s);
 			if(extendsMatcher.find())
@@ -69,7 +72,7 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 				}
 			}
 
-			myTypeParameters[i] = new ClsTypeElementImpl(this, s, variance, annotations.forTypeArgument(length - i - 1));
+			myTypeParameters[i] = new ClsTypeElementImpl(this, s, variance, annotations.forTypeArgument(i));
 		}
 	}
 
@@ -81,6 +84,14 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 	@Override
 	public void setMirror(TreeElement element) throws InvalidMirrorException
 	{
+		setMirrorCheckingType(element, JavaElementType.REFERENCE_PARAMETER_LIST);
+
+		PsiReferenceParameterList mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
+		PsiTypeElement[] children = PsiTreeUtil.getChildrenOfType(mirror, PsiTypeElement.class);
+		if(children != null)
+		{
+			setMirrors(myTypeParameters, children);
+		}
 	}
 
 	@Override
@@ -98,7 +109,7 @@ public class ClsReferenceParameterListImpl extends ClsElementImpl implements Psi
 			cachedTypes = PsiType.createArray(myTypeParameters.length);
 			for(int i = 0; i < cachedTypes.length; i++)
 			{
-				cachedTypes[cachedTypes.length - i - 1] = myTypeParameters[i].getType();
+				cachedTypes[i] = myTypeParameters[i].getType();
 			}
 			myTypeParametersCachedTypes = cachedTypes;
 		}

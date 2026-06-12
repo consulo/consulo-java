@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiLiteralExpression;
 import com.intellij.java.language.psi.PsiType;
@@ -62,7 +61,7 @@ public class ClsLiteralExpressionImpl extends ClsElementImpl implements PsiLiter
 
   @Override
   public void setMirror(TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, JavaElementType.LITERAL_EXPRESSION);
+    setMirrorCheckingType(element, null);
   }
 
   @Override

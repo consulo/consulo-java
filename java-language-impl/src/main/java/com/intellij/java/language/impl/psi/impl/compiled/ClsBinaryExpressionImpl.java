@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.ast.IElementType;
@@ -44,7 +43,7 @@ class ClsBinaryExpressionImpl extends ClsElementImpl implements PsiBinaryExpress
 
   @Override
   public void setMirror(TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, JavaElementType.BINARY_EXPRESSION);
+    setMirrorCheckingType(element, null);
   }
 
   @Override

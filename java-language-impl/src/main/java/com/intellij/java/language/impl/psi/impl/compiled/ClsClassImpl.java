@@ -16,6 +16,7 @@ import com.intellij.java.language.impl.psi.impl.source.Constants;
 import com.intellij.java.language.impl.psi.impl.source.PsiClassImpl;
 import com.intellij.java.language.impl.psi.impl.source.PsiExtensibleClass;
 import com.intellij.java.language.impl.psi.scope.processor.MethodsProcessor;
+import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
@@ -36,6 +37,8 @@ import consulo.util.lang.Pair;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static consulo.util.lang.ObjectUtil.assertNotNull;
 import static java.util.Arrays.asList;
@@ -431,24 +434,100 @@ public class ClsClassImpl extends ClsMemberImpl<PsiClassStub<?>> implements PsiE
         setMirrorIfPresent(getDocComment(), mirror.getDocComment());
 
         PsiModifierList modifierList = getModifierList();
-        if (modifierList != null) {
+        if (modifierList != null && mirror.getModifierList() != null) {
             setMirror(modifierList, mirror.getModifierList());
         }
-        setMirror(getNameIdentifier(), mirror.getNameIdentifier());
-        setMirror(getTypeParameterList(), mirror.getTypeParameterList());
-        setMirror(getExtendsList(), mirror.getExtendsList());
-        setMirror(getImplementsList(), mirror.getImplementsList());
+        if (mirror.getNameIdentifier() != null) {
+            setMirrorChecked(getNameIdentifier(), mirror.getNameIdentifier());
+        }
+        if (mirror.getTypeParameterList() != null) {
+            setMirrorChecked(getTypeParameterList(), mirror.getTypeParameterList());
+        }
+        if (mirror.getExtendsList() != null) {
+            setMirrorChecked(getExtendsList(), mirror.getExtendsList());
+        }
+        if (mirror.getImplementsList() != null) {
+            setMirrorChecked(getImplementsList(), mirror.getImplementsList());
+        }
 
         if (mirror instanceof PsiExtensibleClass extMirror) {
-            setMirrors(getOwnFields(), extMirror.getOwnFields());
-            setMirrors(getOwnMethods(), extMirror.getOwnMethods());
-            setMirrors(getOwnInnerClasses(), extMirror.getOwnInnerClasses());
+            setMirrorsChecked(getOwnFields(), extMirror.getOwnFields());
+            setMethodMirrorsChecked(getOwnMethods(), extMirror.getOwnMethods());
+            //inner classes are sorted by decompiler by method lines, so it is necessary to resort
+            setSortedMirrorsChecked(getOwnInnerClasses(), extMirror.getOwnInnerClasses(), Comparator.comparing(PsiClass::getName));
         }
         else {
-            setMirrors(getOwnFields(), asList(mirror.getFields()));
-            setMirrors(getOwnMethods(), asList(mirror.getMethods()));
-            setMirrors(getOwnInnerClasses(), asList(mirror.getInnerClasses()));
+            setMirrorsChecked(getOwnFields(), asList(mirror.getFields()));
+            setMethodMirrorsChecked(getOwnMethods(), asList(mirror.getMethods()));
+            //inner classes are sorted by decompiler by method lines, so it is necessary to resort
+            setSortedMirrorsChecked(getOwnInnerClasses(), asList(mirror.getInnerClasses()), Comparator.comparing(PsiClass::getName));
         }
+    }
+
+    private static <T extends PsiElement> void setMirrorChecked(T stub, T mirror) {
+        setMirror(stub, mirror);
+    }
+
+    private static <T extends PsiElement> void setMirrorsChecked(List<T> stubs, List<T> mirrors) {
+        if (stubs.size() == mirrors.size()) {
+            setMirrors(stubs, mirrors);
+        }
+    }
+
+    private static void setMethodMirrorsChecked(List<PsiMethod> stubs, List<PsiMethod> mirrors) {
+        if (stubs.size() == mirrors.size()) {
+            setMirrors(stubs, mirrors);
+        }
+
+        // If the count of stubs and mirrors doesn't match,
+        // it's probably because the default constructor (present in stubs) isn't present in the decompiled code (mirrors),
+        // because it was removed by Fernflower's "high readability" mode.
+
+        // If after removing all constructors from both stubs and mirrors, the count is still different, then we cannot help.
+        final long nonConstructorStubCount = stubs.stream().filter(method -> !method.isConstructor()).count();
+        final long nonConstructorMirrorCount = mirrors.stream().filter(method -> !method.isConstructor()).count();
+        if (nonConstructorStubCount != nonConstructorMirrorCount) {
+            return;
+        }
+
+        if (stubs.size() - 1 == mirrors.size()) {
+            Predicate<PsiMethod> isSyntheticConstructor = (PsiMethod stubMethod) -> {
+                final PsiClass containingClass = stubMethod.getContainingClass();
+                if (containingClass == null) {
+                    return false;
+                }
+
+                if (containingClass.isRecord()) {
+                    return JavaPsiRecordUtil.isCanonicalConstructor(stubMethod);
+                }
+                else {
+                    return isDefaultConstructor(stubMethod);
+                }
+            };
+
+            final List<PsiMethod> stubsWithoutSyntheticConstructor = stubs.stream()
+                .filter(isSyntheticConstructor.negate())
+                .collect(Collectors.toList());
+
+            setMirrors(stubsWithoutSyntheticConstructor, mirrors);
+        }
+    }
+
+    private static boolean isDefaultConstructor(PsiMethod stubMethod) {
+        if (!stubMethod.isConstructor()) {
+            return false;
+        }
+        if (!stubMethod.getParameterList().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    private static <T extends PsiElement> void setSortedMirrorsChecked(List<T> stub,
+                                                                       List<T> mirror,
+                                                                       Comparator<? super T> comparator) {
+        setMirrorsChecked(stub.stream().sorted(comparator).collect(Collectors.toList()),
+                          mirror.stream().sorted(comparator).collect(Collectors.toList()));
     }
 
     @Override

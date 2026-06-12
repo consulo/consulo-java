@@ -15,7 +15,6 @@
  */
 package com.intellij.java.language.impl.psi.impl.compiled;
 
-import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
 import consulo.language.ast.IElementType;
 import consulo.language.impl.ast.TreeElement;
@@ -79,7 +78,7 @@ class ClsPrefixExpressionImpl extends ClsElementImpl implements PsiPrefixExpress
 
   @Override
   public void setMirror(TreeElement element) throws InvalidMirrorException {
-    setMirrorCheckingType(element, JavaElementType.PREFIX_EXPRESSION);
+    setMirrorCheckingType(element, null);
   }
 
   @Override

@@ -14,8 +14,10 @@ import consulo.application.util.AtomicNullableLazyValue;
 import consulo.application.util.NotNullLazyValue;
 import consulo.application.util.NullableLazyValue;
 import consulo.language.impl.ast.TreeElement;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.util.PsiTreeUtil;
 import one.util.streamex.StreamEx;
 
 import org.jspecify.annotations.Nullable;
@@ -111,9 +113,13 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
     public void setMirror(TreeElement element) throws InvalidMirrorException {
         setMirrorCheckingType(element, JavaElementType.TYPE);
 
-        ClsElementImpl child = myChild.getValue();
-        if (child != null) {
-            child.setMirror(element.getFirstChildNode());
+        PsiTypeElement mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
+        ClsElementImpl childValue = myChild.getValue();
+        if (childValue instanceof ClsTypeElementImpl) {
+            setMirror(childValue, PsiTreeUtil.getChildOfType(mirror, PsiTypeElement.class));
+        }
+        else if (childValue instanceof ClsJavaCodeReferenceElementImpl) {
+            setMirror(childValue, PsiTreeUtil.getChildOfType(mirror, PsiJavaCodeReferenceElement.class));
         }
     }
 

@@ -27,6 +27,12 @@ import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.IncorrectOperationException;
+import consulo.project.DumbService;
+import consulo.util.collection.ContainerUtil;
+import org.jspecify.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierListStub> implements PsiModifierList {
@@ -158,7 +164,54 @@ public class ClsModifierListImpl extends ClsRepositoryPsiElement<PsiModifierList
     @Override
     public void setMirror(TreeElement element) throws InvalidMirrorException {
         setMirrorCheckingType(element, JavaElementType.MODIFIER_LIST);
-        setMirrors(getAnnotations(), SourceTreeToPsiMap.<PsiModifierList>treeToPsiNotNull(element).getAnnotations());
+        PsiAnnotation[] annotations = getAnnotations();
+        PsiAnnotation[] mirrorAnnotations = SourceTreeToPsiMap.<PsiModifierList>treeToPsiNotNull(element).getAnnotations();
+        // Annotations could be inconsistent, as in stubs all type annotations are attached to the types
+        // not to modifier list
+        Map<String, PsiAnnotation> annotationByShortName = getAnnotationByShortName(annotations);
+        Map<String, PsiAnnotation> mirrorAnnotationByShortName = getAnnotationByShortName(mirrorAnnotations);
+        if (!annotationByShortName.containsKey(null) &&
+            !mirrorAnnotationByShortName.containsKey(null) &&
+            annotationByShortName.size() == annotations.length &&
+            mirrorAnnotationByShortName.size() == mirrorAnnotations.length) {
+            //it is possible to work with short name without resolving
+            for (Map.Entry<String, PsiAnnotation> annotationEntry : annotationByShortName.entrySet()) {
+                String key = annotationEntry.getKey();
+                PsiAnnotation mirror = mirrorAnnotationByShortName.get(key);
+                if (mirror != null) {
+                    PsiAnnotation annotation = annotationEntry.getValue();
+                    setMirror(annotation, mirror);
+                }
+            }
+            return;
+        }
+        DumbService.getInstance(getProject()).runWithAlternativeResolveEnabled(() -> {
+            //necessary to use AlternativeResolver, because of getQualifiedName()
+            for (PsiAnnotation annotation : annotations) {
+                String qualifiedName = annotation.getQualifiedName();
+                if (qualifiedName != null) {
+                    PsiAnnotation mirror = ContainerUtil.find(mirrorAnnotations, m -> qualifiedName.equals(m.getQualifiedName()));
+                    if (mirror != null) {
+                        setMirror(annotation, mirror);
+                    }
+                }
+            }
+        });
+    }
+
+    private static Map<String, PsiAnnotation> getAnnotationByShortName(PsiAnnotation[] annotations) {
+        HashMap<String, PsiAnnotation> result = new HashMap<>();
+        for (PsiAnnotation annotation : annotations) {
+            result.put(getAnnotationReferenceShortName(annotation), annotation);
+        }
+        return result;
+    }
+
+    @Nullable
+    private static String getAnnotationReferenceShortName(PsiAnnotation annotation) {
+        PsiJavaCodeReferenceElement referenceElement = annotation.getNameReferenceElement();
+        if (referenceElement == null) return null;
+        return referenceElement.getReferenceName();
     }
 
     @Override

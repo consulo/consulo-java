@@ -100,7 +100,13 @@ public class ClsReferenceListImpl extends ClsRepositoryPsiElement<PsiClassRefere
   @Override
   public void setMirror(TreeElement element) throws InvalidMirrorException {
     setMirrorCheckingType(element, null);
-    setMirrors(getReferenceElements(), SourceTreeToPsiMap.<PsiReferenceList>treeToPsiNotNull(element).getReferenceElements());
+    PsiJavaCodeReferenceElement[] mirrorRefs = SourceTreeToPsiMap.<PsiReferenceList>treeToPsiNotNull(element).getReferenceElements();
+    PsiJavaCodeReferenceElement[] stubRefs = getReferenceElements();
+    if (mirrorRefs.length == 0 && stubRefs.length == 1 && CommonClassNames.JAVA_LANG_OBJECT.equals(stubRefs[0].getQualifiedName())) {
+      // annotated Object type is supported in stubs but not supported in decompiler yet
+      return;
+    }
+    setMirrors(stubRefs, mirrorRefs);
   }
 
   @Override

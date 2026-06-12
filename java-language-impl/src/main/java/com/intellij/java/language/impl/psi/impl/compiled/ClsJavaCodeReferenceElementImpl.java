@@ -24,6 +24,7 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.document.util.TextRange;
 import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.ResolveScopeManager;
+import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.*;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveCache;
@@ -333,6 +334,12 @@ public class ClsJavaCodeReferenceElementImpl extends ClsElementImpl implements P
     @Override
     public void setMirror(TreeElement element) throws InvalidMirrorException {
         setMirrorCheckingType(element, JavaElementType.JAVA_CODE_REFERENCE);
+
+        PsiJavaCodeReferenceElement mirror = SourceTreeToPsiMap.treeToPsiNotNull(element);
+        PsiReferenceParameterList list = getParameterList();
+        if (list != null) {
+            setMirror(list, mirror.getParameterList());
+        }
     }
 
     @Override
