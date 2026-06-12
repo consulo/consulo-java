@@ -868,14 +868,20 @@ public class HighlightUtil extends HighlightUtilBase {
     @RequiredReadAction
     public static HighlightInfo checkUnderscore(PsiIdentifier identifier, LanguageLevel languageLevel) {
         if ("_".equals(identifier.getText())) {
-            if (languageLevel.isAtLeast(LanguageLevel.JDK_1_9)) {
-                return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
-                    .range(identifier)
-                    .descriptionAndTooltip(JavaCompilationErrorLocalize.underscoreIdentifier())
-                    .create();
+            PsiElement parent = identifier.getParent();
+
+            if (languageLevel.isAtLeast(LanguageLevel.JDK_1_9) && !(parent instanceof PsiUnnamedPattern) &&
+                !(parent instanceof PsiVariable var && var.isUnnamed())) {
+                if (!JavaFeature.UNNAMED_PATTERNS_AND_VARIABLES.isSufficient(languageLevel)) {
+                    return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                        .range(identifier)
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.underscoreIdentifier())
+                        .create();
+                }
             }
-            else if (languageLevel.isAtLeast(LanguageLevel.JDK_1_8)) {
-                if (identifier.getParent() instanceof PsiParameter param && param.getDeclarationScope() instanceof PsiLambdaExpression) {
+            else if (JavaFeature.LAMBDA_EXPRESSIONS.isSufficient(languageLevel)) {
+                if (parent instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiLambdaExpression &&
+                    !parameter.isUnnamed()) {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(identifier)
                         .descriptionAndTooltip(JavaCompilationErrorLocalize.underscoreIdentifierLambda())

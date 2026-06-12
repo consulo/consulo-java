@@ -301,9 +301,10 @@ public class PostHighlightingVisitor {
         PsiIdentifier identifier,
         ProgressIndicator progress
     ) {
-        if (variable instanceof PsiResourceVariable && PsiUtil.isIgnoredName(variable.getName())) {
+        if (PsiUtil.isIgnoredName(variable.getName()) || variable.isUnnamed()) {
             return null;
         }
+
         if (UnusedSymbolUtil.isImplicitUsage(myProject, variable, progress)) {
             return null;
         }

@@ -18,16 +18,21 @@ package com.intellij.java.language.impl.psi.scope;
 import consulo.util.dataholder.Key;
 
 public interface ElementClassHint {
-  Key<ElementClassHint> KEY = Key.create("ElementClassHint");
+    Key<ElementClassHint> KEY = Key.create("ElementClassHint");
 
-  enum DeclarationKind {
-    CLASS,
-    PACKAGE,
-    METHOD,
-    VARIABLE,
-    FIELD,
-    ENUM_CONST
-  }
+    /**
+     * If this hint is set to true, then the unnamed variables will be processed. By default, they are skipped.
+     */
+    Key<Boolean> PROCESS_UNNAMED_VARIABLES = Key.create("ElementClassHint.PROCESS_UNNAMED_VARIABLES");
 
-  boolean shouldProcess(DeclarationKind kind);
+    enum DeclarationKind {
+        CLASS,
+        PACKAGE,
+        METHOD,
+        VARIABLE,
+        FIELD,
+        ENUM_CONST
+    }
+
+    boolean shouldProcess(DeclarationKind kind);
 }

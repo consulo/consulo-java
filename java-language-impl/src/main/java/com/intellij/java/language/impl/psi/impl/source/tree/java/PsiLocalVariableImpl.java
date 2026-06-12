@@ -51,277 +51,294 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class PsiLocalVariableImpl extends CompositePsiElement implements PsiLocalVariable, PsiVariableEx, Constants {
-  private static final Logger LOG = Logger.getInstance(PsiLocalVariableImpl.class);
+    private static final Logger LOG = Logger.getInstance(PsiLocalVariableImpl.class);
 
-  private volatile String myCachedName = null;
+    private volatile String myCachedName = null;
 
-  @SuppressWarnings({"UnusedDeclaration"})
-  public PsiLocalVariableImpl() {
-    this(LOCAL_VARIABLE);
-  }
-
-  protected PsiLocalVariableImpl(final IElementType type) {
-    super(type);
-  }
-
-  @Override
-  public void clearCaches() {
-    super.clearCaches();
-    myCachedName = null;
-  }
-
-  @Override
-  public final PsiIdentifier getNameIdentifier() {
-    final PsiElement element = findChildByRoleAsPsiElement(ChildRole.NAME);
-    assert element instanceof PsiIdentifier : getText();
-    return (PsiIdentifier)element;
-  }
-
-  @Override
-  public final String getName() {
-    String cachedName = myCachedName;
-    if (cachedName == null){
-      myCachedName = cachedName = getNameIdentifier().getText();
+    @SuppressWarnings({"UnusedDeclaration"})
+    public PsiLocalVariableImpl() {
+        this(LOCAL_VARIABLE);
     }
-    return cachedName;
-  }
 
-  @Override
-  public void setInitializer(PsiExpression initializer) throws IncorrectOperationException {
-    JavaSharedImplUtil.setInitializer(this, initializer);
-  }
+    protected PsiLocalVariableImpl(final IElementType type) {
+        super(type);
+    }
 
-  @Override
-  public PsiElement setName(String name) throws IncorrectOperationException {
-    PsiImplUtil.setName(getNameIdentifier(), name);
-    return this;
-  }
+    @Override
+    public void clearCaches() {
+        super.clearCaches();
+        myCachedName = null;
+    }
 
-  @Override
-  public PsiType getType() {
-    return JavaSharedImplUtil.getType(getTypeElement(), getNameIdentifier());
-  }
+    @Override
+    public final PsiIdentifier getNameIdentifier() {
+        final PsiElement element = findChildByRoleAsPsiElement(ChildRole.NAME);
+        assert element instanceof PsiIdentifier : getText();
+        return (PsiIdentifier) element;
+    }
 
-  @Override
-  public PsiTypeElement getTypeElement() {
-    PsiTypeElement typeElement = PsiTreeUtil.getChildOfType(this, PsiTypeElement.class);
-    if (typeElement != null) return typeElement;
+    @Override
+    public final String getName() {
+        String cachedName = myCachedName;
+        if (cachedName == null) {
+            myCachedName = cachedName = getNameIdentifier().getText();
+        }
+        return cachedName;
+    }
 
-    final PsiElement parent = getParent();
-    assert parent != null : "no parent; " + this + "; [" + getText() + "]";
-    final PsiLocalVariable localVariable = PsiTreeUtil.getChildOfType(parent, PsiLocalVariable.class);
-    assert localVariable != null : "no local variable in " + Arrays.toString(parent.getChildren());
-    typeElement = PsiTreeUtil.getChildOfType(localVariable, PsiTypeElement.class);
-    assert typeElement != null : "no type element in " + Arrays.toString(localVariable.getChildren());
-    return typeElement;
-  }
+    @Override
+    public void setInitializer(PsiExpression initializer) throws IncorrectOperationException {
+        JavaSharedImplUtil.setInitializer(this, initializer);
+    }
 
-  @Override
-  public PsiModifierList getModifierList() {
-    final CompositeElement parent = getTreeParent();
-    if (parent == null) return null;
-    final CompositeElement first = (CompositeElement)parent.findChildByType(LOCAL_VARIABLE);
-    return first != null ? (PsiModifierList)first.findChildByRoleAsPsiElement(ChildRole.MODIFIER_LIST) : null;
-  }
+    @Override
+    public PsiElement setName(String name) throws IncorrectOperationException {
+        PsiImplUtil.setName(getNameIdentifier(), name);
+        return this;
+    }
 
-  @Override
-  public boolean hasModifierProperty(String name) {
-    final PsiModifierList modifierList = getModifierList();
-    return modifierList != null && modifierList.hasModifierProperty(name);
-  }
+    @Override
+    public PsiType getType() {
+        return JavaSharedImplUtil.getType(getTypeElement(), getNameIdentifier());
+    }
 
-  @Override
-  public PsiExpression getInitializer() {
-    return (PsiExpression)findChildByRoleAsPsiElement(ChildRole.INITIALIZER);
-  }
-
-  @Override
-  public boolean hasInitializer() {
-    return getInitializer() != null;
-  }
-
-  @Override
-  public Object computeConstantValue() {
-    return computeConstantValue(new HashSet<PsiVariable>());
-  }
-
-  @Override
-  public Object computeConstantValue(Set<PsiVariable> visitedVars) {
-    if (!hasModifierProperty(PsiModifier.FINAL)) return null;
-
-    PsiType type = getType();
-    // javac rejects all non primitive and non String constants, although JLS states constants "variables whose initializers are constant expressions"
-    if (!(type instanceof PsiPrimitiveType) && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) return null;
-
-    PsiExpression initializer = getInitializer();
-    if (initializer == null) return null;
-    return PsiConstantEvaluationHelperImpl.computeCastTo(initializer, getType(), visitedVars);
-  }
-
-  @Override
-  public int getTextOffset() {
-    return getNameIdentifier().getTextOffset();
-  }
-
-  @Override
-  public void normalizeDeclaration() throws IncorrectOperationException {
-    CheckUtil.checkWritable(this);
-    final CharTable treeCharTab = SharedImplUtil.findCharTableByTree(this);
-
-    final CompositeElement statement = getTreeParent();
-    final PsiElement psiElement = SourceTreeToPsiMap.treeElementToPsi(statement);
-    final PsiElement[] variables = psiElement instanceof  PsiDeclarationStatement
-                                   ? ((PsiDeclarationStatement)psiElement).getDeclaredElements() : PsiElement.EMPTY_ARRAY;
-    if (variables.length > 1) {
-      final PsiModifierList modifierList = getModifierList();
-      final PsiTypeElement typeElement = getTypeElement();
-      assert modifierList != null : getText();
-      ASTNode last = statement;
-      for (int i = 1; i < variables.length; i++) {
-        ASTNode typeCopy = typeElement.copy().getNode();
-        ASTNode modifierListCopy = modifierList.copy().getNode();
-        CompositeElement variable = (CompositeElement)SourceTreeToPsiMap.psiToTreeNotNull(variables[i]);
-
-        ASTNode comma = PsiImplUtil.skipWhitespaceAndCommentsBack(variable.getTreePrev());
-        if (comma != null && comma.getElementType() == JavaTokenType.COMMA) {
-          CodeEditUtil.removeChildren(statement, comma, variable.getTreePrev());
+    @Override
+    public PsiTypeElement getTypeElement() {
+        PsiTypeElement typeElement = PsiTreeUtil.getChildOfType(this, PsiTypeElement.class);
+        if (typeElement != null) {
+            return typeElement;
         }
 
-        CodeEditUtil.removeChild(statement, variable);
-        final CharTable charTableByTree = SharedImplUtil.findCharTableByTree(statement);
-        CompositeElement statement1 = Factory.createCompositeElement(DECLARATION_STATEMENT, charTableByTree, getManager());
-        statement1.addChild(variable, null);
+        final PsiElement parent = getParent();
+        assert parent != null : "no parent; " + this + "; [" + getText() + "]";
+        final PsiLocalVariable localVariable = PsiTreeUtil.getChildOfType(parent, PsiLocalVariable.class);
+        assert localVariable != null : "no local variable in " + Arrays.toString(parent.getChildren());
+        typeElement = PsiTreeUtil.getChildOfType(localVariable, PsiTypeElement.class);
+        assert typeElement != null : "no type element in " + Arrays.toString(localVariable.getChildren());
+        return typeElement;
+    }
 
-        ASTNode space = Factory.createSingleLeafElement(TokenType.WHITE_SPACE, " ", 0, 1, treeCharTab, getManager());
-        variable.addChild(space, variable.getFirstChildNode());
+    @Override
+    public PsiModifierList getModifierList() {
+        final CompositeElement parent = getTreeParent();
+        if (parent == null) {
+            return null;
+        }
+        final CompositeElement first = (CompositeElement) parent.findChildByType(LOCAL_VARIABLE);
+        return first != null ? (PsiModifierList) first.findChildByRoleAsPsiElement(ChildRole.MODIFIER_LIST) : null;
+    }
 
-        variable.addChild(typeCopy, variable.getFirstChildNode());
+    @Override
+    public boolean hasModifierProperty(String name) {
+        final PsiModifierList modifierList = getModifierList();
+        return modifierList != null && modifierList.hasModifierProperty(name);
+    }
 
-        if (modifierListCopy.getTextLength() > 0) {
-          space = Factory.createSingleLeafElement(TokenType.WHITE_SPACE, " ", 0, 1, treeCharTab, getManager());
-          variable.addChild(space, variable.getFirstChildNode());
+    @Override
+    public PsiExpression getInitializer() {
+        return (PsiExpression) findChildByRoleAsPsiElement(ChildRole.INITIALIZER);
+    }
+
+    @Override
+    public boolean hasInitializer() {
+        return getInitializer() != null;
+    }
+
+    @Override
+    public Object computeConstantValue() {
+        return computeConstantValue(new HashSet<PsiVariable>());
+    }
+
+    @Override
+    public Object computeConstantValue(Set<PsiVariable> visitedVars) {
+        if (!hasModifierProperty(PsiModifier.FINAL)) {
+            return null;
         }
 
-        variable.addChild(modifierListCopy, variable.getFirstChildNode());
+        PsiType type = getType();
+        // javac rejects all non primitive and non String constants, although JLS states constants "variables whose initializers are constant expressions"
+        if (!(type instanceof PsiPrimitiveType) && !type.equalsToText(CommonClassNames.JAVA_LANG_STRING)) {
+            return null;
+        }
 
-        ASTNode semicolon = Factory.createSingleLeafElement(JavaTokenType.SEMICOLON, ";", 0, 1, treeCharTab, getManager());
-        SourceTreeToPsiMap.psiToTreeNotNull(variables[i - 1]).addChild(semicolon, null);
-
-        CodeEditUtil.addChild(statement.getTreeParent(), statement1, last.getTreeNext());
-
-        last = statement1;
-      }
+        PsiExpression initializer = getInitializer();
+        if (initializer == null) {
+            return null;
+        }
+        return PsiConstantEvaluationHelperImpl.computeCastTo(initializer, getType(), visitedVars);
     }
 
-    JavaSharedImplUtil.normalizeBrackets(this);
-  }
-
-  @Override
-  public void deleteChildInternal(ASTNode child) {
-    if (getChildRole(child) == ChildRole.INITIALIZER){
-      ASTNode eq = findChildByRole(ChildRole.INITIALIZER_EQ);
-      if (eq != null){
-        deleteChildInternal(eq);
-      }
-    }
-    super.deleteChildInternal(child);
-  }
-
-  @Override
-  public ASTNode findChildByRole(int role) {
-    LOG.assertTrue(ChildRole.isUnique(role));
-    switch(role){
-      default:
-        return null;
-
-      case ChildRole.MODIFIER_LIST:
-        return findChildByType(MODIFIER_LIST);
-
-      case ChildRole.TYPE:
-        return findChildByType(TYPE);
-
-      case ChildRole.NAME:
-        return findChildByType(JavaTokenType.IDENTIFIER);
-
-      case ChildRole.INITIALIZER_EQ:
-        return findChildByType(JavaTokenType.EQ);
-
-      case ChildRole.INITIALIZER:
-        return findChildByType(ElementType.EXPRESSION_BIT_SET);
-
-      case ChildRole.CLOSING_SEMICOLON:
-        return TreeUtil.findChildBackward(this, JavaTokenType.SEMICOLON);
-    }
-  }
-
-  @Override
-  public int getChildRole(ASTNode child) {
-    LOG.assertTrue(child.getTreeParent() == this);
-    IElementType i = child.getElementType();
-    if (i == MODIFIER_LIST) {
-      return ChildRole.MODIFIER_LIST;
-    }
-    else if (i == TYPE) {
-      return getChildRole(child, ChildRole.TYPE);
-    }
-    else if (i == JavaTokenType.IDENTIFIER) {
-      return getChildRole(child, ChildRole.NAME);
-    }
-    else if (i == JavaTokenType.EQ) {
-      return getChildRole(child, ChildRole.INITIALIZER_EQ);
-    }
-    else if (i == JavaTokenType.SEMICOLON) {
-      return getChildRole(child, ChildRole.CLOSING_SEMICOLON);
-    }
-    else {
-      if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
-        return ChildRole.INITIALIZER;
-      }
-      return ChildRoleBase.NONE;
-    }
-  }
-
-  @Override
-  public void accept(PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitLocalVariable(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
-
-  @Override
-  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
-    if (lastParent == null) return true;
-    if (lastParent.getContext() instanceof JavaDummyHolder) {
-      return processor.execute(this, state);
+    @Override
+    public int getTextOffset() {
+        return getNameIdentifier().getTextOffset();
     }
 
-    if (lastParent.getParent() != this) return true;
-    final ASTNode lastParentTree = SourceTreeToPsiMap.psiElementToTree(lastParent);
+    @Override
+    public void normalizeDeclaration() throws IncorrectOperationException {
+        CheckUtil.checkWritable(this);
+        final CharTable treeCharTab = SharedImplUtil.findCharTableByTree(this);
 
-    return getChildRole(lastParentTree) != ChildRole.INITIALIZER ||
-           processor.execute(this, state);
-  }
+        final CompositeElement statement = getTreeParent();
+        final PsiElement psiElement = SourceTreeToPsiMap.treeElementToPsi(statement);
+        final PsiElement[] variables = psiElement instanceof PsiDeclarationStatement
+            ? ((PsiDeclarationStatement) psiElement).getDeclaredElements() : PsiElement.EMPTY_ARRAY;
+        if (variables.length > 1) {
+            final PsiModifierList modifierList = getModifierList();
+            final PsiTypeElement typeElement = getTypeElement();
+            assert modifierList != null : getText();
+            ASTNode last = statement;
+            for (int i = 1; i < variables.length; i++) {
+                ASTNode typeCopy = typeElement.copy().getNode();
+                ASTNode modifierListCopy = modifierList.copy().getNode();
+                CompositeElement variable = (CompositeElement) SourceTreeToPsiMap.psiToTreeNotNull(variables[i]);
 
-  @Override
-  public ItemPresentation getPresentation() {
-    return ItemPresentationProvider.getItemPresentation(this);
-  }
+                ASTNode comma = PsiImplUtil.skipWhitespaceAndCommentsBack(variable.getTreePrev());
+                if (comma != null && comma.getElementType() == JavaTokenType.COMMA) {
+                    CodeEditUtil.removeChildren(statement, comma, variable.getTreePrev());
+                }
 
-  public String toString() {
-    return "PsiLocalVariable:" + getName();
-  }
+                CodeEditUtil.removeChild(statement, variable);
+                final CharTable charTableByTree = SharedImplUtil.findCharTableByTree(statement);
+                CompositeElement statement1 = Factory.createCompositeElement(DECLARATION_STATEMENT, charTableByTree, getManager());
+                statement1.addChild(variable, null);
 
-  @Override
-  public SearchScope getUseScope() {
-    final PsiElement parentElement = getParent();
-    if (parentElement instanceof PsiDeclarationStatement) {
-      return new LocalSearchScope(parentElement.getParent());
+                ASTNode space = Factory.createSingleLeafElement(TokenType.WHITE_SPACE, " ", 0, 1, treeCharTab, getManager());
+                variable.addChild(space, variable.getFirstChildNode());
+
+                variable.addChild(typeCopy, variable.getFirstChildNode());
+
+                if (modifierListCopy.getTextLength() > 0) {
+                    space = Factory.createSingleLeafElement(TokenType.WHITE_SPACE, " ", 0, 1, treeCharTab, getManager());
+                    variable.addChild(space, variable.getFirstChildNode());
+                }
+
+                variable.addChild(modifierListCopy, variable.getFirstChildNode());
+
+                ASTNode semicolon = Factory.createSingleLeafElement(JavaTokenType.SEMICOLON, ";", 0, 1, treeCharTab, getManager());
+                SourceTreeToPsiMap.psiToTreeNotNull(variables[i - 1]).addChild(semicolon, null);
+
+                CodeEditUtil.addChild(statement.getTreeParent(), statement1, last.getTreeNext());
+
+                last = statement1;
+            }
+        }
+
+        JavaSharedImplUtil.normalizeBrackets(this);
     }
-    else {
-      return ResolveScopeManager.getElementUseScope(this);
+
+    @Override
+    public void deleteChildInternal(ASTNode child) {
+        if (getChildRole(child) == ChildRole.INITIALIZER) {
+            ASTNode eq = findChildByRole(ChildRole.INITIALIZER_EQ);
+            if (eq != null) {
+                deleteChildInternal(eq);
+            }
+        }
+        super.deleteChildInternal(child);
     }
-  }
+
+    @Override
+    public ASTNode findChildByRole(int role) {
+        LOG.assertTrue(ChildRole.isUnique(role));
+        switch (role) {
+            default:
+                return null;
+
+            case ChildRole.MODIFIER_LIST:
+                return findChildByType(MODIFIER_LIST);
+
+            case ChildRole.TYPE:
+                return findChildByType(TYPE);
+
+            case ChildRole.NAME:
+                return findChildByType(JavaTokenType.IDENTIFIER);
+
+            case ChildRole.INITIALIZER_EQ:
+                return findChildByType(JavaTokenType.EQ);
+
+            case ChildRole.INITIALIZER:
+                return findChildByType(ElementType.EXPRESSION_BIT_SET);
+
+            case ChildRole.CLOSING_SEMICOLON:
+                return TreeUtil.findChildBackward(this, JavaTokenType.SEMICOLON);
+        }
+    }
+
+    @Override
+    public int getChildRole(ASTNode child) {
+        LOG.assertTrue(child.getTreeParent() == this);
+        IElementType i = child.getElementType();
+        if (i == MODIFIER_LIST) {
+            return ChildRole.MODIFIER_LIST;
+        }
+        else if (i == TYPE) {
+            return getChildRole(child, ChildRole.TYPE);
+        }
+        else if (i == JavaTokenType.IDENTIFIER) {
+            return getChildRole(child, ChildRole.NAME);
+        }
+        else if (i == JavaTokenType.EQ) {
+            return getChildRole(child, ChildRole.INITIALIZER_EQ);
+        }
+        else if (i == JavaTokenType.SEMICOLON) {
+            return getChildRole(child, ChildRole.CLOSING_SEMICOLON);
+        }
+        else {
+            if (ElementType.EXPRESSION_BIT_SET.contains(child.getElementType())) {
+                return ChildRole.INITIALIZER;
+            }
+            return ChildRoleBase.NONE;
+        }
+    }
+
+    @Override
+    public void accept(PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor) {
+            ((JavaElementVisitor) visitor).visitLocalVariable(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
+
+    @Override
+    public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
+        if (lastParent == null) {
+            return true;
+        }
+        if (lastParent.getContext() instanceof JavaDummyHolder) {
+            return processor.execute(this, state);
+        }
+
+        if (lastParent.getParent() != this) {
+            return true;
+        }
+        final ASTNode lastParentTree = SourceTreeToPsiMap.psiElementToTree(lastParent);
+
+        return getChildRole(lastParentTree) != ChildRole.INITIALIZER ||
+            processor.execute(this, state);
+    }
+
+    @Override
+    public ItemPresentation getPresentation() {
+        return ItemPresentationProvider.getItemPresentation(this);
+    }
+
+    public String toString() {
+        return "PsiLocalVariable:" + getName();
+    }
+
+    @Override
+    public SearchScope getUseScope() {
+        if (isUnnamed()) {
+            return LocalSearchScope.EMPTY;
+        }
+        final PsiElement parentElement = getParent();
+        if (parentElement instanceof PsiDeclarationStatement) {
+            return new LocalSearchScope(parentElement.getParent());
+        }
+        else {
+            return ResolveScopeManager.getElementUseScope(this);
+        }
+    }
 }

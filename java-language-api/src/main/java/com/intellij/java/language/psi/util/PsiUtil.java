@@ -56,6 +56,7 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 
 public final class PsiUtil extends PsiUtilCore {
     private static final Logger LOG = Logger.getInstance(PsiUtil.class);
@@ -66,20 +67,7 @@ public final class PsiUtil extends PsiUtilCore {
     public static final int ACCESS_LEVEL_PRIVATE = 1;
     public static final Key<Boolean> VALID_VOID_TYPE_IN_CODE_FRAGMENT = Key.create("VALID_VOID_TYPE_IN_CODE_FRAGMENT");
 
-    private static final Set<String> IGNORED_NAMES = Set.of(
-        "ignore",
-        "ignore1",
-        "ignore2",
-        "ignore3",
-        "ignore4",
-        "ignore5",
-        "ignored",
-        "ignored1",
-        "ignored2",
-        "ignored3",
-        "ignored4",
-        "ignored5"
-    );
+    private static final Pattern IGNORED_NAMES = Pattern.compile("ignored?[A-Za-z\\d]*");
 
     private PsiUtil() {
     }
@@ -1443,7 +1431,7 @@ public final class PsiUtil extends PsiUtilCore {
     }
 
     public static boolean isIgnoredName(@Nullable String name) {
-        return name != null && IGNORED_NAMES.contains(name);
+        return name != null && IGNORED_NAMES.matcher(name).matches();
     }
 
     @Nullable

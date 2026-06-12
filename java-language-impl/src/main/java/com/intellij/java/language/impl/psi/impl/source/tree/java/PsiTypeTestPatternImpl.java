@@ -2,6 +2,7 @@
 package com.intellij.java.language.impl.psi.impl.source.tree.java;
 
 import com.intellij.java.language.impl.psi.impl.source.Constants;
+import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.psi.JavaElementVisitor;
 import com.intellij.java.language.psi.PsiPatternVariable;
 import com.intellij.java.language.psi.PsiTypeElement;
@@ -12,58 +13,59 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.util.PsiTreeUtil;
-
 import org.jspecify.annotations.Nullable;
 
 public class PsiTypeTestPatternImpl extends CompositePsiElement implements PsiTypeTestPattern, Constants {
-  public PsiTypeTestPatternImpl() {
-    super(TYPE_TEST_PATTERN);
-  }
-
-  @Override
-  public PsiTypeElement getCheckType() {
-    for (PsiElement child = getFirstChild(); child != null; child = child.getNextSibling()) {
-      if (child instanceof PsiTypeElement) {
-        return (PsiTypeElement) child;
-      }
-      if (child instanceof PsiPatternVariable) {
-        return ((PsiPatternVariable) child).getTypeElement();
-      }
+    public PsiTypeTestPatternImpl() {
+        super(TYPE_TEST_PATTERN);
     }
-    throw new IllegalStateException(this.getText());
-  }
 
-  @Nullable
-  @Override
-  public PsiPatternVariable getPatternVariable() {
-    return PsiTreeUtil.getChildOfType(this, PsiPatternVariable.class);
-  }
-
-
-  @Override
-  public void accept(PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor) visitor).visitTypeTestPattern(this);
-    } else {
-      visitor.visitElement(this);
+    @Override
+    public PsiTypeElement getCheckType() {
+        for (PsiElement child = getFirstChild(); child != null; child = child.getNextSibling()) {
+            if (child instanceof PsiTypeElement) {
+                return (PsiTypeElement) child;
+            }
+            if (child instanceof PsiPatternVariable) {
+                return ((PsiPatternVariable) child).getTypeElement();
+            }
+        }
+        throw new IllegalStateException(this.getText());
     }
-  }
 
-  @Override
-  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent,
-                                     PsiElement place) {
-    processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
-
-    PsiPatternVariable variable = getPatternVariable();
-    if (variable != null && variable != lastParent) {
-      return processor.execute(variable, state);
+    @Nullable
+    @Override
+    public PsiPatternVariable getPatternVariable() {
+        return PsiTreeUtil.getChildOfType(this, PsiPatternVariable.class);
     }
-    return true;
-  }
 
-  @Override
-  public String toString() {
-    return "PsiTypeTestPattern";
-  }
+
+    @Override
+    public void accept(PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor) {
+            ((JavaElementVisitor) visitor).visitTypeTestPattern(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
+
+    @Override
+    public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent,
+                                       PsiElement place) {
+        processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
+
+        PsiPatternVariable variable = getPatternVariable();
+        if (variable != null && variable != lastParent &&
+            !(variable.isUnnamed() && !Boolean.TRUE.equals(processor.getHint(ElementClassHint.PROCESS_UNNAMED_VARIABLES)))) {
+            return processor.execute(variable, state);
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "PsiTypeTestPattern";
+    }
 }
 

@@ -19,10 +19,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
-import com.intellij.java.language.psi.JavaElementVisitor;
-import com.intellij.java.language.psi.JavaTokenType;
-import com.intellij.java.language.psi.PsiClass;
-import com.intellij.java.language.psi.PsiDeclarationStatement;
+import com.intellij.java.language.psi.*;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.TokenSet;
 import consulo.language.impl.ast.*;
@@ -35,95 +32,107 @@ import consulo.language.psi.resolve.ResolveState;
 
 
 public class PsiDeclarationStatementImpl extends CompositePsiElement implements PsiDeclarationStatement {
-  public PsiDeclarationStatementImpl() {
-    super(JavaElementType.DECLARATION_STATEMENT);
-  }
+    public PsiDeclarationStatementImpl() {
+        super(JavaElementType.DECLARATION_STATEMENT);
+    }
 
-  @Override
-  public PsiElement[] getDeclaredElements() {
-    return getChildrenAsPsiElements(DECLARED_ELEMENT_BIT_SET, PsiElement.ARRAY_FACTORY);
-  }
+    @Override
+    public PsiElement[] getDeclaredElements() {
+        return getChildrenAsPsiElements(DECLARED_ELEMENT_BIT_SET, PsiElement.ARRAY_FACTORY);
+    }
 
-  private static final TokenSet DECLARED_ELEMENT_BIT_SET = TokenSet.create(JavaElementType.LOCAL_VARIABLE, JavaElementType.CLASS);
+    private static final TokenSet DECLARED_ELEMENT_BIT_SET = TokenSet.create(JavaElementType.LOCAL_VARIABLE, JavaElementType.CLASS);
 
-  @Override
-  public int getChildRole(ASTNode child) {
-    if (child.getElementType() == JavaTokenType.COMMA) return ChildRole.COMMA;
-    return super.getChildRole(child);
-  }
-
-  @Override
-  public void deleteChildInternal(ASTNode child) {
-    if (DECLARED_ELEMENT_BIT_SET.contains(child.getElementType())) {
-      PsiElement[] declaredElements = getDeclaredElements();
-      int length = declaredElements.length;
-      if (length > 0) {
-        if (length == 1) {
-          getTreeParent().deleteChildInternal(this);
-          return;
-        } else {
-          if (SourceTreeToPsiMap.psiElementToTree(declaredElements[length - 1]) == child) {
-            removeCommaBefore(child);
-            final LeafElement semicolon = Factory.createSingleLeafElement(JavaTokenType.SEMICOLON, ";", 0, 1,
-                                                                          SharedImplUtil.findCharTableByTree(this), getManager());
-            SourceTreeToPsiMap.psiElementToTree(declaredElements[length - 2]).addChild(semicolon, null);
-          }
-          else if (SourceTreeToPsiMap.psiElementToTree(declaredElements[0]) == child) {
-            CompositeElement next = (CompositeElement)SourceTreeToPsiMap.psiElementToTree(declaredElements[1]);
-            ASTNode copyChild = child.copyElement();
-            ASTNode nameChild = ((CompositeElement)copyChild).findChildByRole(ChildRole.NAME);
-            removeCommaBefore(next);
-            next.addInternal((TreeElement)copyChild.getFirstChildNode(), nameChild.getTreePrev(), null, Boolean.FALSE);
-          }
-          else {
-            removeCommaBefore (child);
-          }
+    @Override
+    public int getChildRole(ASTNode child) {
+        if (child.getElementType() == JavaTokenType.COMMA) {
+            return ChildRole.COMMA;
         }
-      }
+        return super.getChildRole(child);
     }
-    super.deleteChildInternal(child);
-  }
 
-  private void removeCommaBefore(ASTNode child) {
-    ASTNode prev = child;
-    do {
-      prev = prev.getTreePrev();
-    } while (prev != null && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(prev.getElementType()));
-    if (prev != null && prev.getElementType() == JavaTokenType.COMMA) deleteChildInternal(prev);
-  }
-
-  @Override
-  public void accept(PsiElementVisitor visitor) {
-    if (visitor instanceof JavaElementVisitor) {
-      ((JavaElementVisitor)visitor).visitDeclarationStatement(this);
-    }
-    else {
-      visitor.visitElement(this);
-    }
-  }
-
-  public String toString() {
-    return "PsiDeclarationStatement";
-  }
-
-  @Override
-  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
-    processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
-    PsiElement[] decls = getDeclaredElements();
-    for (PsiElement decl : decls) {
-      if (decl != lastParent) {
-        if (!processor.execute(decl, state)) return false;
-      }
-      else {
-        final ElementClassHint hint = processor.getHint(ElementClassHint.KEY);
-        if (lastParent instanceof PsiClass) {
-          if (hint == null || hint.shouldProcess(ElementClassHint.DeclarationKind.CLASS)) {
-            if (!processor.execute(lastParent, state)) return false;
-          }
+    @Override
+    public void deleteChildInternal(ASTNode child) {
+        if (DECLARED_ELEMENT_BIT_SET.contains(child.getElementType())) {
+            PsiElement[] declaredElements = getDeclaredElements();
+            int length = declaredElements.length;
+            if (length > 0) {
+                if (length == 1) {
+                    getTreeParent().deleteChildInternal(this);
+                    return;
+                }
+                else {
+                    if (SourceTreeToPsiMap.psiElementToTree(declaredElements[length - 1]) == child) {
+                        removeCommaBefore(child);
+                        final LeafElement semicolon = Factory.createSingleLeafElement(JavaTokenType.SEMICOLON, ";", 0, 1,
+                            SharedImplUtil.findCharTableByTree(this), getManager());
+                        SourceTreeToPsiMap.psiElementToTree(declaredElements[length - 2]).addChild(semicolon, null);
+                    }
+                    else if (SourceTreeToPsiMap.psiElementToTree(declaredElements[0]) == child) {
+                        CompositeElement next = (CompositeElement) SourceTreeToPsiMap.psiElementToTree(declaredElements[1]);
+                        ASTNode copyChild = child.copyElement();
+                        ASTNode nameChild = ((CompositeElement) copyChild).findChildByRole(ChildRole.NAME);
+                        removeCommaBefore(next);
+                        next.addInternal((TreeElement) copyChild.getFirstChildNode(), nameChild.getTreePrev(), null, Boolean.FALSE);
+                    }
+                    else {
+                        removeCommaBefore(child);
+                    }
+                }
+            }
         }
-      }
+        super.deleteChildInternal(child);
     }
 
-    return true;
-  }
+    private void removeCommaBefore(ASTNode child) {
+        ASTNode prev = child;
+        do {
+            prev = prev.getTreePrev();
+        }
+        while (prev != null && ElementType.JAVA_COMMENT_OR_WHITESPACE_BIT_SET.contains(prev.getElementType()));
+        if (prev != null && prev.getElementType() == JavaTokenType.COMMA) {
+            deleteChildInternal(prev);
+        }
+    }
+
+    @Override
+    public void accept(PsiElementVisitor visitor) {
+        if (visitor instanceof JavaElementVisitor) {
+            ((JavaElementVisitor) visitor).visitDeclarationStatement(this);
+        }
+        else {
+            visitor.visitElement(this);
+        }
+    }
+
+    public String toString() {
+        return "PsiDeclarationStatement";
+    }
+
+    @Override
+    public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
+        processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, this);
+
+        for (PsiElement element : getDeclaredElements()) {
+            if (element != lastParent) {
+                if (element instanceof PsiVariable && ((PsiVariable) element).isUnnamed() &&
+                    !Boolean.TRUE.equals(processor.getHint(ElementClassHint.PROCESS_UNNAMED_VARIABLES))) {
+                    continue;
+                }
+                if (!processor.execute(element, state)) {
+                    return false;
+                }
+            }
+            else {
+                ElementClassHint hint = processor.getHint(ElementClassHint.KEY);
+                if (lastParent instanceof PsiClass && (hint == null || hint.shouldProcess(ElementClassHint.DeclarationKind.CLASS))) {
+                    if (!processor.execute(lastParent, state)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
 }

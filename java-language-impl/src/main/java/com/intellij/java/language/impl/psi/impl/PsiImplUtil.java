@@ -134,7 +134,7 @@ public class PsiImplUtil {
             PsiMethod[] methods = resolvedClass.findMethodsByName(attributeName, false);
             for (PsiMethod method : methods) {
                 if (PsiUtil.isAnnotationMethod(method)) {
-                    return ((PsiAnnotationMethod)method).getDefaultValue();
+                    return ((PsiAnnotationMethod) method).getDefaultValue();
                 }
             }
         }
@@ -260,8 +260,13 @@ public class PsiImplUtil {
         }
 
         if (fromBody) {
-            PsiParameter[] parameters = element.getParameterList().getParameters();
+            final PsiParameter[] parameters = element.getParameterList().getParameters();
             for (PsiParameter parameter : parameters) {
+                if (parameter.isUnnamed() &&
+                    !Boolean.TRUE.equals(processor.getHint(ElementClassHint.PROCESS_UNNAMED_VARIABLES))) {
+                    continue;
+                }
+
                 if (!processor.execute(parameter, state)) {
                     return false;
                 }
@@ -277,7 +282,7 @@ public class PsiImplUtil {
         ResolveState state,
         PsiElement lastParent
     ) {
-        ElementClassHint hint = processor.getHint(ElementClassHint.KEY);
+        final ElementClassHint hint = processor.getHint(ElementClassHint.KEY);
         if (hint != null && !hint.shouldProcess(ElementClassHint.DeclarationKind.VARIABLE)) {
             return true;
         }
@@ -286,7 +291,10 @@ public class PsiImplUtil {
             if (resource == lastParent) {
                 break;
             }
-            if (resource instanceof PsiResourceVariable && !processor.execute(resource, state)) {
+            if (resource instanceof PsiResourceVariable &&
+                !(((PsiResourceVariable) resource).isUnnamed() &&
+                    !Boolean.TRUE.equals(processor.getHint(ElementClassHint.PROCESS_UNNAMED_VARIABLES))) &&
+                !processor.execute(resource, state)) {
                 return false;
             }
         }
@@ -573,7 +581,7 @@ public class PsiImplUtil {
             existing.getParent().delete();
         }
         else if (existing != null) {
-            ((PsiNameValuePair)existing.getParent()).setValue(value);
+            ((PsiNameValuePair) existing.getParent()).setValue(value);
         }
         else {
             PsiNameValuePair[] attributes = psiAnnotation.getParameterList().getAttributes();
@@ -865,7 +873,7 @@ public class PsiImplUtil {
             // method refs: do not cache results during parent conflict resolving, acceptable checks, etc
             Map<PsiElement, PsiType> map = LambdaUtil.ourFunctionTypes.get();
             if (map != null && map.containsKey(element)) {
-                return (JavaResolveResult[])resolver.resolve(element, psiFile, incompleteCode);
+                return (JavaResolveResult[]) resolver.resolve(element, psiFile, incompleteCode);
             }
         }
 
@@ -880,7 +888,7 @@ public class PsiImplUtil {
         ResolveCache.PolyVariantContextResolver<? super T> resolver
     ) {
         ResolveResult[] results = ResolveCache.getInstance(project).resolveWithCaching(element, resolver, true, incompleteCode, psiFile);
-        return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[])results;
+        return results.length == 0 ? JavaResolveResult.EMPTY_ARRAY : (JavaResolveResult[]) results;
     }
 
     /**
