@@ -83,10 +83,6 @@ public abstract class PsiElementFinder {
         return null;
     }
 
-    public Collection<PsiJavaModule> findModules(String moduleName, GlobalSearchScope scope) {
-        return List.of();
-    }
-
     /**
      * Returns the list of subpackages of the specified package in the specified search scope.
      *

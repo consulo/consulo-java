@@ -3457,6 +3457,22 @@ public class HighlightUtil extends HighlightUtilBase {
 
         if (!result.isValidResult() && !PsiUtil.isInsideJavadocComment(ref)) {
             if (!result.isAccessible()) {
+                // Module accessibility now participates in resolution (see PsiResolveHelperImpl). For an otherwise-public
+                // symbol the inaccessibility is a Java module problem, so prefer the specific module diagnostic and fix.
+                if (resolved instanceof PsiModifierListOwner owner
+                    && !owner.hasModifierProperty(PsiModifier.PRIVATE)
+                    && !owner.hasModifierProperty(PsiModifier.PROTECTED)
+                    && !owner.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)
+                    && getPackageLocalClassInTheMiddle(ref) == null) {
+                    PsiJavaModule refModule = JavaModuleGraphUtil.findDescriptorByElement(ref);
+                    if (refModule != null) {
+                        HighlightInfo.Builder moduleProblem = ModuleHighlightUtil.checkPackageAccessibility(ref, resolved, refModule);
+                        if (moduleProblem != null) {
+                            return moduleProblem;
+                        }
+                    }
+                }
+
                 HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
                     .range(refName)
                     .descriptionAndTooltip(buildProblemWithAccessDescription(ref, result, resolved));

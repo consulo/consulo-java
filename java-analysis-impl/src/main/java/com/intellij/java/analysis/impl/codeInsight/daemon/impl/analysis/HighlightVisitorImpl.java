@@ -1364,7 +1364,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
                 add(GenericsHighlightUtil.checkRawOnParameterizedType(ref, resolved));
             }
             if (!myHolder.hasErrorResults() && resolved != null && myJavaModule != null) {
-                myHolder.add(ModuleHighlightUtil.checkPackageAccessibility(ref, resolved, myJavaModule));
+                add(ModuleHighlightUtil.checkPackageAccessibility(ref, resolved, myJavaModule));
             }
         }
     }
@@ -1664,7 +1664,7 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         }
 
         if (!myHolder.hasErrorResults() && resolved != null && myJavaModule != null) {
-            myHolder.add(ModuleHighlightUtil.checkPackageAccessibility(expression, resolved, myJavaModule));
+            add(ModuleHighlightUtil.checkPackageAccessibility(expression, resolved, myJavaModule));
         }
     }
 

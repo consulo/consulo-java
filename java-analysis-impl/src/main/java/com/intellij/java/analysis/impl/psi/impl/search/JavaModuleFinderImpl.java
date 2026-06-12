@@ -2,7 +2,7 @@ package com.intellij.java.analysis.impl.psi.impl.search;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
-import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiElementFinder;
 import com.intellij.java.language.psi.PsiJavaFile;
@@ -57,7 +57,7 @@ public class JavaModuleFinderImpl extends PsiElementFinder {
         }
       }
       else if (root.getFileSystem() instanceof ArchiveFileSystem && "jar".equalsIgnoreCase(root.getExtension())) {
-        return AutomaticJavaModule.findModule(PsiManager.getInstance(project), root);
+        return LightJavaModule.findModule(PsiManager.getInstance(project), root);
       }
     }
     return null;

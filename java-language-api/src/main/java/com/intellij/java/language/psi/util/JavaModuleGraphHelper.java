@@ -1,13 +1,18 @@
 // Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.psi.util;
 
+import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.application.Application;
 import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiUtilCore;
 
+import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 /**
@@ -29,4 +34,29 @@ public interface JavaModuleGraphHelper {
    * to the specified place.
    */
   List<PsiPackageAccessibilityStatement> getExportedPackages(PsiElement place, PsiJavaModule module);
+
+  /**
+   * Checks accessibility of the class
+   *
+   * @param target class which accessibility should be determined
+   * @param place  place where accessibility of target is required
+   */
+  default boolean isAccessible(PsiClass target, PsiElement place) {
+    PsiFile targetFile = target.getContainingFile();
+    if (targetFile == null) return true;
+
+    PsiUtilCore.ensureValid(targetFile);
+
+    String packageName = PsiUtil.getPackageName(target);
+    return packageName == null || isAccessible(packageName, targetFile, place);
+  }
+
+  /**
+   * Checks accessibility of element in the package
+   *
+   * @param targetPackageName name of the package which element's accessibility should be determined
+   * @param targetFile        file in which this element is contained
+   * @param place             place where accessibility of target is required
+   */
+  boolean isAccessible(String targetPackageName, @Nullable PsiFile targetFile, PsiElement place);
 }

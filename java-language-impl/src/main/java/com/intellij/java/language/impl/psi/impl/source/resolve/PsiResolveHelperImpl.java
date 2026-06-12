@@ -25,6 +25,7 @@ import com.intellij.java.language.impl.psi.scope.util.PsiScopesUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.impl.source.resolve.ParameterTypeInferencePolicy;
 import com.intellij.java.language.psi.infos.CandidateInfo;
+import com.intellij.java.language.psi.util.JavaModuleGraphHelper;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ServiceImpl;
 import consulo.language.psi.PsiElement;
@@ -133,7 +134,11 @@ public class PsiResolveHelperImpl implements PsiResolveHelper {
                               @Nullable PsiClass accessObjectClass,
                               @Nullable PsiElement currentFileResolveScope) {
     PsiClass containingClass = member.getContainingClass();
-    return JavaResolveUtil.isAccessible(member, containingClass, modifierList, place, accessObjectClass, currentFileResolveScope);
+    boolean accessible = JavaResolveUtil.isAccessible(member, containingClass, modifierList, place, accessObjectClass, currentFileResolveScope);
+    if (accessible && member instanceof PsiClass && !(member instanceof PsiTypeParameter)) {
+      accessible = JavaModuleGraphHelper.getInstance().isAccessible((PsiClass)member, place);
+    }
+    return accessible;
   }
 
   @Override

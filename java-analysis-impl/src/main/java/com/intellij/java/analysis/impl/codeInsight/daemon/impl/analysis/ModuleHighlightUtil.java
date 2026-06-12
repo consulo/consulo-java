@@ -20,7 +20,7 @@ import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.AddRequi
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.GoToSymbolFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MergeModuleStatementsFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.MoveFileFix;
-import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement.Role;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
@@ -476,9 +476,8 @@ public class ModuleHighlightUtil {
         return results;
     }
 
-    @Nullable
     @RequiredReadAction
-    public static HighlightInfo checkPackageAccessibility(
+    public static HighlightInfo.@Nullable Builder checkPackageAccessibility(
         PsiJavaCodeReferenceElement ref,
         PsiElement target,
         PsiJavaModule refModule
@@ -512,7 +511,7 @@ public class ModuleHighlightUtil {
     }
 
     @RequiredReadAction
-    private static HighlightInfo checkPackageAccessibility(
+    private static HighlightInfo.Builder checkPackageAccessibility(
         PsiJavaCodeReferenceElement ref,
         PsiJavaModule refModule,
         PsiJavaModule targetModule,
@@ -522,25 +521,22 @@ public class ModuleHighlightUtil {
             if (targetModule == null) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
                     .range(ref)
-                    .descriptionAndTooltip(JavaErrorLocalize.modulePackageOnClasspath())
-                    .create();
+                    .descriptionAndTooltip(JavaErrorLocalize.modulePackageOnClasspath());
             }
 
             String refModuleName = refModule.getName();
             String requiredName = targetModule.getName();
-            if (!(targetModule instanceof AutomaticJavaModule || JavaModuleGraphUtil.exports(targetModule, packageName, refModule))) {
+            if (!(targetModule instanceof LightJavaModule || JavaModuleGraphUtil.exports(targetModule, packageName, refModule))) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
                     .range(ref)
-                    .descriptionAndTooltip(JavaErrorLocalize.modulePackageNotExported(requiredName, packageName, refModuleName))
-                    .create();
+                    .descriptionAndTooltip(JavaErrorLocalize.modulePackageNotExported(requiredName, packageName, refModuleName));
             }
 
             if (!(PsiJavaModule.JAVA_BASE.equals(requiredName) || JavaModuleGraphUtil.reads(refModule, targetModule))) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
                     .range(ref)
                     .descriptionAndTooltip(JavaErrorLocalize.moduleNotInRequirements(refModuleName, requiredName))
-                    .registerFix(new AddRequiredModuleFix(refModule, requiredName))
-                    .create();
+                    .registerFix(new AddRequiredModuleFix(refModule, requiredName));
             }
         }
 

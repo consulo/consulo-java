@@ -16,7 +16,7 @@
 package com.intellij.java.impl.ide.actions;
 
 import com.intellij.java.language.impl.JavaFileType;
-import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.component.ActionImpl;
 import consulo.dataContext.DataContext;
@@ -109,6 +109,6 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
     @Override
     protected Map<String, String> getLiveTemplateDefaults(DataContext ctx, PsiFile file) {
         Module module = ctx.getData(Module.KEY);
-        return Collections.singletonMap("MODULE_NAME", module != null ? AutomaticJavaModule.moduleName(module.getName()) : "module_name");
+        return Collections.singletonMap("MODULE_NAME", module != null ? LightJavaModule.moduleName(module.getName()) : "module_name");
     }
 }
