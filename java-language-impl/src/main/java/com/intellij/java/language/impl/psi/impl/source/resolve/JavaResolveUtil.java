@@ -22,12 +22,14 @@ package com.intellij.java.language.impl.psi.impl.source.resolve;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.PatternInference;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiExpressionListImpl;
+import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.projectRoots.JavaVersionService;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.JavaModuleGraphHelper;
 import com.intellij.java.language.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
@@ -43,6 +45,8 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
 import consulo.util.lang.ObjectUtil;
 import org.jspecify.annotations.Nullable;
+
+import java.util.List;
 
 public class JavaResolveUtil {
   public static PsiClass getContextClass(PsiElement element) {
@@ -338,5 +342,28 @@ public class JavaResolveUtil {
                            .resolveConstructor(PsiTypesUtil.getClassType(superClassWhichTheSuperCallMustResolveTo),
                                                expressionList,
                                                place).getElement();
+  }
+
+  public static boolean processJavaModuleExports(PsiJavaModule module,
+                                                 PsiScopeProcessor processor,
+                                                 ResolveState state,
+                                                 @Nullable PsiElement lastParent,
+                                                 PsiElement place) {
+    // Skip processing if inside the module - otherwise, imports within the module won't work because the system would rely only on exports
+    if (PsiTreeUtil.isAncestor(module, place, false)) return true;
+
+    processor.handleEvent(PsiScopeProcessor.Event.SET_DECLARATION_HOLDER, module);
+    ElementClassHint classHint = processor.getHint(ElementClassHint.KEY);
+    if (classHint != null && !classHint.shouldProcess(ElementClassHint.DeclarationKind.CLASS)) return true;
+
+    List<PsiPackageAccessibilityStatement> exports = JavaModuleGraphHelper.getInstance().getExportedPackages(place, module);
+    for (PsiPackageAccessibilityStatement export : exports) {
+      PsiJavaCodeReferenceElement aPackage = export.getPackageReference();
+      if (aPackage == null) continue;
+      PsiElement resolvedPackage = aPackage.resolve();
+      if (!(resolvedPackage instanceof PsiPackage)) continue;
+      if (!resolvedPackage.processDeclarations(processor, state, lastParent, place)) return false;
+    }
+    return true;
   }
 }

@@ -16,10 +16,12 @@
 package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.impl.psi.impl.java.stubs.impl.PsiImportStatementStubImpl;
+import com.intellij.java.language.impl.psi.impl.source.PsiImportModuleStatementImpl;
 import com.intellij.java.language.impl.psi.impl.source.PsiImportStatementImpl;
 import com.intellij.java.language.impl.psi.impl.source.PsiImportStaticStatementImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSourceUtil;
+import com.intellij.java.language.impl.psi.impl.source.tree.java.ImportModuleStatementElement;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.ImportStaticStatementElement;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiImportStatementBase;
@@ -52,6 +54,8 @@ public abstract class JavaImportStatementElementType extends JavaStubElementType
   public PsiImportStatementBase createPsi(final ASTNode node) {
     if (node instanceof ImportStaticStatementElement) {
       return new PsiImportStaticStatementImpl(node);
+    } else if (node instanceof ImportModuleStatementElement) {
+      return new PsiImportModuleStatementImpl(node);
     } else {
       return new PsiImportStatementImpl(node);
     }
@@ -64,14 +68,18 @@ public abstract class JavaImportStatementElementType extends JavaStubElementType
 
     for (LighterASTNode child : tree.getChildren(node)) {
       IElementType type = child.getTokenType();
-      if (type == JavaElementType.JAVA_CODE_REFERENCE || type == JavaElementType.IMPORT_STATIC_REFERENCE) {
+      if (type == JavaElementType.JAVA_CODE_REFERENCE ||
+          type == JavaElementType.IMPORT_STATIC_REFERENCE ||
+          type == JavaElementType.MODULE_REFERENCE) {
         refText = JavaSourceUtil.getReferenceText(tree, child);
-      } else if (type == JavaTokenType.ASTERISK) {
+      } else if (type == JavaTokenType.ASTERISK || type == JavaTokenType.MODULE_KEYWORD) {
         isOnDemand = true;
       }
     }
 
-    byte flags = PsiImportStatementStubImpl.packFlags(isOnDemand, node.getTokenType() == JavaElementType.IMPORT_STATIC_STATEMENT);
+    byte flags = PsiImportStatementStubImpl.packFlags(isOnDemand,
+                                                      node.getTokenType() == JavaElementType.IMPORT_STATIC_STATEMENT,
+                                                      node.getTokenType() == JavaElementType.IMPORT_MODULE_STATEMENT);
     return new PsiImportStatementStubImpl(parentStub, refText, flags);
   }
 

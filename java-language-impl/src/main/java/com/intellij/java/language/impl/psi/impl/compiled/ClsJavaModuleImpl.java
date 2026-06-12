@@ -3,6 +3,7 @@ package com.intellij.java.language.impl.psi.impl.compiled;
 
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaModuleStub;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
@@ -10,6 +11,8 @@ import consulo.language.impl.ast.TreeElement;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiElementVisitor;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.stub.StubElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.ItemPresentation;
@@ -29,6 +32,14 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
   public ClsJavaModuleImpl(PsiJavaModuleStub stub) {
     super(stub);
     myReference = new ClsJavaModuleReferenceElementImpl(this, stub.getName());
+  }
+
+  @Override
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
+                                     @Nullable PsiElement lastParent,
+                                     PsiElement place) {
+    return JavaResolveUtil.processJavaModuleExports(this, processor, state, lastParent, place);
   }
 
   @Override

@@ -19,7 +19,9 @@ import org.jspecify.annotations.Nullable;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiJavaModuleReferenceElement;
 import com.intellij.java.language.psi.PsiJavaParserFacade;
+import com.intellij.java.language.impl.psi.impl.java.stubs.JavaImportStatementElementType;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiImportStatementStub;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaCodeReferenceElementImpl;
@@ -37,15 +39,30 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 	private final byte myFlags;
 	private final String myText;
 	private SoftReference<PsiJavaCodeReferenceElement> myReference;
+	private SoftReference<PsiJavaModuleReferenceElement> myModuleReference;
 
 	private static final int ON_DEMAND = 0x01;
 	private static final int STATIC = 0x02;
+	private static final int MODULE = 0x04;
 
 	public PsiImportStatementStubImpl(final StubElement parent, final String text, final byte flags)
 	{
-		super(parent, isStatic(flags) ? JavaStubElementTypes.IMPORT_STATIC_STATEMENT : JavaStubElementTypes.IMPORT_STATEMENT);
+		super(parent, getImportType(flags));
 		myText = text;
 		myFlags = flags;
+	}
+
+	private static JavaImportStatementElementType getImportType(final byte flags)
+	{
+		if(isStatic(flags))
+		{
+			return JavaStubElementTypes.IMPORT_STATIC_STATEMENT;
+		}
+		if(isModule(flags))
+		{
+			return JavaStubElementTypes.IMPORT_MODULE_STATEMENT;
+		}
+		return JavaStubElementTypes.IMPORT_STATEMENT;
 	}
 
 	@Override
@@ -57,6 +74,17 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 	private static boolean isStatic(final byte flags)
 	{
 		return BitUtil.isSet(flags, STATIC);
+	}
+
+	@Override
+	public boolean isModule()
+	{
+		return isModule(myFlags);
+	}
+
+	private static boolean isModule(final byte flags)
+	{
+		return BitUtil.isSet(flags, MODULE);
 	}
 
 	@Override
@@ -81,7 +109,7 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 	public PsiJavaCodeReferenceElement getReference()
 	{
 		PsiJavaCodeReferenceElement ref = SoftReference.dereference(myReference);
-		if(ref == null)
+		if(ref == null && !isModule())
 		{
 			ref = isStatic() ? getStaticReference() : getRegularReference();
 			myReference = new SoftReference<>(ref);
@@ -89,7 +117,24 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 		return ref;
 	}
 
-	public static byte packFlags(boolean isOnDemand, boolean isStatic)
+	@Override
+	@Nullable
+	public PsiJavaModuleReferenceElement getModuleReference()
+	{
+		if(!isModule())
+		{
+			return null;
+		}
+		PsiJavaModuleReferenceElement ref = SoftReference.dereference(myModuleReference);
+		if(ref == null)
+		{
+			ref = createModuleReference();
+			myModuleReference = new SoftReference<>(ref);
+		}
+		return ref;
+	}
+
+	public static byte packFlags(boolean isOnDemand, boolean isStatic, boolean isModule)
 	{
 		byte flags = 0;
 		if(isOnDemand)
@@ -100,7 +145,30 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 		{
 			flags |= STATIC;
 		}
+		if(isModule)
+		{
+			flags |= MODULE;
+		}
 		return flags;
+	}
+
+	@Nullable
+	private PsiJavaModuleReferenceElement createModuleReference()
+	{
+		final String refText = getImportReferenceText();
+		if(refText == null)
+		{
+			return null;
+		}
+		try
+		{
+			final PsiJavaParserFacade parserFacade = JavaPsiFacade.getInstance(getProject()).getParserFacade();
+			return parserFacade.createModuleReferenceFromText(refText, getPsi());
+		}
+		catch(IncorrectOperationException ignore)
+		{
+			return null;
+		}
 	}
 
 	@Nullable
@@ -163,10 +231,14 @@ public class PsiImportStatementStubImpl extends StubBase<PsiImportStatementBase>
 		{
 			builder.append("static ");
 		}
+		if(isModule())
+		{
+			builder.append("module ");
+		}
 
 		builder.append(getImportReferenceText());
 
-		if(isOnDemand())
+		if(isOnDemand() && !isModule())
 		{
 			builder.append(".*");
 		}

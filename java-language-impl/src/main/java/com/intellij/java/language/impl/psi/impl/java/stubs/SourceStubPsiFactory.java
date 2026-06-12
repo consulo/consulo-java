@@ -63,6 +63,9 @@ public class SourceStubPsiFactory extends StubPsiFactory {
 
     @Override
     public PsiImportStatementBase createImportStatement(PsiImportStatementStub stub) {
+        if (stub.isModule()) {
+            return new PsiImportModuleStatementImpl(stub);
+        }
         return stub.isStatic() ? new PsiImportStaticStatementImpl(stub) : new PsiImportStatementImpl(stub);
     }
 

@@ -66,6 +66,7 @@ public interface JavaElementType {
   IElementType IMPORT_LIST = JavaStubElementTypes.IMPORT_LIST;
   IElementType IMPORT_STATEMENT = JavaStubElementTypes.IMPORT_STATEMENT;
   IElementType IMPORT_STATIC_STATEMENT = JavaStubElementTypes.IMPORT_STATIC_STATEMENT;
+  IElementType IMPORT_MODULE_STATEMENT = JavaStubElementTypes.IMPORT_MODULE_STATEMENT;
   IElementType MODIFIER_LIST = JavaStubElementTypes.MODIFIER_LIST;
   IElementType ANNOTATION = JavaStubElementTypes.ANNOTATION;
   IElementType NAME_VALUE_PAIR = JavaStubElementTypes.NAME_VALUE_PAIR;

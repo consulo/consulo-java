@@ -362,6 +362,14 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
   PsiImportStatement createImportStatementOnDemand(String packageName) throws IncorrectOperationException;
 
   /**
+   * Creates an {@code import module} statement for importing the specified module.
+   *
+   * @param moduleName the name of the module to create the import statement for.
+   * @return the import module statement instance.
+   */
+  PsiImportModuleStatement createImportModuleStatementFromText(String moduleName) throws IncorrectOperationException;
+
+  /**
    * Creates a local variable declaration statement with the specified name, type and initializer,
    * optionally without reformatting the declaration.
    *

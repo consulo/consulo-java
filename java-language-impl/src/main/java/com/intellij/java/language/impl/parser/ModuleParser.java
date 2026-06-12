@@ -96,7 +96,7 @@ public class ModuleParser {
     return module;
   }
 
-  private static PsiBuilder.Marker parseName(PsiBuilder builder) {
+  public static PsiBuilder.Marker parseName(PsiBuilder builder) {
     PsiBuilder.Marker nameElement = builder.mark();
     boolean empty = true;
 

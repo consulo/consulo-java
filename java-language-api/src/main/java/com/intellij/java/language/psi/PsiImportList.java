@@ -49,6 +49,13 @@ public interface PsiImportList extends PsiElement {
   PsiImportStaticStatement[] getImportStaticStatements();
 
   /**
+   * Returns the import module statements contained in the list.
+   *
+   * @return the array of import module statements.
+   */
+  PsiImportModuleStatement[] getImportModuleStatements();
+
+  /**
    * Returns all import statements contained in the list.
    *
    * @return the array of import statements.
@@ -72,6 +79,15 @@ public interface PsiImportList extends PsiElement {
    */
   @Nullable
   PsiImportStatement findOnDemandImportStatement(String packageName);
+
+  /**
+   * Searches the list for a module import statement importing the specified class.
+   *
+   * @param moduleName the name of the imported module.
+   * @return the import module statement, or null if one was not found.
+   */
+  @Nullable
+  PsiImportModuleStatement findImportModuleStatement(String moduleName);
 
   /**
    * Searches the list for a single import or import static statement importing the specified

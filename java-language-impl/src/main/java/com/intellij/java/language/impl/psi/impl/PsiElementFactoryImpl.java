@@ -568,6 +568,22 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
   }
 
   @Override
+  public PsiImportModuleStatement createImportModuleStatementFromText(String moduleName) throws IncorrectOperationException {
+    PsiJavaFile aFile = createDummyJavaFile("import module " + moduleName + ";");
+    PsiImportList importList = aFile.getImportList();
+    if (importList == null) {
+      throw new IncorrectOperationException("Can't create module with name: " + moduleName);
+    }
+    PsiImportModuleStatement[] statements = importList.getImportModuleStatements();
+    if (statements.length != 1) {
+      throw new IncorrectOperationException("Created more than one module with name: " + moduleName);
+    }
+    PsiImportModuleStatement statement = statements[0];
+    CodeEditUtil.markGenerated(statement.getNode()); //Don't reformat because there is a chance of infinite recursion
+    return statement;
+  }
+
+  @Override
   public PsiDeclarationStatement createVariableDeclarationStatement(final String name, final PsiType type, final PsiExpression initializer) throws IncorrectOperationException {
     if (!PsiNameHelper.getInstance(myManager.getProject()).isIdentifier(name)) {
       throw new IncorrectOperationException("\"" + name + "\" is not an identifier.");

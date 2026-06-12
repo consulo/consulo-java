@@ -21,13 +21,17 @@ package com.intellij.java.language.impl.psi.impl.java.stubs;
 
 import com.intellij.java.language.psi.PsiImportStatementBase;
 import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiJavaModuleReferenceElement;
 import consulo.language.psi.stub.StubElement;
 import org.jspecify.annotations.Nullable;
 
 public interface PsiImportStatementStub extends StubElement<PsiImportStatementBase> {
   boolean isStatic();
+  boolean isModule();
   boolean isOnDemand();
   String getImportReferenceText();
   @Nullable
   PsiJavaCodeReferenceElement getReference();
+  @Nullable
+  PsiJavaModuleReferenceElement getModuleReference();
 }

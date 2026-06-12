@@ -42,7 +42,7 @@ public class ClsPackageAccessibilityStatementImpl extends ClsRepositoryPsiElemen
       @Override
       protected PsiJavaCodeReferenceElement compute() {
         String packageName = getPackageName();
-        return packageName != null ? new ClsJavaCodeReferenceElementImpl(ClsPackageAccessibilityStatementImpl.this, packageName) : null;
+        return packageName != null ? new ClsPackageReferenceElementImpl(ClsPackageAccessibilityStatementImpl.this, packageName) : null;
       }
     };
     myModuleReferences = LazyValue.atomicNotNull(() -> {

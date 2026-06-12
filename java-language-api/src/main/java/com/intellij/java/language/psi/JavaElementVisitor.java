@@ -213,6 +213,10 @@ public abstract class JavaElementVisitor extends PsiElementVisitor {
     visitElement(statement);
   }
 
+  public void visitImportModuleStatement(PsiImportModuleStatement statement) {
+    visitElement(statement);
+  }
+
   public void visitInlineDocTag(PsiInlineDocTag tag) {
     visitDocTag(tag);
   }

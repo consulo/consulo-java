@@ -162,6 +162,12 @@ public interface JavaStubElementTypes {
             return new ImportStaticStatementElement();
         }
     };
+    JavaImportStatementElementType IMPORT_MODULE_STATEMENT = new JavaImportStatementElementType("IMPORT_MODULE_STATEMENT") {
+        @Override
+        public ASTNode createCompositeNode() {
+            return new ImportModuleStatementElement();
+        }
+    };
 
     JavaPackageStatementElementType PACKAGE_STATEMENT = new JavaPackageStatementElementType();
 

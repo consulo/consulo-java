@@ -216,17 +216,46 @@ public class FileParser
 		PsiBuilder.Marker statement = builder.mark();
 		builder.advanceLexer();
 
-		boolean isStatic = expect(builder, JavaTokenType.STATIC_KEYWORD);
-		IElementType type = isStatic ? JavaElementType.IMPORT_STATIC_STATEMENT : JavaElementType.IMPORT_STATEMENT;
+		String identifierText = builder.getTokenText();
+		IElementType type = getImportType(builder);
+		boolean isStatic = type == JavaElementType.IMPORT_STATIC_STATEMENT;
+		boolean isModule = type == JavaElementType.IMPORT_MODULE_STATEMENT;
+		boolean isOk = isModule
+				? ModuleParser.parseName(builder) != null
+				: myParser.getReferenceParser().parseImportCodeReference(builder, isStatic);
 
-		boolean isOk = myParser.getReferenceParser().parseImportCodeReference(builder, isStatic);
-		if(isOk)
+		//if it is `module` we should expect either `;` or `identifier`
+		if(isOk && !isModule &&
+				!isStatic && builder.getTokenType() != JavaTokenType.SEMICOLON &&
+				PsiKeyword.MODULE.equals(identifierText))
+		{
+			JavaParserUtil.error(builder, JavaErrorBundle.message("expected.identifier.or.semicolon"));
+		}
+		else if(isOk)
 		{
 			semicolon(builder);
 		}
 
 		done(statement, type);
 		return statement;
+	}
+
+	private static IElementType getImportType(PsiBuilder builder)
+	{
+		IElementType type = builder.getTokenType();
+		if(type == JavaTokenType.STATIC_KEYWORD)
+		{
+			builder.advanceLexer();
+			return JavaElementType.IMPORT_STATIC_STATEMENT;
+		}
+		if(type == JavaTokenType.IDENTIFIER &&
+				PsiKeyword.MODULE.equals(builder.getTokenText()) && builder.lookAhead(1) == JavaTokenType.IDENTIFIER)
+		{
+			builder.remapCurrentToken(JavaTokenType.MODULE_KEYWORD);
+			builder.advanceLexer();
+			return JavaElementType.IMPORT_MODULE_STATEMENT;
+		}
+		return JavaElementType.IMPORT_STATEMENT;
 	}
 
 	private static String error(AbstractBundle bundle, String errorMessageKey)

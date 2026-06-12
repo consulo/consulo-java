@@ -44,6 +44,7 @@ import consulo.language.file.FileViewProvider;
 import consulo.language.impl.psi.PsiFileImpl;
 import consulo.language.impl.psi.SourceTreeToPsiMap;
 import consulo.language.psi.*;
+import consulo.language.psi.resolve.DelegatingScopeProcessor;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
 import consulo.language.psi.stub.IndexingDataKeys;
@@ -399,6 +400,19 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
         }
 
         if (classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.CLASS)) {
+            final PsiImportModuleStatement[] importModuleStatements = importList.getImportModuleStatements();
+            for (PsiImportModuleStatement statement : importModuleStatements) {
+                final PsiElement resolved = statement.resolve();
+                if (resolved != null) {
+                    processor.handleEvent(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT, statement);
+                    if (!processOnDemandTarget(resolved, processor, state, place)) {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if (classHint == null || classHint.shouldProcess(ElementClassHint.DeclarationKind.CLASS)) {
             processor.handleEvent(JavaScopeProcessorEvent.SET_CURRENT_FILE_CONTEXT, null);
 
             final PsiJavaCodeReferenceElement[] implicitlyImported = getImplicitlyImportedPackageReferences();
@@ -437,10 +451,33 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
                 }
             }
         }
+        else if (target instanceof PsiJavaModule) {
+            return processModuleDeclaration(substitutor, place, (PsiJavaModule) target, processor);
+        }
         else {
             LOG.assertTrue(false);
         }
         return true;
+    }
+
+    private static boolean processModuleDeclaration(ResolveState state,
+                                                    PsiElement place,
+                                                    PsiJavaModule target,
+                                                    PsiScopeProcessor processor) {
+        processor = new DelegatingScopeProcessor(processor) {
+            @Override
+            public <T> @Nullable T getHint(Key<T> hintKey) {
+                if (hintKey == ElementClassHint.KEY) {
+                    //noinspection unchecked
+                    return (T) (ElementClassHint) kind -> kind == ElementClassHint.DeclarationKind.CLASS;
+                }
+                else {
+                    return super.getHint(hintKey);
+                }
+            }
+        };
+
+        return target.processDeclarations(processor, state, null, place);
     }
 
     @Override

@@ -2,11 +2,14 @@
 package com.intellij.java.language.impl.psi.impl.light;
 
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import consulo.language.impl.psi.LightElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
+import consulo.language.psi.resolve.PsiScopeProcessor;
+import consulo.language.psi.resolve.ResolveState;
 import consulo.language.util.IncorrectOperationException;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
@@ -28,6 +31,14 @@ public abstract class LightJavaModuleBase extends LightElement implements PsiJav
   }
 
   public abstract VirtualFile getRootVirtualFile();
+
+  @Override
+  public boolean processDeclarations(PsiScopeProcessor processor,
+                                     ResolveState state,
+                                     @Nullable PsiElement lastParent,
+                                     PsiElement place) {
+    return JavaResolveUtil.processJavaModuleExports(this, processor, state, lastParent, place);
+  }
 
   @Override
   @Nullable

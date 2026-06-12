@@ -4,6 +4,7 @@ package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 import com.intellij.java.analysis.impl.psi.impl.search.JavaModuleFinderImpl;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.psi.impl.PsiJavaModuleModificationTracker;
 import com.intellij.java.language.impl.psi.impl.light.AutomaticJavaModule;
 import com.intellij.java.language.psi.*;
 import consulo.application.util.CachedValueProvider.Result;
@@ -22,6 +23,7 @@ import consulo.module.ModuleManager;
 import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectFileIndex;
 import consulo.project.Project;
+import consulo.project.content.ProjectRootModificationTracker;
 import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.util.collection.ContainerUtil;
@@ -111,6 +113,64 @@ public final class JavaModuleGraphUtil {
 
   public static Set<PsiJavaModule> getAllDependencies(PsiJavaModule source) {
     return getRequiresGraph(source).getAllDependencies(source);
+  }
+
+  /**
+   * Retrieves a list of package accessibility statements for a given Java module that
+   * are accessible to the specified place.
+   *
+   * @param place the place from which accessibility is being checked.
+   * @param module the module whose exported packages are to be retrieved.
+   * @return a list of `PsiPackageAccessibilityStatement` elements that represent the exported packages accessible
+   *         to the specified place.
+   */
+  public static List<PsiPackageAccessibilityStatement> getExportedPackages(PsiElement place, PsiJavaModule module) {
+    List<PsiPackageAccessibilityStatement> results = new ArrayList<>();
+    PsiJavaModule currentModule = findDescriptorByElement(place);
+    List<PsiPackageAccessibilityStatement> exports = getAllDeclaredExports(module);
+    for (PsiPackageAccessibilityStatement export : exports) {
+      PsiJavaCodeReferenceElement aPackage = export.getPackageReference();
+      if (aPackage == null) continue;
+      List<String> accessibleModules = export.getModuleNames();
+      if (!accessibleModules.isEmpty()) {
+        if (currentModule == null || !accessibleModules.contains(currentModule.getName())) continue;
+      }
+      results.add(export);
+    }
+    return results;
+  }
+
+  /**
+   * Retrieves all transitive modules required by the given module, including the module itself.
+   *
+   * @param module the module for which transitive dependencies are being collected; must not be null
+   * @return a set of transitive modules required by the given module, including the module itself
+   */
+  public static Set<PsiJavaModule> getAllTransitiveModulesIncludeCurrent(PsiJavaModule module) {
+    return LanguageCachedValueUtil.getCachedValue(module, () -> {
+      Project project = module.getProject();
+      Set<PsiJavaModule> collected = new HashSet<>();
+      collected.addAll(getAllDependencies(module));
+      collected.add(module);
+      return Result.create(collected,
+                           PsiJavaModuleModificationTracker.getInstance(project),
+                           ProjectRootModificationTracker.getInstance(project));
+    });
+  }
+
+  private static List<PsiPackageAccessibilityStatement> getAllDeclaredExports(PsiJavaModule module) {
+    Project project = module.getProject();
+    return LanguageCachedValueUtil.getCachedValue(module, () -> {
+      List<PsiPackageAccessibilityStatement> exports = new ArrayList<>();
+      for (PsiJavaModule javaModule : getAllTransitiveModulesIncludeCurrent(module)) {
+        for (PsiPackageAccessibilityStatement export : javaModule.getExports()) {
+          exports.add(export);
+        }
+      }
+      return Result.create(exports,
+                           PsiJavaModuleModificationTracker.getInstance(project),
+                           ProjectRootModificationTracker.getInstance(project));
+    });
   }
 
   @Nullable

@@ -31,6 +31,7 @@ import java.util.Map;
 public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> implements PsiImportList {
   private volatile Map<String, PsiImportStatement> myClassNameToImportMap = null;
   private volatile Map<String, PsiImportStatement> myPackageNameToImportMap = null;
+  private volatile Map<String, PsiImportModuleStatement> myModuleNameToImportMap = null;
   private volatile Map<String, PsiImportStatementBase> myNameToSingleImportMap = null;
   private static final PsiImportStatementBase[] EMPTY_ARRAY = new PsiImportStatementBase[0];
   private static final ArrayFactory<PsiImportStatementBase> ARRAY_FACTORY = new ArrayFactory<PsiImportStatementBase>() {
@@ -54,6 +55,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
     clone.myClassNameToImportMap = null;
     clone.myPackageNameToImportMap = null;
     clone.myNameToSingleImportMap = null;
+    clone.myModuleNameToImportMap = null;
     return clone;
   }
 
@@ -62,11 +64,13 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
     myClassNameToImportMap = null;
     myPackageNameToImportMap = null;
     myNameToSingleImportMap = null;
+    myModuleNameToImportMap = null;
     super.subtreeChanged();
   }
 
   private static final TokenSet IMPORT_STATEMENT_BIT_SET = TokenSet.create(JavaElementType.IMPORT_STATEMENT);
   private static final TokenSet IMPORT_STATIC_STATEMENT_BIT_SET = TokenSet.create(JavaElementType.IMPORT_STATIC_STATEMENT);
+  private static final TokenSet IMPORT_MODULE_STATEMENT_BIT_SET = TokenSet.create(JavaElementType.IMPORT_MODULE_STATEMENT);
 
   @Override
   public PsiImportStatement[] getImportStatements() {
@@ -76,6 +80,11 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   @Override
   public PsiImportStaticStatement[] getImportStaticStatements() {
     return getStubOrPsiChildren(IMPORT_STATIC_STATEMENT_BIT_SET, PsiImportStaticStatementImpl.ARRAY_FACTORY);
+  }
+
+  @Override
+  public PsiImportModuleStatement[] getImportModuleStatements() {
+    return getStubOrPsiChildren(IMPORT_MODULE_STATEMENT_BIT_SET, PsiImportModuleStatementImpl.ARRAY_FACTORY);
   }
 
   @Override
@@ -108,6 +117,18 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
   }
 
   @Override
+  public PsiImportModuleStatement findImportModuleStatement(String name) {
+    while (true) {
+      Map<String, PsiImportModuleStatement> map = myModuleNameToImportMap;
+      if (map == null) {
+        initializeMaps();
+      } else {
+        return map.get(name);
+      }
+    }
+  }
+
+  @Override
   public PsiImportStatementBase findSingleImportStatement(String name) {
     while (true) {
       Map<String, PsiImportStatementBase> map = myNameToSingleImportMap;
@@ -128,6 +149,7 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
     Map<String, PsiImportStatement> classNameToImportMap = new HashMap<String, PsiImportStatement>();
     Map<String, PsiImportStatement> packageNameToImportMap = new HashMap<String, PsiImportStatement>();
     Map<String, PsiImportStatementBase> nameToSingleImportMap = new HashMap<String, PsiImportStatementBase>();
+    Map<String, PsiImportModuleStatement> moduleNameToImportMap = new HashMap<String, PsiImportModuleStatement>();
     PsiImportStatement[] imports = getImportStatements();
     for (PsiImportStatement anImport : imports) {
       String qName = anImport.getQualifiedName();
@@ -152,9 +174,18 @@ public class PsiImportListImpl extends JavaStubPsiElement<PsiImportListStub> imp
       }
     }
 
+    PsiImportModuleStatement[] importModules = getImportModuleStatements();
+    for (PsiImportModuleStatement importModule : importModules) {
+      String referenceName = importModule.getReferenceName();
+      if (referenceName != null) {
+        moduleNameToImportMap.put(referenceName, importModule);
+      }
+    }
+
     myClassNameToImportMap = classNameToImportMap;
     myPackageNameToImportMap = packageNameToImportMap;
     myNameToSingleImportMap = nameToSingleImportMap;
+    myModuleNameToImportMap = moduleNameToImportMap;
   }
 
   @Override
