@@ -31,149 +31,185 @@ import consulo.module.content.layer.extension.ModuleExtensionWithSdkBase;
 import consulo.module.extension.ModuleInheritableNamedPointer;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author VISTALL
  * @since 10:02/19.05.13
  */
 public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModuleExtensionImpl> implements JavaModuleExtension<JavaModuleExtensionImpl> {
-  private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
-  private static final String BYTECODE_VERSION = "bytecode-version";
-  private static final String COMPILER_ARGUMENTS = "compiler-arguments";
-  private static final String COMPILER_ARGUMENT = "compiler-argument";
+    private static final String SPECIAL_DIR_LOCATION = "special-dir-location";
+    private static final String BYTECODE_VERSION = "bytecode-version";
+    private static final String COMPILER_ARGUMENTS = "compiler-arguments";
+    private static final String COMPILER_ARGUMENT = "compiler-argument";
+    private static final String MANIFEST_ATTRIBUTES = "manifest-attributes";
+    private static final String MANIFEST_ATTRIBUTE = "manifest-attribute";
 
-  protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
-  protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.SOURCE_DIR;
-  protected String myBytecodeVersion;
-  protected List<String> myCompilerArguments = new ArrayList<>();
+    protected LanguageLevelModuleInheritableNamedPointerImpl myLanguageLevel;
+    protected SpecialDirLocation mySpecialDirLocation = SpecialDirLocation.SOURCE_DIR;
+    protected String myBytecodeVersion;
+    protected List<String> myCompilerArguments = new ArrayList<>();
+    protected LinkedHashMap<String, String> myManifestAttributes = new LinkedHashMap<>();
 
-  private LazyValueBySdk<LanguageLevel> myLanguageLevelValue;
+    private LazyValueBySdk<LanguageLevel> myLanguageLevelValue;
 
-  public JavaModuleExtensionImpl(String id, ModuleRootLayer moduleRootLayer) {
-    super(id, moduleRootLayer);
-    myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer, id);
-    myLanguageLevelValue = new LazyValueBySdk<>(this, LanguageLevel.HIGHEST, sdk -> {
-      JavaSdkVersion sdkVersion = JavaSdkTypeUtil.getVersion(sdk);
-      return sdkVersion == null ? LanguageLevel.HIGHEST : sdkVersion.getMaxLanguageLevel();
-    });
-  }
-
-  @RequiredReadAction
-  @Override
-  public void commit(JavaModuleExtensionImpl mutableModuleExtension) {
-    super.commit(mutableModuleExtension);
-
-    myLanguageLevel.set(mutableModuleExtension.getInheritableLanguageLevel());
-    mySpecialDirLocation = mutableModuleExtension.getSpecialDirLocation();
-    myBytecodeVersion = mutableModuleExtension.getBytecodeVersion();
-    myCompilerArguments.clear();
-    myCompilerArguments.addAll(mutableModuleExtension.getCompilerArguments());
-  }
-
-  @Override
-  public LanguageLevel getLanguageLevel() {
-    return myLanguageLevel.isNull() ? myLanguageLevelValue.getValue() : myLanguageLevel.get();
-  }
-
-  @Nullable
-  @Override
-  public LanguageLevel getLanguageLevelNoDefault() {
-    return myLanguageLevel.get();
-  }
-
-  @Override
-  public SpecialDirLocation getSpecialDirLocation() {
-    return mySpecialDirLocation;
-  }
-
-  @Nullable
-  @Override
-  public Sdk getSdkForCompilation() {
-    return getSdk();
-  }
-
-  @Nullable
-  @Override
-  public String getBytecodeVersion() {
-    return myBytecodeVersion;
-  }
-
-  @Override
-  public Set<VirtualFile> getCompilationClasspath(CompileContext compileContext, ModuleChunk moduleChunk) {
-    Sdk sdk = getSdk();
-    if (sdk == null) {
-      return Set.of();
-    }
-    return moduleChunk.getCompilationClasspathFiles((SdkType)sdk.getSdkType());
-  }
-
-  @Override
-  public Set<VirtualFile> getCompilationBootClasspath(CompileContext compileContext, ModuleChunk moduleChunk) {
-    Sdk sdk = getSdk();
-    if (sdk == null) {
-      return Set.of();
-    }
-    return moduleChunk.getCompilationBootClasspathFiles((SdkType) sdk.getSdkType());
-  }
-
-  public ModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel() {
-    return myLanguageLevel;
-  }
-
-  @Override
-  public Class<? extends SdkType> getSdkTypeClass() {
-    return JavaSdkType.class;
-  }
-
-  @Override
-  public List<String> getCompilerArguments() {
-    return myCompilerArguments;
-  }
-
-  @Override
-  protected void getStateImpl(Element element) {
-    super.getStateImpl(element);
-
-    myLanguageLevel.toXml(element);
-
-    if (mySpecialDirLocation != SpecialDirLocation.SOURCE_DIR) {
-      element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
+    public JavaModuleExtensionImpl(String id, ModuleRootLayer moduleRootLayer) {
+        super(id, moduleRootLayer);
+        myLanguageLevel = new LanguageLevelModuleInheritableNamedPointerImpl(moduleRootLayer, id);
+        myLanguageLevelValue = new LazyValueBySdk<>(this, LanguageLevel.HIGHEST, sdk -> {
+            JavaSdkVersion sdkVersion = JavaSdkTypeUtil.getVersion(sdk);
+            return sdkVersion == null ? LanguageLevel.HIGHEST : sdkVersion.getMaxLanguageLevel();
+        });
     }
 
-    if (!StringUtil.isEmpty(myBytecodeVersion)) {
-      element.setAttribute(BYTECODE_VERSION, myBytecodeVersion);
+    @RequiredReadAction
+    @Override
+    public void commit(JavaModuleExtensionImpl mutableModuleExtension) {
+        super.commit(mutableModuleExtension);
+
+        myLanguageLevel.set(mutableModuleExtension.getInheritableLanguageLevel());
+        mySpecialDirLocation = mutableModuleExtension.getSpecialDirLocation();
+        myBytecodeVersion = mutableModuleExtension.getBytecodeVersion();
+        myCompilerArguments.clear();
+        myCompilerArguments.addAll(mutableModuleExtension.getCompilerArguments());
     }
 
-    if (!myCompilerArguments.isEmpty()) {
-      Element compilerArgs = new Element(COMPILER_ARGUMENTS);
-      element.addContent(compilerArgs);
-
-      for (String compilerArgument : myCompilerArguments) {
-        compilerArgs.addContent(new Element(COMPILER_ARGUMENT).setText(compilerArgument));
-      }
+    @Override
+    public LanguageLevel getLanguageLevel() {
+        return myLanguageLevel.isNull() ? myLanguageLevelValue.getValue() : myLanguageLevel.get();
     }
-  }
 
-  @RequiredReadAction
-  @Override
-  protected void loadStateImpl(Element element) {
-    super.loadStateImpl(element);
-
-    myLanguageLevel.fromXml(element);
-    mySpecialDirLocation = SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.SOURCE_DIR.name()));
-    myBytecodeVersion = element.getAttributeValue(BYTECODE_VERSION, (String) null);
-
-    Element compilerArgs = element.getChild(COMPILER_ARGUMENTS);
-    if (compilerArgs != null) {
-      for (Element compilerArg : compilerArgs.getChildren(COMPILER_ARGUMENT)) {
-        myCompilerArguments.add(compilerArg.getTextTrim());
-      }
+    @Nullable
+    @Override
+    public LanguageLevel getLanguageLevelNoDefault() {
+        return myLanguageLevel.get();
     }
-  }
+
+    @Override
+    public SpecialDirLocation getSpecialDirLocation() {
+        return mySpecialDirLocation;
+    }
+
+    @Nullable
+    @Override
+    public Sdk getSdkForCompilation() {
+        return getSdk();
+    }
+
+    @NonNull
+    @Override
+    public LinkedHashMap<String, String> getManifestAttributes() {
+        return myManifestAttributes;
+    }
+
+    @Nullable
+    @Override
+    public String getBytecodeVersion() {
+        return myBytecodeVersion;
+    }
+
+    @Override
+    public Set<VirtualFile> getCompilationClasspath(CompileContext compileContext, ModuleChunk moduleChunk) {
+        Sdk sdk = getSdk();
+        if (sdk == null) {
+            return Set.of();
+        }
+        return moduleChunk.getCompilationClasspathFiles((SdkType) sdk.getSdkType());
+    }
+
+    @Override
+    public Set<VirtualFile> getCompilationBootClasspath(CompileContext compileContext, ModuleChunk moduleChunk) {
+        Sdk sdk = getSdk();
+        if (sdk == null) {
+            return Set.of();
+        }
+        return moduleChunk.getCompilationBootClasspathFiles((SdkType) sdk.getSdkType());
+    }
+
+    public ModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel() {
+        return myLanguageLevel;
+    }
+
+    @Override
+    public Class<? extends SdkType> getSdkTypeClass() {
+        return JavaSdkType.class;
+    }
+
+    @Override
+    public List<String> getCompilerArguments() {
+        return myCompilerArguments;
+    }
+
+    @Override
+    protected void getStateImpl(Element element) {
+        super.getStateImpl(element);
+
+        myLanguageLevel.toXml(element);
+
+        if (mySpecialDirLocation != SpecialDirLocation.SOURCE_DIR) {
+            element.setAttribute(SPECIAL_DIR_LOCATION, mySpecialDirLocation.name());
+        }
+
+        if (!StringUtil.isEmpty(myBytecodeVersion)) {
+            element.setAttribute(BYTECODE_VERSION, myBytecodeVersion);
+        }
+
+        if (!myCompilerArguments.isEmpty()) {
+            Element compilerArgs = new Element(COMPILER_ARGUMENTS);
+            element.addContent(compilerArgs);
+
+            for (String compilerArgument : myCompilerArguments) {
+                compilerArgs.addContent(new Element(COMPILER_ARGUMENT).setText(compilerArgument));
+            }
+        }
+
+        if (!myManifestAttributes.isEmpty()) {
+            Element manifestAttributes = new Element(MANIFEST_ATTRIBUTE);
+            element.addContent(manifestAttributes);
+
+            for (Map.Entry<String, String> entry : myManifestAttributes.entrySet()) {
+                Element manifestAttribute = new Element(MANIFEST_ATTRIBUTE);
+                manifestAttribute.setAttribute("key", entry.getKey());
+                manifestAttribute.setAttribute("value", entry.getValue());
+
+                manifestAttributes.addContent(manifestAttribute);
+            }
+        }
+    }
+
+    @RequiredReadAction
+    @Override
+    protected void loadStateImpl(Element element) {
+        super.loadStateImpl(element);
+
+        myLanguageLevel.fromXml(element);
+        mySpecialDirLocation = SpecialDirLocation.valueOf(element.getAttributeValue(SPECIAL_DIR_LOCATION, SpecialDirLocation.SOURCE_DIR.name()));
+        myBytecodeVersion = element.getAttributeValue(BYTECODE_VERSION, (String) null);
+
+        Element compilerArgs = element.getChild(COMPILER_ARGUMENTS);
+        if (compilerArgs != null) {
+            for (Element compilerArg : compilerArgs.getChildren(COMPILER_ARGUMENT)) {
+                myCompilerArguments.add(compilerArg.getTextTrim());
+            }
+        }
+
+        Element manifestAttributes = element.getChild(MANIFEST_ATTRIBUTES);
+        if (manifestAttributes != null) {
+            LinkedHashMap<String, String> manifestMap = new LinkedHashMap<>();
+
+            for (Element manifestAttribute : manifestAttributes.getChildren(MANIFEST_ATTRIBUTE)) {
+                String manifestKey = manifestAttribute.getAttributeValue("key");
+                String manifestValue = manifestAttribute.getAttributeValue("value");
+                if (manifestValue != null) {
+                    manifestMap.put(manifestKey, manifestValue);
+                }
+            }
+
+            myManifestAttributes = manifestMap;
+        }
+    }
 }

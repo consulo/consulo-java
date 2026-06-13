@@ -1,12 +1,13 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
-import com.intellij.java.analysis.impl.psi.impl.search.JavaModuleFinderImpl;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.PsiJavaModuleModificationTracker;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
+import com.intellij.java.language.impl.psi.util.JavaManifestUtil;
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.CachedValueProvider.Result;
 import consulo.application.util.CachedValuesManager;
 import consulo.component.util.graph.DFSTBuilder;
@@ -17,7 +18,9 @@ import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.file.LanguageFileType;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.search.FilenameIndex;
 import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.project.DumbService;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.module.content.ModuleRootManager;
@@ -31,6 +34,7 @@ import consulo.util.collection.MultiMap;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.VirtualFile;
+import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 import consulo.virtualFileSystem.fileType.FileTypeRegistry;
 
 import org.jspecify.annotations.Nullable;
@@ -87,7 +91,45 @@ public final class JavaModuleGraphUtil {
     if (file == null) {
       return null;
     }
-    return JavaPsiFacade.getInstance(project).findModule(file);
+    ProjectFileIndex index = ProjectFileIndex.getInstance(project);
+    return index.isInLibrary(file)
+      ? findDescriptorInLibrary(file, project)
+      : findDescriptorByModule(index.getModuleForFile(file), index.isInTestSourceContent(file));
+  }
+
+  /**
+   * @param file    library content root
+   * @param project current project
+   * @return JPMS module declared by the supplied library; null if not found
+   */
+  @Nullable
+  @RequiredReadAction
+  public static PsiJavaModule findDescriptorInLibrary(VirtualFile file, Project project) {
+    ProjectFileIndex index = ProjectFileIndex.getInstance(project);
+    VirtualFile root = index.getClassRootForFile(file);
+    if (root != null) {
+      VirtualFile descriptorFile = JavaModuleNameIndex.descriptorFile(root);
+      if (descriptorFile != null) {
+        PsiFile psiFile = PsiManager.getInstance(project).findFile(descriptorFile);
+        if (psiFile instanceof PsiJavaFile) {
+          return ((PsiJavaFile) psiFile).getModuleDeclaration();
+        }
+      }
+      else if (root.getFileSystem() instanceof ArchiveFileSystem && "jar".equalsIgnoreCase(root.getExtension())) {
+        return LightJavaModule.findModule(PsiManager.getInstance(project), root);
+      }
+    }
+    else {
+      root = index.getSourceRootForFile(file);
+      if (root != null) {
+        VirtualFile moduleDescriptor = root.findChild(PsiJavaModule.MODULE_INFO_FILE);
+        PsiFile psiFile = moduleDescriptor != null ? PsiManager.getInstance(project).findFile(moduleDescriptor) : null;
+        if (psiFile instanceof PsiJavaFile) {
+          return ((PsiJavaFile) psiFile).getModuleDeclaration();
+        }
+      }
+    }
+    return null;
   }
 
   @Nullable
@@ -111,22 +153,53 @@ public final class JavaModuleGraphUtil {
 
   @Nullable
   private static PsiJavaModule findDescriptionByModuleInner(Module module, boolean inTests) {
-    Predicate<ContentFolderTypeProvider> rootType = inTests ? LanguageContentFolderScopes.test() : LanguageContentFolderScopes.production();
-    List<VirtualFile> files = ContainerUtil.mapNotNull(ModuleRootManager.getInstance(module).getContentFolderFiles(rootType),
-        root -> root.findChild(PsiJavaModule.MODULE_INFO_FILE));
-    if (files.size() == 1) {
-      PsiFile psiFile = PsiManager.getInstance(module.getProject()).findFile(files.get(0));
-      if (psiFile instanceof PsiJavaFile) {
-        return ((PsiJavaFile) psiFile).getModuleDeclaration();
-      }
-    } else if (files.isEmpty()) {
-      files = ContainerUtil.mapNotNull(ModuleRootManager.getInstance(module).getContentFolderFiles(rootType),
-          root -> root.findFileByRelativePath(JarFile.MANIFEST_NAME));
-      if (files.size() == 1) {
+    Project project = module.getProject();
+    GlobalSearchScope moduleScope = GlobalSearchScope.moduleScope(module);
+    String virtualAutoModuleName = JavaManifestUtil.getManifestAttributeValue(module, PsiJavaModule.AUTO_MODULE_NAME);
+    if (!DumbService.isDumb(project) &&
+        FilenameIndex.getVirtualFilesByName(project, PsiJavaModule.MODULE_INFO_FILE, moduleScope).isEmpty() &&
+        FilenameIndex.getVirtualFilesByName(project, "MANIFEST.MF", moduleScope).isEmpty() &&
+        virtualAutoModuleName == null) {
+      return null;
+    }
+    ModuleRootManager rootManager = ModuleRootManager.getInstance(module);
+    Set<VirtualFile> excludeRoots = new HashSet<>(Arrays.asList(rootManager.getExcludeRoots()));
+    Predicate<ContentFolderTypeProvider> sourceScope = inTests ? LanguageContentFolderScopes.onlyTest() : LanguageContentFolderScopes.onlyProduction();
+    List<VirtualFile> sourceRoots =
+        ContainerUtil.filter(Arrays.asList(rootManager.getContentFolderFiles(sourceScope)), root -> !excludeRoots.contains(root));
+
+    List<VirtualFile> files = ContainerUtil.mapNotNull(sourceRoots, root -> root.findChild(PsiJavaModule.MODULE_INFO_FILE));
+    if (files.isEmpty()) {
+      // META-INF/MANIFEST.MF can live in source or resource roots
+      Predicate<ContentFolderTypeProvider> sourceAndResourceScope =
+          inTests ? LanguageContentFolderScopes.test() : LanguageContentFolderScopes.production();
+      List<VirtualFile> roots =
+          ContainerUtil.filter(Arrays.asList(rootManager.getContentFolderFiles(sourceAndResourceScope)), root -> !excludeRoots.contains(root));
+      files = ContainerUtil.mapNotNull(roots, root -> root.findFileByRelativePath(JarFile.MANIFEST_NAME));
+      if (files.size() == 1 || new HashSet<>(files).size() == 1) {
         VirtualFile manifest = files.get(0);
-        String name = LightJavaModule.claimedModuleName(manifest);
-        if (name != null) {
-          return LightJavaModule.findModule(PsiManager.getInstance(module.getProject()), manifest.getParent().getParent());
+        PsiFile manifestPsi = PsiManager.getInstance(project).findFile(manifest);
+        if (manifestPsi != null) {
+          return LanguageCachedValueUtil.getCachedValue(manifestPsi, () -> {
+            String name = LightJavaModule.claimedModuleName(manifest);
+            LightJavaModule result =
+                name != null ? LightJavaModule.create(PsiManager.getInstance(project), manifest.getParent().getParent(), name) : null;
+            return Result.create(result, manifestPsi, ProjectRootModificationTracker.getInstance(project));
+          });
+        }
+      }
+      // automatic module name provided by the build system (e.g. maven-jar-plugin Automatic-Module-Name in the POM)
+      VirtualFile[] sourceSourceRoots = rootManager.getContentFolderFiles(LanguageContentFolderScopes.onlyProduction());
+      if (virtualAutoModuleName != null && sourceSourceRoots.length != 0) {
+        return LightJavaModule.create(PsiManager.getInstance(project), sourceSourceRoots[0], virtualAutoModuleName);
+      }
+    }
+    else {
+      VirtualFile file = files.get(0);
+      if (ContainerUtil.and(files, f -> f.equals(file))) {
+        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+        if (psiFile instanceof PsiJavaFile) {
+          return ((PsiJavaFile) psiFile).getModuleDeclaration();
         }
       }
     }
@@ -568,7 +641,7 @@ public final class JavaModuleGraphUtil {
       }
       ProjectFileIndex index = ProjectFileIndex.getInstance(project);
       if (index.isInLibrary(file)) {
-        return myIncludeLibraries && contains(JavaModuleFinderImpl.findDescriptorInLibrary(project, index, file));
+        return myIncludeLibraries && contains(findDescriptorInLibrary(file, project));
       }
       Module module = index.getModuleForFile(file);
       return contains(findDescriptorByModule(module, myIsInTests));

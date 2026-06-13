@@ -19,22 +19,23 @@ package consulo.java.language.module.extension;
 import com.intellij.java.language.LanguageLevel;
 import consulo.module.extension.MutableModuleExtensionWithSdk;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
-
 import org.jspecify.annotations.Nullable;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
  * @author VISTALL
  * @since 05.05.14
  */
-public interface JavaMutableModuleExtension<T extends JavaModuleExtension<T>> extends MutableModuleExtensionWithSdk<T>, JavaModuleExtension<T>
-{
-	MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel();
+public interface JavaMutableModuleExtension<T extends JavaModuleExtension<T>> extends MutableModuleExtensionWithSdk<T>, JavaModuleExtension<T> {
+    MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel();
 
-	void setSpecialDirLocation(SpecialDirLocation location);
+    void setSpecialDirLocation(SpecialDirLocation location);
 
-	void setBytecodeVersion(@Nullable String version);
+    void setBytecodeVersion(@Nullable String version);
 
-	void setCompilerArguments(List<String> arguments);
+    void setCompilerArguments(List<String> arguments);
+
+    void setManifestAttributes(LinkedHashMap<String, String> manifestAttributes);
 }

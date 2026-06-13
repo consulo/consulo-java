@@ -22,7 +22,6 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.util.dataholder.NotNullLazyKey;
-import consulo.virtualFileSystem.VirtualFile;
 
 import org.jspecify.annotations.Nullable;
 import java.util.Collection;
@@ -72,12 +71,6 @@ public abstract class JavaPsiFacade {
    */
   @Nullable
   public abstract PsiJavaPackage findPackage(String qualifiedName);
-
-  /**
-   * Search java module for file. Can be automatic module or explicit declaration from java file
-   */
-  @Nullable
-  public abstract PsiJavaModule findModule(VirtualFile file);
 
   public abstract PsiJavaPackage[] getSubPackages(PsiJavaPackage psiPackage, GlobalSearchScope scope);
 

@@ -32,7 +32,6 @@ import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
@@ -57,8 +56,6 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
     private final Map<GlobalSearchScope, Map<String, Collection<PsiJavaModule>>> myModulesByScopeCache =
         ContainerUtil.createConcurrentSoftKeySoftValueMap();
 
-    private final Map<VirtualFile, PsiJavaModule> myModuleScopeByFile = ContainerUtil.createConcurrentWeakKeyWeakValueMap();
-
     @Inject
     public JavaPsiFacadeImpl(
         Project project,
@@ -76,7 +73,6 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
 
         project.getMessageBus().connect().subscribe(PsiModificationTrackerListener.class, () -> {
             myModulesByScopeCache.clear();
-            myModuleScopeByFile.clear();
         });
 
         JavaElementType.ANNOTATION.getIndex(); // Initialize stubs.
@@ -161,24 +157,6 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
             }
         }
         return (PsiJavaPackage)myPackageManager.findPackage(qualifiedName, JavaModuleExtension.class);
-    }
-
-    @Nullable
-    @Override
-    public PsiJavaModule findModule(VirtualFile file) {
-        PsiJavaModule psiJavaModule = myModuleScopeByFile.get(file);
-        if (psiJavaModule != null) {
-            return psiJavaModule;
-        }
-
-        for (PsiElementFinder finder : filteredFinders()) {
-            PsiJavaModule module = finder.findModule(file);
-            if (module != null) {
-                myModuleScopeByFile.put(file, module);
-                return module;
-            }
-        }
-        return null;
     }
 
     @Override

@@ -57,14 +57,14 @@ import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class LightJavaModule extends LightElement implements PsiJavaModule {
+public final class LightJavaModule extends LightElement implements PsiJavaModule {
   private static final Key<String> CLAIMED_MODULE_NAME_KEY = Key.create("LightJavaModule.claimedModuleName");
 
   private final LightJavaModuleReferenceElement myRefElement;
   private final VirtualFile myRoot;
   private final Supplier<List<PsiPackageAccessibilityStatement>> myExports = LazyValue.atomicNotNull(this::findExports);
 
-  public LightJavaModule(PsiManager manager, VirtualFile root, String name) {
+  private LightJavaModule(PsiManager manager, VirtualFile root, String name) {
     super(manager, JavaLanguage.INSTANCE);
     myRoot = root;
     myRefElement = new LightJavaModuleReferenceElement(manager, name);

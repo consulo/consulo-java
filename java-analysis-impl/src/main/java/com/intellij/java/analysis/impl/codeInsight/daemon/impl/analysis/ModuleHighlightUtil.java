@@ -66,7 +66,7 @@ public class ModuleHighlightUtil {
             return null;
         }
 
-        return JavaPsiFacade.getInstance(fsItem.getProject()).findModule(file);
+        return JavaModuleGraphUtil.findDescriptorByFile(file, fsItem.getProject());
     }
 
     @RequiredReadAction

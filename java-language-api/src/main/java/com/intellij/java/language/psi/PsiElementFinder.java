@@ -24,7 +24,6 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.SmartList;
-import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
@@ -72,14 +71,6 @@ public abstract class PsiElementFinder {
      */
     @Nullable
     public PsiJavaPackage findPackage(String qualifiedName) {
-        return null;
-    }
-
-    /**
-     * Search java module for file. Can be automatic module or explicit declaration from java file
-     */
-    @Nullable
-    public PsiJavaModule findModule(VirtualFile file) {
         return null;
     }
 

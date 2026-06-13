@@ -22,8 +22,10 @@ import consulo.content.bundle.Sdk;
 import consulo.module.extension.ModuleExtensionWithSdk;
 import consulo.virtualFileSystem.VirtualFile;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -57,4 +59,6 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
   String getBytecodeVersion();
 
   List<String> getCompilerArguments();
+
+  @NonNull Map<String, String> getManifestAttributes();
 }

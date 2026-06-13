@@ -29,9 +29,10 @@ import consulo.ui.Label;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.layout.VerticalLayout;
 import consulo.util.lang.Comparing;
-
 import org.jspecify.annotations.Nullable;
+
 import javax.swing.*;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -39,76 +40,81 @@ import java.util.List;
  * @since 12:39/19.05.13
  */
 public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl>, SwingMutableModuleExtension {
-  public JavaMutableModuleExtensionImpl(String id, ModuleRootLayer moduleRootLayer) {
-    super(id, moduleRootLayer);
-  }
-
-  @RequiredUIAccess
-  @Nullable
-  @Override
-  public JComponent createConfigurablePanel(Disposable disposable, Runnable updateOnCheck) {
-    return new JavaModuleExtensionPanel(this, updateOnCheck);
-  }
-
-  @RequiredUIAccess
-  @Nullable
-  @Override
-  public Component createConfigurationComponent(Disposable disposable, Runnable runnable) {
-    return VerticalLayout.create().add(Label.create("Unsupported platform"));
-  }
-
-  @Override
-  public void setEnabled(boolean val) {
-    myIsEnabled = val;
-  }
-
-  @Override
-  public MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel() {
-    return myLanguageLevel;
-  }
-
-  @Override
-  public void setBytecodeVersion(@Nullable String version) {
-    myBytecodeVersion = version;
-  }
-
-  @Override
-  public void setCompilerArguments(List<String> arguments) {
-    myCompilerArguments.clear();
-    myCompilerArguments.addAll(arguments);
-  }
-
-  @Override
-  public void setSpecialDirLocation(SpecialDirLocation specialDirLocation) {
-    mySpecialDirLocation = specialDirLocation;
-  }
-
-  @Override
-  public boolean isModified(JavaModuleExtensionImpl javaModuleExtension) {
-    if (isModifiedImpl(javaModuleExtension)) {
-      return true;
+    public JavaMutableModuleExtensionImpl(String id, ModuleRootLayer moduleRootLayer) {
+        super(id, moduleRootLayer);
     }
 
-    if (!myLanguageLevel.equals(javaModuleExtension.getInheritableLanguageLevel())) {
-      return true;
+    @RequiredUIAccess
+    @Nullable
+    @Override
+    public JComponent createConfigurablePanel(Disposable disposable, Runnable updateOnCheck) {
+        return new JavaModuleExtensionPanel(this, updateOnCheck);
     }
 
-    if (!Comparing.equal(myBytecodeVersion, javaModuleExtension.getBytecodeVersion())) {
-      return true;
+    @RequiredUIAccess
+    @Nullable
+    @Override
+    public Component createConfigurationComponent(Disposable disposable, Runnable runnable) {
+        return VerticalLayout.create().add(Label.create("Unsupported platform"));
     }
 
-    if (!mySpecialDirLocation.equals(javaModuleExtension.getSpecialDirLocation())) {
-      return true;
+    @Override
+    public void setEnabled(boolean val) {
+        myIsEnabled = val;
     }
 
-    if (!myCompilerArguments.equals(javaModuleExtension.myCompilerArguments)) {
-      return true;
+    @Override
+    public MutableModuleInheritableNamedPointer<LanguageLevel> getInheritableLanguageLevel() {
+        return myLanguageLevel;
     }
-    return false;
-  }
 
-  @Override
-  public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk() {
-    return (MutableModuleInheritableNamedPointer<Sdk>) super.getInheritableSdk();
-  }
+    @Override
+    public void setBytecodeVersion(@Nullable String version) {
+        myBytecodeVersion = version;
+    }
+
+    @Override
+    public void setCompilerArguments(List<String> arguments) {
+        myCompilerArguments.clear();
+        myCompilerArguments.addAll(arguments);
+    }
+
+    @Override
+    public void setManifestAttributes(LinkedHashMap<String, String> manifestAttributes) {
+        myManifestAttributes = new LinkedHashMap<>(manifestAttributes);
+    }
+
+    @Override
+    public void setSpecialDirLocation(SpecialDirLocation specialDirLocation) {
+        mySpecialDirLocation = specialDirLocation;
+    }
+
+    @Override
+    public boolean isModified(JavaModuleExtensionImpl javaModuleExtension) {
+        if (isModifiedImpl(javaModuleExtension)) {
+            return true;
+        }
+
+        if (!myLanguageLevel.equals(javaModuleExtension.getInheritableLanguageLevel())) {
+            return true;
+        }
+
+        if (!Comparing.equal(myBytecodeVersion, javaModuleExtension.getBytecodeVersion())) {
+            return true;
+        }
+
+        if (!mySpecialDirLocation.equals(javaModuleExtension.getSpecialDirLocation())) {
+            return true;
+        }
+
+        if (!myCompilerArguments.equals(javaModuleExtension.myCompilerArguments)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public MutableModuleInheritableNamedPointer<Sdk> getInheritableSdk() {
+        return (MutableModuleInheritableNamedPointer<Sdk>) super.getInheritableSdk();
+    }
 }
