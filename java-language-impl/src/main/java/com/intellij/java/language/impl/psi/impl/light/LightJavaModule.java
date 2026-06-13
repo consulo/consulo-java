@@ -64,7 +64,7 @@ public class LightJavaModule extends LightElement implements PsiJavaModule {
   private final VirtualFile myRoot;
   private final Supplier<List<PsiPackageAccessibilityStatement>> myExports = LazyValue.atomicNotNull(this::findExports);
 
-  private LightJavaModule(PsiManager manager, VirtualFile root, String name) {
+  public LightJavaModule(PsiManager manager, VirtualFile root, String name) {
     super(manager, JavaLanguage.INSTANCE);
     myRoot = root;
     myRefElement = new LightJavaModuleReferenceElement(manager, name);
