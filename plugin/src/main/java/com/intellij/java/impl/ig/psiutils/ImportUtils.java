@@ -15,28 +15,239 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
+import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import com.intellij.java.language.impl.psi.util.ImportsUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.search.PsiShortNamesCache;
 import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.util.CachedValueProvider;
+import consulo.project.DumbService;
 import consulo.project.Project;
+import consulo.util.lang.ThreeState;
+import consulo.util.lang.ref.Ref;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.language.psi.PsiModificationTracker;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.ObjectUtil;
+import consulo.util.lang.StringUtil;
 import com.siyeh.HardcodedMethodConstants;
 import com.siyeh.ig.psiutils.ClassUtils;
 
 import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ImportUtils {
 
   private ImportUtils() {
+  }
+
+  /**
+   * Optimizes module imports for a given Java file by removing redundant module import statements.
+   * A module import is redundant when another (explicit or implicit) module import already
+   * transitively reads the same target module.
+   *
+   * @param file the Java file for which module imports need to be optimized
+   * @return a list of optimized module import statements.
+   */
+  public static List<PsiImportModuleStatement> optimizeModuleImports(PsiJavaFile file) {
+    return LanguageCachedValueUtil.getCachedValue(file, () -> {
+      PsiImportList importList = file.getImportList();
+      if (importList == null) {
+        return CachedValueProvider.Result.create(List.<PsiImportModuleStatement>of(), PsiModificationTracker.MODIFICATION_COUNT);
+      }
+      List<PsiImportModuleStatement> statements = Arrays.asList(importList.getImportModuleStatements());
+      List<PsiImportModuleStatement> implicit =
+        ContainerUtil.filterIsInstance(ImportsUtil.getAllImplicitImports(file), PsiImportModuleStatement.class);
+      List<PsiImportModuleStatement> results = new ArrayList<>(statements);
+      Map<PsiImportModuleStatement, PsiJavaModule> modules = new HashMap<>();
+      Map<PsiJavaModule, Set<PsiJavaModule>> dependencies = new HashMap<>();
+      Set<PsiImportModuleStatement> toDelete = new HashSet<>();
+      List<PsiImportModuleStatement> allImports = ContainerUtil.concat(implicit, statements);
+      for (PsiImportModuleStatement current : statements) {
+        PsiJavaModule currentModule = modules.computeIfAbsent(current, m -> m.resolveTargetModule());
+        if (currentModule == null) {
+          continue;
+        }
+        for (PsiImportModuleStatement higher : allImports) {
+          if (toDelete.contains(higher)) {
+            continue;
+          }
+          if (higher == current) {
+            continue;
+          }
+          PsiJavaModule higherModule = modules.computeIfAbsent(higher, m -> m.resolveTargetModule());
+          if (higherModule == null) {
+            continue;
+          }
+          Set<PsiJavaModule> higherDependencies =
+            dependencies.computeIfAbsent(higherModule, m -> JavaModuleGraphUtil.getAllTransitiveModulesIncludeCurrent(m));
+          if (higherDependencies.contains(currentModule)) {
+            toDelete.add(current);
+            break;
+          }
+        }
+      }
+      results.removeAll(toDelete);
+      return CachedValueProvider.Result.create(results, PsiModificationTracker.MODIFICATION_COUNT);
+    });
+  }
+
+  /**
+   * Represents the kinds of conflict a name can have with on-demand and/or module imports.
+   */
+  public enum OnDemandImportConflict {
+    NO_CONFLICTS(false, false),
+    ON_DEMAND_IMPORT_CONFLICTS(true, false),
+    MODULE_CONFLICTS(false, true),
+    ON_DEMAND_AND_MODULE_CONFLICT(true, true);
+
+    private final boolean myConflictForOnDemand;
+    private final boolean myConflictForModules;
+
+    OnDemandImportConflict(boolean conflictForOnDemand, boolean conflictForModules) {
+      myConflictForOnDemand = conflictForOnDemand;
+      myConflictForModules = conflictForModules;
+    }
+
+    /**
+     * @return true if there is a conflict related to on-demand imports, false otherwise.
+     */
+    public boolean hasConflictForOnDemand() {
+      return myConflictForOnDemand;
+    }
+
+    /**
+     * @return true if there is a conflict related to module imports, false otherwise.
+     */
+    public boolean hasConflictForModules() {
+      return myConflictForModules;
+    }
+
+    static OnDemandImportConflict from(boolean conflictForOnDemand, boolean conflictForModules) {
+      if (conflictForOnDemand && conflictForModules) {
+        return ON_DEMAND_AND_MODULE_CONFLICT;
+      }
+      else if (conflictForOnDemand) {
+        return ON_DEMAND_IMPORT_CONFLICTS;
+      }
+      else if (conflictForModules) {
+        return MODULE_CONFLICTS;
+      }
+      else {
+        return NO_CONFLICTS;
+      }
+    }
+  }
+
+  public static ImportUtils.ImplicitImportChecker createImplicitImportChecker(PsiJavaFile file) {
+    return new ImplicitImportChecker(file);
+  }
+
+  /**
+   * The ImplicitImportChecker class provides functionality to check if a given import is implicitly
+   * imported in the context of a PsiJavaFile. It tracks both static member imports and package imports.
+   */
+  public static class ImplicitImportChecker {
+
+    private final Map<String, PsiImportStaticStatement> myStaticImportStatements = new HashMap<>();
+    private final Set<PsiImportModuleStatement> myModulesStatements = new HashSet<>();
+    private final Map<String, PsiImportStatement> myPackageStatements = new HashMap<>();
+
+    private final Map<ImplicitCacheItem, Boolean> myCache = new HashMap<>();
+
+    private ImplicitImportChecker(PsiJavaFile file) {
+      for (PsiImportStatementBase anImport : ImportsUtil.getAllImplicitImports(file)) {
+        if (anImport instanceof PsiImportStaticStatement staticStatement) {
+          PsiJavaCodeReferenceElement importReference = staticStatement.getImportReference();
+          if (importReference == null) continue;
+          String referenceName = importReference.getQualifiedName();
+          if (referenceName == null) continue;
+          myStaticImportStatements.put(staticStatement.isOnDemand() ? referenceName : StringUtil.getPackageName(referenceName),
+                                       staticStatement);
+        }
+        else if (anImport instanceof PsiImportModuleStatement moduleStatement) {
+          myModulesStatements.add(moduleStatement);
+        }
+        else if (anImport instanceof PsiImportStatement packageStatement) {
+          String qualifiedName = packageStatement.getQualifiedName();
+          if (qualifiedName == null || !packageStatement.isOnDemand()) continue;
+          myPackageStatements.put(qualifiedName, packageStatement);
+        }
+      }
+    }
+
+    record ImplicitCacheItem(String qName, boolean isStatic, OnDemandImportConflict conflicts) {
+    }
+
+    public boolean isImplicitlyImported(String qName, boolean isStatic) {
+      return isImplicitlyImported(qName, isStatic, OnDemandImportConflict.NO_CONFLICTS);
+    }
+
+    public boolean isImplicitlyImported(String qName, boolean isStatic, OnDemandImportConflict conflicts) {
+      ImplicitCacheItem cacheItem = new ImplicitCacheItem(qName, isStatic, conflicts);
+      Boolean result = myCache.get(cacheItem);
+      if (result != null) return result;
+      String packageOrClassName = StringUtil.getPackageName(qName);
+      String className = ClassUtil.extractClassName(qName);
+      if (!isStatic) {
+        if (conflicts == OnDemandImportConflict.NO_CONFLICTS) {
+          for (PsiImportModuleStatement psiImportModuleStatement : myModulesStatements) {
+            PsiPackageAccessibilityStatement importedPackage = psiImportModuleStatement.findImportedPackage(packageOrClassName);
+            if (importedPackage == null) continue;
+            PsiJavaCodeReferenceElement reference = importedPackage.getPackageReference();
+            if (reference == null) continue;
+            PsiElement resolved = reference.resolve();
+            if (resolved instanceof PsiJavaPackage psiPackage) {
+              if (psiPackage.containsClassNamed(className)) {
+                myCache.put(cacheItem, true);
+                return true;
+              }
+            }
+          }
+        }
+        if (!conflicts.hasConflictForOnDemand() && myPackageStatements.containsKey(packageOrClassName)) {
+          myCache.put(cacheItem, true);
+          return true;
+        }
+      }
+      else {
+        if (!conflicts.hasConflictForOnDemand()) {
+          PsiImportStaticStatement psiImportStaticStatement = myStaticImportStatements.get(packageOrClassName);
+          if (psiImportStaticStatement != null) {
+            if (psiImportStaticStatement.isOnDemand()) {
+              myCache.put(cacheItem, true);
+              return true;
+            }
+            PsiJavaCodeReferenceElement reference = psiImportStaticStatement.getImportReference();
+            if (reference == null) {
+              myCache.put(cacheItem, false);
+              return false;
+            }
+            String qualifiedName = reference.getQualifiedName();
+            boolean equals = qName.equals(qualifiedName);
+            myCache.put(cacheItem, equals);
+            return equals;
+          }
+        }
+      }
+      myCache.put(cacheItem, false);
+      return false;
+    }
   }
 
   public static void addImportIfNeeded(PsiClass aClass, PsiElement context) {
@@ -313,6 +524,162 @@ public class ImportUtils {
       }
     }
     return false;
+  }
+
+  /**
+   * Checks if there is an on-demand import conflict between the fully qualified name (fqName)
+   * and the specified import statements in the given Java file.
+   *
+   * @param javaFile the Java file to check for import conflicts.
+   * @param importStatements the list of import statements to check against.
+   * @param fqName the fully qualified name to check for conflicts.
+   * @param checkOnDemand check conflicts for all on-demand statements, excluding module import statements.
+   * @param checkModules check conflicts for module imports.
+   * @return true if there is an on-demand import conflict, false otherwise.
+   */
+  public static boolean hasOnDemandImportConflictWithImports(PsiJavaFile javaFile,
+                                                             Collection<? extends PsiImportStatementBase> importStatements,
+                                                             String fqName,
+                                                             boolean checkOnDemand,
+                                                             boolean checkModules) {
+    return hasOnDemandImportConflictWithImports(javaFile, importStatements, fqName, false, checkOnDemand, checkModules) == ThreeState.YES;
+  }
+
+  private static ThreeState hasOnDemandImportConflictWithImports(PsiJavaFile javaFile,
+                                                                 Collection<? extends PsiImportStatementBase> importStatements,
+                                                                 String fqName,
+                                                                 boolean strict,
+                                                                 boolean checkOnDemand,
+                                                                 boolean checkModules) {
+    final String shortName = ClassUtil.extractClassName(fqName);
+    final String packageName = ClassUtil.extractPackageName(fqName);
+    PsiClass importedClass = JavaPsiFacade.getInstance(javaFile.getProject()).findClass(packageName, javaFile.getResolveScope());
+    for (final PsiImportStatementBase importStatement : importStatements) {
+      if (!importStatement.isOnDemand()) {
+        continue;
+      }
+      if (checkModules && importStatement instanceof PsiImportModuleStatement moduleStatement) {
+        //can't process, let's assume that we have conflict because it is safe
+        if (DumbService.isDumb(javaFile.getProject())) return ThreeState.YES;
+        Ref<Boolean> result = Ref.create();
+        PsiJavaModule module = moduleStatement.resolveTargetModule();
+        if (module == null) return ThreeState.UNSURE;
+        JavaModuleGraphUtil.JavaModuleScope scope = JavaModuleGraphUtil.JavaModuleScope.moduleWithTransitiveScope(module);
+        if (scope == null) return ThreeState.UNSURE;
+        PsiShortNamesCache.getInstance(javaFile.getProject()).processClassesWithName(shortName, currentClass -> {
+          if (!currentClass.hasModifierProperty(PsiModifier.PUBLIC)) return true;
+          if (currentClass.getContainingClass() != null) return true;
+          String qualifiedName = currentClass.getQualifiedName();
+          if (qualifiedName == null) return true;
+          String currentPackage = ClassUtil.extractPackageName(qualifiedName);
+          if (currentPackage == null) return true;
+          if (currentPackage.equals(packageName)) return true;
+          PsiPackageAccessibilityStatement aPackage = moduleStatement.findImportedPackage(currentPackage);
+          if (aPackage == null || aPackage.getPackageReference() == null) return true;
+          PsiElement resolvedPackage = aPackage.getPackageReference().resolve();
+          if (resolvedPackage instanceof PsiJavaPackage currentResolvedPackage) {
+            ThreeState state = hasOnDemandImportConflictInPackage(currentResolvedPackage, shortName, javaFile, fqName, strict);
+            if (state != ThreeState.UNSURE) {
+              result.set(state.toBoolean());
+              return false;
+            }
+          }
+          return true;
+        }, scope, null);
+        if (result.get() != null) return ThreeState.fromBoolean(result.get());
+      }
+      if (!checkOnDemand) continue;
+      final PsiJavaCodeReferenceElement importReference = importStatement.getImportReference();
+      if (importReference == null) {
+        continue;
+      }
+      final String packageText = importReference.getText();
+      if (packageText.equals(packageName)) {
+        continue;
+      }
+      final PsiElement element = importReference.resolve();
+      if (element instanceof PsiJavaPackage aPackage) {
+        ThreeState state = hasOnDemandImportConflictInPackage(aPackage, shortName, javaFile, fqName, strict);
+        if (state != ThreeState.UNSURE) return state;
+      }
+      else if (element instanceof PsiClass aClass) {
+        final PsiClass innerClass = aClass.findInnerClassByName(shortName, true);
+        if (importStatement instanceof PsiImportStatement) {
+          if (innerClass != null && PsiUtil.isAccessible(innerClass, javaFile, null)) {
+            final String qualifiedName = innerClass.getQualifiedName();
+            if (!fqName.equals(qualifiedName) && (!strict || containsConflictingReference(javaFile, qualifiedName))) {
+              return ThreeState.YES;
+            }
+          }
+        }
+        else {
+          if (innerClass != null && PsiUtil.isAccessible(innerClass, javaFile, null) &&
+              innerClass.hasModifierProperty(PsiModifier.STATIC)) {
+            final String qualifiedName = innerClass.getQualifiedName();
+            if (!fqName.equals(qualifiedName) && (!strict || memberReferenced(innerClass, javaFile))) {
+              return ThreeState.YES;
+            }
+          }
+          final PsiField field = aClass.findFieldByName(shortName, true);
+          if (field != null && PsiUtil.isAccessible(field, javaFile, null) && field.hasModifierProperty(PsiModifier.STATIC)) {
+            final PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null) {
+              continue;
+            }
+            final String qualifiedName = containingClass.getQualifiedName() + '.' + field.getName();
+            if (!fqName.equals(qualifiedName) && (!strict || memberReferenced(field, javaFile))) {
+              return ThreeState.YES;
+            }
+          }
+          final PsiMethod[] methods = aClass.findMethodsByName(shortName, true);
+          for (PsiMethod method : methods) {
+            if (!PsiUtil.isAccessible(method, javaFile, null) || !method.hasModifierProperty(PsiModifier.STATIC)) {
+              continue;
+            }
+            final PsiClass containingClass = method.getContainingClass();
+            if (containingClass == null) {
+              continue;
+            }
+            final String qualifiedName = containingClass.getQualifiedName() + '.' + method.getName();
+            boolean theSameMethod = fqName.equals(qualifiedName)
+                                    ||
+                                    //can reference through inheritances
+                                    (!containingClass.isInterface() && importedClass != null &&
+                                     importedClass.isInheritor(containingClass, true));
+            if (theSameMethod) {
+              break;
+            }
+            if (!strict || memberReferenced(method, javaFile)) {
+              return ThreeState.YES;
+            }
+          }
+        }
+      }
+    }
+    return ThreeState.UNSURE;
+  }
+
+  private static ThreeState hasOnDemandImportConflictInPackage(PsiJavaPackage aPackage,
+                                                               String shortName,
+                                                               PsiFile containingFile,
+                                                               String fqName,
+                                                               boolean strict) {
+    if (!strict) {
+      if (aPackage.findClassByShortName(shortName, containingFile.getResolveScope()).length > 0) {
+        return ThreeState.YES;
+      }
+    }
+    else {
+      final PsiClass[] classes = aPackage.findClassByShortName(shortName, containingFile.getResolveScope());
+      for (final PsiClass aClass : classes) {
+        final String qualifiedClassName = aClass.getQualifiedName();
+        if (qualifiedClassName == null || fqName.equals(qualifiedClassName)) {
+          return ThreeState.UNSURE;
+        }
+        return ThreeState.fromBoolean(containsConflictingReference(containingFile, qualifiedClassName));
+      }
+    }
+    return ThreeState.UNSURE;
   }
 
   public static boolean hasDefaultImportConflict(String fqName, PsiJavaFile file) {

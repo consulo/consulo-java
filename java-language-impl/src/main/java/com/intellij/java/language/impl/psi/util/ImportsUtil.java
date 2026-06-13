@@ -18,6 +18,7 @@ package com.intellij.java.language.impl.psi.util;
 import com.intellij.java.language.psi.*;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.util.lang.Comparing;
 
 import org.jspecify.annotations.Nullable;
@@ -81,6 +82,26 @@ public class ImportsUtil {
       refExpr.replace(elementFactory.createReferenceFromText(referenceExpression.getText() + "." + refExpr
           .getText(), refExpr));
     }
+  }
+
+  /**
+   * Retrieves all implicit import statements associated with the given Java file.
+   *
+   * @param file the Java file for which to retrieve implicit import statements.
+   * @return a list of implicit import statements associated with the given Java file.
+   */
+  public static List<PsiImportStatementBase> getAllImplicitImports(PsiJavaFile file) {
+    return LanguageCachedValueUtil.getProjectPsiDependentCache(file, javaFile -> {
+      List<PsiImportStatementBase> results = new ArrayList<>();
+      for (ImplicitlyImportedElement element : javaFile.getImplicitlyImportedElements()) {
+        results.add(element.createImportStatement());
+      }
+      PsiElementFactory factory = PsiElementFactory.getInstance(javaFile.getProject());
+      for (String aPackage : javaFile.getImplicitlyImportedPackages()) {
+        results.add(factory.createImportStatementOnDemand(aPackage));
+      }
+      return Collections.unmodifiableList(results);
+    });
   }
 
   public static boolean hasStaticImportOn(final PsiElement expr, final PsiMember member, boolean acceptOnDemand) {

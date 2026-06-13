@@ -79,6 +79,14 @@ public interface PsiJavaFile extends PsiImportHolder, PsiClassOwner {
   String[] getImplicitlyImportedPackages();
 
   /**
+   * @return the array of implicitly imported elements.
+   * This array doesn't include elements from {@link #getImplicitlyImportedPackages()}
+   */
+  default ImplicitlyImportedElement[] getImplicitlyImportedElements() {
+    return ImplicitlyImportedElement.EMPTY_ARRAY;
+  }
+
+  /**
    * returns the list of reference elements for the
    * implicitly imported packages (for example, java.lang).
    *

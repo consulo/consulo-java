@@ -103,6 +103,21 @@ public enum JavaFeature {
 
     //JEP 507
     PRIMITIVE_TYPES_IN_PATTERNS(LanguageLevel.JDK_23_PREVIEW, "feature.primitive.types.in.patterns"),
+
+    //JEP 494
+    PACKAGE_IMPORTS_SHADOW_MODULE_IMPORTS(LanguageLevel.JDK_24_PREVIEW, "feature.package.import.shadow.module.import") {
+        @Override
+        public boolean isSufficient(LanguageLevel useSiteLevel) {
+            return super.isSufficient(useSiteLevel) ||
+                useSiteLevel.isAtLeast(LanguageLevel.JDK_25) ||
+                LanguageLevel.JDK_24_PREVIEW == useSiteLevel;
+        }
+
+        @Override
+        public LanguageLevel getStandardLevel() {
+            return LanguageLevel.JDK_25;
+        }
+    },
     ;
 
     private final LanguageLevel myLevel;

@@ -2,10 +2,13 @@
 package com.intellij.java.impl.psi.impl.source.codeStyle;
 
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.HighlightVisitorImpl;
+import com.intellij.java.impl.ig.psiutils.ImportUtils;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.impl.psi.impl.source.resolve.reference.impl.providers.JavaClassReference;
 import com.intellij.java.impl.psi.impl.source.tree.JavaJspElementType;
+import com.intellij.java.language.JavaFeature;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.impl.psi.util.ImportsUtil;
 import com.intellij.java.language.codeInsight.ImportFilter;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.psi.impl.source.PsiJavaCodeReferenceElementImpl;
@@ -14,6 +17,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.ClassUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.ast.ASTNode;
 import consulo.language.ast.IElementType;
 import consulo.language.codeStyle.CodeStyleManager;
@@ -83,10 +87,14 @@ public class ImportHelper {
     List<Pair<String, Boolean>> names = new ArrayList<>(collectNamesToImport(file, nonImports));
     Collections.sort(names, Comparator.comparing(o -> o.getFirst()));
 
-    List<Pair<String, Boolean>> resultList = sortItemsAccordingToSettings(names, mySettings);
+    SortedImportItems items = sortItemsWithModulesAccordingToSettings(names, mySettings);
+    List<Pair<String, Boolean>> resultList = items.imports();
+    int moduleIndex = items.moduleIndex();
 
     Map<String, Boolean> classesOrPackagesToImportOnDemand = new HashMap<>();
-    collectOnDemandImports(resultList, mySettings, classesOrPackagesToImportOnDemand);
+    List<PsiImportModuleStatement> previousModuleStatements = collectModuleImports(file, mySettings);
+    Map<String, PsiImportModuleStatement> moduleStatementMap = collectNamesImportedByModules(file, previousModuleStatements, resultList);
+    collectOnDemandImports(resultList, mySettings, classesOrPackagesToImportOnDemand, moduleStatementMap);
 
     MultiMap<String, String> conflictingMemberNames = new MultiMap<>();
     for (Pair<String, Boolean> pair : resultList) {
@@ -104,13 +112,23 @@ public class ImportHelper {
       }
     }
 
-    Set<String> classesToUseSingle = findSingleImports(file, resultList, classesOrPackagesToImportOnDemand.keySet());
-    Set<String> toReimport = new HashSet<>();
-    calcClassesConflictingViaOnDemandImports(file, classesOrPackagesToImportOnDemand, file.getResolveScope(), toReimport);
+    ImportUtils.ImplicitImportChecker checker = ImportUtils.createImplicitImportChecker(file);
+    Set<String> classesToUseSingle = findSingleImports(file, resultList, classesOrPackagesToImportOnDemand.keySet(),
+                                                       moduleStatementMap.keySet(), checker);
+
+    Collection<PsiImportModuleStatement> moduleImports =
+      mySettings.isDeleteUnusedModuleImports() ? moduleStatementMap.values() : previousModuleStatements;
+
+    Set<String> toReimport = calculateOnDemandImportConflicts(file, classesOrPackagesToImportOnDemand, moduleImports,
+                                                              moduleStatementMap.keySet());
     classesToUseSingle.addAll(toReimport);
 
+    deleteOnDemandIfAllIsSingle(classesOrPackagesToImportOnDemand, resultList, classesToUseSingle, checker);
+
     try {
-      StringBuilder text = buildImportListText(resultList, classesOrPackagesToImportOnDemand.keySet(), classesToUseSingle);
+      boolean onDemandFirst = mySettings.isLayoutOnDemandImportFromSamePackageFirst();
+      StringBuilder text = buildImportListText(resultList, classesOrPackagesToImportOnDemand.keySet(), classesToUseSingle,
+                                               checker, moduleStatementMap, previousModuleStatements, onDemandFirst, moduleIndex);
       for (PsiElement nonImport : nonImports) {
         text.append("\n").append(nonImport.getText());
       }
@@ -147,12 +165,16 @@ public class ImportHelper {
 
   public static void collectOnDemandImports(List<Pair<String, Boolean>> resultList,
                                             JavaCodeStyleSettings settings,
-                                            Map<String, Boolean> outClassesOrPackagesToImportOnDemand) {
+                                            Map<String, Boolean> outClassesOrPackagesToImportOnDemand,
+                                            Map<String, PsiImportModuleStatement> moduleStatementMap) {
     ObjectIntMap<String> packageToCountMap = ObjectMaps.newObjectIntHashMap();
     ObjectIntMap<String> classToCountMap = ObjectMaps.newObjectIntHashMap();
     for (Pair<String, Boolean> pair : resultList) {
       String name = pair.getFirst();
       Boolean isStatic = pair.getSecond();
+      if (!isStatic && moduleStatementMap.containsKey(name)) {
+        continue;
+      }
       String packageOrClassName = getPackageOrClassName(name);
       if (packageOrClassName.isEmpty()) {
         continue;
@@ -215,10 +237,11 @@ public class ImportHelper {
 
   private static Set<String> findSingleImports(PsiJavaFile file,
                                                Collection<Pair<String, Boolean>> names,
-                                               Set<String> onDemandImports) {
+                                               Set<String> onDemandImports,
+                                               Set<String> namesImportedByModuleStatements,
+                                               ImportUtils.ImplicitImportChecker checker) {
     GlobalSearchScope resolveScope = file.getResolveScope();
     String thisPackageName = file.getPackageName();
-    Set<String> implicitlyImportedPackages = new HashSet<>(Arrays.asList(file.getImplicitlyImportedPackages()));
     PsiManager manager = file.getManager();
     JavaPsiFacade facade = JavaPsiFacade.getInstance(manager.getProject());
 
@@ -232,8 +255,8 @@ public class ImportHelper {
       if (prefix.isEmpty()) {
         continue;
       }
-      boolean isImplicitlyImported = implicitlyImportedPackages.contains(prefix);
-      if (!onDemandImports.contains(prefix) && !isImplicitlyImported) {
+      boolean isImplicitlyImported = checker.isImplicitlyImported(name, isStatic);
+      if (!onDemandImports.contains(prefix) && !isImplicitlyImported && !namesImportedByModuleStatements.contains(name)) {
         continue;
       }
       String shortName = PsiNameHelper.getShortClassName(name);
@@ -295,21 +318,35 @@ public class ImportHelper {
     return namesToUseSingle;
   }
 
-  private static void calcClassesConflictingViaOnDemandImports(PsiJavaFile file,
-                                                               Map<String, Boolean> onDemandImports,
-                                                               GlobalSearchScope resolveScope,
-                                                               Set<? super String> outNamesToUseSingle) {
-    List<String> onDemands = new ArrayList<>(Arrays.asList(file.getImplicitlyImportedPackages()));
+  private static Set<String> calculateOnDemandImportConflicts(PsiJavaFile file,
+                                                              Map<String, Boolean> onDemandImports,
+                                                              Collection<PsiImportModuleStatement> usedModuleStatements,
+                                                              Set<String> namesImportedByModuleStatements) {
+    if (file instanceof PsiCompiledElement) {
+      return Collections.emptySet();
+    }
+    List<PsiImportStatementBase> implicitImports = ImportsUtil.getAllImplicitImports(file);
+    List<PsiImportModuleStatement> moduleImports =
+      new ArrayList<>(ContainerUtil.filterIsInstance(implicitImports, PsiImportModuleStatement.class));
+    moduleImports.addAll(usedModuleStatements);
+
+    List<String> onDemands =
+      implicitImports.stream()
+        .filter(implicit -> implicit.isOnDemand() &&
+                            !(implicit instanceof PsiImportModuleStatement) && implicit.getImportReference() != null)
+        .map(t -> t.getImportReference().getQualifiedName())
+        .collect(Collectors.toCollection(ArrayList::new));
     for (String onDemand : onDemandImports.keySet()) {
       if (!onDemands.contains(onDemand)) {
         onDemands.add(onDemand);
       }
     }
-    if (onDemands.size() < 2) {
-      return;
+    if (moduleImports.isEmpty() && onDemands.size() < 2) {
+      return Collections.emptySet();
     }
 
     // if we have classes x.A, x.B and there is an "import x.*" then classNames = {"x" -> ("A", "B")}
+    GlobalSearchScope resolveScope = file.getResolveScope();
     Map<String, Set<String>> classNames = new HashMap<>();
     JavaPsiFacade facade = JavaPsiFacade.getInstance(file.getProject());
     for (int i = onDemands.size() - 1; i >= 0; i--) {
@@ -320,27 +357,25 @@ public class ImportHelper {
       if (aPackage != null) { // import foo.package1.*;
         Set<String> set = Arrays.stream(aPackage.getClasses(resolveScope)).map(PsiClass::getName).collect(toSet());
         classNames.put(onDemand, set);
-      } else if ((aClass = facade.findClass(onDemand, resolveScope)) != null) {  // import static foo.package1.Class1.*;
+      }
+      else if ((aClass = facade.findClass(onDemand, resolveScope)) != null) {  // import static foo.package1.Class1.*;
         if (isStatic) {
-          PsiMember[][] membersArray = {
-              aClass.getInnerClasses(),
-              aClass.getMethods(),
-              aClass.getFields()
-          };
-          Set<String> set = Arrays.stream(membersArray)
-              .flatMap(Arrays::stream)
-              .filter(member -> member.hasModifierProperty(PsiModifier.STATIC))
-              .map(PsiMember::getName).collect(toSet());
+          Set<String> set = Arrays.stream(aClass.getInnerClasses())
+            .filter(member -> member.hasModifierProperty(PsiModifier.STATIC))
+            .map(PsiMember::getName)
+            .collect(toSet());
           classNames.put(onDemand, set);
-        } else {
+        }
+        else {
           classNames.put(onDemand, Arrays.stream(aClass.getInnerClasses()).map(PsiClass::getName).collect(toSet()));
         }
-      } else {
+      }
+      else {
         onDemands.remove(i);
       }
     }
 
-    final Set<String> conflicts = new HashSet<>();
+    Set<String> conflicts = new HashSet<>();
     for (int i = 0; i < onDemands.size(); i++) {
       String on1 = onDemands.get(i);
       for (int j = i + 1; j < onDemands.size(); j++) {
@@ -351,72 +386,250 @@ public class ImportHelper {
         conflicts.addAll(intersection);
       }
     }
-    if (!conflicts.isEmpty() && !(file instanceof PsiCompiledElement)) {
-      String packageName = file.getPackageName();
-      file.accept(new JavaRecursiveElementVisitor() {
+    if (moduleImports.isEmpty() && conflicts.isEmpty()) {
+      return Collections.emptySet();
+    }
+
+    Set<String> result = new HashSet<>();
+    String filePackageName = file.getPackageName();
+    ImportUtils.ImplicitImportChecker checker = ImportUtils.createImplicitImportChecker(file);
+    for (PsiClass aClass : file.getClasses()) {
+      // do not visit imports
+      aClass.accept(new JavaRecursiveElementVisitor() {
         @Override
         public void visitReferenceElement(PsiJavaCodeReferenceElement reference) {
           super.visitReferenceElement(reference);
           if (reference.getQualifier() != null) {
             return;
           }
-          PsiElement element = reference.resolve();
-          if (element instanceof PsiClass && conflicts.contains(((PsiClass) element).getName())) {
-            String fqn = ((PsiClass) element).getQualifiedName();
-            if (fqn != null &&
-                !PsiTreeUtil.isAncestor(file, element, true) &&
-                !packageName.equals(StringUtil.getPackageName(fqn))) {
-              outNamesToUseSingle.add(fqn);
+          JavaResolveResult resolveResult = reference.advancedResolve(false);
+          if (!(resolveResult.getElement() instanceof PsiClass psiClass)) {
+            return;
+          }
+          String qualifiedName = psiClass.getQualifiedName();
+          if (qualifiedName == null) {
+            return;
+          }
+          String referencePackageName = StringUtil.getPackageName(qualifiedName);
+          String referenceShortName = StringUtil.getShortName(qualifiedName);
+          //conflict with packages
+          boolean hasConflict = conflicts.contains(psiClass.getName());
+          if (!hasConflict) {
+            //if it is already imported by on demands, there is no conflict with modules
+            if (!(PsiUtil.isAvailable(JavaFeature.PACKAGE_IMPORTS_SHADOW_MODULE_IMPORTS, file) &&
+                  classNames.getOrDefault(referencePackageName, Collections.emptySet()).contains(referenceShortName)) ||
+                //with PACKAGE_IMPORTS_SHADOW_MODULE_IMPORTS conflicts are possible only between modules, other types of imports should be more important
+                namesImportedByModuleStatements.contains(qualifiedName)) {
+              hasConflict = !moduleImports.isEmpty() &&
+                            ImportUtils.hasOnDemandImportConflictWithImports(file, moduleImports, qualifiedName, false, true);
             }
           }
+          if (!hasConflict) {
+            return;
+          }
+          //can be visible by inheritance
+          if (!(resolveResult.getCurrentFileResolveScope() instanceof PsiImportStatementBase) &&
+              !isImplicitlyImported(psiClass, checker)) {
+            return;
+          }
+          //in the same package or in the same class
+          if (PsiTreeUtil.isAncestor(file, psiClass, true) ||
+              filePackageName.equals(referencePackageName)) {
+            return;
+          }
+          result.add(qualifiedName);
         }
       });
     }
+    return result;
   }
 
-  private static StringBuilder buildImportListText(List<Pair<String, Boolean>> names,
-                                                   Set<String> packagesOrClassesToImportOnDemand,
-                                                   Set<String> namesToUseSingle) {
-    Set<Pair<String, Boolean>> importedPackagesOrClasses = new HashSet<>();
+  private StringBuilder buildImportListText(List<Pair<String, Boolean>> imports,
+                                            Set<String> packagesOrClassesToImportOnDemand,
+                                            Set<String> namesToUseSingle,
+                                            ImportUtils.ImplicitImportChecker implicitImportContext,
+                                            Map<String, PsiImportModuleStatement> moduleStatementMap,
+                                            List<PsiImportModuleStatement> previousModuleStatements,
+                                            boolean onDemandImportsFirst,
+                                            int moduleIndex) {
+    Set<String> importedPackagesOrClasses = new HashSet<>();
     StringBuilder buffer = new StringBuilder();
-    for (Pair<String, Boolean> pair : names) {
-      String name = pair.getFirst();
-      Boolean isStatic = pair.getSecond();
-      String packageOrClassName = getPackageOrClassName(name);
-      boolean implicitlyImported = JAVA_LANG_PACKAGE.equals(packageOrClassName);
-      boolean useOnDemand = implicitlyImported || packagesOrClassesToImportOnDemand.contains(packageOrClassName);
-      Pair<String, Boolean> current = Pair.create(packageOrClassName, isStatic);
-      if (namesToUseSingle.remove(name)) {
-        if (useOnDemand && importedPackagesOrClasses.contains(current)) {
-          buffer.insert(buffer.lastIndexOf("import"), "import " + (isStatic ? "static " : "") + name + ";\n");
-          continue;
+
+    Set<PsiImportModuleStatement> usedModuleImports = new HashSet<>();
+    int indexModuleString = -1;
+    for (int i = 0; i < imports.size(); i++) {
+      if (i == moduleIndex) {
+        indexModuleString = buffer.length();
+      }
+      Pair<String, Boolean> importedName = imports.get(i);
+      String name = importedName.getFirst();
+      boolean isStatic = importedName.getSecond();
+      String packageOrClassName = StringUtil.getPackageName(name);
+      boolean implicitlyImported = implicitImportContext.isImplicitlyImported(name, isStatic);
+      if (!implicitlyImported && packagesOrClassesToImportOnDemand.remove(packageOrClassName)) {
+        appendImportStatement(packageOrClassName + ".*", isStatic, buffer);
+        importedPackagesOrClasses.add(packageOrClassName);
+      }
+      if (namesToUseSingle.contains(name)) {
+        if (!implicitlyImported && !onDemandImportsFirst && importedPackagesOrClasses.contains(packageOrClassName)) {
+          buffer.insert(buffer.lastIndexOf("import "), "import " + (isStatic ? "static " : "") + name + ";\n");
         }
-        useOnDemand = false;
+        else {
+          appendImportStatement(name, isStatic, buffer);
+        }
       }
-      if (useOnDemand && (importedPackagesOrClasses.contains(current) || implicitlyImported)) {
-        continue;
+      else if (!implicitlyImported && !importedPackagesOrClasses.contains(packageOrClassName)) {
+        if (!moduleStatementMap.containsKey(name)) {
+          appendImportStatement(name, isStatic, buffer);
+        }
+        else {
+          usedModuleImports.add(moduleStatementMap.get(name));
+        }
       }
-      buffer.append("import ");
-      if (isStatic) {
-        buffer.append("static ");
-      }
-      if (useOnDemand) {
-        importedPackagesOrClasses.add(current);
-        buffer.append(packageOrClassName);
-        buffer.append(".*");
-      } else {
-        buffer.append(name);
-      }
-      buffer.append(";\n");
     }
 
-    for (String remainingSingle : namesToUseSingle) {
-      buffer.append("import ");
-      buffer.append(remainingSingle);
-      buffer.append(";\n");
+    if (!mySettings.isDeleteUnusedModuleImports()) {
+      usedModuleImports = new HashSet<>(previousModuleStatements);
+    }
+    StringBuilder moduleStatements = new StringBuilder();
+    usedModuleImports.stream()
+      .sorted(Comparator.comparing(m -> {
+        PsiJavaModuleReferenceElement reference = m.getModuleReference();
+        if (reference == null) return "";
+        return reference.getText();
+      }))
+      .map(m -> m.getText())
+      .forEach(importModuleStatement -> {
+        moduleStatements.append(importModuleStatement).append("\n");
+      });
+    if (!moduleStatements.isEmpty()) {
+      if (indexModuleString != -1) {
+        buffer.insert(indexModuleString, moduleStatements);
+      }
+      else {
+        buffer.append(moduleStatements);
+      }
     }
 
     return buffer;
+  }
+
+  private static void appendImportStatement(String name, boolean isStatic, StringBuilder buffer) {
+    buffer.append("import ");
+    if (isStatic) {
+      buffer.append("static ");
+    }
+    buffer.append(name).append(";\n");
+  }
+
+  private record SortedImportItems(List<Pair<String, Boolean>> imports, int moduleIndex) {
+  }
+
+  private static SortedImportItems sortItemsWithModulesAccordingToSettings(List<Pair<String, Boolean>> names, JavaCodeStyleSettings settings) {
+    // Consulo's PackageEntry layout has no dedicated module-imports entry, so module imports are emitted at the top.
+    return new SortedImportItems(sortItemsAccordingToSettings(names, settings), 0);
+  }
+
+  /**
+   * Collects the names of classes that are imported by modules specified implicitly in the given Java file and in the import list.
+   *
+   * @param file       the Java file for which imported class names are being collected.
+   * @param statements a list of import module statements that specify the modules from which classes are imported.
+   * @param list       a list of import objects representing the imports from which class names need to be collected.
+   * @return a map of class names and used module imports.
+   */
+  private static Map<String, PsiImportModuleStatement> collectNamesImportedByModules(PsiJavaFile file,
+                                                                                     List<PsiImportModuleStatement> statements,
+                                                                                     List<Pair<String, Boolean>> list) {
+    List<PsiImportModuleStatement> moduleImports =
+      new ArrayList<>(ContainerUtil.filterIsInstance(ImportsUtil.getAllImplicitImports(file), PsiImportModuleStatement.class));
+    moduleImports.addAll(statements);
+
+    Map<String, PsiImportModuleStatement> usedClasses = new HashMap<>();
+    for (Pair<String, Boolean> anImport : list) {
+      if (anImport.getSecond()) {
+        continue;
+      }
+      String qualifiedName = anImport.getFirst();
+      String referencePackageName = StringUtil.getPackageName(qualifiedName);
+      String referenceShortName = StringUtil.getShortName(qualifiedName);
+      if (referencePackageName.isEmpty() || referenceShortName.isEmpty()) {
+        continue;
+      }
+      for (PsiImportModuleStatement statement : moduleImports) {
+        PsiPackageAccessibilityStatement importedPackage = statement.findImportedPackage(referencePackageName);
+        if (importedPackage == null) {
+          continue;
+        }
+        PsiJavaCodeReferenceElement packageReference = importedPackage.getPackageReference();
+        if (packageReference == null) {
+          continue;
+        }
+        PsiElement resolved = packageReference.resolve();
+        if (!(resolved instanceof PsiJavaPackage psiPackage)) {
+          continue;
+        }
+        if (!psiPackage.containsClassNamed(referenceShortName)) {
+          continue;
+        }
+        usedClasses.put(anImport.getFirst(), statement);
+      }
+    }
+    return usedClasses;
+  }
+
+  /**
+   * Collects the module import statements from the specified Java file, considering the code style settings, to insert in the new import list
+   * If there are two modules, one of which (parent) includes another, only this parent will be taken
+   *
+   * @param file     the Java file from which module import statements are collected.
+   * @param settings the code style settings that determine whether module imports should be preserved.
+   * @return a list of module import statements present in the Java file.
+   */
+  private static List<PsiImportModuleStatement> collectModuleImports(PsiJavaFile file, JavaCodeStyleSettings settings) {
+    if (!settings.isPreserveModuleImports()) {
+      return Collections.emptyList();
+    }
+    PsiImportList importList = file.getImportList();
+    if (importList == null) {
+      return Collections.emptyList();
+    }
+    return ImportUtils.optimizeModuleImports(file);
+  }
+
+  /**
+   * Removes on-demand imports from the given map if all corresponding elements are present in the singles set
+   * (individually imported) or implicitly imported.
+   */
+  private static void deleteOnDemandIfAllIsSingle(Map<String, Boolean> onDemand,
+                                                  List<Pair<String, Boolean>> allList,
+                                                  Set<String> singles,
+                                                  ImportUtils.ImplicitImportChecker checker) {
+    Set<String> save = new HashSet<>();
+    if (singles.isEmpty()) {
+      return;
+    }
+    for (Pair<String, Boolean> anImport : allList) {
+      String name = anImport.getFirst();
+      boolean isStatic = anImport.getSecond();
+      String packageOrClassName = StringUtil.getPackageName(name);
+      boolean implicitlyImported = checker.isImplicitlyImported(name, isStatic);
+      if (!singles.contains(name) && !implicitlyImported && onDemand.containsKey(packageOrClassName)) {
+        save.add(packageOrClassName);
+      }
+    }
+    onDemand.keySet().retainAll(save);
+  }
+
+  private static boolean isImplicitlyImported(@Nullable PsiClass psiClass, ImportUtils.ImplicitImportChecker checker) {
+    if (psiClass == null) {
+      return false;
+    }
+    String qualifiedName = psiClass.getQualifiedName();
+    if (qualifiedName == null) {
+      return false;
+    }
+    return checker.isImplicitlyImported(qualifiedName, psiClass.hasModifierProperty(PsiModifier.STATIC));
   }
 
   /**
@@ -873,7 +1086,8 @@ public class ImportHelper {
         .filter(aClass -> aClass != null)
         .map(aClass -> aClass.getQualifiedName()).collect(toSet());
     String newImport = StringUtil.getQualifiedName(qualifiedName, referenceName);
-    Set<String> singleImports = findSingleImports(file, Collections.singletonList(Pair.create(newImport, true)), onDemandImportedClasses);
+    Set<String> singleImports = findSingleImports(file, Collections.singletonList(Pair.create(newImport, true)), onDemandImportedClasses,
+                                                  Collections.emptySet(), ImportUtils.createImplicitImportChecker(file));
 
     return singleImports.contains(newImport);
   }
