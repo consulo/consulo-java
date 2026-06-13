@@ -177,7 +177,7 @@ public class PsiMethodImpl extends JavaStubPsiElement<PsiMethodStub> implements 
 
     @Override
     public PsiTypeParameterList getTypeParameterList() {
-        return getRequiredStubOrPsiChild(JavaStubElementTypes.TYPE_PARAMETER_LIST);
+        return getStubOrPsiChild(JavaStubElementTypes.TYPE_PARAMETER_LIST);
     }
 
     @Override
