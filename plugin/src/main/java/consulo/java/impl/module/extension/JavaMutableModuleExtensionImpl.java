@@ -110,6 +110,11 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
         if (!myCompilerArguments.equals(javaModuleExtension.myCompilerArguments)) {
             return true;
         }
+
+        if (!myManifestAttributes.equals(javaModuleExtension.myManifestAttributes)) {
+            return true;
+        }
+        
         return false;
     }
 

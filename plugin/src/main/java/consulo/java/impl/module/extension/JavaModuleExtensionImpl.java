@@ -74,8 +74,8 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
         myLanguageLevel.set(mutableModuleExtension.getInheritableLanguageLevel());
         mySpecialDirLocation = mutableModuleExtension.getSpecialDirLocation();
         myBytecodeVersion = mutableModuleExtension.getBytecodeVersion();
-        myCompilerArguments.clear();
-        myCompilerArguments.addAll(mutableModuleExtension.getCompilerArguments());
+        myCompilerArguments = new ArrayList<>(mutableModuleExtension.getCompilerArguments());
+        myManifestAttributes = new LinkedHashMap<>(mutableModuleExtension.getManifestAttributes());
     }
 
     @Override
