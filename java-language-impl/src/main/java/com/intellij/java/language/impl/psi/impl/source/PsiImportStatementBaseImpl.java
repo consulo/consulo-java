@@ -15,66 +15,60 @@
  */
 package com.intellij.java.language.impl.psi.impl.source;
 
-import consulo.language.ast.ASTNode;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiImportStatementBase;
-import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiImportStatementStub;
 import com.intellij.java.language.impl.psi.impl.source.tree.ChildRole;
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
+import com.intellij.java.language.psi.PsiImportStatementBase;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import consulo.language.ast.ASTNode;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.stub.IStubElementType;
 
 /**
  * @author dsl
  */
 public abstract class PsiImportStatementBaseImpl extends JavaStubPsiElement<PsiImportStatementStub> implements
-		PsiImportStatementBase
-{
-	public static final PsiImportStatementBaseImpl[] EMPTY_ARRAY = new PsiImportStatementBaseImpl[0];
+    PsiImportStatementBase {
+    public static final PsiImportStatementBaseImpl[] EMPTY_ARRAY = new PsiImportStatementBaseImpl[0];
 
-	protected PsiImportStatementBaseImpl(final PsiImportStatementStub stub, final IStubElementType type)
-	{
-		super(stub, type);
-	}
+    protected PsiImportStatementBaseImpl(final PsiImportStatementStub stub, final IStubElementType type) {
+        super(stub, type);
+    }
 
-	protected PsiImportStatementBaseImpl(final ASTNode node)
-	{
-		super(node);
-	}
+    protected PsiImportStatementBaseImpl(final ASTNode node) {
+        super(node);
+    }
 
-	@Override
-	public boolean isOnDemand()
-	{
-		final PsiImportStatementStub stub = getStub();
-		if(stub != null)
-		{
-			return stub.isOnDemand();
-		}
+    @Override
+    public boolean isOnDemand() {
+        final PsiImportStatementStub stub = getGreenStub();
+        if (stub != null) {
+            return stub.isOnDemand();
+        }
 
-		return calcTreeElement().findChildByRoleAsPsiElement(ChildRole.IMPORT_ON_DEMAND_DOT) != null;
-	}
+        return calcTreeElement().findChildByRoleAsPsiElement(ChildRole.IMPORT_ON_DEMAND_DOT) != null ||
+            calcTreeElement().findChildByType(JavaElementType.MODULE_REFERENCE) != null;
+    }
 
-	@Override
-	public PsiJavaCodeReferenceElement getImportReference()
-	{
-		assert isValid();
-		final PsiImportStatementStub stub = getStub();
-		if(stub != null)
-		{
-			return stub.getReference();
-		}
-		return (PsiJavaCodeReferenceElement) calcTreeElement().findChildByRoleAsPsiElement(ChildRole.IMPORT_REFERENCE);
-	}
+    @Override
+    public PsiJavaCodeReferenceElement getImportReference() {
+        PsiUtilCore.ensureValid(this);
+        final PsiImportStatementStub stub = getStub();
+        if (stub != null) {
+            return stub.getReference();
+        }
+        return (PsiJavaCodeReferenceElement) calcTreeElement().findChildByRoleAsPsiElement(ChildRole.IMPORT_REFERENCE);
+    }
 
-	@Override
-	public PsiElement resolve()
-	{
-		final PsiJavaCodeReferenceElement reference = getImportReference();
-		return reference == null ? null : reference.resolve();
-	}
+    @Override
+    public PsiElement resolve() {
+        final PsiJavaCodeReferenceElement reference = getImportReference();
+        return reference == null ? null : reference.resolve();
+    }
 
-	@Override
-	public boolean isForeignFileImport()
-	{
-		return false;
-	}
+    @Override
+    public boolean isForeignFileImport() {
+        return false;
+    }
 }
