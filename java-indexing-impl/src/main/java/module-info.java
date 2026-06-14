@@ -9,4 +9,7 @@ module consulo.java.indexing.impl {
 	exports com.intellij.java.indexing.impl;
 	exports com.intellij.java.indexing.impl.search;
 	exports com.intellij.java.indexing.impl.stubs.index;
+
+	// allow the platform to reflect on cached-value provider lambdas (CachedValueStabilityChecker)
+	opens com.intellij.java.indexing.impl.search;
 }
