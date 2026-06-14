@@ -2854,6 +2854,33 @@ public class HighlightUtil extends HighlightUtilBase {
                     return null;
                 }
 
+                // JEP 482 Flexible Constructor Bodies: assigning to an instance field of this class
+                // (on the left-hand side of a simple assignment) before super()/this() is allowed
+                if (PsiUtil.isAvailable(JavaFeature.STATEMENTS_BEFORE_SUPER, expression)
+                    && PsiUtil.getLanguageLevel(expression) != LanguageLevel.JDK_22_PREVIEW) {
+                    if (expression instanceof PsiReferenceExpression fieldRef
+                        && isOnSimpleAssignmentLeftHand(expression)
+                        && fieldRef.resolve() instanceof PsiField field
+                        && !field.isStatic()
+                        && field.getContainingClass() == aClass) {
+                        return field.hasInitializer()
+                            ? HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                                .range(expression.getTextRange())
+                                .descriptionAndTooltip(JavaCompilationErrorLocalize.fieldInitializedBeforeConstructorCall(resolvedName))
+                            : null;
+                    }
+                    if (expression instanceof PsiThisExpression) {
+                        PsiElement assignTarget = PsiUtil.skipParenthesizedExprUp(expression.getParent());
+                        if (assignTarget instanceof PsiReferenceExpression fieldRef
+                            && isOnSimpleAssignmentLeftHand(assignTarget)
+                            && fieldRef.resolve() instanceof PsiField field
+                            && !field.isStatic()
+                            && field.getContainingClass() == aClass) {
+                            return null;
+                        }
+                    }
+                }
+
                 HighlightInfo.Builder hlBuilder = createMemberReferencedError(resolvedName, expression.getTextRange());
                 if (expression instanceof PsiReferenceExpression refExpr && PsiUtil.isInnerClass(aClass)) {
                     String referenceName = refExpr.getReferenceName();
@@ -2901,6 +2928,13 @@ public class HighlightUtil extends HighlightUtilBase {
         return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
             .range(textRange)
             .descriptionAndTooltip(JavaErrorLocalize.memberReferencedBeforeConstructorCalled(resolvedName));
+    }
+
+    private static boolean isOnSimpleAssignmentLeftHand(PsiElement expr) {
+        PsiElement parent = PsiTreeUtil.skipParentsOfType(expr, PsiParenthesizedExpression.class);
+        return parent instanceof PsiAssignmentExpression assignment
+            && JavaTokenType.EQ == assignment.getOperationTokenType()
+            && PsiTreeUtil.isAncestor(assignment.getLExpression(), expr, false);
     }
 
     @RequiredReadAction

@@ -1496,6 +1496,10 @@ public class HighlightMethodUtil {
                     return null;
                 }
                 if (prevSibling instanceof PsiStatement) {
+                    // JEP 482 Flexible Constructor Bodies: statements are allowed before super()/this()
+                    if (PsiUtil.isAvailable(JavaFeature.STATEMENTS_BEFORE_SUPER, methodCall)) {
+                        return null;
+                    }
                     break;
                 }
                 prevSibling = prevSibling.getPrevSibling();
