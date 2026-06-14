@@ -2,6 +2,7 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
+import com.intellij.java.indexing.search.searches.JavaModuleSearch;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.psi.impl.PsiJavaModuleModificationTracker;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
@@ -19,6 +20,8 @@ import consulo.language.file.LanguageFileType;
 import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.search.FilenameIndex;
+import consulo.language.psi.stub.DumbModeAccessType;
+import consulo.language.psi.stub.FileBasedIndex;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.project.DumbService;
 import consulo.module.Module;
@@ -27,10 +30,10 @@ import consulo.module.content.ModuleRootManager;
 import consulo.module.content.ProjectFileIndex;
 import consulo.project.Project;
 import consulo.project.content.ProjectRootModificationTracker;
-import consulo.project.content.scope.ProjectAwareSearchScope;
 import consulo.project.content.scope.ProjectScopes;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.MultiMap;
+import consulo.util.collection.SmartList;
 import consulo.util.lang.ObjectUtil;
 import consulo.util.lang.Trinity;
 import consulo.virtualFileSystem.VirtualFile;
@@ -360,8 +363,11 @@ public final class JavaModuleGraphUtil {
 
   private static RequiresGraph getRequiresGraph(PsiJavaModule module) {
     Project project = module.getProject();
+    if (DumbService.getInstance(project).isAlternativeResolveEnabled()) {
+      return FileBasedIndex.getInstance().ignoreDumbMode(DumbModeAccessType.RELIABLE_DATA_ONLY, () -> buildRequiresGraph(project));
+    }
     return CachedValuesManager.getManager(project).getCachedValue(project, () ->
-        Result.create(buildRequiresGraph(project),
+        Result.create(FileBasedIndex.getInstance().ignoreDumbMode(DumbModeAccessType.RELIABLE_DATA_ONLY, () -> buildRequiresGraph(project)),
                       PsiJavaModuleModificationTracker.getInstance(project),
                       ProjectRootModificationTracker.getInstance(project)));
   }
@@ -371,14 +377,19 @@ public final class JavaModuleGraphUtil {
    * The resulting graph is used for tracing readability and checking package conflicts.
    */
   private static RequiresGraph buildRequiresGraph(Project project) {
+    MultiMap<String, PsiJavaModule> allModules = MultiMap.create();
     MultiMap<PsiJavaModule, PsiJavaModule> relations = MultiMap.create();
     Set<String> transitiveEdges = new HashSet<>();
 
-    JavaModuleNameIndex index = JavaModuleNameIndex.getInstance();
-    ProjectAwareSearchScope scope = ProjectScopes.getAllScope(project);
-    for (String key : index.getAllKeys(project)) {
-      for (PsiJavaModule module : index.get(key, project, scope)) {
-        visit(module, relations, transitiveEdges);
+    GlobalSearchScope scope = (GlobalSearchScope) ProjectScopes.getAllScope(project);
+    JavaModuleSearch.allModules(project, scope).forEach(module -> {
+      allModules.putValue(module.getName(), module);
+      return true;
+    });
+
+    for (PsiJavaModule module : allModules.values()) {
+      if (!(module instanceof LightJavaModule)) {
+        visit(module, relations, transitiveEdges, allModules);
       }
     }
 
@@ -386,34 +397,68 @@ public final class JavaModuleGraphUtil {
     return new RequiresGraph(graph, transitiveEdges);
   }
 
-  private static void visit(PsiJavaModule module, MultiMap<PsiJavaModule, PsiJavaModule> relations, Set<String> transitiveEdges) {
-    if (!(module instanceof LightJavaModule) && !relations.containsKey(module)) {
-      relations.putValues(module, Collections.emptyList());
-      boolean explicitJavaBase = false;
-      for (PsiRequiresStatement statement : module.getRequires()) {
-        PsiJavaModuleReference ref = statement.getModuleReference();
-        if (ref != null) {
-          if (PsiJavaModule.JAVA_BASE.equals(ref.getCanonicalText())) {
-            explicitJavaBase = true;
-          }
-          for (ResolveResult result : ref.multiResolve(false)) {
-            PsiJavaModule dependency = (PsiJavaModule) result.getElement();
-            assert dependency != null : result;
-            relations.putValue(module, dependency);
-            if (statement.hasModifierProperty(PsiModifier.TRANSITIVE)) {
-              transitiveEdges.add(RequiresGraph.key(dependency, module));
-            }
-            visit(dependency, relations, transitiveEdges);
-          }
+  /**
+   * Visits a given module and processes its dependencies and relations. Updates the set of visited modules,
+   * the relations between modules, and the set of transitive edges based on the requires statements within
+   * the module.
+   *
+   * @param module          the module to be visited
+   * @param relations       a mapping that represents module dependencies
+   * @param transitiveEdges a set of transitive edges representing transitive dependencies
+   * @param allModules      a map of module names to PsiJavaModule instances
+   */
+  private static void visit(PsiJavaModule module,
+                            MultiMap<PsiJavaModule, PsiJavaModule> relations,
+                            Set<String> transitiveEdges,
+                            MultiMap<String, PsiJavaModule> allModules) {
+    relations.putValues(module, Collections.emptyList());
+    boolean explicitJavaBase = false;
+
+    GlobalSearchScope scope = GlobalSearchScope.allScope(module.getProject());
+    for (PsiRequiresStatement statement : module.getRequires()) {
+      PsiJavaModuleReference ref = statement.getModuleReference();
+      if (ref != null) {
+        String moduleName = ref.getCanonicalText();
+        if (PsiJavaModule.JAVA_BASE.equals(moduleName)) {
+          explicitJavaBase = true;
         }
-      }
-      if (!explicitJavaBase) {
-        PsiJavaModule javaBase = JavaPsiFacade.getInstance(module.getProject()).findModule(PsiJavaModule.JAVA_BASE, module.getResolveScope());
-        if (javaBase != null) {
-          relations.putValue(module, javaBase);
+        for (PsiJavaModule dependency : filterModules(allModules.get(moduleName), scope)) {
+          relations.putValue(module, dependency);
+          if (statement.hasModifierProperty(PsiModifier.TRANSITIVE)) {
+            transitiveEdges.add(RequiresGraph.key(dependency, module));
+          }
         }
       }
     }
+
+    if (!explicitJavaBase) {
+      Collection<PsiJavaModule> modules = filterModules(allModules.get(PsiJavaModule.JAVA_BASE), module.getResolveScope());
+      if (modules.size() == 1) {
+        relations.putValue(module, modules.iterator().next());
+      }
+    }
+  }
+
+  private static List<PsiJavaModule> filterModules(Collection<PsiJavaModule> modules, GlobalSearchScope scope) {
+    SmartList<PsiJavaModule> filtered = new SmartList<>();
+    for (PsiJavaModule candidate : modules) {
+      VirtualFile candidateFile = getVirtualFile(candidate);
+      if (candidateFile != null && scope.contains(candidateFile)) {
+        filtered.add(candidate);
+      }
+    }
+    return filtered;
+  }
+
+  @Nullable
+  private static VirtualFile getVirtualFile(@Nullable PsiJavaModule module) {
+    if (module == null) {
+      return null;
+    }
+    if (module instanceof LightJavaModule light) {
+      return light.getRootVirtualFile();
+    }
+    return PsiUtilCore.getVirtualFile(module);
   }
 
   private static final class RequiresGraph {
