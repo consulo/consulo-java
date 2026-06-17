@@ -19,9 +19,10 @@ import com.intellij.java.analysis.impl.generate.config.Config;
 import com.intellij.java.analysis.impl.generate.config.DuplicationPolicy;
 import com.intellij.java.analysis.impl.generate.config.InsertWhere;
 import com.intellij.java.impl.generate.config.PolicyOptions;
+import consulo.application.Application;
 import consulo.component.util.pointer.NamedPointer;
 import consulo.language.Language;
-import consulo.language.LanguagePointerUtil;
+import consulo.language.LanguageRegistry;
 import consulo.language.editor.ui.awt.LanguageTextField;
 import consulo.project.Project;
 import consulo.ui.ex.awt.IdeBorderFactory;
@@ -59,7 +60,7 @@ public class ConfigUI extends JPanel {
   private final JComboBox sortElementsComboBox = new JComboBox();
   private final JCheckBox sortElements = new JCheckBox("Sort elements");
 
-  private static NamedPointer<Language> ourRegExpPointer = LanguagePointerUtil.createPointer("RegExp");
+  private final NamedPointer<Language> myRegExpPointer;
   /**
    * Constructor.
    *
@@ -68,10 +69,11 @@ public class ConfigUI extends JPanel {
    */
   public ConfigUI(Config config, Project project) {
     super(new BorderLayout());
-    filterFieldName = new LanguageTextField(ourRegExpPointer.get(), project, config.getFilterFieldName());
-    filterFieldType = new LanguageTextField(ourRegExpPointer.get(), project, config.getFilterFieldType());
-    filterMethodName = new LanguageTextField(ourRegExpPointer.get(), project, config.getFilterMethodName());
-    filterMethodType = new LanguageTextField(ourRegExpPointer.get(), project, config.getFilterMethodType());
+    myRegExpPointer = Application.get().getInstance(LanguageRegistry.class).createLanguagePointer("RegExp");
+    filterFieldName = new LanguageTextField(myRegExpPointer.get(), project, config.getFilterFieldName());
+    filterFieldType = new LanguageTextField(myRegExpPointer.get(), project, config.getFilterFieldType());
+    filterMethodName = new LanguageTextField(myRegExpPointer.get(), project, config.getFilterMethodName());
+    filterMethodType = new LanguageTextField(myRegExpPointer.get(), project, config.getFilterMethodType());
     init();
     setConfig(config);
   }
