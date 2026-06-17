@@ -18,10 +18,11 @@ package com.intellij.java.language.psi;
 import com.intellij.java.language.psi.tree.java.IJavaElementType;
 import com.intellij.java.language.psi.tree.java.IKeywordElementType;
 import consulo.language.ast.IElementType;
+import consulo.language.ast.StandardTokenTypes;
 import consulo.language.ast.TokenType;
 
 @SuppressWarnings("SpellCheckingInspection")
-public interface JavaTokenType extends TokenType {
+public interface JavaTokenType extends StandardTokenTypes {
   IElementType IDENTIFIER = new IJavaElementType("IDENTIFIER");
   IElementType C_STYLE_COMMENT = new IJavaElementType("C_STYLE_COMMENT");
   IElementType END_OF_LINE_COMMENT = new IJavaElementType("END_OF_LINE_COMMENT");
