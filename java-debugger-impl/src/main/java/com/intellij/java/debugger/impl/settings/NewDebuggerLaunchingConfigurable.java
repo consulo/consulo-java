@@ -57,14 +57,6 @@ public class NewDebuggerLaunchingConfigurable extends SimpleConfigurableByProper
         layout.add(LabeledBuilder.sided(JavaDebuggerLocalize.labelDebuggerLaunchingConfigurableDebuggerTransport(), transportBox));
         propertyBuilder.add(transportBox, () -> settings.DEBUGGER_TRANSPORT, it -> settings.DEBUGGER_TRANSPORT = it);
 
-        CheckBox forceClassicVMBox = CheckBox.create(JavaDebuggerLocalize.labelDebuggerLaunchingConfigurableForceClassicVm());
-        layout.add(forceClassicVMBox);
-        propertyBuilder.add(forceClassicVMBox, () -> settings.FORCE_CLASSIC_VM, it -> settings.FORCE_CLASSIC_VM = it);
-
-        CheckBox disableJitBox = CheckBox.create(JavaDebuggerLocalize.labelDebuggerLaunchingConfigurableDisableJit());
-        layout.add(disableJitBox);
-        propertyBuilder.add(disableJitBox, () -> settings.DISABLE_JIT, it -> settings.DISABLE_JIT = it);
-
         return layout;
     }
 }

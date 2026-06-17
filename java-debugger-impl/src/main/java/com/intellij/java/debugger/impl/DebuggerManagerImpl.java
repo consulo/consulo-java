@@ -113,8 +113,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         }
     };
 
-    private static final String DEBUG_KEY_NAME = "idea.xdebug.key";
-
     @Override
     public void addClassNameMapper(NameMapper mapper) {
         myNameMappers.add(mapper);
@@ -371,14 +369,6 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         }
     }
 
-    /**
-     * for Target JDKs versions 1.2.x - 1.3.0 the Classic VM should be used for debugging
-     */
-    @Deprecated
-    private static boolean shouldForceClassicVM(Sdk jdk) {
-        return false;
-    }
-
     @RequiredUIAccess
     @SuppressWarnings({"HardCodedStringLiteral"})
     public static RemoteConnection createDebugParameters(
@@ -427,61 +417,11 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         Application.get().runReadAction(() -> {
             JavaSdkUtil.addRtJar(parameters.getClassPath());
 
-            Sdk jdk = parameters.getJdk();
-            boolean forceClassicVM = shouldForceClassicVM(jdk);
-            boolean forceNoJIT = shouldForceNoJIT(jdk);
-            String debugKey = Platform.current().jvm().getRuntimeProperty(DEBUG_KEY_NAME, "-Xdebug");
-            boolean needDebugKey = shouldAddXdebugKey(jdk) || !"-Xdebug".equals(debugKey) /*the key is non-standard*/;
-
-            if (forceClassicVM || forceNoJIT || needDebugKey || !isJVMTIAvailable(jdk)) {
-                parameters.getVMParametersList().replaceOrPrepend("-Xrunjdwp:", "-Xrunjdwp:" + _debuggeeRunProperties);
-            }
-            else {
-                // use newer JVMTI if available
-                parameters.getVMParametersList().replaceOrPrepend("-Xrunjdwp:", "");
-                parameters.getVMParametersList().replaceOrPrepend("-agentlib:jdwp=", "-agentlib:jdwp=" + _debuggeeRunProperties);
-            }
-
-            if (forceNoJIT) {
-                parameters.getVMParametersList().replaceOrPrepend("-Djava.compiler=", "-Djava.compiler=NONE");
-                parameters.getVMParametersList().replaceOrPrepend("-Xnoagent", "-Xnoagent");
-            }
-
-            if (needDebugKey) {
-                parameters.getVMParametersList().replaceOrPrepend(debugKey, debugKey);
-            }
-            else {
-                // deliberately skip outdated parameter because it can disable full-speed debugging for some jdk builds
-                // see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6272174
-                parameters.getVMParametersList().replaceOrPrepend("-Xdebug", "");
-            }
-
-            parameters.getVMParametersList().replaceOrPrepend("-classic", forceClassicVM ? "-classic" : "");
+            parameters.getVMParametersList().replaceOrPrepend("-Xrunjdwp:", "");
+            parameters.getVMParametersList().replaceOrPrepend("-agentlib:jdwp=", "-agentlib:jdwp=" + _debuggeeRunProperties);
         });
 
         return new RemoteConnection(useSockets, "127.0.0.1", address, debuggerInServerMode);
-    }
-
-    @Deprecated
-    private static boolean shouldForceNoJIT(Sdk jdk) {
-        return DebuggerSettings.getInstance().DISABLE_JIT;
-    }
-
-    @Deprecated
-    private static boolean shouldAddXdebugKey(Sdk jdk) {
-        if (jdk == null) {
-            return true; // conservative choice
-        }
-        return DebuggerSettings.getInstance().DISABLE_JIT;
-    }
-
-    @Deprecated
-    private static boolean isJVMTIAvailable(Sdk jdk) {
-        if (jdk == null) {
-            return false; // conservative choice
-        }
-
-        return true;
     }
 
     @RequiredUIAccess
