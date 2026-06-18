@@ -87,6 +87,12 @@
       <val name="intValues" val="{javax.swing.SwingConstants.LEFT, javax.swing.SwingConstants.CENTER, javax.swing.SwingConstants.RIGHT, javax.swing.SwingConstants.LEADING, javax.swing.SwingConstants.TRAILING}" />
     </annotation>
   </item>
+  <item name="javax.swing.JList void addListSelectionListener(javax.swing.event.ListSelectionListener) 0">
+    <annotation name="consulo.ui.annotation.RequiredUIAccess" />
+  </item>
+  <item name="javax.swing.JList void removeListSelectionListener(javax.swing.event.ListSelectionListener) 0">
+    <annotation name="consulo.ui.annotation.RequiredUIAccess" />
+  </item>
   <item name="javax.swing.JOptionPane JOptionPane(java.lang.Object, int) 1">
     <annotation name="org.intellij.lang.annotations.MagicConstant">
       <val name="intValues" val="{javax.swing.JOptionPane.INFORMATION_MESSAGE,javax.swing.JOptionPane.WARNING_MESSAGE,javax.swing.JOptionPane.ERROR_MESSAGE,javax.swing.JOptionPane.QUESTION_MESSAGE,javax.swing.JOptionPane.PLAIN_MESSAGE}" />
