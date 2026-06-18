@@ -409,6 +409,12 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
             debuggeeRunProperties += ",suspend=n,server=y";
         }
 
+        DebuggerSettings settings = DebuggerSettings.getInstance();
+
+        if (settings.INCLUDE_VIRTUAL_THREADS) {
+            debuggeeRunProperties += ",includevirtualthreads=y";
+        }
+
         if (StringUtil.containsWhitespaces(debuggeeRunProperties)) {
             debuggeeRunProperties = "\"" + debuggeeRunProperties + "\"";
         }

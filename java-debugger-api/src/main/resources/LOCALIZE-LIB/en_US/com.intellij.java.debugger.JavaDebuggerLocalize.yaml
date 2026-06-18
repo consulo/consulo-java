@@ -723,6 +723,8 @@ label.get.jpda.dialog.prompt:
     text: To get JPDA libraries please visit
 label.group.watch.events:
     text: Watch
+label.include.virtual.threads.as.platform.threads:
+    text: List of all threads includes virtual threads as well as platform threads
 label.method.breakpoint.properties.panel.emulated:
     text: Em&ulated
 label.method.breakpoint.properties.panel.method.entry:

@@ -89,6 +89,7 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
     public boolean SKIP_CONSTRUCTORS;
     public boolean SKIP_GETTERS;
     public boolean SKIP_CLASSLOADERS = true;
+    public boolean INCLUDE_VIRTUAL_THREADS = false;
 
     public String RUN_HOTSWAP_AFTER_COMPILE = RUN_HOTSWAP_ASK;
     public boolean COMPILE_BEFORE_HOTSWAP = true;
@@ -172,18 +173,23 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
         }
         DebuggerSettings secondSettings = (DebuggerSettings) obj;
 
-        return TRACING_FILTERS_ENABLED == secondSettings.TRACING_FILTERS_ENABLED && DEBUGGER_TRANSPORT == secondSettings.DEBUGGER_TRANSPORT && StringUtil
-            .equals(EVALUATE_FINALLY_ON_POP_FRAME,
-                secondSettings.EVALUATE_FINALLY_ON_POP_FRAME) && SHOW_ALTERNATIVE_SOURCE ==
-            secondSettings.SHOW_ALTERNATIVE_SOURCE && KILL_PROCESS_IMMEDIATELY == secondSettings.KILL_PROCESS_IMMEDIATELY && HOTSWAP_IN_BACKGROUND == secondSettings.HOTSWAP_IN_BACKGROUND &&
-            SKIP_SYNTHETIC_METHODS == secondSettings.SKIP_SYNTHETIC_METHODS && SKIP_CLASSLOADERS == secondSettings.SKIP_CLASSLOADERS && SKIP_CONSTRUCTORS == secondSettings.SKIP_CONSTRUCTORS &&
-            SKIP_GETTERS == secondSettings.SKIP_GETTERS && RESUME_ONLY_CURRENT_THREAD == secondSettings.RESUME_ONLY_CURRENT_THREAD && COMPILE_BEFORE_HOTSWAP == secondSettings
-            .COMPILE_BEFORE_HOTSWAP && HOTSWAP_HANG_WARNING_ENABLED == secondSettings.HOTSWAP_HANG_WARNING_ENABLED && (RUN_HOTSWAP_AFTER_COMPILE != null ? RUN_HOTSWAP_AFTER_COMPILE
-            .equals
-                (secondSettings.RUN_HOTSWAP_AFTER_COMPILE) : secondSettings.RUN_HOTSWAP_AFTER_COMPILE == null) && DebuggerUtilsEx.filterEquals(
-            mySteppingFilters,
-            secondSettings.mySteppingFilters) &&
-            myCapturePoints.equals(((DebuggerSettings) obj).myCapturePoints);
+        return TRACING_FILTERS_ENABLED == secondSettings.TRACING_FILTERS_ENABLED
+            && DEBUGGER_TRANSPORT == secondSettings.DEBUGGER_TRANSPORT
+            && StringUtil.equals(EVALUATE_FINALLY_ON_POP_FRAME, secondSettings.EVALUATE_FINALLY_ON_POP_FRAME)
+            && SHOW_ALTERNATIVE_SOURCE == secondSettings.SHOW_ALTERNATIVE_SOURCE
+            && KILL_PROCESS_IMMEDIATELY == secondSettings.KILL_PROCESS_IMMEDIATELY
+            && HOTSWAP_IN_BACKGROUND == secondSettings.HOTSWAP_IN_BACKGROUND
+            && SKIP_SYNTHETIC_METHODS == secondSettings.SKIP_SYNTHETIC_METHODS
+            && SKIP_CLASSLOADERS == secondSettings.SKIP_CLASSLOADERS
+            && SKIP_CONSTRUCTORS == secondSettings.SKIP_CONSTRUCTORS
+            && SKIP_GETTERS == secondSettings.SKIP_GETTERS
+            && INCLUDE_VIRTUAL_THREADS == secondSettings.INCLUDE_VIRTUAL_THREADS
+            && RESUME_ONLY_CURRENT_THREAD == secondSettings.RESUME_ONLY_CURRENT_THREAD
+            && COMPILE_BEFORE_HOTSWAP == secondSettings.COMPILE_BEFORE_HOTSWAP
+            && HOTSWAP_HANG_WARNING_ENABLED == secondSettings.HOTSWAP_HANG_WARNING_ENABLED
+            && (RUN_HOTSWAP_AFTER_COMPILE != null ? RUN_HOTSWAP_AFTER_COMPILE.equals(secondSettings.RUN_HOTSWAP_AFTER_COMPILE) : secondSettings.RUN_HOTSWAP_AFTER_COMPILE == null)
+            && DebuggerUtilsEx.filterEquals(mySteppingFilters,  secondSettings.mySteppingFilters)
+            && myCapturePoints.equals(((DebuggerSettings) obj).myCapturePoints);
     }
 
     @Override

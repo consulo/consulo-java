@@ -57,6 +57,10 @@ public class NewDebuggerLaunchingConfigurable extends SimpleConfigurableByProper
         layout.add(LabeledBuilder.sided(JavaDebuggerLocalize.labelDebuggerLaunchingConfigurableDebuggerTransport(), transportBox));
         propertyBuilder.add(transportBox, () -> settings.DEBUGGER_TRANSPORT, it -> settings.DEBUGGER_TRANSPORT = it);
 
+        CheckBox includeVirtualThreadsBox = CheckBox.create(JavaDebuggerLocalize.labelIncludeVirtualThreadsAsPlatformThreads());
+        layout.add(includeVirtualThreadsBox);
+        propertyBuilder.add(includeVirtualThreadsBox, () -> settings.INCLUDE_VIRTUAL_THREADS, it -> settings.INCLUDE_VIRTUAL_THREADS = it);
+
         return layout;
     }
 }
