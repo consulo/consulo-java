@@ -3,272 +3,101 @@
   "server" : "https://i.verbaria.org/",
   "project" : "consulo-java",
   "projectVersion" : "master",
-  "generatedAt" : "2026-06-02T20:46:05.582478648Z",
+  "generatedAt" : "2026-06-19T20:00:15.064752675Z",
   "documents" : {
     "com.intellij.java.debugger.JavaDebuggerLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "7602057feaf78eec8123176b5b48f5c5"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "5a87fd10ffa4e136ab0ede5bf0e7dea8",
-          "state" : "Approved",
-          "total" : 506,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 2
       }
     },
     "com.siyeh.InspectionGadgetsLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "40e1fc032b1d6252e738965d7e9c31b9"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "0bb47801bbd16a09df965431fad891b7",
-          "state" : "Approved",
-          "total" : 2374,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "com.siyeh.IntentionPowerPackLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "fb1a635147022b9c14bc60f0bac31674"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "e0dba9db43711c4a4d53f4982f83a67f",
-          "state" : "Approved",
-          "total" : 228,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.JavaCompletionLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "8deac19a932ed6704897905f8221eb43"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "22a077921030e6af3b5c6f4cc9a558be",
-          "state" : "Approved",
-          "total" : 10,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.JavaLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "dcd18a31b6561aad27a3e8a6da19e44b"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "254fd7962245b80a2f15d2f1dc5556fe",
-          "state" : "Approved",
-          "total" : 153,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.JavaRefactoringLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "ed5d9c45ba638b396f97932e688beae8"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "054dd50aa913197d77771cb8f1b0c14f",
-          "state" : "Approved",
-          "total" : 274,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.analysis.JavaAnalysisLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "8205c2edcf35fad77bef3eec2ae2883b"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "3af7c155d580c151f7a82299c874a26c",
-          "state" : "Approved",
-          "total" : 564,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.analysis.codeInsight.JavaCodeInsightLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "9a934870ac726cd2eb07b3221ab85305"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "584b619168177d112491a50d221c0d99",
-          "state" : "Approved",
-          "total" : 17,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.analysis.impl.JavaInspectionsLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "0f267db6bc074f25a8aa5b33e36e903e"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "2f69fb8d2c3ba1c75d2264cd98659bc5",
-          "state" : "Approved",
-          "total" : 803,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.analysis.impl.JavaQuickFixLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "f98074ae42e51e07957ec10a82f8e039"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "d9dac438bd7fc3997182fbda24aeece2",
-          "state" : "Approved",
-          "total" : 264,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.compiler.JavaCompilerLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "cdd5315044ac82f30ea194eed978a756"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "c47d2dc0e34b203965169610c725ee24",
-          "state" : "Approved",
-          "total" : 22,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.coverage.JavaCoverageLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "22debe12e43ce8e92b5b3386a37dda11"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "9d0f73ce8b26db18d6a84c8dc77ec5e2",
-          "state" : "Approved",
-          "total" : 39,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.execution.JavaExecutionLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "779ea2c998675aa67a03e1ba911af87c"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "e4641e4ff69b531c3d33cc1ac528e30c",
-          "state" : "Approved",
-          "total" : 15,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.language.JavaCompilationErrorLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "434b6fa3c52a47c3ec8ae7d31e09df0b"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "f45aa7e394d2f0002e332a3257001bca",
-          "state" : "Approved",
-          "total" : 497,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.language.JavaCoreLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "a4581edab01f14904cfab2277687f7d7"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "d3157b37855cb8fab7d257e13350b0d0",
-          "state" : "Approved",
-          "total" : 34,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.language.JavaLanguageLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "513f750973703af7d7404c8e3f48fb68"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "7f83ad3913bdb2f3cb2222a8974f6af7",
-          "state" : "Approved",
-          "total" : 303,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.language.JavadocLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "ba8ddc0639bf864a8fa83050d24d8e5e"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "9356d6665912456e56c1048f936c2619",
-          "state" : "Approved",
-          "total" : 36,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.language.impl.JavaErrorLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "e8ea369d132bc638d919bd56eafda90d"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "fd1cb3d70805428a2a47248ff7680bc4",
-          "state" : "Approved",
-          "total" : 106,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     },
     "consulo.java.properties.impl.JavaPropertiesLocalize" : {
       "source" : {
-        "revision" : 1,
-        "sig" : "22d31cb20eafab634d61ebb4296b0ea9"
-      },
-      "translations" : {
-        "en-US" : {
-          "sig" : "23888db55fd8ee98fcfe825fded6c278",
-          "state" : "Approved",
-          "total" : 2,
-          "translators" : [ "Valery Semenchuk <vistall.valeriy@gmail.com>" ]
-        }
+        "revision" : 1
       }
     }
   }
