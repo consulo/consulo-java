@@ -24,41 +24,38 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataProvider;
-import consulo.dataContext.GetDataRule;
+import consulo.dataContext.DataSink;
+import consulo.dataContext.DataSnapshot;
+import consulo.dataContext.UiDataRule;
+import consulo.language.editor.CommonDataKeys;
+import consulo.language.editor.impl.action.AnalysisScopeUtil;
 import consulo.language.editor.scope.AnalysisScope;
-import consulo.language.psi.PsiDirectory;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
-import consulo.language.psi.PsiManager;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.Module;
 import consulo.util.dataholder.Key;
 
 @ExtensionImpl
-public class AnalysisScopeRule implements GetDataRule<AnalysisScope> {
+public class AnalysisScopeRule implements UiDataRule {
     @Override
-    public Key<AnalysisScope> getKey() {
-        return AnalysisScope.KEY;
-    }
-
-    @Override
-    public AnalysisScope getData(DataProvider dataProvider) {
-        Object psiFile = dataProvider.getDataUnchecked(PsiFile.KEY);
-        if (psiFile instanceof PsiJavaFile javaFile) {
-            return new JavaAnalysisScope(javaFile);
-        }
-        Object psiTarget = dataProvider.getDataUnchecked(PsiElement.KEY);
-        if (psiTarget instanceof PsiJavaPackage pack) {
-            PsiManager manager = pack.getManager();
-            if (!manager.isInProject(pack)) {
-                return null;
+    public void uiDataSnapshot(DataSink sink, DataSnapshot snapshot) {
+        sink.lazyValue(AnalysisScope.KEY, dataProvider -> {
+            if (dataProvider.get(PsiFile.KEY) instanceof PsiJavaFile javaFile) {
+                return new JavaAnalysisScope(javaFile);
             }
-            PsiDirectory[] dirs = pack.getDirectories(GlobalSearchScope.projectScope(manager.getProject()));
-            if (dirs.length == 0) {
-                return null;
+            Object psiTarget = dataProvider.get(PsiElement.KEY);
+            if (psiTarget instanceof PsiPackage pack) {
+                PsiManager manager = pack.getManager();
+                if (!manager.isInProject(pack)) {
+                    return null;
+                }
+                PsiDirectory[] dirs = pack.getDirectories(GlobalSearchScope.projectScope(manager.getProject()));
+                if (dirs.length == 0) {
+                    return null;
+                }
+                return new JavaAnalysisScope(pack, dataProvider.get(Module.KEY));
             }
-            return new JavaAnalysisScope(pack, dataProvider.getDataUnchecked(Module.KEY));
-        }
-        return null;
+            return null;
+        });
     }
 }

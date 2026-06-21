@@ -21,7 +21,7 @@ import com.intellij.java.language.psi.PsiJavaFile;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.component.util.Iconable;
 import consulo.dataContext.DataSink;
-import consulo.dataContext.TypeSafeDataProvider;
+import consulo.dataContext.UiDataProvider;
 import consulo.language.editor.util.NavigationItemFileStatus;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.inject.InjectedLanguageManager;
@@ -46,168 +46,168 @@ import consulo.virtualFileSystem.status.FileStatus;
  * @author max
  */
 public class ClassGroupingRule implements UsageGroupingRule {
-  @RequiredReadAction
-  @Override
-  public UsageGroup groupUsage(Usage usage) {
-    if (!(usage instanceof PsiElementUsage)) {
-      return null;
-    }
-    PsiElement psiElement = ((PsiElementUsage) usage).getElement();
-    PsiFile containingFile = psiElement.getContainingFile();
-    PsiFile topLevelFile = InjectedLanguageManager.getInstance(containingFile.getProject()).getTopLevelFile(containingFile);
-
-    if (!(topLevelFile instanceof PsiJavaFile) /*|| topLevelFile instanceof JspFile*/) {
-      return null;
-    }
-    PsiElement containingClass = topLevelFile == containingFile ? psiElement : InjectedLanguageManager
-        .getInstance(containingFile.getProject()).getInjectionHost(containingFile);
-    do {
-      containingClass = PsiTreeUtil.getParentOfType(containingClass, PsiClass.class, true);
-      if (containingClass == null || ((PsiClass) containingClass).getQualifiedName() != null) break;
-    }
-    while (true);
-
-    if (containingClass == null) {
-      // check whether the element is in the import list
-      PsiImportList importList = PsiTreeUtil.getParentOfType(psiElement, PsiImportList.class, true);
-      if (importList != null) {
-        String fileName = getFileNameWithoutExtension(topLevelFile);
-        PsiClass[] classes = ((PsiJavaFile) topLevelFile).getClasses();
-        for (PsiClass aClass : classes) {
-          if (fileName.equals(aClass.getName())) {
-            containingClass = aClass;
-            break;
-          }
+    @RequiredReadAction
+    @Override
+    public UsageGroup groupUsage(Usage usage) {
+        if (!(usage instanceof PsiElementUsage)) {
+            return null;
         }
-      }
-    } else {
-      // skip JspClass synthetic classes.
+        PsiElement psiElement = ((PsiElementUsage) usage).getElement();
+        PsiFile containingFile = psiElement.getContainingFile();
+        PsiFile topLevelFile = InjectedLanguageManager.getInstance(containingFile.getProject()).getTopLevelFile(containingFile);
+
+        if (!(topLevelFile instanceof PsiJavaFile) /*|| topLevelFile instanceof JspFile*/) {
+            return null;
+        }
+        PsiElement containingClass = topLevelFile == containingFile ? psiElement : InjectedLanguageManager
+            .getInstance(containingFile.getProject()).getInjectionHost(containingFile);
+        do {
+            containingClass = PsiTreeUtil.getParentOfType(containingClass, PsiClass.class, true);
+            if (containingClass == null || ((PsiClass) containingClass).getQualifiedName() != null) {
+                break;
+            }
+        }
+        while (true);
+
+        if (containingClass == null) {
+            // check whether the element is in the import list
+            PsiImportList importList = PsiTreeUtil.getParentOfType(psiElement, PsiImportList.class, true);
+            if (importList != null) {
+                String fileName = getFileNameWithoutExtension(topLevelFile);
+                PsiClass[] classes = ((PsiJavaFile) topLevelFile).getClasses();
+                for (PsiClass aClass : classes) {
+                    if (fileName.equals(aClass.getName())) {
+                        containingClass = aClass;
+                        break;
+                    }
+                }
+            }
+        }
+        else {
+            // skip JspClass synthetic classes.
       /*if (containingClass.getParent() instanceof PsiFile && JspPsiUtil.isInJspFile(containingClass)) {
         containingClass = null;
       }   */
-    }
-
-    if (containingClass != null) {
-      return new ClassUsageGroup((PsiClass) containingClass);
-    }
-
-    VirtualFile virtualFile = topLevelFile.getVirtualFile();
-    if (virtualFile != null) {
-      return new FileGroupingRule.FileUsageGroup(topLevelFile.getProject(), virtualFile);
-    }
-    return null;
-  }
-
-  @RequiredReadAction
-  private static String getFileNameWithoutExtension(PsiFile file) {
-    String name = file.getName();
-    int index = name.lastIndexOf('.');
-    return index < 0 ? name : name.substring(0, index);
-  }
-
-  private static class ClassUsageGroup implements UsageGroup, TypeSafeDataProvider {
-    private final SmartPsiElementPointer myClassPointer;
-    private final String myText;
-    private final String myQName;
-    private final Image myIcon;
-
-    @RequiredReadAction
-    public ClassUsageGroup(PsiClass aClass) {
-      myQName = aClass.getQualifiedName();
-      myText = createText(aClass);
-      myClassPointer = SmartPointerManager.getInstance(aClass.getProject()).createSmartPsiElementPointer(aClass);
-      myIcon = IconDescriptorUpdaters.getIcon(aClass, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
-    }
-
-    @Override
-    public void update() {
-    }
-
-    @RequiredReadAction
-    private static String createText(PsiClass aClass) {
-      String text = aClass.getName();
-      PsiClass containingClass = aClass.getContainingClass();
-      while (containingClass != null) {
-        text = containingClass.getName() + '.' + text;
-        containingClass = containingClass.getContainingClass();
-      }
-      return text;
-    }
-
-    @Override
-    public Image getIcon() {
-      return myIcon;
-    }
-
-    @Override
-    public String getText(UsageView view) {
-      return myText;
-    }
-
-    @Override
-    @RequiredReadAction
-    public FileStatus getFileStatus() {
-      return isValid() ? NavigationItemFileStatus.get(getPsiClass()) : null;
-    }
-
-    @RequiredReadAction
-    private PsiClass getPsiClass() {
-      return (PsiClass) myClassPointer.getElement();
-    }
-
-    @Override
-    @RequiredReadAction
-    public boolean isValid() {
-      PsiClass psiClass = getPsiClass();
-      return psiClass != null && psiClass.isValid();
-    }
-
-    public int hashCode() {
-      return myQName.hashCode();
-    }
-
-    public boolean equals(Object object) {
-      return object instanceof ClassUsageGroup classUsageGroup && myQName.equals(classUsageGroup.myQName);
-    }
-
-    @Override
-    @RequiredReadAction
-    public void navigate(boolean focus) throws UnsupportedOperationException {
-      if (canNavigate()) {
-        getPsiClass().navigate(focus);
-      }
-    }
-
-    @Override
-    @RequiredReadAction
-    public boolean canNavigate() {
-      return isValid();
-    }
-
-    @Override
-    @RequiredReadAction
-    public boolean canNavigateToSource() {
-      return canNavigate();
-    }
-
-    @Override
-    public int compareTo(UsageGroup usageGroup) {
-      return getText(null).compareToIgnoreCase(usageGroup.getText(null));
-    }
-
-    @Override
-    @RequiredReadAction
-    public void calcData(Key<?> key, DataSink sink) {
-      if (!isValid()) return;
-      if (PsiElement.KEY == key) {
-        sink.put(PsiElement.KEY, getPsiClass());
-      }
-      if (UsageView.USAGE_INFO_KEY == key) {
-        PsiClass psiClass = getPsiClass();
-        if (psiClass != null) {
-          sink.put(UsageView.USAGE_INFO_KEY, new UsageInfo(psiClass));
         }
-      }
+
+        if (containingClass != null) {
+            return new ClassUsageGroup((PsiClass) containingClass);
+        }
+
+        VirtualFile virtualFile = topLevelFile.getVirtualFile();
+        if (virtualFile != null) {
+            return new FileGroupingRule.FileUsageGroup(topLevelFile.getProject(), virtualFile);
+        }
+        return null;
     }
-  }
+
+    @RequiredReadAction
+    private static String getFileNameWithoutExtension(PsiFile file) {
+        String name = file.getName();
+        int index = name.lastIndexOf('.');
+        return index < 0 ? name : name.substring(0, index);
+    }
+
+    private static class ClassUsageGroup implements UsageGroup, UiDataProvider {
+        private final SmartPsiElementPointer myClassPointer;
+        private final String myText;
+        private final String myQName;
+        private final Image myIcon;
+
+        @RequiredReadAction
+        public ClassUsageGroup(PsiClass aClass) {
+            myQName = aClass.getQualifiedName();
+            myText = createText(aClass);
+            myClassPointer = SmartPointerManager.getInstance(aClass.getProject()).createSmartPsiElementPointer(aClass);
+            myIcon = IconDescriptorUpdaters.getIcon(aClass, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
+        }
+
+        @Override
+        public void update() {
+        }
+
+        @RequiredReadAction
+        private static String createText(PsiClass aClass) {
+            String text = aClass.getName();
+            PsiClass containingClass = aClass.getContainingClass();
+            while (containingClass != null) {
+                text = containingClass.getName() + '.' + text;
+                containingClass = containingClass.getContainingClass();
+            }
+            return text;
+        }
+
+        @Override
+        public Image getIcon() {
+            return myIcon;
+        }
+
+        @Override
+        public String getText(UsageView view) {
+            return myText;
+        }
+
+        @Override
+        @RequiredReadAction
+        public FileStatus getFileStatus() {
+            return isValid() ? NavigationItemFileStatus.get(getPsiClass()) : null;
+        }
+
+        @RequiredReadAction
+        private PsiClass getPsiClass() {
+            return (PsiClass) myClassPointer.getElement();
+        }
+
+        @Override
+        @RequiredReadAction
+        public boolean isValid() {
+            PsiClass psiClass = getPsiClass();
+            return psiClass != null && psiClass.isValid();
+        }
+
+        public int hashCode() {
+            return myQName.hashCode();
+        }
+
+        public boolean equals(Object object) {
+            return object instanceof ClassUsageGroup classUsageGroup && myQName.equals(classUsageGroup.myQName);
+        }
+
+        @Override
+        @RequiredReadAction
+        public void navigate(boolean focus) throws UnsupportedOperationException {
+            if (canNavigate()) {
+                getPsiClass().navigate(focus);
+            }
+        }
+
+        @Override
+        @RequiredReadAction
+        public boolean canNavigate() {
+            return isValid();
+        }
+
+        @Override
+        @RequiredReadAction
+        public boolean canNavigateToSource() {
+            return canNavigate();
+        }
+
+        @Override
+        public int compareTo(UsageGroup usageGroup) {
+            return getText(null).compareToIgnoreCase(usageGroup.getText(null));
+        }
+
+        @Override
+        public void uiDataSnapshot(DataSink sink) {
+            sink.lazy(PsiElement.KEY, this::getPsiClass);
+            sink.lazy(UsageView.USAGE_INFO_KEY, () -> {
+                PsiClass psiClass = getPsiClass();
+                if (psiClass != null) {
+                    return new UsageInfo(psiClass);
+                }
+                return null;
+            });
+        }
+    }
 }

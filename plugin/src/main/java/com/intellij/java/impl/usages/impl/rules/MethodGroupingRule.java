@@ -24,7 +24,7 @@ import com.intellij.java.language.psi.util.PsiFormatUtilBase;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.component.util.Iconable;
 import consulo.dataContext.DataSink;
-import consulo.dataContext.TypeSafeDataProvider;
+import consulo.dataContext.UiDataProvider;
 import consulo.document.util.Segment;
 import consulo.language.editor.util.NavigationItemFileStatus;
 import consulo.language.icon.IconDescriptorUpdaters;
@@ -48,160 +48,160 @@ import consulo.virtualFileSystem.status.FileStatus;
  * @author max
  */
 public class MethodGroupingRule implements UsageGroupingRule {
-  private static final Logger LOG = Logger.getInstance(MethodGroupingRule.class);
-
-  @Override
-  @RequiredReadAction
-  public UsageGroup groupUsage(Usage usage) {
-    if (!(usage instanceof PsiElementUsage)) return null;
-    PsiElement psiElement = ((PsiElementUsage)usage).getElement();
-    PsiFile containingFile = psiElement.getContainingFile();
-    InjectedLanguageManager manager = InjectedLanguageManager.getInstance(containingFile.getProject());
-    PsiFile topLevelFile = manager.getTopLevelFile(containingFile);
-    if (topLevelFile instanceof PsiJavaFile) {
-      PsiElement containingMethod = topLevelFile == containingFile ? psiElement : manager.getInjectionHost(containingFile);
-      if (usage instanceof UsageInfo2UsageAdapter usageInfo2UsageAdapter && topLevelFile == containingFile) {
-        int offset = usageInfo2UsageAdapter.getUsageInfo().getNavigationOffset();
-        containingMethod = containingFile.findElementAt(offset);
-      }
-      do {
-        containingMethod = PsiTreeUtil.getParentOfType(containingMethod, PsiMethod.class, true);
-        if (containingMethod == null) break;
-        PsiClass containingClass = ((PsiMethod)containingMethod).getContainingClass();
-        if (containingClass == null || containingClass.getQualifiedName() != null) break;
-      }
-      while (true);
-
-      if (containingMethod != null) {
-        return new MethodUsageGroup((PsiMethod)containingMethod);
-      }
-    }
-    return null;
-  }
-
-  private static class MethodUsageGroup implements UsageGroup, TypeSafeDataProvider {
-    private final SmartPsiElementPointer<PsiMethod> myMethodPointer;
-    private final String myName;
-    private final Image myIcon;
-    private final Project myProject;
-
-    @RequiredReadAction
-    public MethodUsageGroup(PsiMethod psiMethod) {
-      myName = PsiFormatUtil.formatMethod(
-          psiMethod,
-          PsiSubstitutor.EMPTY,
-          PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
-          PsiFormatUtilBase.SHOW_TYPE
-        );
-      myProject = psiMethod.getProject();
-      myMethodPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(psiMethod);
-
-      myIcon = getIconImpl(psiMethod);
-    }
-
-    @Override
-    public void update() {
-    }
-
-    @RequiredReadAction
-    private static Image getIconImpl(PsiMethod psiMethod) {
-      return IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
-    }
-
-    public int hashCode() {
-      return myName.hashCode();
-    }
-
-    public boolean equals(Object object) {
-      if (!(object instanceof MethodUsageGroup)) {
-        return false;
-      }
-      MethodUsageGroup group = (MethodUsageGroup) object;
-      return Comparing.equal(myName, ((MethodUsageGroup)object).myName)
-             && SmartPointerManager.getInstance(myProject).pointToTheSameElement(myMethodPointer, group.myMethodPointer);
-    }
-
-    @Override
-    public Image getIcon() {
-      return myIcon;
-    }
-
-    @RequiredReadAction
-    private PsiMethod getMethod() {
-      return myMethodPointer.getElement();
-    }
-
-    @Override
-    public String getText(UsageView view) {
-      return myName;
-    }
+    private static final Logger LOG = Logger.getInstance(MethodGroupingRule.class);
 
     @Override
     @RequiredReadAction
-    public FileStatus getFileStatus() {
-      return isValid() ? NavigationItemFileStatus.get(getMethod()) : null;
-    }
-
-    @Override
-    @RequiredReadAction
-    public boolean isValid() {
-      PsiMethod method = getMethod();
-      return method != null && method.isValid();
-    }
-
-    @Override
-    @RequiredReadAction
-    public void navigate(boolean focus) throws UnsupportedOperationException {
-      if (canNavigate()) {
-          getMethod().navigate(focus);
-      }
-    }
-
-    @Override
-    @RequiredReadAction
-    public boolean canNavigate() {
-      return isValid();
-    }
-
-    @Override
-    @RequiredReadAction
-    public boolean canNavigateToSource() {
-      return canNavigate();
-    }
-
-    @Override
-    public int compareTo(UsageGroup usageGroup) {
-      if (!(usageGroup instanceof MethodUsageGroup)) {
-        LOG.error("MethodUsageGroup expected but " + usageGroup.getClass() + " found");
-      }
-      MethodUsageGroup other = (MethodUsageGroup)usageGroup;
-      if (SmartPointerManager.getInstance(myProject).pointToTheSameElement(myMethodPointer, other.myMethodPointer)) {
-        return 0;
-      }
-      if (!UsageViewSettings.getInstance().IS_SORT_MEMBERS_ALPHABETICALLY) {
-        Segment segment1 = myMethodPointer.getRange();
-        Segment segment2 = other.myMethodPointer.getRange();
-        if (segment1 != null && segment2 != null) {
-          return segment1.getStartOffset() - segment2.getStartOffset();
+    public UsageGroup groupUsage(Usage usage) {
+        if (!(usage instanceof PsiElementUsage)) {
+            return null;
         }
-      }
+        PsiElement psiElement = ((PsiElementUsage) usage).getElement();
+        PsiFile containingFile = psiElement.getContainingFile();
+        InjectedLanguageManager manager = InjectedLanguageManager.getInstance(containingFile.getProject());
+        PsiFile topLevelFile = manager.getTopLevelFile(containingFile);
+        if (topLevelFile instanceof PsiJavaFile) {
+            PsiElement containingMethod = topLevelFile == containingFile ? psiElement : manager.getInjectionHost(containingFile);
+            if (usage instanceof UsageInfo2UsageAdapter usageInfo2UsageAdapter && topLevelFile == containingFile) {
+                int offset = usageInfo2UsageAdapter.getUsageInfo().getNavigationOffset();
+                containingMethod = containingFile.findElementAt(offset);
+            }
+            do {
+                containingMethod = PsiTreeUtil.getParentOfType(containingMethod, PsiMethod.class, true);
+                if (containingMethod == null) {
+                    break;
+                }
+                PsiClass containingClass = ((PsiMethod) containingMethod).getContainingClass();
+                if (containingClass == null || containingClass.getQualifiedName() != null) {
+                    break;
+                }
+            }
+            while (true);
 
-      return myName.compareToIgnoreCase(other.myName);
-    }
-
-    @Override
-    @RequiredReadAction
-    public void calcData(Key<?> key, DataSink sink) {
-      if (!isValid()) return;
-      if (PsiElement.KEY == key) {
-        sink.put(PsiElement.KEY, getMethod());
-      }
-      if (UsageView.USAGE_INFO_KEY == key) {
-        PsiMethod method = getMethod();
-        if (method != null) {
-          sink.put(UsageView.USAGE_INFO_KEY, new UsageInfo(method));
+            if (containingMethod != null) {
+                return new MethodUsageGroup((PsiMethod) containingMethod);
+            }
         }
-      }
+        return null;
     }
-  }
+
+    private static class MethodUsageGroup implements UsageGroup, UiDataProvider {
+        private final SmartPsiElementPointer<PsiMethod> myMethodPointer;
+        private final String myName;
+        private final Image myIcon;
+        private final Project myProject;
+
+        @RequiredReadAction
+        public MethodUsageGroup(PsiMethod psiMethod) {
+            myName = PsiFormatUtil.formatMethod(
+                psiMethod,
+                PsiSubstitutor.EMPTY,
+                PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
+                PsiFormatUtilBase.SHOW_TYPE
+            );
+            myProject = psiMethod.getProject();
+            myMethodPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(psiMethod);
+
+            myIcon = getIconImpl(psiMethod);
+        }
+
+        @Override
+        public void update() {
+        }
+
+        @RequiredReadAction
+        private static Image getIconImpl(PsiMethod psiMethod) {
+            return IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
+        }
+
+        public int hashCode() {
+            return myName.hashCode();
+        }
+
+        public boolean equals(Object object) {
+            if (!(object instanceof MethodUsageGroup)) {
+                return false;
+            }
+            MethodUsageGroup group = (MethodUsageGroup) object;
+            return Comparing.equal(myName, ((MethodUsageGroup) object).myName)
+                && SmartPointerManager.getInstance(myProject).pointToTheSameElement(myMethodPointer, group.myMethodPointer);
+        }
+
+        @Override
+        public Image getIcon() {
+            return myIcon;
+        }
+
+        @RequiredReadAction
+        private PsiMethod getMethod() {
+            return myMethodPointer.getElement();
+        }
+
+        @Override
+        public String getText(UsageView view) {
+            return myName;
+        }
+
+        @Override
+        @RequiredReadAction
+        public FileStatus getFileStatus() {
+            return isValid() ? NavigationItemFileStatus.get(getMethod()) : null;
+        }
+
+        @Override
+        @RequiredReadAction
+        public boolean isValid() {
+            PsiMethod method = getMethod();
+            return method != null && method.isValid();
+        }
+
+        @Override
+        @RequiredReadAction
+        public void navigate(boolean focus) throws UnsupportedOperationException {
+            if (canNavigate()) {
+                getMethod().navigate(focus);
+            }
+        }
+
+        @Override
+        @RequiredReadAction
+        public boolean canNavigate() {
+            return isValid();
+        }
+
+        @Override
+        @RequiredReadAction
+        public boolean canNavigateToSource() {
+            return canNavigate();
+        }
+
+        @Override
+        public int compareTo(UsageGroup usageGroup) {
+            if (!(usageGroup instanceof MethodUsageGroup)) {
+                LOG.error("MethodUsageGroup expected but " + usageGroup.getClass() + " found");
+            }
+            MethodUsageGroup other = (MethodUsageGroup) usageGroup;
+            if (SmartPointerManager.getInstance(myProject).pointToTheSameElement(myMethodPointer, other.myMethodPointer)) {
+                return 0;
+            }
+            if (!UsageViewSettings.getInstance().IS_SORT_MEMBERS_ALPHABETICALLY) {
+                Segment segment1 = myMethodPointer.getRange();
+                Segment segment2 = other.myMethodPointer.getRange();
+                if (segment1 != null && segment2 != null) {
+                    return segment1.getStartOffset() - segment2.getStartOffset();
+                }
+            }
+
+            return myName.compareToIgnoreCase(other.myName);
+        }
+
+        @Override
+        public void uiDataSnapshot(DataSink sink) {
+            sink.lazy(PsiElement.KEY, this::getMethod);
+            sink.lazy(UsageView.USAGE_INFO_KEY, () -> {
+                PsiMethod method = getMethod();
+                return method != null ? new UsageInfo(method) : null;
+            });
+        }
+    }
 }
