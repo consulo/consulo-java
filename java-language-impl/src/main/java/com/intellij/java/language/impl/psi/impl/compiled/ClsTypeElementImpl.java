@@ -138,7 +138,13 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 
     @Override
     public PsiJavaCodeReferenceElement getInnermostComponentReferenceElement() {
-        return null;
+        ClsElementImpl child = myChild.getValue();
+        if (child instanceof ClsTypeElementImpl typeElement) {
+            return typeElement.getInnermostComponentReferenceElement();
+        }
+        else {
+            return (PsiJavaCodeReferenceElement) child;
+        }
     }
 
     private ClsElementImpl calculateChild() {
@@ -154,8 +160,14 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
         if (isVarArgs()) {
             return getDeepestArrayElement();
         }
-        return myVariance == VARIANCE_INVARIANT ? null :
-            new ClsJavaCodeReferenceElementImpl(this, myTypeText, myVariance == VARIANCE_NONE ? myAnnotations : myAnnotations.forBound());
+        switch (myVariance) {
+            case VARIANCE_INVARIANT:
+                return null;
+            case VARIANCE_NONE:
+                return new ClsJavaCodeReferenceElementImpl(this, myTypeText, myAnnotations);
+            default:
+                return new ClsTypeElementImpl(this, myTypeText, VARIANCE_NONE, myAnnotations.forBound());
+        }
     }
 
     int getArrayDepth() {
@@ -214,40 +226,22 @@ public class ClsTypeElementImpl extends ClsElementImpl implements PsiTypeElement
 
         ClsElementImpl childElement = myChild.getValue();
         if (childElement instanceof ClsTypeElementImpl typeElement) {
-            if (isArray()) {
-                return switch (myVariance) {
-                    case VARIANCE_NONE -> createArrayType(typeElement);
-                    case VARIANCE_EXTENDS -> PsiWildcardType.createExtends(getManager(), typeElement.getType());
-                    case VARIANCE_SUPER -> PsiWildcardType.createSuper(getManager(), typeElement.getType());
-                    default -> {
-                        assert false : myVariance;
-                        yield null;
-                    }
-                };
+            if (myVariance == VARIANCE_EXTENDS) {
+                return PsiWildcardType.createExtends(getManager(), typeElement.getType());
             }
-            assert isVarArgs() : this;
+            if (myVariance == VARIANCE_SUPER) {
+                return PsiWildcardType.createSuper(getManager(), typeElement.getType());
+            }
+            assert isArray() || isVarArgs() : this;
+            assert myVariance == VARIANCE_NONE : this + "(" + myVariance + ")";
             return createArrayType(typeElement);
         }
         if (childElement instanceof ClsJavaCodeReferenceElementImpl codeRefElem) {
-            PsiClassReferenceType psiClassReferenceType = new PsiClassReferenceType(codeRefElem, null);
-            return switch (myVariance) {
-                case VARIANCE_NONE -> psiClassReferenceType;
-                case VARIANCE_EXTENDS -> PsiWildcardType.createExtends(
-                    getManager(),
-                    psiClassReferenceType.annotate(myAnnotations.forBound().getProvider(codeRefElem))
-                );
-                case VARIANCE_SUPER -> PsiWildcardType.createSuper(
-                    getManager(),
-                    psiClassReferenceType.annotate(myAnnotations.forBound().getProvider(codeRefElem))
-                );
-                case VARIANCE_INVARIANT -> PsiWildcardType.createUnbounded(getManager());
-                default -> {
-                    assert false : myVariance;
-                    yield null;
-                }
-            };
+            assert myVariance == VARIANCE_NONE : this + "(" + myVariance + ")";
+            return new PsiClassReferenceType(codeRefElem, null);
         }
         assert childElement == null : this;
+        assert myVariance == VARIANCE_INVARIANT : this + "(" + myVariance + ")";
         return PsiWildcardType.createUnbounded(getManager());
     }
 
