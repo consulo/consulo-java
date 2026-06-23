@@ -34,6 +34,7 @@ import consulo.compiler.scope.CompileScope;
 import consulo.compiler.util.ModuleCompilerUtil;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.compiler.impl.javaCompiler.JavaAdditionalOutputDirectoriesProvider;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.platform.base.localize.CommonLocalize;
@@ -53,170 +54,172 @@ import java.util.*;
 
 @ExtensionImpl(id = "java-annotation-processor", order = "before java-compiler")
 public class AnnotationProcessingCompiler implements TranslatingCompiler {
-  private static final Logger LOGGER = Logger.getInstance(AnnotationProcessingCompiler.class);
-  private final Project myProject;
-  private final JavaCompilerConfiguration myCompilerConfiguration;
+    private static final Logger LOGGER = Logger.getInstance(AnnotationProcessingCompiler.class);
+    private final Project myProject;
+    private final JavaCompilerConfiguration myCompilerConfiguration;
 
-  @Inject
-  public AnnotationProcessingCompiler(Project project) {
-    myProject = project;
-    myCompilerConfiguration = JavaCompilerConfiguration.getInstance(project);
-  }
-
-  @Override
-  public String getDescription() {
-    return CompilerLocalize.annotationProcessingCompilerDescription().get();
-  }
-
-  @Override
-  public boolean isCompilableFile(VirtualFile file, CompileContext context) {
-    return myCompilerConfiguration.isAnnotationProcessorsEnabled() && file.getFileType() == JavaFileType.INSTANCE
-      && !isExcludedFromAnnotationProcessing(file, context);
-  }
-
-  @Override
-  public void compile(final CompileContext context, final Chunk<Module> moduleChunk, final VirtualFile[] files, OutputSink sink) {
-    if (!myCompilerConfiguration.isAnnotationProcessorsEnabled()) {
-      return;
+    @Inject
+    public AnnotationProcessingCompiler(Project project) {
+        myProject = project;
+        myCompilerConfiguration = JavaCompilerConfiguration.getInstance(project);
     }
-    final LocalFileSystem lfs = LocalFileSystem.getInstance();
-    final CompileContextEx _context = new CompileContextExDelegate((CompileContextEx)context) {
-      @Override
-      public VirtualFile getModuleOutputDirectory(Module module) {
-        final String path = JavaAdditionalOutputDirectoriesProvider.getAnnotationProcessorsGenerationPath(module);
-        return path != null ? lfs.findFileByPath(path) : null;
-      }
 
-      @Override
-      public VirtualFile getModuleOutputDirectoryForTests(Module module) {
-        return getModuleOutputDirectory(module);
-      }
-    };
-    final JavacCompiler javacCompiler = getBackEndCompiler();
-    final boolean processorMode = javacCompiler.setAnnotationProcessorMode(true);
-    final BackendCompilerWrapper wrapper =
-      new BackendCompilerWrapper(this, moduleChunk, myProject, Arrays.asList(files), _context, javacCompiler, sink);
-    wrapper.setForceCompileTestsSeparately(true);
-    try {
-      wrapper.compile(new HashMap<>());
+    @Override
+    public String getDescription() {
+        return CompilerLocalize.annotationProcessingCompilerDescription().get();
     }
-    catch (CompilerException e) {
-      _context.addMessage(CompilerMessageCategory.ERROR, ExceptionUtil.getThrowableText(e), null, -1, -1);
+
+    @Override
+    @RequiredReadAction
+    public boolean isCompilableFile(VirtualFile file, CompileContext context) {
+        return myCompilerConfiguration.isAnnotationProcessorsEnabled()
+            && file.getFileType() == JavaFileType.INSTANCE
+            && !isExcludedFromAnnotationProcessing(file, context);
     }
-    catch (CacheCorruptedException e) {
-      LOGGER.info(e);
-      _context.requestRebuildNextTime(e.getMessage());
-    }
-    finally {
-      javacCompiler.setAnnotationProcessorMode(processorMode);
-      final Set<VirtualFile> dirsToRefresh = new HashSet<>();
-      Application.get().runReadAction(() -> {
-      for (Module module : moduleChunk.getNodes()) {
-        final VirtualFile out = _context.getModuleOutputDirectory(module);
-        if (out != null) {
-          dirsToRefresh.add(out);
+
+    @Override
+    public void compile(final CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
+        if (!myCompilerConfiguration.isAnnotationProcessorsEnabled()) {
+            return;
         }
-      }
-    });
-      for (VirtualFile root : dirsToRefresh) {
-        root.refresh(false, true);
-      }
-    }
-  }
+        final LocalFileSystem lfs = LocalFileSystem.getInstance();
+        CompileContextEx _context = new CompileContextExDelegate((CompileContextEx) context) {
+            @Override
+            public VirtualFile getModuleOutputDirectory(Module module) {
+                String path = JavaAdditionalOutputDirectoriesProvider.getAnnotationProcessorsGenerationPath(module);
+                return path != null ? lfs.findFileByPath(path) : null;
+            }
 
-  @Override
-  public FileType[] getInputFileTypes() {
-    return new FileType[]{JavaFileType.INSTANCE};
-  }
-
-  @Override
-  public FileType[] getOutputFileTypes() {
-    return new FileType[]{
-      JavaFileType.INSTANCE,
-      JavaClassFileType.INSTANCE
-    };
-  }
-
-  private boolean isExcludedFromAnnotationProcessing(VirtualFile file, CompileContext context) {
-    if (!myCompilerConfiguration.isAnnotationProcessorsEnabled()) {
-      return true;
-    }
-    final Module module = context.getModuleByFile(file);
-    if (module != null) {
-      if (!myCompilerConfiguration.getAnnotationProcessingConfiguration(module).isEnabled()) {
-        return true;
-      }
-      final String path = JavaAdditionalOutputDirectoriesProvider.getAnnotationProcessorsGenerationPath(module);
-      final VirtualFile generationDir = path != null ? LocalFileSystem.getInstance().findFileByPath(path) : null;
-      if (generationDir != null && VirtualFileUtil.isAncestor(generationDir, file, false)) {
-        return true;
-      }
-    }
-    return CompilerManager.getInstance(myProject).isExcludedFromCompilation(file);
-  }
-
-  @Override
-  @RequiredUIAccess
-  @RequiredReadAction
-  public boolean validateConfiguration(CompileScope scope) {
-    final List<Chunk<Module>> chunks = ModuleCompilerUtil.getSortedModuleChunks(myProject, Arrays.asList(scope.getAffectedModules()));
-    for (final Chunk<Module> chunk : chunks) {
-      final Set<Module> chunkModules = chunk.getNodes();
-      if (chunkModules.size() <= 1) {
-        continue; // no need to check one-module chunks
-      }
-      for (Module chunkModule : chunkModules) {
-        if (myCompilerConfiguration.getAnnotationProcessingConfiguration(chunkModule).isEnabled()) {
-          showCyclesNotSupportedForAnnotationProcessors(chunkModules.toArray(new Module[chunkModules.size()]));
-          return false;
+            @Override
+            public VirtualFile getModuleOutputDirectoryForTests(Module module) {
+                return getModuleOutputDirectory(module);
+            }
+        };
+        JavacCompiler javacCompiler = getBackEndCompiler();
+        boolean processorMode = javacCompiler.setAnnotationProcessorMode(true);
+        BackendCompilerWrapper wrapper =
+            new BackendCompilerWrapper(this, moduleChunk, myProject, Arrays.asList(files), _context, javacCompiler, sink);
+        wrapper.setForceCompileTestsSeparately(true);
+        try {
+            wrapper.compile(new HashMap<>());
         }
-      }
+        catch (CompilerException e) {
+            _context.newError(LocalizeValue.of(ExceptionUtil.getThrowableText(e))).add();
+        }
+        catch (CacheCorruptedException e) {
+            LOGGER.info(e);
+            _context.requestRebuildNextTime(LocalizeValue.ofNullable(e.getMessage()));
+        }
+        finally {
+            javacCompiler.setAnnotationProcessorMode(processorMode);
+            Set<VirtualFile> dirsToRefresh = new HashSet<>();
+            Application.get().runReadAction(() -> {
+                for (Module module : moduleChunk.getNodes()) {
+                    VirtualFile out = _context.getModuleOutputDirectory(module);
+                    if (out != null) {
+                        dirsToRefresh.add(out);
+                    }
+                }
+            });
+            for (VirtualFile root : dirsToRefresh) {
+                root.refresh(false, true);
+            }
+        }
     }
 
-    final JavacCompiler compiler = getBackEndCompiler();
-    final boolean previousValue = compiler.setAnnotationProcessorMode(true);
-    try {
-      return compiler.checkCompiler(scope);
+    @Override
+    public FileType[] getInputFileTypes() {
+        return new FileType[]{JavaFileType.INSTANCE};
     }
-    finally {
-      compiler.setAnnotationProcessorMode(previousValue);
+
+    @Override
+    public FileType[] getOutputFileTypes() {
+        return new FileType[]{
+            JavaFileType.INSTANCE,
+            JavaClassFileType.INSTANCE
+        };
     }
-  }
 
-  @RequiredUIAccess
-  private void showCyclesNotSupportedForAnnotationProcessors(Module[] modulesInChunk) {
-    LOGGER.assertTrue(modulesInChunk.length > 0);
-    String moduleNameToSelect = modulesInChunk[0].getName();
-    final String moduleNames = getModulesString(modulesInChunk);
-    Messages.showMessageDialog(
-      myProject,
-      CompilerLocalize.errorAnnotationProcessingNotSupportedForModuleCycles(moduleNames).get(),
-      CommonLocalize.titleError().get(),
-      UIUtil.getErrorIcon()
-    );
-    showConfigurationDialog(moduleNameToSelect, null);
-  }
-
-  @RequiredUIAccess
-  private void showConfigurationDialog(String moduleNameToSelect, String tabNameToSelect) {
-    ShowSettingsUtil.getInstance().showProjectStructureDialog(
-      myProject,
-      projectStructureSelector -> projectStructureSelector.select(moduleNameToSelect, tabNameToSelect, true)
-    );
-  }
-
-  private static String getModulesString(Module[] modulesInChunk) {
-    final StringBuilder moduleNames = new StringBuilder();
-    for (Module module : modulesInChunk) {
-      if (moduleNames.length() > 0) {
-        moduleNames.append("\n");
-      }
-      moduleNames.append("\"").append(module.getName()).append("\"");
+    @RequiredReadAction
+    private boolean isExcludedFromAnnotationProcessing(VirtualFile file, CompileContext context) {
+        if (!myCompilerConfiguration.isAnnotationProcessorsEnabled()) {
+            return true;
+        }
+        Module module = context.getModuleByFile(file);
+        if (module != null) {
+            if (!myCompilerConfiguration.getAnnotationProcessingConfiguration(module).isEnabled()) {
+                return true;
+            }
+            String path = JavaAdditionalOutputDirectoriesProvider.getAnnotationProcessorsGenerationPath(module);
+            VirtualFile generationDir = path != null ? LocalFileSystem.getInstance().findFileByPath(path) : null;
+            if (generationDir != null && VirtualFileUtil.isAncestor(generationDir, file, false)) {
+                return true;
+            }
+        }
+        return CompilerManager.getInstance(myProject).isExcludedFromCompilation(file);
     }
-    return moduleNames.toString();
-  }
 
-  private JavacCompiler getBackEndCompiler() {
-    return (JavacCompiler)myCompilerConfiguration.findCompiler(JavaCompilerConfiguration.DEFAULT_COMPILER);
-  }
+    @Override
+    @RequiredUIAccess
+    public boolean validateConfiguration(CompileScope scope) {
+        List<Chunk<Module>> chunks = ModuleCompilerUtil.getSortedModuleChunks(myProject, Arrays.asList(scope.getAffectedModules()));
+        for (Chunk<Module> chunk : chunks) {
+            Set<Module> chunkModules = chunk.getNodes();
+            if (chunkModules.size() <= 1) {
+                continue; // no need to check one-module chunks
+            }
+            for (Module chunkModule : chunkModules) {
+                if (myCompilerConfiguration.getAnnotationProcessingConfiguration(chunkModule).isEnabled()) {
+                    showCyclesNotSupportedForAnnotationProcessors(chunkModules.toArray(new Module[chunkModules.size()]));
+                    return false;
+                }
+            }
+        }
+
+        JavacCompiler compiler = getBackEndCompiler();
+        boolean previousValue = compiler.setAnnotationProcessorMode(true);
+        try {
+            return compiler.checkCompiler(scope);
+        }
+        finally {
+            compiler.setAnnotationProcessorMode(previousValue);
+        }
+    }
+
+    @RequiredUIAccess
+    private void showCyclesNotSupportedForAnnotationProcessors(Module[] modulesInChunk) {
+        LOGGER.assertTrue(modulesInChunk.length > 0);
+        String moduleNameToSelect = modulesInChunk[0].getName();
+        String moduleNames = getModulesString(modulesInChunk);
+        Messages.showMessageDialog(
+            myProject,
+            CompilerLocalize.errorAnnotationProcessingNotSupportedForModuleCycles(moduleNames).get(),
+            CommonLocalize.titleError().get(),
+            UIUtil.getErrorIcon()
+        );
+        showConfigurationDialog(moduleNameToSelect, null);
+    }
+
+    @RequiredUIAccess
+    private void showConfigurationDialog(String moduleNameToSelect, String tabNameToSelect) {
+        ShowSettingsUtil.getInstance().showProjectStructureDialog(
+            myProject,
+            projectStructureSelector -> projectStructureSelector.select(moduleNameToSelect, tabNameToSelect, true)
+        );
+    }
+
+    private static String getModulesString(Module[] modulesInChunk) {
+        StringBuilder moduleNames = new StringBuilder();
+        for (Module module : modulesInChunk) {
+            if (moduleNames.length() > 0) {
+                moduleNames.append("\n");
+            }
+            moduleNames.append("\"").append(module.getName()).append("\"");
+        }
+        return moduleNames.toString();
+    }
+
+    private JavacCompiler getBackEndCompiler() {
+        return (JavacCompiler) myCompilerConfiguration.findCompiler(JavaCompilerConfiguration.DEFAULT_COMPILER);
+    }
 }

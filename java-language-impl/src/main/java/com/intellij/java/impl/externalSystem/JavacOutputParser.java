@@ -10,6 +10,7 @@ import consulo.build.ui.output.BuildOutputCollector;
 import consulo.build.ui.output.BuildOutputInstantReader;
 import consulo.build.ui.output.BuildOutputParser;
 import consulo.compiler.CompilerManager;
+import consulo.localize.LocalizeValue;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
@@ -43,11 +44,8 @@ public class JavacOutputParser implements BuildOutputParser {
     }
 
     @Override
-    public boolean parse(
-        String line,
-        BuildOutputInstantReader reader,
-        Consumer<? super BuildEvent> messageConsumer
-    ) {
+    public boolean parse(String line, BuildOutputInstantReader reader, Consumer<? super BuildEvent> messageConsumer) {
+        LocalizeValue lineValue = LocalizeValue.of(line);
         int colonIndex1 = line.indexOf(COLON);
         if (colonIndex1 == 1) { // drive letter
             colonIndex1 = line.indexOf(COLON, colonIndex1 + 1);
@@ -62,8 +60,8 @@ public class JavacOutputParser implements BuildOutputParser {
                     reader.getParentEventId(),
                     MessageEvent.Kind.ERROR,
                     CompilerManager.NOTIFICATION_GROUP,
-                    text,
-                    line
+                    LocalizeValue.of(text),
+                    lineValue
                 ));
                 return true;
             }
@@ -74,8 +72,8 @@ public class JavacOutputParser implements BuildOutputParser {
                     reader.getParentEventId(),
                     MessageEvent.Kind.WARNING,
                     CompilerManager.NOTIFICATION_GROUP,
-                    text,
-                    line
+                    LocalizeValue.of(text),
+                    lineValue
                 ));
                 return true;
             }
@@ -84,8 +82,8 @@ public class JavacOutputParser implements BuildOutputParser {
                     reader.getParentEventId(),
                     MessageEvent.Kind.ERROR,
                     CompilerManager.NOTIFICATION_GROUP,
-                    line,
-                    line
+                    lineValue,
+                    lineValue
                 ));
                 return true;
             }
@@ -97,15 +95,14 @@ public class JavacOutputParser implements BuildOutputParser {
                     if (file.isFile()) {
                         message = message.substring(javaFileExtensionIndex + ".java".length() + 1);
                         String detailedMessage = amendNextInfoLinesIfNeeded(file.getPath() + ":\n" + message, reader);
-                        messageConsumer
-                            .accept(myBuildEventFactory.createFileMessageEvent(
-                                reader.getParentEventId(),
-                                MessageEvent.Kind.INFO,
-                                CompilerManager.NOTIFICATION_GROUP,
-                                message,
-                                detailedMessage,
-                                new FilePosition(file, 0, 0)
-                            ));
+                        messageConsumer.accept(myBuildEventFactory.createFileMessageEvent(
+                            reader.getParentEventId(),
+                            MessageEvent.Kind.INFO,
+                            CompilerManager.NOTIFICATION_GROUP,
+                            LocalizeValue.of(message),
+                            LocalizeValue.of(detailedMessage),
+                            new FilePosition(file, 0, 0)
+                        ));
                         return true;
                     }
                 }
@@ -175,15 +172,14 @@ public class JavacOutputParser implements BuildOutputParser {
                     if (column >= 0) {
                         String message = StringUtil.join(convertMessages(messageList), "\n");
                         String detailedMessage = line + "\n" + outputCollector.getOutput(); //NON-NLS
-                        messageConsumer
-                            .accept(myBuildEventFactory.createFileMessageEvent(
-                                reader.getParentEventId(),
-                                kind,
-                                CompilerManager.NOTIFICATION_GROUP,
-                                message,
-                                detailedMessage,
-                                new FilePosition(file, lineNumber - 1, column)
-                            ));
+                        messageConsumer.accept(myBuildEventFactory.createFileMessageEvent(
+                            reader.getParentEventId(),
+                            kind,
+                            CompilerManager.NOTIFICATION_GROUP,
+                            LocalizeValue.of(message),
+                            LocalizeValue.of(detailedMessage),
+                            new FilePosition(file, lineNumber - 1, column)
+                        ));
                         return true;
                     }
                 }
@@ -197,8 +193,8 @@ public class JavacOutputParser implements BuildOutputParser {
                 reader.getParentEventId(),
                 MessageEvent.Kind.ERROR,
                 CompilerManager.NOTIFICATION_GROUP,
-                BuildLocalize.buildEventMessageOutMemory().get(),
-                line
+                BuildLocalize.buildEventMessageOutMemory(),
+                lineValue
             ));
             return true;
         }
@@ -233,7 +229,6 @@ public class JavacOutputParser implements BuildOutputParser {
     private static boolean isMessageEnd(@Nullable String line) {
         return line != null && line.length() > 0 && Character.isWhitespace(line.charAt(0));
     }
-
 
     private static List<String> convertMessages(List<String> messages) {
         if (messages.size() <= 1) {

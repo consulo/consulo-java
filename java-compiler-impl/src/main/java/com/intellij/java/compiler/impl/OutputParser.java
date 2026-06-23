@@ -16,56 +16,81 @@
 package com.intellij.java.compiler.impl;
 
 import com.intellij.java.compiler.impl.javaCompiler.FileObject;
+import consulo.compiler.CompileContext;
 import consulo.compiler.CompilerMessageCategory;
+import consulo.localize.LocalizeValue;
 import consulo.util.lang.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class OutputParser {
-  protected final List<ParserAction> myParserActions = new ArrayList<ParserAction>(10);
+    protected final List<ParserAction> myParserActions = new ArrayList<>(10);
 
-  public interface Callback {
-    String getNextLine();
-    String getCurrentLine();
-    void pushBack(String line);
-    void setProgressText(String text);
-    void fileProcessed(String path);
-    void fileGenerated(FileObject path);
-    void message(CompilerMessageCategory category, String message, String url, int lineNum, int columnNum);
-  }
+    public interface Callback {
+        String getNextLine();
 
-  public boolean processMessageLine(Callback callback) {
-    final String line = callback.getNextLine();
-    if(line == null) {
-      return false;
+        String getCurrentLine();
+
+        void pushBack(String line);
+
+        void setProgressText(LocalizeValue text);
+
+        void fileProcessed(String path);
+
+        void fileGenerated(FileObject path);
+
+        default CompileContext.MessageBuilder newInfo(LocalizeValue message) {
+            return newMessage(CompilerMessageCategory.INFORMATION, message);
+        }
+
+        default CompileContext.MessageBuilder newInfo(String message) {
+            return newInfo(LocalizeValue.of(message));
+        }
+
+        default CompileContext.MessageBuilder newWarning(LocalizeValue message) {
+            return newMessage(CompilerMessageCategory.WARNING, message);
+        }
+
+        default CompileContext.MessageBuilder newWarning(String message) {
+            return newWarning(LocalizeValue.of(message));
+        }
+
+        default CompileContext.MessageBuilder newError(LocalizeValue message) {
+            return newMessage(CompilerMessageCategory.ERROR, message);
+        }
+
+        default CompileContext.MessageBuilder newError(String message) {
+            return newError(LocalizeValue.of(message));
+        }
+
+        CompileContext.MessageBuilder newMessage(CompilerMessageCategory category, LocalizeValue message);
+
+        default CompileContext.MessageBuilder newMessage(CompilerMessageCategory category, String message) {
+            return newMessage(category, LocalizeValue.of(message));
+        }
     }
-    // common statistics messages (javac & jikes)
-    for (ParserAction action : myParserActions) {
-      if (action.execute(line, callback)) {
+
+    public boolean processMessageLine(Callback callback) {
+        String line = callback.getNextLine();
+        if (line == null) {
+            return false;
+        }
+        // common statistics messages (javac & jikes)
+        for (ParserAction action : myParserActions) {
+            if (action.execute(line, callback)) {
+                return true;
+            }
+        }
+        if (StringUtil.startsWithChar(line, '[') && StringUtil.endsWithChar(line, ']')) {
+            // at this point any meaningful output surrounded with '[' and ']' characters is processed, so
+            // suppress messages like "[total 4657ms]" or "[search path for source files: []]"
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isTrimLines() {
         return true;
-      }
     }
-    if (StringUtil.startsWithChar(line, '[') && StringUtil.endsWithChar(line, ']')) {
-      // at this point any meaningful output surrounded with '[' and ']' characters is processed, so
-      // suppress messages like "[total 4657ms]" or "[search path for source files: []]"
-      return true;
-    }
-    return false;
-  }
-
-  protected static void addMessage(Callback callback, CompilerMessageCategory type, String message) {
-    if(message == null || message.trim().length() == 0) {
-      return;
-    }
-    addMessage(callback, type, message, null, -1, -1);
-  }
-
-  protected static void addMessage(Callback callback, CompilerMessageCategory type, String text, String url, int line, int column){
-    callback.message(type, text, url, line, column);
-  }
-
-  public boolean isTrimLines() {
-    return true;
-  }
 }
