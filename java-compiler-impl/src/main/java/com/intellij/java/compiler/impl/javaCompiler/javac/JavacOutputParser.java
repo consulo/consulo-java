@@ -160,7 +160,7 @@ public class JavacOutputParser extends OutputParser implements JavacResourcesRea
         }
 
         if (line.endsWith("java.lang.OutOfMemoryError")) {
-            callback.newError(CompilerLocalize.errorJavacOutOfMemory());
+            callback.newError(CompilerLocalize.errorJavacOutOfMemory()).add();
             return true;
         }
 

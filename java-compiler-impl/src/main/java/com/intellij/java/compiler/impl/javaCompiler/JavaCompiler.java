@@ -108,7 +108,7 @@ public class JavaCompiler implements TranslatingCompiler {
             wrapper.compile(parsingInfo);
         }
         catch (CompilerException e) {
-            context.newError(LocalizeValue.of(ExceptionUtil.getThrowableText(e)));
+            context.newError(LocalizeValue.of(ExceptionUtil.getThrowableText(e))).add();
             LOGGER.info(e);
         }
         catch (CacheCorruptedException e) {

@@ -188,7 +188,7 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
             try {
                 VirtualFile fileByURL = VirtualFileUtil.findFileByURL(new URI(url).toURL());
                 if (fileByURL != null) {
-                    return url(fileByURL.getUrl());
+                    myDelegate.url(fileByURL.getUrl());
                 }
             }
             catch (Exception ignored) {
