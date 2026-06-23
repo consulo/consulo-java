@@ -28,6 +28,7 @@ import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.content.ProductionResourceContentFolderTypeProvider;
 import consulo.language.content.TestResourceContentFolderTypeProvider;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ProjectFileIndex;
@@ -54,103 +55,103 @@ import java.util.function.Consumer;
  */
 @ExtensionImpl(id = "java-compiler")
 public class JavaCompiler implements TranslatingCompiler {
-  private static final Logger LOGGER = Logger.getInstance(JavaCompiler.class);
+    private static final Logger LOGGER = Logger.getInstance(JavaCompiler.class);
 
-  public static final Key<Map<File, FileObject>> ourOutputFileParseInfo = Key.create("ourOutputFileParseInfo");
+    public static final Key<Map<File, FileObject>> ourOutputFileParseInfo = Key.create("ourOutputFileParseInfo");
 
-  private final Project myProject;
+    private final Project myProject;
 
-  @Inject
-  public JavaCompiler(Project project) {
-    myProject = project;
-  }
-
-  @Override
-  public String getDescription() {
-    return CompilerLocalize.javaCompilerDescription().get();
-  }
-
-  @Override
-  public boolean isCompilableFile(VirtualFile file, CompileContext context) {
-    return file.getFileType() == JavaFileType.INSTANCE;
-  }
-
-  @Override
-  public void compile(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
-    boolean found = false;
-    for (Module module : moduleChunk.getNodes()) {
-      JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
-      if (extension != null) {
-        found = true;
-        break;
-      }
+    @Inject
+    public JavaCompiler(Project project) {
+        myProject = project;
     }
 
-    if (!found) {
-      return;
+    @Override
+    public String getDescription() {
+        return CompilerLocalize.javaCompilerDescription().get();
     }
 
-    Map<File, FileObject> parsingInfo = Maps.newHashMap(FileUtil.FILE_HASHING_STRATEGY);
-    context.putUserData(ourOutputFileParseInfo, parsingInfo);
-
-    final BackendCompiler backEndCompiler = getBackEndCompiler();
-    final BackendCompilerWrapper wrapper = new BackendCompilerWrapper(
-      this,
-      moduleChunk,
-      myProject,
-      filterResourceFiles(context, files),
-      (CompileContextEx)context,
-      backEndCompiler,
-      sink
-    );
-    try {
-      wrapper.compile(parsingInfo);
+    @Override
+    public boolean isCompilableFile(VirtualFile file, CompileContext context) {
+        return file.getFileType() == JavaFileType.INSTANCE;
     }
-    catch (CompilerException e) {
-      context.addMessage(CompilerMessageCategory.ERROR, ExceptionUtil.getThrowableText(e), null, -1, -1);
-      LOGGER.info(e);
+
+    @Override
+    public void compile(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
+        boolean found = false;
+        for (Module module : moduleChunk.getNodes()) {
+            JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
+            if (extension != null) {
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            return;
+        }
+
+        Map<File, FileObject> parsingInfo = Maps.newHashMap(FileUtil.FILE_HASHING_STRATEGY);
+        context.putUserData(ourOutputFileParseInfo, parsingInfo);
+
+        BackendCompiler backEndCompiler = getBackEndCompiler();
+        BackendCompilerWrapper wrapper = new BackendCompilerWrapper(
+            this,
+            moduleChunk,
+            myProject,
+            filterResourceFiles(context, files),
+            (CompileContextEx) context,
+            backEndCompiler,
+            sink
+        );
+        try {
+            wrapper.compile(parsingInfo);
+        }
+        catch (CompilerException e) {
+            context.newError(LocalizeValue.of(ExceptionUtil.getThrowableText(e))).add();
+            LOGGER.info(e);
+        }
+        catch (CacheCorruptedException e) {
+            LOGGER.info(e);
+            context.requestRebuildNextTime(LocalizeValue.ofNullable(e.getMessage()));
+        }
     }
-    catch (CacheCorruptedException e) {
-      LOGGER.info(e);
-      context.requestRebuildNextTime(e.getMessage());
+
+    private static List<VirtualFile> filterResourceFiles(CompileContext compileContext, VirtualFile[] virtualFiles) {
+        ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(compileContext.getProject());
+
+        List<VirtualFile> list = new ArrayList<>(virtualFiles.length);
+        for (VirtualFile file : virtualFiles) {
+            ContentFolderTypeProvider provider = fileIndex.getContentFolderTypeForFile(file);
+            if (provider == ProductionResourceContentFolderTypeProvider.getInstance() || provider == TestResourceContentFolderTypeProvider.getInstance()) {
+                continue;
+            }
+            list.add(file);
+        }
+        return list;
     }
-  }
 
-  private static List<VirtualFile> filterResourceFiles(CompileContext compileContext, VirtualFile[] virtualFiles) {
-    ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(compileContext.getProject());
-
-    List<VirtualFile> list = new ArrayList<>(virtualFiles.length);
-    for (VirtualFile file : virtualFiles) {
-      ContentFolderTypeProvider provider = fileIndex.getContentFolderTypeForFile(file);
-      if (provider == ProductionResourceContentFolderTypeProvider.getInstance() || provider == TestResourceContentFolderTypeProvider.getInstance()) {
-        continue;
-      }
-      list.add(file);
+    @Override
+    public FileType[] getInputFileTypes() {
+        return new FileType[]{JavaFileType.INSTANCE};
     }
-    return list;
-  }
 
-  @Override
-  public FileType[] getInputFileTypes() {
-    return new FileType[]{JavaFileType.INSTANCE};
-  }
+    @Override
+    public FileType[] getOutputFileTypes() {
+        return new FileType[]{JavaClassFileType.INSTANCE};
+    }
 
-  @Override
-  public FileType[] getOutputFileTypes() {
-    return new FileType[]{JavaClassFileType.INSTANCE};
-  }
+    @Override
+    public boolean validateConfiguration(CompileScope scope) {
+        return getBackEndCompiler().checkCompiler(scope);
+    }
 
-  @Override
-  public boolean validateConfiguration(CompileScope scope) {
-    return getBackEndCompiler().checkCompiler(scope);
-  }
+    @Override
+    public void registerCompilableFileTypes(Consumer<FileType> fileTypeConsumer) {
+        fileTypeConsumer.accept(JavaFileType.INSTANCE);
+    }
 
-  @Override
-  public void registerCompilableFileTypes(Consumer<FileType> fileTypeConsumer) {
-    fileTypeConsumer.accept(JavaFileType.INSTANCE);
-  }
-
-  private BackendCompiler getBackEndCompiler() {
-    return JavaCompilerConfiguration.getInstance(myProject).getActiveCompiler();
-  }
+    private BackendCompiler getBackEndCompiler() {
+        return JavaCompilerConfiguration.getInstance(myProject).getActiveCompiler();
+    }
 }

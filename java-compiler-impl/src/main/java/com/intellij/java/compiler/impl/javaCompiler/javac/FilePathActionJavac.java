@@ -30,63 +30,54 @@ import java.util.regex.Pattern;
 
 /**
  * @author Eugene Zhuravlev
- *         Date: Sep 14, 2005
+ * Date: Sep 14, 2005
  */
-public class FilePathActionJavac extends JavacParserAction
-{
-	private static final Logger LOG = Logger.getInstance(FilePathActionJavac.class);
-	private static final Pattern ourPattern = Pattern.compile("^\\w+\\[(.+)\\]$", Pattern.CASE_INSENSITIVE);
+public class FilePathActionJavac extends JavacParserAction {
+    private static final Logger LOG = Logger.getInstance(FilePathActionJavac.class);
+    private static final Pattern ourPattern = Pattern.compile("^\\w+\\[(.+)\\]$", Pattern.CASE_INSENSITIVE);
 
-	private final Matcher myJdk7FormatMatcher;
+    private final Matcher myJdk7FormatMatcher;
 
-	public FilePathActionJavac(final Matcher matcher)
-	{
-		super(matcher);
-		myJdk7FormatMatcher = ourPattern.matcher("");
-	}
+    public FilePathActionJavac(Matcher matcher) {
+        super(matcher);
+        myJdk7FormatMatcher = ourPattern.matcher("");
+    }
 
-	@Override
-	protected void doExecute(final String line, final String originalPath, final OutputParser.Callback callback)
-	{
-		if (LOG.isDebugEnabled())
-		{
-			LOG.debug("Process parsing message: " + originalPath);
-		}
+    @Override
+    protected void doExecute(String line, String originalPath, OutputParser.Callback callback) {
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Process parsing message: " + originalPath);
+        }
 
-		String filePath = originalPath;
-		// for jdk7: cut off characters wrapping the path. e.g. "RegularFileObject[C:/tmp/bugs/src/a/Demo1.java]"
-		if (myJdk7FormatMatcher.reset(filePath).matches())
-		{
-			filePath = myJdk7FormatMatcher.group(1);
-		}
+        String filePath = originalPath;
+        // for jdk7: cut off characters wrapping the path. e.g. "RegularFileObject[C:/tmp/bugs/src/a/Demo1.java]"
+        if (myJdk7FormatMatcher.reset(filePath).matches()) {
+            filePath = myJdk7FormatMatcher.group(1);
+        }
 
-		// jdk 9 specific
-		// C:\\Users\\VISTALL\\Documents\\Consulo\\untitled71\\out\\production\\untitled71:org\\example\\Main.class
-		int i = filePath.lastIndexOf(':');
-		if (i != -1)
-		{
-			// check next character - if it slash, it's not module separator
-			char next = filePath.charAt(i + 1);
-			if (next != '\\' && next != '/')
-			{
-				char[] chars = filePath.toCharArray();
-				chars[i] = '/';
-				filePath = FileUtil.toSystemIndependentName(new String(chars));
-			}
-		}
+        // jdk 9 specific
+        // C:\\Users\\VISTALL\\Documents\\Consulo\\untitled71\\out\\production\\untitled71:org\\example\\Main.class
+        int i = filePath.lastIndexOf(':');
+        if (i != -1) {
+            // check next character - if it slash, it's not module separator
+            char next = filePath.charAt(i + 1);
+            if (next != '\\' && next != '/') {
+                char[] chars = filePath.toCharArray();
+                chars[i] = '/';
+                filePath = FileUtil.toSystemIndependentName(new String(chars));
+            }
+        }
 
-		int index = filePath.lastIndexOf('/');
-		final String name = index >= 0 ? filePath.substring(index + 1) : filePath;
+        int index = filePath.lastIndexOf('/');
+        String name = index >= 0 ? filePath.substring(index + 1) : filePath;
 
-		CharSequence extension = FileUtil.getExtension((CharSequence) name);
-		if (Comparing.equal(extension, JavaFileType.INSTANCE.getDefaultExtension()))
-		{
-			callback.fileProcessed(filePath);
-			callback.setProgressText(CompilerLocalize.progressParsingFile(name).get());
-		}
-		else if (Comparing.equal(extension, JavaClassFileType.INSTANCE.getDefaultExtension()))
-		{
-			callback.fileGenerated(new FileObject(new File(filePath)));
-		}
-	}
+        CharSequence extension = FileUtil.getExtension((CharSequence) name);
+        if (Comparing.equal(extension, JavaFileType.INSTANCE.getDefaultExtension())) {
+            callback.fileProcessed(filePath);
+            callback.setProgressText(CompilerLocalize.progressParsingFile(name));
+        }
+        else if (Comparing.equal(extension, JavaClassFileType.INSTANCE.getDefaultExtension())) {
+            callback.fileGenerated(new FileObject(new File(filePath)));
+        }
+    }
 }
