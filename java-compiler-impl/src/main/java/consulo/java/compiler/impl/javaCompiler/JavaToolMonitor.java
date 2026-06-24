@@ -5,6 +5,7 @@ import com.intellij.java.compiler.impl.javaCompiler.FileObject;
 import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompileContext;
+import consulo.compiler.CompilerMessageCategory;
 import consulo.compiler.localize.CompilerLocalize;
 import consulo.java.rt.common.compiler.JavaCompilerInterface;
 import consulo.localize.LocalizeValue;
@@ -114,26 +115,17 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
 
     @Override
     public void logInfo(String message, String fileUri, long lineNumber, long columnNumber) throws TException {
-        new MessageBuilderWrapper(myCompileContext.newInfo(LocalizeValue.of(message)))
-            .url(fileUri)
-            .position((int) lineNumber, (int) columnNumber)
-            .add();
+        logMessage(CompilerMessageCategory.INFORMATION, message, fileUri, lineNumber, columnNumber);
     }
 
     @Override
     public void logError(String message, String fileUri, long lineNumber, long columnNumber) throws TException {
-        new MessageBuilderWrapper(myCompileContext.newError(LocalizeValue.of(message)))
-            .url(fileUri)
-            .position((int) lineNumber, (int) columnNumber)
-            .add();
+        logMessage(CompilerMessageCategory.ERROR, message, fileUri, lineNumber, columnNumber);
     }
 
     @Override
     public void logWarning(String message, String fileUri, long lineNumber, long columnNumber) throws TException {
-        new MessageBuilderWrapper(myCompileContext.newWarning(LocalizeValue.of(message)))
-            .url(fileUri)
-            .position((int) lineNumber, (int) columnNumber)
-            .add();
+        logMessage(CompilerMessageCategory.WARNING, message, fileUri, lineNumber, columnNumber);
     }
 
     @Override
@@ -176,39 +168,21 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
     //		}
     //	}
 
-    private class MessageBuilderWrapper implements CompileContext.MessageBuilder {
-        private final CompileContext.MessageBuilder myDelegate;
-
-        private MessageBuilderWrapper(CompileContext.MessageBuilder delegate) {
-            myDelegate = delegate;
-        }
-
-        @Override
-        public CompileContext.MessageBuilder url(String url) {
-            try {
-                VirtualFile fileByURL = VirtualFileUtil.findFileByURL(new URI(url).toURL());
-                if (fileByURL != null) {
-                    myDelegate.url(fileByURL.getUrl());
-                }
+    private void logMessage(CompilerMessageCategory category, String message, String fileUri, long lineNumber, long columnNumber) {
+        String fileUrl = null;
+        try {
+            URI uri = new URI(fileUri);
+            VirtualFile fileByURL = VirtualFileUtil.findFileByURL(uri.toURL());
+            if (fileByURL != null) {
+                fileUrl = fileByURL.getUrl();
             }
-            catch (Exception ignored) {
-            }
-            return this;
+        }
+        catch (Exception ignored) {
         }
 
-        @Override
-        public CompileContext.MessageBuilder position(int line, int column) {
-            return myDelegate.position(line, column);
-        }
-
-        @Override
-        public CompileContext.MessageBuilder navigatable(Navigatable navigatable) {
-            return myDelegate.navigatable(navigatable);
-        }
-
-        @Override
-        public void add() {
-            myDelegate.add();
-        }
+        myCompileContext.newMessage(category, LocalizeValue.of(message))
+            .optionalUrl(fileUrl)
+            .position((int) lineNumber, (int) columnNumber)
+            .add();
     }
 }
