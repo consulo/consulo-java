@@ -15,47 +15,54 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import consulo.application.AllIcons;
 import consulo.fileEditor.structureView.tree.ActionPresentation;
 import consulo.fileEditor.structureView.tree.Sorter;
 import consulo.ide.localize.IdeLocalize;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 
 import java.util.Comparator;
 
-public class VisibilitySorter implements Sorter{
+public class VisibilitySorter implements Sorter {
+    public static final Sorter INSTANCE = new VisibilitySorter();
 
-  public static final Sorter INSTANCE = new VisibilitySorter();
+    private static final ActionPresentation PRESENTATION = new ActionPresentation() {
+        @Override
+        public LocalizeValue getText() {
+            return IdeLocalize.actionStructureviewSortByVisibility();
+        }
 
-  private static final ActionPresentation PRESENTATION = new ActionPresentation() {
-    public String getText() {
-      return IdeLocalize.actionStructureviewSortByVisibility().get();
+        @Override
+        public LocalizeValue getDescription() {
+            return LocalizeValue.empty();
+        }
+
+        @Override
+        public Image getIcon() {
+            return PlatformIconGroup.objectbrowserVisibilitysort();
+        }
+    };
+
+    public static final String ID = "VISIBILITY_SORTER";
+
+    @Override
+    public Comparator getComparator() {
+        return VisibilityComparator.IMSTANCE;
     }
 
-    public String getDescription() {
-      return null;
+    @Override
+    public boolean isVisible() {
+        return true;
     }
 
-    public Image getIcon() {
-      return AllIcons.ObjectBrowser.VisibilitySort;
+    @Override
+    public ActionPresentation getPresentation() {
+        return PRESENTATION;
     }
-  };
 
-  public static final String ID = "VISIBILITY_SORTER";
-
-  public Comparator getComparator() {
-    return VisibilityComparator.IMSTANCE;
-  }
-
-  public boolean isVisible() {
-    return true;
-  }
-
-  public ActionPresentation getPresentation() {
-    return PRESENTATION;
-  }
-
-  public String getName() {
-    return ID;
-  }
+    @Override
+    public String getName() {
+        return ID;
+    }
 }
