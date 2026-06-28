@@ -18,20 +18,22 @@ package com.intellij.java.impl.ide.structureView.impl.java;
 import consulo.ui.ex.tree.AlphaComparator;
 import com.intellij.java.impl.ide.util.treeView.SourceComparator;
 import consulo.logging.Logger;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 
 public class VisibilityComparator implements Comparator {
     private static final Logger LOG = Logger.getInstance(VisibilityComparator.class);
     private static final int GROUP_ACCESS_SUBLEVEL = 1;
-    public static Comparator THEN_SOURCE = new VisibilityComparator(SourceComparator.INSTANCE);
-    public static Comparator THEN_ALPHA = new VisibilityComparator(AlphaComparator.INSTANCE);
-    public static Comparator INSTANCE = new VisibilityComparator(null);
 
-    private final Comparator myNextComparator;
+    public static final Comparator THEN_SOURCE = new VisibilityComparator(SourceComparator.INSTANCE);
+    public static final Comparator THEN_ALPHA = new VisibilityComparator(AlphaComparator.INSTANCE);
+    public static final Comparator INSTANCE = new VisibilityComparator(null);
+
+    private final @Nullable Comparator myNextComparator;
     private static final int UNKNOWN_ACCESS_LEVEL = -1;
 
-    public VisibilityComparator(Comparator comparator) {
+    public VisibilityComparator(@Nullable Comparator comparator) {
         myNextComparator = comparator;
     }
 
