@@ -22,35 +22,36 @@ import consulo.logging.Logger;
 import java.util.Comparator;
 
 public class VisibilityComparator implements Comparator {
-  private static final Logger LOG = Logger.getInstance(VisibilityComparator.class);
-  private static final int GROUP_ACCESS_SUBLEVEL = 1;
-  public static Comparator THEN_SOURCE = new VisibilityComparator(SourceComparator.INSTANCE);
-  public static Comparator THEN_ALPHA = new VisibilityComparator(AlphaComparator.INSTANCE);
-  public static Comparator IMSTANCE = new VisibilityComparator(null);
+    private static final Logger LOG = Logger.getInstance(VisibilityComparator.class);
+    private static final int GROUP_ACCESS_SUBLEVEL = 1;
+    public static Comparator THEN_SOURCE = new VisibilityComparator(SourceComparator.INSTANCE);
+    public static Comparator THEN_ALPHA = new VisibilityComparator(AlphaComparator.INSTANCE);
+    public static Comparator INSTANCE = new VisibilityComparator(null);
 
-  private final Comparator myNextComparator;
-  private static final int UNKNOWN_ACCESS_LEVEL = -1;
+    private final Comparator myNextComparator;
+    private static final int UNKNOWN_ACCESS_LEVEL = -1;
 
-  public VisibilityComparator(Comparator comparator) {
-    myNextComparator = comparator;
-  }
-
-  public int compare(Object descriptor1, Object descriptor2) {
-    int accessLevel1 = getAccessLevel(descriptor1);
-    int accessLevel2 = getAccessLevel(descriptor2);
-    if (accessLevel1 == accessLevel2 && myNextComparator != null) {
-      return myNextComparator.compare(descriptor1, descriptor2);
+    public VisibilityComparator(Comparator comparator) {
+        myNextComparator = comparator;
     }
-    return accessLevel2 - accessLevel1;
-  }
 
-  private static int getAccessLevel(Object element) {
-    if (element instanceof AccessLevelProvider) {
-      return ((AccessLevelProvider)element).getAccessLevel() * (GROUP_ACCESS_SUBLEVEL + 1) + ((AccessLevelProvider)element).getSubLevel();
+    @Override
+    public int compare(Object descriptor1, Object descriptor2) {
+        int accessLevel1 = getAccessLevel(descriptor1);
+        int accessLevel2 = getAccessLevel(descriptor2);
+        if (accessLevel1 == accessLevel2 && myNextComparator != null) {
+            return myNextComparator.compare(descriptor1, descriptor2);
+        }
+        return accessLevel2 - accessLevel1;
     }
-    else {
-      LOG.error(element.getClass().getName());
-      return UNKNOWN_ACCESS_LEVEL;
-    }    
-  }
+
+    private static int getAccessLevel(Object element) {
+        if (element instanceof AccessLevelProvider accessLevelProvider) {
+            return accessLevelProvider.getAccessLevel() * (GROUP_ACCESS_SUBLEVEL + 1) + accessLevelProvider.getSubLevel();
+        }
+        else {
+            LOG.error(element.getClass().getName());
+            return UNKNOWN_ACCESS_LEVEL;
+        }
+    }
 }

@@ -48,7 +48,7 @@ public class VisibilitySorter implements Sorter {
 
     @Override
     public Comparator getComparator() {
-        return VisibilityComparator.IMSTANCE;
+        return VisibilityComparator.INSTANCE;
     }
 
     @Override
