@@ -21,6 +21,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ActionImpl;
 import consulo.annotation.component.ActionParentRef;
 import consulo.annotation.component.ActionRef;
+import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
 import consulo.java.analysis.impl.util.JavaI18nUtil;
@@ -38,7 +39,9 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
 import consulo.undoRedo.CommandProcessor;
+import consulo.util.concurrent.coroutine.Coroutine;
 import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
 
@@ -53,15 +56,16 @@ public class I18nizeAction extends AnAction {
     }
 
     @Override
-    @RequiredUIAccess
-    public void update(AnActionEvent e) {
-        boolean active = getHandler(e) != null;
-        if (ActionPlaces.isPopupPlace(e.getPlace())) {
-            e.getPresentation().setVisible(active);
-        }
-        else {
-            e.getPresentation().setEnabled(active);
-        }
+    public Coroutine<?, ?> updateAsync(AnActionEvent e) {
+        return ActionSafeReadLock.run(e, presentation -> {
+            boolean active = getHandler(e) != null;
+            if (ActionPlaces.isPopupPlace(e.getPlace())) {
+                presentation.setVisible(active);
+            }
+            else {
+                presentation.setEnabled(active);
+            }
+        }).toCoroutine();
     }
 
     @Nullable
@@ -94,14 +98,7 @@ public class I18nizeAction extends AnAction {
             return new I18nizeQuickFix();
         }
 
-        for (I18nizeHandlerProvider handlerProvider : I18nizeHandlerProvider.EP_NAME.getExtensionList()) {
-            I18nQuickFixHandler handler = handlerProvider.getHandler(psiFile, editor, range);
-            if (handler != null) {
-                return handler;
-            }
-        }
-
-        return null;
+        return Application.get().getExtensionPoint(I18nizeHandlerProvider.class).computeSafeIfAny(it -> it.getHandler(psiFile, editor, range));
     }
 
     @Nullable

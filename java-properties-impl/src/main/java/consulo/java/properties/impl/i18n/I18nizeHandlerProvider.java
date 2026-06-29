@@ -18,10 +18,8 @@ package consulo.java.properties.impl.i18n;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.codeEditor.Editor;
-import consulo.component.extension.ExtensionPointName;
 import consulo.document.util.TextRange;
 import consulo.language.psi.PsiFile;
-
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -29,8 +27,6 @@ import org.jspecify.annotations.Nullable;
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public abstract class I18nizeHandlerProvider {
-    public static final ExtensionPointName<I18nizeHandlerProvider> EP_NAME = ExtensionPointName.create(I18nizeHandlerProvider.class);
-
     @Nullable
     public abstract I18nQuickFixHandler getHandler(PsiFile psiFile, Editor editor, TextRange range);
 }
