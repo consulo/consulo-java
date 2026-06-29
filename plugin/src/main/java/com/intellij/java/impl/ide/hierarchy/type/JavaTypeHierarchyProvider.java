@@ -23,6 +23,7 @@ import com.intellij.java.language.psi.PsiSyntheticClass;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorKeys;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.TypeHierarchyBrowserBase;
 import consulo.language.Language;
@@ -51,7 +52,7 @@ public class JavaTypeHierarchyProvider implements TypeHierarchyProvider {
             return null;
         }
 
-        Editor editor = dataContext.getData(Editor.KEY);
+        Editor editor = dataContext.getData(EditorKeys.EDITOR_SNAPSHOT);
         if (editor != null) {
             PsiFile file = PsiDocumentManager.getInstance(project).getPsiFile(editor.getDocument());
             if (file == null) {

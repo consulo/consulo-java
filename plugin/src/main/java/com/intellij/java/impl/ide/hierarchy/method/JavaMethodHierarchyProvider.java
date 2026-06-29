@@ -22,6 +22,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorKeys;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
 import consulo.language.Language;
@@ -65,7 +66,7 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
             return method;
         }
 
-        Editor editor = dataContext.getData(Editor.KEY);
+        Editor editor = dataContext.getData(EditorKeys.EDITOR_SNAPSHOT);
         if (editor == null) {
             return null;
         }
@@ -74,8 +75,6 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
         if (psiFile == null) {
             return null;
         }
-
-        PsiDocumentManager.getInstance(project).commitAllDocuments();
 
         int offset = editor.getCaretModel().getOffset();
         if (offset < 1) {
