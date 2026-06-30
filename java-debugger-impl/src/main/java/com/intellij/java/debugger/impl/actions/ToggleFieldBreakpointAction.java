@@ -33,6 +33,7 @@ import com.intellij.java.language.psi.PsiField;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ActionImpl;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorKeys;
 import consulo.dataContext.DataContext;
 import consulo.document.Document;
 import consulo.fileEditor.FileEditorManager;
@@ -44,6 +45,9 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
+import consulo.util.concurrent.coroutine.Coroutine;
+import consulo.util.dataholder.Key;
 import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -70,7 +74,7 @@ public class ToggleFieldBreakpointAction extends AnAction {
         if (project == null) {
             return;
         }
-        SourcePosition place = getPlace(e);
+        SourcePosition place = getPlace(e, Editor.KEY);
 
         if (place != null) {
             Document document = PsiDocumentManager.getInstance(project).getDocument(place.getFile());
@@ -97,14 +101,15 @@ public class ToggleFieldBreakpointAction extends AnAction {
     }
 
     @Override
-    @RequiredUIAccess
-    public void update(AnActionEvent event) {
-        event.getPresentation().setVisible(getPlace(event) != null);
+    public Coroutine<?, ?> updateAsync(AnActionEvent e) {
+        return ActionSafeReadLock.run(e, presentation -> {
+            presentation.setVisible(getPlace(e, EditorKeys.EDITOR_SNAPSHOT) != null);
+        }).toCoroutine();
     }
 
     @Nullable
     @RequiredReadAction
-    public static SourcePosition getPlace(AnActionEvent event) {
+    public static SourcePosition getPlace(AnActionEvent event, Key<Editor> editorKey) {
         DataContext dataContext = event.getDataContext();
         Project project = event.getData(Project.KEY);
         if (project == null) {
@@ -140,7 +145,7 @@ public class ToggleFieldBreakpointAction extends AnAction {
             }
         }
 
-        Editor editor = event.getData(Editor.KEY);
+        Editor editor = event.getData(editorKey);
         if (editor == null) {
             editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
         }
