@@ -93,8 +93,6 @@ public class BaseGenerateTestSupportMethodAction extends BaseGenerateAction {
             return false;
         }
 
-        PsiDocumentManager.getInstance(project).commitAllDocuments();
-
         PsiClass targetClass = getTargetClass(editor, file);
         return targetClass != null && isValidForClass(targetClass);
     }
