@@ -707,8 +707,6 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
     @Nullable
     @RequiredReadAction
     public static PsiClass getContextClass(Project project, Editor editor, PsiFile file, boolean allowInterface) {
-        PsiDocumentManager.getInstance(project).commitAllDocuments();
-
         int offset = editor.getCaretModel().getOffset();
         PsiElement element = file.findElementAt(offset);
         do {
