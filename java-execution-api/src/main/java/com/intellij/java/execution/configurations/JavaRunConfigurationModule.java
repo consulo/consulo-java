@@ -91,9 +91,7 @@ public class JavaRunConfigurationModule extends RunConfigurationModule {
   public PsiClass findNotNullClass(final String className) throws RuntimeConfigurationWarning {
     final PsiClass psiClass = findClass(className);
     if (psiClass == null) {
-      throw new RuntimeConfigurationWarning(
-        ExecutionLocalize.classNotFoundInModuleErrorMessage(className, getModuleName()).get()
-      );
+      throw new RuntimeConfigurationWarning(ExecutionLocalize.classNotFoundInModuleErrorMessage(className, getModuleName()));
     }
     return psiClass;
   }

@@ -89,8 +89,6 @@ public class BaseGenerateAction extends CodeInsightAction implements GenerateAct
             return false;
         }
 
-        PsiDocumentManager.getInstance(project).commitAllDocuments();
-
         PsiClass targetClass = getTargetClass(editor, file);
         return targetClass != null && isValidForClass(targetClass);
     }
