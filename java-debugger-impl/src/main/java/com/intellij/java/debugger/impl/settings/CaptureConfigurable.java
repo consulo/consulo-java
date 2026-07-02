@@ -39,6 +39,7 @@ import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
 import consulo.ui.ex.action.DumbAwareAction;
+import consulo.ui.ex.action.LegacyDumbAwareAction;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
@@ -158,7 +159,7 @@ public class CaptureConfigurable implements SearchableConfigurable {
             }
         });
 
-        new DumbAwareAction("Toggle") {
+        new LegacyDumbAwareAction("Toggle") {
             @Override
             public void update(AnActionEvent e) {
                 e.getPresentation().setEnabled(table.getSelectedRowCount() == 1);

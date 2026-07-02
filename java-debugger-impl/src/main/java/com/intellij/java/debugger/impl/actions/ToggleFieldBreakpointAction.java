@@ -45,6 +45,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithAsyncUpdate;
 import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
 import consulo.util.concurrent.coroutine.Coroutine;
 import consulo.util.dataholder.Key;
@@ -56,7 +57,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Set;
 
 @ActionImpl(id = "ToggleFieldBreakpoint")
-public class ToggleFieldBreakpointAction extends AnAction {
+public class ToggleFieldBreakpointAction extends AnAction implements AnActionWithAsyncUpdate {
     private static final Set<String> POPUP_PLACES = Set.of(
         ActionPlaces.PROJECT_VIEW_POPUP,
         ActionPlaces.STRUCTURE_VIEW_POPUP,

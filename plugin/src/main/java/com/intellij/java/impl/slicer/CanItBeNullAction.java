@@ -20,13 +20,14 @@ import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.language.psi.PsiElement;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  * User: cdr
  */
-public class CanItBeNullAction  extends AnAction {
+public class CanItBeNullAction  extends AnAction implements AnActionWithSyncUpdate {
   private final SliceTreeBuilder myTreeBuilder;
   private static final String TEXT = "Group by leaf expression nullity";
 

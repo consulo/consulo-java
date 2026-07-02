@@ -48,10 +48,7 @@ import consulo.process.event.ProcessListener;
 import consulo.process.util.CapturingProcessAdapter;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.CustomShortcutSet;
-import consulo.ui.ex.action.Presentation;
+import consulo.ui.ex.action.*;
 import consulo.ui.image.Image;
 
 import javax.swing.*;
@@ -151,7 +148,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
     }
 
 
-    private abstract static class ProxyBasedAction extends AnAction {
+    private abstract static class ProxyBasedAction extends AnAction implements AnActionWithSyncUpdate {
         protected final ProcessHandler myProcessHandler;
 
         protected ProxyBasedAction(LocalizeValue text, LocalizeValue description, Image icon, ProcessHandler processHandler) {
@@ -159,7 +156,6 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
             myProcessHandler = processHandler;
         }
 
-        @RequiredUIAccess
         @Override
         public final void update(AnActionEvent event) {
             ProcessProxy proxy = ProcessProxyFactory.getInstance().getAttachedProxy(myProcessHandler);

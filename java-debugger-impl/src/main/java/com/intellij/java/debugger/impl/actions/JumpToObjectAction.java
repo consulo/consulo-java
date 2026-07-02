@@ -22,6 +22,7 @@ import consulo.annotation.component.ActionImpl;
 import consulo.application.Application;
 import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import org.jspecify.annotations.Nullable;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
@@ -46,7 +47,7 @@ import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 
 @ActionImpl(id = DebuggerActions.EDIT_TYPE_SOURCE)
-public class JumpToObjectAction extends DebuggerAction {
+public class JumpToObjectAction extends DebuggerAction implements AnActionWithSyncUpdate {
     private static final Logger LOG = Logger.getInstance(JumpToObjectAction.class);
 
     public JumpToObjectAction() {

@@ -33,12 +33,13 @@ import consulo.execution.debug.ui.XValueTree;
 import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.util.concurrent.AsyncResult;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-public abstract class ArrayAction extends DebuggerAction {
+public abstract class ArrayAction extends DebuggerAction implements AnActionWithSyncUpdate {
     protected ArrayAction(LocalizeValue text) {
         super(text);
     }

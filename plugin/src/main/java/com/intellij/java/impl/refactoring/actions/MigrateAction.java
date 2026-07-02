@@ -22,9 +22,10 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 
 @ActionImpl(id = "Migrate")
-public class MigrateAction extends AnAction {
+public class MigrateAction extends AnAction implements AnActionWithSyncUpdate {
     public MigrateAction() {
         super(JavaLocalize.actionMigrateText(), JavaLocalize.actionMigrateDescription());
     }
@@ -37,7 +38,6 @@ public class MigrateAction extends AnAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         e.getPresentation().setEnabled(e.hasData(Project.KEY));
     }

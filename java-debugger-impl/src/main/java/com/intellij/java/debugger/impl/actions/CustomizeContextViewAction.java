@@ -35,6 +35,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.DumbAwareAction;
 
 import javax.swing.*;
@@ -48,7 +49,7 @@ import java.util.List;
         @ActionParentRef(@ActionRef(id = "XDebugger.Watches.Tree.Popup"))
     }
 )
-public class CustomizeContextViewAction extends DumbAwareAction {
+public class CustomizeContextViewAction extends DumbAwareAction implements AnActionWithSyncUpdate {
     public CustomizeContextViewAction() {
         super(XDebuggerLocalize.actionCustomizeContextViewText());
     }
@@ -100,7 +101,6 @@ public class CustomizeContextViewAction extends DumbAwareAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
         XDebuggerManager debuggerManager = project == null ? null : XDebuggerManager.getInstance(project);

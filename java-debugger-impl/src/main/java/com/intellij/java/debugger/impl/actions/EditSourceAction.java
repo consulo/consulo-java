@@ -31,13 +31,10 @@ import consulo.application.ReadAction;
 import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.action.ActionManager;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.IdeActions;
-import consulo.ui.ex.action.Presentation;
+import consulo.ui.ex.action.*;
 
 @ActionImpl(id = DebuggerActions.EDIT_NODE_SOURCE)
-public class EditSourceAction extends DebuggerAction {
+public class EditSourceAction extends DebuggerAction implements AnActionWithSyncUpdate {
     public EditSourceAction() {
         super(XDebuggerLocalize.actionEditNodeSourceText());
     }
@@ -98,7 +95,6 @@ public class EditSourceAction extends DebuggerAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
 

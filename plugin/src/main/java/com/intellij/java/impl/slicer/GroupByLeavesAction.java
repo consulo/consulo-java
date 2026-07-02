@@ -18,11 +18,12 @@ package com.intellij.java.impl.slicer;
 import consulo.application.AllIcons;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 
 /**
  * @author cdr
  */
-class GroupByLeavesAction extends AnAction {
+class GroupByLeavesAction extends AnAction implements AnActionWithSyncUpdate {
   private final SliceTreeBuilder myTreeBuilder;
   private static final String TEXT = "Group by leaf expression";
 

@@ -39,6 +39,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithAsyncUpdate;
 import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.concurrent.coroutine.Coroutine;
@@ -48,8 +49,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 
 @ActionImpl(id = "I18nize", parents = @ActionParentRef(@ActionRef(id = "RefactoringMenu")))
-public class I18nizeAction extends AnAction {
-    private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.i18n.I18nizeAction");
+public class I18nizeAction extends AnAction implements AnActionWithAsyncUpdate {
+    private static final Logger LOG = Logger.getInstance(I18nizeAction.class);
 
     public I18nizeAction() {
         super(JavaPropertiesLocalize.actionI18nizeText(), JavaPropertiesLocalize.actionI18nizeDescription());

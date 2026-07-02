@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ActionImpl(id = "Debugger.ViewAsGroup")
-public class ViewAsGroup extends ActionGroup implements DumbAware {
+public class ViewAsGroup extends ActionGroup implements DumbAware, AnActionWithSyncUpdate {
     private static final Logger LOG = Logger.getInstance(ViewAsGroup.class);
 
     private volatile AnAction[] myChildren = AnAction.EMPTY_ARRAY;
@@ -162,7 +162,6 @@ public class ViewAsGroup extends ActionGroup implements DumbAware {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent event) {
         if (!DebuggerAction.isFirstStart(event)) {
             return;

@@ -41,6 +41,7 @@ import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
@@ -60,15 +61,9 @@ import org.jspecify.annotations.Nullable;
         relatedToAction = @ActionRef(id = "QuickJavaDoc")
     )
 )
-public class ShowByteCodeAction extends AnAction {
+public class ShowByteCodeAction extends AnAction implements AnActionWithSyncUpdate {
     public ShowByteCodeAction() {
-        super("Show Byte Code");
-    }
-
-    @Nullable
-    @Override
-    protected Image getTemplateIcon() {
-        return PlatformIconGroup.filetypesBinary();
+        super("Show Byte Code", "", PlatformIconGroup.filetypesBinary());
     }
 
     @Override

@@ -28,6 +28,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 
 /**
  * @author lex
@@ -40,7 +41,7 @@ import consulo.ui.ex.action.AnActionEvent;
         relatedToAction = @ActionRef(id = "StepOver")
     )
 )
-public class HotSwapAction extends AnAction {
+public class HotSwapAction extends AnAction implements AnActionWithSyncUpdate {
     public HotSwapAction() {
         super(JavaDebuggerLocalize.actionHotswapText(), JavaDebuggerLocalize.actionHotswapDescription());
     }
@@ -62,7 +63,6 @@ public class HotSwapAction extends AnAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         Project project = e.getData(Project.KEY);
         if (project == null) {

@@ -32,18 +32,18 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.util.lang.StringUtil;
 
 import java.util.List;
 
 @ActionImpl(id = "Debugger.CreateRenderer")
-public class CreateRendererAction extends AnAction {
+public class CreateRendererAction extends AnAction implements AnActionWithSyncUpdate {
     public CreateRendererAction() {
         super(JavaDebuggerLocalize.actionCreateRendererText());
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         List<JavaValue> values = ViewAsGroup.getSelectedValues(e);
         if (values.size() != 1) {

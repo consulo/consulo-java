@@ -25,12 +25,13 @@ import consulo.annotation.component.ActionImpl;
 import consulo.execution.debug.localize.XDebuggerLocalize;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 
 /**
  * @author lex
  */
 @ActionImpl(id = "Debugger.FreezeThread")
-public class FreezeThreadAction extends DebuggerAction {
+public class FreezeThreadAction extends DebuggerAction implements AnActionWithSyncUpdate {
     public FreezeThreadAction() {
         super(XDebuggerLocalize.actionFreezeThreadText());
     }
@@ -62,7 +63,6 @@ public class FreezeThreadAction extends DebuggerAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         DebuggerTreeNodeImpl[] selectedNode = getSelectedNodes(e.getDataContext());
         if (selectedNode == null) {

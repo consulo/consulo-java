@@ -28,6 +28,7 @@ import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.Presentation;
 
 /**
@@ -35,7 +36,7 @@ import consulo.ui.ex.action.Presentation;
  * @since 2003-09-26
  */
 @ActionImpl(id = "Debugger.ResumeThread")
-public class ResumeThreadAction extends DebuggerAction {
+public class ResumeThreadAction extends DebuggerAction implements AnActionWithSyncUpdate {
     public ResumeThreadAction() {
         super(XDebuggerLocalize.actionResumeThreadText());
     }
@@ -65,7 +66,6 @@ public class ResumeThreadAction extends DebuggerAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         DebuggerTreeNodeImpl[] selectedNodes = getSelectedNodes(e.getDataContext());
 

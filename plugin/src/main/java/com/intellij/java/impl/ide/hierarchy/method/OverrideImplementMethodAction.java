@@ -34,6 +34,7 @@ import consulo.project.ui.wm.ToolWindowManager;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
 import consulo.undoRedo.CommandProcessor;
@@ -45,7 +46,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-abstract class OverrideImplementMethodAction extends AnAction {
+abstract class OverrideImplementMethodAction extends AnAction implements AnActionWithSyncUpdate {
     private static final Logger LOG = Logger.getInstance(OverrideImplementMethodAction.class);
 
     protected OverrideImplementMethodAction(LocalizeValue text, LocalizeValue description) {
@@ -106,7 +107,6 @@ abstract class OverrideImplementMethodAction extends AnAction {
     }
 
     @Override
-    @RequiredUIAccess
     public final void update(AnActionEvent e) {
         Presentation presentation = e.getPresentation();
         DataContext dataContext = e.getDataContext();

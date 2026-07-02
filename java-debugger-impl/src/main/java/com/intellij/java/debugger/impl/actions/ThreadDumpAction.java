@@ -34,6 +34,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.Presentation;
 import consulo.util.collection.SmartList;
 import consulo.util.collection.primitive.ints.IntMaps;
@@ -49,7 +50,7 @@ import java.util.Map;
  * @author Sascha Weinreuter
  */
 @ActionImpl(id = "DumpThreads")
-public class ThreadDumpAction extends AnAction {
+public class ThreadDumpAction extends AnAction implements AnActionWithSyncUpdate {
     public ThreadDumpAction() {
         super(
             JavaDebuggerLocalize.actionThreadDumpText(),
@@ -329,7 +330,6 @@ public class ThreadDumpAction extends AnAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent event) {
         Presentation presentation = event.getPresentation();
         Project project = event.getData(Project.KEY);

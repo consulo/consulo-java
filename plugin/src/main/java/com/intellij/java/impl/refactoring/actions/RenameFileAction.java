@@ -47,7 +47,7 @@ import consulo.virtualFileSystem.VirtualFile;
         )
     }
 )
-public class RenameFileAction extends AnAction implements DumbAware {
+public class RenameFileAction extends AnAction implements DumbAware, AnActionWithSyncUpdate {
     public RenameFileAction() {
         super(JavaRefactoringLocalize.actionRenameFileText(), JavaRefactoringLocalize.actionRenameFileDescription());
     }
@@ -65,7 +65,7 @@ public class RenameFileAction extends AnAction implements DumbAware {
     @Override
     public void update(AnActionEvent e) {
         PsiFile file = e.getData(PsiFile.KEY);
-        boolean enabled = file instanceof PsiClassOwner && e.getPlace() != ActionPlaces.EDITOR_POPUP && e.hasData(Project.KEY);
+        boolean enabled = file instanceof PsiClassOwner && !ActionPlaces.EDITOR_POPUP.equals(e.getPlace()) && e.hasData(Project.KEY);
         e.getPresentation().setEnabledAndVisible(enabled);
     }
 }

@@ -27,6 +27,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
@@ -42,7 +43,7 @@ import java.io.IOException;
  * @author Jeka
  */
 @ActionImpl(id = "ExportThreads")
-public class ExportThreadsAction extends AnAction {
+public class ExportThreadsAction extends AnAction implements AnActionWithSyncUpdate {
     public ExportThreadsAction() {
         super(ActionLocalize.actionExportthreadsText(), ActionLocalize.actionExportthreadsDescription(), PlatformIconGroup.actionsExport());
     }
@@ -89,7 +90,6 @@ public class ExportThreadsAction extends AnAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent event) {
         Presentation presentation = event.getPresentation();
         Project project = event.getData(Project.KEY);

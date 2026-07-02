@@ -22,6 +22,7 @@ import consulo.execution.test.AbstractTestProxy;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.Presentation;
 import consulo.project.Project;
 import com.intellij.java.language.psi.PsiClass;
@@ -32,7 +33,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 
 import java.util.Set;
 
-public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfiguration<JavaRunConfigurationModule>> extends AnAction {
+public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfiguration<JavaRunConfigurationModule>> extends AnAction implements AnActionWithSyncUpdate {
   private static final Logger LOG = Logger.getInstance(AbstractExcludeFromRunAction.class);
 
   protected abstract Set<String> getPattern(T configuration);
@@ -54,7 +55,6 @@ public abstract class AbstractExcludeFromRunAction<T extends ModuleBasedConfigur
     getPattern(configuration).remove(qualifiedName);
   }
 
-  @RequiredUIAccess
   @Override
   public void update(AnActionEvent e) {
     final Presentation presentation = e.getPresentation();

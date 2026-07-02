@@ -37,6 +37,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.util.lang.CharArrayUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -45,7 +46,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Set;
 
 @ActionImpl(id = "ToggleMethodBreakpoint")
-public class ToggleMethodBreakpointAction extends AnAction {
+public class ToggleMethodBreakpointAction extends AnAction implements AnActionWithSyncUpdate {
     private static final Set<String> POPUP_PLACES = Set.of(
         ActionPlaces.PROJECT_VIEW_POPUP,
         ActionPlaces.STRUCTURE_VIEW_POPUP,
@@ -58,7 +59,6 @@ public class ToggleMethodBreakpointAction extends AnAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent event) {
         boolean toEnable = getPlace(event) != null;
 

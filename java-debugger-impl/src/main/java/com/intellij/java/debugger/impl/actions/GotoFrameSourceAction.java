@@ -23,11 +23,12 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.dataContext.DataContext;
 import consulo.project.Project;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 
 /**
  * @author lex
  */
-public abstract class GotoFrameSourceAction extends DebuggerAction {
+public abstract class GotoFrameSourceAction extends DebuggerAction implements AnActionWithSyncUpdate {
     protected GotoFrameSourceAction(LocalizeValue text) {
         super(text);
     }
@@ -52,7 +53,6 @@ public abstract class GotoFrameSourceAction extends DebuggerAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         e.getPresentation().setVisible(getStackFrameDescriptor(e.getDataContext()) != null);
     }

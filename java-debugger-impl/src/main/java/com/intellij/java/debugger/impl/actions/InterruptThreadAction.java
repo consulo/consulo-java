@@ -24,6 +24,7 @@ import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.component.ActionImpl;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.Presentation;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import java.util.List;
  * @since 2003-09-26
  */
 @ActionImpl(id = "Debugger.InterruptThread")
-public class InterruptThreadAction extends DebuggerAction {
+public class InterruptThreadAction extends DebuggerAction implements AnActionWithSyncUpdate {
     public InterruptThreadAction() {
         super(JavaDebuggerLocalize.actionInterruptThreadText());
     }
@@ -69,7 +70,6 @@ public class InterruptThreadAction extends DebuggerAction {
     }
 
     @Override
-    @RequiredUIAccess
     public void update(AnActionEvent e) {
         DebuggerTreeNodeImpl[] selectedNodes = getSelectedNodes(e.getDataContext());
 

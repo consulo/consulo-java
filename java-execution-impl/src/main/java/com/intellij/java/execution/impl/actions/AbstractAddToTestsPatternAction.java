@@ -26,6 +26,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
@@ -35,7 +36,7 @@ import consulo.util.collection.ContainerUtil;
 
 import java.util.*;
 
-public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction {
+public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction implements AnActionWithSyncUpdate {
   protected abstract AbstractPatternBasedConfigurationProducer<T> getPatternBasedProducer();
 
   protected abstract ConfigurationType getConfigurationType();
@@ -82,7 +83,6 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
     }
   }
 
-  @RequiredUIAccess
   @Override
   public void update(AnActionEvent e) {
     final Presentation presentation = e.getPresentation();
