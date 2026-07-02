@@ -24,6 +24,7 @@ import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.PsiMethod;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ActionImpl;
 import consulo.codeEditor.Editor;
 import consulo.document.Document;
@@ -34,10 +35,9 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.action.ActionPlaces;
-import consulo.ui.ex.action.AnAction;
-import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.AnActionWithSyncUpdate;
+import consulo.ui.ex.action.*;
+import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
+import consulo.util.concurrent.coroutine.Coroutine;
 import consulo.util.lang.CharArrayUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
@@ -46,7 +46,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.Set;
 
 @ActionImpl(id = "ToggleMethodBreakpoint")
-public class ToggleMethodBreakpointAction extends AnAction implements AnActionWithSyncUpdate {
+public class ToggleMethodBreakpointAction extends AnAction implements AnActionWithAsyncUpdate {
     private static final Set<String> POPUP_PLACES = Set.of(
         ActionPlaces.PROJECT_VIEW_POPUP,
         ActionPlaces.STRUCTURE_VIEW_POPUP,
@@ -59,15 +59,17 @@ public class ToggleMethodBreakpointAction extends AnAction implements AnActionWi
     }
 
     @Override
-    public void update(AnActionEvent event) {
-        boolean toEnable = getPlace(event) != null;
+    public Coroutine<?, ?> updateAsync(AnActionEvent e) {
+        return ActionSafeReadLock.run(e, presentation -> {
+            boolean toEnable = getPlace(e) != null;
 
-        if (ActionPlaces.isPopupPlace(event.getPlace())) {
-            event.getPresentation().setVisible(toEnable);
-        }
-        else {
-            event.getPresentation().setEnabled(toEnable);
-        }
+            if (ActionPlaces.isPopupPlace(e.getPlace())) {
+                presentation.setVisible(toEnable);
+            }
+            else {
+                presentation.setEnabled(toEnable);
+            }
+        }).toCoroutine();
     }
 
     @Override
@@ -93,6 +95,7 @@ public class ToggleMethodBreakpointAction extends AnAction implements AnActionWi
     }
 
     @Nullable
+    @RequiredReadAction
     private static PlaceInDocument getPlace(AnActionEvent event) {
         Project project = event.getData(Project.KEY);
         if (project == null) {
