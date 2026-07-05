@@ -26,100 +26,106 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.AnActionWithSyncUpdate;
+import consulo.ui.ex.action.AnActionWithAsyncUpdate;
 import consulo.ui.ex.action.Presentation;
+import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.concurrent.coroutine.Coroutine;
 
 import java.util.*;
 
-public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction implements AnActionWithSyncUpdate {
-  protected abstract AbstractPatternBasedConfigurationProducer<T> getPatternBasedProducer();
+public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigurationBase> extends AnAction implements AnActionWithAsyncUpdate {
+    protected abstract AbstractPatternBasedConfigurationProducer<T> getPatternBasedProducer();
 
-  protected abstract ConfigurationType getConfigurationType();
+    protected abstract ConfigurationType getConfigurationType();
 
-  protected abstract boolean isPatternBasedConfiguration(T configuration);
+    protected abstract boolean isPatternBasedConfiguration(T configuration);
 
-  protected abstract Set<String> getPatterns(T configuration);
+    protected abstract Set<String> getPatterns(T configuration);
 
-  @RequiredUIAccess
-  @Override
-  public void actionPerformed(AnActionEvent e) {
-    final PsiElement[] psiElements = e.getData(PsiElement.KEY_OF_ARRAY);
-    final LinkedHashSet<PsiElement> classes = new LinkedHashSet<>();
-    PsiElementProcessor.CollectElements<PsiElement> processor = new PsiElementProcessor.CollectElements<>(classes);
-    getPatternBasedProducer().collectTestMembers(psiElements, true, true, processor);
+    @RequiredUIAccess
+    @Override
+    public void actionPerformed(AnActionEvent e) {
+        final PsiElement[] psiElements = e.getData(PsiElement.KEY_OF_ARRAY);
+        final LinkedHashSet<PsiElement> classes = new LinkedHashSet<>();
+        PsiElementProcessor.CollectElements<PsiElement> processor = new PsiElementProcessor.CollectElements<>(classes);
+        getPatternBasedProducer().collectTestMembers(psiElements, true, true, processor);
 
-    final Project project = e.getData(Project.KEY);
-    final List<T> patternConfigurations = collectPatternConfigurations(classes, project);
-    if (patternConfigurations.size() == 1) {
-      final T configuration = patternConfigurations.get(0);
-      for (PsiElement aClass : classes) {
-        getPatterns(configuration).add(getPatternBasedProducer().getQName(aClass));
-      }
-    } else {
-      JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<T>("Choose suite to add", patternConfigurations) {
-        @Override
-        public PopupStep onChosen(T configuration, boolean finalChoice) {
-          for (PsiElement aClass : classes) {
-            getPatterns(configuration).add(getPatternBasedProducer().getQName(aClass));
-          }
-          return FINAL_CHOICE;
+        final Project project = e.getData(Project.KEY);
+        final List<T> patternConfigurations = collectPatternConfigurations(classes, project);
+        if (patternConfigurations.size() == 1) {
+            final T configuration = patternConfigurations.get(0);
+            for (PsiElement aClass : classes) {
+                getPatterns(configuration).add(getPatternBasedProducer().getQName(aClass));
+            }
         }
+        else {
+            JBPopupFactory.getInstance().createListPopup(new BaseListPopupStep<T>("Choose suite to add", patternConfigurations) {
+                @Override
+                public PopupStep onChosen(T configuration, boolean finalChoice) {
+                    for (PsiElement aClass : classes) {
+                        getPatterns(configuration).add(getPatternBasedProducer().getQName(aClass));
+                    }
+                    return FINAL_CHOICE;
+                }
 
-        @Override
-        public Image getIconFor(T configuration) {
-          return configuration.getIcon();
-        }
+                @Override
+                public Image getIconFor(T configuration) {
+                    return configuration.getIcon();
+                }
 
-        @Override
-        public String getTextFor(T value) {
-          return value.getName();
+                @Override
+                public String getTextFor(T value) {
+                    return value.getName();
+                }
+            }).showInBestPositionFor(e.getDataContext());
         }
-      }).showInBestPositionFor(e.getDataContext());
     }
-  }
 
-  @Override
-  public void update(AnActionEvent e) {
-    final Presentation presentation = e.getPresentation();
-    presentation.setVisible(false);
-    final PsiElement[] psiElements = e.getData(PsiElement.KEY_OF_ARRAY);
-    if (psiElements != null) {
-      PsiElementProcessor.CollectElementsWithLimit<PsiElement> processor = new PsiElementProcessor.CollectElementsWithLimit<>(2);
-      getPatternBasedProducer().collectTestMembers(psiElements, false, false, processor);
-      Collection<PsiElement> collection = processor.getCollection();
-      if (collection.isEmpty()) {
-        return;
-      }
-      final Project project = e.getData(Project.KEY);
-      if (project != null) {
-        final List<T> foundConfigurations = collectPatternConfigurations(collection, project);
-        if (!foundConfigurations.isEmpty()) {
-          presentation.setVisible(true);
-          if (foundConfigurations.size() == 1) {
-            presentation.setText("Add to temp suite: " + foundConfigurations.get(0).getName());
-          }
-        }
-      }
+    @Override
+    public Coroutine<?, ?> updateAsync(AnActionEvent e) {
+        return ActionSafeReadLock.run(e, (presentation) -> {
+            presentation.setVisible(false);
+            final PsiElement[] psiElements = e.getData(PsiElement.KEY_OF_ARRAY);
+            if (psiElements == null) {
+                return;
+            }
+            
+            PsiElementProcessor.CollectElementsWithLimit<PsiElement> processor = new PsiElementProcessor.CollectElementsWithLimit<>(2);
+            getPatternBasedProducer().collectTestMembers(psiElements, false, false, processor);
+            Collection<PsiElement> collection = processor.getCollection();
+            if (collection.isEmpty()) {
+                return;
+            }
+            final Project project = e.getData(Project.KEY);
+            if (project != null) {
+                final List<T> foundConfigurations = collectPatternConfigurations(collection, project);
+                if (!foundConfigurations.isEmpty()) {
+                    presentation.setVisible(true);
+                    if (foundConfigurations.size() == 1) {
+                        presentation.setText("Add to temp suite: " + foundConfigurations.get(0).getName());
+                    }
+                }
+            }
+        }).toCoroutine();
     }
-  }
 
-  @SuppressWarnings("unchecked")
-  private List<T> collectPatternConfigurations(Collection<PsiElement> foundClasses, Project project) {
-    final List<RunConfiguration> configurations = RunManager.getInstance(project).getConfigurationsList(getConfigurationType());
-    final List<T> foundConfigurations = new ArrayList<>();
-    for (RunConfiguration configuration : configurations) {
-      if (isPatternBasedConfiguration((T) configuration)) {
-        if (foundClasses.size() > 1 || foundClasses.size() == 1
-          && !getPatterns((T) configuration).contains(getPatternBasedProducer().getQName(ContainerUtil.getFirstItem(foundClasses)))) {
-          foundConfigurations.add((T) configuration);
+    @SuppressWarnings("unchecked")
+    private List<T> collectPatternConfigurations(Collection<PsiElement> foundClasses, Project project) {
+        final List<RunConfiguration> configurations = RunManager.getInstance(project).getConfigurationsList(getConfigurationType());
+        final List<T> foundConfigurations = new ArrayList<>();
+        for (RunConfiguration configuration : configurations) {
+            if (isPatternBasedConfiguration((T) configuration)) {
+                if (foundClasses.size() > 1 || foundClasses.size() == 1
+                    && !getPatterns((T) configuration).contains(getPatternBasedProducer().getQName(ContainerUtil.getFirstItem(foundClasses)))) {
+                    foundConfigurations.add((T) configuration);
+                }
+            }
         }
-      }
+        return foundConfigurations;
     }
-    return foundConfigurations;
-  }
 }
