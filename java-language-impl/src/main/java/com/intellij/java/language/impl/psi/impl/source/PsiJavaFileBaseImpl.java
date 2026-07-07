@@ -17,6 +17,7 @@ package com.intellij.java.language.impl.psi.impl.source;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.impl.JavaLanguageLevelPersistence;
 import com.intellij.java.language.impl.psi.impl.JavaPsiImplementationHelper;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
@@ -557,6 +558,11 @@ public abstract class PsiJavaFileBaseImpl extends PsiFileImpl implements PsiJava
                 final LanguageLevel level = folder.getUserData(LanguageLevel.KEY);
                 if (level != null) {
                     return level;
+                }
+
+                final LanguageLevel persisted = JavaLanguageLevelPersistence.getPersistedLanguageLevel(folder);
+                if (persisted != null) {
+                    return persisted;
                 }
             }
 

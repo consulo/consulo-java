@@ -17,8 +17,8 @@ package com.intellij.java.analysis.impl;
 
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.JavaLanguageLevelPersistence;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.index.io.data.DataInputOutputUtil;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -31,12 +31,8 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.PushedFilePropertiesUpdater;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import consulo.virtualFileSystem.FileAttribute;
 import consulo.virtualFileSystem.VirtualFile;
 
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
@@ -88,7 +84,6 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
         return ProjectFileIndex.getInstance(project).isInSourceContent(file);
     }
 
-    private static final FileAttribute PERSISTENCE = new FileAttribute("language_level_persistence", 2, true);
 
     @Override
     public void persistAttribute(
@@ -96,22 +91,11 @@ public class JavaLanguageLevelPusher implements FilePropertyPusher<LanguageLevel
         VirtualFile fileOrDir,
         LanguageLevel level
     ) throws IOException {
-        final DataInputStream iStream = PERSISTENCE.readAttribute(fileOrDir);
-        if (iStream != null) {
-            try {
-                final int oldLevelOrdinal = DataInputOutputUtil.readINT(iStream);
-                if (oldLevelOrdinal == level.ordinal()) {
-                    return;
-                }
-            }
-            finally {
-                iStream.close();
-            }
+        if (JavaLanguageLevelPersistence.getPersistedLanguageLevel(fileOrDir) == level) {
+            return;
         }
 
-        final DataOutputStream oStream = PERSISTENCE.writeAttribute(fileOrDir);
-        DataInputOutputUtil.writeINT(oStream, level.ordinal());
-        oStream.close();
+        JavaLanguageLevelPersistence.persistLanguageLevel(fileOrDir, level);
 
         for (VirtualFile child : fileOrDir.getChildren()) {
             if (!child.isDirectory() && JavaFileType.INSTANCE == child.getFileType()) {
