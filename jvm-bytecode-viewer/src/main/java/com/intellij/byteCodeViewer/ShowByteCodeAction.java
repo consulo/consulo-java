@@ -28,6 +28,7 @@ import consulo.application.progress.Task;
 import consulo.application.util.function.Computable;
 import consulo.application.util.function.Processor;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorKeys;
 import consulo.compiler.TranslatingCompilerFilesMonitor;
 import consulo.dataContext.DataContext;
 import consulo.disposer.Disposer;
@@ -41,11 +42,14 @@ import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithAsyncUpdate;
 import consulo.ui.ex.action.AnActionWithSyncUpdate;
+import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.image.Image;
+import consulo.util.concurrent.coroutine.Coroutine;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
@@ -61,25 +65,29 @@ import org.jspecify.annotations.Nullable;
         relatedToAction = @ActionRef(id = "QuickJavaDoc")
     )
 )
-public class ShowByteCodeAction extends AnAction implements AnActionWithSyncUpdate {
+public class ShowByteCodeAction extends AnAction implements AnActionWithAsyncUpdate {
     public ShowByteCodeAction() {
         super("Show Byte Code", "", PlatformIconGroup.filetypesBinary());
     }
 
     @Override
-    public void update(AnActionEvent e) {
-        boolean enabled = false;
-        final Project project = e.getData(Project.KEY);
-        if (project != null) {
-            final PsiElement psiElement = getPsiElement(e.getDataContext(), project, e.getData(Editor.KEY));
-            if (psiElement != null) {
-                if (psiElement.getContainingFile() instanceof PsiClassOwner && ByteCodeViewerManager.getContainingClass(psiElement) != null) {
-                    enabled = true;
+    public Coroutine<?, ?> updateAsync(AnActionEvent e) {
+        return ActionSafeReadLock.run(e, presentation -> {
+            boolean enabled = false;
+            final Project project = e.getData(Project.KEY);
+            if (project != null) {
+                Editor editor = e.getData(EditorKeys.EDITOR_SNAPSHOT);
+
+                final PsiElement psiElement = getPsiElement(e.getDataContext(), project, editor);
+                if (psiElement != null) {
+                    if (psiElement.getContainingFile() instanceof PsiClassOwner && ByteCodeViewerManager.getContainingClass(psiElement) != null) {
+                        enabled = true;
+                    }
                 }
             }
-        }
 
-        e.getPresentation().setEnabled(enabled);
+            presentation.setEnabled(enabled);
+        }).toCoroutine();
     }
 
     @Override
