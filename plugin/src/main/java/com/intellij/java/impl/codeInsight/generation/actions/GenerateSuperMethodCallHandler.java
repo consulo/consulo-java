@@ -77,8 +77,6 @@ public class GenerateSuperMethodCallHandler implements CodeInsightActionHandler 
 
     @RequiredReadAction
     public static PsiMethod canInsertSuper(Project project, Editor editor, PsiFile file) {
-        PsiDocumentManager.getInstance(project).commitAllDocuments();
-
         int offset = editor.getCaretModel().getOffset();
         PsiElement element = file.findElementAt(offset);
         if (element == null) {
