@@ -77,9 +77,11 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         }
     }
 
+    @RequiredReadAction
     @Override
-    public void update(AnActionEvent event) {
-        super.update(event);
+    protected void updateInReadAction(AnActionEvent event) {
+        super.updateInReadAction(event);
+
         Presentation presentation = event.getPresentation();
         if (!presentation.isEnabled()) {
             return;
@@ -101,8 +103,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             presentation.setEnabled(false);
             return;
         }
-        AnnotationProcessingConfiguration profile =
-            ReadAction.compute(() -> compilerConfiguration.getAnnotationProcessingConfiguration(module));
+        AnnotationProcessingConfiguration profile = compilerConfiguration.getAnnotationProcessingConfiguration(module);
         if (!profile.isEnabled() || (!profile.isObtainProcessorsFromClasspath() && profile.getProcessors().isEmpty())) {
             presentation.setEnabled(false);
             return;
@@ -111,7 +112,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         presentation.setEnabledAndVisible(true);
         presentation.setText(JavaCompilerLocalize.actionRunAptText());
 
-        FileSetCompileScope scope = ReadAction.compute(() -> getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY)));
+        FileSetCompileScope scope = getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY));
         if (moduleContext == null && scope == null) {
             presentation.setEnabled(false);
             return;
@@ -124,7 +125,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             PsiJavaPackage aPackage = null;
             Collection<VirtualFile> files = scope.getRootFiles();
             if (files.size() == 1) {
-                PsiDirectory directory = ReadAction.compute(() -> PsiManager.getInstance(project).findDirectory(files.iterator().next()));
+                PsiDirectory directory = PsiManager.getInstance(project).findDirectory(files.iterator().next());
                 if (directory != null) {
                     aPackage = JavaDirectoryService.getInstance().getPackage(directory);
                 }

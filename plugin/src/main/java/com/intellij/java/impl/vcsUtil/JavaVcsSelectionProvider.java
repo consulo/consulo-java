@@ -25,11 +25,13 @@ import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.TargetElementUtilExtender;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.versionControlSystem.VcsBundle;
 import consulo.versionControlSystem.action.VcsContext;
 import consulo.versionControlSystem.history.VcsSelection;
 import consulo.versionControlSystem.history.VcsSelectionProvider;
+import consulo.versionControlSystem.localize.VcsLocalize;
 import consulo.virtualFileSystem.VirtualFile;
 
 import org.jspecify.annotations.Nullable;
@@ -56,24 +58,24 @@ public class JavaVcsSelectionProvider implements VcsSelectionProvider {
       return null;
     }
 
-    String actionName;
+    LocalizeValue actionName;
 
     if (psiElement instanceof PsiClass) {
-      actionName = VcsBundle.message("action.name.show.history.for.class");
+      actionName = VcsLocalize.actionNameShowHistoryForClass();
     } else if (psiElement instanceof PsiField) {
-      actionName = VcsBundle.message("action.name.show.history.for.field");
+      actionName = VcsLocalize.actionNameShowHistoryForField();
     } else if (psiElement instanceof PsiMethod) {
-      actionName = VcsBundle.message("action.name.show.history.for.method");
+      actionName = VcsLocalize.actionNameShowHistoryForMethod();
     } else if (psiElement instanceof PsiCodeBlock) {
-      actionName = VcsBundle.message("action.name.show.history.for.code.block");
+      actionName = VcsLocalize.actionNameShowHistoryForCodeBlock();
     } else if (psiElement instanceof PsiStatement) {
-      actionName = VcsBundle.message("action.name.show.history.for.statement");
+      actionName = VcsLocalize.actionNameShowHistoryForStatement();
     } else {
       return null;
     }
 
     TextRange textRange = psiElement.getTextRange();
-    if (textRange == null) {
+    if (textRange == TextRange.EMPTY_RANGE) {
       return null;
     }
 
