@@ -21,9 +21,11 @@ import com.intellij.java.execution.filters.ExceptionWorker;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiCodeBlock;
 import com.intellij.java.language.psi.PsiTryStatement;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AccessToken;
 import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
 import consulo.colorScheme.EffectType;
 import consulo.colorScheme.TextAttributes;
 import consulo.document.Document;
@@ -47,6 +49,7 @@ import org.jspecify.annotations.Nullable;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -96,45 +99,11 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
         }
 
         if (info == null) {
-          info = emptyInfo;
-          AccessToken token = ApplicationManager.getApplication().acquireReadActionLock();
-          try {
-            worker.execute(text, lineEndOffset);
-            Result result = worker.getResult();
-            if (result == null) {
-              continue;
-            }
-            HyperlinkInfo hyperlinkInfo = result.getHyperlinkInfo();
-            if (!(hyperlinkInfo instanceof FileHyperlinkInfo)) {
-              continue;
-            }
-
-            OpenFileDescriptor descriptor = ((FileHyperlinkInfo) hyperlinkInfo).getDescriptor();
-            if (descriptor == null) {
-              continue;
-            }
-
-            PsiFile psiFile = worker.getFile();
-            if (psiFile == null || psiFile instanceof PsiCompiledFile) {
-              continue;
-            }
-            int offset = descriptor.getOffset();
-            if (offset <= 0) {
-              continue;
-            }
-
-            PsiElement element = psiFile.findElementAt(offset);
-            PsiTryStatement parent = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class, true, PsiClass.class);
-            PsiCodeBlock tryBlock = parent != null ? parent.getTryBlock() : null;
-            if (tryBlock == null || !tryBlock.getTextRange().contains(offset)) {
-              continue;
-            }
-            info = worker.getInfo();
-          } finally {
-            token.finish();
-            visited.put(text, info);
-          }
+          info = ReadAction.compute(() -> doParse(worker, text, lineEndOffset));
         }
+
+        visited.put(text, Objects.requireNonNullElse(info, emptyInfo));
+
         int off = startOffset + lineStartOffset;
         final ColorValue color = TargetAWT.from(UIUtil.getInactiveTextColor());
         consumer.accept(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset()) {
@@ -144,6 +113,41 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
           }
         });
       }
+    }
+
+    @RequiredReadAction
+    private Trinity<TextRange, TextRange, TextRange> doParse(ExceptionWorker worker, String text, int lineEndOffset) {
+      worker.execute(text, lineEndOffset);
+      Result result = worker.getResult();
+      if (result == null) {
+        return null;
+      }
+      HyperlinkInfo hyperlinkInfo = result.getHyperlinkInfo();
+      if (!(hyperlinkInfo instanceof FileHyperlinkInfo)) {
+        return null;
+      }
+
+      OpenFileDescriptor descriptor = ((FileHyperlinkInfo) hyperlinkInfo).getDescriptor();
+      if (descriptor == null) {
+        return null;
+      }
+
+      PsiFile psiFile = worker.getFile();
+      if (psiFile == null || psiFile instanceof PsiCompiledFile) {
+        return null;
+      }
+      int offset = descriptor.getOffset();
+      if (offset <= 0) {
+        return null;
+      }
+
+      PsiElement element = psiFile.findElementAt(offset);
+      PsiTryStatement parent = PsiTreeUtil.getParentOfType(element, PsiTryStatement.class, true, PsiClass.class);
+      PsiCodeBlock tryBlock = parent != null ? parent.getTryBlock() : null;
+      if (tryBlock == null || !tryBlock.getTextRange().contains(offset)) {
+        return null;
+      }
+      return worker.getInfo();
     }
 
     @Override

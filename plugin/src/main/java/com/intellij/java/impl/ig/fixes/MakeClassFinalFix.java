@@ -90,14 +90,10 @@ public class MakeClassFinalFix extends InspectionGadgetsFix {
                 element.getProject(),
                 conflicts,
                 () -> {
-                    AccessToken token = WriteAction.start();
-                    try {
+                    WriteAction.run(() -> {
                         modifierList.setModifierProperty(PsiModifier.FINAL, true);
                         modifierList.setModifierProperty(PsiModifier.ABSTRACT, false);
-                    }
-                    finally {
-                        token.finish();
-                    }
+                    });
                 }
             );
             conflictsDialog.show();

@@ -146,13 +146,7 @@ public class ConvertInterfaceToClassIntention extends Intention {
                 anInterface.getProject(),
                 conflicts,
                 () -> {
-                    AccessToken token = WriteAction.start();
-                    try {
-                        convertInterfaceToClass(anInterface);
-                    }
-                    finally {
-                        token.finish();
-                    }
+                    WriteAction.run(() -> convertInterfaceToClass(anInterface));
                 }
             );
             conflictsDialog.show();

@@ -24,6 +24,7 @@ import com.intellij.lang.properties.references.I18nizeQuickFixDialog;
 import com.intellij.lang.properties.references.I18nizeQuickFixModel;
 import consulo.application.AccessToken;
 import consulo.application.ApplicationManager;
+import consulo.application.WriteAction;
 import consulo.language.editor.intention.SyntheticIntentionAction;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -60,17 +61,15 @@ public class JavaCreatePropertyFix extends CreatePropertyFix implements Syntheti
       StringUtil.escapeStringCharacters(key.length(), key, buffer);
       buffer.append('"');
 
-      final AccessToken token = ApplicationManager.getApplication().acquireWriteActionLock(JavaCreatePropertyFix.class);
-      try {
-        final PsiExpression newKeyLiteral = JavaPsiFacade.getElementFactory(project).createExpressionFromText(buffer.toString(), null);
-        psiElement.replace(newKeyLiteral);
-      }
-      catch (IncorrectOperationException e) {
-        LOG.error(e);
-      }
-      finally {
-        token.finish();
-      }
+      WriteAction.run(() -> {
+        try {
+          final PsiExpression newKeyLiteral = JavaPsiFacade.getElementFactory(project).createExpressionFromText(buffer.toString(), null);
+          psiElement.replace(newKeyLiteral);
+        }
+        catch (IncorrectOperationException e) {
+          LOG.error(e);
+        }
+      });
     }
     return result;
   }

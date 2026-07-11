@@ -143,13 +143,9 @@ public class ProtectedMemberInFinalClassInspection extends BaseInspection {
                     member.getProject(),
                     conflicts,
                     () -> {
-                        AccessToken token = WriteAction.start();
-                        try {
+                        WriteAction.run(() -> {
                             modifierList.setModifierProperty(PsiModifier.PRIVATE, true);
-                        }
-                        finally {
-                            token.finish();
-                        }
+                        });
                     }
                 );
                 conflictsDialog.show();
