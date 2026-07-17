@@ -104,6 +104,10 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
 
         visited.put(text, info = Objects.requireNonNullElse(info, emptyInfo));
 
+        if (info == emptyInfo) {
+            continue;
+        }
+
         int off = startOffset + lineStartOffset;
         final ColorValue color = TargetAWT.from(UIUtil.getInactiveTextColor());
         consumer.accept(new AdditionalHighlight(off + info.first.getStartOffset(), off + info.second.getEndOffset()) {
