@@ -102,7 +102,7 @@ public class ExceptionExFilterFactory implements ExceptionFilterFactory {
           info = ReadAction.compute(() -> doParse(worker, text, lineEndOffset));
         }
 
-        visited.put(text, Objects.requireNonNullElse(info, emptyInfo));
+        visited.put(text, info = Objects.requireNonNullElse(info, emptyInfo));
 
         int off = startOffset + lineStartOffset;
         final ColorValue color = TargetAWT.from(UIUtil.getInactiveTextColor());
