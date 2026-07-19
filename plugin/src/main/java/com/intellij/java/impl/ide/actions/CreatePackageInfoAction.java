@@ -39,8 +39,11 @@ import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithAsyncUpdate;
+import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.util.concurrent.coroutine.Coroutine;
 import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
 
@@ -50,7 +53,7 @@ import static com.intellij.java.language.impl.codeInsight.template.JavaTemplateU
  * @author Bas Leijdekkers
  */
 @ActionImpl(id = "NewPackageInfo")
-public class CreatePackageInfoAction extends CreateFromTemplateActionBase implements DumbAware {
+public class CreatePackageInfoAction extends CreateFromTemplateActionBase implements DumbAware, AnActionWithAsyncUpdate {
     public CreatePackageInfoAction() {
         super(
             JavaLocalize.actionCreateNewPackageInfoTitle(),
@@ -95,13 +98,14 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
     }
 
     @Override
-    @RequiredReadAction
-    public void update(AnActionEvent e) {
-        if (!e.getPresentation().isVisible()) {
-            return;
-        }
+    public Coroutine<?, ?> updateAsync(AnActionEvent e) {
+        return ActionSafeReadLock.run(e, presentation -> {
+            if (!e.getPresentation().isVisible()) {
+                return;
+            }
 
-        e.getPresentation().setEnabledAndVisible(isAvailable(e.getDataContext()));
+            e.getPresentation().setEnabledAndVisible(isAvailable(e.getDataContext()));
+        }).toCoroutine();
     }
 
     @RequiredReadAction

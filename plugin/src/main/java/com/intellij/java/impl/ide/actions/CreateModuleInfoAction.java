@@ -37,6 +37,9 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.ui.ex.action.AnActionEvent;
+import consulo.ui.ex.action.AnActionWithAsyncUpdate;
+import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
+import consulo.util.concurrent.coroutine.Coroutine;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
@@ -49,7 +52,7 @@ import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_CLASS;
 import static com.intellij.java.language.psi.PsiJavaModule.MODULE_INFO_FILE;
 
 @ActionImpl(id = "NewModuleInfo")
-public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
+public class CreateModuleInfoAction extends CreateFromTemplateActionBase implements AnActionWithAsyncUpdate {
     public CreateModuleInfoAction() {
         super(
             JavaLocalize.actionCreateNewModuleInfoTitle(),
@@ -59,24 +62,26 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase {
     }
 
     @Override
-    public void update(AnActionEvent e) {
-        if (!e.getPresentation().isVisible()) {
-            return;
-        }
-        DataContext ctx = e.getDataContext();
-        boolean available = Optional.ofNullable(ctx.getData(IdeView.KEY))
-            .map(view -> getTargetDirectory(ctx, view))
-            .filter(PsiUtil::isLanguageLevel9OrHigher)
-            .map(PsiElement::getModule)
-            .map(
-                module -> FilenameIndex.getVirtualFilesByName(
-                    module.getProject(),
-                    MODULE_INFO_FILE,
-                    GlobalSearchScope.moduleScope(module)
-                ).isEmpty()
-            )
-            .orElse(false);
-        e.getPresentation().setEnabledAndVisible(available);
+    public Coroutine<?, ?> updateAsync(AnActionEvent e) {
+        return ActionSafeReadLock.run(e, presentation -> {
+            if (!e.getPresentation().isVisible()) {
+                return;
+            }
+            DataContext ctx = e.getDataContext();
+            boolean available = Optional.ofNullable(ctx.getData(IdeView.KEY))
+                .map(view -> getTargetDirectory(ctx, view))
+                .filter(PsiUtil::isLanguageLevel9OrHigher)
+                .map(PsiElement::getModule)
+                .map(
+                    module -> FilenameIndex.getVirtualFilesByName(
+                        module.getProject(),
+                        MODULE_INFO_FILE,
+                        GlobalSearchScope.moduleScope(module)
+                    ).isEmpty()
+                )
+                .orElse(false);
+            e.getPresentation().setEnabledAndVisible(available);
+        }).toCoroutine();
     }
 
     @Nullable
