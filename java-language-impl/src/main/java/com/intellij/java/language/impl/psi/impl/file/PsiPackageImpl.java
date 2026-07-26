@@ -198,7 +198,8 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 
     @RequiredReadAction
     private PsiClass[] getCachedClassesByName(String shortName, GlobalSearchScope scope) {
-        if (DumbService.getInstance(getProject()).isAlternativeResolveEnabled()) {
+        DumbService dumbService = DumbService.getInstance(getProject());
+        if (dumbService.isDumb() || dumbService.isAlternativeResolveEnabled()) {
             return getCachedClassesInDumbMode(shortName, scope);
         }
         // we just cache all classes from the everythingScope scope
