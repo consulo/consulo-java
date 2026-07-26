@@ -73,6 +73,7 @@ public class JavaPsiFacadeImpl extends JavaPsiFacadeEx {
 
         project.getMessageBus().connect().subscribe(PsiModificationTrackerListener.class, () -> {
             myModulesByScopeCache.clear();
+            myPackageManager.dropCache(JavaModuleExtension.class);
         });
 
         JavaElementType.ANNOTATION.getIndex(); // Initialize stubs.

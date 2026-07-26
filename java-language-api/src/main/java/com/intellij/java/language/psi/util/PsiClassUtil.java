@@ -19,23 +19,50 @@ package com.intellij.java.language.psi.util;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiModifier;
+import consulo.language.psi.PsiUtilCore;
+import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.virtualFileSystem.VirtualFile;
+
+import java.util.Comparator;
 
 /**
  * @author mike
  */
 public class PsiClassUtil {
-  private PsiClassUtil() {
-  }
+    private PsiClassUtil() {
+    }
 
-  public static boolean isRunnableClass(final PsiClass aClass, final boolean mustBePublic) {
-    return isRunnableClass(aClass, mustBePublic, true);
-  }
-  public static boolean isRunnableClass(final PsiClass aClass, final boolean mustBePublic, boolean mustNotBeAbstract) {
-    if (aClass instanceof PsiAnonymousClass) return false;
-    if (aClass.isInterface()) return false;
-    if (mustBePublic && !aClass.hasModifierProperty(PsiModifier.PUBLIC)) return false;
-    if (aClass.hasModifierProperty(PsiModifier.PRIVATE)) return false;
-    if (mustNotBeAbstract && aClass.hasModifierProperty(PsiModifier.ABSTRACT)) return false;
-    return aClass.getContainingClass() == null || aClass.hasModifierProperty(PsiModifier.STATIC);
-  }
+    /**
+     * @return a comparator ordering classes by the position of their files in the given scope
+     * (classes from the "closest" files go first).
+     */
+    public static Comparator<PsiClass> createScopeComparator(GlobalSearchScope scope) {
+        return Comparator.comparing(
+            PsiUtilCore::getVirtualFile,
+            Comparator.nullsFirst((VirtualFile file1, VirtualFile file2) -> scope.compare(file2, file1))
+        );
+    }
+
+    public static boolean isRunnableClass(final PsiClass aClass, final boolean mustBePublic) {
+        return isRunnableClass(aClass, mustBePublic, true);
+    }
+
+    public static boolean isRunnableClass(final PsiClass aClass, final boolean mustBePublic, boolean mustNotBeAbstract) {
+        if (aClass instanceof PsiAnonymousClass) {
+            return false;
+        }
+        if (aClass.isInterface()) {
+            return false;
+        }
+        if (mustBePublic && !aClass.hasModifierProperty(PsiModifier.PUBLIC)) {
+            return false;
+        }
+        if (aClass.hasModifierProperty(PsiModifier.PRIVATE)) {
+            return false;
+        }
+        if (mustNotBeAbstract && aClass.hasModifierProperty(PsiModifier.ABSTRACT)) {
+            return false;
+        }
+        return aClass.getContainingClass() == null || aClass.hasModifierProperty(PsiModifier.STATIC);
+    }
 }

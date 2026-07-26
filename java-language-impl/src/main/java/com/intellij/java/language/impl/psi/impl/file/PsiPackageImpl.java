@@ -17,17 +17,21 @@ package com.intellij.java.language.impl.psi.impl.file;
 
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.codeInsight.completion.scope.JavaCompletionHints;
+import com.intellij.java.language.impl.core.CoreJavaDirectoryService;
 import com.intellij.java.language.impl.psi.impl.JavaPsiFacadeImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiCompositeModifierList;
 import com.intellij.java.language.impl.psi.scope.ElementClassHint;
 import com.intellij.java.language.impl.psi.scope.NameHint;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiClassUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.CachedValue;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.CachedValuesManager;
 import consulo.application.util.Queryable;
+import consulo.application.util.RecursionGuard;
+import consulo.application.util.RecursionManager;
 import consulo.application.util.function.CommonProcessors;
 import consulo.component.ProcessCanceledException;
 import consulo.language.Language;
@@ -35,21 +39,28 @@ import consulo.language.impl.psi.PsiPackageBase;
 import consulo.language.psi.*;
 import consulo.language.psi.resolve.PsiScopeProcessor;
 import consulo.language.psi.resolve.ResolveState;
-import consulo.language.psi.scope.DelegatingGlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.language.psi.scope.PsiSearchScopeUtil;
 import consulo.logging.Logger;
 import consulo.module.extension.ModuleExtension;
+import consulo.project.DumbService;
 import consulo.util.collection.ArrayFactory;
+import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.lang.Pair;
 import consulo.util.lang.function.Predicates;
 import consulo.util.lang.ref.SoftReference;
 import consulo.virtualFileSystem.VirtualFile;
+import one.util.streamex.StreamEx;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -60,7 +71,9 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
 
     private volatile CachedValue<PsiModifierList> myAnnotationList;
     private volatile CachedValue<Collection<PsiDirectory>> myDirectories;
-    private volatile SoftReference<Set<String>> myPublicClassNamesCache;
+    private volatile SoftReference<Map<GlobalSearchScope, Map<String, PsiClass[]>>> myClassCache;
+    private volatile SoftReference<Map<GlobalSearchScope, Map<String, PsiClass[]>>> myDumbModeFullCache;
+    private volatile SoftReference<Map<Pair<GlobalSearchScope, String>, PsiClass[]>> myDumbModePartialCache;
 
     public PsiPackageImpl(
         PsiManager manager,
@@ -184,44 +197,132 @@ public class PsiPackageImpl extends PsiPackageBase implements PsiJavaPackage, Qu
     }
 
     @RequiredReadAction
-    private Set<String> getClassNamesCache() {
-        SoftReference<Set<String>> ref = myPublicClassNamesCache;
-        Set<String> cache = ref == null ? null : ref.get();
-        if (cache == null) {
-            GlobalSearchScope scope = allScope();
-
-            if (!scope.isForceSearchingInLibrarySources()) {
-                scope = new DelegatingGlobalSearchScope(scope) {
-                    @Override
-                    public boolean isForceSearchingInLibrarySources() {
-                        return true;
-                    }
-                };
-            }
-            cache = getFacade().getClassNames(this, scope);
-            myPublicClassNamesCache = new SoftReference<>(cache);
+    private PsiClass[] getCachedClassesByName(String shortName, GlobalSearchScope scope) {
+        if (DumbService.getInstance(getProject()).isAlternativeResolveEnabled()) {
+            return getCachedClassesInDumbMode(shortName, scope);
         }
-
-        return cache;
+        // we just cache all classes from the everythingScope scope
+        return getCachedClassesByNameImpl(shortName, GlobalSearchScope.everythingScope(getProject()));
     }
 
     @RequiredReadAction
-    private PsiClass[] findClassesByName(String name, GlobalSearchScope scope) {
+    private PsiClass[] getCachedClassesByNameImpl(String shortName, GlobalSearchScope scope) {
+        Map<GlobalSearchScope, Map<String, PsiClass[]>> cache = SoftReference.dereference(myClassCache);
+        if (cache == null) {
+            cache = ContainerUtil.createConcurrentSoftValueMap();
+            myClassCache = new SoftReference<>(cache);
+        }
+
+        Map<String, PsiClass[]> map = cache.computeIfAbsent(scope, __ -> ContainerUtil.createConcurrentSoftValueMap());
+        PsiClass[] classes = map.get(shortName);
+        if (classes != null) {
+            return classes;
+        }
+
+        RecursionGuard.StackStamp stamp = RecursionManager.markStack();
+        classes = findAllClasses(shortName, scope);
+        if (stamp.mayCacheNow()) {
+            map.put(shortName, classes);
+        }
+        return classes;
+    }
+
+    @RequiredReadAction
+    private PsiClass[] findAllClasses(String shortName, GlobalSearchScope scope) {
         String qName = getQualifiedName();
-        String classQName = !qName.isEmpty() ? qName + "." + name : name;
+        String classQName = !qName.isEmpty() ? qName + "." + shortName : shortName;
         return getFacade().findClasses(classQName, scope);
+    }
+
+    @RequiredReadAction
+    private PsiClass[] getCachedClassesInDumbMode(String shortName, GlobalSearchScope scope) {
+        Map<GlobalSearchScope, Map<String, PsiClass[]>> scopeMap = SoftReference.dereference(myDumbModeFullCache);
+        if (scopeMap == null) {
+            myDumbModeFullCache = new SoftReference<>(scopeMap = new ConcurrentHashMap<>());
+        }
+        Map<String, PsiClass[]> map = scopeMap.get(scope);
+        if (map == null) {
+            // before parsing all files in this package, try cheap heuristics:
+            // check if 'shortName' is a subpackage, check files named like 'shortName'
+            PsiClass[] array = findClassesHeuristically(shortName, scope);
+            if (array != null) {
+                return array;
+            }
+
+            RecursionGuard.StackStamp stamp = RecursionManager.markStack();
+            map = new HashMap<>();
+            for (PsiClass psiClass : getClasses(scope)) {
+                String psiClassName = psiClass.getName();
+                if (psiClassName != null) {
+                    PsiClass[] existing = map.get(psiClassName);
+                    map.put(psiClassName, existing == null ? new PsiClass[]{psiClass} : ArrayUtil.append(existing, psiClass));
+                }
+            }
+            if (stamp.mayCacheNow()) {
+                scopeMap.put(scope, map);
+            }
+        }
+        PsiClass[] classes = map.get(shortName);
+        return classes == null ? PsiClass.EMPTY_ARRAY : classes;
+    }
+
+    @Nullable
+    @RequiredReadAction
+    private PsiClass[] findClassesHeuristically(String shortName, GlobalSearchScope scope) {
+        if (findSubPackageByName(shortName) != null) {
+            return PsiClass.EMPTY_ARRAY;
+        }
+
+        Map<Pair<GlobalSearchScope, String>, PsiClass[]> partial = SoftReference.dereference(myDumbModePartialCache);
+        if (partial == null) {
+            myDumbModePartialCache = new SoftReference<>(partial = new ConcurrentHashMap<>());
+        }
+        PsiClass[] result = partial.get(Pair.create(scope, shortName));
+        if (result == null) {
+            RecursionGuard.StackStamp stamp = RecursionManager.markStack();
+            List<PsiClass> fastClasses = new ArrayList<>();
+            for (PsiDirectory directory : getDirectories(scope)) {
+                List<PsiFile> sameNamed =
+                    ContainerUtil.filter(directory.getFiles(), file -> file.getName().contains(shortName));
+                PsiClass[] classes = CoreJavaDirectoryService.getPsiClasses(directory, sameNamed.toArray(PsiFile.EMPTY_ARRAY));
+                for (PsiClass aClass : classes) {
+                    if (shortName.equals(aClass.getName())) {
+                        fastClasses.add(aClass);
+                    }
+                }
+            }
+            if (!fastClasses.isEmpty() && stamp.mayCacheNow()) {
+                partial.put(Pair.create(scope, shortName), result = fastClasses.toArray(PsiClass.EMPTY_ARRAY));
+            }
+        }
+        return result;
     }
 
     @Override
     @RequiredReadAction
     public boolean containsClassNamed(String name) {
-        return getClassNamesCache().contains(name);
+        return getCachedClassesByName(name, GlobalSearchScope.everythingScope(getProject())).length > 0;
     }
 
     @Override
     @RequiredReadAction
     public PsiClass[] findClassByShortName(String name, GlobalSearchScope scope) {
-        return getFacade().findClassByShortName(name, this, scope);
+        PsiClass[] allClasses = getCachedClassesByName(name, scope);
+        if (allClasses.length == 0) {
+            return allClasses;
+        }
+        if (allClasses.length == 1) {
+            return PsiSearchScopeUtil.isInScope(scope, allClasses[0]) ? allClasses.clone() : PsiClass.EMPTY_ARRAY;
+        }
+        return StreamEx.of(allClasses)
+            .filter(aClass -> PsiSearchScopeUtil.isInScope(scope, aClass) && aClass.getContainingClass() == null)
+            .sorted(PsiClassUtil.createScopeComparator(scope)
+                .thenComparing(PsiClass::getQualifiedName, Comparator.nullsLast(Comparator.naturalOrder()))
+                .thenComparing(c -> {
+                    PsiFile file = c.getContainingFile();
+                    return file instanceof PsiClassOwner classOwner ? classOwner.getPackageName() : "";
+                }))
+            .toArray(PsiClass.EMPTY_ARRAY);
     }
 
     @Nullable
