@@ -17,7 +17,6 @@ import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.siyeh.ig.callMatcher.CallMatcher;
-import com.siyeh.ig.psiutils.ClassUtils;
 import consulo.application.util.CachedValueProvider;
 import consulo.language.ast.IElementType;
 import consulo.language.psi.*;
@@ -300,8 +299,8 @@ public final class DfaPsiUtil {
     }
 
     private static boolean shouldIgnoreAnnotation(PsiAnnotation annotation) {
-        PsiClass containingClass = ClassUtils.getContainingClass(annotation);
-        if (containingClass == null) {
+        PsiClass containingClass = PsiUtil.getContainingClass(annotation);
+        if (containingClass == null || !containingClass.isValid()) {
             return false;
         }
         String qualifiedName = containingClass.getQualifiedName();
