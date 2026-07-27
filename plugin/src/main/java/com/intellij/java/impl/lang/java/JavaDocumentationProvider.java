@@ -59,6 +59,7 @@ import consulo.virtualFileSystem.archive.ArchiveFileSystem;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * @author Maxim.Mossienko
@@ -554,6 +555,74 @@ public class JavaDocumentationProvider extends DocumentationProviderEx implement
 
         //external documentation finder
         return generateExternalJavadoc(element);
+    }
+
+    @Override
+    @Nullable
+    public String generateRenderedDoc(PsiDocCommentBase comment) {
+        return generateRenderedDocStatic(comment);
+    }
+
+    @Nullable
+    public static String generateRenderedDocStatic(PsiDocCommentBase comment) {
+        PsiElement target = comment.getOwner();
+        if (target == null) {
+            target = comment;
+        }
+        JavaDocInfoGenerator generator = new JavaDocInfoGenerator(target.getProject(), target, true);
+        return JavaDocExternalFilter.filterInternalDocInfo(generator.generateRenderedDocInfo());
+    }
+
+    @Override
+    public void collectDocComments(PsiFile file, Consumer<? super PsiDocCommentBase> sink) {
+        if (!(file instanceof PsiJavaFile javaFile)) {
+            return;
+        }
+        if (file instanceof PsiCompiledElement) {
+            return;
+        }
+        String fileName = file.getName();
+        if (PsiJavaPackage.PACKAGE_INFO_FILE.equals(fileName)) {
+            PsiPackageStatement packageStatement = javaFile.getPackageStatement();
+            if (packageStatement != null) {
+                PsiElement prevElement = PsiTreeUtil.skipWhitespacesBackward(packageStatement);
+                if (prevElement instanceof PsiDocCommentBase docComment) {
+                    sink.accept(docComment);
+                }
+            }
+        }
+        else if (PsiJavaModule.MODULE_INFO_FILE.equals(fileName)) {
+            PsiJavaModule module = javaFile.getModuleDeclaration();
+            if (module != null) {
+                collectDocComment(module, sink);
+            }
+        }
+        else {
+            PsiClass[] classes = javaFile.getClasses();
+            for (PsiClass aClass : classes) {
+                collectDocComments(aClass, sink);
+            }
+        }
+    }
+
+    private static void collectDocComments(PsiClass aClass, Consumer<? super PsiDocCommentBase> sink) {
+        collectDocComment(aClass, sink);
+        List<PsiDocCommentOwner> children = PsiTreeUtil.getChildrenOfTypeAsList(aClass, PsiDocCommentOwner.class);
+        for (PsiDocCommentOwner child : children) {
+            if (child instanceof PsiClass childClass) {
+                collectDocComments(childClass, sink);
+            }
+            else {
+                collectDocComment(child, sink);
+            }
+        }
+    }
+
+    private static void collectDocComment(PsiJavaDocumentedElement commentOwner, Consumer<? super PsiDocCommentBase> sink) {
+        PsiDocComment comment = commentOwner.getDocComment();
+        if (comment != null) {
+            sink.accept(comment);
+        }
     }
 
     @Override
