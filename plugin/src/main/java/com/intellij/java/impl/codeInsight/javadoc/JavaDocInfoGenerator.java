@@ -1377,10 +1377,10 @@ public class JavaDocInfoGenerator {
     URL baseUrl = getBaseUrl();
     buffer.append("<html><head>");
     if (baseUrl != null) {
+      // used to resolve URLs of local images
       buffer.append("<base href=\"").append(baseUrl).append("\">");
     }
-    buffer.append("    <style type=\"text/css\">" + "        #error {" + "            background-color: #eeeeee;" + "            margin-bottom: 10px;" + "        }" + "        p {" + "          " +
-        "  margin: 5px 0;" + "        }" + "    </style>" + "</head><body>");
+    buffer.append("</head><body>");
   }
 
   private URL getBaseUrl() {
