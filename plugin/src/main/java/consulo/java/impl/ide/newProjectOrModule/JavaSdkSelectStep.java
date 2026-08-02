@@ -50,7 +50,7 @@ public class JavaSdkSelectStep extends UnifiedProjectOrModuleNameStep<JavaNewMod
     builder.addLabeled(LocalizeValue.localizeTODO("JDK:"), (myBundleBox = boxBuilder.build()).getComponent());
 
     ComboBox<BundleBox.BundleBoxItem> component = myBundleBox.getComponent();
-    if (component.getListModel().getSize() > 0) {
+    if (component.getDataModel().getSize() > 0) {
       component.setValueByIndex(0);
     }
   }
