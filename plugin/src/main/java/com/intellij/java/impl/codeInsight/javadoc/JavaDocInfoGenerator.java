@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.codeInsight.javadoc;
 
+import consulo.java.localize.JavaLocalize;
 import com.intellij.java.impl.javadoc.JavadocGeneratorRunProfile;
 import com.intellij.java.impl.lang.java.JavaDocumentationProvider;
 import com.intellij.java.language.JavadocBundle;
@@ -549,6 +550,7 @@ public class JavaDocInfoGenerator {
     PsiDocComment comment = getDocComment(aClass);
     if (comment != null) {
       generateCommonSection(buffer, comment);
+      generateAuthorAndVersionSections(buffer, comment);
       generateTypeParametersSection(buffer, aClass);
     }
 
@@ -713,6 +715,7 @@ public class JavaDocInfoGenerator {
     PsiDocComment comment = getDocComment(field);
     if (comment != null) {
       generateCommonSection(buffer, comment);
+      generateAuthorAndVersionSections(buffer, comment);
     }
 
     if (generatePrologueAndEpilogue) {
@@ -1244,6 +1247,7 @@ public class JavaDocInfoGenerator {
     if (comment != null) {
       generateApiSection(buffer, comment);
       generateSinceSection(buffer, comment);
+      generateAuthorAndVersionSections(buffer, comment);
       generateSeeAlsoSection(buffer, comment);
     }
 
@@ -1693,6 +1697,43 @@ public class JavaDocInfoGenerator {
       generateValue(buffer, tag.getDataElements(), ourEmptyElementsProvider);
       buffer.append("</I>");
       buffer.append("</DL></DD>");
+    }
+  }
+
+  @RequiredReadAction
+  private void generateAuthorAndVersionSections(StringBuilder buffer, PsiDocComment comment) {
+    generateSingleTagSection(buffer, comment, "version", JavaLocalize.javadocVersion().get());
+    generateAuthorSection(buffer, comment);
+  }
+
+  @RequiredReadAction
+  private void generateAuthorSection(StringBuilder buffer, PsiDocComment comment) {
+    PsiDocTag[] tags = comment.findTagsByName("author");
+    if (tags.length > 0) {
+      buffer.append("<DD><DL>");
+      buffer.append("<DT><b>").append(JavaLocalize.javadocAuthor()).append("</b>");
+      buffer.append("<DD>");
+      for (int i = 0; i < tags.length; i++) {
+        StringBuilder tmp = new StringBuilder();
+        generateValue(tmp, tags[i].getDataElements(), ourEmptyElementsProvider);
+        buffer.append(tmp.toString().trim());
+        if (i < tags.length - 1) {
+          buffer.append(", ");
+        }
+      }
+      buffer.append("</DD></DL></DD>");
+    }
+  }
+
+  @RequiredReadAction
+  private void generateSingleTagSection(StringBuilder buffer, PsiDocComment comment, String tagName, String header) {
+    PsiDocTag tag = comment.findTagByName(tagName);
+    if (tag != null) {
+      buffer.append("<DD><DL>");
+      buffer.append("<DT><b>").append(header).append("</b>");
+      buffer.append("<DD>");
+      generateValue(buffer, tag.getDataElements(), ourEmptyElementsProvider);
+      buffer.append("</DD></DL></DD>");
     }
   }
 
