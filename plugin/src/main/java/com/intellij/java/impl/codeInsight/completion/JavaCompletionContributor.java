@@ -42,7 +42,6 @@ import consulo.codeEditor.Editor;
 import consulo.document.Document;
 import consulo.document.util.DocumentUtil;
 import consulo.externalService.statistic.FeatureUsageTracker;
-import consulo.ide.impl.idea.codeInsight.completion.CodeCompletionFeatures;
 import consulo.ide.impl.idea.codeInsight.completion.LegacyCompletionContributor;
 import consulo.ide.impl.idea.codeInsight.completion.WordCompletionContributor;
 import consulo.language.LangBundle;
