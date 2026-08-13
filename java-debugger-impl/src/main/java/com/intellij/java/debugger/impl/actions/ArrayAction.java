@@ -38,6 +38,7 @@ import consulo.util.concurrent.AsyncResult;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class ArrayAction extends DebuggerAction implements AnActionWithSyncUpdate {
     protected ArrayAction(LocalizeValue text) {
@@ -75,14 +76,20 @@ public abstract class ArrayAction extends DebuggerAction implements AnActionWith
         //if (index > 0) {
         //    title = title + " " + label.substring(index);
         //}
-        createNewRenderer(node, renderer, debuggerContext, node.getName()).doWhenDone(newRenderer -> setArrayRenderer(
-            newRenderer,
-            node,
-            debuggerContext
-        ));
+        createNewRenderer(node, renderer, debuggerContext, node.getName()).whenComplete((arrayRenderer, er) -> {
+            if (er != null) {
+                return;
+            }
+
+            setArrayRenderer(
+                arrayRenderer,
+                node,
+                debuggerContext
+            );
+        });
     }
 
-    protected abstract AsyncResult<ArrayRenderer> createNewRenderer(
+    protected abstract CompletableFuture<ArrayRenderer> createNewRenderer(
         XValueNode node,
         ArrayRenderer original,
         DebuggerContextImpl debuggerContext,

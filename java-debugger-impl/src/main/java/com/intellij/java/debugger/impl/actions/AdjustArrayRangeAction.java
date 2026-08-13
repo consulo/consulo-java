@@ -25,6 +25,8 @@ import consulo.localize.LocalizeValue;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.concurrent.AsyncResult;
 
+import java.util.concurrent.CompletableFuture;
+
 @ActionImpl(id = "Debugger.AdjustArrayRange")
 public class AdjustArrayRangeAction extends ArrayAction {
     public AdjustArrayRangeAction() {
@@ -33,7 +35,7 @@ public class AdjustArrayRangeAction extends ArrayAction {
 
     @Override
     @RequiredUIAccess
-    protected AsyncResult<ArrayRenderer> createNewRenderer(
+    protected CompletableFuture<ArrayRenderer> createNewRenderer(
         XValueNode node,
         ArrayRenderer original,
         DebuggerContextImpl debuggerContext,
@@ -41,11 +43,16 @@ public class AdjustArrayRangeAction extends ArrayAction {
     ) {
         ArrayRenderer clonedRenderer = original.clone();
         clonedRenderer.setForced(true);
-        AsyncResult<ArrayRenderer> result = AsyncResult.undefined();
-        AsyncResult<Void> showResult = ShowSettingsUtil.getInstance()
+        CompletableFuture<ArrayRenderer> result = new CompletableFuture<>();
+        CompletableFuture<Void> showResult = ShowSettingsUtil.getInstance()
             .editConfigurable(debuggerContext.getProject(), new NamedArrayConfigurable(title, clonedRenderer));
-        showResult.doWhenDone(() -> result.setDone(clonedRenderer));
-        showResult.doWhenRejected((Runnable)result::setRejected);
+        showResult.whenComplete((r, e) -> {
+            if (e != null) {
+                result.completeExceptionally(e);
+            } else {
+                result.complete(clonedRenderer);
+            }
+        });
         return result;
     }
 }

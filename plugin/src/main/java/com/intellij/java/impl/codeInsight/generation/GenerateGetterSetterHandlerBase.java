@@ -109,7 +109,13 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
                     }
                 };
                 ui.selectNodeInTree(templatesManager.getDefaultTemplate());
-                ShowSettingsUtil.getInstance().editConfigurable(panel, ui).doWhenDone(() -> setComboBoxModel(templatesManager, comboBox));
+                ShowSettingsUtil.getInstance().editConfigurable(panel, ui).whenComplete((res, t) -> {
+                    if (t != null) {
+                        return;
+                    }
+
+                    setComboBoxModel(templatesManager, comboBox);
+                });
             }
         );
 

@@ -60,233 +60,241 @@ import java.util.Map;
 import java.util.Set;
 
 public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
-  private final PsiLiteralExpression myLiteralExpression;
+    private final PsiLiteralExpression myLiteralExpression;
 
-  private final JLabel myPreviewLabel;
-  private final JPanel myHyperLinkPanel;
-  private final JPanel myResourceBundleSuggester;
-  private EditorComboBox myRBEditorTextField;
-  private final JPanel myJavaCodeInfoPanel;
-  private final JPanel myPreviewPanel;
-  private PsiClassType myResourceBundleType;
-  protected final ResourceBundleManager myResourceBundleManager;
+    private final JLabel myPreviewLabel;
+    private final JPanel myHyperLinkPanel;
+    private final JPanel myResourceBundleSuggester;
+    private EditorComboBox myRBEditorTextField;
+    private final JPanel myJavaCodeInfoPanel;
+    private final JPanel myPreviewPanel;
+    private PsiClassType myResourceBundleType;
+    protected final ResourceBundleManager myResourceBundleManager;
 
-  private final boolean myShowJavaCodeInfo;
-  private final boolean myShowPreview;
+    private final boolean myShowJavaCodeInfo;
+    private final boolean myShowPreview;
 
-  public static final String PROPERTY_KEY_OPTION_KEY = "PROPERTY_KEY";
-  private static final String RESOURCE_BUNDLE_OPTION_KEY = "RESOURCE_BUNDLE";
-  public static final String PROPERTY_VALUE_ATTR = "PROPERTY_VALUE";
+    public static final String PROPERTY_KEY_OPTION_KEY = "PROPERTY_KEY";
+    private static final String RESOURCE_BUNDLE_OPTION_KEY = "RESOURCE_BUNDLE";
+    public static final String PROPERTY_VALUE_ATTR = "PROPERTY_VALUE";
 
-  @RequiredUIAccess
-  public JavaI18nizeQuickFixDialog(
-    Project project,
-    final PsiFile context,
-    @Nullable final PsiLiteralExpression literalExpression,
-    String defaultPropertyValue,
-    DialogCustomization customization,
-    final boolean showJavaCodeInfo,
-    final boolean showPreview
-  ) {
-    super(project, context, defaultPropertyValue, customization, true);
+    @RequiredUIAccess
+    public JavaI18nizeQuickFixDialog(
+        Project project,
+        final PsiFile context,
+        @Nullable final PsiLiteralExpression literalExpression,
+        String defaultPropertyValue,
+        DialogCustomization customization,
+        final boolean showJavaCodeInfo,
+        final boolean showPreview
+    ) {
+        super(project, context, defaultPropertyValue, customization, true);
 
-    ResourceBundleManager resourceBundleManager = null;
-    try {
-      resourceBundleManager = ResourceBundleManager.getManager(context);
-      LOG.assertTrue(resourceBundleManager != null);
-    } catch (ResourceBundleManager.ResourceBundleNotFoundException e) {
-      LOG.error(e);
-    }
-    myResourceBundleManager = resourceBundleManager;
-
-    JavaExtensibilityData data = new JavaExtensibilityData();
-    myExtensibilityPanel.setLayout(new BorderLayout());
-    myExtensibilityPanel.add(data.myPanel, BorderLayout.CENTER);
-    myJavaCodeInfoPanel = data.myJavaCodeInfoPanel;
-    myPreviewPanel = data.myPreviewPanel;
-    myHyperLinkPanel = data.myHyperLinkPanel;
-    myResourceBundleSuggester = data.myResourceBundleSuggester;
-    myPreviewLabel = data.myPreviewLabel;
-
-    myLiteralExpression = literalExpression;
-    myShowPreview = showPreview;
-
-    myResourceBundleSuggester.setLayout(new BorderLayout());
-    PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
-    PsiClass resourceBundle = myResourceBundleManager.getResourceBundle();
-
-    myShowJavaCodeInfo = showJavaCodeInfo && myResourceBundleManager.canShowJavaCodeInfo();
-
-    if (myShowJavaCodeInfo) {
-      LOG.assertTrue(resourceBundle != null);
-      myResourceBundleType = factory.createType(resourceBundle);
-      String defaultVarName = "resourceBundle";
-      final JavaCodeFragmentFactory codeFragmentFactory = JavaCodeFragmentFactory.getInstance(project);
-      PsiExpressionCodeFragment expressionCodeFragment =
-          codeFragmentFactory.createExpressionCodeFragment(defaultVarName, myLiteralExpression, myResourceBundleType, true);
-      Document document = PsiDocumentManager.getInstance(myProject).getDocument(expressionCodeFragment);
-      myRBEditorTextField = new EditorComboBox(document, myProject, JavaFileType.INSTANCE);
-      myResourceBundleSuggester.add(myRBEditorTextField, BorderLayout.CENTER);
-      suggestAvailableResourceBundleExpressions();
-      myRBEditorTextField.addDocumentListener(new DocumentAdapter() {
-        @Override
-        public void documentChanged(DocumentEvent e) {
-          somethingChanged();
+        ResourceBundleManager resourceBundleManager = null;
+        try {
+            resourceBundleManager = ResourceBundleManager.getManager(context);
+            LOG.assertTrue(resourceBundleManager != null);
         }
-      });
-    }
+        catch (ResourceBundleManager.ResourceBundleNotFoundException e) {
+            LOG.error(e);
+        }
+        myResourceBundleManager = resourceBundleManager;
 
-    myHyperLinkPanel.setLayout(new BorderLayout());
-    final String templateName = getTemplateName();
+        JavaExtensibilityData data = new JavaExtensibilityData();
+        myExtensibilityPanel.setLayout(new BorderLayout());
+        myExtensibilityPanel.add(data.myPanel, BorderLayout.CENTER);
+        myJavaCodeInfoPanel = data.myJavaCodeInfoPanel;
+        myPreviewPanel = data.myPreviewPanel;
+        myHyperLinkPanel = data.myHyperLinkPanel;
+        myResourceBundleSuggester = data.myResourceBundleSuggester;
+        myPreviewLabel = data.myPreviewLabel;
 
-    if (templateName != null) {
-      HyperlinkLabel link = new HyperlinkLabel(CodeInsightLocalize.i18nizeDialogTemplateLinkLabel().get());
-      link.addHyperlinkListener(e -> {
-        final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
-        final FileTemplate template = FileTemplateManager.getInstance(project).getCodeTemplate(templateName);
-        SwingUtilities.invokeLater(() -> configurable.setTemplate(template, null));
-        ShowSettingsUtil.getInstance().editConfigurable(myPanel, configurable).doWhenDone(() -> {
-          somethingChanged();
-          if (myShowJavaCodeInfo) {
+        myLiteralExpression = literalExpression;
+        myShowPreview = showPreview;
+
+        myResourceBundleSuggester.setLayout(new BorderLayout());
+        PsiElementFactory factory = JavaPsiFacade.getInstance(myProject).getElementFactory();
+        PsiClass resourceBundle = myResourceBundleManager.getResourceBundle();
+
+        myShowJavaCodeInfo = showJavaCodeInfo && myResourceBundleManager.canShowJavaCodeInfo();
+
+        if (myShowJavaCodeInfo) {
+            LOG.assertTrue(resourceBundle != null);
+            myResourceBundleType = factory.createType(resourceBundle);
+            String defaultVarName = "resourceBundle";
+            final JavaCodeFragmentFactory codeFragmentFactory = JavaCodeFragmentFactory.getInstance(project);
+            PsiExpressionCodeFragment expressionCodeFragment =
+                codeFragmentFactory.createExpressionCodeFragment(defaultVarName, myLiteralExpression, myResourceBundleType, true);
+            Document document = PsiDocumentManager.getInstance(myProject).getDocument(expressionCodeFragment);
+            myRBEditorTextField = new EditorComboBox(document, myProject, JavaFileType.INSTANCE);
+            myResourceBundleSuggester.add(myRBEditorTextField, BorderLayout.CENTER);
             suggestAvailableResourceBundleExpressions();
-          }
-        });
-      });
-      myHyperLinkPanel.add(link, BorderLayout.CENTER);
-    }
-
-    if (!myShowJavaCodeInfo) {
-      myJavaCodeInfoPanel.setVisible(false);
-    }
-    if (!myShowPreview) {
-      myPreviewPanel.setVisible(false);
-    }
-
-    init();
-  }
-
-  public static boolean isAvailable(PsiFile file) {
-    final Project project = file.getProject();
-    final LocalizeValue title = CodeInsightLocalize.i18nizeDialogErrorJdkTitle();
-    try {
-      return ResourceBundleManager.getManager(file) != null;
-    } catch (ResourceBundleManager.ResourceBundleNotFoundException e) {
-      final IntentionAction fix = e.getFix();
-      if (fix != null) {
-        if (Messages.showOkCancelDialog(project, e.getMessage(), title.get(), UIUtil.getErrorIcon()) == OK_EXIT_CODE) {
-          try {
-            fix.invoke(project, null, file);
-            return false;
-          } catch (IncorrectOperationException e1) {
-            LOG.error(e1);
-          }
+            myRBEditorTextField.addDocumentListener(new DocumentAdapter() {
+                @Override
+                public void documentChanged(DocumentEvent e) {
+                    somethingChanged();
+                }
+            });
         }
-      }
-      Messages.showErrorDialog(project, e.getMessage(), title.get());
-      return false;
-    }
-  }
 
-  public PropertyCreationHandler getPropertyCreationHandler() {
-    PropertyCreationHandler handler = myResourceBundleManager.getPropertyCreationHandler();
-    return handler != null ? handler : JavaPropertiesUtil.DEFAULT_PROPERTY_CREATION_HANDLER;
-  }
+        myHyperLinkPanel.setLayout(new BorderLayout());
+        final String templateName = getTemplateName();
 
-  private void suggestAvailableResourceBundleExpressions() {
-    String templateName = getTemplateName();
-    if (templateName == null) {
-      return;
-    }
+        if (templateName != null) {
+            HyperlinkLabel link = new HyperlinkLabel(CodeInsightLocalize.i18nizeDialogTemplateLinkLabel().get());
+            link.addHyperlinkListener(e -> {
+                final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
+                final FileTemplate template = FileTemplateManager.getInstance(project).getCodeTemplate(templateName);
+                SwingUtilities.invokeLater(() -> configurable.setTemplate(template, null));
+                ShowSettingsUtil.getInstance().editConfigurable(myPanel, configurable).whenComplete((res, throwable) -> {
+                    if (throwable != null) {
+                        return;
+                    }
+                    
+                    somethingChanged();
+                    if (myShowJavaCodeInfo) {
+                        suggestAvailableResourceBundleExpressions();
+                    }
+                });
+            });
+            myHyperLinkPanel.add(link, BorderLayout.CENTER);
+        }
 
-    if (myShowJavaCodeInfo) {
-      FileTemplate template = FileTemplateManager.getInstance(myProject).getCodeTemplate(templateName);
-      boolean showResourceBundleSuggester = template.getText().contains("${" + RESOURCE_BUNDLE_OPTION_KEY + "}");
-      myJavaCodeInfoPanel.setVisible(showResourceBundleSuggester);
-    }
-    Set<String> result = JavaI18nUtil.suggestExpressionOfType(myResourceBundleType, myLiteralExpression);
-    if (result.isEmpty()) {
-      result.add(getResourceBundleText());
-    }
+        if (!myShowJavaCodeInfo) {
+            myJavaCodeInfoPanel.setVisible(false);
+        }
+        if (!myShowPreview) {
+            myPreviewPanel.setVisible(false);
+        }
 
-    myRBEditorTextField.setHistory(ArrayUtil.toStringArray(result));
-    SwingUtilities.invokeLater(() -> myRBEditorTextField.setSelectedIndex(0));
-  }
-
-  @Override
-  protected void somethingChanged() {
-    if (myShowPreview) {
-      myPreviewLabel.setText(getI18nizedText());
-    }
-    super.somethingChanged();
-  }
-
-  @Nullable
-  protected String getTemplateName() {
-    return myResourceBundleManager.getTemplateName();
-  }
-
-  @Override
-  protected String defaultSuggestPropertyKey(String value) {
-    return myResourceBundleManager.suggestPropertyKey(value);
-  }
-
-  @Override
-  protected List<String> defaultSuggestPropertiesFiles() {
-    return myResourceBundleManager.suggestPropertiesFiles();
-  }
-
-  public String getI18nizedText() {
-    String propertyKey = StringUtil.escapeStringCharacters(getKey());
-    I18nizedTextGenerator textGenerator = myResourceBundleManager.getI18nizedTextGenerator();
-    if (textGenerator != null) {
-      return generateText(textGenerator, propertyKey, getPropertiesFile(), myLiteralExpression);
+        init();
     }
 
-    String templateName = getTemplateName();
-    LOG.assertTrue(templateName != null);
-    FileTemplate template = FileTemplateManager.getInstance(myProject).getCodeTemplate(templateName);
-    Map<String, String> attributes = new HashMap<>();
-    attributes.put(PROPERTY_KEY_OPTION_KEY, propertyKey);
-    attributes.put(RESOURCE_BUNDLE_OPTION_KEY, getResourceBundleText());
-    attributes.put(PROPERTY_VALUE_ATTR, StringUtil.escapeStringCharacters(myDefaultPropertyValue));
-    addAdditionalAttributes(attributes);
-    String text = null;
-    try {
-      text = template.getText(attributes);
-    } catch (IOException e) {
-      LOG.error(e);
+    public static boolean isAvailable(PsiFile file) {
+        final Project project = file.getProject();
+        final LocalizeValue title = CodeInsightLocalize.i18nizeDialogErrorJdkTitle();
+        try {
+            return ResourceBundleManager.getManager(file) != null;
+        }
+        catch (ResourceBundleManager.ResourceBundleNotFoundException e) {
+            final IntentionAction fix = e.getFix();
+            if (fix != null) {
+                if (Messages.showOkCancelDialog(project, e.getMessage(), title.get(), UIUtil.getErrorIcon()) == OK_EXIT_CODE) {
+                    try {
+                        fix.invoke(project, null, file);
+                        return false;
+                    }
+                    catch (IncorrectOperationException e1) {
+                        LOG.error(e1);
+                    }
+                }
+            }
+            Messages.showErrorDialog(project, e.getMessage(), title.get());
+            return false;
+        }
     }
-    return text;
-  }
 
-  protected String generateText(final I18nizedTextGenerator textGenerator,
-                                final String propertyKey,
-                                final PropertiesFile propertiesFile,
-                                final PsiLiteralExpression literalExpression) {
-    return textGenerator.getI18nizedText(propertyKey, propertiesFile, literalExpression);
-  }
+    public PropertyCreationHandler getPropertyCreationHandler() {
+        PropertyCreationHandler handler = myResourceBundleManager.getPropertyCreationHandler();
+        return handler != null ? handler : JavaPropertiesUtil.DEFAULT_PROPERTY_CREATION_HANDLER;
+    }
 
-  protected void addAdditionalAttributes(final Map<String, String> attributes) {
-  }
+    private void suggestAvailableResourceBundleExpressions() {
+        String templateName = getTemplateName();
+        if (templateName == null) {
+            return;
+        }
 
-  private String getResourceBundleText() {
-    return myShowJavaCodeInfo ? myRBEditorTextField.getText() : null;
-  }
+        if (myShowJavaCodeInfo) {
+            FileTemplate template = FileTemplateManager.getInstance(myProject).getCodeTemplate(templateName);
+            boolean showResourceBundleSuggester = template.getText().contains("${" + RESOURCE_BUNDLE_OPTION_KEY + "}");
+            myJavaCodeInfoPanel.setVisible(showResourceBundleSuggester);
+        }
+        Set<String> result = JavaI18nUtil.suggestExpressionOfType(myResourceBundleType, myLiteralExpression);
+        if (result.isEmpty()) {
+            result.add(getResourceBundleText());
+        }
 
-  public PsiLiteralExpression getLiteralExpression() {
-    return myLiteralExpression;
-  }
+        myRBEditorTextField.setHistory(ArrayUtil.toStringArray(result));
+        SwingUtilities.invokeLater(() -> myRBEditorTextField.setSelectedIndex(0));
+    }
 
-  public PsiExpression[] getParameters() {
-    return PsiExpression.EMPTY_ARRAY;
-  }
+    @Override
+    protected void somethingChanged() {
+        if (myShowPreview) {
+            myPreviewLabel.setText(getI18nizedText());
+        }
+        super.somethingChanged();
+    }
 
-  static class JavaExtensibilityData {
-    private JPanel myPreviewPanel;
-    private JPanel myJavaCodeInfoPanel;
-    private JPanel myPanel;
-    private JPanel myHyperLinkPanel;
-    private MultiLineLabel myPreviewLabel;
-    private JPanel myResourceBundleSuggester;
-  }
+    @Nullable
+    protected String getTemplateName() {
+        return myResourceBundleManager.getTemplateName();
+    }
+
+    @Override
+    protected String defaultSuggestPropertyKey(String value) {
+        return myResourceBundleManager.suggestPropertyKey(value);
+    }
+
+    @Override
+    protected List<String> defaultSuggestPropertiesFiles() {
+        return myResourceBundleManager.suggestPropertiesFiles();
+    }
+
+    public String getI18nizedText() {
+        String propertyKey = StringUtil.escapeStringCharacters(getKey());
+        I18nizedTextGenerator textGenerator = myResourceBundleManager.getI18nizedTextGenerator();
+        if (textGenerator != null) {
+            return generateText(textGenerator, propertyKey, getPropertiesFile(), myLiteralExpression);
+        }
+
+        String templateName = getTemplateName();
+        LOG.assertTrue(templateName != null);
+        FileTemplate template = FileTemplateManager.getInstance(myProject).getCodeTemplate(templateName);
+        Map<String, String> attributes = new HashMap<>();
+        attributes.put(PROPERTY_KEY_OPTION_KEY, propertyKey);
+        attributes.put(RESOURCE_BUNDLE_OPTION_KEY, getResourceBundleText());
+        attributes.put(PROPERTY_VALUE_ATTR, StringUtil.escapeStringCharacters(myDefaultPropertyValue));
+        addAdditionalAttributes(attributes);
+        String text = null;
+        try {
+            text = template.getText(attributes);
+        }
+        catch (IOException e) {
+            LOG.error(e);
+        }
+        return text;
+    }
+
+    protected String generateText(final I18nizedTextGenerator textGenerator,
+                                  final String propertyKey,
+                                  final PropertiesFile propertiesFile,
+                                  final PsiLiteralExpression literalExpression) {
+        return textGenerator.getI18nizedText(propertyKey, propertiesFile, literalExpression);
+    }
+
+    protected void addAdditionalAttributes(final Map<String, String> attributes) {
+    }
+
+    private String getResourceBundleText() {
+        return myShowJavaCodeInfo ? myRBEditorTextField.getText() : null;
+    }
+
+    public PsiLiteralExpression getLiteralExpression() {
+        return myLiteralExpression;
+    }
+
+    public PsiExpression[] getParameters() {
+        return PsiExpression.EMPTY_ARRAY;
+    }
+
+    static class JavaExtensibilityData {
+        private JPanel myPreviewPanel;
+        private JPanel myJavaCodeInfoPanel;
+        private JPanel myPanel;
+        private JPanel myHyperLinkPanel;
+        private MultiLineLabel myPreviewLabel;
+        private JPanel myResourceBundleSuggester;
+    }
 }

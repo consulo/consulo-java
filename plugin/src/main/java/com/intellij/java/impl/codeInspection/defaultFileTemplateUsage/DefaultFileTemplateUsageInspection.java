@@ -36,77 +36,82 @@ import org.jspecify.annotations.Nullable;
  */
 @ExtensionImpl
 public class DefaultFileTemplateUsageInspection extends BaseJavaLocalInspectionTool {
-  // Fields are left for the compatibility
-  @Deprecated
-  public boolean CHECK_FILE_HEADER = true;
-  @Deprecated
-  public boolean CHECK_TRY_CATCH_SECTION = true;
-  @Deprecated
-  public boolean CHECK_METHOD_BODY = true;
+    // Fields are left for the compatibility
+    @Deprecated
+    public boolean CHECK_FILE_HEADER = true;
+    @Deprecated
+    public boolean CHECK_TRY_CATCH_SECTION = true;
+    @Deprecated
+    public boolean CHECK_METHOD_BODY = true;
 
-  @Override
-  public LocalizeValue getGroupDisplayName() {
-    return InspectionLocalize.inspectionGeneralToolsGroupName();
-  }
-
-  @Override
-  public LocalizeValue getDisplayName() {
-    return InspectionLocalize.defaultFileTemplateDisplayName();
-  }
-
-  @Override
-  public String getShortName() {
-    return "DefaultFileTemplate";
-  }
-
-  @Override
-  @Nullable
-  public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly, Object state) {
-    ProblemDescriptor descriptor = FileHeaderChecker.checkFileHeader(file, manager, isOnTheFly);
-    return descriptor == null ? null : new ProblemDescriptor[]{descriptor};
-  }
-
-  @Override
-  public boolean isEnabledByDefault() {
-    return true;
-  }
-
-  public static LocalQuickFix createEditFileTemplateFix(FileTemplate templateToEdit, ReplaceWithFileTemplateFix replaceTemplateFix) {
-    return new EditFileTemplateFix(templateToEdit, replaceTemplateFix);
-  }
-
-  private static class EditFileTemplateFix implements LocalQuickFix {
-    private final FileTemplate myTemplateToEdit;
-    private final ReplaceWithFileTemplateFix myReplaceTemplateFix;
-
-    public EditFileTemplateFix(FileTemplate templateToEdit, ReplaceWithFileTemplateFix replaceTemplateFix) {
-      myTemplateToEdit = templateToEdit;
-      myReplaceTemplateFix = replaceTemplateFix;
+    @Override
+    public LocalizeValue getGroupDisplayName() {
+        return InspectionLocalize.inspectionGeneralToolsGroupName();
     }
 
     @Override
-    public LocalizeValue getName() {
-      return InspectionLocalize.defaultFileTemplateEditTemplate();
+    public LocalizeValue getDisplayName() {
+        return InspectionLocalize.defaultFileTemplateDisplayName();
     }
 
     @Override
-    public boolean startInWriteAction() {
-      return false;
+    public String getShortName() {
+        return "DefaultFileTemplate";
     }
 
     @Override
-    public void applyFix(Project project, ProblemDescriptor descriptor) {
-      FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
-      configurable.setTemplate(myTemplateToEdit, null);
-      ShowSettingsUtil.getInstance().editConfigurable(project, configurable).doWhenDone(
-        () -> WriteCommandAction.runWriteCommandAction(
-          project,
-          () -> {
-            FileTemplateManager.getInstance(project).saveAllTemplates();
-            myReplaceTemplateFix.applyFix(project, descriptor);
-          }
-        )
-      );
+    @Nullable
+    public ProblemDescriptor[] checkFile(PsiFile file, InspectionManager manager, boolean isOnTheFly, Object state) {
+        ProblemDescriptor descriptor = FileHeaderChecker.checkFileHeader(file, manager, isOnTheFly);
+        return descriptor == null ? null : new ProblemDescriptor[]{descriptor};
     }
-  }
+
+    @Override
+    public boolean isEnabledByDefault() {
+        return true;
+    }
+
+    public static LocalQuickFix createEditFileTemplateFix(FileTemplate templateToEdit, ReplaceWithFileTemplateFix replaceTemplateFix) {
+        return new EditFileTemplateFix(templateToEdit, replaceTemplateFix);
+    }
+
+    private static class EditFileTemplateFix implements LocalQuickFix {
+        private final FileTemplate myTemplateToEdit;
+        private final ReplaceWithFileTemplateFix myReplaceTemplateFix;
+
+        public EditFileTemplateFix(FileTemplate templateToEdit, ReplaceWithFileTemplateFix replaceTemplateFix) {
+            myTemplateToEdit = templateToEdit;
+            myReplaceTemplateFix = replaceTemplateFix;
+        }
+
+        @Override
+        public LocalizeValue getName() {
+            return InspectionLocalize.defaultFileTemplateEditTemplate();
+        }
+
+        @Override
+        public boolean startInWriteAction() {
+            return false;
+        }
+
+        @Override
+        public void applyFix(Project project, ProblemDescriptor descriptor) {
+            FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
+            configurable.setTemplate(myTemplateToEdit, null);
+            ShowSettingsUtil.getInstance().editConfigurable(project, configurable).whenComplete((res, t) -> {
+                    if (t != null) {
+                        return;
+                    }
+                    
+                    WriteCommandAction.runWriteCommandAction(
+                        project,
+                        () -> {
+                            FileTemplateManager.getInstance(project).saveAllTemplates();
+                            myReplaceTemplateFix.applyFix(project, descriptor);
+                        }
+                    );
+                }
+            );
+        }
+    }
 }

@@ -376,7 +376,11 @@ public class JavaLanguageInjectionSupport extends AbstractLanguageInjectionSuppo
             methodParameterInjection = createFrom(project, originalCopy, contextMethod, false);
         }
 
-        ShowSettingsUtil.getInstance().editConfigurable(project, new MethodParameterInjectionConfigurable(methodParameterInjection, EmptyRunnable.getInstance(), project)).doWhenDone(() -> {
+        ShowSettingsUtil.getInstance().editConfigurable(project, new MethodParameterInjectionConfigurable(methodParameterInjection, EmptyRunnable.getInstance(), project)).whenComplete((_, t) -> {
+            if (t != null) {
+                return;
+            }
+
             final BaseInjection newInjection = new BaseInjection(methodParameterInjection.getSupportId()).copyFrom(methodParameterInjection);
             if (originalInjection != null) {
                 newInjection.mergeOriginalPlacesFrom(originalInjection, true);
