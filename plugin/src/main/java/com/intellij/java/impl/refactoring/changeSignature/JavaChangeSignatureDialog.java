@@ -64,6 +64,7 @@ import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.*;
 import consulo.ui.ex.awt.tree.Tree;
 import consulo.ui.ex.awt.util.DialogUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.ImageEffects;
 import consulo.usage.UsageInfo;
 import consulo.util.lang.Comparing;
@@ -330,9 +331,10 @@ public class JavaChangeSignatureDialog extends ChangeSignatureDialogBase<Paramet
   @RequiredUIAccess
   private int getColumnWidth(int index) {
     int letters = getTypesMaxLength() + (index == 0 ? 1 : getNamesMaxLength() + 2);
-    Font font = EditorColorsManager.getInstance().getGlobalScheme().getFont(EditorFontType.PLAIN);
-    font = new Font(font.getFontName(), font.getStyle(), 12);
-    return letters * Toolkit.getDefaultToolkit().getFontMetrics(font).stringWidth("W");
+    consulo.ui.font.Font font = EditorColorsManager.getInstance().getGlobalScheme().getFont(EditorFontType.PLAIN);
+    Font awtFont = TargetAWT.to(font);
+    awtFont = new Font(awtFont.getFontName(), awtFont.getStyle(), 12);
+    return letters * Toolkit.getDefaultToolkit().getFontMetrics(awtFont).stringWidth("W");
   }
 
   @RequiredUIAccess

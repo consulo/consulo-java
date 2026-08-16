@@ -32,6 +32,8 @@ import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.ex.awt.FontUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
+import consulo.ui.font.Font;
 
 import java.awt.*;
 
@@ -61,7 +63,7 @@ public class JavaFoldingBuilder extends JavaFoldingBuilderBase {
 
   public static String getRightArrow() {
     Font font = EditorColorsManager.getInstance().getGlobalScheme().getFont(EditorFontType.PLAIN);
-    return FontUtil.rightArrow(font);
+    return FontUtil.rightArrow(TargetAWT.to(font));
   }
 
   @Override
