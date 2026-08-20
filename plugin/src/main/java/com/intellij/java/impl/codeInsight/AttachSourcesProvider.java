@@ -18,31 +18,30 @@ package com.intellij.java.impl.codeInsight;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.layer.orderEntry.LibraryOrderEntry;
 import consulo.ui.Component;
 import consulo.ui.event.ComponentEvent;
-import consulo.util.concurrent.AsyncResult;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @ExtensionAPI(ComponentScope.PROJECT)
 public interface AttachSourcesProvider {
-  Collection<AttachSourcesAction> getActions(List<LibraryOrderEntry> orderEntries, PsiFile psiFile);
+    Collection<AttachSourcesAction> getActions(List<LibraryOrderEntry> orderEntries, PsiFile psiFile);
 
-  interface AttachSourcesAction {
-    String getName();
+    interface AttachSourcesAction {
+        LocalizeValue getName();
 
-    String getBusyText();
+        LocalizeValue getBusyText();
 
-    AsyncResult<Void> perform(List<LibraryOrderEntry> orderEntriesContainingFile, ComponentEvent<Component> e);
-  }
+        CompletableFuture<?> perform(List<LibraryOrderEntry> orderEntriesContainingFile, ComponentEvent<Component> e);
+    }
 
-  /**
-   * This marker interface means what this action will be shown only if it is single action.
-   */
-  interface LightAttachSourcesAction extends AttachSourcesAction {
-
-  }
-
+    /**
+     * This marker interface means what this action will be shown only if it is single action.
+     */
+    interface LightAttachSourcesAction extends AttachSourcesAction {
+    }
 }
