@@ -19,8 +19,6 @@ import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.application.util.function.CommonProcessors;
 import consulo.java.localize.JavaLocalize;
-import consulo.language.editor.CodeInsightBundle;
-import consulo.language.editor.DaemonBundle;
 import consulo.language.editor.gutter.GutterIconNavigationHandler;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.localize.DaemonLocalize;
@@ -43,6 +41,7 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.concurrent.coroutine.CoroutineStep;
 import consulo.util.concurrent.coroutine.step.CodeExecution;
+import jakarta.annotation.Nonnull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
@@ -426,12 +425,13 @@ public class MarkerType {
             myClass = aClass;
         }
 
+        @Nonnull
         @Override
-        public String getCaption(int size) {
+        public LocalizeValue getCaption(int size) {
             String suffix = isFinished() ? "" : " so far";
             return myClass.isInterface()
-                ? CodeInsightBundle.message("goto.implementation.chooserTitle", myClass.getName(), size, suffix)
-                : DaemonBundle.message("navigation.title.subclass", myClass.getName(), size, suffix);
+                ? CodeInsightLocalize.gotoImplementationChoosertitle(myClass.getName(), size, suffix)
+                : DaemonLocalize.navigationTitleSubclass(myClass.getName(), size, suffix);
         }
 
         @Override
@@ -470,11 +470,12 @@ public class MarkerType {
             myMethod = method;
         }
 
+        @Nonnull
         @Override
-        public String getCaption(int size) {
+        public LocalizeValue getCaption(int size) {
             return myMethod.isAbstract()
-                ? DaemonLocalize.navigationTitleImplementationMethod(myMethod.getName(), size).get()
-                : DaemonLocalize.navigationTitleOverriderMethod(myMethod.getName(), size).get();
+                ? DaemonLocalize.navigationTitleImplementationMethod(myMethod.getName(), size)
+                : DaemonLocalize.navigationTitleOverriderMethod(myMethod.getName(), size);
         }
 
         @Override
