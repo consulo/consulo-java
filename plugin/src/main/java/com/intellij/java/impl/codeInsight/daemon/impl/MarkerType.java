@@ -5,16 +5,15 @@
  */
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
-import com.intellij.java.impl.ide.util.MethodCellRenderer;
-import com.intellij.java.impl.ide.util.MethodOrFunctionalExpressionCellRenderer;
-import com.intellij.java.impl.ide.util.PsiClassOrFunctionalExpressionListCellRenderer;
+import com.intellij.java.impl.ide.util.MethodOrFunctionalExpressionPresentationProvider;
+import com.intellij.java.impl.ide.util.PsiClassOrFunctionalExpressionPresentationProvider;
 import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;
-import com.intellij.java.language.impl.codeInsight.PsiClassListCellRenderer;
 import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.application.Application;
 import consulo.application.ReadAction;
 import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
@@ -25,25 +24,29 @@ import consulo.language.editor.DaemonBundle;
 import consulo.language.editor.gutter.GutterIconNavigationHandler;
 import consulo.language.editor.localize.CodeInsightLocalize;
 import consulo.language.editor.localize.DaemonLocalize;
-import consulo.language.editor.ui.PsiElementListCellRenderer;
-import consulo.language.editor.ui.PsiElementListNavigator;
-import consulo.language.editor.ui.navigation.BackgroundUpdaterTask;
+import consulo.language.editor.ui.navigation.ItemWithPresentation;
+import consulo.language.editor.ui.navigation.PsiTargetNavigationService;
+import consulo.language.editor.ui.navigation.TargetPresentationProvider;
+import consulo.language.editor.ui.navigation.TargetUpdaterTask;
 import consulo.language.psi.NavigatablePsiElement;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiUtilCore;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.scope.GlobalSearchScope;
+import consulo.localize.LocalizeValue;
 import consulo.project.DumbService;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.event.ComponentEvent;
 import consulo.ui.ex.action.IdeActions;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.concurrent.coroutine.CoroutineStep;
+import consulo.util.concurrent.coroutine.step.CodeExecution;
 import org.jspecify.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.event.MouseEvent;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
@@ -89,7 +92,7 @@ public class MarkerType {
             ? calculateOverridingMethodTooltip(method, method != element.getParent()) : null,
         new LineMarkerNavigator() {
             @Override
-            public void browse(MouseEvent e, PsiElement element) {
+            public void browse(ComponentEvent<?> e, PsiElement element) {
                 PsiElement parent = getParentMethod(element);
                 if (!(parent instanceof PsiMethod method)) {
                     return;
@@ -103,7 +106,7 @@ public class MarkerType {
         element -> getParentMethod(element) instanceof PsiMethod method ? calculateOverridingSiblingMethodTooltip(method) : null,
         new LineMarkerNavigator() {
             @Override
-            public void browse(MouseEvent e, PsiElement element) {
+            public void browse(ComponentEvent<?> e, PsiElement element) {
                 if (getParentMethod(element) instanceof PsiMethod method) {
                     navigateToSiblingOverridingMethod(e, method);
                 }
@@ -184,33 +187,33 @@ public class MarkerType {
         return GutterTooltipHelper.getTooltipText(elements, prefix, true, IdeActions.ACTION_GOTO_IMPLEMENTATION);
     }
 
-    private static void navigateToOverridingMethod(MouseEvent e, PsiMethod method, boolean acceptSelf) {
+    @RequiredUIAccess
+    private static void navigateToOverridingMethod(ComponentEvent<?> e, PsiMethod method, boolean acceptSelf) {
         PsiMethod[] superMethods = composeSuperMethods(method, acceptSelf);
         if (superMethods.length == 0) {
             return;
         }
         boolean showMethodNames = !PsiUtil.allMethodsHaveSameSignature(superMethods);
-        PsiElementListNavigator.openTargets(
-            e,
-            superMethods,
-            DaemonLocalize.navigationTitleSuperMethod(method.getName()).get(),
-            DaemonLocalize.navigationFindusagesTitleSuperMethod(method.getName()).get(),
-            new MethodCellRenderer(showMethodNames)
-        );
+        openSuperMethods(e, method, Arrays.asList(superMethods), showMethodNames);
     }
 
-    private static void navigateToSiblingOverridingMethod(MouseEvent e, PsiMethod method) {
+    @RequiredUIAccess
+    private static void navigateToSiblingOverridingMethod(ComponentEvent<?> e, PsiMethod method) {
         PsiMethod superMethod = FindSuperElementsHelper.getSiblingInheritedViaSubClass(method);
         if (superMethod == null) {
             return;
         }
-        PsiElementListNavigator.openTargets(
-            e,
-            new NavigatablePsiElement[]{superMethod},
-            DaemonLocalize.navigationTitleSuperMethod(method.getName()).get(),
-            DaemonLocalize.navigationFindusagesTitleSuperMethod(method.getName()).get(),
-            new MethodCellRenderer(false)
-        );
+        openSuperMethods(e, method, List.of(superMethod), false);
+    }
+
+    @RequiredUIAccess
+    private static void openSuperMethods(ComponentEvent<?> e, PsiMethod method, List<PsiMethod> superMethods, boolean showMethodNames) {
+        Application.get().getInstance(PsiTargetNavigationService.class)
+            .<PsiMethod>newNavigator(() -> superMethods)
+            .presentationProvider(new MethodOrFunctionalExpressionPresentationProvider(() -> showMethodNames))
+            .title(DaemonLocalize.navigationTitleSuperMethod(method.getName()))
+            .findUsagesTitle(DaemonLocalize.navigationFindusagesTitleSuperMethod(method.getName()))
+            .navigate(e, method.getProject());
     }
 
     private static PsiMethod[] composeSuperMethods(PsiMethod method, boolean acceptSelf) {
@@ -235,7 +238,7 @@ public class MarkerType {
         element -> element.getParent() instanceof PsiMethod method ? getOverriddenMethodTooltip(method) : null,
         new LineMarkerNavigator() {
             @Override
-            public void browse(MouseEvent e, PsiElement element) {
+            public void browse(ComponentEvent<?> e, PsiElement element) {
                 if (element.getParent() instanceof PsiMethod method) {
                     navigateToOverriddenMethod(e, method);
                 }
@@ -264,60 +267,53 @@ public class MarkerType {
             return !isAbstract || aClass == null ? null : getFunctionalImplementationTooltip(aClass);
         }
 
-        Comparator<PsiMethod> comparator = new MethodCellRenderer(false).getComparator();
-        Arrays.sort(overridings, comparator);
+        Arrays.sort(overridings, new MethodOrFunctionalExpressionPresentationProvider(() -> false).comparator());
 
         return getImplementationTooltip(isAbstract ? "Is implemented in" : "Is overridden in", overridings);
     }
 
-    private static void navigateToOverriddenMethod(MouseEvent e, PsiMethod method) {
+    @RequiredUIAccess
+    private static void navigateToOverriddenMethod(ComponentEvent<?> e, PsiMethod method) {
         if (DumbService.isDumb(method.getProject())) {
             DumbService.getInstance(method.getProject())
                 .showDumbModeNotification(JavaLocalize.notificationNavigationToOverridingClasses());
             return;
         }
 
-        PsiElementProcessor.CollectElementsWithLimit<PsiMethod> collectProcessor = getProcessor(2, true);
-        PsiElementProcessor.CollectElementsWithLimit<PsiFunctionalExpression> collectExprProcessor = getProcessor(2, true);
-        boolean isAbstract = method.isAbstract();
-        if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
-            () -> {
-                GlobalSearchScope scope = GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(method));
-                OverridingMethodsSearch.search(method, scope, true).forEach(new PsiElementProcessorAdapter<>(collectProcessor));
-                if (isAbstract && collectProcessor.getCollection().size() < 2) {
-                    PsiClass aClass = ReadAction.compute(method::getContainingClass);
-                    if (aClass != null) {
-                        FunctionalExpressionSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(collectExprProcessor));
-                    }
-                }
-            },
-            SEARCHING_FOR_OVERRIDING_METHODS,
-            true,
-            method.getProject(),
-            (JComponent)e.getComponent()
-        )) {
-            return;
-        }
+        // known only once the prefetch below is done, so the provider is handed a supplier rather than a value
+        AtomicBoolean showMethodNames = new AtomicBoolean();
+        MethodOrFunctionalExpressionPresentationProvider provider =
+            new MethodOrFunctionalExpressionPresentationProvider(showMethodNames::get);
 
-        PsiMethod[] methodOverriders = collectProcessor.toArray(PsiMethod.EMPTY_ARRAY);
-        List<NavigatablePsiElement> overridings = new ArrayList<>();
-        overridings.addAll(collectProcessor.getCollection());
-        overridings.addAll(collectExprProcessor.getCollection());
-        if (overridings.isEmpty()) {
-            return;
-        }
-        boolean showMethodNames = !PsiUtil.allMethodsHaveSameSignature(methodOverriders);
-        MethodOrFunctionalExpressionCellRenderer renderer = new MethodOrFunctionalExpressionCellRenderer(showMethodNames);
-        Collections.sort(overridings, renderer.getComparator());
-        OverridingMethodsUpdater methodsUpdater = new OverridingMethodsUpdater(method, renderer);
-        PsiElementListNavigator.openTargets(
-            e,
-            overridings.toArray(NavigatablePsiElement.EMPTY_ARRAY),
-            methodsUpdater.getCaption(overridings.size()),
-            "Overriding methods of " + method.getName(),
-            renderer,
-            methodsUpdater
-        );
+        CoroutineStep<Void, Collection<NavigatablePsiElement>> prefetch = CodeExecution.supply(() -> {
+            PsiElementProcessor.CollectElementsWithLimit<PsiMethod> collectProcessor = getProcessor(2, true);
+            PsiElementProcessor.CollectElementsWithLimit<PsiFunctionalExpression> collectExprProcessor = getProcessor(2, true);
+
+            GlobalSearchScope scope = GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(method));
+            OverridingMethodsSearch.search(method, scope, true).forEach(new PsiElementProcessorAdapter<>(collectProcessor));
+            if (ReadAction.compute(method::isAbstract) && collectProcessor.getCollection().size() < 2) {
+                PsiClass aClass = ReadAction.compute(method::getContainingClass);
+                if (aClass != null) {
+                    FunctionalExpressionSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(collectExprProcessor));
+                }
+            }
+
+            PsiMethod[] methodOverriders = collectProcessor.toArray(PsiMethod.EMPTY_ARRAY);
+            showMethodNames.set(ReadAction.compute(() -> !PsiUtil.allMethodsHaveSameSignature(methodOverriders)));
+
+            List<NavigatablePsiElement> overridings = new ArrayList<>();
+            overridings.addAll(collectProcessor.getCollection());
+            overridings.addAll(collectExprProcessor.getCollection());
+            ReadAction.run(() -> overridings.sort(provider.comparator()));
+            return overridings;
+        });
+
+        Application.get().getInstance(PsiTargetNavigationService.class)
+            .newNavigator(prefetch)
+            .presentationProvider(provider)
+            .findUsagesTitle(LocalizeValue.localizeTODO("Overriding methods of " + method.getName()))
+            .updater(new OverridingMethodsUpdater(method, provider))
+            .navigate(e, method.getProject());
     }
 
     private static final String SEARCHING_FOR_OVERRIDDEN_METHODS = "Searching for Overridden Methods";
@@ -326,7 +322,7 @@ public class MarkerType {
         element -> element.getParent() instanceof PsiClass aClass ? getSubclassedClassTooltip(aClass) : null,
         new LineMarkerNavigator() {
             @Override
-            public void browse(MouseEvent e, PsiElement element) {
+            public void browse(ComponentEvent<?> e, PsiElement element) {
                 if (element.getParent() instanceof PsiClass aClass) {
                     navigateToSubclassedClass(e, aClass);
                 }
@@ -348,22 +344,23 @@ public class MarkerType {
             return getFunctionalImplementationTooltip(aClass);
         }
 
-        Comparator<PsiClass> comparator = new PsiClassListCellRenderer().getComparator();
-        Arrays.sort(subclasses, comparator);
+        Arrays.sort(subclasses, new PsiClassOrFunctionalExpressionPresentationProvider().comparator());
 
         return getImplementationTooltip(aClass.isInterface() ? "Is implemented by" : "Is subclassed by", subclasses);
     }
 
     // Used in Kotlin, please don't make private
-    public static void navigateToSubclassedClass(MouseEvent e, PsiClass aClass) {
-        navigateToSubclassedClass(e, aClass, new PsiClassOrFunctionalExpressionListCellRenderer());
+    @RequiredUIAccess
+    public static void navigateToSubclassedClass(ComponentEvent<?> e, PsiClass aClass) {
+        navigateToSubclassedClass(e, aClass, new PsiClassOrFunctionalExpressionPresentationProvider());
     }
 
     // Used in Kotlin, please don't make private
+    @RequiredUIAccess
     public static void navigateToSubclassedClass(
-        MouseEvent e,
+        ComponentEvent<?> e,
         PsiClass aClass,
-        PsiElementListCellRenderer<NavigatablePsiElement> renderer
+        TargetPresentationProvider<? super NavigatablePsiElement> provider
     ) {
         if (DumbService.isDumb(aClass.getProject())) {
             DumbService.getInstance(aClass.getProject())
@@ -371,46 +368,61 @@ public class MarkerType {
             return;
         }
 
-        PsiElementProcessor.FindElement<PsiClass> collectProcessor = new PsiElementProcessor.FindElement<>();
-        PsiElementProcessor.FindElement<PsiFunctionalExpression> collectExprProcessor = new PsiElementProcessor.FindElement<>();
-        if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(
-            () -> {
-                ClassInheritorsSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(collectProcessor));
-                if (collectProcessor.getFoundElement() == null) {
-                    FunctionalExpressionSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(collectExprProcessor));
-                }
-            },
-            SEARCHING_FOR_OVERRIDDEN_METHODS,
-            true,
-            aClass.getProject(),
-            (JComponent)e.getComponent()
-        )) {
-            return;
-        }
+        CoroutineStep<Void, Collection<NavigatablePsiElement>> prefetch = CodeExecution.supply(() -> {
+            PsiElementProcessor.FindElement<PsiClass> collectProcessor = new PsiElementProcessor.FindElement<>();
+            PsiElementProcessor.FindElement<PsiFunctionalExpression> collectExprProcessor = new PsiElementProcessor.FindElement<>();
 
-        List<NavigatablePsiElement> inheritors = new ArrayList<>();
-        ContainerUtil.addIfNotNull(inheritors, collectProcessor.getFoundElement());
-        ContainerUtil.addIfNotNull(inheritors, collectExprProcessor.getFoundElement());
-        if (inheritors.isEmpty()) {
-            return;
-        }
-        SubclassUpdater subclassUpdater = new SubclassUpdater(aClass, renderer);
-        Collections.sort(inheritors, renderer.getComparator());
-        PsiElementListNavigator.openTargets(
-            e,
-            inheritors.toArray(NavigatablePsiElement.EMPTY_ARRAY),
-            subclassUpdater.getCaption(inheritors.size()),
-            CodeInsightLocalize.gotoImplementationFindusagesTitle(aClass.getName()).get(),
-            renderer,
-            subclassUpdater
-        );
+            ClassInheritorsSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(collectProcessor));
+            if (collectProcessor.getFoundElement() == null) {
+                FunctionalExpressionSearch.search(aClass).forEach(new PsiElementProcessorAdapter<>(collectExprProcessor));
+            }
+
+            List<NavigatablePsiElement> inheritors = new ArrayList<>();
+            ContainerUtil.addIfNotNull(inheritors, collectProcessor.getFoundElement());
+            ContainerUtil.addIfNotNull(inheritors, collectExprProcessor.getFoundElement());
+            ReadAction.run(() -> inheritors.sort(provider.comparator()));
+            return inheritors;
+        });
+
+        Application.get().getInstance(PsiTargetNavigationService.class)
+            .newNavigator(prefetch)
+            .presentationProvider(provider)
+            .findUsagesTitle(CodeInsightLocalize.gotoImplementationFindusagesTitle(aClass.getName()))
+            .updater(new SubclassUpdater(aClass, provider))
+            .navigate(e, aClass.getProject());
     }
 
-    private static class SubclassUpdater extends BackgroundUpdaterTask {
+    private abstract static class SingleTargetUpdater extends TargetUpdaterTask<NavigatablePsiElement> {
+        private SingleTargetUpdater(
+            PsiElement anchor,
+            String title,
+            TargetPresentationProvider<? super NavigatablePsiElement> provider
+        ) {
+            super(anchor.getProject(), LocalizeValue.localizeTODO(title), provider);
+        }
+
+        /**
+         * A search that ends up with a single hit had no choice to offer, so the popup steps aside and the
+         * target is opened directly.
+         */
+        @Override
+        @RequiredUIAccess
+        public void onSuccess() {
+            super.onSuccess();
+            ItemWithPresentation<NavigatablePsiElement> only = getTheOnlyOneElement();
+            NavigatablePsiElement element = only == null ? null : only.dereference();
+            if (element != null) {
+                element.navigate(true);
+                myPopup.cancel();
+            }
+        }
+    }
+
+    private static class SubclassUpdater extends SingleTargetUpdater {
         private final PsiClass myClass;
 
-        private SubclassUpdater(PsiClass aClass, PsiElementListCellRenderer<NavigatablePsiElement> renderer) {
-            super(aClass.getProject(), SEARCHING_FOR_OVERRIDDEN_METHODS, createComparatorWrapper((Comparator)renderer.getComparator()));
+        private SubclassUpdater(PsiClass aClass, TargetPresentationProvider<? super NavigatablePsiElement> provider) {
+            super(aClass, SEARCHING_FOR_OVERRIDDEN_METHODS, provider);
             myClass = aClass;
         }
 
@@ -423,24 +435,13 @@ public class MarkerType {
         }
 
         @Override
-        @RequiredUIAccess
-        public void onSuccess() {
-            super.onSuccess();
-            PsiElement oneElement = getTheOnlyOneElement();
-            if (oneElement instanceof NavigatablePsiElement navigatablePsiElement) {
-                navigatablePsiElement.navigate(true);
-                myPopup.cancel();
-            }
-        }
-
-        @Override
-        public void run(final ProgressIndicator indicator) {
+        public void run(ProgressIndicator indicator) {
             super.run(indicator);
             ClassInheritorsSearch.search(myClass, ReadAction.compute(myClass::getUseScope), true)
                 .forEach(new CommonProcessors.CollectProcessor<>() {
                     @Override
                     public boolean process(PsiClass o) {
-                        if (!updateComponent(o)) {
+                        if (!updateElement(o)) {
                             indicator.cancel();
                         }
                         ProgressManager.checkCanceled();
@@ -451,7 +452,7 @@ public class MarkerType {
             FunctionalExpressionSearch.search(myClass).forEach(new CommonProcessors.CollectProcessor<>() {
                 @Override
                 public boolean process(PsiFunctionalExpression expr) {
-                    if (!updateComponent(expr)) {
+                    if (!updateElement(expr)) {
                         indicator.cancel();
                     }
                     ProgressManager.checkCanceled();
@@ -461,11 +462,11 @@ public class MarkerType {
         }
     }
 
-    private static class OverridingMethodsUpdater extends BackgroundUpdaterTask {
+    private static class OverridingMethodsUpdater extends SingleTargetUpdater {
         private final PsiMethod myMethod;
 
-        private OverridingMethodsUpdater(PsiMethod method, PsiElementListCellRenderer renderer) {
-            super(method.getProject(), SEARCHING_FOR_OVERRIDING_METHODS, createComparatorWrapper(renderer.getComparator()));
+        private OverridingMethodsUpdater(PsiMethod method, TargetPresentationProvider<? super NavigatablePsiElement> provider) {
+            super(method, SEARCHING_FOR_OVERRIDING_METHODS, provider);
             myMethod = method;
         }
 
@@ -477,25 +478,14 @@ public class MarkerType {
         }
 
         @Override
-        @RequiredUIAccess
-        public void onSuccess() {
-            super.onSuccess();
-            PsiElement oneElement = getTheOnlyOneElement();
-            if (oneElement instanceof NavigatablePsiElement navigatableElement) {
-                navigatableElement.navigate(true);
-                myPopup.cancel();
-            }
-        }
-
-        @Override
-        public void run(final ProgressIndicator indicator) {
+        public void run(ProgressIndicator indicator) {
             super.run(indicator);
             GlobalSearchScope scope = GlobalSearchScope.allScope(PsiUtilCore.getProjectInReadAction(myMethod));
             OverridingMethodsSearch.search(myMethod, scope, true).forEach(
                 new CommonProcessors.CollectProcessor<>() {
                     @Override
                     public boolean process(PsiMethod psiMethod) {
-                        if (!updateComponent(psiMethod)) {
+                        if (!updateElement(psiMethod)) {
                             indicator.cancel();
                         }
                         ProgressManager.checkCanceled();
@@ -507,7 +497,7 @@ public class MarkerType {
                 FunctionalExpressionSearch.search(psiClass).forEach(new CommonProcessors.CollectProcessor<>() {
                     @Override
                     public boolean process(PsiFunctionalExpression expr) {
-                        if (!updateComponent(expr)) {
+                        if (!updateElement(expr)) {
                             indicator.cancel();
                         }
                         ProgressManager.checkCanceled();

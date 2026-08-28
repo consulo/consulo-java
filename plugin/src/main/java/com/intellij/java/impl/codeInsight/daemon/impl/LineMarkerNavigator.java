@@ -16,9 +16,10 @@
 package com.intellij.java.impl.codeInsight.daemon.impl;
 
 import consulo.language.psi.PsiElement;
-
-import java.awt.event.MouseEvent;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.event.ComponentEvent;
 
 public abstract class LineMarkerNavigator {
-  public abstract void browse(MouseEvent e, PsiElement element);
+  @RequiredUIAccess
+  public abstract void browse(ComponentEvent<?> e, PsiElement element);
 }

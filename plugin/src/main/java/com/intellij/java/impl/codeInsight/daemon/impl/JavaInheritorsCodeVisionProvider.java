@@ -22,9 +22,9 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiModificationTracker;
 import consulo.language.psi.PsiNameIdentifierOwner;
 import consulo.localize.LocalizeValue;
+import consulo.ui.event.ComponentEvent;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.List;
 
@@ -98,7 +98,7 @@ public class JavaInheritorsCodeVisionProvider extends InheritorsCodeVisionProvid
     }
 
     @Override
-    public void handleClick(Editor editor, PsiElement element, @Nullable MouseEvent event) {
+    public void handleClick(Editor editor, PsiElement element, ComponentEvent<?> event) {
         MarkerType markerType = element instanceof PsiClass
             ? MarkerType.SUBCLASSED_CLASS
             : MarkerType.OVERRIDDEN_METHOD;

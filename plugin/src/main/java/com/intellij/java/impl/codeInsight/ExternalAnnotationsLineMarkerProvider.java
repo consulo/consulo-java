@@ -45,8 +45,8 @@ import consulo.language.editor.intention.IntentionManager;
 import consulo.language.psi.*;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.RelativePoint;
 import consulo.ui.ex.action.ActionGroup;
 import consulo.ui.ex.popup.JBPopup;
 import consulo.ui.ex.popup.JBPopupFactory;
@@ -56,8 +56,8 @@ import consulo.util.lang.xml.XmlStringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
-import java.awt.event.MouseEvent;
+import consulo.ui.event.ComponentEvent;
+
 import java.util.function.Function;
 
 @ExtensionImpl
@@ -133,7 +133,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
 
     @RequiredUIAccess
     @Override
-    public void navigate(MouseEvent e, PsiElement nameIdentifier) {
+    public void navigate(ComponentEvent<?> e, PsiElement nameIdentifier) {
       PsiElement listOwner = nameIdentifier.getParent();
       PsiFile containingFile = listOwner.getContainingFile();
       VirtualFile virtualFile = PsiUtilCore.getVirtualFile(listOwner);
@@ -149,7 +149,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
           if (file != null && virtualFile.equals(file.getVirtualFile())) {
             JBPopup popup = createActionGroupPopup(containingFile, project, editor, e.getComponent());
             if (popup != null) {
-              popup.show(new RelativePoint(e));
+              popup.showBy(e);
             }
           }
         }
@@ -157,7 +157,7 @@ public class ExternalAnnotationsLineMarkerProvider extends LineMarkerProviderDes
     }
 
     @Nullable
-    protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor, Component component) {
+    protected JBPopup createActionGroupPopup(PsiFile file, Project project, Editor editor, @Nullable Component component) {
       ActionGroup.Builder group = ActionGroup.newImmutableBuilder();
       for (IntentionAction action : IntentionManager.getInstance().getAvailableIntentionActions()) {
         if (shouldShowInGutterPopup(action) && action.isAvailable(project, editor, file)) {

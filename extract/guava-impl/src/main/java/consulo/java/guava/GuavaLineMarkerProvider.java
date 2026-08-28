@@ -23,8 +23,8 @@ import com.intellij.java.language.impl.psi.impl.source.PsiImmediateClassType;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
+import consulo.application.Application;
 import consulo.application.ReadAction;
-import consulo.application.progress.ProgressManager;
 import consulo.application.util.CachedValueProvider;
 import consulo.application.util.query.FilteredQuery;
 import consulo.application.util.query.Query;
@@ -35,19 +35,19 @@ import consulo.language.editor.Pass;
 import consulo.language.editor.gutter.GutterIconNavigationHandler;
 import consulo.language.editor.gutter.LineMarkerInfo;
 import consulo.language.editor.gutter.LineMarkerProvider;
-import consulo.language.editor.ui.DefaultPsiElementCellRenderer;
-import consulo.language.editor.ui.PsiElementListNavigator;
-import consulo.language.psi.NavigatablePsiElement;
+import consulo.language.editor.ui.navigation.PsiTargetNavigationService;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.resolve.PsiElementProcessor;
 import consulo.language.psi.resolve.PsiElementProcessorAdapter;
 import consulo.language.psi.util.LanguageCachedValueUtil;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectRootManager;
+import consulo.util.concurrent.coroutine.CoroutineStep;
+import consulo.util.concurrent.coroutine.step.CodeExecution;
 import consulo.util.lang.function.Functions;
 
 import org.jspecify.annotations.Nullable;
-import javax.swing.*;
 import java.util.Collection;
 
 /**
@@ -66,17 +66,18 @@ public class GuavaLineMarkerProvider implements LineMarkerProvider {
     if (anno == null) {
       return;
     }
-    PsiElementProcessor.CollectElements<PsiMember> collector = new PsiElementProcessor.CollectElements<>();
-    if (!ProgressManager.getInstance().runProcessWithProgressSynchronously(() ->
+    CoroutineStep<Void, Collection<PsiMember>> search = CodeExecution.supply(() ->
     {
-
+      PsiElementProcessor.CollectElements<PsiMember> collector = new PsiElementProcessor.CollectElements<>();
       createQuery(psiClass, anno).forEach(new PsiElementProcessorAdapter<>(collector));
-    }, "Searching event methods", true, psiClass.getProject(), (JComponent) e.getComponent())) {
-      return;
-    }
+      return collector.getCollection();
+    });
 
-    Collection<PsiMember> collection = collector.getCollection();
-    PsiElementListNavigator.openTargets(e, collection.toArray(new NavigatablePsiElement[collection.size()]), "Event Methods", "Event Methods", new DefaultPsiElementCellRenderer());
+    Application.get().getInstance(PsiTargetNavigationService.class)
+        .newNavigator(search)
+        .title(LocalizeValue.localizeTODO("Event Methods"))
+        .findUsagesTitle(LocalizeValue.localizeTODO("Event Methods"))
+        .navigate(e, psiClass.getProject());
   };
 
   private static final GutterIconNavigationHandler<PsiElement> ourMethodNavigator = (e, elt) ->

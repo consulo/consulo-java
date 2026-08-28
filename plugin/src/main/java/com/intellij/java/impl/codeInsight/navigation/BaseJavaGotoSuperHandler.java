@@ -15,21 +15,20 @@
  */
 package com.intellij.java.impl.codeInsight.navigation;
 
-import com.intellij.java.impl.ide.util.MethodCellRenderer;
+import com.intellij.java.impl.ide.util.MethodOrFunctionalExpressionPresentationProvider;
 import com.intellij.java.language.impl.psi.impl.FindSuperElementsHelper;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
 import consulo.codeEditor.Editor;
-import consulo.codeEditor.EditorPopupHelper;
 import consulo.externalService.statistic.FeatureUsageTracker;
 import consulo.fileEditor.FileEditorManager;
 import consulo.ide.impl.idea.codeInsight.navigation.actions.GotoSuperAction;
 import consulo.language.editor.action.GotoSuperActionHander;
 import consulo.language.editor.localize.CodeInsightLocalize;
-import consulo.language.editor.ui.PopupNavigationUtil;
-import consulo.language.editor.ui.PsiElementListNavigator;
+import consulo.language.editor.ui.navigation.PsiTargetNavigationService;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiNameIdentifierOwner;
@@ -38,9 +37,10 @@ import consulo.navigation.OpenFileDescriptor;
 import consulo.navigation.OpenFileDescriptorFactory;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.popup.JBPopup;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
+
+import java.util.List;
 
 public abstract class BaseJavaGotoSuperHandler implements GotoSuperActionHander {
   @RequiredUIAccess
@@ -61,21 +61,21 @@ public abstract class BaseJavaGotoSuperHandler implements GotoSuperActionHander 
         OpenFileDescriptorFactory.getInstance(project).builder(virtualFile).offset(superElement.getTextOffset()).build();
       FileEditorManager.getInstance(project).openTextEditor(descriptor, true);
     }
+    else if (superElements[0] instanceof PsiMethod firstMethod) {
+      PsiMethod[] superMethods = (PsiMethod[])superElements;
+      boolean showMethodNames = !PsiUtil.allMethodsHaveSameSignature(superMethods);
+      Application.get().getInstance(PsiTargetNavigationService.class)
+        .<PsiMethod>newNavigator(() -> List.of(superMethods))
+        .presentationProvider(new MethodOrFunctionalExpressionPresentationProvider(() -> showMethodNames))
+        .title(CodeInsightLocalize.gotoSuperMethodChooserTitle())
+        .findUsagesTitle(CodeInsightLocalize.gotoSuperMethodFindusagesTitle(firstMethod.getName()))
+        .navigate(editor, project);
+    }
     else {
-      if (superElements[0] instanceof PsiMethod) {
-        boolean showMethodNames = !PsiUtil.allMethodsHaveSameSignature((PsiMethod[])superElements);
-        PsiElementListNavigator.openTargets(
-          editor,
-          (PsiMethod[])superElements,
-          CodeInsightLocalize.gotoSuperMethodChooserTitle().get(),
-          CodeInsightLocalize.gotoSuperMethodFindusagesTitle(((PsiMethod)superElements[0]).getName()).get(),
-          new MethodCellRenderer(showMethodNames)
-        );
-      }
-      else {
-        JBPopup popup = PopupNavigationUtil.getPsiElementPopup(superElements, CodeInsightLocalize.gotoSuperClassChooserTitle().get());
-        EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
-      }
+      Application.get().getInstance(PsiTargetNavigationService.class)
+        .<PsiElement>newNavigator(() -> List.of(superElements))
+        .title(CodeInsightLocalize.gotoSuperClassChooserTitle())
+        .navigate(editor, project);
     }
   }
 

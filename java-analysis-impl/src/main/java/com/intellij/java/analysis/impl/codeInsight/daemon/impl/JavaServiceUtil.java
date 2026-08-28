@@ -17,11 +17,11 @@ import consulo.language.editor.gutter.LineMarkerInfo;
 import consulo.language.psi.PsiElement;
 import consulo.navigation.NavigationItem;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.event.ComponentEvent;
 import consulo.util.collection.ContainerUtil;
 import org.jspecify.annotations.Nullable;
 import one.util.streamex.StreamEx;
 
-import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -138,7 +138,7 @@ public final class JavaServiceUtil {
 
         @Override
         @RequiredUIAccess
-        public void navigate(MouseEvent e, PsiElement element) {
+        public void navigate(ComponentEvent<?> e, PsiElement element) {
             Optional.ofNullable(JavaModuleGraphUtil.findDescriptorByElement(element))
                 .map(this::findTargetReference)
                 .filter(NavigationItem.class::isInstance)
