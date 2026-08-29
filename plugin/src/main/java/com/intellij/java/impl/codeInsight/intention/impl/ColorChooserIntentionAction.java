@@ -42,11 +42,9 @@ import consulo.ui.ColorPickerBuilder;
 import consulo.ui.Component;
 import consulo.ui.color.ColorValue;
 import consulo.ui.color.RGBColor;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.style.StandardColors;
 import consulo.util.lang.StringUtil;
 
-import java.awt.*;
 
 /**
  * @author spleaner
@@ -215,11 +213,11 @@ public class ColorChooserIntentionAction extends BaseColorIntentionAction {
                     return;
                 }
 
-                Color color = TargetAWT.to(colorValue);
+                RGBColor rgb = colorValue.toRGB();
                 WriteCommandAction.runWriteCommandAction(expression.getProject(), () -> {
                     PsiManager manager = expression.getManager();
                     PsiElementFactory factory = JavaPsiFacade.getInstance(manager.getProject()).getElementFactory();
-                    PsiExpression newCall = factory.createExpressionFromText("new " + JAVA_AWT_COLOR + "(" + color.getRed() + ", " + color.getGreen() + ", " + color.getBlue() + (color.getAlpha() < 255 ? ", " + color.getAlpha() : "") + ")", expression);
+                    PsiExpression newCall = factory.createExpressionFromText("new " + JAVA_AWT_COLOR + "(" + rgb.getRed() + ", " + rgb.getGreen() + ", " + rgb.getBlue() + (rgb.getAlpha() < 255 ? ", " + rgb.getAlpha() : "") + ")", expression);
                     PsiElement insertedElement = expression.replace(newCall);
                     CodeStyleManager codeStyleManager = CodeStyleManager.getInstance(manager.getProject());
                     codeStyleManager.reformat(insertedElement);
