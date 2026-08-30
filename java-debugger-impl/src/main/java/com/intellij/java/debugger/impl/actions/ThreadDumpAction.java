@@ -25,6 +25,9 @@ import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.unscramble.ThreadDumpParser;
 import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
+import consulo.annotation.component.ActionRef;
+import consulo.execution.debug.XDebuggerActions;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.unscramble.ThreadState;
 import consulo.internal.com.sun.jdi.*;
@@ -49,7 +52,10 @@ import java.util.Map;
  * @author Eugene Zhuravlev
  * @author Sascha Weinreuter
  */
-@ActionImpl(id = "DumpThreads")
+@ActionImpl(
+    id = "DumpThreads",
+    parents = @ActionParentRef(@ActionRef(id = XDebuggerActions.TOOL_WINDOW_TOP_TOOLBAR_EXTRA_GROUP))
+)
 public class ThreadDumpAction extends AnAction implements AnActionWithSyncUpdate {
     public ThreadDumpAction() {
         super(

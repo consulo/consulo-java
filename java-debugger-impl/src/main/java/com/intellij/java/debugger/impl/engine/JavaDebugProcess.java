@@ -17,7 +17,6 @@ package com.intellij.java.debugger.impl.engine;
 
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.*;
-import com.intellij.java.debugger.impl.actions.DebuggerActions;
 import com.intellij.java.debugger.impl.actions.JvmDropFrameActionHandler;
 import com.intellij.java.debugger.impl.actions.JvmSmartStepIntoActionHandler;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
@@ -401,15 +400,10 @@ public class JavaDebugProcess extends XDebugProcess {
 
     @Override
     public void registerAdditionalActions(
-        DefaultActionGroup leftToolbar,
+        DefaultActionGroup moreGroup,
         DefaultActionGroup topToolbar,
         DefaultActionGroup settings
     ) {
-        Constraints beforeRunner = new Constraints(Anchor.BEFORE, "Runner.Layout");
-        leftToolbar.add(AnSeparator.getInstance(), beforeRunner);
-        leftToolbar.add(ActionManager.getInstance().getAction(DebuggerActions.DUMP_THREADS), beforeRunner);
-        leftToolbar.add(AnSeparator.getInstance(), beforeRunner);
-
         Constraints beforeSort = new Constraints(Anchor.BEFORE, "XDebugger.ToggleSortValues");
         settings.addAction(new WatchLastMethodReturnValueAction(), beforeSort);
         settings.addAction(new AutoVarsSwitchAction(), beforeSort);
