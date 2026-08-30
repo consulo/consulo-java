@@ -35,6 +35,7 @@ import org.jspecify.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -130,8 +131,8 @@ public class PackageAnnotator {
                 continue;
             }
             String rootPackageVMName = qualifiedName.replaceAll("\\.", "/");
-            VirtualFile output = myCoverageManager.doInReadActionIfProjectOpen(() -> ModuleCompilerPathsManager.getInstance(module)
-                .getCompilerOutput(ProductionContentFolderTypeProvider.getInstance()));
+            Path output = myCoverageManager.doInReadActionIfProjectOpen(() -> ModuleCompilerPathsManager.getInstance(module)
+                .getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance()));
 
             if (output != null) {
                 File outputRoot = findRelativeFile(rootPackageVMName, output);
@@ -152,9 +153,9 @@ public class PackageAnnotator {
             }
 
             if (suite.isTrackTestFolders()) {
-                VirtualFile testPackageRoot =
+                Path testPackageRoot =
                     myCoverageManager.doInReadActionIfProjectOpen(() -> ModuleCompilerPathsManager.getInstance(module)
-                        .getCompilerOutput(TestContentFolderTypeProvider.getInstance()));
+                        .getCompilerOutputPath(TestContentFolderTypeProvider.getInstance()));
 
                 if (testPackageRoot != null) {
                     File outputRoot = findRelativeFile(rootPackageVMName, testPackageRoot);
@@ -188,8 +189,8 @@ public class PackageAnnotator {
         }
     }
 
-    private static File findRelativeFile(String rootPackageVMName, VirtualFile output) {
-        File outputRoot = VirtualFileUtil.virtualToIoFile(output);
+    private static File findRelativeFile(String rootPackageVMName, Path output) {
+        File outputRoot = output.toFile();
         outputRoot = rootPackageVMName.length() > 0 ? new File(outputRoot, FileUtil.toSystemDependentName(rootPackageVMName)) : outputRoot;
         return outputRoot;
     }
@@ -205,9 +206,9 @@ public class PackageAnnotator {
             boolean isInTests = ProjectRootManager.getInstance(module.getProject()).getFileIndex()
                 .isInTestSourceContent(psiClass.getContainingFile().getVirtualFile());
             ModuleCompilerPathsManager moduleExtension = ModuleCompilerPathsManager.getInstance(module);
-            VirtualFile outputPath = isInTests
-                ? moduleExtension.getCompilerOutput(TestContentFolderTypeProvider.getInstance())
-                : moduleExtension.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
+            Path outputPath = isInTests
+                ? moduleExtension.getCompilerOutputPath(TestContentFolderTypeProvider.getInstance())
+                : moduleExtension.getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
 
             if (outputPath != null) {
                 String qualifiedName = psiClass.getQualifiedName();

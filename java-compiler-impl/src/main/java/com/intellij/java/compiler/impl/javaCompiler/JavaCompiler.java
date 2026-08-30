@@ -38,12 +38,16 @@ import consulo.util.collection.Maps;
 import consulo.util.dataholder.Key;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.ExceptionUtil;
+import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import consulo.virtualFileSystem.fileType.FileTypeRegistry;
 import jakarta.inject.Inject;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -72,12 +76,12 @@ public class JavaCompiler implements TranslatingCompiler {
     }
 
     @Override
-    public boolean isCompilableFile(VirtualFile file, CompileContext context) {
-        return file.getFileType() == JavaFileType.INSTANCE;
+    public boolean isCompilableFile(Path file, CompileContext context) {
+        return FileTypeRegistry.getInstance().getFileTypeByFileName(file.getFileName().toString()) == JavaFileType.INSTANCE;
     }
 
     @Override
-    public void compile(CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
+    public void compile(CompileContext context, Chunk<Module> moduleChunk, Collection<Path> files, OutputSink sink) {
         boolean found = false;
         for (Module module : moduleChunk.getNodes()) {
             JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
@@ -117,16 +121,20 @@ public class JavaCompiler implements TranslatingCompiler {
         }
     }
 
-    private static List<VirtualFile> filterResourceFiles(CompileContext compileContext, VirtualFile[] virtualFiles) {
+    private static List<Path> filterResourceFiles(CompileContext compileContext, Collection<Path> paths) {
         ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(compileContext.getProject());
+        LocalFileSystem localFileSystem = LocalFileSystem.getInstance();
 
-        List<VirtualFile> list = new ArrayList<>(virtualFiles.length);
-        for (VirtualFile file : virtualFiles) {
-            ContentFolderTypeProvider provider = fileIndex.getContentFolderTypeForFile(file);
-            if (provider == ProductionResourceContentFolderTypeProvider.getInstance() || provider == TestResourceContentFolderTypeProvider.getInstance()) {
-                continue;
+        List<Path> list = new ArrayList<>(paths.size());
+        for (Path path : paths) {
+            VirtualFile file = localFileSystem.findFileByNioFile(path);
+            if (file != null) {
+                ContentFolderTypeProvider provider = fileIndex.getContentFolderTypeForFile(file);
+                if (provider == ProductionResourceContentFolderTypeProvider.getInstance() || provider == TestResourceContentFolderTypeProvider.getInstance()) {
+                    continue;
+                }
             }
-            list.add(file);
+            list.add(path);
         }
         return list;
     }

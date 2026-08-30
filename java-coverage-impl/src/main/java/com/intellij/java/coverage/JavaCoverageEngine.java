@@ -41,12 +41,12 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -191,10 +191,10 @@ public class JavaCoverageEngine extends CoverageEngine {
         CoverageSuitesBundle suite,
         Runnable chooseSuiteAction
     ) {
-        VirtualFile outputpath =
-            ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
-        VirtualFile testOutputpath =
-            ModuleCompilerPathsManager.getInstance(module).getCompilerOutput(TestContentFolderTypeProvider.getInstance());
+        Path outputpath =
+            ModuleCompilerPathsManager.getInstance(module).getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
+        Path testOutputpath =
+            ModuleCompilerPathsManager.getInstance(module).getCompilerOutputPath(TestContentFolderTypeProvider.getInstance());
 
         if ((outputpath == null && isModuleOutputNeeded(module, ProductionContentFolderTypeProvider.getInstance()))
             || (suite.isTrackTestFolders() && testOutputpath == null
@@ -330,8 +330,8 @@ public class JavaCoverageEngine extends CoverageEngine {
         }
         Set<File> classFiles = new HashSet<>();
         ModuleCompilerPathsManager pathsManager = ModuleCompilerPathsManager.getInstance(module);
-        VirtualFile outputpath = pathsManager.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
-        VirtualFile testOutputpath = pathsManager.getCompilerOutput(TestContentFolderTypeProvider.getInstance());
+        Path outputpath = pathsManager.getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
+        Path testOutputpath = pathsManager.getCompilerOutputPath(TestContentFolderTypeProvider.getInstance());
 
         for (JavaCoverageEngineExtension extension : JavaCoverageEngineExtension.EP_NAME.getExtensions()) {
             if (extension.collectOutputFiles(srcFile, outputpath, testOutputpath, suite, classFiles)) {
@@ -346,8 +346,8 @@ public class JavaCoverageEngine extends CoverageEngine {
         File vDir = outputpath == null
             ? null
             : packageVmName.length() > 0
-            ? new File(outputpath.getPath() + File.separator + packageVmName)
-            : VirtualFileUtil.virtualToIoFile(outputpath);
+            ? new File(outputpath.toFile(), packageVmName)
+            : outputpath.toFile();
         if (vDir != null && vDir.exists()) {
             Collections.addAll(children, vDir.listFiles());
         }
@@ -356,8 +356,8 @@ public class JavaCoverageEngine extends CoverageEngine {
             File testDir = testOutputpath == null
                 ? null
                 : packageVmName.length() > 0
-                ? new File(testOutputpath.getPath() + File.separator + packageVmName)
-                : VirtualFileUtil.virtualToIoFile(testOutputpath);
+                ? new File(testOutputpath.toFile(), packageVmName)
+                : testOutputpath.toFile();
             if (testDir != null && testDir.exists()) {
                 Collections.addAll(children, testDir.listFiles());
             }

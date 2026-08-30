@@ -36,7 +36,6 @@ import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.util.collection.Chunk;
 import consulo.util.io.FileUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 
 import org.jspecify.annotations.Nullable;
@@ -45,6 +44,7 @@ import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -74,8 +74,8 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
         }
 
         @Override
-        public File getFile() {
-            return myFile;
+        public Path getFile() {
+            return myFile.toPath();
         }
 
         @Nullable
@@ -187,20 +187,19 @@ public class JavaBytecodeProcessorCompiler implements ClassInstrumentingCompiler
 
     public static InstrumentationClassFinder createClassFinder(CompileContext context, Module module) {
         ModuleChunk moduleChunk =
-            new ModuleChunk((CompileContextEx) context, new Chunk<>(module), Collections.<Module, List<VirtualFile>>emptyMap());
+            new ModuleChunk((CompileContextEx) context, new Chunk<>(module), Collections.<Module, List<Path>>emptyMap());
 
-        Set<VirtualFile> compilationBootClasspath = JavaCompilerUtil.getCompilationBootClasspath(context, moduleChunk);
-        Set<VirtualFile> compilationClasspath = JavaCompilerUtil.getCompilationClasspath(context, moduleChunk);
+        Set<Path> compilationBootClasspath = JavaCompilerUtil.getCompilationBootClasspath(context, moduleChunk);
+        Set<Path> compilationClasspath = JavaCompilerUtil.getCompilationClasspath(context, moduleChunk);
 
         return new InstrumentationClassFinder(toUrls(compilationBootClasspath), toUrls(compilationClasspath));
     }
 
-    private static URL[] toUrls(Set<VirtualFile> files) {
+    private static URL[] toUrls(Set<Path> files) {
         List<URL> urls = new ArrayList<>(files.size());
-        for (VirtualFile file : files) {
+        for (Path file : files) {
             try {
-                File javaFile = VirtualFileUtil.virtualToIoFile(file);
-                urls.add(javaFile.getCanonicalFile().toURI().toURL());
+                urls.add(file.toFile().getCanonicalFile().toURI().toURL());
             }
             catch (Exception e) {
                 LOGGER.error(e);

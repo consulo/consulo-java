@@ -228,8 +228,8 @@ public class ChangedConstantsDependencyProcessor {
         final PsiFile containingFile = usage.getContainingFile();
         if (containingFile != null) {
           final VirtualFile file = containingFile.getVirtualFile();
-          if (file != null) {
-            myDependencyCache.markFile(file);
+          if (file != null && file.isInLocalFileSystem()) {
+            myDependencyCache.markFile(file.toNioPath());
           }
         }
       }

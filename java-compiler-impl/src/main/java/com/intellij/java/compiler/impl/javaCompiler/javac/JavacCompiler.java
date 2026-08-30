@@ -27,7 +27,6 @@ import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiJavaFile;
 import com.intellij.java.language.psi.PsiJavaModule;
-import com.intellij.java.language.vfs.jrt.JrtFileSystem;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AccessRule;
@@ -47,7 +46,6 @@ import consulo.java.compiler.impl.javaCompiler.NewBackendCompilerProcessBuilder;
 import consulo.java.compiler.impl.javaCompiler.old.OldBackendCompilerProcessBuilder;
 import consulo.java.compiler.localize.JavaCompilerLocalize;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
-import consulo.java.language.fileTypes.JModFileType;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.content.LanguageContentFolderScopes;
 import consulo.language.content.ProductionContentFolderTypeProvider;
@@ -69,7 +67,6 @@ import consulo.ui.ex.awt.UIUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.util.PathsList;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
@@ -77,6 +74,7 @@ import jakarta.inject.Inject;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 @ExtensionImpl
@@ -358,8 +356,8 @@ public class JavacCompiler implements BackendCompiler {
 
     commandLine.add("-verbose");
 
-    final Set<VirtualFile> cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
-    final Set<VirtualFile> bootCp = filterModFiles(JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk));
+    final Set<Path> cp = JavaCompilerUtil.getCompilationClasspath(compileContext, chunk);
+    final Set<Path> bootCp = filterModFiles(JavaCompilerUtil.getCompilationBootClasspath(compileContext, chunk));
 
     final List<String> classPath;
     if (version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1) {
@@ -456,13 +454,13 @@ public class JavacCompiler implements BackendCompiler {
       // this may cause problems if we have java code in IDEA working directory
       if (isAnnotationProcessingMode) {
         final int currentSourcesMode = chunk.getSourcesFilter();
+        Path[] sourcePaths =
+          chunk.getSourceRoots(currentSourcesMode == ModuleChunk.TEST_SOURCES ? ModuleChunk.ALL_SOURCES : currentSourcesMode);
         if (newCompiler) {
-          VirtualFile[] sourcePaths =
-            chunk.getSourceRoots(currentSourcesMode == ModuleChunk.TEST_SOURCES ? ModuleChunk.ALL_SOURCES : currentSourcesMode);
-          addClassPathValue(jdk, version, commandLine, toStringList(Set.of(sourcePaths)), "javac_sp", tempFiles);
+          addClassPathValue(jdk, version, commandLine, toStringList(Arrays.asList(sourcePaths)), "javac_sp", tempFiles);
         }
         else {
-          commandLine.add(chunk.getSourcePath(currentSourcesMode == ModuleChunk.TEST_SOURCES ? ModuleChunk.ALL_SOURCES : currentSourcesMode));
+          commandLine.add(StringUtil.join(toStringList(Arrays.asList(sourcePaths)), File.pathSeparator));
         }
       }
       else {
@@ -527,10 +525,10 @@ public class JavacCompiler implements BackendCompiler {
     return version.isAtLeast(target) && (languageLevel == null || languageLevel.isAtLeast(target.getMaxLanguageLevel()));
   }
 
-  private static Set<VirtualFile> filterModFiles(Set<VirtualFile> files) {
-    Set<VirtualFile> newFiles = new LinkedHashSet<>(files.size());
-    for (VirtualFile file : files) {
-      if (JrtFileSystem.isModuleRoot(file) || JModFileType.isModuleRoot(file)) {
+  private static Set<Path> filterModFiles(Set<Path> files) {
+    Set<Path> newFiles = new LinkedHashSet<>(files.size());
+    for (Path file : files) {
+      if (isJModFile(file) || isModularRuntime(file)) {
         continue;
       }
 
@@ -539,10 +537,21 @@ public class JavacCompiler implements BackendCompiler {
     return newFiles;
   }
 
-  private static List<String> toStringList(Set<VirtualFile> files) {
-    PathsList pathsList = new PathsList();
-    pathsList.addVirtualFiles(files);
-    return pathsList.getPathList();
+  private static boolean isJModFile(Path file) {
+    Path fileName = file.getFileName();
+    return fileName != null && StringUtil.endsWithIgnoreCase(fileName.toString(), ".jmod");
+  }
+
+  private static boolean isModularRuntime(Path file) {
+    return Files.isRegularFile(file.resolve("lib").resolve("modules"));
+  }
+
+  private static List<String> toStringList(Collection<Path> files) {
+    List<String> result = new ArrayList<>(files.size());
+    for (Path file : files) {
+      result.add(file.toString());
+    }
+    return result;
   }
 
   private static void addClassPathValue(

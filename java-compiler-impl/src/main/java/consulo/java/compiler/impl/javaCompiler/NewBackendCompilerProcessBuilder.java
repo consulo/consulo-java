@@ -25,12 +25,13 @@ import consulo.process.ProcessHandlerBuilder;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
 import consulo.util.io.ClassPathUtil;
+import consulo.util.io.FileUtil;
 import consulo.util.io.NetUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TServiceClient;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -146,15 +147,15 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 		sourcesFile.deleteOnExit();
 		myTempFiles.add(sourcesFile);
 
-		List<VirtualFile> files = chunk.getFilesToCompile();
+		List<Path> files = chunk.getFilesToCompile();
 
 		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(sourcesFile))))
 		{
-			for(final VirtualFile file : files)
+			for(final Path file : files)
 			{
 				// Important: should use "/" slashes!
 				// but not for JDK 1.5 - see SCR 36673
-				final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.getPath().replace('/', File.separatorChar) : file.getPath();
+				final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.toString() : FileUtil.toSystemIndependentName(file.toString());
 				if(LOG.isDebugEnabled())
 				{
 					LOG.debug("Adding path for compilation " + path);

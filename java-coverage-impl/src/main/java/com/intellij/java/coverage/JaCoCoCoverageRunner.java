@@ -16,8 +16,6 @@ import consulo.language.content.TestContentFolderTypeProvider;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.project.Project;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.util.VirtualFileUtil;
 import org.jspecify.annotations.Nullable;
 import org.jacoco.core.analysis.*;
 import org.jacoco.core.data.ExecutionDataReader;
@@ -26,6 +24,7 @@ import org.jacoco.core.data.ExecutionDataStore;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 
 /**
@@ -78,14 +77,14 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner {
         Module[] modules = ModuleManager.getInstance(project).getModules();
         for (Module module : modules) {
             ModuleCompilerPathsManager compilerModuleExtension = ModuleCompilerPathsManager.getInstance(module);
-            VirtualFile compilerOutput = compilerModuleExtension.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
+            Path compilerOutput = compilerModuleExtension.getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
             if (compilerOutput != null) {
-                analyzer.analyzeAll(VirtualFileUtil.virtualToIoFile(compilerOutput));
+                analyzer.analyzeAll(compilerOutput.toFile());
             }
 
-            compilerOutput = compilerModuleExtension.getCompilerOutput(TestContentFolderTypeProvider.getInstance());
+            compilerOutput = compilerModuleExtension.getCompilerOutputPath(TestContentFolderTypeProvider.getInstance());
             if (compilerOutput != null) {
-                analyzer.analyzeAll(VirtualFileUtil.virtualToIoFile(compilerOutput));
+                analyzer.analyzeAll(compilerOutput.toFile());
             }
         }
 

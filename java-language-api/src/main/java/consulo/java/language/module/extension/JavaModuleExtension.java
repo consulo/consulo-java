@@ -20,10 +20,10 @@ import consulo.compiler.CompileContext;
 import consulo.compiler.ModuleChunk;
 import consulo.content.bundle.Sdk;
 import consulo.module.extension.ModuleExtensionWithSdk;
-import consulo.virtualFileSystem.VirtualFile;
 
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,9 +51,9 @@ public interface JavaModuleExtension<T extends JavaModuleExtension<T>> extends M
   @Nullable
   Sdk getSdkForCompilation();
 
-  Set<VirtualFile> getCompilationClasspath(CompileContext compileContext, ModuleChunk moduleChunk);
+  Set<Path> getCompilationClasspath(CompileContext compileContext, ModuleChunk moduleChunk);
 
-  Set<VirtualFile> getCompilationBootClasspath(CompileContext compileContext, ModuleChunk moduleChunk);
+  Set<Path> getCompilationBootClasspath(CompileContext compileContext, ModuleChunk moduleChunk);
 
   @Nullable
   String getBytecodeVersion();

@@ -7,10 +7,10 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.coverage.CoverageSuitesBundle;
 import consulo.language.psi.PsiFile;
-import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Set;
 
 /**
@@ -30,8 +30,8 @@ public abstract class JavaCoverageEngineExtension {
 
     public boolean collectOutputFiles(
         PsiFile srcFile,
-        @Nullable VirtualFile output,
-        @Nullable VirtualFile testoutput,
+        @Nullable Path output,
+        @Nullable Path testoutput,
         CoverageSuitesBundle suite,
         Set<File> classFiles
     ) {

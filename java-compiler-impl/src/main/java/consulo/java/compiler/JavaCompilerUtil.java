@@ -31,9 +31,9 @@ import consulo.platform.Platform;
 import consulo.process.cmd.ParametersList;
 import consulo.util.io.CharsetToolkit;
 import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.Set;
 
@@ -176,7 +176,7 @@ public class JavaCompilerUtil {
     return getSdkForCompilation(chunk.getModule());
   }
 
-  public static Set<VirtualFile> getCompilationClasspath(CompileContext compileContext, final ModuleChunk moduleChunk) {
+  public static Set<Path> getCompilationClasspath(CompileContext compileContext, final ModuleChunk moduleChunk) {
     JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
     if (extension == null) {
       return Collections.emptySet();
@@ -184,7 +184,7 @@ public class JavaCompilerUtil {
     return extension.getCompilationClasspath(compileContext, moduleChunk);
   }
 
-  public static Set<VirtualFile> getCompilationBootClasspath(CompileContext compileContext, final ModuleChunk moduleChunk) {
+  public static Set<Path> getCompilationBootClasspath(CompileContext compileContext, final ModuleChunk moduleChunk) {
     JavaModuleExtension<?> extension = ModuleUtilCore.getExtension(moduleChunk.getModule(), JavaModuleExtension.class);
     if (extension == null) {
       return Collections.emptySet();

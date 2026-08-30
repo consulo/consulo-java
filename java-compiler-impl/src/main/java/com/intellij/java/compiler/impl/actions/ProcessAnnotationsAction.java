@@ -48,8 +48,8 @@ import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 import org.jspecify.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -70,9 +70,9 @@ public class ProcessAnnotationsAction extends CompileActionBase {
             CompilerManager.getInstance(project).make(new ModuleCompileScope(module, false, true), filter, null);
         }
         else {
-            FileSetCompileScope scope = getCompilableFiles(project, dataContext.getData(VirtualFile.KEY_OF_ARRAY));
-            if (scope != null) {
-                CompilerManager.getInstance(project).make(scope, filter, null);
+            List<VirtualFile> files = getCompilableFiles(project, dataContext.getData(VirtualFile.KEY_OF_ARRAY));
+            if (files != null) {
+                CompilerManager.getInstance(project).make(createScope(project, files), filter, null);
             }
         }
     }
@@ -112,8 +112,8 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         presentation.setEnabledAndVisible(true);
         presentation.setText(JavaCompilerLocalize.actionRunAptText());
 
-        FileSetCompileScope scope = getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY));
-        if (moduleContext == null && scope == null) {
+        List<VirtualFile> files = getCompilableFiles(project, event.getData(VirtualFile.KEY_OF_ARRAY));
+        if (moduleContext == null && files == null) {
             presentation.setEnabled(false);
             return;
         }
@@ -123,7 +123,6 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         }
         else {
             PsiJavaPackage aPackage = null;
-            Collection<VirtualFile> files = scope.getRootFiles();
             if (files.size() == 1) {
                 PsiDirectory directory = PsiManager.getInstance(project).findDirectory(files.iterator().next());
                 if (directory != null) {
@@ -170,7 +169,7 @@ public class ProcessAnnotationsAction extends CompileActionBase {
 
     @Nullable
     @RequiredReadAction
-    private static FileSetCompileScope getCompilableFiles(Project project, VirtualFile[] files) {
+    private static List<VirtualFile> getCompilableFiles(Project project, VirtualFile[] files) {
         if (files == null || files.length == 0) {
             return null;
         }
@@ -178,7 +177,6 @@ public class ProcessAnnotationsAction extends CompileActionBase {
         ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
         CompilerManager compilerManager = CompilerManager.getInstance(project);
         List<VirtualFile> filesToCompile = new ArrayList<>();
-        List<Module> affectedModules = new ArrayList<>();
         for (VirtualFile file : files) {
             if (!fileIndex.isInSourceContent(file)) {
                 continue;
@@ -199,11 +197,22 @@ public class ProcessAnnotationsAction extends CompileActionBase {
                 }
             }
             filesToCompile.add(file);
-            ContainerUtil.addIfNotNull(affectedModules, fileIndex.getModuleForFile(file));
         }
         if (filesToCompile.isEmpty()) {
             return null;
         }
-        return new FileSetCompileScope(filesToCompile, affectedModules.toArray(new Module[affectedModules.size()]));
+        return filesToCompile;
+    }
+
+    @RequiredReadAction
+    private static FileSetCompileScope createScope(Project project, List<VirtualFile> filesToCompile) {
+        ProjectFileIndex fileIndex = ProjectRootManager.getInstance(project).getFileIndex();
+        List<Module> affectedModules = new ArrayList<>();
+        List<Path> paths = new ArrayList<>(filesToCompile.size());
+        for (VirtualFile file : filesToCompile) {
+            ContainerUtil.addIfNotNull(affectedModules, fileIndex.getModuleForFile(file));
+            paths.add(file.toNioPath());
+        }
+        return new FileSetCompileScope(paths, affectedModules.toArray(new Module[affectedModules.size()]));
     }
 }

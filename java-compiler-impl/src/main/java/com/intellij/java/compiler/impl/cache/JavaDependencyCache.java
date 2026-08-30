@@ -29,11 +29,11 @@ import consulo.util.collection.primitive.ints.IntSets;
 import consulo.util.lang.Pair;
 import consulo.util.lang.Trinity;
 import consulo.util.lang.ref.SimpleReference;
-import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -55,7 +55,7 @@ public class JavaDependencyCache implements DependencyCache {
     private final IntSet myPreviouslyRemoteClasses = IntSets.newHashSet();
     // classes that were Remote, but became non-Remote for some reason
     private final IntSet myMarkedInfos = IntSets.newHashSet(); // classes to be recompiled
-    private final Set<VirtualFile> myMarkedFiles = new HashSet<>();
+    private final Set<Path> myMarkedFiles = new HashSet<>();
 
     private volatile JavaDependencyCacheNavigator myCacheNavigator;
     private volatile SymbolTable mySymbolTable;
@@ -409,14 +409,14 @@ public class JavaDependencyCache implements DependencyCache {
     /**
      * @return qualified names of the classes that should be additionally recompiled
      */
-    public Pair<int[], Set<VirtualFile>> findDependentClasses(CompileContext context, Project project, Set<VirtualFile> compiledWithErrors)
+    public Pair<int[], Set<Path>> findDependentClasses(CompileContext context, Project project, Set<Path> compiledWithErrors)
         throws CacheCorruptedException, ExitException {
 
         markDependencies(context, project, compiledWithErrors);
         return Pair.create(myMarkedInfos.toArray(), Collections.unmodifiableSet(myMarkedFiles));
     }
 
-    private void markDependencies(CompileContext context, Project project, Set<VirtualFile> compiledWithErrors)
+    private void markDependencies(CompileContext context, Project project, Set<Path> compiledWithErrors)
         throws CacheCorruptedException, ExitException {
         try {
             if (LOG.isDebugEnabled()) {
@@ -457,7 +457,7 @@ public class JavaDependencyCache implements DependencyCache {
                         String qualifiedName = resolve(qName);
                         String sourceFileName = getCache().getSourceFileName(qName);
                         boolean markAsRemovedSource = project.getApplication().runReadAction((Supplier<Boolean>)() -> {
-                            VirtualFile sourceFile = sourceFileFinder.findSourceFile(qualifiedName, sourceFileName, false);
+                            Path sourceFile = sourceFileFinder.findSourceFile(qualifiedName, sourceFileName, false);
                             return sourceFile == null || !compiledWithErrors.contains(sourceFile) ? Boolean.TRUE : Boolean.FALSE;
                         });
                         if (markAsRemovedSource) {
@@ -568,7 +568,7 @@ public class JavaDependencyCache implements DependencyCache {
         return myMarkedInfos.contains(qName);
     }
 
-    public void markFile(VirtualFile file) {
+    public void markFile(Path file) {
         myMarkedFiles.add(file);
     }
 
@@ -641,12 +641,12 @@ public class JavaDependencyCache implements DependencyCache {
     public void findDependentFiles(
         CompileContext context,
         SimpleReference<CacheCorruptedException> exceptionRef,
-        Function<Pair<int[], Set<VirtualFile>>, Pair<int[], Set<VirtualFile>>> filter,
-        Set<VirtualFile> dependentFiles,
-        Set<VirtualFile> compiledWithErrors
+        Function<Pair<int[], Set<Path>>, Pair<int[], Set<Path>>> filter,
+        Set<Path> dependentFiles,
+        Set<Path> compiledWithErrors
     ) throws CacheCorruptedException, ExitException {
-        Pair<int[], Set<VirtualFile>> deps = findDependentClasses(context, context.getProject(), compiledWithErrors);
-        Pair<int[], Set<VirtualFile>> filteredDeps = filter != null ? filter.apply(deps) : deps;
+        Pair<int[], Set<Path>> deps = findDependentClasses(context, context.getProject(), compiledWithErrors);
+        Pair<int[], Set<Path>> filteredDeps = filter != null ? filter.apply(deps) : deps;
 
         CacheCorruptedException[] _ex = {null};
         Application.get().runReadAction(() -> {
@@ -657,25 +657,17 @@ public class JavaDependencyCache implements DependencyCache {
                 for (int infoQName : filteredDeps.getFirst()) {
                     String qualifiedName = resolve(infoQName);
                     String sourceFileName = cache.getSourceFileName(infoQName);
-                    VirtualFile file = sourceFileFinder.findSourceFile(qualifiedName, sourceFileName, true);
+                    Path file = sourceFileFinder.findSourceFile(qualifiedName, sourceFileName, true);
                     if (file != null) {
                         dependentFiles.add(file);
-                        /*if (Application.get().isUnitTestMode()) {
-                            LOG.assertTrue(file.isValid());
-                            CompilerManagerImpl.addRecompiledPath(file.getPath());
-                        }*/
                     }
                     else {
                         LOG.info("No source file for " + resolve(infoQName) + " found; source file name=" + sourceFileName);
                     }
                 }
-                for (VirtualFile file : filteredDeps.getSecond()) {
+                for (Path file : filteredDeps.getSecond()) {
                     if (!compilerConfiguration.isExcludedFromCompilation(file)) {
                         dependentFiles.add(file);
-                        /*if (Application.get().isUnitTestMode()) {
-                            LOG.assertTrue(file.isValid());
-                            CompilerManagerImpl.addRecompiledPath(file.getPath());
-                        }*/
                     }
                 }
             }

@@ -36,6 +36,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * User: anna
@@ -188,14 +189,14 @@ public class ByteCodeViewerManager extends DockablePopupManager<ByteCodeViewerCo
       final ModuleCompilerPathsManager compilerPathsManager = ModuleCompilerPathsManager.getInstance(module);
       String classPath;
       if (ProjectRootManager.getInstance(module.getProject()).getFileIndex().isInTestSourceContent(virtualFile)) {
-        final VirtualFile pathForTests = compilerPathsManager.getCompilerOutput(TestContentFolderTypeProvider.getInstance());
+        final Path pathForTests = compilerPathsManager.getCompilerOutputPath(TestContentFolderTypeProvider.getInstance());
         if (pathForTests == null) return null;
-        classPath = pathForTests.getPath();
+        classPath = pathForTests.toString();
       }
       else {
-        final VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
+        final Path compilerOutputPath = compilerPathsManager.getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
         if (compilerOutputPath == null) return null;
-        classPath = compilerOutputPath.getPath();
+        classPath = compilerOutputPath.toString();
       }
 
       classPath += "/" + classVMName.replace('.', '/') + ".class";

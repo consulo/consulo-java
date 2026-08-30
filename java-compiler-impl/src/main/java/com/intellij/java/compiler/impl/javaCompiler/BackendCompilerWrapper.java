@@ -23,7 +23,6 @@ import com.intellij.java.compiler.impl.cache.JavaMakeUtil;
 import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.cls.ClsFormatException;
-import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.Application;
 import consulo.application.ReadAction;
 import consulo.application.util.AsyncFileService;
@@ -31,10 +30,8 @@ import consulo.application.util.concurrent.AppExecutorUtil;
 import consulo.compiler.*;
 import consulo.compiler.localize.CompilerLocalize;
 import consulo.compiler.util.CompilerUtil;
-import consulo.content.ContentIterator;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerMonitor;
 import consulo.java.compiler.impl.javaCompiler.BackendCompilerProcessBuilder;
-import consulo.language.file.FileTypeManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScopesCore;
 import consulo.localize.LocalizeValue;
@@ -48,7 +45,6 @@ import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.project.Project;
-import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.Chunk;
 import consulo.util.dataholder.Key;
 import consulo.util.io.FilePermissionCopier;
@@ -60,14 +56,18 @@ import consulo.util.lang.ref.SimpleReference;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-import consulo.virtualFileSystem.util.VirtualFileUtil;
-import consulo.virtualFileSystem.util.VirtualFileVisitor;
+import consulo.virtualFileSystem.fileType.FileTypeRegistry;
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
@@ -84,17 +84,17 @@ public class BackendCompilerWrapper {
     private final BackendCompiler myCompiler;
 
     private final CompileContextEx myCompileContext;
-    private final List<VirtualFile> myFilesToCompile;
+    private final List<Path> myFilesToCompile;
     private final TranslatingCompiler.OutputSink mySink;
     private final TranslatingCompiler myTranslatingCompiler;
     private final Chunk<Module> myChunk;
     private final Project myProject;
-    private final Map<Module, VirtualFile> myModuleToTempDirMap = new HashMap<>();
+    private final Map<Module, Path> myModuleToTempDirMap = new HashMap<>();
     private final ProjectFileIndex myProjectFileIndex;
     private static final String PACKAGE_ANNOTATION_FILE_NAME = "package-info.java";
     private static final FileObject ourStopThreadToken = new FileObject(new File(""), new byte[0]);
     public final Map<String, Set<CompiledClass>> myFileNameToSourceMap = new HashMap<>();
-    private final Set<VirtualFile> myProcessedPackageInfos = new HashSet<>();
+    private final Set<Path> myProcessedPackageInfos = new HashSet<>();
     private final CompileStatistics myStatistics;
     private volatile String myModuleName = null;
     private boolean myForceCompileTestsSeparately = false;
@@ -103,7 +103,7 @@ public class BackendCompilerWrapper {
         TranslatingCompiler translatingCompiler,
         Chunk<Module> chunk,
         Project project,
-        List<VirtualFile> filesToCompile,
+        List<Path> filesToCompile,
         CompileContextEx compileContext,
         BackendCompiler compiler,
         TranslatingCompiler.OutputSink sink
@@ -141,10 +141,9 @@ public class BackendCompilerWrapper {
             throw new CompilerException(e.getMessage(), e);
         }
         finally {
-            for (VirtualFile file : myModuleToTempDirMap.values()) {
-                if (file != null) {
-                    File ioFile = new File(file.getPath());
-                    getAsyncFileService().asyncDelete(ioFile);
+            for (Path dir : myModuleToTempDirMap.values()) {
+                if (dir != null) {
+                    getAsyncFileService().asyncDelete(dir.toFile());
                 }
             }
             myModuleToTempDirMap.clear();
@@ -153,15 +152,13 @@ public class BackendCompilerWrapper {
         if (!myFilesToCompile.isEmpty() && myCompileContext.getMessageCount(CompilerMessageCategory.ERROR) == 0) {
             // package-info.java hack
             List<TranslatingCompiler.OutputItem> outputs = new ArrayList<>();
-            myProject.getApplication().runReadAction(() -> {
-                for (VirtualFile file : myFilesToCompile) {
-                    if (PACKAGE_ANNOTATION_FILE_NAME.equals(file.getName()) && !myProcessedPackageInfos.contains(file)) {
-                        outputs.add(new OutputItemImpl(file));
-                    }
+            for (Path file : myFilesToCompile) {
+                if (PACKAGE_ANNOTATION_FILE_NAME.equals(file.getFileName().toString()) && !myProcessedPackageInfos.contains(file)) {
+                    outputs.add(new TranslatingCompiler.OutputItem(null, file));
                 }
-            });
+            }
             if (!outputs.isEmpty()) {
-                mySink.add(null, outputs, VirtualFile.EMPTY_ARRAY);
+                mySink.add(null, outputs, List.of());
             }
         }
     }
@@ -174,7 +171,7 @@ public class BackendCompilerWrapper {
         myForceCompileTestsSeparately = forceCompileTestsSeparately;
     }
 
-    private Map<Module, List<VirtualFile>> buildModuleToFilesMap(List<VirtualFile> filesToCompile) {
+    private Map<Module, List<Path>> buildModuleToFilesMap(List<Path> filesToCompile) {
         if (myChunk.getNodes().size() == 1) {
             return Collections.singletonMap(myChunk.getNodes().iterator().next(), Collections.unmodifiableList(filesToCompile));
         }
@@ -185,8 +182,7 @@ public class BackendCompilerWrapper {
         return Application.get().getInstance(AsyncFileService.class);
     }
 
-    @RequiredUIAccess
-    private void compileModules(Map<Module, List<VirtualFile>> moduleToFilesMap, Map<File, FileObject> parsingInfo)
+    private void compileModules(Map<Module, List<Path>> moduleToFilesMap, Map<File, FileObject> parsingInfo)
         throws CompilerException {
         try {
             compileChunk(new ModuleChunk(myCompileContext, myChunk, moduleToFilesMap), parsingInfo);
@@ -196,7 +192,6 @@ public class BackendCompilerWrapper {
         }
     }
 
-    @RequiredUIAccess
     private void compileChunk(ModuleChunk chunk, Map<File, FileObject> parsingInfo) throws IOException {
         String chunkPresentableName = getPresentableNameFor(chunk);
         myModuleName = chunkPresentableName;
@@ -495,7 +490,6 @@ public class BackendCompilerWrapper {
         }
     }
 
-    @RequiredUIAccess
     private void runTransformingCompilers(ModuleChunk chunk) {
         JavaSourceTransformingCompiler[] transformers =
             CompilerManager.getInstance(myProject).getCompilers(JavaSourceTransformingCompiler.class);
@@ -507,40 +501,31 @@ public class BackendCompilerWrapper {
         }
         Module[] modules = chunk.getModules();
         for (JavaSourceTransformingCompiler transformer : transformers) {
-            Map<VirtualFile, VirtualFile> originalToCopyFileMap = new HashMap<>();
-            Application application = Application.get();
-            application.invokeAndWait(
-                () -> {
-                    for (Module module : modules) {
-                        for (VirtualFile file : chunk.getFilesToCompile(module)) {
-                            VirtualFile untransformed = chunk.getOriginalFile(file);
-                            if (transformer.isTransformable(untransformed)) {
-                                application.runWriteAction(() -> {
-                                    try {
-                                        // if untransformed != file, the file is already a (possibly transformed) copy of the original
-                                        // 'untransformed' file.
-                                        // If this is the case, just use already created copy and do not copy file content once again
-                                        VirtualFile fileCopy =
-                                            untransformed.equals(file) ? createFileCopy(getTempDir(module), file) : file;
-                                        originalToCopyFileMap.put(file, fileCopy);
-                                    }
-                                    catch (IOException e) {
-                                        // skip it
-                                    }
-                                });
-                            }
+            Map<Path, Path> originalToCopyFileMap = new HashMap<>();
+            for (Module module : modules) {
+                for (Path file : chunk.getFilesToCompile(module)) {
+                    Path untransformed = chunk.getOriginalFile(file);
+                    if (transformer.isTransformable(untransformed)) {
+                        try {
+                            // if untransformed != file, the file is already a (possibly transformed) copy of the original
+                            // 'untransformed' file.
+                            // If this is the case, just use already created copy and do not copy file content once again
+                            Path fileCopy = untransformed.equals(file) ? createFileCopy(getTempDir(module), file) : file;
+                            originalToCopyFileMap.put(file, fileCopy);
+                        }
+                        catch (IOException e) {
+                            LOG.info(e);
                         }
                     }
-                },
-                myCompileContext.getProgressIndicator().getModalityState()
-            );
+                }
+            }
 
             // do actual transform
             for (Module module : modules) {
-                List<VirtualFile> filesToCompile = chunk.getFilesToCompile(module);
+                List<Path> filesToCompile = chunk.getFilesToCompile(module);
                 for (int j = 0; j < filesToCompile.size(); j++) {
-                    VirtualFile file = filesToCompile.get(j);
-                    VirtualFile fileCopy = originalToCopyFileMap.get(file);
+                    Path file = filesToCompile.get(j);
+                    Path fileCopy = originalToCopyFileMap.get(file);
                     if (fileCopy != null) {
                         boolean ok = transformer.transform(myCompileContext, fileCopy, chunk.getOriginalFile(file));
                         if (ok) {
@@ -552,38 +537,37 @@ public class BackendCompilerWrapper {
         }
     }
 
-    @RequiredWriteAction
-    private VirtualFile createFileCopy(VirtualFile tempDir, VirtualFile file) throws IOException {
-        String fileName = file.getName();
-        if (tempDir.findChild(fileName) != null) {
+    private Path createFileCopy(Path tempDir, Path file) throws IOException {
+        String fileName = file.getFileName().toString();
+        Path targetDir = tempDir;
+        if (Files.exists(targetDir.resolve(fileName))) {
             int idx = 0;
             while (true) {
                 //noinspection HardCodedStringLiteral
                 String dirName = "dir" + idx++;
-                VirtualFile dir = tempDir.findChild(dirName);
-                if (dir == null) {
-                    tempDir = tempDir.createChildDirectory(this, dirName);
+                Path dir = targetDir.resolve(dirName);
+                if (!Files.exists(dir)) {
+                    Files.createDirectories(dir);
+                    targetDir = dir;
                     break;
                 }
-                if (dir.findChild(fileName) == null) {
-                    tempDir = dir;
+                if (!Files.exists(dir.resolve(fileName))) {
+                    targetDir = dir;
                     break;
                 }
             }
         }
-        return VirtualFileUtil.copyFile(this, file, tempDir);
+        Path copy = targetDir.resolve(fileName);
+        Files.copy(file, copy, StandardCopyOption.REPLACE_EXISTING);
+        return copy;
     }
 
-    private VirtualFile getTempDir(Module module) throws IOException {
-        VirtualFile tempDir = myModuleToTempDirMap.get(module);
+    private Path getTempDir(Module module) throws IOException {
+        Path tempDir = myModuleToTempDirMap.get(module);
         if (tempDir == null) {
             String projectName = myProject.getName();
             String moduleName = module.getName();
-            File tempDirectory = Files.createTempDirectory(projectName + "_" + moduleName).toFile();
-            tempDir = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(tempDirectory);
-            if (tempDir == null) {
-                LOG.error("Cannot locate temp directory " + tempDirectory.getPath());
-            }
+            tempDir = Files.createTempDirectory(projectName + "_" + moduleName);
             myModuleToTempDirMap.put(module, tempDir);
         }
         return tempDir;
@@ -598,19 +582,19 @@ public class BackendCompilerWrapper {
         List<File> toRefresh = new ArrayList<>();
         Map<String, Collection<TranslatingCompiler.OutputItem>> results = new HashMap<>();
         try {
-            FileTypeManager typeManager = FileTypeManager.getInstance();
             String outputDirPath = outputDir.replace(File.separatorChar, '/');
             try {
                 for (Module module : chunk.getModules()) {
-                    for (VirtualFile root : chunk.getSourceRoots(module)) {
-                        String packagePrefix = myProjectFileIndex.getPackageNameByDirectory(root);
+                    for (Path root : chunk.getSourceRoots(module)) {
+                        VirtualFile rootFile = LocalFileSystem.getInstance().findFileByNioFile(root);
+                        String packagePrefix = rootFile != null ? myProjectFileIndex.getPackageNameByDirectory(rootFile) : null;
                         if (LOG.isDebugEnabled()) {
                             LOG.debug(
-                                "Building output items for ", root.getPresentableUrl(), "; output dir = ", outputDirPath,
+                                "Building output items for ", root.toString(), "; output dir = ", outputDirPath,
                                 "; packagePrefix = \"", packagePrefix, "\""
                             );
                         }
-                        buildOutputItemsList(outputDirPath, module, root, typeManager, root, packagePrefix, toRefresh, results);
+                        buildOutputItemsList(outputDirPath, module, root, rootFile, packagePrefix, toRefresh, results);
                     }
                 }
             }
@@ -625,7 +609,7 @@ public class BackendCompilerWrapper {
             CompilerUtil.refreshIOFiles(toRefresh);
             for (Iterator<Map.Entry<String, Collection<TranslatingCompiler.OutputItem>>> it = results.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<String, Collection<TranslatingCompiler.OutputItem>> entry = it.next();
-                mySink.add(entry.getKey(), entry.getValue(), VirtualFile.EMPTY_ARRAY);
+                mySink.add(entry.getKey(), entry.getValue(), List.of());
                 it.remove(); // to free memory
             }
         }
@@ -635,49 +619,64 @@ public class BackendCompilerWrapper {
     private void buildOutputItemsList(
         String outputDir,
         Module module,
-        VirtualFile from,
-        FileTypeManager typeManager,
-        VirtualFile sourceRoot,
+        Path sourceRoot,
+        @Nullable VirtualFile sourceRootFile,
         String packagePrefix,
         List<File> filesToRefresh,
         Map<String, Collection<TranslatingCompiler.OutputItem>> results
     ) throws CacheCorruptedException {
         SimpleReference<CacheCorruptedException> exRef = new SimpleReference<>(null);
-        ModuleFileIndex fileIndex = ModuleRootManager.getInstance(module).getFileIndex();
-        GlobalSearchScope srcRootScope = GlobalSearchScope.moduleScope(module)
-            .intersectWith(GlobalSearchScopesCore.directoryScope(myProject, sourceRoot, true));
+        GlobalSearchScope srcRootScope = sourceRootFile != null
+            ? GlobalSearchScope.moduleScope(module).intersectWith(GlobalSearchScopesCore.directoryScope(myProject, sourceRootFile, true))
+            : GlobalSearchScope.moduleScope(module);
 
         Collection<FileType> registeredInputTypes = CompilerManager.getInstance(myProject).getRegisteredInputTypes(myTranslatingCompiler);
 
-        final ContentIterator contentIterator = child -> {
-            try {
-                if (child.isValid()) {
-                    if (!child.isDirectory() && registeredInputTypes.contains(child.getFileType())) {
-                        updateOutputItemsList(outputDir, child, sourceRoot, packagePrefix, filesToRefresh, results, srcRootScope);
-                    }
-                }
-                return true;
-            }
-            catch (CacheCorruptedException e) {
-                exRef.set(e);
-                return false;
-            }
-        };
-        if (fileIndex.isInContent(from)) {
+        FileTypeRegistry fileTypeRegistry = FileTypeRegistry.getInstance();
+
+        ModuleFileIndex fileIndex = ModuleRootManager.getInstance(module).getFileIndex();
+        if (sourceRootFile != null && fileIndex.isInContent(sourceRootFile)) {
             // use file index for iteration to handle 'inner modules' and excludes properly
-            fileIndex.iterateContentUnderDirectory(from, contentIterator);
-        }
-        else {
-            // seems to be a root for generated sources
-            VirtualFileUtil.visitChildrenRecursively(from, new VirtualFileVisitor() {
-                @Override
-                public boolean visitFile(VirtualFile file) {
-                    if (!file.isDirectory()) {
-                        contentIterator.processFile(file);
+            fileIndex.iterateContentUnderDirectory(sourceRootFile, child -> {
+                try {
+                    if (child.isValid() && !child.isDirectory() && registeredInputTypes.contains(child.getFileType())) {
+                        updateOutputItemsList(outputDir, child.toNioPath(), sourceRoot, packagePrefix, filesToRefresh, results, srcRootScope);
                     }
                     return true;
                 }
+                catch (CacheCorruptedException e) {
+                    exRef.set(e);
+                    return false;
+                }
             });
+        }
+        else {
+            // seems to be a root for generated sources
+            try {
+                Files.walkFileTree(sourceRoot, new SimpleFileVisitor<>() {
+                    @Override
+                    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                        try {
+                            if (registeredInputTypes.contains(fileTypeRegistry.getFileTypeByFileName(file.getFileName().toString()))) {
+                                updateOutputItemsList(outputDir, file, sourceRoot, packagePrefix, filesToRefresh, results, srcRootScope);
+                            }
+                            return FileVisitResult.CONTINUE;
+                        }
+                        catch (CacheCorruptedException e) {
+                            exRef.set(e);
+                            return FileVisitResult.TERMINATE;
+                        }
+                    }
+
+                    @Override
+                    public FileVisitResult visitFileFailed(Path file, IOException e) {
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+            }
+            catch (IOException e) {
+                LOG.info(e);
+            }
         }
         CacheCorruptedException exc = exRef.get();
         if (exc != null) {
@@ -701,8 +700,8 @@ public class BackendCompilerWrapper {
 
     private void updateOutputItemsList(
         String outputDir,
-        VirtualFile srcFile,
-        VirtualFile sourceRoot,
+        Path srcFile,
+        Path sourceRoot,
         String packagePrefix,
         List<File> filesToRefresh,
         Map<String, Collection<TranslatingCompiler.OutputItem>> results,
@@ -711,7 +710,7 @@ public class BackendCompilerWrapper {
         CompositeDependencyCache dependencyCache = myCompileContext.getDependencyCache();
         JavaDependencyCache child = dependencyCache.findChild(JavaDependencyCache.class);
         Cache newCache = child.getNewClassesCache();
-        Set<CompiledClass> paths = myFileNameToSourceMap.get(srcFile.getName());
+        Set<CompiledClass> paths = myFileNameToSourceMap.get(srcFile.getFileName().toString());
         if (paths == null || paths.isEmpty()) {
             return;
         }
@@ -738,7 +737,7 @@ public class BackendCompilerWrapper {
                         }
                         if (psiClass != null) {
                             VirtualFile vFile = psiClass.getContainingFile().getVirtualFile();
-                            return vFile != null && vFile.equals(srcFile);
+                            return vFile != null && FileUtil.pathsEqual(vFile.getPath(), FileUtil.toSystemIndependentName(srcFile.toString()));
                         }
                         return false;
                     });
@@ -754,8 +753,8 @@ public class BackendCompilerWrapper {
                         outputs = new ArrayList<>();
                         results.put(realLocation.getFirst(), outputs);
                     }
-                    outputs.add(new OutputItemImpl(realLocation.getSecond(), srcFile));
-                    if (PACKAGE_ANNOTATION_FILE_NAME.equals(srcFile.getName())) {
+                    outputs.add(new TranslatingCompiler.OutputItem(realLocation.getSecond(), srcFile));
+                    if (PACKAGE_ANNOTATION_FILE_NAME.equals(srcFile.getFileName().toString())) {
                         myProcessedPackageInfos.add(srcFile);
                     }
                     if (CompilerManager.MAKE_ENABLED) {
@@ -763,7 +762,7 @@ public class BackendCompilerWrapper {
                     }
                     if (LOG.isDebugEnabled()) {
                         LOG.debug("Added output item: [outputDir; outputPath; sourceFile]  = [" + realLocation.getFirst() + "; " +
-                            realLocation.getSecond() + "; " + srcFile.getPresentableUrl() + "]");
+                            realLocation.getSecond() + "; " + srcFile + "]");
                     }
                 }
                 else {
@@ -784,21 +783,21 @@ public class BackendCompilerWrapper {
      * @param packagePrefix
      * @return A 'package'-path to a given src file relative to a specified root. "/" slashes must be used
      */
-    protected static String calcPackagePath(VirtualFile srcFile, VirtualFile sourceRoot, String packagePrefix) {
+    protected static String calcPackagePath(Path srcFile, Path sourceRoot, String packagePrefix) {
         String prefix = packagePrefix != null && packagePrefix.length() > 0 ? packagePrefix.replace('.', '/') + "/" : "";
-        return prefix + VirtualFileUtil.getRelativePath(srcFile, sourceRoot, '/');
+        return prefix + FileUtil.toSystemIndependentName(sourceRoot.relativize(srcFile).toString());
     }
 
     @Nullable
     private Couple<String> moveToRealLocation(
         String tempOutputDir,
         String pathToClass,
-        VirtualFile sourceFile,
+        Path sourceFile,
         List<File> filesToRefresh
     ) {
         Module module = myCompileContext.getModuleByFile(sourceFile);
         if (module == null) {
-            String message = "Cannot determine module for source file: " + sourceFile.getPresentableUrl() + ";\n" +
+            String message = "Cannot determine module for source file: " + sourceFile + ";\n" +
                 "Corresponding output file: " + pathToClass;
             LOG.info(message);
             myCompileContext.newWarning(LocalizeValue.localizeTODO(message)).add();
@@ -855,8 +854,8 @@ public class BackendCompilerWrapper {
         if (myModuleToTestsOutput.containsKey(module)) {
             return myModuleToTestsOutput.get(module);
         }
-        VirtualFile outputDirectory = myCompileContext.getModuleOutputDirectoryForTests(module);
-        String out = outputDirectory != null ? outputDirectory.getPath() : null;
+        Path outputDirectory = myCompileContext.getModuleOutputDirectoryForTests(module);
+        String out = outputDirectory != null ? FileUtil.toSystemIndependentName(outputDirectory.toString()) : null;
         myModuleToTestsOutput.put(module, out);
         return out;
     }
@@ -867,8 +866,8 @@ public class BackendCompilerWrapper {
         if (myModuleToOutput.containsKey(module)) {
             return myModuleToOutput.get(module);
         }
-        VirtualFile outputDirectory = myCompileContext.getModuleOutputDirectory(module);
-        String out = outputDirectory != null ? outputDirectory.getPath() : null;
+        Path outputDirectory = myCompileContext.getModuleOutputDirectory(module);
+        String out = outputDirectory != null ? FileUtil.toSystemIndependentName(outputDirectory.toString()) : null;
         myModuleToOutput.put(module, out);
         return out;
     }

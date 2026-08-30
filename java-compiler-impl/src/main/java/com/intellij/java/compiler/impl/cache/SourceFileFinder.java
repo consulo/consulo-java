@@ -31,7 +31,10 @@ import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.LocalFileSystem;
 import consulo.virtualFileSystem.VirtualFile;
+import org.jspecify.annotations.Nullable;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +47,7 @@ import java.util.Map;
 public class SourceFileFinder {
   private final Project myProject;
   private final CompileContext myCompileContext;
-  private Map<VirtualFile, String> myProjectSourceRoots = null;
+  private Map<Path, String> myProjectSourceRoots = null;
   private final CompilerManager myCompilerConfiguration;
 
   public SourceFileFinder(Project project, CompileContext compileContext) {
@@ -53,7 +56,8 @@ public class SourceFileFinder {
     myCompilerConfiguration = CompilerManager.getInstance(project);
   }
 
-  public VirtualFile findSourceFile(String qualifiedName, final String srcName, boolean checkIfExcludedFromMake) {
+  @Nullable
+  public Path findSourceFile(String qualifiedName, final String srcName, boolean checkIfExcludedFromMake) {
     // optimization
     final int dollar = qualifiedName.indexOf('$');
     final String outerQName = (dollar >= 0)? qualifiedName.substring(0, dollar) : qualifiedName;
@@ -62,25 +66,28 @@ public class SourceFileFinder {
       final PsiFile file = aClass.getContainingFile();
       if (srcName.equals(file.getName())) {
         final VirtualFile vFile = file.getVirtualFile();
-        if (vFile != null && (!checkIfExcludedFromMake || !myCompilerConfiguration.isExcludedFromCompilation(vFile))) {
-          return vFile;
+        if (vFile != null && vFile.isInLocalFileSystem()) {
+          Path path = vFile.toNioPath();
+          if (!checkIfExcludedFromMake || !myCompilerConfiguration.isExcludedFromCompilation(path)) {
+            return path;
+          }
         }
       }
     }
 
     String relativePath = JavaMakeUtil.createRelativePathToSource(qualifiedName, srcName);
-    Map<VirtualFile, String> dirs = getAllSourceRoots();
+    Map<Path, String> dirs = getAllSourceRoots();
     if (!StringUtil.startsWithChar(relativePath, '/')) {
       relativePath = "/" + relativePath;
     }
-    LocalFileSystem fs = LocalFileSystem.getInstance();
-    for (final VirtualFile virtualFile : dirs.keySet()) {
-      final String prefix = dirs.get(virtualFile);
+    for (final Map.Entry<Path, String> entry : dirs.entrySet()) {
+      final Path root = entry.getKey();
+      final String prefix = entry.getValue();
       String path;
       if (prefix.length() > 0) {
         if (FileUtil.startsWith(relativePath, prefix)) {
           // if there is package prefix assigned to the root, the relative path should be corrected
-          path = virtualFile.getPath() + relativePath.substring(prefix.length() - 1);
+          path = FileUtil.toSystemIndependentName(root.toString()) + relativePath.substring(prefix.length() - 1);
         }
         else {
           // if there is package prefix, but the relative path does not match it, skip the root
@@ -88,27 +95,29 @@ public class SourceFileFinder {
         }
       }
       else {
-        path = virtualFile.getPath() + relativePath;
+        path = FileUtil.toSystemIndependentName(root.toString()) + relativePath;
       }
-      VirtualFile file = fs.findFileByPath(path);
-      if (file != null && (!checkIfExcludedFromMake || !myCompilerConfiguration.isExcludedFromCompilation(virtualFile))) {
+      Path file = Path.of(FileUtil.toSystemDependentName(path));
+      if (Files.exists(file) && (!checkIfExcludedFromMake || !myCompilerConfiguration.isExcludedFromCompilation(root))) {
         return file;
       }
     }
     return null;
   }
 
-  private Map<VirtualFile, String> getAllSourceRoots() {
+  private Map<Path, String> getAllSourceRoots() {
     if (myProjectSourceRoots == null) {
-      myProjectSourceRoots = new HashMap<VirtualFile, String>();
+      myProjectSourceRoots = new HashMap<Path, String>();
       ApplicationManager.getApplication().runReadAction(new Runnable() {
         public void run() {
           final ProjectFileIndex fileIndex = ProjectRootManager.getInstance(myProject).getFileIndex();
+          final LocalFileSystem fs = LocalFileSystem.getInstance();
           final Module[] allModules = ModuleManager.getInstance(myProject).getModules();
           for (Module allModule : allModules) {
-            final VirtualFile[] sourceRoots = myCompileContext.getSourceRoots(allModule);
-            for (final VirtualFile sourceRoot : sourceRoots) {
-              String packageName = fileIndex.getPackageNameByDirectory(sourceRoot);
+            final Path[] sourceRoots = myCompileContext.getSourceRoots(allModule);
+            for (final Path sourceRoot : sourceRoots) {
+              VirtualFile rootFile = fs.findFileByNioFile(sourceRoot);
+              String packageName = rootFile != null ? fileIndex.getPackageNameByDirectory(rootFile) : null;
               myProjectSourceRoots
                 .put(sourceRoot, packageName == null || packageName.length() == 0 ? "" : "/" + packageName.replace('.', '/') + "/");
             }

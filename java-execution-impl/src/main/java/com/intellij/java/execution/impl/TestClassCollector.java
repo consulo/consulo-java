@@ -131,10 +131,7 @@ public class TestClassCollector {
   public static Path getRootPath(Module module, final boolean chooseSingleModule) {
     if (chooseSingleModule) {
       ModuleCompilerPathsManager moduleExtension = ModuleCompilerPathsManager.getInstance(module);
-      VirtualFile tests = moduleExtension.getCompilerOutput(TestContentFolderTypeProvider.getInstance());
-      if (tests != null) {
-        return Paths.get(VirtualFileUtil.virtualToIoFile(tests).toURI());
-      }
+      return moduleExtension.getCompilerOutputPath(TestContentFolderTypeProvider.getInstance());
     }
     return null;
   }

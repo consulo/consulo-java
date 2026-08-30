@@ -27,7 +27,6 @@ import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.JavaFileType;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.Application;
 import consulo.compiler.*;
 import consulo.compiler.localize.CompilerLocalize;
 import consulo.compiler.scope.CompileScope;
@@ -43,13 +42,14 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.util.collection.Chunk;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.ExceptionUtil;
-import consulo.virtualFileSystem.LocalFileSystem;
-import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
-import consulo.virtualFileSystem.util.VirtualFileUtil;
+import consulo.virtualFileSystem.fileType.FileTypeRegistry;
 import jakarta.inject.Inject;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.util.*;
 
 @ExtensionImpl(id = "java-annotation-processor", order = "before java-compiler")
@@ -71,34 +71,33 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
 
     @Override
     @RequiredReadAction
-    public boolean isCompilableFile(VirtualFile file, CompileContext context) {
+    public boolean isCompilableFile(Path file, CompileContext context) {
         return myCompilerConfiguration.isAnnotationProcessorsEnabled()
-            && file.getFileType() == JavaFileType.INSTANCE
+            && FileTypeRegistry.getInstance().getFileTypeByFileName(file.getFileName().toString()) == JavaFileType.INSTANCE
             && !isExcludedFromAnnotationProcessing(file, context);
     }
 
     @Override
-    public void compile(final CompileContext context, Chunk<Module> moduleChunk, VirtualFile[] files, OutputSink sink) {
+    public void compile(CompileContext context, Chunk<Module> moduleChunk, Collection<Path> files, OutputSink sink) {
         if (!myCompilerConfiguration.isAnnotationProcessorsEnabled()) {
             return;
         }
-        final LocalFileSystem lfs = LocalFileSystem.getInstance();
         CompileContextEx _context = new CompileContextExDelegate((CompileContextEx) context) {
             @Override
-            public VirtualFile getModuleOutputDirectory(Module module) {
+            public Path getModuleOutputDirectory(Module module) {
                 String path = JavaAdditionalOutputDirectoriesProvider.getAnnotationProcessorsGenerationPath(module);
-                return path != null ? lfs.findFileByPath(path) : null;
+                return path != null ? Path.of(path) : null;
             }
 
             @Override
-            public VirtualFile getModuleOutputDirectoryForTests(Module module) {
+            public Path getModuleOutputDirectoryForTests(Module module) {
                 return getModuleOutputDirectory(module);
             }
         };
         JavacCompiler javacCompiler = getBackEndCompiler();
         boolean processorMode = javacCompiler.setAnnotationProcessorMode(true);
         BackendCompilerWrapper wrapper =
-            new BackendCompilerWrapper(this, moduleChunk, myProject, Arrays.asList(files), _context, javacCompiler, sink);
+            new BackendCompilerWrapper(this, moduleChunk, myProject, new ArrayList<>(files), _context, javacCompiler, sink);
         wrapper.setForceCompileTestsSeparately(true);
         try {
             wrapper.compile(new HashMap<>());
@@ -112,18 +111,6 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
         }
         finally {
             javacCompiler.setAnnotationProcessorMode(processorMode);
-            Set<VirtualFile> dirsToRefresh = new HashSet<>();
-            Application.get().runReadAction(() -> {
-                for (Module module : moduleChunk.getNodes()) {
-                    VirtualFile out = _context.getModuleOutputDirectory(module);
-                    if (out != null) {
-                        dirsToRefresh.add(out);
-                    }
-                }
-            });
-            for (VirtualFile root : dirsToRefresh) {
-                root.refresh(false, true);
-            }
         }
     }
 
@@ -141,7 +128,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
     }
 
     @RequiredReadAction
-    private boolean isExcludedFromAnnotationProcessing(VirtualFile file, CompileContext context) {
+    private boolean isExcludedFromAnnotationProcessing(Path file, CompileContext context) {
         if (!myCompilerConfiguration.isAnnotationProcessorsEnabled()) {
             return true;
         }
@@ -151,8 +138,7 @@ public class AnnotationProcessingCompiler implements TranslatingCompiler {
                 return true;
             }
             String path = JavaAdditionalOutputDirectoriesProvider.getAnnotationProcessorsGenerationPath(module);
-            VirtualFile generationDir = path != null ? LocalFileSystem.getInstance().findFileByPath(path) : null;
-            if (generationDir != null && VirtualFileUtil.isAncestor(generationDir, file, false)) {
+            if (path != null && FileUtil.isAncestor(new File(path), file.toFile(), false)) {
                 return true;
             }
         }

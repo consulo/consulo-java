@@ -39,6 +39,7 @@ public class DefaultProblemFileHighlightFilter implements WolfFileProblemFilter 
   @Override
   public boolean isToBeHighlighted(VirtualFile file) {
     return JavaProjectRootsUtil.isJavaSourceFile(myProject, file, false)
-      && !CompilerManager.getInstance(myProject).isExcludedFromCompilation(file);
+      && file.isInLocalFileSystem()
+      && !CompilerManager.getInstance(myProject).isExcludedFromCompilation(file.toNioPath());
   }
 }

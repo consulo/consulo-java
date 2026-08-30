@@ -18,9 +18,10 @@ import consulo.java.rt.JavaRtClassNames;
 import consulo.logging.Logger;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
-import consulo.virtualFileSystem.VirtualFile;
+import consulo.util.io.FileUtil;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -110,13 +111,13 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 
 		parametersList.addAll(additionalOptions);
 
-		final List<VirtualFile> files = chunk.getFilesToCompile();
+		final List<Path> files = chunk.getFilesToCompile();
 
 		if(version == JavaSdkVersion.JDK_1_0)
 		{
-			for(VirtualFile file : files)
+			for(Path file : files)
 			{
-				String path = file.getPath();
+				String path = FileUtil.toSystemIndependentName(file.toString());
 				if(LOG.isDebugEnabled())
 				{
 					LOG.debug("Adding path for compilation " + path);
@@ -131,11 +132,11 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 			myTempFiles.add(sourcesFile);
 			try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(sourcesFile))))
 			{
-				for(final VirtualFile file : files)
+				for(final Path file : files)
 				{
 					// Important: should use "/" slashes!
 					// but not for JDK 1.5 - see SCR 36673
-					final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.getPath().replace('/', File.separatorChar) : file.getPath();
+					final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.toString() : FileUtil.toSystemIndependentName(file.toString());
 					if(LOG.isDebugEnabled())
 					{
 						LOG.debug("Adding path for compilation " + path);

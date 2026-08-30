@@ -30,11 +30,11 @@ import consulo.module.content.layer.ModuleRootLayer;
 import consulo.module.content.layer.extension.ModuleExtensionWithSdkBase;
 import consulo.module.extension.ModuleInheritableNamedPointer;
 import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import org.jdom.Element;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -113,7 +113,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
     }
 
     @Override
-    public Set<VirtualFile> getCompilationClasspath(CompileContext compileContext, ModuleChunk moduleChunk) {
+    public Set<Path> getCompilationClasspath(CompileContext compileContext, ModuleChunk moduleChunk) {
         Sdk sdk = getSdk();
         if (sdk == null) {
             return Set.of();
@@ -122,7 +122,7 @@ public class JavaModuleExtensionImpl extends ModuleExtensionWithSdkBase<JavaModu
     }
 
     @Override
-    public Set<VirtualFile> getCompilationBootClasspath(CompileContext compileContext, ModuleChunk moduleChunk) {
+    public Set<Path> getCompilationBootClasspath(CompileContext compileContext, ModuleChunk moduleChunk) {
         Sdk sdk = getSdk();
         if (sdk == null) {
             return Set.of();

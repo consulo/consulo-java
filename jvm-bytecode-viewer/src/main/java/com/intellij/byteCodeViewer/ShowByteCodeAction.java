@@ -120,7 +120,8 @@ public class ShowByteCodeAction extends AnAction implements AnActionWithAsyncUpd
             @Override
             public void run(ProgressIndicator indicator) {
                 if (ProjectRootManager.getInstance(project).getFileIndex().isInContent(virtualFile)
-                    && TranslatingCompilerFilesMonitor.getInstance().isMarkedForCompilation(project, virtualFile)) {
+                    && virtualFile.isInLocalFileSystem()
+                    && TranslatingCompilerFilesMonitor.getInstance().isMarkedForCompilation(project, virtualFile.toNioPath())) {
                     myErrorMessage = "Unable to show byte code for '" + psiElementTitle + "'. Class file does not exist or is out-of-date.";
                     myErrorTitle = "Class File Out-Of-Date";
                 }

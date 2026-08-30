@@ -46,13 +46,17 @@ import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.project.DumbService;
 import consulo.project.Project;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
 import java.io.DataInput;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -121,27 +125,32 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
             boolean jdk6 = jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
 
             ModuleCompilerPathsManager compilerPathsManager = ModuleCompilerPathsManager.getInstance(module);
-            VirtualFile compilerOutputPath = compilerPathsManager.getCompilerOutput(ProductionContentFolderTypeProvider.getInstance());
+            Path compilerOutputPath = compilerPathsManager.getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
             if (compilerOutputPath != null) {
                 String packageName = srcFile.getPackageName();
-                VirtualFile packageDir = packageName.length() > 0
-                    ? compilerOutputPath.findFileByRelativePath(packageName.replace('.', '/'))
+                Path packageDir = packageName.length() > 0
+                    ? compilerOutputPath.resolve(packageName.replace('.', '/'))
                     : compilerOutputPath;
 
-                if (packageDir != null && packageDir.isDirectory()) {
+                if (Files.isDirectory(packageDir)) {
                     PsiClass[] classes = srcFile.getClasses();
-                    for (VirtualFile classFile : packageDir.getChildren()) {
-                        if (classFile.isDirectory() || !"class".equals(classFile.getExtension())) {
-                            // no point in looking at directories or non-class files
-                            continue;
-                        }
-                        String name = classFile.getName();
-                        for (PsiClass clazz : classes) {
-                            String className = clazz.getName();
-                            if (className != null && name.startsWith(className)) {
-                                result.add(new InstrumentationItem(classFile, jdk6));
+                    try (DirectoryStream<Path> children = Files.newDirectoryStream(packageDir)) {
+                        for (Path classFile : children) {
+                            String name = classFile.getFileName().toString();
+                            if (Files.isDirectory(classFile) || !"class".equals(FileUtil.getExtension(name))) {
+                                // no point in looking at directories or non-class files
+                                continue;
+                            }
+                            for (PsiClass clazz : classes) {
+                                String className = clazz.getName();
+                                if (className != null && name.startsWith(className)) {
+                                    result.add(new InstrumentationItem(classFile, jdk6));
+                                }
                             }
                         }
+                    }
+                    catch (IOException e) {
+                        LOG.error(e);
                     }
                 }
             }
@@ -160,16 +169,16 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
 
             for (ProcessingItem pi : items) {
                 InstrumentationItem item = ((InstrumentationItem) pi);
-                VirtualFile classFile = item.getClassFile();
+                Path classFile = item.getClassFile();
 
                 try {
-                    byte[] bytes = classFile.contentsToByteArray();
+                    byte[] bytes = Files.readAllBytes(classFile);
                     ClassReader classreader;
                     try {
                         classreader = new ClassReader(bytes, 0, bytes.length);
                     }
                     catch (Exception e) {
-                        LOG.debug("ASM failed to read class file <" + classFile.getPresentableUrl() + ">", e);
+                        LOG.debug("ASM failed to read class file <" + classFile + ">", e);
                         continue;
                     }
 
@@ -180,12 +189,8 @@ public abstract class AnnotationBasedInstrumentingCompiler implements ClassInstr
 
                     if (instrumenter.instrumented()) {
                         // only dump the class if it has actually been instrumented
-                        FileOutputStream out = new FileOutputStream(classFile.getPath());
-                        try {
+                        try (OutputStream out = Files.newOutputStream(classFile)) {
                             out.write(classwriter.toByteArray());
-                        }
-                        finally {
-                            out.close();
                         }
                     }
 

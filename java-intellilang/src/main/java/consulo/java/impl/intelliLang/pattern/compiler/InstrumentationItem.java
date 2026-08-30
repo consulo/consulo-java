@@ -17,29 +17,27 @@ package consulo.java.impl.intelliLang.pattern.compiler;
 
 import consulo.compiler.FileProcessingCompiler;
 import consulo.compiler.ValidityState;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.util.VirtualFileUtil;
 
-import java.io.File;
+import java.nio.file.Path;
 
 class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 {
-	private final VirtualFile myClassFile;
+	private final Path myClassFile;
 	private final boolean myJDK6;
 
-	public InstrumentationItem(VirtualFile classFile, boolean jdk6)
+	public InstrumentationItem(Path classFile, boolean jdk6)
 	{
 		myJDK6 = jdk6;
 		myClassFile = classFile;
 	}
 
 	@Override
-	public File getFile()
+	public Path getFile()
 	{
-		return VirtualFileUtil.virtualToIoFile(myClassFile);
+		return myClassFile;
 	}
 
-	public VirtualFile getClassFile()
+	public Path getClassFile()
 	{
 		return myClassFile;
 	}
@@ -47,7 +45,6 @@ class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 	@Override
 	public ValidityState getValidityState()
 	{
-		//        return new TimestampValidityState(myClassFile.getModificationStamp());
 		return null;
 	}
 
@@ -80,7 +77,7 @@ class InstrumentationItem implements FileProcessingCompiler.ProcessingItem
 
 	public String toString()
 	{
-		return "Item: " + myClassFile.getPresentableUrl();
+		return "Item: " + myClassFile;
 	}
 
 	public boolean isJDK6()

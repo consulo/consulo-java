@@ -20,6 +20,7 @@ import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.Annotat
 import consulo.annotation.component.ExtensionImpl;
 import consulo.compiler.AdditionalOutputDirectoriesProvider;
 import consulo.compiler.CompilerPaths;
+import consulo.language.content.ProductionContentFolderTypeProvider;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
 import consulo.project.Project;
@@ -73,7 +74,7 @@ public class JavaAdditionalOutputDirectoriesProvider implements AdditionalOutput
     }
 
 
-    final String path = CompilerPaths.getModuleOutputPath(module, false);
+    final String path = CompilerPaths.getModuleOutputPath(module, ProductionContentFolderTypeProvider.getInstance());
     if (path == null) {
       return null;
     }
