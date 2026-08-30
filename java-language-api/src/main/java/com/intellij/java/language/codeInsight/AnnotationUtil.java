@@ -216,10 +216,12 @@ public class AnnotationUtil {
         {
             Set<PsiModifierListOwner> result = new LinkedHashSet<>();
             if (element instanceof PsiMethod) {
-                collectSuperMethods(result,
-                    ((PsiMethod) element).getHierarchicalMethodSignature(),
-                    element,
-                    JavaPsiFacade.getInstance(element.getProject()).getResolveHelper());
+                if (!element.hasModifierProperty(PsiModifier.STATIC)) {
+                    collectSuperMethods(result,
+                        ((PsiMethod) element).getHierarchicalMethodSignature(),
+                        element,
+                        JavaPsiFacade.getInstance(element.getProject()).getResolveHelper());
+                }
             }
             else if (element instanceof PsiClass) {
                 //noinspection unchecked

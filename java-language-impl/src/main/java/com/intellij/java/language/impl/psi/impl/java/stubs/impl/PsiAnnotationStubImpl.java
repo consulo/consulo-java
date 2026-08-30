@@ -22,11 +22,15 @@ import com.intellij.java.language.psi.PsiAnnotation;
 import com.intellij.java.language.psi.PsiJavaParserFacade;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiAnnotationStub;
+import consulo.language.file.light.LightVirtualFile;
 import consulo.language.impl.ast.CharTableImpl;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.stub.PsiFileStub;
 import consulo.language.psi.stub.StubBase;
 import consulo.language.psi.stub.StubElement;
 import consulo.util.lang.ref.SoftReference;
 import consulo.language.util.IncorrectOperationException;
+import consulo.virtualFileSystem.VirtualFile;
 
 /**
  * @author max
@@ -68,13 +72,32 @@ public class PsiAnnotationStubImpl extends StubBase<PsiAnnotation> implements Ps
     try {
       PsiJavaParserFacade facade = JavaPsiFacade.getInstance(getProject()).getParserFacade();
       PsiAnnotation annotation = facade.createAnnotationFromText(text, getPsi());
+      VirtualFile holderFile = annotation.getContainingFile().getViewProvider().getVirtualFile();
+      if (holderFile instanceof LightVirtualFile lightVirtualFile) {
+        lightVirtualFile.setWritable(false);
+      }
       myParsedFromRepository = new SoftReference<PsiAnnotation>(annotation);
       return annotation;
     }
     catch (IncorrectOperationException e) {
-      LOG.error("Bad annotation in repository!", e);
+      LOG.error("Bad annotation in " + fileName(), e);
       return null;
     }
+  }
+
+  private String fileName() {
+    StubElement<?> stub = this;
+    while ((stub = stub.getParentStub()) != null) {
+      if (stub instanceof PsiFileStub) {
+        Object psi = stub.getPsi();
+        if (psi instanceof PsiFile psiFile) {
+          VirtualFile file = psiFile.getVirtualFile();
+          return file != null ? file.getUrl() : psiFile.getName();
+        }
+      }
+    }
+
+    return "<unknown file>";
   }
 
   @Override

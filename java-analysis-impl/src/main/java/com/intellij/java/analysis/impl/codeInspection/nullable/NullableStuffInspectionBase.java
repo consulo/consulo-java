@@ -1084,7 +1084,8 @@ public abstract class NullableStuffInspectionBase extends AbstractBaseJavaLocalI
     private static String getPresentableAnnoName(PsiModifierListOwner owner) {
         NullableNotNullManager manager = NullableNotNullManager.getInstance(owner.getProject());
         NullabilityAnnotationInfo info = manager.findEffectiveNullabilityInfo(owner);
-        String name = info == null ? null : info.getAnnotation().getQualifiedName();
+        PsiAnnotation annotation = info == null ? null : info.getAnnotation();
+        String name = annotation == null || !annotation.isValid() ? null : annotation.getQualifiedName();
         if (name == null) {
             return "???";
         }
