@@ -83,11 +83,6 @@ public class BytecodeAnalysisIndex extends ScalarIndexExtension<HMember> {
   }
 
   @Override
-  public boolean hasSnapshotMapping() {
-    return true;
-  }
-
-  @Override
   public FileBasedIndex.InputFilter getInputFilter() {
     return new DefaultFileTypeSpecificInputFilter(JavaClassFileType.INSTANCE);
   }
