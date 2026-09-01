@@ -15,6 +15,7 @@
  */
 package com.intellij.java.impl.ig.psiutils;
 
+import com.intellij.java.codeserver.core.JavaPsiModuleUtil;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaModuleGraphUtil;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
 import com.intellij.java.language.impl.psi.util.ImportsUtil;
@@ -95,7 +96,7 @@ public class ImportUtils {
             continue;
           }
           Set<PsiJavaModule> higherDependencies =
-            dependencies.computeIfAbsent(higherModule, m -> JavaModuleGraphUtil.getAllTransitiveModulesIncludeCurrent(m));
+            dependencies.computeIfAbsent(higherModule, m -> JavaPsiModuleUtil.getAllTransitiveModulesIncludeCurrent(m));
           if (higherDependencies.contains(currentModule)) {
             toDelete.add(current);
             break;

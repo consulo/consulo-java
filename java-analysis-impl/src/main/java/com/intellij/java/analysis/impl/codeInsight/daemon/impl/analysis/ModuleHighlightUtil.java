@@ -15,6 +15,7 @@
  */
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
+import com.intellij.java.codeserver.core.JavaPsiModuleUtil;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.AddRequiredModuleFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.GoToSymbolFix;
@@ -86,7 +87,7 @@ public class ModuleHighlightUtil {
         if (module != null) {
             String packageName = statement.getPackageName();
             if (packageName != null) {
-                PsiJavaModule origin = JavaModuleGraphUtil.findOrigin(module, packageName);
+                PsiJavaModule origin = JavaPsiModuleUtil.findOrigin(module, packageName);
                 if (origin != null) {
                     return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                         .range(statement)
@@ -276,7 +277,7 @@ public class ModuleHighlightUtil {
                     .create();
             }
             else {
-                Collection<PsiJavaModule> cycle = JavaModuleGraphUtil.findCycle((PsiJavaModule)target);
+                Collection<PsiJavaModule> cycle = JavaPsiModuleUtil.findCycle((PsiJavaModule)target);
                 if (cycle.contains(container)) {
                     Stream<String> stream = cycle.stream().map(PsiJavaModule::getName);
                     if (container.getApplication().isUnitTestMode()) {
@@ -526,13 +527,13 @@ public class ModuleHighlightUtil {
 
             String refModuleName = refModule.getName();
             String requiredName = targetModule.getName();
-            if (!(targetModule instanceof LightJavaModule || JavaModuleGraphUtil.exports(targetModule, packageName, refModule))) {
+            if (!(targetModule instanceof LightJavaModule || JavaPsiModuleUtil.exports(targetModule, packageName, refModule))) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
                     .range(ref)
                     .descriptionAndTooltip(JavaErrorLocalize.modulePackageNotExported(requiredName, packageName, refModuleName));
             }
 
-            if (!(PsiJavaModule.JAVA_BASE.equals(requiredName) || JavaModuleGraphUtil.reads(refModule, targetModule))) {
+            if (!(PsiJavaModule.JAVA_BASE.equals(requiredName) || JavaPsiModuleUtil.reads(refModule, targetModule))) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
                     .range(ref)
                     .descriptionAndTooltip(JavaErrorLocalize.moduleNotInRequirements(refModuleName, requiredName))
@@ -546,7 +547,7 @@ public class ModuleHighlightUtil {
     @Nullable
     @RequiredReadAction
     public static HighlightInfo checkClashingReads(PsiJavaModule module) {
-        Trinity<String, PsiJavaModule, PsiJavaModule> conflict = JavaModuleGraphUtil.findConflict(module);
+        Trinity<String, PsiJavaModule, PsiJavaModule> conflict = JavaPsiModuleUtil.findConflict(module);
         if (conflict != null) {
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(range(module))

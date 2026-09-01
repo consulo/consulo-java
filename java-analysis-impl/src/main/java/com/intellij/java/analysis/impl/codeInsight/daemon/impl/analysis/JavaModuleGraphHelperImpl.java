@@ -1,6 +1,7 @@
 // Copyright 2000-2026 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
+import com.intellij.java.codeserver.core.JavaPsiModuleUtil;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.psi.PsiJavaModule;
 import com.intellij.java.language.psi.PsiPackageAccessibilityStatement;
@@ -18,7 +19,7 @@ import java.util.List;
 public final class JavaModuleGraphHelperImpl implements JavaModuleGraphHelper {
   @Override
   public List<PsiPackageAccessibilityStatement> getExportedPackages(PsiElement place, PsiJavaModule module) {
-    return JavaModuleGraphUtil.getExportedPackages(place, module);
+    return JavaPsiModuleUtil.getExportedPackages(place, module);
   }
 
   @Override
@@ -29,9 +30,9 @@ public final class JavaModuleGraphHelperImpl implements JavaModuleGraphHelper {
     if (targetModule == null || refModule.equals(targetModule)) return true;
 
     String requiredName = targetModule.getName();
-    if (!(targetModule instanceof LightJavaModule || JavaModuleGraphUtil.exports(targetModule, targetPackageName, refModule))) {
+    if (!(targetModule instanceof LightJavaModule || JavaPsiModuleUtil.exports(targetModule, targetPackageName, refModule))) {
       return false;
     }
-    return PsiJavaModule.JAVA_BASE.equals(requiredName) || JavaModuleGraphUtil.reads(refModule, targetModule);
+    return PsiJavaModule.JAVA_BASE.equals(requiredName) || JavaPsiModuleUtil.reads(refModule, targetModule);
   }
 }

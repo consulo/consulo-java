@@ -30,6 +30,7 @@ open module consulo.java.analysis.impl {
   requires asm.util;
 
   exports com.intellij.java.analysis.impl;
+  exports com.intellij.java.codeserver.core;
   exports com.intellij.java.analysis.impl.codeInsight;
   exports com.intellij.java.analysis.impl.codeInsight.daemon.impl;
   exports com.intellij.java.analysis.impl.codeInsight.daemon.impl.actions;
