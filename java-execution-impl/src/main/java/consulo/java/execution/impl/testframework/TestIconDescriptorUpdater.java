@@ -19,10 +19,13 @@ import com.intellij.java.language.testIntegration.TestFramework;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.application.AllIcons;
+import consulo.application.Application;
 import consulo.language.icon.IconDescriptor;
 import consulo.language.icon.IconDescriptorUpdater;
 import consulo.language.psi.PsiElement;
-
+import consulo.platform.base.icon.PlatformIconGroup;
+import consulo.project.DumbService;
+import jakarta.inject.Inject;
 
 /**
  * @author VISTALL
@@ -30,17 +33,30 @@ import consulo.language.psi.PsiElement;
  */
 @ExtensionImpl
 public class TestIconDescriptorUpdater implements IconDescriptorUpdater {
-  @RequiredReadAction
-  @Override
-  public void updateIcon(IconDescriptor iconDescriptor, PsiElement element, int flags) {
-    for (TestFramework framework : TestFramework.EXTENSION_NAME.getExtensionList()) {
-      if (framework.isIgnoredMethod(element)) {
-        iconDescriptor.setMainIcon(AllIcons.RunConfigurations.IgnoredTest);
-      }
+    private final Application myApplication;
+    private final DumbService myDumbService;
 
-      if (framework.isTestMethod(element) || framework.isTestClass(element)) {
-        iconDescriptor.addLayerIcon(AllIcons.RunConfigurations.TestMark);
-      }
+    @Inject
+    public TestIconDescriptorUpdater(Application application, DumbService dumbService) {
+        myApplication = application;
+        myDumbService = dumbService;
     }
-  }
+
+    @RequiredReadAction
+    @Override
+    public void updateIcon(IconDescriptor iconDescriptor, PsiElement element, int flags) {
+        boolean dumb = myDumbService.isDumb();
+
+        myApplication.getExtensionPoint(TestFramework.class).forEach(framework -> {
+            if (dumb && DumbService.isDumbAware(framework) || !dumb) {
+                if (framework.isIgnoredMethod(element)) {
+                    iconDescriptor.setMainIcon(PlatformIconGroup.runconfigurationsIgnoredtest());
+                }
+
+                if (framework.isTestMethod(element) || framework.isTestClass(element)) {
+                    iconDescriptor.addLayerIcon(PlatformIconGroup.nodesJunittestmark());
+                }
+            }
+        });
+    }
 }
