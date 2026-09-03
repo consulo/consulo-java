@@ -329,6 +329,7 @@ public class DebugProcessEvents extends DebugProcessImpl {
             myDebugProcessDispatcher.getMulticaster().processAttached(this);
 
             createStackCapturingBreakpoints();
+            AsyncStacksUtils.setupAgent(this);
 
             // breakpoints should be initialized after all processAttached listeners work
             getProject().getApplication().runReadAction(() -> {
@@ -348,7 +349,7 @@ public class DebugProcessEvents extends DebugProcessImpl {
     }
 
     private void createStackCapturingBreakpoints() {
-        getManagerThread().invoke(new DebuggerCommandImpl() {
+        getManagerThread().schedule(new DebuggerCommandImpl() {
             @Override
             public Priority getPriority() {
                 return Priority.HIGH;
@@ -356,7 +357,8 @@ public class DebugProcessEvents extends DebugProcessImpl {
 
             @Override
             protected void action() throws Exception {
-                StackCapturingLineBreakpoint.recreateAll(DebugProcessEvents.this);
+                StackCapturingLineBreakpoint.deleteAll(DebugProcessEvents.this);
+                StackCapturingLineBreakpoint.createAll(DebugProcessEvents.this);
             }
         });
     }

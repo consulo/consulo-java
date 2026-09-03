@@ -1,5 +1,5 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
-package com.intellij.java.impl.codeInsight;
+package com.intellij.java.language.impl.codeInsight;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.util.ClassFilter;
@@ -31,6 +31,13 @@ public class AnnotationsPanel {
   private final JBTable myTable;
   private final JPanel myComponent;
   protected final DefaultTableModel myTableModel;
+
+  public AnnotationsPanel(Project project,
+                          String name,
+                          List<String> annotations,
+                          List<String> defaultAnnotations) {
+    this(project, name, "", annotations, defaultAnnotations, Collections.emptySet(), false, false);
+  }
 
   public AnnotationsPanel(Project project,
                           String name,
@@ -208,7 +215,7 @@ public class AnnotationsPanel {
     return myComponent;
   }
 
-  String getDefaultAnnotation() {
+  public String getDefaultAnnotation() {
     return myDefaultAnnotation;
   }
 
@@ -221,7 +228,7 @@ public class AnnotationsPanel {
     return result;
   }
 
-  List<String> getCheckedAnnotations() {
+  public List<String> getCheckedAnnotations() {
     List<String> result = new ArrayList<>();
     for (int i = 0; i < myTable.getRowCount(); i++) {
       if (Boolean.TRUE.equals(myTable.getValueAt(i, 1))) {

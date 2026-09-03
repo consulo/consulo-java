@@ -213,9 +213,8 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
             Method lambdaMethod = MethodBytecodeUtil.getLambdaMethod(classType, debugProcess.getVirtualMachineProxy());
             List<Method> methods = lambdaMethod != null ? Collections.singletonList(lambdaMethod) : breakpoint.matchingMethods((classType.methods().stream().filter(m -> base || !m.isAbstract())
                 .collect(Collectors.toList())), debugProcess);
-            boolean found = false;
+            boolean scanSubClasses = false;
             for (Method method : methods) {
-                found = true;
                 if (base && method.isNative()) {
                     breakpoint.disableEmulation();
                     return;
@@ -223,6 +222,13 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
                 Method target = MethodBytecodeUtil.getBridgeTargetMethod(method, debugProcess.getVirtualMachineProxy());
                 if (target != null && !DebuggerUtilsEx.allLineLocations(target).isEmpty()) {
                     method = target;
+                }
+                if (!method.isStatic() && !method.isPrivate() && !method.isFinal()) {
+                    scanSubClasses = true;
+                }
+                if (method.isAbstract()) {
+                    scanSubClasses = true;
+                    continue;
                 }
 
                 List<Location> allLineLocations = DebuggerUtilsEx.allLineLocations(method);
@@ -257,7 +263,7 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
                     }
                 }
             }
-            if (base && found) {
+            if (base && scanSubClasses) {
                 // desired class found - now also track all new classes
                 createRequestForSubClasses(breakpoint, debugProcess, classType);
             }
@@ -580,7 +586,8 @@ public class MethodBreakpoint extends BreakpointWithHighlighter<JavaMethodBreakp
         if (LOG.isDebugEnabled()) {
             start = System.currentTimeMillis();
         }
-        progressIndicator.start();
+        // the indicator of the running Task.Backgroundable is already started, unlike IDEA's own modal progress
+        progressIndicator.setIndeterminate(false);
         progressIndicator.setText(DebuggerBundle.message("label.method.breakpoints.processing.classes"));
         try {
             MultiMap<ReferenceType, ReferenceType> inheritance = new MultiMap<>();

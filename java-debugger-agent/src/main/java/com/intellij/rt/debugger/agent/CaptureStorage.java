@@ -1,0 +1,693 @@
+// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+package com.intellij.rt.debugger.agent;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.lang.ref.ReferenceQueue;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+public final class CaptureStorage {
+  public static final String GENERATED_INSERT_METHOD_POSTFIX = "$$$capture";
+  private static final ConcurrentIdentityWeakHashMap<Object, CapturedStack> STORAGE_GENERAL = new ConcurrentIdentityWeakHashMap<>();
+  private static final ConcurrentIdentityWeakHashMap<Throwable, CapturedStack> STORAGE_THROWABLES = new ConcurrentIdentityWeakHashMap<>();
+
+  private static final ConcurrentIdentityWeakHashMap<Thread, Deque<CapturedStack>> THREAD_TO_STACKS_MAP = new ConcurrentIdentityWeakHashMap<>();
+
+  private static final ThreadLocal<Deque<CapturedStack>> CURRENT_STACKS = new ThreadLocal<Deque<CapturedStack>>() {
+    @Override
+    protected Deque<CapturedStack> initialValue() {
+      return new LinkedList<>();
+    }
+  };
+
+  private static final boolean storeAsyncStackTracesForAllThreads = Boolean.parseBoolean(
+          System.getProperty("debugger.async.stack.trace.for.all.threads", "false")
+  );
+
+  static final double DEFAULT_OVERHEAD_PERCENT = 50;
+  private static final String PACKAGE_PREFIX = CaptureStorage.class.getPackage().getName();
+  private static OverheadDetector ourOverheadDetector = new OverheadDetector(DEFAULT_OVERHEAD_PERCENT, true);
+
+  static void init(Properties properties) {
+    String overheadPercent = properties.getProperty("overheadPercent");
+    String throttlingValue = properties.getProperty("throttling");
+
+    double overhead = overheadPercent != null ? Double.parseDouble(overheadPercent) : DEFAULT_OVERHEAD_PERCENT;
+    boolean throttlingEnabled = throttlingValue == null || Boolean.parseBoolean(throttlingValue);
+    ourOverheadDetector = new OverheadDetector(overhead, throttlingEnabled);
+  }
+
+  static class ThreadLocalContext {
+    final OverheadDetector.OverheadTracker overheadTracker = ourOverheadDetector.createOverheadTracker();
+    boolean throwableCaptureDisabled = false;
+  }
+
+  static final ThreadLocal<ThreadLocalContext> CURRENT_CONTEXT = new ThreadLocal<ThreadLocalContext>() {
+    @Override
+    protected ThreadLocalContext initialValue() {
+      return new ThreadLocalContext();
+    }
+  };
+
+  private static Deque<CapturedStack> getStacksForCurrentThread() {
+    if (storeAsyncStackTracesForAllThreads) {
+      Thread currentThread = Thread.currentThread();
+      Deque<CapturedStack> capturedStacks = THREAD_TO_STACKS_MAP.get(currentThread);
+      if (capturedStacks == null) {
+        capturedStacks = new LinkedList<>();
+        THREAD_TO_STACKS_MAP.put(currentThread, capturedStacks);
+      }
+      return capturedStacks;
+    } else {
+      return CURRENT_STACKS.get();
+    }
+  }
+
+  static CapturedStack getCurrentCapturedStack() {
+    return getStacksForCurrentThread().peekLast();
+  }
+
+  @SuppressWarnings("StaticNonFinalField")
+  public static boolean DEBUG; // set from debugger
+  private static boolean ENABLED = true; // set from debugger
+
+  static final StackTraceElement ASYNC_STACK_ELEMENT =
+          new StackTraceElement("--- Async", "Stack.Trace --- ", "captured by IntelliJ IDEA debugger", -1);
+  static final StackTraceElement THROTTLED_STACK_ELEMENT =
+          new StackTraceElement("< Unknown", "Stack > ", "was not captured due to throttling", -1);
+
+  //// METHODS CALLED FROM THE USER PROCESS
+
+  @SuppressWarnings("unused")
+  public static void capture(final Object key) {
+    if (!ENABLED) {
+      return;
+    }
+    ThreadLocalContext context = CURRENT_CONTEXT.get();
+    boolean executed = runWithOverheadTrackingAndWithoutThrowableCapture(context, new Runnable() {
+      @Override
+      public void run() {
+        try {
+          if (DEBUG) {
+            System.out.println("captureGeneral " + getCallerDescriptorForLogging() + " - " + getKeyText(key));
+          }
+          CapturedStack stack = getStacksForCurrentThread().peekLast();
+          STORAGE_GENERAL.put(key, createCapturedStack(new Throwable(), stack));
+        }
+        // TODO: check whether it's ok to use assertions, and if we should catch Throwable everywhere
+        catch (AssertionError | Exception e) {
+          handleException(e);
+        }
+      }
+    });
+    if (executed) return;
+    // Overhead detected, add marker stack
+    runWithoutThrowableCapture(context, new Runnable() {
+      @Override
+      public void run() {
+        try {
+          if (DEBUG) {
+            System.out.println("captureGeneral (throttled) " + getCallerDescriptorForLogging() + " - " + getKeyText(key));
+          }
+          // skip previously captured stacks to minimize overhead
+          STORAGE_GENERAL.put(key, ThrottledCapturedStack.INSTANCE);
+        } catch (AssertionError | Exception e) {
+          handleException(e);
+        }
+      }
+    });
+  }
+
+  @SuppressWarnings("unused")
+  public static void captureThrowableBacktrace(Object backtrace) {
+    ThrowableInterner.captureBacktrace(backtrace);
+  }
+
+  @SuppressWarnings("unused")
+  public static void captureThrowable(final Throwable throwable) {
+    final ThreadLocalContext context = CURRENT_CONTEXT.get();
+    if (!ENABLED || context.throwableCaptureDisabled) {
+      return;
+    }
+    runWithoutThrowableCapture(context, new Runnable() {
+      @Override
+      public void run() {
+        // TODO: support coroutine stack traces
+        try {
+          if (DEBUG) {
+            System.out.println("captureThrowable " + getCallerDescriptorForLogging() + " - " + getKeyText(throwable));
+          }
+          CapturedStack stack = getStacksForCurrentThread().peekLast();
+          if (stack != null) {
+            // Ensure that we don't leak throwable here, IDEA-360126
+            assert !(stack instanceof ExceptionCapturedStack) ||
+                    ((ExceptionCapturedStack) stack).myException != throwable;
+            STORAGE_THROWABLES.put(throwable, stack);
+          }
+        }
+        // TODO: check whether it's ok to use assertions, and if we should catch Throwable everywhere
+        catch (AssertionError | Exception e) {
+          handleException(e);
+        }
+      }
+    });
+  }
+
+  @SuppressWarnings("unused")
+  public static void insertEnter(final Object key) {
+    if (!ENABLED) {
+      return;
+    }
+    runWithoutThrowableCapture(CURRENT_CONTEXT.get(), new Runnable() {
+      @Override
+      public void run() {
+        try {
+          CapturedStack stack = STORAGE_GENERAL.get(key);
+          Deque<CapturedStack> currentStacks = getStacksForCurrentThread();
+          currentStacks.add(stack);
+          if (DEBUG) {
+            System.out.println(
+                    "insert " + getCallerDescriptorForLogging() + " -> " + getKeyText(key) + ", stack saved (" + currentStacks.size() + ")");
+          }
+        }
+        catch (Exception e) {
+          handleException(e);
+        }
+      }
+    });
+  }
+
+  @SuppressWarnings("unused")
+  public static void insertExit(final Object key) {
+    if (!ENABLED) {
+      return;
+    }
+    runWithoutThrowableCapture(CURRENT_CONTEXT.get(), new Runnable() {
+      @Override
+      public void run() {
+        try {
+          Deque<CapturedStack> currentStacks = getStacksForCurrentThread();
+          // frameworks may modify thread locals to avoid memory leaks, so do not fail if currentStacks is empty
+          // check https://youtrack.jetbrains.com/issue/IDEA-357455 for more details
+          currentStacks.pollLast();
+          if (DEBUG) {
+            System.out.println(
+                    "insert " + getCallerDescriptorForLogging() + " <- " + getKeyText(key) + ", stack removed (" + currentStacks.size() + ")");
+          }
+        } catch (Exception e) {
+          handleException(e);
+        }
+      }
+    });
+  }
+
+  private static final ConcurrentIdentityWeakHashMap<ClassLoader, Method> COROUTINE_GET_CALLER_FRAME_METHODS = new ConcurrentIdentityWeakHashMap<>();
+
+  @SuppressWarnings("unused")
+  public static Object coroutineOwner(final Object key) {
+    if (!ENABLED) {
+      return key;
+    }
+    return withoutThrowableCapture(new Callable<Object>() {
+      @Override
+      public Object call() {
+        try {
+          Method getCallerFrameMethod = getGetCallerFrameMethod(key);
+          Object res = key;
+          while (true) {
+            //TODO: slow implementation for now, need to put the code directly into the insert point
+            Object caller = getCallerFrameMethod.invoke(res);
+            if (caller == null) {
+              return res;
+            }
+            if ("kotlinx.coroutines.debug.internal.DebugProbesImpl$CoroutineOwner".equals(caller.getClass().getName())) {
+              return caller;
+            }
+            res = caller;
+          }
+        } catch (Exception e) {
+          handleException(e);
+        }
+        return key;
+      }
+    });
+  }
+
+  @SuppressWarnings("unused")
+  public static StackTraceElement[] getAsyncStackTrace(final Throwable throwable) {
+    if (!ENABLED) {
+      return throwable.getStackTrace();
+    }
+    return withoutThrowableCapture(new Callable<StackTraceElement[]>() {
+      @Override
+      public StackTraceElement[] call() {
+        try {
+          CapturedStack stack = STORAGE_THROWABLES.get(throwable);
+          if (stack != null) {
+            CapturedStack capturedStack = createCapturedStack(throwable, stack);
+            ArrayList<StackTraceElement> stackTrace = getStackTrace(capturedStack, CaptureAgent.throwableAsyncStackDepthLimit());
+            return stackTrace.toArray(new StackTraceElement[0]);
+          }
+        } catch (Exception e) {
+          handleException(e);
+        }
+        return throwable.getStackTrace();
+      }
+    });
+  }
+
+  //// END - METHODS CALLED FROM THE USER PROCESS
+
+  private interface Callable<T> {
+    T call();
+  }
+
+  private static boolean runWithOverheadTrackingAndWithoutThrowableCapture(ThreadLocalContext context, final Runnable runnable) {
+  // It's better to disable throwable instrumentation inside our own code for ease of debugging.
+    boolean oldValue = context.throwableCaptureDisabled;
+    context.throwableCaptureDisabled = true;
+    try {
+      return context.overheadTracker.runIfNoOverhead(runnable);
+    } finally {
+      context.throwableCaptureDisabled = oldValue;
+    }
+  }
+
+  private static void runWithoutThrowableCapture(ThreadLocalContext context, final Runnable runnable) {
+    // It's better to disable throwable instrumentation inside our own code for ease of debugging.
+    boolean oldValue = context.throwableCaptureDisabled;
+    context.throwableCaptureDisabled = true;
+    try {
+      runnable.run();
+    } finally {
+      context.throwableCaptureDisabled = oldValue;
+    }
+  }
+
+  // It's better to disable throwable instrumentation inside our own code for ease of debugging.
+  private static <T> T withoutThrowableCapture(Callable<T> action) {
+    ThreadLocalContext context = CURRENT_CONTEXT.get();
+    boolean oldValue = context.throwableCaptureDisabled;
+    context.throwableCaptureDisabled = true;
+    try {
+      return action.call();
+    } finally {
+      context.throwableCaptureDisabled = oldValue;
+    }
+  }
+
+  private static Method getGetCallerFrameMethod(Object key) throws NoSuchMethodException, ClassNotFoundException {
+    ClassLoader classLoader = key.getClass().getClassLoader();
+    Method getCallerFrameMethod = COROUTINE_GET_CALLER_FRAME_METHODS.get(classLoader);
+    if (getCallerFrameMethod == null) {
+      getCallerFrameMethod = Class.forName("kotlin.coroutines.jvm.internal.CoroutineStackFrame", false, classLoader)
+              .getDeclaredMethod("getCallerFrame");
+      COROUTINE_GET_CALLER_FRAME_METHODS.put(classLoader, getCallerFrameMethod);
+    }
+    return getCallerFrameMethod;
+  }
+
+  private static class ConcurrentIdentityWeakHashMap<K, V> {
+    private final ReferenceQueue<K> referenceQueue = new ReferenceQueue<>();
+    private final ConcurrentMap<Key<K>, V> map = new ConcurrentHashMap<>();
+
+    @SuppressWarnings("UnusedReturnValue")
+    public V put(K key, V value) {
+      processQueue();
+      return map.put(new WeakKey<>(key, referenceQueue), value);
+    }
+
+    public V get(K key) {
+      return map.get(new HardKey<>(key));
+    }
+
+    private void processQueue() {
+      WeakKey<K> key;
+      //noinspection unchecked
+      while ((key = (WeakKey<K>) referenceQueue.poll()) != null) {
+        map.remove(key);
+      }
+    }
+
+    private interface Key<K> {
+      K get();
+    }
+
+    private static boolean equalKeys(Key<?> x, Key<?> y) {
+      if (x == y) return true;
+      Object kx = x.get();
+      Object ky = y.get();
+      return kx != null && kx == ky;
+    }
+
+    // only for map queries
+    private static class HardKey<K> implements Key<K> {
+      private final K myKey;
+      private final int myHash;
+
+      HardKey(K key) {
+        myKey = key;
+        myHash = System.identityHashCode(key);
+      }
+
+      @Override
+      public K get() {
+        return myKey;
+      }
+
+      @Override
+      public boolean equals(Object o) {
+        return o instanceof Key<?> && equalKeys(this, (Key<?>) o);
+      }
+
+      public int hashCode() {
+        return myHash;
+      }
+    }
+
+    private static class WeakKey<K> extends WeakReference<K> implements Key<K> {
+      private final int myHash;
+
+      WeakKey(K key, ReferenceQueue<K> q) {
+        super(key, q);
+        myHash = System.identityHashCode(key);
+      }
+
+      @Override
+      public boolean equals(Object o) {
+        return o instanceof Key<?> && equalKeys(this, (Key<?>) o);
+      }
+
+      @Override
+      public int hashCode() {
+        return myHash;
+      }
+    }
+  }
+
+  private static CapturedStack createCapturedStack(Throwable exception, CapturedStack insertMatch) {
+    ExceptionCapturedStack exceptionStack = new ExceptionCapturedStack(exception);
+    if (insertMatch != null) {
+      CapturedStack stack = new DeepCapturedStack(exceptionStack, insertMatch);
+      if (stack.getRecursionDepth() > 100) {
+        ArrayList<StackTraceElement> trace = getStackTrace(stack, 500);
+        trace.trimToSize();
+        stack = new UnwindCapturedStack(trace);
+      }
+      return stack;
+    }
+    return exceptionStack;
+  }
+
+  private static class StackData {
+    public final List<StackTraceElement> stackTrace;
+    public final CapturedStack previous;
+
+    private StackData(List<StackTraceElement> stackTrace, CapturedStack previous) {
+      this.stackTrace = stackTrace;
+      this.previous = previous;
+    }
+  }
+
+  static abstract class CapturedStack {
+    abstract List<StackTraceElement> getStackTrace();
+
+    int getRecursionDepth() {
+      return 0;
+    }
+
+    StackData collectStacks(List<StackTraceElement> stackTrace) {
+      return new StackData(stackTrace, null);
+    }
+  }
+
+  private static class UnwindCapturedStack extends CapturedStack {
+    final List<StackTraceElement> myStackTraceElements;
+
+    UnwindCapturedStack(List<StackTraceElement> elements) {
+      myStackTraceElements = elements;
+    }
+
+    @Override
+    public List<StackTraceElement> getStackTrace() {
+      return myStackTraceElements;
+    }
+  }
+
+  private static class ExceptionCapturedStack extends CapturedStack {
+    final Throwable myException;
+
+    private ExceptionCapturedStack(Throwable exception) {
+      myException = exception;
+    }
+
+    @Override
+    public List<StackTraceElement> getStackTrace() {
+      return trimInitAgentFrames(Arrays.asList(myException.getStackTrace()));
+    }
+  }
+
+  private static class DeepCapturedStack extends CapturedStack {
+    private final CapturedStack myCurrent;
+    private final CapturedStack myPrevious;
+    private final int myRecursionDepth;
+
+    DeepCapturedStack(CapturedStack stack, CapturedStack previous) {
+      myCurrent = stack;
+      myPrevious = previous;
+      myRecursionDepth = previous.getRecursionDepth() + 1;
+    }
+
+    @Override
+    public List<StackTraceElement> getStackTrace() {
+      return myCurrent.getStackTrace();
+    }
+
+    @Override
+    public int getRecursionDepth() {
+      return myRecursionDepth;
+    }
+
+    @Override
+    StackData collectStacks(List<StackTraceElement> stackTrace) {
+      int size = stackTrace.size();
+      int newEnd = Integer.MAX_VALUE;
+      for (int i = 0; i < size; i++) {
+        StackTraceElement elem = stackTrace.get(i);
+        if (elem.getMethodName().endsWith(GENERATED_INSERT_METHOD_POSTFIX)) {
+          // End stack trace like this: ..., "foo$$$capture", "foo"
+          newEnd = i + 2;
+          break;
+        } else if (elem == ASYNC_STACK_ELEMENT) {
+          newEnd = i;
+          break;
+        }
+      }
+      if (newEnd > size) {
+        return new StackData(stackTrace, null); // Insertion point was not found - stop
+      } else {
+        return new StackData(stackTrace.subList(0, newEnd), myPrevious);
+      }
+    }
+  }
+
+  static List<StackTraceElement> getThrowableStackTrace(Throwable throwable) {
+    return trimInitAgentFrames(Arrays.asList(throwable.getStackTrace()));
+  }
+
+  static List<StackTraceElement> getCapturedStackTrace(CapturedStack capturedStack, int limit) {
+    return getStackTrace(capturedStack, limit);
+  }
+
+  // to be run from the debugger
+
+  /**
+   * If storing stack traces for all threads is enabled (`debugger.async.stack.trace.for.all.threads` is true),
+   * returns the captured stack trace of the given thread or null if no stack trace was captured.
+   * <p>
+   * If `debugger.async.stack.trace.for.all.threads` is false,
+   * it only returns the captured stack trace for the current thread and null if no stack trace was captured or if the given thread is not the current thread.
+   */
+  @SuppressWarnings("unused")
+  public static String getCapturedStackForThread(int limit, Thread thread) {
+    Deque<CapturedStack> capturedStacks = storeAsyncStackTracesForAllThreads
+            ? THREAD_TO_STACKS_MAP.get(thread)
+            : (thread == Thread.currentThread() ? CURRENT_STACKS.get() : null);
+    if (capturedStacks == null) return null;
+    return wrapInString(capturedStacks.peekLast(), limit);
+  }
+
+  /**
+   * If storing stack traces for all threads is enabled (`debugger.async.stack.trace.for.all.threads` is true),
+   * returns a map from thread to it's captured stack trace.
+   * <p>
+   * If `debugger.async.stack.trace.for.all.threads` is false,
+   * only returns a map from the current thread to its captured stack trace.
+   */
+  @SuppressWarnings("unused")
+  public static Map<Thread, String> getAllCapturedStacks(int limit) {
+    HashMap<Thread, String> threadToStacks = new HashMap<>();
+    if (storeAsyncStackTracesForAllThreads) {
+      for (Map.Entry<ConcurrentIdentityWeakHashMap.Key<Thread>, Deque<CapturedStack>> entry : THREAD_TO_STACKS_MAP.map.entrySet()) {
+        Thread thread = entry.getKey().get();
+        if (entry.getValue() == null || entry.getValue().isEmpty() || !thread.isAlive()) continue;
+        String capturedStack = wrapInString(entry.getValue().peekLast(), limit);
+        threadToStacks.put(thread, capturedStack);
+      }
+    } else {
+      Deque<CapturedStack> capturedStacks = CURRENT_STACKS.get();
+      if (capturedStacks != null) {
+        threadToStacks.put(Thread.currentThread(), wrapInString(capturedStacks.peekLast(), limit));
+      }
+    }
+    return threadToStacks;
+  }
+
+  // to be run from the debugger
+  @SuppressWarnings("unused")
+  public static Object[][] getRelatedStack(Object key, int limit) {
+      return wrapInArray(STORAGE_GENERAL.get(key), limit);
+  }
+
+  private static String wrapInString(CapturedStack stack, int limit) {
+    if (stack == null) {
+      return null;
+    }
+    return wrapAsyncStackTraceInString(getStackTrace(stack, limit));
+  }
+
+  private static String wrapAsyncStackTraceInString(List<StackTraceElement> stackTrace) {
+    if (stackTrace == null || stackTrace.isEmpty()) {
+      return null;
+    }
+    try (ByteArrayOutputStream bas = new ByteArrayOutputStream();
+         DataOutputStream dos = new DataOutputStream(bas)) {
+      writeAsyncStackTraceToStream(stackTrace, dos);
+      return bas.toString(StandardCharsets.ISO_8859_1.name());
+    } catch (IOException e) {
+      // It shouldn't ever happen.
+      handleException(e);
+      return null;
+    }
+  }
+
+  static void writeAsyncStackTraceToStream(List<StackTraceElement> stackTrace, DataOutputStream dos) throws IOException {
+    for (StackTraceElement elem : stackTrace) {
+      writeAsyncStackTraceElementToStream(elem, dos);
+    }
+  }
+
+  static void writeAsyncStackTraceElementToStream(StackTraceElement elem, DataOutputStream dos) throws IOException {
+    if (elem == ASYNC_STACK_ELEMENT) {
+      dos.writeBoolean(false);
+    }
+    else {
+      dos.writeBoolean(true);
+      dos.writeUTF(elem.getClassName());
+      dos.writeUTF(elem.getMethodName());
+      dos.writeInt(elem.getLineNumber());
+    }
+  }
+
+  private static Object[][] wrapInArray(CapturedStack stack, int limit) {
+    if (stack == null) {
+      return null;
+    }
+    List<StackTraceElement> stackTrace = getStackTrace(stack, limit);
+    Object[][] res = new Object[stackTrace.size()][];
+    for (int i = 0; i < stackTrace.size(); i++) {
+      StackTraceElement elem = stackTrace.get(i);
+      if (elem == ASYNC_STACK_ELEMENT) {
+        res[i] = null;
+      }
+      else {
+        res[i] = new Object[]{elem.getClassName(), elem.getFileName(), elem.getMethodName(), String.valueOf(elem.getLineNumber())};
+      }
+    }
+    return res;
+  }
+
+  private static List<StackTraceElement> trimInitAgentFrames(List<StackTraceElement> elements) {
+    int firstNotAgent = 0;
+    for (int i = 0; i < elements.size(); i++) {
+      if (!isAgentFrame(elements.get(i))) {
+        firstNotAgent = i;
+        break;
+      }
+    }
+    return elements.subList(firstNotAgent, elements.size());
+  }
+
+  private static ArrayList<StackTraceElement> getStackTrace(CapturedStack stack, int limit) {
+    ArrayList<StackTraceElement> res = new ArrayList<>();
+    while (stack != null && res.size() <= limit) {
+      List<StackTraceElement> filteredStacks = stack.getStackTrace();
+      StackData stackData = stack.collectStacks(filteredStacks);
+      res.addAll(stackData.stackTrace);
+      stack = stackData.previous;
+      if (stack != null) {
+        res.add(ASYNC_STACK_ELEMENT);
+      }
+    }
+    return res;
+  }
+
+  public static void setEnabled(boolean enabled) {
+    ENABLED = enabled;
+  }
+
+  private static void handleException(Throwable e) {
+    ENABLED = false;
+    System.err.println("Critical error in IDEA Async Stacktraces instrumenting agent. Agent is now disabled. Please report to IDEA support:");
+    e.printStackTrace();
+  }
+
+  static boolean isAgentFrame(StackTraceElement elem) {
+    return elem.getClassName().startsWith(PACKAGE_PREFIX);
+  }
+
+  static List<StackTraceElement> getCurrentStackTraceWithoutAgentFrames() {
+    // Don't use Thread.currentThread().getStackTrace() because it adds extra frame.
+    return trimInitAgentFrames(Arrays.asList(new Throwable().getStackTrace()));
+  }
+
+  /** Expensive method, it should be used only for logging. */
+  private static String getCallerDescriptorForLogging() {
+    List<StackTraceElement> stackTrace = getCurrentStackTraceWithoutAgentFrames();
+    if (stackTrace.isEmpty()) return "unknown";
+
+    StackTraceElement elem = stackTrace.get(0);
+    return elem.getClassName() + "." + elem.getMethodName();
+  }
+
+  private static String getKeyText(Object key) {
+    String res = key.getClass().getName() + "@" + Integer.toHexString(System.identityHashCode(key));
+    try {
+      return res + "(" + key + ")";
+    } catch (RuntimeException ignored) {
+    }
+    return res;
+  }
+
+  private static class ThrottledCapturedStack extends CapturedStack {
+
+    public static final ThrottledCapturedStack INSTANCE = new ThrottledCapturedStack();
+
+    private static final List<StackTraceElement> STACK_TRACE_ELEMENTS = Collections.singletonList(THROTTLED_STACK_ELEMENT);
+
+
+    private ThrottledCapturedStack() {
+    }
+
+    @Override
+    public List<StackTraceElement> getStackTrace() {
+      return STACK_TRACE_ELEMENTS;
+    }
+  }
+}

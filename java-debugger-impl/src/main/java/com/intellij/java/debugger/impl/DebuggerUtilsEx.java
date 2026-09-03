@@ -22,6 +22,7 @@ package com.intellij.java.debugger.impl;
 
 import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.SourcePosition;
+import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.SourcePositionHighlighter;
 import com.intellij.java.debugger.engine.evaluation.*;
@@ -34,9 +35,12 @@ import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.expression.UnBoxingEvaluator;
 import com.intellij.java.debugger.impl.engine.requests.RequestManagerImpl;
+import com.intellij.java.debugger.impl.jdi.GeneratedLocation;
+import com.intellij.java.debugger.impl.jdi.GeneratedReferenceType;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
+import com.intellij.java.debugger.requests.ClassPrepareRequestor;
 import com.intellij.java.debugger.requests.Requestor;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
 import com.intellij.java.execution.filters.ExceptionFilters;
@@ -44,6 +48,8 @@ import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
+import consulo.application.util.function.ThrowableComputable;
+import consulo.application.util.registry.Registry;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
 import consulo.disposer.Disposable;
@@ -64,6 +70,7 @@ import consulo.execution.unscramble.ThreadState;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.Event;
 import consulo.internal.com.sun.jdi.event.EventSet;
+import consulo.internal.com.sun.tools.jdi.LocationImpl;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
@@ -87,12 +94,15 @@ import consulo.util.xml.serializer.JDOMExternalizable;
 import consulo.util.xml.serializer.WriteExternalException;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
+import one.util.streamex.StreamEx;
 import org.jspecify.annotations.Nullable;
 import org.jdom.Attribute;
 import org.jdom.Element;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 import java.util.regex.PatternSyntaxException;
 
 public abstract class DebuggerUtilsEx extends DebuggerUtils {
@@ -673,6 +683,202 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
             LOG.info(e);
         }
         return null;
+    }
+
+    public static CompletableFuture<Method> getMethodAsync(LocationImpl location) {
+        return location.methodAsync().exceptionally(throwable -> {
+            if (DebuggerUtilsAsync.unwrap(throwable) instanceof IllegalArgumentException) { // Invalid method id
+                LOG.info(throwable);
+                return null;
+            }
+            throw (RuntimeException) throwable;
+        });
+    }
+
+    public static String getLocationMethodName(Location location) {
+        if (location instanceof GeneratedLocation generatedLocation) {
+            return generatedLocation.methodName();
+        }
+        Method method = getMethod(location);
+        if (method == null) {
+            return "<invalid method>";
+        }
+        return method.name();
+    }
+
+    public static List<Method> declaredMethodsByName(ReferenceType type, String name) {
+        return StreamEx.of(type.methods()).filter(m -> name.equals(m.name())).toList();
+    }
+
+    public static List<Location> locationsOfLine(Method method, int line) {
+        try {
+            return method.locationsOfLine(DebugProcess.JAVA_STRATUM, null, line);
+        }
+        catch (AbsentInformationException ignored) {
+        }
+        return Collections.emptyList();
+    }
+
+    public static Location findOrCreateLocation(VirtualMachine virtualMachine, StackTraceElement stackTraceElement) {
+        return findOrCreateLocation(
+            virtualMachine,
+            stackTraceElement.getClassName(),
+            stackTraceElement.getMethodName(),
+            stackTraceElement.getLineNumber()
+        );
+    }
+
+    public static Location findOrCreateLocation(VirtualMachine virtualMachine, String className, String methodName, int line) {
+        GeneratedLocation generatedLocation = null;
+        for (ReferenceType classType : virtualMachine.classesByName(className)) {
+            try {
+                if (line >= 0) {
+                    for (Method method : declaredMethodsByName(classType, methodName)) {
+                        List<Location> locations = locationsOfLine(method, line);
+                        if (!locations.isEmpty()) {
+                            return locations.get(0);
+                        }
+                    }
+                }
+                if (generatedLocation == null) {
+                    generatedLocation = new GeneratedLocation(classType, methodName, line);
+                }
+            }
+            catch (ObjectCollectedException ignored) {
+            }
+        }
+        if (generatedLocation != null) {
+            return generatedLocation;
+        }
+        return new GeneratedLocation(new GeneratedReferenceType(virtualMachine, className), methodName, line);
+    }
+
+    /**
+     * Converts a type name ("int", "java.lang.String", "java.lang.Object[]") into a JVM signature ("I", "Ljava/lang/String;", "[Ljava/lang/Object;").
+     * IDEA delegates to {@code JNITypeParser.typeNameToSignature}, which is package-private in Consulo's JDI.
+     */
+    public static String typeNameToSignature(String name) {
+        if (name.endsWith("[]")) {
+            return "[" + typeNameToSignature(name.substring(0, name.length() - 2));
+        }
+        switch (name) {
+            case "boolean":
+                return "Z";
+            case "byte":
+                return "B";
+            case "char":
+                return "C";
+            case "short":
+                return "S";
+            case "int":
+                return "I";
+            case "long":
+                return "J";
+            case "float":
+                return "F";
+            case "double":
+                return "D";
+            case "void":
+                return "V";
+            default:
+                return "L" + name.replace('.', '/') + ";";
+        }
+    }
+
+    public static void setStaticBooleanField(DebugProcessImpl process, String className, String fieldName, boolean value) {
+        DebuggerManagerThreadImpl.assertIsManagerThread();
+        final RequestManagerImpl requestsManager = process.getRequestsManager();
+        ClassPrepareRequestor requestor = new ClassPrepareRequestor() {
+            @Override
+            public void processClassPrepare(DebugProcess debuggerProcess, ReferenceType referenceType) {
+                try {
+                    requestsManager.deleteRequest(this);
+                    Field field = findField(referenceType, fieldName);
+                    BooleanValue mirror = referenceType.virtualMachine().mirrorOf(value);
+                    ((ClassType) referenceType).setValue(field, mirror);
+                }
+                catch (Exception e) {
+                    LOG.warn("Error while setting field '" + fieldName + "' in class '" + className + "'", e);
+                }
+            }
+        };
+        requestsManager.callbackOnPrepareClasses(requestor, className);
+        try {
+            ClassType classType = (ClassType) process.findClass(null, className, null);
+            if (classType != null) {
+                requestor.processClassPrepare(process, classType);
+            }
+        }
+        catch (Exception e) {
+            LOG.warn("Error while setting field '" + fieldName + "' in class '" + className + "'", e);
+        }
+    }
+
+    protected static <R, T> R processCollectibleValue(
+        ThrowableComputable<? extends T, ? extends EvaluateException> valueComputable,
+        Function<? super T, ? extends R> processor,
+        SuspendContextImpl suspendContext
+    ) throws EvaluateException {
+        int retries = 3;
+        while (true) {
+            try {
+                T result = valueComputable.compute();
+                return processor.apply(result);
+            }
+            catch (ObjectCollectedException oce) {
+                if (--retries < 0) {
+                    return suspendAllAndEvaluate(valueComputable, processor, suspendContext.getDebugProcess().getVirtualMachineProxy());
+                }
+            }
+            catch (EvaluateException e) {
+                if (e.getCause() instanceof ObjectCollectedException) {
+                    if (--retries < 0) {
+                        return suspendAllAndEvaluate(valueComputable, processor, suspendContext.getDebugProcess().getVirtualMachineProxy());
+                    }
+                }
+                else {
+                    throw e;
+                }
+            }
+        }
+    }
+
+    private static <R, T> R suspendAllAndEvaluate(
+        ThrowableComputable<? extends T, ? extends EvaluateException> valueComputable,
+        Function<? super T, ? extends R> processor,
+        VirtualMachineProxyImpl virtualMachineProxy
+    ) throws EvaluateException {
+        if (Registry.is("debugger.collectible.value.retries.error", true)) {
+            LOG.error("Retries exhausted, applying suspend-all evaluation");
+        }
+        virtualMachineProxy.suspend();
+        try {
+            return processor.apply(valueComputable.compute());
+        }
+        finally {
+            virtualMachineProxy.resume();
+        }
+    }
+
+    public static StringReference mirrorOfString(String s, SuspendContextImpl context) {
+        VirtualMachine vm = context.getDebugProcess().getVirtualMachineProxy().getVirtualMachine();
+        try {
+            return processCollectibleValue(
+                () -> vm.mirrorOf(s),
+                value -> {
+                    context.keep(value);
+                    return value;
+                },
+                context
+            );
+        }
+        catch (EvaluateException e) { // should not happen
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static StringReference mirrorOfString(String s, EvaluationContext context) throws EvaluateException {
+        return mirrorOfString(s, (SuspendContextImpl) context.getSuspendContext());
     }
 
     public static Value createValue(VirtualMachineProxyImpl vm, String expectedType, double value) {

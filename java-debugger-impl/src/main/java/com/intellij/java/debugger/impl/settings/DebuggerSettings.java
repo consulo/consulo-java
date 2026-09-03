@@ -106,6 +106,8 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
 
     private ClassFilter[] mySteppingFilters = DEFAULT_STEPPING_FILTERS;
 
+    public boolean INSTRUMENTING_AGENT = true;
+    public boolean AGENT_THROTTLING = true;
     private List<CapturePoint> myCapturePoints = new ArrayList<>();
     public boolean CAPTURE_VARIABLES;
     private final EventDispatcher<CapturePointsSettingsListener> myDispatcher = EventDispatcher.create(CapturePointsSettingsListener.class);
@@ -187,6 +189,8 @@ public class DebuggerSettings implements Cloneable, PersistentStateComponent<Ele
             && RESUME_ONLY_CURRENT_THREAD == secondSettings.RESUME_ONLY_CURRENT_THREAD
             && COMPILE_BEFORE_HOTSWAP == secondSettings.COMPILE_BEFORE_HOTSWAP
             && HOTSWAP_HANG_WARNING_ENABLED == secondSettings.HOTSWAP_HANG_WARNING_ENABLED
+            && INSTRUMENTING_AGENT == secondSettings.INSTRUMENTING_AGENT
+            && AGENT_THROTTLING == secondSettings.AGENT_THROTTLING
             && (RUN_HOTSWAP_AFTER_COMPILE != null ? RUN_HOTSWAP_AFTER_COMPILE.equals(secondSettings.RUN_HOTSWAP_AFTER_COMPILE) : secondSettings.RUN_HOTSWAP_AFTER_COMPILE == null)
             && DebuggerUtilsEx.filterEquals(mySteppingFilters,  secondSettings.mySteppingFilters)
             && myCapturePoints.equals(((DebuggerSettings) obj).myCapturePoints);

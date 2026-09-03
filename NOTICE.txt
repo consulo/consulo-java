@@ -1,1 +1,2 @@
 Initial code was get for IntelliJ IDEA Community Edition. Github repo : github.com/JetBrains/intellij-community
+Debugger agent (java-debugger-agent module) code was get for IntelliJ debugger-agent. Github repo : github.com/JetBrains/debugger-agent

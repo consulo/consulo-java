@@ -20,34 +20,23 @@ import com.intellij.java.debugger.NameMapper;
 import com.intellij.java.debugger.PositionManager;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebugProcessListener;
-import com.intellij.java.debugger.engine.DebuggerUtils;
-import com.intellij.java.debugger.impl.apiAdapters.TransportServiceWrapper;
 import com.intellij.java.debugger.impl.engine.DebugProcessEvents;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.RemoteDebugProcessHandler;
-import com.intellij.java.debugger.impl.settings.DebuggerSettings;
-import com.intellij.java.debugger.impl.ui.GetJPDADialog;
 import com.intellij.java.debugger.impl.ui.breakpoints.BreakpointManager;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
-import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
-import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.Application;
 import consulo.application.progress.ProgressManager;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.component.persist.StoragePathMacros;
-import consulo.content.bundle.Sdk;
 import consulo.execution.ExecutionResult;
 import consulo.java.execution.configurations.OwnJavaParameters;
-import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
-import consulo.platform.Platform;
 import consulo.process.ExecutionException;
 import consulo.process.KillableProcessHandler;
 import consulo.process.ProcessHandler;
@@ -58,14 +47,11 @@ import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.collection.Lists;
 import consulo.util.collection.SmartList;
-import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
 import javax.swing.*;
-import java.io.File;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -75,6 +61,7 @@ import java.util.stream.Stream;
 @ServiceImpl
 public class DebuggerManagerImpl extends DebuggerManagerEx {
     private static final Logger LOG = Logger.getInstance(DebuggerManagerImpl.class);
+    public static final String LOCALHOST_ADDRESS_FALLBACK = "127.0.0.1";
 
     private final Project myProject;
     private final HashMap<ProcessHandler, DebuggerSession> mySessions = new HashMap<>();
@@ -339,38 +326,11 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         myCustomPositionManagerFactories.remove(factory);
     }
 
-    /* Remoting */
+    /**
+     * @deprecated use {@link RemoteConnectionBuilder}
+     */
+    @Deprecated(forRemoval = true)
     @RequiredUIAccess
-    private static void checkTargetJPDAInstalled(OwnJavaParameters parameters) throws ExecutionException {
-        Sdk jdk = parameters.getJdk();
-        if (jdk == null) {
-            throw new ExecutionException(JavaDebuggerLocalize.errorJdkNotSpecified().get());
-        }
-        JavaSdkVersion version = JavaSdkTypeUtil.getVersion(jdk);
-        String versionString = jdk.getVersionString();
-        if (version == JavaSdkVersion.JDK_1_0 || version == JavaSdkVersion.JDK_1_1) {
-            throw new ExecutionException(JavaDebuggerLocalize.errorUnsupportedJdkVersion(versionString).get());
-        }
-        if (Platform.current().os().isWindows() && version == JavaSdkVersion.JDK_1_2) {
-            VirtualFile homeDirectory = jdk.getHomeDirectory();
-            if (homeDirectory == null || !homeDirectory.isValid()) {
-                throw new ExecutionException(JavaDebuggerLocalize.errorInvalidJdkHome(versionString).get());
-            }
-            //noinspection HardCodedStringLiteral
-            File dllFile = new File(
-                homeDirectory.getPath().replace('/', File.separatorChar) +
-                    File.separator + "bin" + File.separator + "jdwp.dll"
-            );
-            if (!dllFile.exists()) {
-                GetJPDADialog dialog = new GetJPDADialog();
-                dialog.show();
-                throw new ExecutionException(JavaDebuggerLocalize.errorDebugLibrariesMissing().get());
-            }
-        }
-    }
-
-    @RequiredUIAccess
-    @SuppressWarnings({"HardCodedStringLiteral"})
     public static RemoteConnection createDebugParameters(
         OwnJavaParameters parameters,
         boolean debuggerInServerMode,
@@ -378,58 +338,16 @@ public class DebuggerManagerImpl extends DebuggerManagerEx {
         String debugPort,
         boolean checkValidity
     ) throws ExecutionException {
-        if (checkValidity) {
-            checkTargetJPDAInstalled(parameters);
-        }
-
-        boolean useSockets = transport == DebuggerSettings.SOCKET_TRANSPORT;
-
-        String address = "";
-        if (StringUtil.isEmptyOrSpaces(debugPort)) {
-            try {
-                address = DebuggerUtils.getInstance().findAvailableDebugAddress(useSockets);
-            }
-            catch (ExecutionException e) {
-                if (checkValidity) {
-                    throw e;
-                }
-            }
-        }
-        else {
-            address = debugPort;
-        }
-
-        TransportServiceWrapper transportService = TransportServiceWrapper.createTransportService(transport);
-        String debugAddress = debuggerInServerMode && useSockets ? "127.0.0.1:" + address : address;
-        String debuggeeRunProperties = "transport=" + transportService.transportId() + ",address=" + debugAddress;
-        if (debuggerInServerMode) {
-            debuggeeRunProperties += ",suspend=y,server=n";
-        }
-        else {
-            debuggeeRunProperties += ",suspend=n,server=y";
-        }
-
-        DebuggerSettings settings = DebuggerSettings.getInstance();
-
-        if (settings.INCLUDE_VIRTUAL_THREADS) {
-            debuggeeRunProperties += ",includevirtualthreads=y";
-        }
-
-        if (StringUtil.containsWhitespaces(debuggeeRunProperties)) {
-            debuggeeRunProperties = "\"" + debuggeeRunProperties + "\"";
-        }
-        String _debuggeeRunProperties = debuggeeRunProperties;
-
-        Application.get().runReadAction(() -> {
-            JavaSdkUtil.addRtJar(parameters.getClassPath());
-
-            parameters.getVMParametersList().replaceOrPrepend("-Xrunjdwp:", "");
-            parameters.getVMParametersList().replaceOrPrepend("-agentlib:jdwp=", "-agentlib:jdwp=" + _debuggeeRunProperties);
-        });
-
-        return new RemoteConnection(useSockets, "127.0.0.1", address, debuggerInServerMode);
+        return new RemoteConnectionBuilder(debuggerInServerMode, transport, debugPort)
+            .checkValidity(checkValidity)
+            .asyncAgent(true)
+            .create(parameters);
     }
 
+    /**
+     * @deprecated use {@link RemoteConnectionBuilder}
+     */
+    @Deprecated(forRemoval = true)
     @RequiredUIAccess
     public static RemoteConnection createDebugParameters(
         OwnJavaParameters parameters,

@@ -34,6 +34,12 @@ import com.intellij.java.debugger.impl.ui.tree.render.*;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.indexing.search.searches.AnnotatedElementsSearch;
+import com.intellij.java.language.codeInsight.AnnotationUtil;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
@@ -42,8 +48,10 @@ import consulo.component.persist.State;
 import consulo.component.persist.Storage;
 import consulo.disposer.Disposable;
 import consulo.application.Application;
+import consulo.application.ReadAction;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.language.psi.PsiElement;
+import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
@@ -61,6 +69,7 @@ import org.jdom.Element;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 @Singleton
@@ -620,5 +629,31 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
         private static String getDescriptorLabel(ValueDescriptorImpl keyDescriptor) {
             return keyDescriptor == null ? "null" : keyDescriptor.getValueLabel();
         }
+    }
+
+    static <T extends PsiModifierListOwner, R> List<R> visitAnnotatedElements(
+        List<String> annotationFqns,
+        Project project,
+        BiFunction<? super PsiModifierListOwner, ? super PsiAnnotation, R> consumer,
+        Class<? extends T>... types
+    ) {
+        return ReadAction.nonBlocking(() -> {
+            List<R> result = new ArrayList<>();
+            for (String annotationFqn : annotationFqns) {
+                PsiClass annotationClass =
+                    JavaPsiFacade.getInstance(project).findClass(annotationFqn, GlobalSearchScope.allScope(project));
+                if (annotationClass == null) {
+                    continue;
+                }
+                GlobalSearchScope scope = GlobalSearchScope.allScope(project);
+                for (T owner : AnnotatedElementsSearch.searchElements(annotationClass, scope, types).findAll()) {
+                    R element = consumer.apply(owner, AnnotationUtil.findAnnotation(owner, annotationFqn));
+                    if (element != null) {
+                        result.add(element);
+                    }
+                }
+            }
+            return result;
+        }).executeSynchronously();
     }
 }

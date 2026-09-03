@@ -1,0 +1,133 @@
+// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+package com.intellij.rt.debugger.agent;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.instrument.Instrumentation;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Properties;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+
+public class DebuggerAgent {
+  private static final String KEEP_SUFFIX = "[keep]";
+
+  // Always update current version after changes in agent.
+  @SuppressWarnings("unused")
+  public final static int BREAKPOINT_INSTRUMENTATION_CURRENT_VERSION = 8;
+
+  // Update this to the BREAKPOINT_INSTRUMENTATION_CURRENT_VERSION value in case older IDEA versions cannot work with the new agent version.
+  // It is easier to extract versions from this class as it will be loaded before InstrumentationBreakpointTransformer
+  @SuppressWarnings("unused")
+  public final static int BREAKPOINT_INSTRUMENTATION_MIN_VERSION = 7;
+
+  /**
+   * Used for small periodic tasks.
+   * Do not use it for long-running tasks, as it will block other debugger operations.
+   */
+  static final ScheduledExecutorService SCHEDULED_EXECUTOR_SERVICE = Executors.newSingleThreadScheduledExecutor(new ThreadFactory() {
+    @Override
+    public Thread newThread(Runnable r) {
+      Thread thread = new Thread(r, "IntelliJ Debugger Helper Thread");
+      thread.setDaemon(true);
+      return thread;
+    }
+  });
+
+  public static void premain(String args, Instrumentation instrumentation) {
+    if (DebuggerAgent.class.getClassLoader() != null) {
+      System.err.println("Debugger agent: agent should be loaded by bootstrap classloader, " +
+              "check jar name and 'Boot-Class-Path' value in the manifest");
+      return;
+    }
+
+    if (System.getProperty("intellij.debug.agent") != null) {
+      System.err.println("Debugger agent: more than one agent is not allowed, skipping");
+      return;
+    }
+    System.setProperty("intellij.debug.agent", "true");
+
+    readAndApplyProperties(args, instrumentation);
+  }
+
+  private static void initAll(Instrumentation instrumentation, Properties properties) {
+    CaptureStorage.init(properties);
+    initSharedFlowTransformer(instrumentation);
+    CaptureAgent.init(properties, instrumentation);
+    SuspendHelper.init(properties);
+    CollectionBreakpointInstrumentor.init(properties, instrumentation);
+    SpilledVariablesTransformer.init(instrumentation);
+    TailCallContinuationTransformer.init(instrumentation);
+
+    boolean logCaptureEnabled = Boolean.getBoolean("debugger.agent.enable.log.capture");
+    LogCaptureStorage.init(properties, logCaptureEnabled);
+    if (logCaptureEnabled) {
+      LogCaptureTransformer.init(instrumentation);
+    }
+
+    InstrumentationBreakpointTransformer.init(properties, instrumentation);
+  }
+
+  private static void readAndApplyProperties(String args, Instrumentation instrumentation) {
+    Properties properties = new Properties();
+    if (args == null || args.isEmpty()) {
+      initAll(instrumentation, properties);
+      return;
+    }
+    // Parse "keep setting file" suffix: -javaagent:<path>/debugger-agent.jar=<uri-or-path-to-props>([keep])?
+    String path;
+    boolean keepSettings = false;
+    String argsTrimmed = args.trim();
+    if (argsTrimmed.endsWith(KEEP_SUFFIX)) {
+      path = argsTrimmed.substring(0, argsTrimmed.length() - KEEP_SUFFIX.length()).trim();
+      keepSettings = true;
+    } else {
+      path = argsTrimmed;
+    }
+
+    Path filePath = null;
+    try {
+      try {
+        filePath = Paths.get(new URI(path));
+      } catch (URISyntaxException ignored) {
+        filePath = Paths.get(path);
+      }
+      try (InputStream stream = Files.newInputStream(filePath)) {
+        // use ISO 8859-1 character encoding
+        properties.load(stream);
+      }
+    } catch (Exception e) {
+      System.out.println("Capture agent: unable to read settings");
+      e.printStackTrace();
+    }
+
+    initAll(instrumentation, properties);
+
+    // delete settings file only if it was read correctly
+    boolean keep = keepSettings || !Boolean.parseBoolean(properties.getProperty("deleteSettings", "true"));
+    if (!keep && filePath != null) {
+      try {
+        Files.deleteIfExists(filePath);
+      } catch (IOException e) {
+        System.out.println("Capture agent: could not delete settings file: " + filePath);
+        e.printStackTrace();
+      }
+    }
+  }
+
+  private static void initSharedFlowTransformer(Instrumentation instrumentation) {
+    if (Boolean.getBoolean("debugger.agent.enable.coroutines")
+            && Boolean.getBoolean("kotlinx.coroutines.debug.enable.flows.stack.trace")) {
+      instrumentation.addTransformer(new SharedFlowTransformer(), true);
+      // make state flow instrumentation switchable, so it could be turned off if instrumentation breaks the code
+      if (Boolean.getBoolean("kotlinx.coroutines.debug.enable.mutable.state.flows.stack.trace")) {
+        instrumentation.addTransformer(new StateFlowTransformer(), true);
+      }
+    }
+  }
+}

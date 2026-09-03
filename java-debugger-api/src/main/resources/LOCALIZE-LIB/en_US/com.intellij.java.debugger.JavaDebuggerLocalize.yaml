@@ -1,3 +1,25 @@
+action.AnActionButton.description.disable.selected:
+    text: Disable Selected
+action.AnActionButton.description.duplicate:
+    text: Duplicate
+action.AnActionButton.description.enable.selected:
+    text: Enable Selected
+action.AnActionButton.description.export:
+    text: Export
+action.AnActionButton.description.import:
+    text: Import
+action.AnActionButton.text.disable.selected:
+    text: Disable Selected
+action.AnActionButton.text.duplicate:
+    text: Duplicate
+action.AnActionButton.text.enable.selected:
+    text: Enable Selected
+action.AnActionButton.text.export:
+    text: Export
+action.AnActionButton.text.import:
+    text: Import
+action.Debugger.AsyncStacks.text:
+    text: Async Stack Traces
 action.add.field.watchpoint.text:
     text: Add Field Watchpoint
 action.auto.variables.mode:
@@ -42,6 +64,8 @@ action.show.watches.text.hide:
     text: Hide Watches
 action.show.watches.text.show:
     text: Show Watches
+action.text.toggle:
+    text: Toggle
 action.thread.dump.description:
     text: Get stacktraces of all the threads within JVM at current moment
 action.thread.dump.text:
@@ -80,8 +104,12 @@ add.instance.filter.dialog.prompt:
     text: 'Enter instance ID:'
 add.instance.filter.dialog.title:
     text: Add Instance Filter
+async.stack.throttled.frame.info:
+    text: Async stack trace was not collected for performance reasons. You can disable throttling in
+async.stack.throttled.frame.label:
+    text: Could not capture
 async.stacktraces.configurable.display.name:
-    text: Async Stacktraces
+    text: Async Stack Traces
 breakpoint.any.exception.display.name:
     text: Any exception
 breakpoint.exception.breakpoint.display.name:
@@ -176,6 +204,8 @@ button.switch.view:
     text: S&witch View
 button.tree.view:
     text: Tree View
+capture.node.settings.link:
+    text: ' settings'
 class.filters.dialog.exclusion.filters.group:
     text: Class Exclusion Filters
 class.filters.dialog.inclusion.filters.group:
@@ -192,6 +222,8 @@ debugger.session.tab.threads.title:
     text: Threads
 debugger.session.tab.watches.title.with.size:
     text: Watches ({0})
+debugger.variables.not.available.in.async:
+    text: Variables are not available for async stack frames
 default.package.name:
     text: <Default>
 drop.frame.error.no.information:
@@ -531,12 +563,20 @@ exception.breakpoints.tab.title:
     text: Java Exception Breakpoints
 export.dialog.copy.action.description:
     text: '&Copy text to clipboard'
+export.failed:
+    text: Export Failed
+export.selected.capture.points.to.file:
+    text: Export Selected Capture Points to File…
 export.threads.stackframe.format:
     text: at {0}({1}:{2,number,#})
 field.watchpoints.tab.title:
     text: Java Field Watchpoints
+frame.panel.async.stacktrace:
+    text: Async stack trace
 frame.panel.frames.not.available:
     text: Frames not available for unsuspended thread
+frame.panel.thread.finished:
+    text: Thread has finished execution
 get.jpda.dialog.title:
     text: JPDA Libraries Missing
 group.java.debugger.actions.text:
@@ -553,6 +593,8 @@ hotswap.dialog.title:
     text: Reload Changed Classes
 hotswap.dialog.title.with.session:
     text: Reload Changed Classes for {0}
+import.capture.points:
+    text: Import Capture Points
 instance.filters.dialog.instance.filters.group:
     text: Instance Filters
 instance.filters.dialog.title:
@@ -609,8 +651,16 @@ label.breakpoint.properties.panel.group.conditions:
     text: Filters
 label.breakpoint.properties.panel.group.suspend.policy:
     text: Suspend policy
+label.capture.configurable.annotations.configure:
+    text: Configure Annotations…
 label.capture.configurable.capture.variables:
     text: Capture local variables (may greatly slow down the execution)
+label.capture.configurable.debugger.agent:
+    text: Instrumenting agent (requires debugger restart)
+label.capture.configurable.throttling:
+    text: Throttle async stack traces on significant overhead
+label.capture.point.at:
+    text: Capture point at {0}.{1}
 label.class.label.expression.configurable.node.label:
     text: Node label expression
 label.complete.input.dialog.expression:
@@ -771,6 +821,8 @@ label.threads.view.configurable.show.stack.frames.for.synthetic.methods:
     text: Show stack &frames for synthetic methods
 label.threads.view.configurable.show.thread.groups:
     text: Show thread &groups
+label.too.many.frames.rest.truncated:
+    text: Too many frames, the rest is truncated…
 label.undefined:
     text: undefined
 label.unknown.value:
@@ -833,6 +885,8 @@ method.breakpoints.tab.title:
     text: Java Method Breakpoints
 node.has.descendands.expression.optional:
     text: '''Node &has descendands'' expression (optional):'
+please.select.a.file.to.import:
+    text: Please select a file to import.
 position.highlighter.stripe.tooltip:
     text: Execution line
 progress.evaluating:
@@ -851,6 +905,26 @@ rule.name.group.by.class:
     text: Group by class
 rule.name.group.by.package:
     text: Group by package
+settings.async.annotations.configuration:
+    text: Async Annotations Configuration
+settings.async.execute:
+    text: Async Execute
+settings.async.schedule:
+    text: Async Schedule
+settings.breakpoints.based:
+    text: 'Breakpoints based:'
+settings.capture.column.capture.class.name:
+    text: Capture class name
+settings.capture.column.capture.key.expression:
+    text: Capture key expression
+settings.capture.column.capture.method.name:
+    text: Capture method name
+settings.capture.column.insert.class.name:
+    text: Insert class name
+settings.capture.column.insert.key.expression:
+    text: Insert key expression
+settings.capture.column.insert.method.name:
+    text: Insert method name
 status.app.running:
     text: The application is running
 status.breakpoint.invalid:

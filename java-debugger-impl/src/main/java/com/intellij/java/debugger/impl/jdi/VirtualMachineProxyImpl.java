@@ -22,20 +22,23 @@ package com.intellij.java.debugger.impl.jdi;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.jdi.VirtualMachineProxy;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.EventQueue;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
 import consulo.logging.Logger;
+import consulo.util.dataholder.UserDataHolderBase;
 import consulo.util.lang.ExceptionUtil;
 import consulo.util.lang.ThreeState;
 import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
-public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
+public class VirtualMachineProxyImpl extends UserDataHolderBase implements JdiTimer, VirtualMachineProxy
 {
 	private static final Logger LOG = Logger.getInstance(VirtualMachineProxyImpl.class);
 	private final DebugProcessImpl myDebugProcess;
@@ -218,6 +221,34 @@ public class VirtualMachineProxyImpl implements JdiTimer, VirtualMachineProxy
 		}
 
 		return myAllThreads.values();
+	}
+
+	public CompletableFuture<Collection<ThreadReferenceProxyImpl>> allThreadsAsync()
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		if(myAllThreadsDirty)
+		{
+			return DebuggerUtilsAsync.allThreads(myVirtualMachine).thenApply(threads ->
+			{
+				DebuggerManagerThreadImpl.assertIsManagerThread();
+				// same cache contract as allThreads(): keep known proxies, drop proxies of threads that are gone
+				final Map<ThreadReference, ThreadReferenceProxyImpl> result = new HashMap<>();
+				for(final ThreadReference threadReference : threads)
+				{
+					ThreadReferenceProxyImpl proxy = myAllThreads.get(threadReference);
+					if(proxy == null)
+					{
+						proxy = new ThreadReferenceProxyImpl(this, threadReference);
+					}
+					result.put(threadReference, proxy);
+				}
+				myAllThreads = result;
+				myAllThreadsDirty = false;
+				return new ArrayList<>(myAllThreads.values());
+			});
+		}
+
+		return CompletableFuture.completedFuture(new ArrayList<>(myAllThreads.values()));
 	}
 
 	public void threadStarted(ThreadReference thread)

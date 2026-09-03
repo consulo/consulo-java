@@ -19,11 +19,13 @@ import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.StackFrameContext;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentKind;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.java.debugger.impl.actions.DebuggerAction;
 import com.intellij.java.debugger.impl.apiAdapters.TransportServiceWrapper;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
@@ -40,8 +42,11 @@ import consulo.component.ProcessCanceledException;
 import consulo.dataContext.DataContext;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.breakpoint.XExpressionState;
+import consulo.internal.com.sun.jdi.ClassType;
+import consulo.internal.com.sun.jdi.InterfaceType;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
@@ -59,10 +64,14 @@ import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
 import consulo.util.xml.serializer.XmlSerializer;
 import jakarta.inject.Singleton;
+import one.util.streamex.StreamEx;
 import org.jdom.Element;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 @Singleton
 @ServiceImpl
@@ -218,6 +227,47 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
 
     public static boolean isRemote(DebugProcess debugProcess) {
         return Boolean.TRUE.equals(debugProcess.getUserData(BatchEvaluator.REMOTE_SESSION_KEY));
+    }
+
+    @Override
+    public <R, T> R processCollectibleValue(
+        ThrowableComputable<? extends T, ? extends EvaluateException> valueComputable,
+        Function<? super T, ? extends R> processor,
+        EvaluationContext evaluationContext
+    ) throws EvaluateException {
+        return processCollectibleValue(valueComputable, processor, ((EvaluationContextImpl) evaluationContext).getSuspendContext());
+    }
+
+    public static Stream<? extends ReferenceType> supertypes(ReferenceType type) {
+        if (type instanceof InterfaceType) {
+            return ((InterfaceType) type).superinterfaces().stream();
+        }
+        else if (type instanceof ClassType) {
+            return StreamEx.<ReferenceType>ofNullable(((ClassType) type).superclass()).prepend(((ClassType) type).interfaces());
+        }
+        return StreamEx.empty();
+    }
+
+    public static void logError(Throwable e) {
+        logIfNeeded(e, false, LOG::error);
+    }
+
+    public static void logError(String message, Throwable e) {
+        logIfNeeded(e, false, t -> LOG.error(message, t));
+    }
+
+    static void logError(String message, Throwable e, boolean wrapIntoThrowable) {
+        logIfNeeded(e, wrapIntoThrowable, t -> LOG.error(message, t));
+    }
+
+    private static void logIfNeeded(Throwable e, boolean wrapIntoThrowable, Consumer<Throwable> action) {
+        if (e instanceof VMDisconnectedException || e instanceof ProcessCanceledException) {
+            throw (RuntimeException) e;
+        }
+        if (e instanceof InterruptedException) {
+            throw new RuntimeException(e);
+        }
+        action.accept(wrapIntoThrowable ? new Throwable(e) : e);
     }
 
     public static <T, E extends Exception> T suppressExceptions(ThrowableComputable<T, E> supplier, T defaultValue) throws E {

@@ -23,8 +23,4 @@ package consulo.java.debugger.impl;
 public interface JavaRegistry {
   // Reduce watch return values overhead by applying extra filters
   boolean DEBUGGER_WATCH_RETURN_SPEEDUP = true;
-
-  boolean DEBUGGER_CAPTURE_POINTS_ANNOTATIONS = false;
-
-  boolean DEBUGGER_CAPTURE_POINTS = false;
 }

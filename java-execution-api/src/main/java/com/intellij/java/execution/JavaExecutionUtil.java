@@ -24,6 +24,9 @@ import com.intellij.java.language.psi.util.ClassUtil;
 import com.intellij.java.language.psi.util.PsiClassUtil;
 import consulo.annotation.DeprecationInfo;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
+import consulo.application.util.TempFileService;
+import consulo.container.boot.ContainerPathManager;
 import consulo.dataContext.DataContext;
 import consulo.execution.action.Location;
 import consulo.execution.action.PsiLocation;
@@ -44,14 +47,20 @@ import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.util.ModuleUtilCore;
+import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.ui.image.Image;
+import consulo.util.io.FilePermissionCopier;
+import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
 import consulo.util.lang.function.Condition;
 import org.jspecify.annotations.Nullable;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,6 +68,8 @@ import java.util.Set;
  * @author spleaner
  */
 public class JavaExecutionUtil {
+  private static final Logger LOG = Logger.getInstance(JavaExecutionUtil.class);
+
   private JavaExecutionUtil() {
   }
 
@@ -233,5 +244,80 @@ public class JavaExecutionUtil {
 
   public static boolean isRunnableClass(final PsiClass aClass) {
     return PsiClassUtil.isRunnableClass(aClass, true);
+  }
+
+  public static @Nullable String handleSpacesInAgentPath(String agentPath,
+                                                         String copyDirName,
+                                                         @Nullable String agentPathPropertyKey) {
+    return handleSpacesInAgentPath(agentPath, copyDirName, agentPathPropertyKey, null);
+  }
+
+  public static @Nullable String handleSpacesInAgentPath(String agentPath,
+                                                         String copyDirName,
+                                                         @Nullable String agentPathPropertyKey,
+                                                         @Nullable FileFilter fileFilter) {
+    String agentName = new File(agentPath).getName();
+    String containingDir = handleSpacesInContainingDir(agentPath, agentName, copyDirName, agentPathPropertyKey, fileFilter);
+    return containingDir == null ? null : FileUtil.join(containingDir, agentName);
+  }
+
+  private static @Nullable String handleSpacesInContainingDir(String agentPath,
+                                                              String agentName,
+                                                              String copyDirName,
+                                                              @Nullable String agentPathPropertyKey,
+                                                              @Nullable FileFilter fileFilter) {
+    String agentContainingDir;
+    String userDefined = agentPathPropertyKey == null ? null : System.getProperty(agentPathPropertyKey);
+    if (userDefined != null && new File(userDefined).exists()) {
+      agentContainingDir = userDefined;
+    }
+    else {
+      agentContainingDir = new File(agentPath).getParent();
+    }
+    if (agentContainingDir.contains(" ")) {
+      String res = tryCopy(agentContainingDir, agentName, new File(ContainerPathManager.get().getSystemPath(), copyDirName), fileFilter);
+      if (res == null) {
+        try {
+          TempFileService tempFileService = Application.get().getInstance(TempFileService.class);
+          res = tryCopy(agentContainingDir, agentName, tempFileService.createTempDirectory(copyDirName, "jars").toFile(), fileFilter);
+          if (res == null) {
+            String message = "agent not used since the agent path contains spaces: " + agentContainingDir;
+            if (agentPathPropertyKey != null) {
+              message += "\nOne can move the agent libraries to a directory with no spaces in path "
+                + "and specify its path in idea.properties as " + agentPathPropertyKey + "=<path>";
+            }
+            LOG.info(message);
+          }
+        }
+        catch (IOException e) {
+          LOG.info(e);
+        }
+      }
+      return res;
+    }
+    return agentContainingDir;
+  }
+
+  private static @Nullable String tryCopy(String agentDir,
+                                          String agentName,
+                                          File targetDir,
+                                          @Nullable FileFilter fileFilter) {
+    if (targetDir.getAbsolutePath().contains(" ")) {
+      return null;
+    }
+    try {
+      if (fileFilter == null) {
+        FileUtil.copy(new File(agentDir, agentName), new File(targetDir, agentName), FilePermissionCopier.BY_NIO2);
+      }
+      else {
+        FileUtil.copyDir(new File(agentDir), targetDir, fileFilter, FilePermissionCopier.BY_NIO2);
+      }
+      LOG.info("Agent jars were copied to " + targetDir.getPath());
+      return targetDir.getPath();
+    }
+    catch (IOException e) {
+      LOG.info(e);
+      return null;
+    }
   }
 }

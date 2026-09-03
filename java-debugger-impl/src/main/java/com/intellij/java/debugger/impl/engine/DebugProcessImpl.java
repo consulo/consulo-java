@@ -1210,6 +1210,17 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         List<? extends Value> args,
         boolean internalEvaluate
     ) throws EvaluateException {
+        return invokeMethod(evaluationContext, classType, method, args, 0, internalEvaluate);
+    }
+
+    public Value invokeMethod(
+        EvaluationContext evaluationContext,
+        ClassType classType,
+        Method method,
+        List<? extends Value> args,
+        int extraInvocationOptions,
+        boolean internalEvaluate
+    ) throws EvaluateException {
         ThreadReference thread = getEvaluationThread(evaluationContext);
         return new InvokeCommand<>(method, args) {
             @Override
@@ -1221,7 +1232,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                 if (LOG.isDebugEnabled()) {
                     LOG.debug("Invoking " + classType.name() + "." + method.name());
                 }
-                return classType.invokeMethod(thread, method, args, invokePolicy);
+                return classType.invokeMethod(thread, method, args, invokePolicy | extraInvocationOptions);
             }
         }.start((EvaluationContextImpl)evaluationContext, internalEvaluate);
     }
@@ -1318,7 +1329,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     }
 
     @Override
-    public ReferenceType findClass(EvaluationContext evaluationContext, String className, ClassLoaderReference classLoader)
+    public ReferenceType findClass(@Nullable EvaluationContext evaluationContext, String className, ClassLoaderReference classLoader)
         throws EvaluateException {
         try {
             DebuggerManagerThreadImpl.assertIsManagerThread();
@@ -1329,9 +1340,11 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                     break;
                 }
             }
-            EvaluationContextImpl evalContext = (EvaluationContextImpl)evaluationContext;
-            if (result == null && evalContext.isAutoLoadClasses()) {
-                return loadClass(evalContext, className, classLoader);
+            if (result == null && evaluationContext != null) {
+                EvaluationContextImpl evalContext = (EvaluationContextImpl)evaluationContext;
+                if (evalContext.isAutoLoadClasses()) {
+                    return loadClass(evalContext, className, classLoader);
+                }
             }
             return result;
         }
@@ -1426,6 +1439,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
     public SuspendManager getSuspendManager() {
         return mySuspendManager;
+    }
+
+    public boolean isEvaluationPossible() {
+        return getSuspendManager().getPausedContext() != null;
     }
 
     @Override

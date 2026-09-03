@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.engine;
 import com.intellij.java.debugger.engine.managerThread.DebuggerCommand;
 import com.intellij.java.debugger.engine.managerThread.DebuggerManagerThread;
 import com.intellij.java.debugger.engine.managerThread.SuspendContextCommand;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.InvokeAndWaitThread;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
@@ -28,7 +29,10 @@ import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import org.jetbrains.annotations.TestOnly;
+import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerCommandImpl> implements DebuggerManagerThread, Disposable {
     private static final Logger LOG = Logger.getInstance(DebuggerManagerThreadImpl.class);
     static final int COMMAND_TIMEOUT = 3000;
+    private static final ThreadLocal<Deque<DebuggerCommandImpl>> ourCurrentCommands = ThreadLocal.withInitial(ArrayDeque::new);
 
     private volatile boolean myDisposed;
 
@@ -61,6 +66,15 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
 
     public static void assertIsManagerThread() {
         LOG.assertTrue(isManagerThread(), "Should be invoked in manager thread, use DebuggerManagerThreadImpl.getInstance(..).invoke...");
+    }
+
+    public static @Nullable DebuggerCommandImpl getCurrentCommand() {
+        return ourCurrentCommands.get().peekLast();
+    }
+
+    public static DebuggerManagerThreadImpl getCurrentThread() {
+        assertIsManagerThread();
+        return (DebuggerManagerThreadImpl) currentThread();
     }
 
     @Override
@@ -133,6 +147,8 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
     @Override
     public void processEvent(DebuggerCommandImpl managerCommand) {
         assertIsManagerThread();
+        Deque<DebuggerCommandImpl> threadCommands = ourCurrentCommands.get();
+        threadCommands.add(managerCommand);
         try {
             if (myEvents.isClosed()) {
                 managerCommand.notifyCancelled();
@@ -151,7 +167,14 @@ public class DebuggerManagerThreadImpl extends InvokeAndWaitThread<DebuggerComma
             throw new RuntimeException(e);
         }
         catch (Exception e) {
+            Throwable unwrap = DebuggerUtilsAsync.unwrap(e);
+            if (unwrap instanceof InterruptedException) {
+                throw new RuntimeException(unwrap);
+            }
             LOG.error(e);
+        }
+        finally {
+            threadCommands.removeLast();
         }
     }
 

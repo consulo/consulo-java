@@ -27,6 +27,7 @@ import consulo.project.Project;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.internal.com.sun.jdi.*;
 import consulo.util.dataholder.UserDataHolder;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -77,7 +78,7 @@ public interface DebugProcess extends UserDataHolder
 
 	Value invokeInstanceMethod(EvaluationContext evaluationContext, ObjectReference objRef, Method method, List<? extends Value> args, int invocationOptions) throws EvaluateException;
 
-	ReferenceType findClass(EvaluationContext evaluationContext, String name, ClassLoaderReference classLoader) throws EvaluateException;
+	ReferenceType findClass(@Nullable EvaluationContext evaluationContext, String name, ClassLoaderReference classLoader) throws EvaluateException;
 
 	ArrayReference newInstance(ArrayType arrayType, int dimension) throws EvaluateException;
 

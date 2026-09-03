@@ -2,6 +2,7 @@
 package com.intellij.java.impl.codeInsight;
 
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.impl.codeInsight.AnnotationsPanel;
 import consulo.dataContext.DataManager;
 import consulo.java.impl.JavaBundle;
 import consulo.localize.LocalizeValue;

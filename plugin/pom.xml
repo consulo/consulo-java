@@ -82,6 +82,10 @@
                                 <path>java-rt.jar</path>
                             </copy>
                             <copy>
+                                <artifact>${project.groupId}:consulo.java-java.debugger.agent:${project.version}</artifact>
+                                <path>debugger-agent.jar</path>
+                            </copy>
+                            <copy>
                                 <artifact>consulo.internal:java.coverage.agent:2.0</artifact>
                                 <path>coverage/consulo/agent.jar</path>
                             </copy>
@@ -406,7 +410,7 @@
         <dependency>
             <groupId>consulo.internal</groupId>
             <artifactId>jdi</artifactId>
-            <version>3-SNAPSHOT</version>
+            <version>4.6</version>
         </dependency>
         <dependency>
             <groupId>consulo.internal.org.objectweb.asm</groupId>
@@ -462,6 +466,12 @@
             <groupId>consulo.internal</groupId>
             <artifactId>java.coverage.agent</artifactId>
             <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>consulo.java-java.debugger.agent</artifactId>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

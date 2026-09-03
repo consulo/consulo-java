@@ -20,18 +20,23 @@ import com.intellij.java.debugger.NoDataException;
 import com.intellij.java.debugger.PositionManager;
 import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.DebuggerUtilsImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
+import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
 import consulo.application.ReadAction;
 import consulo.execution.debug.frame.XStackFrame;
 import consulo.execution.ui.console.LineNumbersMapping;
+import consulo.language.file.FileTypeManager;
 import consulo.virtualFileSystem.fileType.FileType;
+import consulo.virtualFileSystem.fileType.UnknownFileType;
 import consulo.application.progress.ProgressManager;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.language.psi.PsiFile;
 import consulo.util.lang.ThreeState;
+import consulo.internal.com.sun.jdi.AbsentInformationException;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ReferenceType;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
@@ -40,6 +45,12 @@ import consulo.logging.Logger;
 
 import org.jspecify.annotations.Nullable;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
+
+import static java.util.concurrent.CompletableFuture.completedFuture;
+import static java.util.concurrent.CompletableFuture.failedFuture;
 
 public class CompoundPositionManager extends PositionManagerEx implements MultiRequestPositionManager
 {
@@ -108,6 +119,124 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 			}
 		}
 		return defaultValue;
+	}
+
+	private static boolean acceptsFileType(PositionManager positionManager, @Nullable FileType fileType)
+	{
+		if(fileType != null && fileType != UnknownFileType.INSTANCE)
+		{
+			Set<? extends FileType> types = positionManager.getAcceptedFileTypes();
+			if(types != null && !types.contains(fileType))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private <T> CompletableFuture<T> iterateAsync(Function<PositionManager, CompletableFuture<T>> processor,
+												  @Nullable FileType fileType,
+												  boolean ignorePCE)
+	{
+		CompletableFuture<T> res = failedFuture(NoDataException.INSTANCE);
+		for(PositionManager positionManager : myPositionManagers)
+		{
+			if(acceptsFileType(positionManager, fileType))
+			{
+				res = res.exceptionallyCompose(e ->
+				{
+					Throwable unwrap = DebuggerUtilsAsync.unwrap(e);
+					if(unwrap instanceof NoDataException)
+					{
+						if(!ignorePCE)
+						{
+							ProgressManager.checkCanceled();
+						}
+						return processor.apply(positionManager);
+					}
+					return failedFuture(unwrap);
+				});
+			}
+		}
+		return res;
+	}
+
+	private static CompletableFuture<SourcePosition> getSourcePositionAsync(PositionManager positionManager, Location location)
+	{
+		// Consulo's PositionManager has no async variant (JB's PositionManagerAsync), so every manager is queried synchronously
+		try
+		{
+			return completedFuture(ReadAction.nonBlocking(() -> positionManager.getSourcePosition(location)).executeSynchronously());
+		}
+		catch(Exception e)
+		{
+			Throwable cause = e;
+			// NonBlockingReadAction.executeSynchronously() wraps checked exceptions of the computation
+			// into RuntimeException(ExecutionException(...)), unwrap it so that NoDataException reaches iterateAsync()
+			if(cause.getClass() == RuntimeException.class && cause.getCause() instanceof ExecutionException)
+			{
+				cause = cause.getCause();
+			}
+			return failedFuture(DebuggerUtilsAsync.unwrap(cause));
+		}
+	}
+
+	public CompletableFuture<SourcePosition> getSourcePositionFuture(final Location location)
+	{
+		return DebuggerUtilsAsync.reschedule(getCachedSourcePosition(location,
+				fileType -> iterateAsync(positionManager -> getSourcePositionAsync(positionManager, location), fileType, false)));
+	}
+
+	private CompletableFuture<SourcePosition> getCachedSourcePosition(Location location,
+																	  Function<FileType, CompletableFuture<SourcePosition>> producer)
+	{
+		if(location == null)
+		{
+			return completedFuture(null);
+		}
+		SourcePosition res = null;
+		try
+		{
+			res = mySourcePositionCache.get(location);
+		}
+		catch(IllegalArgumentException ignored)
+		{ // Invalid method id
+		}
+		final SourcePosition cached = res;
+		if(ReadAction.compute(() -> checkCacheEntry(cached, location)))
+		{
+			return completedFuture(cached);
+		}
+
+		FileType fileType = ReadAction.compute(() ->
+		{
+			String sourceName = getSourceName(location);
+			return sourceName != null ? FileTypeManager.getInstance().getFileTypeByFileName(sourceName) : null;
+		});
+		return producer.apply(fileType).thenApply(p ->
+		{
+			try
+			{
+				mySourcePositionCache.put(location, p);
+			}
+			catch(IllegalArgumentException ignored)
+			{ // Invalid method id
+			}
+			return p;
+		});
+	}
+
+	@Nullable
+	private static String getSourceName(Location location)
+	{
+		try
+		{
+			return location.sourceName();
+		}
+		catch(InternalError | AbsentInformationException e)
+		{
+			return null;
+		}
 	}
 
 	@Nullable
@@ -248,6 +377,28 @@ public class CompoundPositionManager extends PositionManagerEx implements MultiR
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Consulo: position managers provide at most one custom frame per location
+	 * (see {@link #createStackFrame(StackFrameProxyImpl, DebugProcessImpl, Location)}), so the result is either a singleton list or null
+	 */
+	@Nullable
+	public List<XStackFrame> createStackFrames(StackFrameDescriptorImpl descriptor)
+	{
+		Location location = descriptor.getLocation();
+		if(location == null)
+		{
+			return null;
+		}
+		XStackFrame xStackFrame = createStackFrame(descriptor.getFrameProxy(), (DebugProcessImpl) descriptor.getDebugProcess(), location);
+		return xStackFrame != null ? Collections.singletonList(xStackFrame) : null;
+	}
+
+	public CompletableFuture<List<XStackFrame>> createStackFramesAsync(StackFrameDescriptorImpl descriptor)
+	{
+		// Consulo has no coroutine command infrastructure (invokeCommandAsCompletableFuture), the frames are computed synchronously
+		return DebuggerUtilsAsync.toCompletableFuture(() -> createStackFrames(descriptor));
 	}
 
 	@Override

@@ -109,7 +109,7 @@
     <dependency>
       <groupId>consulo.internal</groupId>
       <artifactId>jdi</artifactId>
-      <version>3-SNAPSHOT</version>
+      <version>4.6</version>
     </dependency>
   </dependencies>
 </project>

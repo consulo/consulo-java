@@ -1,0 +1,7 @@
+IntelliJ debugger agent
+Copyright 2000-2026 JetBrains s.r.o. and contributors.
+
+The sources in this module are a copy of the JetBrains debugger agent
+(https://github.com/JetBrains/debugger-agent, published as org.jetbrains.intellij.deps:debugger-agent, version 1.191),
+licensed under the Apache License, Version 2.0 (see LICENSE.txt). The only Consulo change is that the ASM imports point
+at Consulo's relocated ASM build (consulo.internal.org.objectweb.asm) instead of the JetBrains relocation.

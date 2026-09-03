@@ -31,6 +31,7 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.application.Application;
 import consulo.application.dumb.IndexNotReadyException;
+import consulo.application.util.function.ThrowableComputable;
 import consulo.component.extension.ExtensionPoint;
 import consulo.dataContext.DataContext;
 import consulo.internal.com.sun.jdi.*;
@@ -52,10 +53,17 @@ import org.jdom.Element;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
 
 @ServiceAPI(ComponentScope.APPLICATION)
 public abstract class DebuggerUtils {
     private static final Logger LOG = Logger.getInstance(DebuggerUtils.class);
+
+    public abstract <R, T> R processCollectibleValue(
+        ThrowableComputable<? extends T, ? extends EvaluateException> valueComputable,
+        Function<? super T, ? extends R> processor,
+        EvaluationContext evaluationContext
+    ) throws EvaluateException;
     private static final Key<Method> TO_STRING_METHOD_KEY = Key.create("CachedToStringMethod");
     public static final Set<String> ourPrimitiveTypeNames =
         new HashSet<>(Arrays.asList("byte", "short", "int", "long", "float", "double", "boolean", "char"));

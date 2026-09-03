@@ -19,7 +19,10 @@ import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.SimpleStackFrameContext;
+import com.intellij.java.debugger.impl.engine.CompoundPositionManager;
 import com.intellij.java.debugger.impl.engine.ContextUtil;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
@@ -28,20 +31,22 @@ import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
 import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
 import com.intellij.java.debugger.impl.ui.tree.StackFrameDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.DescriptorLabelListener;
-import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.frame.XValueMarkers;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
 import consulo.language.editor.FileColorManager;
+import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
-import consulo.module.content.ProjectFileIndex;
-import consulo.module.content.ProjectRootManager;
 import consulo.project.Project;
 import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Nodes of this type cannot be updated, because StackFrame objects become invalid as soon as VM has been resumed
@@ -51,62 +56,114 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
     private int myUiIndex;
     private String myName = null;
     private Location myLocation;
-    private MethodsTracker.MethodOccurrence myMethodOccurrence;
+    private @Nullable Method myMethod;
+    private @Nullable MethodsTracker.MethodOccurrence myMethodOccurrence;
     private boolean myIsSynthetic;
     private boolean myIsInLibraryContent;
     private ObjectReference myThisObject;
     private Color myBackgroundColor;
     private SourcePosition mySourcePosition;
 
-    public StackFrameDescriptorImpl(StackFrameProxyImpl frame, MethodsTracker tracker) {
+    /**
+     * Prefer this constructor over {@link #StackFrameDescriptorImpl(MethodsTracker, StackFrameProxyImpl)}
+     * if tracking recursive calls is not required.
+     */
+    public StackFrameDescriptorImpl(StackFrameProxyImpl frame) {
+        this(frame, null);
+    }
+
+    /**
+     * @deprecated Use {@link #StackFrameDescriptorImpl(MethodsTracker, StackFrameProxyImpl)} if you aim at tracking recusrion calls,
+     *             or {@link #StackFrameDescriptorImpl(StackFrameProxyImpl)} otherwise.
+     */
+    @Deprecated(forRemoval = true)
+    public StackFrameDescriptorImpl(StackFrameProxyImpl frame,
+                                    @Nullable MethodsTracker tracker) {
+        this(frame, false, null, tracker,
+             ContextUtil.getSourcePosition(new SimpleStackFrameContext(frame, frame.getVirtualMachine().getDebugProcess())));
+    }
+
+    /**
+     * @param tracker Used to show recursion count. If your implementation doesn't need it,
+     *                consider using {@link #StackFrameDescriptorImpl(StackFrameProxyImpl)} instead.
+     *                <b>{@code tracker} should be shared between all frames in the stacktrace!</b>
+     */
+    public StackFrameDescriptorImpl(MethodsTracker tracker,
+                                    StackFrameProxyImpl frame) {
+        this(frame, false, null, tracker,
+             ContextUtil.getSourcePosition(new SimpleStackFrameContext(frame, frame.getVirtualMachine().getDebugProcess())));
+    }
+
+    private StackFrameDescriptorImpl(StackFrameProxyImpl frame,
+                                     boolean useMethod,
+                                     @Nullable Method method,
+                                     @Nullable MethodsTracker tracker,
+                                     @Nullable SourcePosition sourcePosition) {
         myFrame = frame;
 
         try {
             myUiIndex = frame.getFrameIndex();
             myLocation = frame.location();
-            try {
-                myThisObject = frame.thisObject();
+            if (!getValueMarkers().isEmpty()) {
+                getThisObject(); // init this object for markup
             }
-            catch (EvaluateException e) {
-                // catch internal exceptions here
-                if (!(e.getCause() instanceof InternalException)) {
-                    throw e;
-                }
-                LOG.info(e);
-            }
-            myMethodOccurrence = tracker.getMethodOccurrence(myUiIndex, myLocation.method());
-            myIsSynthetic = DebuggerUtils.isSynthetic(myMethodOccurrence.getMethod());
-            ApplicationManager.getApplication().runReadAction(new Runnable() {
-                @Override
-                public void run() {
-                    Project project = StackFrameDescriptorImpl.this.getDebugProcess().getProject();
-
-                    mySourcePosition = ContextUtil.getSourcePosition(StackFrameDescriptorImpl.this);
-                    final VirtualFile file = mySourcePosition != null ? mySourcePosition.getVirtualFile() : null;
-                    if (file == null) {
-                        myIsInLibraryContent = true;
-                    }
-                    else {
-                        myBackgroundColor = FileColorManager.getInstance(project).getFileColor(file);
-
-                        ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-
-                        myIsInLibraryContent = projectFileIndex.isInLibraryClasses(file) || projectFileIndex.isInLibrarySource(file);
-                    }
-                }
-            });
+            myMethod = useMethod ? method : DebuggerUtilsEx.getMethod(myLocation);
+            myMethodOccurrence = tracker == null ? null : tracker.getMethodOccurrence(myUiIndex, myMethod);
+            myIsSynthetic = DebuggerUtils.isSynthetic(myMethod);
+            mySourcePosition = sourcePosition;
+            PsiFile psiFile = mySourcePosition != null ? mySourcePosition.getFile() : null;
+            VirtualFile file = psiFile != null ? psiFile.getVirtualFile() : null;
+            Project project = getDebugProcess().getProject();
+            myIsInLibraryContent = DebuggerUtilsEx.isInLibraryContent(file, project);
+            // Consulo-specific: StackFrameDescriptor.getBackgroundColor() contract
+            myBackgroundColor = file != null ? ReadAction.compute(() -> FileColorManager.getInstance(project).getFileColor(file)) : null;
         }
         catch (InternalException | EvaluateException e) {
             LOG.info(e);
             myLocation = null;
-            myMethodOccurrence = tracker.getMethodOccurrence(0, null);
+            myMethodOccurrence = null;
             myIsSynthetic = false;
             myIsInLibraryContent = false;
         }
     }
 
+    private static CompletableFuture<SourcePosition> getSourcePositionAsync(Location location, StackFrameProxyImpl frame) {
+        try {
+            CompoundPositionManager positionManager = ((DebugProcessImpl) frame.getVirtualMachine().getDebugProcess()).getPositionManager();
+            return positionManager.getSourcePositionFuture(location);
+        }
+        catch (Exception e) {
+            return CompletableFuture.failedFuture(e);
+        }
+    }
+
+    public static CompletableFuture<StackFrameDescriptorImpl> createAsync(StackFrameProxyImpl frame,
+                                                                          MethodsTracker tracker) {
+        CompletableFuture<Location> locationAsync = frame.locationAsync();
+        CompletableFuture<SourcePosition> positionAsync =
+            locationAsync.thenCompose(location -> getSourcePositionAsync(location, frame));
+        return locationAsync
+            .thenCompose(DebuggerUtilsAsync::method)
+            .thenCombine(positionAsync, (method, position) -> {
+                DebuggerManagerThreadImpl.assertIsManagerThread();
+                return new StackFrameDescriptorImpl(frame, true, method, tracker, position);
+            })
+            .exceptionally(throwable -> {
+                Throwable exception = DebuggerUtilsAsync.unwrap(throwable);
+                if (exception instanceof EvaluateException) {
+                    // TODO: simplify when only async method left
+                    if (!(exception.getCause() instanceof InvalidStackFrameException)) {
+                        LOG.error(new Exception(exception));
+                    }
+                    DebuggerManagerThreadImpl.assertIsManagerThread();
+                    return new StackFrameDescriptorImpl(frame, tracker); // fallback to sync
+                }
+                throw (RuntimeException) throwable;
+            });
+    }
+
     public boolean canDrop() {
-        return !myFrame.isBottom() && myMethodOccurrence.canDrop();
+        return !myFrame.isBottom() && myMethodOccurrence != null && myMethodOccurrence.canDrop();
     }
 
     public int getUiIndex() {
@@ -128,32 +185,36 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
         return myBackgroundColor;
     }
 
-    @Nullable
-    public Method getMethod() {
-        return myMethodOccurrence.getMethod();
+    public @Nullable Method getMethod() {
+        return myMethod;
     }
 
     public int getOccurrenceIndex() {
-        return myMethodOccurrence.getIndex();
+        return myMethodOccurrence == null ? 0 : myMethodOccurrence.getIndex();
     }
 
     public boolean isRecursiveCall() {
-        return myMethodOccurrence.isRecursive();
+        return myMethodOccurrence != null && myMethodOccurrence.isRecursive();
     }
 
-    @Nullable
-    public ValueMarkup getValueMarkup() {
-        if (myThisObject != null) {
-            DebugProcess process = myFrame.getVirtualMachine().getDebugProcess();
-            if (process instanceof DebugProcessImpl) {
-                XDebugSession session = ((DebugProcessImpl) process).getSession().getXDebugSession();
-                XValueMarkers<?, ?> markers = session == null ? null : session.getValueMarkers();
-                if (markers != null) {
-                    return markers.getAllMarkers().get(myThisObject);
-                }
-            }
+    public @Nullable ValueMarkup getValueMarkup() {
+        Map<?, ValueMarkup> markers = getValueMarkers();
+        if (!markers.isEmpty() && myThisObject != null) {
+            return markers.get(myThisObject);
         }
         return null;
+    }
+
+    private Map<?, ValueMarkup> getValueMarkers() {
+        DebugProcess process = myFrame.getVirtualMachine().getDebugProcess();
+        if (process instanceof DebugProcessImpl debugProcess) {
+            XDebugSession session = debugProcess.getSession().getXDebugSession();
+            XValueMarkers<?, ?> markers = session == null ? null : session.getValueMarkers();
+            if (markers != null) {
+                return markers.getAllMarkers();
+            }
+        }
+        return Collections.emptyMap();
     }
 
     @Override
@@ -170,7 +231,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
         }
         ThreadsViewSettings settings = ThreadsViewSettings.getInstance();
         final StringBuilder label = new StringBuilder();
-        Method method = myMethodOccurrence.getMethod();
+        Method method = myMethod;
         if (method != null) {
             myName = method.name();
             label.append(settings.SHOW_ARGUMENTS_TYPES ? DebuggerUtilsEx.methodNameWithArguments(method) : myName);
@@ -252,8 +313,7 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
         return myIsInLibraryContent;
     }
 
-    @Nullable
-    public Location getLocation() {
+    public @Nullable Location getLocation() {
         return myLocation;
     }
 
@@ -261,7 +321,15 @@ public class StackFrameDescriptorImpl extends NodeDescriptorImpl implements Stac
         return mySourcePosition;
     }
 
-    public ObjectReference getThisObject() {
+    public @Nullable ObjectReference getThisObject() {
+        if (myThisObject == null) {
+            try {
+                myThisObject = myFrame.thisObject();
+            }
+            catch (EvaluateException e) {
+                LOG.info(e);
+            }
+        }
         return myThisObject;
     }
 }

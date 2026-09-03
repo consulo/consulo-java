@@ -58,6 +58,7 @@
 		<module>java-debugger-api</module>
 		<module>java-debugger-impl</module>
 		<module>java-debugger-image-impl</module>
+		<module>java-debugger-agent</module>
 
 		<module>java-language-api</module>
 		<module>java-language-impl</module>

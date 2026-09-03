@@ -38,6 +38,7 @@ import consulo.execution.ui.RunContentDescriptor;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
+import consulo.project.Project;
 import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
 
@@ -74,18 +75,20 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         if (state instanceof JavaCommandLine commandLine) {
             OwnJavaParameters parameters = commandLine.getJavaParameters();
             runCustomPatchers(parameters, environment.getExecutor(), environment.getRunProfile());
-            RemoteConnection connection = DebuggerManagerImpl.createDebugParameters(
-                parameters,
+            int transport = DebuggerSettings.getInstance().DEBUGGER_TRANSPORT;
+            RemoteConnection connection = new RemoteConnectionBuilder(
                 true,
-                DebuggerSettings.getInstance().DEBUGGER_TRANSPORT,
-                "",
-                false
-            );
+                transport,
+                transport == DebuggerSettings.SOCKET_TRANSPORT ? "0" : ""
+            )
+                .asyncAgent(true)
+                .project(environment.getProject())
+                .create(parameters);
             return attachVirtualMachine(state, environment, connection, true);
         }
 
         if (state instanceof PatchedRunnableState) {
-            RemoteConnection connection = doPatch(new OwnJavaParameters(), environment.getRunnerSettings());
+            RemoteConnection connection = createPatchedConnection(environment);
             return attachVirtualMachine(state, environment, connection, true);
         }
 
@@ -149,6 +152,7 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         return new GenericDebuggerRunnerSettings();
     }
 
+    // used externally
     @Override
     public void patch(
         OwnJavaParameters javaParameters,
@@ -156,7 +160,12 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         RunProfile runProfile,
         boolean beforeExecution
     ) throws ExecutionException {
-        doPatch(javaParameters, settings);
+        doPatch(
+            javaParameters,
+            settings,
+            beforeExecution,
+            runProfile instanceof RunConfiguration runConfiguration ? runConfiguration.getProject() : null
+        );
         runCustomPatchers(
             javaParameters,
             Application.get().getExtensionPoint(Executor.class).findExtension(DefaultDebugExecutor.class),
@@ -164,12 +173,24 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
         );
     }
 
-    private static RemoteConnection doPatch(OwnJavaParameters javaParameters, RunnerSettings settings) throws ExecutionException {
+    public static RemoteConnection createPatchedConnection(ExecutionEnvironment environment) throws ExecutionException {
+        return doPatch(new OwnJavaParameters(), environment.getRunnerSettings(), true, environment.getProject());
+    }
+
+    private static RemoteConnection doPatch(
+        OwnJavaParameters javaParameters,
+        RunnerSettings settings,
+        boolean beforeExecution,
+        @Nullable Project project
+    ) throws ExecutionException {
         GenericDebuggerRunnerSettings debuggerSettings = ((GenericDebuggerRunnerSettings)settings);
         if (StringUtil.isEmpty(debuggerSettings.getDebugPort())) {
             debuggerSettings.setDebugPort(DebuggerUtils.getInstance().findAvailableDebugAddress(debuggerSettings.getTransport() == DebuggerSettings.SOCKET_TRANSPORT));
         }
-        return DebuggerManagerImpl.createDebugParameters(javaParameters, debuggerSettings, false);
+        return new RemoteConnectionBuilder(debuggerSettings.LOCAL, debuggerSettings.getTransport(), debuggerSettings.getDebugPort())
+            .asyncAgent(beforeExecution)
+            .project(project)
+            .create(javaParameters);
     }
 
     @Override

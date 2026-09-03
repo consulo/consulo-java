@@ -20,25 +20,30 @@
 package com.intellij.java.debugger.impl.jdi;
 
 import com.intellij.java.debugger.DebuggerBundle;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluateExceptionUtil;
 import com.intellij.java.debugger.engine.jdi.StackFrameProxy;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.internal.com.sun.jdi.*;
 import consulo.logging.Logger;
 
 import org.jspecify.annotations.Nullable;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 {
 	private static final Logger LOG = Logger.getInstance(StackFrameProxyImpl.class);
+	public static final int FRAMES_BATCH_MAX = 20;
 	private final ThreadReferenceProxyImpl myThreadProxy;
 	private final int myFrameFromBottomIndex; // 1-based
 
 	//caches
-	private int myFrameIndex = -1;
-	private StackFrame myStackFrame;
+	private volatile int myFrameIndex = -1;
+	private volatile StackFrame myStackFrame;
 	private ObjectReference myThisReference;
 	private ClassLoaderReference myClassLoader;
 	private Boolean myIsObsolete = null;
@@ -123,7 +128,17 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 			try
 			{
 				final ThreadReference threadRef = myThreadProxy.getThreadReference();
-				myStackFrame = threadRef.frame(getFrameIndex());
+				int index = getFrameIndex();
+				// batch get frames from 1 to FRAMES_BATCH_MAX
+				// making this number very high does not help much because renderers invocation usually flush all caches
+				if(index > 0 && index < FRAMES_BATCH_MAX)
+				{
+					myStackFrame = threadRef.frames(0, Math.min(myThreadProxy.frameCount(), FRAMES_BATCH_MAX)).get(index);
+				}
+				else
+				{
+					myStackFrame = threadRef.frame(index);
+				}
 			}
 			catch(IndexOutOfBoundsException e)
 			{
@@ -140,6 +155,49 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 		}
 
 		return myStackFrame;
+	}
+
+	public CompletableFuture<StackFrame> getStackFrameAsync()
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+
+		checkValid();
+
+		if(myStackFrame == null)
+		{
+			ThreadReference threadRef = myThreadProxy.getThreadReference();
+			return getFrameIndexAsync().thenCompose(index ->
+			{
+				// batch get frames from 1 to FRAMES_BATCH_MAX
+				// making this number very high does not help much because renderers invocation usually flush all caches
+				if(index > 0 && index < FRAMES_BATCH_MAX)
+				{
+					try
+					{
+						return DebuggerUtilsAsync.frames(threadRef, 0, Math.min(myThreadProxy.frameCount(), FRAMES_BATCH_MAX))
+								.thenApply(frames -> myStackFrame = frames.get(index));
+					}
+					catch(EvaluateException e)
+					{
+						return CompletableFuture.failedFuture(e);
+					}
+				}
+				else
+				{
+					return DebuggerUtilsAsync.frame(threadRef, index).thenApply(f -> myStackFrame = f);
+				}
+			}).exceptionally(throwable ->
+			{
+				if(DebuggerUtilsAsync.unwrap(throwable) instanceof ObjectCollectedException)
+				{
+					throw new CompletionException(
+							EvaluateExceptionUtil.createEvaluateException(JavaDebuggerLocalize.evaluationErrorThreadCollected()));
+				}
+				throw (RuntimeException) throwable;
+			});
+		}
+
+		return CompletableFuture.completedFuture(myStackFrame);
 	}
 
 	@Override
@@ -159,6 +217,25 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 			myFrameIndex = count - myFrameFromBottomIndex;
 		}
 		return myFrameIndex;
+	}
+
+	public CompletableFuture<Integer> getFrameIndexAsync()
+	{
+		DebuggerManagerThreadImpl.assertIsManagerThread();
+		checkValid();
+		if(myFrameIndex == -1)
+		{
+			return myThreadProxy.frameCountAsync().thenApply(count ->
+			{
+				if(myFrameFromBottomIndex > count)
+				{
+					throw new CompletionException(EvaluateExceptionUtil.createEvaluateException(new IncompatibleThreadStateException()));
+				}
+				myFrameIndex = count - myFrameFromBottomIndex;
+				return myFrameIndex;
+			});
+		}
+		return CompletableFuture.completedFuture(myFrameIndex);
 	}
 
 	//  public boolean isProxiedFrameValid() {
@@ -201,6 +278,30 @@ public class StackFrameProxyImpl extends JdiProxy implements StackFrameProxy
 			throw new EvaluateException(error.getMessage(), error);
 		}
 		return null;
+	}
+
+	public CompletableFuture<Location> locationAsync()
+	{
+		return locationAsync(1);
+	}
+
+	private CompletableFuture<Location> locationAsync(int attempt)
+	{
+		return getStackFrameAsync().thenCompose(frame ->
+		{
+			try
+			{
+				return CompletableFuture.completedFuture(frame.location());
+			}
+			catch(InvalidStackFrameException e)
+			{
+				if(attempt > 0)
+				{
+					return locationAsync(attempt - 1);
+				}
+				throw new CompletionException(new EvaluateException(e.getMessage(), e));
+			}
+		});
 	}
 
 	@Override

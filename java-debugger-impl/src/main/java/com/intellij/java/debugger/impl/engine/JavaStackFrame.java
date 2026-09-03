@@ -29,8 +29,6 @@ import com.intellij.java.debugger.impl.jdi.DecompiledLocalVariable;
 import com.intellij.java.debugger.impl.jdi.LocalVariableProxyImpl;
 import com.intellij.java.debugger.impl.jdi.LocalVariablesUtil;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
-import com.intellij.java.debugger.impl.memory.utils.StackFrameItem;
-import com.intellij.java.debugger.impl.settings.CapturePoint;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
@@ -62,7 +60,6 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.ui.ex.ColoredTextContainer;
-import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.CharArrayUtil;
@@ -92,7 +89,6 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
     private static final JavaFramesListRenderer FRAME_RENDERER = new JavaFramesListRenderer();
     private JavaDebuggerEvaluator myEvaluator = null;
     private final String myEqualityObject;
-    private CapturePoint myInsertCapturePoint;
 
     public JavaStackFrame(StackFrameDescriptorImpl descriptor, boolean update) {
         myDescriptor = descriptor;
@@ -136,9 +132,6 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
             }
         }
         FRAME_RENDERER.customizePresentation(myDescriptor, component, selectedDescriptor);
-        if (myInsertCapturePoint != null) {
-            component.setIcon(XDebuggerUIConstants.INFORMATION_MESSAGE_ICON);
-        }
     }
 
     @Override
@@ -159,15 +152,6 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
             public void threadAction() {
                 if (node.isObsolete()) {
                     return;
-                }
-                if (myInsertCapturePoint != null) {
-                    node.setMessage(
-                        "Async stacktrace from " + myInsertCapturePoint.myClassName + "." +
-                            myInsertCapturePoint.myMethodName + " could be available here, enable in",
-                        XDebuggerUIConstants.INFORMATION_MESSAGE_ICON,
-                        SimpleTextAttributes.REGULAR_ATTRIBUTES,
-                        StackFrameItem.CAPTURE_SETTINGS_OPENER
-                    );
                 }
                 XValueChildrenList children = new XValueChildrenList();
                 buildVariablesThreadAction(getFrameDebuggerContext(getDebuggerContext()), children, node);
@@ -736,10 +720,6 @@ public class JavaStackFrame extends XStackFrame implements JVMStackFrameInfoProv
             }
         });
         return rangeRef.get();
-    }
-
-    public void setInsertCapturePoint(CapturePoint insertCapturePoint) {
-        myInsertCapturePoint = insertCapturePoint;
     }
 
     @Override

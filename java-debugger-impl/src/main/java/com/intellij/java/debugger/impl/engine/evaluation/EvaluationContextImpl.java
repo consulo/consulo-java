@@ -127,6 +127,17 @@ public final class EvaluationContextImpl implements EvaluationContext
 		return myAutoLoadClasses;
 	}
 
+	public EvaluationContextImpl withAutoLoadClasses(boolean autoLoadClasses)
+	{
+		if(myAutoLoadClasses == autoLoadClasses)
+		{
+			return this;
+		}
+		EvaluationContextImpl copy = new EvaluationContextImpl(mySuspendContext, myFrameProxy, myThisObject.getValue());
+		copy.setAutoLoadClasses(autoLoadClasses);
+		return copy;
+	}
+
 	public void setAutoLoadClasses(final boolean autoLoadClasses)
 	{
 		myAutoLoadClasses = autoLoadClasses;
