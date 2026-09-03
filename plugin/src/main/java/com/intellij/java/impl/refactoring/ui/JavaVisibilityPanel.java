@@ -30,16 +30,15 @@ import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.ui.VisibilityPanelBase;
 import consulo.ui.Component;
 import consulo.ui.RadioButton;
-import consulo.ui.ValueComponent;
-import consulo.ui.ValueGroup;
+import consulo.ui.RadioGroup;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.event.ComponentEventListener;
-import consulo.ui.event.ValueComponentEvent;
 import consulo.ui.layout.LabeledLayout;
 import consulo.ui.layout.VerticalLayout;
 import org.jspecify.annotations.Nullable;
 
 public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
+    private static final String AS_IS = "AS_IS";
+
     private RadioButton myRbAsIs;
     private RadioButton myRbEscalate;
     private final RadioButton myRbPrivate;
@@ -49,48 +48,37 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
 
     private final LabeledLayout myLayout;
 
+    private final RadioGroup<String> myVisibilityGroup;
+
     public JavaVisibilityPanel(boolean hasAsIs, boolean hasEscalate) {
         VerticalLayout layout = VerticalLayout.create();
 
-        ValueGroup<Boolean> bg = ValueGroup.createBool();
-
-        ComponentEventListener<ValueComponent<Boolean>, ValueComponentEvent<Boolean>> listener = e -> {
-            myEventDispatcher.getMulticaster().visibilityChanged(this);
-        };
+        myVisibilityGroup = RadioGroup.create();
+        myVisibilityGroup.addValueListener(s -> myEventDispatcher.getMulticaster().visibilityChanged(this));
 
         if (hasEscalate) {
-            myRbEscalate = RadioButton.create(RefactoringLocalize.visibilityEscalate());
-            myRbEscalate.addValueListener(listener);
+            myRbEscalate = myVisibilityGroup.newButton(RefactoringLocalize.visibilityEscalate(), VisibilityUtil.ESCALATE_VISIBILITY);
             layout.add(myRbEscalate);
-            bg.add(myRbEscalate);
         }
 
         if (hasAsIs) {
-            myRbAsIs = RadioButton.create(RefactoringLocalize.visibilityAsIs());
-            myRbAsIs.addValueListener(listener);
+            myRbAsIs = myVisibilityGroup.newButton(RefactoringLocalize.visibilityAsIs(), AS_IS);
             layout.add(myRbAsIs);
-            bg.add(myRbAsIs);
         }
 
-        myRbPrivate = RadioButton.create(RefactoringLocalize.visibilityPrivate());
-        myRbPrivate.addValueListener(listener);
+        myRbPrivate = myVisibilityGroup.newButton(RefactoringLocalize.visibilityPrivate(), PsiModifier.PRIVATE);
         layout.add(myRbPrivate);
-        bg.add(myRbPrivate);
 
-        myRbPackageLocal = RadioButton.create(RefactoringLocalize.visibilityPackageLocal());
-        myRbPackageLocal.addValueListener(listener);
+        myRbPackageLocal = myVisibilityGroup.newButton(RefactoringLocalize.visibilityPackageLocal(), PsiModifier.PACKAGE_LOCAL);
         layout.add(myRbPackageLocal);
-        bg.add(myRbPackageLocal);
 
-        myRbProtected = RadioButton.create(RefactoringLocalize.visibilityProtected());
-        myRbProtected.addValueListener(listener);
+        myRbProtected = myVisibilityGroup.newButton(RefactoringLocalize.visibilityProtected(), PsiModifier.PROTECTED);
         layout.add(myRbProtected);
-        bg.add(myRbProtected);
 
-        myRbPublic = RadioButton.create(RefactoringLocalize.visibilityPublic());
-        myRbPublic.addValueListener(listener);
+        myRbPublic = myVisibilityGroup.newButton(RefactoringLocalize.visibilityPublic(), PsiModifier.PUBLIC);
         layout.add(myRbPublic);
-        bg.add(myRbPublic);
+
+        myVisibilityGroup.setValue(PsiModifier.PUBLIC);
 
         myLayout = LabeledLayout.create(RefactoringLocalize.visibilityBorderTitle(), layout);
     }
@@ -99,44 +87,23 @@ public class JavaVisibilityPanel extends VisibilityPanelBase<String> {
     @Nullable
     @RequiredUIAccess
     public String getVisibility() {
-        if (myRbPublic.getValueOrError()) {
-            return PsiModifier.PUBLIC;
-        }
-        if (myRbPackageLocal.getValueOrError()) {
-            return PsiModifier.PACKAGE_LOCAL;
-        }
-        if (myRbProtected.getValueOrError()) {
-            return PsiModifier.PROTECTED;
-        }
-        if (myRbPrivate.getValueOrError()) {
-            return PsiModifier.PRIVATE;
-        }
-        if (myRbEscalate != null && myRbEscalate.getValueOrError()) {
-            return VisibilityUtil.ESCALATE_VISIBILITY;
-        }
-
-        return null;
+        String value = myVisibilityGroup.getValueOrError();
+        return switch (value) {
+            case AS_IS -> null;
+            default -> value;
+        };
     }
 
     @Override
     public void setVisibility(@Nullable String visibility) {
-        if (PsiModifier.PUBLIC.equals(visibility)) {
-            myRbPublic.setValue(true);
-        }
-        else if (PsiModifier.PROTECTED.equals(visibility)) {
-            myRbProtected.setValue(true);
-        }
-        else if (PsiModifier.PACKAGE_LOCAL.equals(visibility)) {
-            myRbPackageLocal.setValue(true);
-        }
-        else if (PsiModifier.PRIVATE.equals(visibility)) {
-            myRbPrivate.setValue(true);
+        if (visibility != null) {
+            myVisibilityGroup.setValue(visibility);
         }
         else if (myRbEscalate != null) {
-            myRbEscalate.setValue(true);
+            myVisibilityGroup.setValue(VisibilityUtil.ESCALATE_VISIBILITY);
         }
         else if (myRbAsIs != null) {
-            myRbAsIs.setValue(true);
+            myVisibilityGroup.setValue(AS_IS);
         }
     }
 

@@ -30,7 +30,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiReference;
 import consulo.project.Project;
 import consulo.ui.RadioButton;
-import consulo.ui.ValueGroup;
+import consulo.ui.RadioGroup;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.layout.LabeledLayout;
@@ -113,13 +113,12 @@ public class MoveInnerToUpperOrMembersHandler extends MoveHandlerDelegate {
 
         @Override
         protected JComponent createCenterPanel() {
-            myRbMoveInner = RadioButton.create(RefactoringLocalize.moveInnerClassToUpperLevel(myClassName));
-            myRbMoveInner.setValue(true);
-            myRbMoveMembers = RadioButton.create(RefactoringLocalize.moveInnerClassToAnotherClass(myClassName));
+            RadioGroup<Boolean> group = RadioGroup.create();
 
-            ValueGroup<Boolean> group = ValueGroup.createBool();
-            group.add(myRbMoveInner);
-            group.add(myRbMoveMembers);
+            myRbMoveInner = group.newButton(RefactoringLocalize.moveInnerClassToUpperLevel(myClassName), Boolean.TRUE);
+            myRbMoveMembers = group.newButton(RefactoringLocalize.moveInnerClassToAnotherClass(myClassName), Boolean.FALSE);
+
+            group.setValue(true);
 
             RadioUpDownListener.registerListener(myRbMoveInner, myRbMoveMembers);
 
