@@ -19,6 +19,7 @@ import com.intellij.java.indexing.impl.stubs.index.JavaAutoModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaFullClassNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.indexing.impl.stubs.index.JavaSourceModuleNameIndex;
+import com.intellij.java.indexing.search.searches.JavaModuleSearch;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.impl.psi.impl.file.impl.JavaFileManager;
@@ -213,17 +214,7 @@ public class JavaFileManagerImpl implements JavaFileManager, Disposable {
   @Override
   public Collection<PsiJavaModule> findModules(String moduleName, GlobalSearchScope scope) {
     GlobalSearchScope excludingScope = new LibSrcExcludingScope(scope);
-
-    List<PsiJavaModule> results = new ArrayList<>(JavaModuleNameIndex.getInstance().get(moduleName, myManager.getProject(), excludingScope));
-
-    for (VirtualFile manifest : JavaSourceModuleNameIndex.getFilesByKey(moduleName, excludingScope)) {
-      ContainerUtil.addIfNotNull(results, LightJavaModule.findModule(myManager, manifest.getParent().getParent()));
-    }
-
-    for (VirtualFile root : JavaAutoModuleNameIndex.getFilesByKey(moduleName, excludingScope)) {
-      ContainerUtil.addIfNotNull(results, LightJavaModule.findModule(myManager, root));
-    }
-
+    Collection<PsiJavaModule> results = JavaModuleSearch.search(moduleName, myManager.getProject(), excludingScope).findAll();
     return upgradeModules(sortModules(results, scope), moduleName, scope);
   }
 

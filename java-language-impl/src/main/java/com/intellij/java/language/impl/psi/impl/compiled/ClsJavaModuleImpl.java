@@ -3,6 +3,7 @@ package com.intellij.java.language.impl.psi.impl.compiled;
 
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaModuleStub;
+import consulo.util.lang.BitUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
@@ -40,6 +41,26 @@ public class ClsJavaModuleImpl extends ClsRepositoryPsiElement<PsiJavaModuleStub
                                      @Nullable PsiElement lastParent,
                                      PsiElement place) {
     return JavaResolveUtil.processJavaModuleExports(this, processor, state, lastParent, place);
+  }
+
+  @Override
+  public boolean doNotResolveByDefault() {
+    return BitUtil.isSet(getStub().getResolution(), PsiJavaModuleStub.DO_NOT_RESOLVE_BY_DEFAULT);
+  }
+
+  @Override
+  public boolean warnDeprecated() {
+    return BitUtil.isSet(getStub().getResolution(), PsiJavaModuleStub.WARN_DEPRECATED);
+  }
+
+  @Override
+  public boolean warnDeprecatedForRemoval() {
+    return BitUtil.isSet(getStub().getResolution(), PsiJavaModuleStub.WARN_DEPRECATED_FOR_REMOVAL);
+  }
+
+  @Override
+  public boolean warnIncubating() {
+    return BitUtil.isSet(getStub().getResolution(), PsiJavaModuleStub.WARN_INCUBATING);
   }
 
   @Override

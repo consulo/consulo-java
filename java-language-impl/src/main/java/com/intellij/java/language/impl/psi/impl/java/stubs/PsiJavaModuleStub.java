@@ -20,5 +20,33 @@ import consulo.language.psi.stub.StubElement;
 
 public interface PsiJavaModuleStub extends StubElement<PsiJavaModule>
 {
+	/**
+	 * The module is not resolved by default from the class path.
+	 */
+	int DO_NOT_RESOLVE_BY_DEFAULT = 1;
+
+	/**
+	 * The module is marked as deprecated.
+	 */
+	int WARN_DEPRECATED = 2;
+
+	/**
+	 * The module is deprecated and will be removed in a future release.
+	 */
+	int WARN_DEPRECATED_FOR_REMOVAL = 4;
+
+	/**
+	 * The module is in incubating mode and not yet standardized.
+	 */
+	int WARN_INCUBATING = 8;
+
 	String getName();
+
+	/**
+	 * Represents the attributes of a {@code module-info.class} file, as specified by
+	 * <a href="https://openjdk.org/jeps/11#Relationship-to-other-modules">JEP 11</a>.
+	 *
+	 * @return a bitmask of the module resolution attributes, or {@code 0} if none are set
+	 */
+	int getResolution();
 }

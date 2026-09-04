@@ -16,6 +16,8 @@
 package com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis;
 
 import com.intellij.java.codeserver.core.JavaPsiModuleUtil;
+import com.intellij.java.codeserver.core.JpmsModuleAccessInfo;
+import com.intellij.java.codeserver.core.JpmsModuleInfo;
 import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.AddRequiredModuleFix;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.quickfix.GoToSymbolFix;
@@ -480,68 +482,105 @@ public class ModuleHighlightUtil {
     @RequiredReadAction
     public static HighlightInfo.@Nullable Builder checkPackageAccessibility(
         PsiJavaCodeReferenceElement ref,
-        PsiElement target,
-        PsiJavaModule refModule
+        PsiElement target
     ) {
-        if (PsiTreeUtil.getParentOfType(ref, PsiDocComment.class) == null) {
-            Module module = findModule(refModule);
-            if (module != null) {
-                if (target instanceof PsiClass psiClass) {
-                    if (psiClass.getParent() instanceof PsiClassOwner targetFile) {
-                        PsiJavaModule targetModule = getModuleDescriptor(targetFile);
-                        String packageName = targetFile.getPackageName();
-                        return checkPackageAccessibility(ref, refModule, targetModule, packageName);
-                    }
-                }
-                else if (target instanceof PsiPackage psiPackage) {
-                    PsiElement refImport = ref.getParent();
-                    if (refImport instanceof PsiImportStatementBase importStatementBase && importStatementBase.isOnDemand()) {
-                        PsiDirectory[] dirs =
-                            psiPackage.getDirectories(GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module, false));
-                        if (dirs.length == 1) {
-                            PsiJavaModule targetModule = getModuleDescriptor(dirs[0]);
-                            String packageName = psiPackage.getQualifiedName();
-                            return checkPackageAccessibility(ref, refModule, targetModule, packageName);
-                        }
-                    }
-                }
+        if (PsiTreeUtil.getParentOfType(ref, PsiDocComment.class) != null) {
+            return null;
+        }
+        if (target instanceof PsiClass targetClass && !(target instanceof PsiTypeParameter)) {
+            String packageName = PsiUtil.getPackageName(targetClass);
+            if (packageName != null) {
+                return checkAccess(packageName, target.getContainingFile(), ref);
             }
         }
-
+        else if (target instanceof PsiJavaPackage targetPackage) {
+            return checkAccess(targetPackage.getQualifiedName(), null, ref);
+        }
         return null;
     }
 
     @RequiredReadAction
-    private static HighlightInfo.Builder checkPackageAccessibility(
-        PsiJavaCodeReferenceElement ref,
-        PsiJavaModule refModule,
-        PsiJavaModule targetModule,
-        String packageName
+    private static HighlightInfo.@Nullable Builder checkAccess(
+        String targetPackageName,
+        @Nullable PsiFile targetFile,
+        PsiJavaCodeReferenceElement place
     ) {
-        if (!refModule.equals(targetModule)) {
-            if (targetModule == null) {
-                return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
-                    .range(ref)
-                    .descriptionAndTooltip(JavaErrorLocalize.modulePackageOnClasspath());
+        PsiFile file = place.getContainingFile();
+        if (file == null) {
+            return null;
+        }
+        file = file.getOriginalFile();
+        List<JpmsModuleInfo.TargetModuleInfo> infos = JpmsModuleInfo.findTargetModuleInfos(targetPackageName, targetFile, file);
+        if (infos == null) {
+            return null;
+        }
+        if (infos.isEmpty()) {
+            return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
+                .range(place)
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.referencePackageNotFound(targetPackageName));
+        }
+        HighlightInfo.Builder error = null;
+        for (JpmsModuleInfo.TargetModuleInfo info : infos) {
+            JpmsModuleAccessInfo moduleAccessInfo = info.accessAt(file);
+            JpmsModuleAccessInfo.JpmsModuleAccessProblem problem =
+                moduleAccessInfo.checkAccess(file, JpmsModuleAccessInfo.JpmsModuleAccessMode.READ);
+            if (problem == null) {
+                return null;
             }
-
-            String refModuleName = refModule.getName();
-            String requiredName = targetModule.getName();
-            if (!(targetModule instanceof LightJavaModule || JavaPsiModuleUtil.exports(targetModule, packageName, refModule))) {
-                return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
-                    .range(ref)
-                    .descriptionAndTooltip(JavaErrorLocalize.modulePackageNotExported(requiredName, packageName, refModuleName));
-            }
-
-            if (!(PsiJavaModule.JAVA_BASE.equals(requiredName) || JavaPsiModuleUtil.reads(refModule, targetModule))) {
-                return HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF)
-                    .range(ref)
-                    .descriptionAndTooltip(JavaErrorLocalize.moduleNotInRequirements(refModuleName, requiredName))
-                    .registerFix(new AddRequiredModuleFix(refModule, requiredName));
+            if (error == null) {
+                error = accessError(problem, findPackagePrefix(place), moduleAccessInfo);
             }
         }
+        return error;
+    }
 
-        return null;
+    @RequiredReadAction
+    private static PsiElement findPackagePrefix(PsiJavaCodeReferenceElement ref) {
+        PsiElement candidate = ref;
+        while (candidate instanceof PsiJavaCodeReferenceElement element) {
+            if (element.resolve() instanceof PsiJavaPackage) {
+                return candidate;
+            }
+            candidate = element.getQualifier();
+        }
+        return ref;
+    }
+
+    private static HighlightInfo.Builder accessError(
+        JpmsModuleAccessInfo.JpmsModuleAccessProblem problem,
+        PsiElement anchor,
+        JpmsModuleAccessInfo info
+    ) {
+        String packageName = info.getTarget().getPackageName();
+        PsiJavaModule targetModule = info.getTarget().getModule();
+        String targetName = targetModule == null ? "" : targetModule.getName();
+        PsiJavaModule currentModule = info.getCurrent().getModule();
+        String currentName = info.getCurrent().getName();
+        HighlightInfo.Builder builder = HighlightInfo.newHighlightInfo(HighlightInfoType.WRONG_REF).range(anchor);
+        return switch (problem) {
+            case FROM_NAMED -> builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessFromNamed(packageName, targetName, currentName));
+            case FROM_UNNAMED -> builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessFromUnnamed(packageName, targetName));
+            case TO_UNNAMED -> builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessToUnnamed(packageName, currentName));
+            case PACKAGE_BAD_NAME -> builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessPackageBadName(packageName, targetName));
+            case BAD_NAME -> builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessBadName(targetName));
+            case PACKAGE_NOT_IN_GRAPH -> builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessPackageNotInGraph(packageName, targetName));
+            case NOT_IN_GRAPH -> builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessNotInGraph(targetName));
+            case PACKAGE_DOES_NOT_READ -> {
+                builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessPackageDoesNotRead(packageName, targetName, currentName));
+                if (currentModule != null) {
+                    builder.registerFix(new AddRequiredModuleFix(currentModule, targetName));
+                }
+                yield builder;
+            }
+            case DOES_NOT_READ -> {
+                builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessDoesNotRead(targetName, currentName));
+                if (currentModule != null) {
+                    builder.registerFix(new AddRequiredModuleFix(currentModule, targetName));
+                }
+                yield builder;
+            }
+            case JPS_DEPENDENCY_PROBLEM -> builder.descriptionAndTooltip(JavaCompilationErrorLocalize.moduleAccessJpsDependencyProblem(targetName));
+        };
     }
 
     @Nullable

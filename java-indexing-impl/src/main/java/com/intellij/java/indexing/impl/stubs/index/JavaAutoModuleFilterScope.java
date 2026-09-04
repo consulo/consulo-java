@@ -1,6 +1,9 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.indexing.impl.stubs.index;
 
+import com.intellij.java.language.LanguageLevel;
+import com.intellij.java.language.psi.PsiJavaModule;
+import com.intellij.java.language.psi.util.JavaMultiReleaseUtil;
 import consulo.language.psi.scope.DelegatingGlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.module.content.ProjectFileIndex;
@@ -21,12 +24,20 @@ class JavaAutoModuleFilterScope extends DelegatingGlobalSearchScope {
     VirtualFile root = file;
     if (!file.isDirectory()) {
       root = file.getParent().getParent();
+      if (root == null) {
+        return false;
+      }
       Project project = getProject();
-      if (project == null || !root.equals(ProjectFileIndex.getInstance(project).getSourceRootForFile(file))) {
+      if (project == null) {
+        return false;
+      }
+      ProjectFileIndex fileIndex = ProjectFileIndex.getInstance(project);
+      if (!root.equals(fileIndex.getSourceRootForFile(file)) && !root.equals(fileIndex.getClassRootForFile(file))) {
         return false;
       }
     }
-    if (JavaModuleNameIndex.descriptorFile(root) != null) {
+
+    if (JavaMultiReleaseUtil.findVersionSpecificFile(root, PsiJavaModule.MODULE_INFO_CLS_FILE, LanguageLevel.HIGHEST) != null) {
       return false;
     }
 

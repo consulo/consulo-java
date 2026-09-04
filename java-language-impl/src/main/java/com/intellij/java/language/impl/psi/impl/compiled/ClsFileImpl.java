@@ -590,7 +590,7 @@ public class ClsFileImpl extends PsiBinaryFileImpl
             PsiJavaFileStub stub = new PsiJavaFileStubImpl(null, level, true);
             if (module) {
                 ModuleStubBuildingVisitor visitor = new ModuleStubBuildingVisitor(stub);
-                reader.accept(visitor, EMPTY_ATTRIBUTES, ClassReader.SKIP_FRAMES);
+                reader.accept(visitor, visitor.attributes(), ClassReader.SKIP_FRAMES);
                 if (visitor.getResult() != null) {
                     return stub;
                 }

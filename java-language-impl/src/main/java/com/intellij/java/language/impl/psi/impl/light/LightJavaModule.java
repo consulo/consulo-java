@@ -58,7 +58,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class LightJavaModule extends LightElement implements PsiJavaModule {
-  private static final Key<String> CLAIMED_MODULE_NAME_KEY = Key.create("LightJavaModule.claimedModuleName");
+  private static final Key<ClaimedModuleName> CLAIMED_MODULE_NAME_KEY = Key.create("LightJavaModule.claimedModuleName");
+
+  private record ClaimedModuleName(long stamp, @Nullable String name) {
+  }
 
   private final LightJavaModuleReferenceElement myRefElement;
   private final VirtualFile myRoot;
@@ -343,20 +346,21 @@ public final class LightJavaModule extends LightElement implements PsiJavaModule
 
   @Nullable
   public static String claimedModuleName(VirtualFile manifest) {
-    String cached = manifest.getUserData(CLAIMED_MODULE_NAME_KEY);
-    if (cached != null) {
-      return cached.isEmpty() ? null : cached;
+    long stamp = manifest.getModificationStamp();
+    ClaimedModuleName cached = manifest.getUserData(CLAIMED_MODULE_NAME_KEY);
+    if (cached != null && cached.stamp() == stamp) {
+      return cached.name();
     }
+    String result;
     try (InputStream stream = manifest.getInputStream()) {
-      String result = new Manifest(stream).getMainAttributes().getValue(PsiJavaModule.AUTO_MODULE_NAME);
-      manifest.putUserData(CLAIMED_MODULE_NAME_KEY, result != null ? result : "");
-      return result;
+      result = new Manifest(stream).getMainAttributes().getValue(PsiJavaModule.AUTO_MODULE_NAME);
     }
     catch (IOException e) {
       Logger.getInstance(LightJavaModule.class).warn(manifest.getPath(), e);
-      manifest.putUserData(CLAIMED_MODULE_NAME_KEY, "");
-      return null;
+      result = null;
     }
+    manifest.putUserData(CLAIMED_MODULE_NAME_KEY, new ClaimedModuleName(stamp, result));
+    return result;
   }
 
   /**

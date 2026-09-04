@@ -1,13 +1,14 @@
 // Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.codeserver.core;
 
-import com.intellij.java.indexing.impl.stubs.index.JavaModuleNameIndex;
 import com.intellij.java.indexing.search.searches.JavaModuleSearch;
 import com.intellij.java.language.JavaLanguage;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.impl.PsiJavaModuleModificationTracker;
 import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.impl.psi.util.JavaManifestUtil;
 import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.JavaMultiReleaseUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.util.CachedValueProvider.Result;
 import consulo.application.util.CachedValuesManager;
@@ -111,7 +112,8 @@ public final class JavaPsiModuleUtil {
     ProjectFileIndex index = ProjectFileIndex.getInstance(project);
     VirtualFile root = index.getClassRootForFile(file);
     if (root != null) {
-      VirtualFile descriptorFile = JavaModuleNameIndex.descriptorFile(root);
+      VirtualFile descriptorFile =
+        JavaMultiReleaseUtil.findVersionSpecificFile(root, PsiJavaModule.MODULE_INFO_CLS_FILE, LanguageLevel.HIGHEST);
       if (descriptorFile != null) {
         PsiFile psiFile = PsiManager.getInstance(project).findFile(descriptorFile);
         if (psiFile instanceof PsiJavaFile) {

@@ -24,11 +24,13 @@ import consulo.language.psi.stub.StubElement;
 public class PsiJavaModuleStubImpl extends StubBase<PsiJavaModule> implements PsiJavaModuleStub
 {
 	private final String myName;
+	private final int myResolution;
 
-	public PsiJavaModuleStubImpl(StubElement parent, String name)
+	public PsiJavaModuleStubImpl(StubElement parent, String name, int resolution)
 	{
 		super(parent, JavaStubElementTypes.MODULE);
 		myName = name;
+		myResolution = resolution;
 	}
 
 	@Override
@@ -38,8 +40,14 @@ public class PsiJavaModuleStubImpl extends StubBase<PsiJavaModule> implements Ps
 	}
 
 	@Override
+	public int getResolution()
+	{
+		return myResolution;
+	}
+
+	@Override
 	public String toString()
 	{
-		return "PsiJavaModuleStub:" + getName();
+		return "PsiJavaModuleStub[name=" + getName() + ", resolution=" + myResolution + "]";
 	}
 }

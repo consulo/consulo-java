@@ -1,6 +1,7 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.indexing.impl.stubs.index;
 
+import com.intellij.java.language.impl.psi.impl.light.LightJavaModule;
 import com.intellij.java.language.impl.JavaClassFileType;
 import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.component.ExtensionImpl;
@@ -23,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import static java.util.Collections.emptyMap;
@@ -33,22 +35,26 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
   private static final ID<String, Void> NAME = ID.create("java.source.module.name");
 
   private final FileType myManifestFileType = FileTypeRegistry.getInstance().getFileTypeByExtension("MF");
-  private final FileBasedIndex.InputFilter myFilter = new DefaultFileTypeSpecificInputFilter(myManifestFileType) {
-    @Override
-    public boolean acceptInput(@Nullable Project project, VirtualFile f) {
-      return f.isInLocalFileSystem();
-    }
-  };
+  private final FileBasedIndex.InputFilter myFilter = new DefaultFileTypeSpecificInputFilter(myManifestFileType);
+
+  static final String META_INF_DIR_NAME = JarFile.MANIFEST_NAME.substring(0, JarFile.MANIFEST_NAME.indexOf('/'));
+  static final String MANIFEST_FILE_NAME = JarFile.MANIFEST_NAME.substring(JarFile.MANIFEST_NAME.indexOf('/') + 1);
 
   private final DataIndexer<String, Void, FileContent> myIndexer = data -> {
     try {
-      String name = new Manifest(new ByteArrayInputStream(data.getContent())).getMainAttributes().getValue(PsiJavaModule.AUTO_MODULE_NAME);
-      if (name != null) {
-        return singletonMap(name, null);
-      }
-    } catch (IOException ignored) {
+      String name = new Manifest(new ByteArrayInputStream(data.getContent()))
+                        .getMainAttributes().getValue(PsiJavaModule.AUTO_MODULE_NAME);
+      if (name != null) return singletonMap(name, null);
+      // fallback: derive from JAR filename, but only for an actual JAR root (not a source root's META-INF)
+      VirtualFile metaInf = data.getFile().getParent();
+      if (metaInf == null || !META_INF_DIR_NAME.equalsIgnoreCase(metaInf.getName())) return emptyMap();
+      VirtualFile jarRoot = metaInf.getParent();
+      if (jarRoot == null || jarRoot.getParent() != null || !"jar".equalsIgnoreCase(jarRoot.getExtension())) return emptyMap();
+      return singletonMap(LightJavaModule.moduleName(jarRoot.getNameWithoutExtension()), null);
     }
-    return emptyMap();
+    catch (IOException ignored) {
+      return emptyMap();
+    }
   };
 
   @Override
@@ -58,7 +64,7 @@ public class JavaSourceModuleNameIndex extends ScalarIndexExtension<String> {
 
   @Override
   public int getVersion() {
-    return 2;
+    return 6;
   }
 
   @Override

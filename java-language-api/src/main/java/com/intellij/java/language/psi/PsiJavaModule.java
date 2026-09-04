@@ -52,4 +52,52 @@ public interface PsiJavaModule extends NavigatablePsiElement, PsiNameIdentifierO
   Iterable<PsiUsesStatement> getUses();
 
   Iterable<PsiProvidesStatement> getProvides();
+
+  /**
+   * Checks whether the module should be excluded from automatic resolution when loaded from the classpath.
+   * This method reads the module resolution attributes from {@code module-info.class}, as specified in JEP 11.
+   *
+   * @return {@code true} if the module is marked with {@code DO_NOT_RESOLVE_BY_DEFAULT}, preventing automatic resolution;
+   *         {@code false} otherwise.
+   * @see <a href="https://openjdk.org/jeps/11">JEP 11: Incubator Modules</a>
+   */
+  default boolean doNotResolveByDefault() {
+    return false;
+  }
+
+  /**
+   * Checks whether the module is marked as deprecated.
+   * This method reads the module resolution attributes from {@code module-info.class}, as specified in JEP 11.
+   *
+   * @return {@code true} if the module is marked with {@code WARN_DEPRECATED}, indicating that it is deprecated;
+   * {@code false} otherwise.
+   * @see <a href="https://openjdk.org/jeps/11">JEP 11: Incubator Modules</a>
+   */
+  default boolean warnDeprecated() {
+    return false;
+  }
+
+  /**
+   * Checks whether the module is deprecated and scheduled for removal in a future release.
+   * This method reads the module resolution attributes from {@code module-info.class}, as specified in JEP 11.
+   *
+   * @return {@code true} if the module is marked with {@code WARN_DEPRECATED_FOR_REMOVAL}, indicating that
+   * it is deprecated and will be removed in a future release; {@code false} otherwise.
+   * @see <a href="https://openjdk.org/jeps/11">JEP 11: Incubator Modules</a>
+   */
+  default boolean warnDeprecatedForRemoval() {
+    return false;
+  }
+
+  /**
+   * Checks whether the module is in incubating mode, meaning it is not yet standardized.
+   * This method reads the module resolution attributes from {@code module-info.class}, as specified in JEP 11.
+   *
+   * @return {@code true} if the module is marked with {@code WARN_INCUBATING}, indicating that it is
+   * in incubating mode; {@code false} otherwise.
+   * @see <a href="https://openjdk.org/jeps/11">JEP 11: Incubator Modules</a>
+   */
+  default boolean warnIncubating() {
+    return false;
+  }
 }

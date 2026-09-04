@@ -17,6 +17,7 @@ package com.intellij.java.language.impl.psi.impl.source;
 
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
 import com.intellij.java.language.impl.psi.impl.java.stubs.PsiJavaModuleStub;
+import consulo.util.lang.BitUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.psi.*;
@@ -96,6 +97,31 @@ public class PsiJavaModuleImpl extends JavaStubPsiElement<PsiJavaModuleStub> imp
   @Override
   public PsiJavaModuleReferenceElement getNameIdentifier() {
     return PsiTreeUtil.getRequiredChildOfType(this, PsiJavaModuleReferenceElement.class);
+  }
+
+  @Override
+  public boolean doNotResolveByDefault() {
+    return isResolutionFlagSet(PsiJavaModuleStub.DO_NOT_RESOLVE_BY_DEFAULT);
+  }
+
+  @Override
+  public boolean warnDeprecated() {
+    return isResolutionFlagSet(PsiJavaModuleStub.WARN_DEPRECATED);
+  }
+
+  @Override
+  public boolean warnDeprecatedForRemoval() {
+    return isResolutionFlagSet(PsiJavaModuleStub.WARN_DEPRECATED_FOR_REMOVAL);
+  }
+
+  @Override
+  public boolean warnIncubating() {
+    return isResolutionFlagSet(PsiJavaModuleStub.WARN_INCUBATING);
+  }
+
+  private boolean isResolutionFlagSet(int flag) {
+    PsiJavaModuleStub stub = getGreenStub();
+    return stub != null && BitUtil.isSet(stub.getResolution(), flag);
   }
 
   @Override

@@ -3498,12 +3498,9 @@ public class HighlightUtil extends HighlightUtilBase {
                     && !owner.hasModifierProperty(PsiModifier.PROTECTED)
                     && !owner.hasModifierProperty(PsiModifier.PACKAGE_LOCAL)
                     && getPackageLocalClassInTheMiddle(ref) == null) {
-                    PsiJavaModule refModule = JavaModuleGraphUtil.findDescriptorByElement(ref);
-                    if (refModule != null) {
-                        HighlightInfo.Builder moduleProblem = ModuleHighlightUtil.checkPackageAccessibility(ref, resolved, refModule);
-                        if (moduleProblem != null) {
-                            return moduleProblem;
-                        }
+                    HighlightInfo.Builder moduleProblem = ModuleHighlightUtil.checkPackageAccessibility(ref, resolved);
+                    if (moduleProblem != null) {
+                        return moduleProblem;
                     }
                 }
 

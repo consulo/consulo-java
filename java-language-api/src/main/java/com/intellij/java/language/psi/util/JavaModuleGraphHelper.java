@@ -16,7 +16,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 /**
- * Bridges the module dependency graph (computed in a higher module) to lower-level PSI consumers.
+ * Provides utilities for operations related to Java modules within the PSI tree.
  */
 @ServiceAPI(ComponentScope.APPLICATION)
 public interface JavaModuleGraphHelper {
@@ -59,4 +59,13 @@ public interface JavaModuleGraphHelper {
    * @param place             place where accessibility of target is required
    */
   boolean isAccessible(String targetPackageName, @Nullable PsiFile targetFile, PsiElement place);
+
+  /**
+   * Checks accessibility of module in the place
+   *
+   * @param targetModule the target java module whose accessibility is being checked
+   * @param place        place where accessibility of target is required
+   * @return true if the target module is accessible from the specified location, false otherwise
+   */
+  boolean isAccessible(PsiJavaModule targetModule, PsiElement place);
 }

@@ -57,18 +57,20 @@ public class JavaModuleElementType extends JavaStubElementType<PsiJavaModuleStub
   @Override
   public PsiJavaModuleStub createStub(LighterAST tree, LighterASTNode node, StubElement parentStub) {
     LighterASTNode ref = LightTreeUtil.requiredChildOfType(tree, node, JavaElementType.MODULE_REFERENCE);
-    return new PsiJavaModuleStubImpl(parentStub, JavaSourceUtil.getReferenceText(tree, ref));
+    return new PsiJavaModuleStubImpl(parentStub, JavaSourceUtil.getReferenceText(tree, ref), 0);
   }
 
   @Override
   public void serialize(PsiJavaModuleStub stub, StubOutputStream dataStream) throws IOException {
     dataStream.writeName(stub.getName());
+    dataStream.writeVarInt(stub.getResolution());
   }
 
   @Override
   public PsiJavaModuleStub deserialize(StubInputStream dataStream, StubElement parentStub) throws IOException {
     String name = StringRef.toString(dataStream.readName());
-    return new PsiJavaModuleStubImpl(parentStub, name);
+    int resolution = dataStream.readVarInt();
+    return new PsiJavaModuleStubImpl(parentStub, name, resolution);
   }
 
   @Override
