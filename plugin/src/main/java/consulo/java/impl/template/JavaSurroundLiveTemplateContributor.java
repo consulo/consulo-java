@@ -4,7 +4,7 @@ import com.intellij.java.impl.codeInsight.template.JavaLikeCodeContextType;
 import com.intellij.java.impl.codeInsight.template.JavaLikeStatementContextType;
 import com.intellij.java.impl.codeInsight.template.impl.ShortenFQNamesProcessor;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.java.localize.JavaLiveTemplateLocalize;
 import consulo.language.editor.template.LiveTemplateContributor;
 import consulo.localize.LocalizeValue;
 
@@ -17,12 +17,17 @@ public class JavaSurroundLiveTemplateContributor implements LiveTemplateContribu
 
     @Override
     public LocalizeValue groupName() {
-        return LocalizeValue.localizeTODO("Java Surround");
+        return JavaLiveTemplateLocalize.groupNameJavaSurround();
     }
 
     @Override
     public void contribute(LiveTemplateContributor.Factory factory) {
-//        try (Builder builder = factory.newBuilder("javasurroundB", "B", "{$SELECTION$}", CodeInsightLocalize.livetemplateDescriptionSurroundBraces())) {
+//        try (Builder builder = factory.newBuilder(
+//            "javasurroundB",
+//            "B",
+//            "{$SELECTION$}",
+//            JavaLiveTemplateLocalize.descriptionSurroundBraces()
+//        )) {
 //            builder.withReformat();
 //
 //            builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -41,7 +46,12 @@ public class JavaSurroundLiveTemplateContributor implements LiveTemplateContribu
 //            builder.withContext(OTHER.class, true);
 //        }
 //
-//        try (Builder builder = factory.newBuilder("javasurroundP", "P", "($SELECTION$)", CodeInsightLocalize.livetemplateDescriptionSurroundParens())) {
+//        try (Builder builder = factory.newBuilder(
+//            "javasurroundP",
+//            "P",
+//            "($SELECTION$)",
+//            JavaLiveTemplateLocalize.descriptionSurroundParens()
+//        )) {
 //            builder.withOption(ShortenFQNamesProcessor.KEY, true);
 //
 //            builder.withVariable("SELECTION", "", "", false);
@@ -58,12 +68,17 @@ public class JavaSurroundLiveTemplateContributor implements LiveTemplateContribu
 //            builder.withContext(OTHER.class, true);
 //        }
 
-        try (Builder builder = factory.newBuilder("javasurroundC", "C", "java.util.concurrent.Callable<$RET$> callable = new java.util.concurrent.Callable<$RET$>() {\n"
-            + "  public $RET$ call() throws Exception {\n"
-            + "    $SELECTION$\n"
-            + "    $END$ \n"
-            + "  }\n"
-            + "};", CodeInsightLocalize.livetemplateDescriptionSurroundWithCallable())) {
+        try (Builder builder = factory.newBuilder(
+            "javasurroundC",
+            "C",
+            "java.util.concurrent.Callable<$RET$> callable = new java.util.concurrent.Callable<$RET$>() {\n"
+                + "  public $RET$ call() throws Exception {\n"
+                + "    $SELECTION$\n"
+                + "    $END$ \n"
+                + "  }\n"
+                + "};",
+            JavaLiveTemplateLocalize.descriptionSurroundWithCallable()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -75,12 +90,17 @@ public class JavaSurroundLiveTemplateContributor implements LiveTemplateContribu
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javasurroundRL", "RL", "$LOCK$.readLock().lock();\n"
-            + "try { \n"
-            + "  $SELECTION$\n"
-            + "} finally {\n"
-            + "  $LOCK$.readLock().unlock();\n"
-            + "}\n", CodeInsightLocalize.livetemplateDescriptionSurroundWithReadLock())) {
+        try (Builder builder = factory.newBuilder(
+            "javasurroundRL",
+            "RL",
+            "$LOCK$.readLock().lock();\n"
+                + "try { \n"
+                + "  $SELECTION$\n"
+                + "} finally {\n"
+                + "  $LOCK$.readLock().unlock();\n"
+                + "}\n",
+            JavaLiveTemplateLocalize.descriptionSurroundWithReadLock()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -92,12 +112,17 @@ public class JavaSurroundLiveTemplateContributor implements LiveTemplateContribu
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javasurroundWL", "WL", "$LOCK$.writeLock().lock();\n"
-            + "try { \n"
-            + "  $SELECTION$\n"
-            + "} finally {\n"
-            + "  $LOCK$.writeLock().unlock();\n"
-            + "}\n", CodeInsightLocalize.livetemplateDescriptionSurroundWithWriteLock())) {
+        try (Builder builder = factory.newBuilder(
+            "javasurroundWL",
+            "WL",
+            "$LOCK$.writeLock().lock();\n"
+                + "try { \n"
+                + "  $SELECTION$\n"
+                + "} finally {\n"
+                + "  $LOCK$.writeLock().unlock();\n"
+                + "}\n",
+            JavaLiveTemplateLocalize.descriptionSurroundWithWriteLock()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -109,9 +134,14 @@ public class JavaSurroundLiveTemplateContributor implements LiveTemplateContribu
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javasurroundI", "I", "for ($ELEMENT_TYPE$ $VAR$ : $SELECTION$) {\n"
-            + "  $END$\n"
-            + "}\n", CodeInsightLocalize.livetemplateDescriptionIter())) {
+        try (Builder builder = factory.newBuilder(
+            "javasurroundI",
+            "I",
+            "for ($ELEMENT_TYPE$ $VAR$ : $SELECTION$) {\n"
+                + "  $END$\n"
+                + "}\n",
+            JavaLiveTemplateLocalize.descriptionItover()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -123,6 +153,5 @@ public class JavaSurroundLiveTemplateContributor implements LiveTemplateContribu
             builder.withContextsOf(JavaLikeCodeContextType.class, false);
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
-
     }
 }

@@ -4,7 +4,7 @@ import com.intellij.java.impl.codeInsight.template.JavaLikeCodeContextType;
 import com.intellij.java.impl.codeInsight.template.JavaLikeStatementContextType;
 import com.intellij.java.impl.codeInsight.template.impl.ShortenFQNamesProcessor;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.java.localize.JavaLiveTemplateLocalize;
 import consulo.language.editor.template.LiveTemplateContributor;
 import consulo.localize.LocalizeValue;
 
@@ -17,12 +17,17 @@ public class JavaOutputLiveTemplateContributor implements LiveTemplateContributo
 
     @Override
     public LocalizeValue groupName() {
-        return LocalizeValue.localizeTODO("Java Output");
+        return JavaLiveTemplateLocalize.groupNameJavaOutput();
     }
 
     @Override
     public void contribute(LiveTemplateContributor.Factory factory) {
-        try (Builder builder = factory.newBuilder("javaoutputSerr", "serr", "System.err.println(\"$END$\");", CodeInsightLocalize.livetemplateDescriptionSerr())) {
+        try (Builder builder = factory.newBuilder(
+            "javaoutputSerr",
+            "serr",
+            "System.err.println(\"$END$\");",
+            JavaLiveTemplateLocalize.descriptionSerr()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -31,7 +36,12 @@ public class JavaOutputLiveTemplateContributor implements LiveTemplateContributo
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaoutputSout", "sout", "System.out.println($END$);", CodeInsightLocalize.livetemplateDescriptionSout())) {
+        try (Builder builder = factory.newBuilder(
+            "javaoutputSout",
+            "sout",
+            "System.out.println($END$);",
+            JavaLiveTemplateLocalize.descriptionSout()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -40,7 +50,12 @@ public class JavaOutputLiveTemplateContributor implements LiveTemplateContributo
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaoutputSouf", "souf", "System.out.printf(\"$END$\");", CodeInsightLocalize.livetemplateDescriptionSouf())) {
+        try (Builder builder = factory.newBuilder(
+            "javaoutputSouf",
+            "souf",
+            "System.out.printf(\"$END$\");",
+            JavaLiveTemplateLocalize.descriptionSouf()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -49,7 +64,12 @@ public class JavaOutputLiveTemplateContributor implements LiveTemplateContributo
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaoutputSoutm", "soutm", "System.out.println(\"$CLASS_NAME$.$METHOD_NAME$\");", CodeInsightLocalize.livetemplateDescriptionSoutm())) {
+        try (Builder builder = factory.newBuilder(
+            "javaoutputSoutm",
+            "soutm",
+            "System.out.println(\"$CLASS_NAME$.$METHOD_NAME$\");",
+            JavaLiveTemplateLocalize.descriptionSoutm()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -61,18 +81,33 @@ public class JavaOutputLiveTemplateContributor implements LiveTemplateContributo
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaoutputSoutp", "soutp", "System.out.println($FORMAT$);", CodeInsightLocalize.livetemplateDescriptionSoutp())) {
+        try (Builder builder = factory.newBuilder(
+            "javaoutputSoutp",
+            "soutp",
+            "System.out.println($FORMAT$);",
+            JavaLiveTemplateLocalize.descriptionSoutp()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
 
-            builder.withVariable("FORMAT", "groovyScript(\"'\\\"' + _1.collect { it + ' = [\\\" + ' + it + ' + \\\"]'}.join(', ') + '\\\"'\", methodParameters())", "", false);
+            builder.withVariable(
+                "FORMAT",
+                "groovyScript(\"'\\\"' + _1.collect { it + ' = [\\\" + ' + it + ' + \\\"]'}.join(', ') + '\\\"'\", methodParameters())",
+                "",
+                false
+            );
 
             builder.withContextsOf(JavaLikeCodeContextType.class, false);
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaoutputSoutv", "soutv", "System.out.println(\"$EXPR_COPY$ = \" + $EXPR$);", CodeInsightLocalize.livetemplateDescriptionSoutv())) {
+        try (Builder builder = factory.newBuilder(
+            "javaoutputSoutv",
+            "soutv",
+            "System.out.println(\"$EXPR_COPY$ = \" + $EXPR$);",
+            JavaLiveTemplateLocalize.descriptionSoutv()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);

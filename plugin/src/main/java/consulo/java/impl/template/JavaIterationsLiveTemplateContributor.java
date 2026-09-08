@@ -4,7 +4,7 @@ import com.intellij.java.impl.codeInsight.template.JavaLikeCodeContextType;
 import com.intellij.java.impl.codeInsight.template.JavaLikeStatementContextType;
 import com.intellij.java.impl.codeInsight.template.impl.ShortenFQNamesProcessor;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.editor.localize.CodeInsightLocalize;
+import consulo.java.localize.JavaLiveTemplateLocalize;
 import consulo.language.editor.template.LiveTemplateContributor;
 import consulo.localize.LocalizeValue;
 
@@ -17,14 +17,19 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
 
     @Override
     public LocalizeValue groupName() {
-        return LocalizeValue.localizeTODO("Java Iterations");
+        return JavaLiveTemplateLocalize.groupNameJavaIterations();
     }
 
     @Override
     public void contribute(LiveTemplateContributor.Factory factory) {
-        try (Builder builder = factory.newBuilder("javaiterationsFori", "fori", "for(int $INDEX$ = 0; $INDEX$ < $LIMIT$; $INDEX$++) {\n"
-            + "  $END$\n"
-            + "}", LocalizeValue.localizeTODO("Create iteration loop"))) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsFori",
+            "fori",
+            "for(int $INDEX$ = 0; $INDEX$ < $LIMIT$; $INDEX$++) {\n"
+                + "  $END$\n"
+                + "}",
+            JavaLiveTemplateLocalize.descriptionFori()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -35,10 +40,15 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaiterationsItar", "itar", "for(int $INDEX$ = 0; $INDEX$ < $ARRAY$.length; $INDEX$++) {\n"
-            + "  $ELEMENT_TYPE$ $VAR$ = $ARRAY$[$INDEX$];\n"
-            + "  $END$\n"
-            + "}", CodeInsightLocalize.livetemplateDescriptionItar())) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsItar",
+            "itar",
+            "for(int $INDEX$ = 0; $INDEX$ < $ARRAY$.length; $INDEX$++) {\n"
+                + "  $ELEMENT_TYPE$ $VAR$ = $ARRAY$[$INDEX$];\n"
+                + "  $END$\n"
+                + "}",
+            JavaLiveTemplateLocalize.descriptionItar()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -52,10 +62,15 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaiterationsItco", "itco", "for($ITER_TYPE$ $ITER$ = $COLLECTION$.iterator(); $ITER$.hasNext(); ) {\n"
-            + "  $ELEMENT_TYPE$ $VAR$ =$CAST$ $ITER$.next();\n"
-            + "  $END$\n"
-            + "}", CodeInsightLocalize.livetemplateDescriptionItco())) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsItco",
+            "itco",
+            "for($ITER_TYPE$ $ITER$ = $COLLECTION$.iterator(); $ITER$.hasNext(); ) {\n"
+                + "  $ELEMENT_TYPE$ $VAR$ =$CAST$ $ITER$.next();\n"
+                + "  $END$\n"
+                + "}",
+            JavaLiveTemplateLocalize.descriptionItco()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -71,10 +86,15 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaiterationsIten", "iten", "while($ENUM$.hasMoreElements()){\n"
-            + "  $TYPE$ $VAR$ = $CAST$ $ENUM$.nextElement();\n"
-            + "  $END$\n"
-            + "}", CodeInsightLocalize.livetemplateDescriptionIten())) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsIten",
+            "iten",
+            "while($ENUM$.hasMoreElements()){\n"
+                + "  $TYPE$ $VAR$ = $CAST$ $ENUM$.nextElement();\n"
+                + "  $END$\n"
+                + "}",
+            JavaLiveTemplateLocalize.descriptionIten()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -91,7 +111,7 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
         try (Builder builder = factory.newBuilder("javaiterationsItit", "itit", "while($ITER$.hasNext()){\n"
             + "  $TYPE$ $VAR$ = $CAST$ $ITER$.next();\n"
             + "  $END$\n"
-            + "}", CodeInsightLocalize.livetemplateDescriptionItit())) {
+            + "}", JavaLiveTemplateLocalize.descriptionItit())) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -105,10 +125,15 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaiterationsItli", "itli", "for (int $INDEX$ = 0; $INDEX$ < $LIST$.size(); $INDEX$++) {\n"
-            + "  $ELEMENT_TYPE$ $VAR$ = $CAST$ $LIST$.get($INDEX$);\n"
-            + "  $END$\n"
-            + "}", CodeInsightLocalize.livetemplateDescriptionItli())) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsItli",
+            "itli",
+            "for (int $INDEX$ = 0; $INDEX$ < $LIST$.size(); $INDEX$++) {\n"
+                + "  $ELEMENT_TYPE$ $VAR$ = $CAST$ $LIST$.get($INDEX$);\n"
+                + "  $END$\n"
+                + "}",
+            JavaLiveTemplateLocalize.descriptionItli()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -123,10 +148,15 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaiterationsIttok", "ittok", "for (java.util.StringTokenizer $TOKENIZER$ = new java.util.StringTokenizer($STRING$); $TOKENIZER$.hasMoreTokens(); ) {\n"
-            + "    String $VAR$ = $TOKENIZER_COPY$.nextToken();\n"
-            + "    $END$\n"
-            + "}\n", CodeInsightLocalize.livetemplateDescriptionIttok())) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsIttok",
+            "ittok",
+            "for (java.util.StringTokenizer $TOKENIZER$ = new java.util.StringTokenizer($STRING$); $TOKENIZER$.hasMoreTokens(); ) {\n"
+                + "    String $VAR$ = $TOKENIZER_COPY$.nextToken();\n"
+                + "    $END$\n"
+                + "}\n",
+            JavaLiveTemplateLocalize.descriptionIttok()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -140,10 +170,15 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaiterationsItve", "itve", "for(int $INDEX$ = 0; $INDEX$ < $VECTOR$.size(); $INDEX$++) {\n"
-            + "  $ELEMENT_TYPE$ $VAR$ = $CAST$ $VECTOR$.elementAt($INDEX$);\n"
-            + "  $END$\n"
-            + "}", CodeInsightLocalize.livetemplateDescriptionItve())) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsItve",
+            "itve",
+            "for(int $INDEX$ = 0; $INDEX$ < $VECTOR$.size(); $INDEX$++) {\n"
+                + "  $ELEMENT_TYPE$ $VAR$ = $CAST$ $VECTOR$.elementAt($INDEX$);\n"
+                + "  $END$\n"
+                + "}",
+            JavaLiveTemplateLocalize.descriptionItve()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -158,10 +193,15 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaiterationsRitar", "ritar", "for(int $INDEX$ = $ARRAY$.length - 1; $INDEX$ >= 0; $INDEX$--) {\n"
-            + "  $ELEMENT_TYPE$ $VAR$ = $ARRAY$[$INDEX$];\n"
-            + "  $END$\n"
-            + "}", CodeInsightLocalize.livetemplateDescriptionRitar())) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsRitar",
+            "ritar",
+            "for(int $INDEX$ = $ARRAY$.length - 1; $INDEX$ >= 0; $INDEX$--) {\n"
+                + "  $ELEMENT_TYPE$ $VAR$ = $ARRAY$[$INDEX$];\n"
+                + "  $END$\n"
+                + "}",
+            JavaLiveTemplateLocalize.descriptionRitar()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);
@@ -175,9 +215,14 @@ public class JavaIterationsLiveTemplateContributor implements LiveTemplateContri
             builder.withContextsOf(JavaLikeStatementContextType.class, true);
         }
 
-        try (Builder builder = factory.newBuilder("javaiterationsIter", "iter", "for ($ELEMENT_TYPE$ $VAR$ : $ITERABLE_TYPE$) {\n"
-            + "  $END$\n"
-            + "}", CodeInsightLocalize.livetemplateDescriptionIter())) {
+        try (Builder builder = factory.newBuilder(
+            "javaiterationsIter",
+            "iter",
+            "for ($ELEMENT_TYPE$ $VAR$ : $ITERABLE_TYPE$) {\n"
+                + "  $END$\n"
+                + "}",
+            JavaLiveTemplateLocalize.descriptionIter()
+        )) {
             builder.withReformat();
 
             builder.withOption(ShortenFQNamesProcessor.KEY, true);

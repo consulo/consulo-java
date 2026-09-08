@@ -1,0 +1,82 @@
+description.fori:
+    text: Create iteration loop
+description.geti:
+    text: Inserts singleton method getInstance
+description.if.not.null:
+    text: Inserts ''if not null'' statement
+description.if.null:
+    text: Inserts ''if null'' statement
+description.inst:
+    text: Checks object type with instanceof and down-casts it
+description.itar:
+    text: Iterate elements of array
+description.itco:
+    text: Iterate elements of java.util.Collection
+description.iten:
+    text: Iterate java.util.Enumeration
+description.iter:
+    text: Iterate Iterable with foreach
+description.itit:
+    text: Iterate java.util.Iterator
+description.itli:
+    text: Iterate elements of java.util.List
+description.itover:
+    text: Iterate over an Iterable or Array selection with foreach
+description.ittok:
+    text: Iterate tokens from String
+description.itve:
+    text: Iterate elements of java.util.Vector
+description.lazy:
+    text: Performs lazy initialization
+description.lst:
+    text: Fetches last element of an array
+description.mn:
+    text: Sets lesser value to a variable
+description.mx:
+    text: Sets greater value to a variable
+description.psf:
+    text: public static final
+description.psfi:
+    text: public static final int
+description.psfs:
+    text: public static final String
+description.psvm:
+    text: main() method declaration
+description.ritar:
+    text: Iterate elements of array in reverse order
+description.serr:
+    text: Prints a string to System.err
+description.souf:
+    text: Prints a formatted string to System.out
+description.sout:
+    text: Prints a string to System.out
+description.soutm:
+    text: Prints current class and method names to System.out
+description.soutp:
+    text: Prints method parameter names and values to System.out
+description.soutv:
+    text: Prints a value to System.out
+description.st:
+    text: String
+description.surround.with.callable:
+    text: Surround with Callable
+description.surround.with.read.lock:
+    text: Surround with ReadWriteLock.readLock
+description.surround.with.write.lock:
+    text: Surround with ReadWriteLock.writeLock
+description.tag.pair:
+    text: Tag pair
+description.thr:
+    text: throw new
+description.toar:
+    text: Stores elements of java.util.Collection into array
+group.name.java.iterations:
+    text: Java Iterations
+group.name.java.other:
+    text: Java Other
+group.name.java.output:
+    text: Java Output
+group.name.java.plain:
+    text: Java Plain
+group.name.java.surround:
+    text: Java Surround
