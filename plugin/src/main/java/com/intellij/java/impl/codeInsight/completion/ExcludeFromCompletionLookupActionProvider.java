@@ -23,6 +23,7 @@ import consulo.language.editor.completion.lookup.Lookup;
 import consulo.language.editor.completion.lookup.LookupActionProvider;
 import consulo.language.editor.completion.lookup.LookupElement;
 import consulo.language.editor.completion.lookup.LookupElementAction;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import org.jspecify.annotations.Nullable;
 
@@ -33,53 +34,52 @@ import java.util.function.Consumer;
  */
 @ExtensionImpl(id = "javaExcludeFromCompletion", order = "after importStatic")
 public class ExcludeFromCompletionLookupActionProvider implements LookupActionProvider {
-  @Override
-  public void fillActions(LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {
-    Object o = element.getObject();
-    if (o instanceof PsiClassObjectAccessExpression) {
-      o = PsiUtil.resolveClassInType(((PsiClassObjectAccessExpression) o).getOperand().getType());
-    }
-
-    if (o instanceof PsiClass) {
-      PsiClass clazz = (PsiClass) o;
-      addExcludes(consumer, clazz, clazz.getQualifiedName());
-    } else if (o instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod) o;
-      if (method.hasModifierProperty(PsiModifier.STATIC)) {
-        addExcludes(consumer, method, PsiUtil.getMemberQualifiedName(method));
-      }
-    } else if (o instanceof PsiField) {
-      PsiField field = (PsiField) o;
-      if (field.hasModifierProperty(PsiModifier.STATIC)) {
-        addExcludes(consumer, field, PsiUtil.getMemberQualifiedName(field));
-      }
-    }
-  }
-
-  private static void addExcludes(Consumer<LookupElementAction> consumer, PsiMember element, @Nullable String qname) {
-    if (qname == null) {
-      return;
-    }
-    Project project = element.getProject();
-    for (String s : AddImportAction.getAllExcludableStrings(qname)) {
-      consumer.accept(new ExcludeFromCompletionAction(project, s));
-    }
-  }
-
-  private static class ExcludeFromCompletionAction extends LookupElementAction {
-    private final Project myProject;
-    private final String myToExclude;
-
-    public ExcludeFromCompletionAction(Project project, String s) {
-      super(null, "Exclude '" + s + "' from completion");
-      myProject = project;
-      myToExclude = s;
-    }
-
     @Override
-    public Result performLookupAction() {
-      AddImportAction.excludeFromImport(myProject, myToExclude);
-      return Result.HIDE_LOOKUP;
+    public void fillActions(LookupElement element, Lookup lookup, Consumer<LookupElementAction> consumer) {
+        Object o = element.getObject();
+        if (o instanceof PsiClassObjectAccessExpression classObjectAccessExpr) {
+            o = PsiUtil.resolveClassInType(classObjectAccessExpr.getOperand().getType());
+        }
+
+        if (o instanceof PsiClass clazz) {
+            addExcludes(consumer, clazz, clazz.getQualifiedName());
+        }
+        else if (o instanceof PsiMethod method) {
+            if (method.isStatic()) {
+                addExcludes(consumer, method, PsiUtil.getMemberQualifiedName(method));
+            }
+        }
+        else if (o instanceof PsiField field) {
+            if (field.isStatic()) {
+                addExcludes(consumer, field, PsiUtil.getMemberQualifiedName(field));
+            }
+        }
     }
-  }
+
+    private static void addExcludes(Consumer<LookupElementAction> consumer, PsiMember element, @Nullable String qName) {
+        if (qName == null) {
+            return;
+        }
+        Project project = element.getProject();
+        for (String s : AddImportAction.getAllExcludableStrings(qName)) {
+            consumer.accept(new ExcludeFromCompletionAction(project, s));
+        }
+    }
+
+    private static class ExcludeFromCompletionAction extends LookupElementAction {
+        private final Project myProject;
+        private final String myToExclude;
+
+        public ExcludeFromCompletionAction(Project project, String s) {
+            super(null, LocalizeValue.localizeTODO("Exclude '" + s + "' from completion"));
+            myProject = project;
+            myToExclude = s;
+        }
+
+        @Override
+        public Result performLookupAction() {
+            AddImportAction.excludeFromImport(myProject, myToExclude);
+            return Result.HIDE_LOOKUP;
+        }
+    }
 }
