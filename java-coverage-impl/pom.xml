@@ -121,7 +121,7 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-<dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>consulo.java-java.language.impl</artifactId>
             <version>${project.version}</version>
@@ -141,6 +141,11 @@
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.core</artifactId>
             <version>0.7.9</version>
+        </dependency>
+        <dependency>
+            <groupId>consulo.internal</groupId>
+            <artifactId>java.coverage.agent.data</artifactId>
+            <version>3.0</version>
         </dependency>
     </dependencies>
 </project>

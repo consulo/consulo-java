@@ -10,7 +10,7 @@ open module consulo.java.execution.impl {
     requires consulo.compiler.api;
     requires consulo.module.ui.api;
     requires consulo.version.control.system.api;
-    requires consulo.xcoverage.rt;
+    requires java.coverage.agent.data;
 
     requires consulo.util.nodep;
     requires consulo.java.language.impl;

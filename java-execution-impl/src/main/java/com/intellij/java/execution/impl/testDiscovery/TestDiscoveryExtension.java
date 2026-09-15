@@ -52,6 +52,8 @@ import java.util.List;
 
 @ExtensionImpl
 public class TestDiscoveryExtension extends RunConfigurationExtension {
+  private static final String TRACE_DIR = "org.jetbrains.instrumentation.trace.dir";
+
   public static final boolean TESTDISCOVERY_ENABLED = Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("testDiscovery.enabled"));
 
   private static final Logger LOG = Logger.getInstance(TestDiscoveryExtension.class);
@@ -116,7 +118,7 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
     argument.append(agentPath);
     params.getVMParametersList().add(argument.toString());
     params.getClassPath().add(agentPath);
-    params.getVMParametersList().addProperty(ProjectData.TRACE_DIR, getTracesDirectory(configuration));
+    params.getVMParametersList().addProperty(TRACE_DIR, getTracesDirectory(configuration));
   }
 
   private static String getTracesDirectory(RunConfigurationBase configuration) {

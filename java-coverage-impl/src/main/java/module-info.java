@@ -8,6 +8,7 @@ module consulo.java.coverage.impl {
     requires consulo.java.language.impl;
     requires consulo.java.analysis.impl;
     requires consulo.java.coverage.rt;
+    requires java.coverage.agent.data;
     requires consulo.java.debugger.api;
     requires consulo.java.debugger.impl;
 

@@ -98,9 +98,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>consulo</groupId>
-            <artifactId>consulo-xcoverage-data</artifactId>
-            <version>${project.version}</version>
+            <groupId>consulo.internal</groupId>
+            <artifactId>java.coverage.agent.data</artifactId>
+            <version>3.0</version>
             <scope>provided</scope>
         </dependency>
         <!-- required transitively by consulo.java.debugger.impl -->

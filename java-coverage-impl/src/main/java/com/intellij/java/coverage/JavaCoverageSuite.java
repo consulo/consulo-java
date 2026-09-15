@@ -4,6 +4,8 @@ import com.intellij.java.language.psi.JavaPsiFacade;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.rt.coverage.data.ProjectData;
+import com.intellij.java.coverage.data.AgentCoverageProjectData;
+import consulo.execution.coverage.data.CoverageProjectData;
 import consulo.execution.coverage.*;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.scope.GlobalSearchScope;
@@ -131,12 +133,13 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
 
     @Nullable
     @Override
-    public ProjectData getCoverageData(CoverageDataManager coverageDataManager) {
-        ProjectData data = getCoverageData();
+    public CoverageProjectData getCoverageData(CoverageDataManager coverageDataManager) {
+        CoverageProjectData data = getCoverageData();
         if (data != null) {
             return data;
         }
-        ProjectData map = loadProjectInfo();
+        CoverageProjectData loaded = loadProjectInfo();
+        ProjectData map = loaded instanceof AgentCoverageProjectData loadedAgent ? loadedAgent.getProjectData() : null;
         if (mySuiteToMerge != null) {
             JavaCoverageSuite toMerge = null;
             CoverageSuite[] suites = coverageDataManager.getSuites();
@@ -149,17 +152,21 @@ public class JavaCoverageSuite extends BaseCoverageSuite {
                 }
             }
             if (toMerge != null) {
-                ProjectData projectInfo = toMerge.getCoverageData(coverageDataManager);
+                CoverageProjectData projectInfo = toMerge.getCoverageData(coverageDataManager);
+                ProjectData toMergeData = projectInfo instanceof AgentCoverageProjectData agent ? agent.getProjectData() : null;
                 if (map != null) {
-                    map.merge(projectInfo);
+                    if (toMergeData != null) {
+                        map.merge(toMergeData);
+                    }
                 }
                 else {
-                    map = projectInfo;
+                    map = toMergeData;
                 }
             }
         }
-        setCoverageData(map);
-        return map;
+        CoverageProjectData result = map == null ? null : new AgentCoverageProjectData(map);
+        setCoverageData(result);
+        return result;
     }
 
     @Override

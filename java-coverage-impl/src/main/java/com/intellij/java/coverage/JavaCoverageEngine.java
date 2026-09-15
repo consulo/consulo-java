@@ -9,7 +9,9 @@ import com.intellij.java.language.impl.psi.controlFlow.*;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiSwitchStatementImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.rt.coverage.data.JumpData;
+import com.intellij.java.coverage.data.AgentCoverageLine;
 import com.intellij.rt.coverage.data.LineData;
+import consulo.execution.coverage.data.CoverageLine;
 import com.intellij.rt.coverage.data.SwitchData;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
@@ -388,8 +390,9 @@ public class JavaCoverageEngine extends CoverageEngine {
         int lineNumber,
         int startOffset,
         int endOffset,
-        @Nullable LineData lineData
+        @Nullable CoverageLine coverageLine
     ) {
+        LineData lineData = coverageLine instanceof AgentCoverageLine agentLine ? agentLine.getLineData() : null;
         StringBuilder buf = new StringBuilder();
         buf.append("Hits: ");
         if (lineData == null) {

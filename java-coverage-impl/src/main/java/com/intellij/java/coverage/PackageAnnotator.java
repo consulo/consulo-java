@@ -6,7 +6,9 @@ import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.rt.coverage.data.ClassData;
 import com.intellij.rt.coverage.data.LineCoverage;
 import com.intellij.rt.coverage.data.LineData;
+import com.intellij.java.coverage.data.AgentCoverageProjectData;
 import com.intellij.rt.coverage.data.ProjectData;
+import consulo.execution.coverage.data.CoverageProjectData;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.content.ContentFolderTypeProvider;
@@ -98,7 +100,7 @@ public class PackageAnnotator {
 
     //get read lock myself when needed
     public void annotate(CoverageSuitesBundle suite, Annotator annotator) {
-        ProjectData data = suite.getCoverageData();
+        ProjectData data = unwrap(suite.getCoverageData());
 
         if (data == null) {
             return;
@@ -197,7 +199,7 @@ public class PackageAnnotator {
 
     @RequiredReadAction
     public void annotateFilteredClass(PsiClass psiClass, CoverageSuitesBundle bundle, Annotator annotator) {
-        ProjectData data = bundle.getCoverageData();
+        ProjectData data = unwrap(bundle.getCoverageData());
         if (data == null) {
             return;
         }
@@ -524,5 +526,10 @@ public class PackageAnnotator {
             content,
             coverageSuite.isTracingEnabled()
         );
+    }
+
+    @Nullable
+    private static ProjectData unwrap(@Nullable CoverageProjectData data) {
+        return data instanceof AgentCoverageProjectData agent ? agent.getProjectData() : null;
     }
 }

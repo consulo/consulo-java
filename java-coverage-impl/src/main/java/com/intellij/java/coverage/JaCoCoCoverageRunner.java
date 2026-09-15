@@ -3,7 +3,9 @@ package com.intellij.java.coverage;
 import com.intellij.rt.coverage.data.ClassData;
 import com.intellij.rt.coverage.data.LineCoverage;
 import com.intellij.rt.coverage.data.LineData;
+import com.intellij.java.coverage.data.AgentCoverageProjectData;
 import com.intellij.rt.coverage.data.ProjectData;
+import consulo.execution.coverage.data.CoverageProjectData;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.compiler.ModuleCompilerPathsManager;
@@ -35,7 +37,7 @@ import java.util.Collection;
 public class JaCoCoCoverageRunner extends JavaCoverageRunner {
     @Override
     @RequiredReadAction
-    public ProjectData loadCoverageData(File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
+    public CoverageProjectData loadCoverageData(File sessionDataFile, @Nullable CoverageSuite baseCoverageSuite) {
         ProjectData data = new ProjectData();
         try {
             Project project =
@@ -45,9 +47,9 @@ public class JaCoCoCoverageRunner extends JavaCoverageRunner {
             }
         }
         catch (Exception e) {
-            return data;
+            return new AgentCoverageProjectData(data);
         }
-        return data;
+        return new AgentCoverageProjectData(data);
     }
 
     @RequiredReadAction

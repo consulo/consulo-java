@@ -1,6 +1,8 @@
 package com.intellij.java.coverage;
 
 import com.intellij.rt.coverage.data.ProjectData;
+import com.intellij.java.coverage.data.AgentCoverageProjectData;
+import consulo.execution.coverage.data.CoverageProjectData;
 import com.intellij.rt.coverage.util.ProjectDataLoader;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.container.plugin.PluginManager;
@@ -21,8 +23,8 @@ public class IDEACoverageRunner extends JavaCoverageRunner {
     private static final Logger LOG = Logger.getInstance(IDEACoverageRunner.class);
 
     @Override
-    public ProjectData loadCoverageData(File sessionDataFile, @Nullable CoverageSuite coverageSuite) {
-        return ProjectDataLoader.load(sessionDataFile);
+    public CoverageProjectData loadCoverageData(File sessionDataFile, @Nullable CoverageSuite coverageSuite) {
+        return new AgentCoverageProjectData(ProjectDataLoader.load(sessionDataFile));
     }
 
     @Override
