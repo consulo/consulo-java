@@ -3,10 +3,10 @@ package com.intellij.java.language.psi;
 
 import org.jspecify.annotations.Nullable;
 
-public interface PsiTypeTestPattern extends PsiPattern
-{
-	PsiTypeElement getCheckType();
+public interface PsiTypeTestPattern extends PsiPrimaryPattern {
+    @Nullable
+    PsiTypeElement getCheckType();
 
-	@Nullable
-	PsiPatternVariable getPatternVariable();
+    @Nullable
+    PsiPatternVariable getPatternVariable();
 }
