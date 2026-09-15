@@ -43,7 +43,7 @@ import static java.util.Arrays.asList;
 
 /**
  * @author Denis Zhdanov
- * @since 4/27/11 3:07 PM
+ * @since 2011-04-27
  */
 @ExtensionImpl
 public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor {
@@ -57,6 +57,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
     }
 
     @Override
+    @RequiredReadAction
     public void processText(Project project, Template template, Document document, RangeMarker templateRange, Editor editor) {
         PsiDocumentManager.getInstance(project).commitDocument(document);
         PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
@@ -64,14 +65,14 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
             return;
         }
 
-        List<Pair<PsiElement, StaticImporter>> staticImportTargets = new ArrayList<Pair<PsiElement, StaticImporter>>();
+        List<Pair<PsiElement, StaticImporter>> staticImportTargets = new ArrayList<>();
         for (
             PsiElement element = PsiUtilCore.getElementAtOffset(file, templateRange.getStartOffset());
             element != null && element.getTextRange().getStartOffset() < templateRange.getEndOffset();
             element = getNext(element)) {
             for (StaticImporter importer : IMPORTERS) {
                 if (importer.canPerform(element)) {
-                    staticImportTargets.add(new Pair<PsiElement, StaticImporter>(element, importer));
+                    staticImportTargets.add(Pair.create(element, importer));
                     break;
                 }
             }
@@ -85,6 +86,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
     }
 
     @Nullable
+    @RequiredReadAction
     private static PsiElement getNext(PsiElement element) {
         PsiElement result = element.getNextSibling();
         for (PsiElement current = element; current != null && result == null; current = current.getParent()) {
@@ -106,6 +108,7 @@ public class ShortenToStaticImportProcessor implements TemplateOptionalProcessor
 
     private static class SingleMemberStaticImporter implements StaticImporter {
         @Override
+        @RequiredReadAction
         public boolean canPerform(PsiElement element) {
             return AddSingleMemberStaticImportAction.getStaticImportClass(element) != null;
         }

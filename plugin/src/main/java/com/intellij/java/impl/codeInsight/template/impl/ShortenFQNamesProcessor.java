@@ -44,11 +44,7 @@ public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
     }
 
     @Override
-    public void processText(Project project,
-                            Template template,
-                            Document document,
-                            RangeMarker templateRange,
-                            Editor editor) {
+    public void processText(Project project, Template template, Document document, RangeMarker templateRange, Editor editor) {
         try {
             PsiDocumentManager.getInstance(project).commitDocument(document);
             JavaCodeStyleManager javaStyle = JavaCodeStyleManager.getInstance(project);
@@ -65,5 +61,10 @@ public class ShortenFQNamesProcessor implements TemplateOptionalProcessor {
     @Override
     public LocalizeValue getOptionText() {
         return CodeInsightLocalize.dialogEditTemplateCheckboxShortenFqNames();
+    }
+
+    @Override
+    public boolean isVisible(Template template) {
+        return true;
     }
 }
