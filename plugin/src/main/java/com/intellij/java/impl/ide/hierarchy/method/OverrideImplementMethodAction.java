@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiSyntheticClass;
 import com.intellij.java.language.psi.util.MethodSignature;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.dataContext.DataContext;
 import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
 import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
@@ -95,7 +96,7 @@ abstract class OverrideImplementMethodAction extends AnAction implements AnActio
                         }
                         else {
                             project.getApplication().invokeLater(
-                                () -> Messages.showErrorDialog(project, status.getReadonlyFilesMessage(), commandName.get())
+                                () -> Messages.showErrorDialog(project, status.getReadonlyFilesMessage().get(), commandName.get())
                             );
                         }
                     }
@@ -157,13 +158,13 @@ abstract class OverrideImplementMethodAction extends AnAction implements AnActio
 
     protected abstract void update(Presentation presentation, int toImplement, int toOverride);
 
+    @RequiredReadAction
     private static boolean canImplementOverride(
         MethodHierarchyNodeDescriptor descriptor,
         MethodHierarchyBrowser methodHierarchyBrowser,
         boolean toImplement
     ) {
-        PsiElement psiElement = descriptor.getPsiClass();
-        if (!(psiElement instanceof PsiClass psiClass)) {
+        if (!(descriptor.getPsiClass() instanceof PsiClass psiClass)) {
             return false;
         }
         if (psiClass instanceof PsiSyntheticClass) {
