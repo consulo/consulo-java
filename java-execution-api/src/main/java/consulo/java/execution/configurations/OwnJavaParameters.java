@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package consulo.java.execution.configurations;
 
 import com.intellij.java.language.projectRoots.roots.NativeLibraryOrderRootType;
@@ -52,12 +51,12 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
   public static final Key<OwnJavaParameters> JAVA_PARAMETERS = Key.create("javaParameters");
 
   public String getJdkPath() throws CantRunException {
-    final Sdk jdk = getJdk();
+    Sdk jdk = getJdk();
     if (jdk == null) {
       throw new CantRunException(ExecutionLocalize.noJdkSpecifiedErrorMessage().get());
     }
 
-    final VirtualFile jdkHome = jdk.getHomeDirectory();
+    VirtualFile jdkHome = jdk.getHomeDirectory();
     if (jdkHome == null) {
       throw new CantRunException(ExecutionLocalize.homeDirectoryNotSpecifiedForJdkErrorMessage().get());
     }
@@ -74,7 +73,7 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
   public static final int JDK_AND_CLASSES_AND_PROVIDED = JDK_ONLY | CLASSES_ONLY | INCLUDE_PROVIDED;
 
   public void configureByModule(
-    final Module module,
+    Module module,
     @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType,
     @Nullable Sdk jdk
   ) throws CantRunException {
@@ -110,12 +109,12 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
     }
   }
 
-  public void setDefaultCharset(final Project project) {
+  public void setDefaultCharset(Project project) {
     Charset encoding = EncodingProjectManager.getInstance(project).getDefaultCharset();
     setCharset(encoding);
   }
 
-  public void configureByModule(final Module module, @MagicConstant(valuesFromClass = OwnJavaParameters.class) final int classPathType)
+  public void configureByModule(Module module, @MagicConstant(valuesFromClass = OwnJavaParameters.class) int classPathType)
     throws CantRunException {
     configureByModule(module, classPathType, getValidJdkToRunModule(module, (classPathType & TESTS_ONLY) == 0));
   }
@@ -123,16 +122,16 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
   /**
    * @deprecated use {@link #getValidJdkToRunModule(Module, boolean)} instead
    */
-  public static Sdk getModuleJdk(final Module module) throws CantRunException {
+  public static Sdk getModuleJdk(Module module) throws CantRunException {
     return getValidJdkToRunModule(module, false);
   }
 
-  public static Sdk getValidJdkToRunModule(final Module module, boolean productionOnly) throws CantRunException {
+  public static Sdk getValidJdkToRunModule(Module module, boolean productionOnly) throws CantRunException {
     Sdk jdk = getJdkToRunModule(module, productionOnly);
     if (jdk == null) {
       throw CantRunException.noJdkForModule(module);
     }
-    final VirtualFile homeDirectory = jdk.getHomeDirectory();
+    VirtualFile homeDirectory = jdk.getHomeDirectory();
     if (homeDirectory == null || !homeDirectory.isValid()) {
       throw CantRunException.jdkMisconfigured(jdk, module);
     }
@@ -141,18 +140,17 @@ public class OwnJavaParameters extends OwnSimpleJavaParameters {
 
   @Nullable
   public static Sdk getJdkToRunModule(Module module, boolean productionOnly) {
-    final Sdk moduleSdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
+    Sdk moduleSdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
     if (moduleSdk == null) {
       return null;
     }
 
-    final Set<Sdk> sdksFromDependencies = new LinkedHashSet<>();
+    Set<Sdk> sdksFromDependencies = new LinkedHashSet<>();
     OrderEnumerator enumerator = OrderEnumerator.orderEntries(module).runtimeOnly().recursively();
     if (productionOnly) {
       enumerator = enumerator.productionOnly();
     }
-    enumerator.forEachModule(module1 ->
-    {
+    enumerator.forEachModule(module1 -> {
       Sdk sdk = ModuleUtilCore.getSdk(module1, JavaModuleExtension.class);
       if (sdk != null && sdk.getSdkType().equals(moduleSdk.getSdkType())) {
         sdksFromDependencies.add(sdk);
