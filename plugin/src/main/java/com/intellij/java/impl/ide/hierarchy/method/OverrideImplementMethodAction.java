@@ -21,6 +21,7 @@ import com.intellij.java.language.psi.PsiMethod;
 import com.intellij.java.language.psi.PsiSubstitutor;
 import com.intellij.java.language.psi.PsiSyntheticClass;
 import com.intellij.java.language.psi.util.MethodSignature;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.dataContext.DataContext;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -152,6 +153,7 @@ abstract class OverrideImplementMethodAction extends AnAction implements AnActio
 
     protected abstract void update(Presentation presentation, int toImplement, int toOverride);
 
+    @RequiredReadAction
     private static boolean canImplementOverride(PsiElement element, @Nullable PsiMethod baseMethod, boolean toImplement) {
         if (!(element instanceof PsiClass psiClass)) {
             return false;
