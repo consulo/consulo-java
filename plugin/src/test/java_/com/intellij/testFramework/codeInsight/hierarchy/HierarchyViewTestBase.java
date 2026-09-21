@@ -15,8 +15,8 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jspecify.annotations.Nullable;
 import com.intellij.codeInsight.CodeInsightTestCase;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.language.editor.hierarchy.HierarchyTreeStructure;
 import consulo.application.util.function.Computable;
 import consulo.util.jdom.JDOMUtil;
 

@@ -22,8 +22,8 @@ import com.intellij.java.language.psi.PsiFunctionalExpression;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.colorScheme.TextAttributes;
 import consulo.component.util.Iconable;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.ui.ex.util.CompositeAppearance;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
@@ -33,6 +33,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.Comparing;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 
@@ -67,7 +68,7 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
     /**
      * Element for OpenFileDescriptor
      */
-    public final PsiElement getTargetElement() {
+    public final @Nullable PsiElement getTargetElement() {
         PsiElement element = getPsiClass();
         if (!(element instanceof PsiClass aClass)) {
             return element;
@@ -80,6 +81,11 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
             return method;
         }
         return aClass;
+    }
+
+    @Override
+    public @Nullable PsiElement getHierarchyElement() {
+        return getTargetElement();
     }
 
     @Override

@@ -24,10 +24,11 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorKeys;
 import consulo.dataContext.DataContext;
-import consulo.ide.impl.idea.ide.hierarchy.MethodHierarchyBrowserBase;
 import consulo.language.Language;
-import consulo.language.editor.hierarchy.HierarchyBrowser;
-import consulo.language.editor.hierarchy.MethodHierarchyProvider;
+import consulo.language.editor.hierarchy.HierarchyKind;
+import consulo.language.editor.hierarchy.HierarchyModel;
+import consulo.language.editor.hierarchy.HierarchyProvider;
+import consulo.language.editor.hierarchy.StandardHierarchyKinds;
 import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -40,10 +41,15 @@ import org.jspecify.annotations.Nullable;
  * @author yole
  */
 @ExtensionImpl
-public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
+public class JavaMethodHierarchyProvider implements HierarchyProvider<PsiMethod> {
+    @Override
+    public HierarchyKind getKind() {
+        return StandardHierarchyKinds.METHOD;
+    }
+
     @Override
     @RequiredReadAction
-    public PsiElement getTarget(DataContext dataContext) {
+    public @Nullable PsiMethod getTarget(DataContext dataContext) {
         PsiMethod method = getMethodImpl(dataContext);
         if (method != null && method.getContainingClass() != null && !method.isPrivate() && !method.isStatic()) {
             return method;
@@ -95,14 +101,9 @@ public class JavaMethodHierarchyProvider implements MethodHierarchyProvider {
     }
 
     @Override
-    public HierarchyBrowser createHierarchyBrowser(PsiElement target) {
-        return new MethodHierarchyBrowser(target.getProject(), (PsiMethod)target);
-    }
-
-    @Override
     @RequiredReadAction
-    public void browserActivated(HierarchyBrowser hierarchyBrowser) {
-        ((MethodHierarchyBrowser)hierarchyBrowser).changeView(MethodHierarchyBrowserBase.METHOD_TYPE);
+    public HierarchyModel<PsiMethod> createModel(Project project, PsiMethod target) {
+        return new JavaMethodHierarchyModel(project, target);
     }
 
     @Override

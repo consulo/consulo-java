@@ -17,18 +17,20 @@ package com.intellij.java.impl.ide.hierarchy.type;
 
 import com.intellij.java.impl.ide.hierarchy.JavaHierarchyUtil;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
+import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
 import consulo.application.AllIcons;
 import consulo.colorScheme.TextAttributes;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.ui.ex.util.CompositeAppearance;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.Comparing;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 
@@ -44,6 +46,17 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
 
     public final PsiElement getPsiClass() {
         return getPsiElement();
+    }
+
+    @Override
+    public boolean canBeDeleted() {
+        PsiElement element = getPsiElement();
+        return element instanceof PsiClass && !(element instanceof PsiAnonymousClass);
+    }
+
+    @Override
+    public @Nullable String getQualifiedName() {
+        return getPsiElement() instanceof PsiClass psiClass ? psiClass.getQualifiedName() : "";
     }
 
     @RequiredUIAccess

@@ -17,14 +17,15 @@ package com.intellij.java.impl.ide.hierarchy.type;
 
 import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiClass;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.language.editor.hierarchy.HierarchyScope;
 import consulo.project.Project;
 
 import java.util.ArrayList;
 
 public final class TypeHierarchyTreeStructure extends SubtypesHierarchyTreeStructure {
-    public TypeHierarchyTreeStructure(Project project, PsiClass aClass, String currentScopeType) {
-        super(project, buildHierarchyElement(project, aClass), currentScopeType);
+    public TypeHierarchyTreeStructure(Project project, PsiClass aClass, HierarchyScope scope) {
+        super(project, buildHierarchyElement(project, aClass), scope);
         setBaseElement(myBaseDescriptor); //to set myRoot
     }
 

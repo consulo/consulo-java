@@ -15,17 +15,9 @@
  */
 package com.intellij.java.impl.ide.hierarchy;
 
-import com.intellij.java.impl.ide.util.treeView.SourceComparator;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserManager;
-import consulo.language.psi.PsiFile;
-import consulo.project.Project;
-import consulo.ui.ex.tree.AlphaComparator;
-import consulo.ui.ex.tree.NodeDescriptor;
 import org.jspecify.annotations.Nullable;
-
-import java.util.Comparator;
 
 /**
  * @author yole
@@ -40,11 +32,5 @@ public class JavaHierarchyUtil {
             return classOwner.getPackageName();
         }
         return null;
-    }
-
-    public static Comparator<NodeDescriptor> getComparator(Project project) {
-        HierarchyBrowserManager.State state = HierarchyBrowserManager.getInstance(project).getState();
-        assert state != null;
-        return state.SORT_ALPHABETICALLY ? AlphaComparator.INSTANCE : SourceComparator.INSTANCE;
     }
 }

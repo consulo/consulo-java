@@ -20,22 +20,29 @@ import com.intellij.java.language.psi.PsiMethod;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.dataContext.DataContext;
-import consulo.ide.impl.idea.ide.hierarchy.CallHierarchyBrowserBase;
 import consulo.language.Language;
-import consulo.language.editor.hierarchy.CallHierarchyProvider;
-import consulo.language.editor.hierarchy.HierarchyBrowser;
+import consulo.language.editor.hierarchy.HierarchyKind;
+import consulo.language.editor.hierarchy.HierarchyModel;
+import consulo.language.editor.hierarchy.HierarchyProvider;
+import consulo.language.editor.hierarchy.StandardHierarchyKinds;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
-
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author yole
  */
 @ExtensionImpl
-public class JavaCallHierarchyProvider implements CallHierarchyProvider {
+public class JavaCallHierarchyProvider implements HierarchyProvider<PsiMethod> {
     @Override
-    public PsiElement getTarget(DataContext dataContext) {
+    public HierarchyKind getKind() {
+        return StandardHierarchyKinds.CALL;
+    }
+
+    @Override
+    @RequiredReadAction
+    public @Nullable PsiMethod getTarget(DataContext dataContext) {
         Project project = dataContext.getData(Project.KEY);
         if (project == null) {
             return null;
@@ -46,14 +53,9 @@ public class JavaCallHierarchyProvider implements CallHierarchyProvider {
     }
 
     @Override
-    public HierarchyBrowser createHierarchyBrowser(PsiElement target) {
-        return new CallHierarchyBrowser(target.getProject(), (PsiMethod)target);
-    }
-
-    @Override
     @RequiredReadAction
-    public void browserActivated(HierarchyBrowser hierarchyBrowser) {
-        ((CallHierarchyBrowser)hierarchyBrowser).changeView(CallHierarchyBrowserBase.CALLER_TYPE);
+    public HierarchyModel<PsiMethod> createModel(Project project, PsiMethod target) {
+        return new JavaCallHierarchyModel(project, target);
     }
 
     @Override

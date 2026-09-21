@@ -19,9 +19,8 @@ import com.intellij.java.indexing.search.searches.ClassInheritorsSearch;
 import com.intellij.java.indexing.search.searches.FunctionalExpressionSearch;
 import com.intellij.java.language.psi.*;
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyBrowserManager;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.language.editor.hierarchy.HierarchyTreeStructure;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.SmartPointerManager;
 import consulo.language.psi.SmartPsiElementPointer;
@@ -36,12 +35,14 @@ import java.util.List;
 
 public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
     private final SmartPsiElementPointer myMethod;
+    private final boolean myHideNotImplemented;
 
     /**
      * Should be called in read action
      */
-    public MethodHierarchyTreeStructure(Project project, PsiMethod method) {
+    public MethodHierarchyTreeStructure(Project project, PsiMethod method, boolean hideNotImplemented) {
         super(project, null);
+        myHideNotImplemented = hideNotImplemented;
         myBaseDescriptor = buildHierarchyElement(project, method);
         ((MethodHierarchyNodeDescriptor)myBaseDescriptor).setTreeStructure(this);
         myMethod = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(method);
@@ -170,9 +171,7 @@ public final class MethodHierarchyTreeStructure extends HierarchyTreeStructure {
 
         List<HierarchyNodeDescriptor> descriptors = new ArrayList<>(subclasses.size());
         for (PsiClass aClass : subclasses) {
-            HierarchyBrowserManager.State state = HierarchyBrowserManager.getInstance(myProject).getState();
-            assert state != null;
-            if (state.HIDE_CLASSES_WHERE_METHOD_NOT_IMPLEMENTED && shouldHideClass(aClass)) {
+            if (myHideNotImplemented && shouldHideClass(aClass)) {
                 continue;
             }
 

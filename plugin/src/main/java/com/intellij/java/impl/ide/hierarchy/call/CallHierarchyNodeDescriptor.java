@@ -32,8 +32,8 @@ import consulo.colorScheme.TextAttributes;
 import consulo.component.util.Iconable;
 import consulo.document.util.TextRange;
 import consulo.fileEditor.FileEditorManager;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.openapi.roots.ui.util.CompositeAppearance;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.ui.ex.util.CompositeAppearance;
 import consulo.ide.localize.IdeLocalize;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.util.PsiUtilBase;
@@ -51,6 +51,7 @@ import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
 import consulo.util.lang.Comparing;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,12 +77,12 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     /**
      * @return PsiMethod or PsiClass or JspFile
      */
-    public final PsiMember getEnclosingElement() {
+    public final @Nullable PsiMember getEnclosingElement() {
         PsiElement element = getPsiElement();
         return element == null ? null : getEnclosingElement(element);
     }
 
-    public static PsiMember getEnclosingElement(PsiElement element) {
+    public static @Nullable PsiMember getEnclosingElement(PsiElement element) {
         return PsiTreeUtil.getNonStrictParentOfType(element, PsiMethod.class, PsiClass.class);
     }
 
@@ -92,8 +93,18 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
     /**
      * Element for OpenFileDescriptor
      */
-    public final PsiElement getTargetElement() {
+    public final @Nullable PsiElement getTargetElement() {
         return getPsiElement();
+    }
+
+    @Override
+    public @Nullable PsiElement getHierarchyElement() {
+        return getEnclosingElement();
+    }
+
+    @Override
+    public @Nullable PsiElement getOpenFileElement() {
+        return getTargetElement();
     }
 
     @Override

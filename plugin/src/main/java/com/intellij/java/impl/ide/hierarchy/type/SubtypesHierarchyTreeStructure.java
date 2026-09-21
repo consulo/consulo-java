@@ -21,8 +21,9 @@ import com.intellij.java.language.psi.CommonClassNames;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.content.scope.SearchScope;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.language.editor.hierarchy.HierarchyScope;
+import consulo.language.editor.hierarchy.HierarchyTreeStructure;
 import consulo.ide.localize.IdeLocalize;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
@@ -31,16 +32,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure {
-    private final String myCurrentScopeType;
+    private final HierarchyScope myScope;
 
-    protected SubtypesHierarchyTreeStructure(Project project, HierarchyNodeDescriptor descriptor, String currentScopeType) {
+    protected SubtypesHierarchyTreeStructure(Project project, HierarchyNodeDescriptor descriptor, HierarchyScope scope) {
         super(project, descriptor);
-        myCurrentScopeType = currentScopeType;
+        myScope = scope;
     }
 
-    public SubtypesHierarchyTreeStructure(Project project, PsiClass psiClass, String currentScopeType) {
+    public SubtypesHierarchyTreeStructure(Project project, PsiClass psiClass, HierarchyScope scope) {
         super(project, new TypeHierarchyNodeDescriptor(project, null, psiClass, true));
-        myCurrentScopeType = currentScopeType;
+        myScope = scope;
     }
 
     @Override
@@ -58,7 +59,7 @@ public class SubtypesHierarchyTreeStructure extends HierarchyTreeStructure {
         if (psiClass.isFinal()) {
             return ArrayUtil.EMPTY_OBJECT_ARRAY;
         }
-        SearchScope searchScope = psiClass.getUseScope().intersectWith(getSearchScope(myCurrentScopeType, psiClass));
+        SearchScope searchScope = psiClass.getUseScope().intersectWith(getSearchScope(myScope, psiClass));
         List<PsiClass> classes = new ArrayList<>(ClassInheritorsSearch.search(psiClass, searchScope, false).findAll());
         List<HierarchyNodeDescriptor> descriptors = new ArrayList<>(classes.size());
         for (PsiClass aClass : classes) {

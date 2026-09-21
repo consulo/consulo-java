@@ -16,8 +16,9 @@
 package com.intellij.java.impl.ide.hierarchy.call;
 
 import consulo.annotation.access.RequiredReadAction;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.language.editor.hierarchy.HierarchyScope;
+import consulo.language.editor.hierarchy.HierarchyTreeStructure;
 import com.intellij.java.language.psi.*;
 import consulo.project.Project;
 import consulo.language.psi.*;
@@ -28,14 +29,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public final class CalleeMethodsTreeStructure extends HierarchyTreeStructure {
-    private final String myScopeType;
+    private final HierarchyScope myScope;
 
     /**
      * Should be called in read action
      */
-    public CalleeMethodsTreeStructure(Project project, PsiMethod method, String scopeType) {
+    public CalleeMethodsTreeStructure(Project project, PsiMethod method, HierarchyScope scope) {
         super(project, new CallHierarchyNodeDescriptor(project, null, method, true, false));
-        myScopeType = scopeType;
+        myScope = scope;
     }
 
     @Override
@@ -61,7 +62,7 @@ public final class CalleeMethodsTreeStructure extends HierarchyTreeStructure {
         ArrayList<CallHierarchyNodeDescriptor> result = new ArrayList<>();
 
         for (PsiMethod calledMethod : methods) {
-            if (!isInScope(baseClass, calledMethod, myScopeType)) {
+            if (!isInScope(baseClass, calledMethod, myScope)) {
                 continue;
             }
 
@@ -79,7 +80,7 @@ public final class CalleeMethodsTreeStructure extends HierarchyTreeStructure {
         // also add overriding methods as children
         PsiMethod[] overridingMethods = OverridingMethodsSearch.search(method, true).toArray(PsiMethod.EMPTY_ARRAY);
         for (PsiMethod overridingMethod : overridingMethods) {
-            if (!isInScope(baseClass, overridingMethod, myScopeType)) {
+            if (!isInScope(baseClass, overridingMethod, myScope)) {
                 continue;
             }
             CallHierarchyNodeDescriptor node =

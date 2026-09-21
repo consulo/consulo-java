@@ -21,8 +21,9 @@ import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.content.scope.SearchScope;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyNodeDescriptor;
-import consulo.ide.impl.idea.ide.hierarchy.HierarchyTreeStructure;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
+import consulo.language.editor.hierarchy.HierarchyScope;
+import consulo.language.editor.hierarchy.HierarchyTreeStructure;
 import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.util.collection.ArrayUtil;
@@ -34,14 +35,14 @@ import java.util.Map;
 import java.util.Set;
 
 public final class CallerMethodsTreeStructure extends HierarchyTreeStructure {
-    private final String myScopeType;
+    private final HierarchyScope myScope;
 
     /**
      * Should be called in read action
      */
-    public CallerMethodsTreeStructure(Project project, PsiMethod method, String scopeType) {
+    public CallerMethodsTreeStructure(Project project, PsiMethod method, HierarchyScope scope) {
         super(project, new CallHierarchyNodeDescriptor(project, null, method, true, false));
-        myScopeType = scopeType;
+        myScope = scope;
     }
 
     @Override
@@ -54,7 +55,7 @@ public final class CallerMethodsTreeStructure extends HierarchyTreeStructure {
         }
         PsiMethod method = (PsiMethod)enclosingElement;
         PsiMethod baseMethod = (PsiMethod)((CallHierarchyNodeDescriptor)nodeDescriptor).getTargetElement();
-        SearchScope searchScope = getSearchScope(myScopeType, baseMethod.getContainingClass());
+        SearchScope searchScope = getSearchScope(myScope, baseMethod.getContainingClass());
 
         PsiClass originalClass = method.getContainingClass();
         assert originalClass != null;
