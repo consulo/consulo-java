@@ -40,7 +40,7 @@ public class CompilerDependencyStorage<Key> implements Flushable, Disposable
 
 	public CompilerDependencyStorage(File file, KeyDescriptor<Key> keyDescriptor, final int cacheSize) throws IOException
 	{
-		myMap = new PersistentHashMap<>(file, keyDescriptor, new DataExternalizer<>()
+		myMap = new PersistentHashMap<>(file.toPath(), keyDescriptor, new DataExternalizer<>()
 		{
 			public void save(DataOutput out, int[] array) throws IOException
 			{

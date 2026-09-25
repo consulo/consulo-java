@@ -59,13 +59,13 @@ final class TestInfoHolder {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    final File methodQNameToTestNameFile = basePath.resolve("methodQNameToTestName.data").toFile();
-    final File testNameToUsedClassesAndMethodMapFile = basePath.resolve("testToCalledMethodNames.data").toFile();
-    final File classNameEnumeratorFile = basePath.resolve("classNameEnumerator.data").toFile();
-    final File methodNameEnumeratorFile = basePath.resolve("methodNameEnumerator.data").toFile();
-    final File testNameEnumeratorFile = basePath.resolve("testNameEnumerator.data").toFile();
-    final File moduleNameEnumeratorFile = basePath.resolve("moduleNameEnumerator.data").toFile();
-    final File testNameToNearestModuleFile = basePath.resolve("testNameToNearestModule.data").toFile();
+    final Path methodQNameToTestNameFile = basePath.resolve("methodQNameToTestName.data");
+    final Path testNameToUsedClassesAndMethodMapFile = basePath.resolve("testToCalledMethodNames.data");
+    final Path classNameEnumeratorFile = basePath.resolve("classNameEnumerator.data");
+    final Path methodNameEnumeratorFile = basePath.resolve("methodNameEnumerator.data");
+    final Path testNameEnumeratorFile = basePath.resolve("testNameEnumerator.data");
+    final Path moduleNameEnumeratorFile = basePath.resolve("moduleNameEnumerator.data");
+    final Path testNameToNearestModuleFile = basePath.resolve("testNameToNearestModule.data");
 
     try {
       int version = readVersion(versionFile);
@@ -184,8 +184,8 @@ final class TestInfoHolder {
     }
   }
 
-  private static void deleteAllIndexDataFiles(File... files) {
-    for (File file : files) {
+  private static void deleteAllIndexDataFiles(Path... files) {
+    for (Path file : files) {
       IOUtil.deleteAllFilesStartingWith(file);
     }
   }

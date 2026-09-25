@@ -23,7 +23,7 @@ package com.intellij.java.compiler.impl.cache;
 
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.localize.CompilerLocalize;
-import consulo.index.io.PersistentEnumerator;
+import consulo.index.io.CorruptedException;
 import consulo.index.io.PersistentStringEnumerator;
 import consulo.util.collection.SLRUCache;
 import consulo.util.io.FileUtil;
@@ -65,9 +65,9 @@ public class SymbolTable {
       if (!file.exists()) {
         FileUtil.createIfDoesntExist(file);
       }
-      myTrie = new PersistentStringEnumerator(file);
+      myTrie = new PersistentStringEnumerator(file.toPath());
     }
-    catch (PersistentEnumerator.CorruptedException e) {
+    catch (CorruptedException e) {
       throw new CacheCorruptedException(CompilerLocalize.errorCompilerCachesCorrupted().get(), e);
     }
     catch (IOException e) {

@@ -17,7 +17,6 @@ package com.intellij.java.compiler.impl.cache;
 
 import com.intellij.java.compiler.impl.classParsing.*;
 import com.intellij.java.language.util.cls.ClsFormatException;
-import consulo.application.progress.ProgressManager;
 import consulo.compiler.CacheCorruptedException;
 import consulo.index.io.*;
 import consulo.index.io.data.DataExternalizer;
@@ -40,12 +39,7 @@ import java.util.*;
 public class Cache {
   private static class MyMapIndexStorage extends MapIndexStorage<Integer, ClassInfo> {
     protected MyMapIndexStorage(File storageFile, KeyDescriptor<Integer> keyDescriptor, int cacheSize) throws IOException {
-      super(storageFile, keyDescriptor, MyDataExternalizer.INSTANCE, cacheSize, true);
-    }
-
-    @Override
-    protected void checkCanceled() {
-      ProgressManager.checkCanceled();
+      super(storageFile.toPath(), keyDescriptor, MyDataExternalizer.INSTANCE, cacheSize, true);
     }
   }
 
@@ -84,7 +78,7 @@ public class Cache {
     myQNameToReferencedClassesMap = new CompilerDependencyStorage<>(getOrCreateFile("fdeps"), EnumeratorIntegerDescriptor.INSTANCE, cacheSize);
     myQNameToSubclassesMap = new CompilerDependencyStorage<>(getOrCreateFile("subclasses"), EnumeratorIntegerDescriptor.INSTANCE, cacheSize);
 
-    myRemoteQNames = new PersistentHashMap<>(getOrCreateFile("remote"), EnumeratorIntegerDescriptor.INSTANCE, new DataExternalizer<Boolean>() {
+    myRemoteQNames = new PersistentHashMap<>(getOrCreateFile("remote").toPath(), EnumeratorIntegerDescriptor.INSTANCE, new DataExternalizer<Boolean>() {
       @Override
       public void save(DataOutput out, Boolean value) throws IOException {
         out.writeBoolean(value.booleanValue());
