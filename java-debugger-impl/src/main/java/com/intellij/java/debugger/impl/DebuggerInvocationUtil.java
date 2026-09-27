@@ -25,30 +25,25 @@ import consulo.ui.annotation.RequiredUIAccess;
 import javax.swing.*;
 
 public class DebuggerInvocationUtil {
+    @Deprecated
     public static void swingInvokeLater(final Project project, @RequiredUIAccess Runnable runnable) {
-        SwingUtilities.invokeLater(() -> {
-            if (project != null && !project.isDisposed()) {
-                runnable.run();
-            }
-        });
+        invokeLater(project, runnable);
     }
 
     public static void invokeLater(final Project project, final Runnable runnable) {
-        Application.get().invokeLater(() -> {
-            if (project != null && !project.isDisposed()) {
-                runnable.run();
-            }
-        });
+        if (project == null) {
+            return;
+        }
+        
+        project.getUIAccess().give(runnable);
     }
 
     public static void invokeLater(final Project project, final Runnable runnable, ModalityState state) {
-        Application.get().invokeLater(() -> {
-            if (project == null || project.isDisposed()) {
-                return;
-            }
+        if (project == null) {
+            return;
+        }
 
-            runnable.run();
-        }, state);
+        project.getUIAccess().giveLater(runnable, state);
     }
 
     public static void invokeAndWait(final Project project, final Runnable runnable, ModalityState state) {
