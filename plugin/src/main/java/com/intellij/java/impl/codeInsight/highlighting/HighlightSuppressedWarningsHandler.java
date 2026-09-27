@@ -25,15 +25,14 @@ import consulo.application.progress.ProgressIndicator;
 import consulo.application.progress.ProgressManager;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
-import consulo.ide.impl.idea.codeInsight.daemon.impl.LocalInspectionsPass;
-import consulo.ide.impl.idea.codeInspection.ex.GlobalInspectionContextImpl;
+import consulo.document.util.TextRange;
 import consulo.language.editor.DaemonCodeAnalyzer;
 import consulo.language.editor.highlight.usage.HighlightUsagesHandlerBase;
-import consulo.language.editor.impl.highlight.HighlightInfoProcessor;
+import consulo.language.editor.impl.inspection.InspectionEngine;
 import consulo.language.editor.impl.inspection.reference.RefManagerImpl;
+import consulo.language.editor.inspection.GlobalInspectionContext;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.inspection.scheme.*;
-import consulo.language.editor.rawHighlight.HighlightInfo;
-import consulo.language.editor.util.CollectHighlightsUtil;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.logging.Logger;
@@ -46,6 +45,7 @@ import consulo.ui.ex.popup.PopupStep;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBase<PsiLiteralExpression> {
@@ -111,44 +111,39 @@ public class HighlightSuppressedWarningsHandler extends HighlightUsagesHandlerBa
   public void computeUsages(List<PsiLiteralExpression> targets) {
     Project project = myTarget.getProject();
     PsiElement parent = myTarget.getParent().getParent();
-    final LocalInspectionsPass pass = new LocalInspectionsPass(myFile, myFile.getViewProvider().getDocument(),
-        parent.getTextRange().getStartOffset(), parent.getTextRange().getEndOffset(), LocalInspectionsPass.EMPTY_PRIORITY_RANGE,
-        false, HighlightInfoProcessor.getEmpty());
-    InspectionProfile inspectionProfile =
-        InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
+    InspectionProfile inspectionProfile = InspectionProjectProfileManager.getInstance(project).getInspectionProfile();
     for (PsiLiteralExpression target : targets) {
       Object value = target.getValue();
       if (!(value instanceof String)) {
         continue;
       }
       InspectionToolWrapper toolWrapperById = inspectionProfile.getToolById((String) value, target);
-      if (!(toolWrapperById instanceof LocalInspectionToolWrapper)) {
+      if (!(toolWrapperById instanceof LocalInspectionToolWrapper localToolWrapper)) {
         continue;
       }
-      final LocalInspectionToolWrapper toolWrapper = ((LocalInspectionToolWrapper) toolWrapperById).createCopy();
-      final InspectionManager manager = InspectionManager.getInstance(project);
-      final GlobalInspectionContextImpl context = (GlobalInspectionContextImpl) manager.createNewGlobalContext(false);
-      toolWrapper.initialize(context);
-      ((RefManagerImpl) context.getRefManager()).inspectionReadActionStarted();
-      ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
-      Runnable inspect = new Runnable() {
-        @Override
-        public void run() {
-          pass.doInspectInBatch(context, manager, Collections.<LocalInspectionToolWrapper>singletonList(toolWrapper));
-        }
-      };
-      if (indicator == null) {
-        ProgressManager.getInstance().executeProcessUnderProgress(inspect, DaemonCodeAnalyzer.getInstance(project).createDaemonProgressIndicator());
-      } else {
-        inspect.run();
+      List<LocalInspectionToolWrapper> toolsCopy = Collections.singletonList(localToolWrapper.createCopy());
+      GlobalInspectionContext context = InspectionManager.getInstance(project).createNewGlobalContext(false);
+      for (InspectionToolWrapper toolWrapper : toolsCopy) {
+        toolWrapper.initialize(context);
       }
+      ((RefManagerImpl) context.getRefManager()).runInsideInspectionReadAction(() -> {
+        ProgressIndicator indicator = ProgressManager.getInstance().getProgressIndicator();
+        if (indicator == null) {
+          indicator = DaemonCodeAnalyzer.getInstance(project).createDaemonProgressIndicator();
+        }
+        Map<LocalInspectionToolWrapper, List<ProblemDescriptor>> map =
+            InspectionEngine.inspectEx(toolsCopy, myFile, parent.getTextRange(), TextRange.EMPTY_RANGE, false, true, false,
+                indicator, (toolWrapper, descriptor) -> true);
 
-      for (HighlightInfo info : pass.getInfos()) {
-        PsiElement element = CollectHighlightsUtil.findCommonParent(myFile, info.getStartOffset(), info.getEndOffset());
-        if (element != null) {
-          addOccurrence(element);
+        for (List<ProblemDescriptor> descriptors : map.values()) {
+          for (ProblemDescriptor descriptor : descriptors) {
+            PsiElement element = descriptor.getPsiElement();
+            if (element != null) {
+              addOccurrence(element);
+            }
+          }
         }
-      }
+      });
     }
   }
 }
