@@ -10,20 +10,56 @@ application.configuration.shorten.command.line.label:
     text: 'Shorten command &line:'
 application.configuration.use.classpath.and.jdk.of.module.label:
     text: 'Use classpath of m&odule:'
+jar.application.configuration.choose.jar.title:
+    text: Choose JAR File
 jar.application.configuration.description:
     text: Configuration to run a JAR file using 'java -jar' command
+jar.application.configuration.jar.path.label:
+    text: 'Path to &JAR:'
+jar.application.configuration.module.label:
+    text: 'Search sources using m&odule''s classpath:'
 jar.application.configuration.name:
     text: JAR Application
 jre.path.is.not.valid.jre.home.error.message:
     text: '''''{0}'''' is not a valid JRE home'
+remote.configuration.command.line.arguments.label:
+    text: '&Command line arguments for remote JVM:'
+remote.configuration.jdk.1.3:
+    text: JDK 1.3.x or earlier
+remote.configuration.jdk.1.4:
+    text: JDK 1.4.x
+remote.configuration.jdk.5.to.8:
+    text: JDK 5 - 8
+remote.configuration.jdk.9.or.later:
+    text: JDK 9 or later
+remote.configuration.jvm.arguments.format.label:
+    text: 'JVM arguments format:'
+remote.configuration.mode.attach:
+    text: Attach to remote JVM
+remote.configuration.mode.listen:
+    text: Listen to remote JVM
+remote.configuration.module.label:
+    text: 'Use &module classpath:'
+remote.configuration.port.not.a.number:
+    text: Port value should be a number between 0 and 65535
+remote.configuration.port.out.of.range:
+    text: Incorrect port range. Set value between 0 and 65535
 remote.debug.configuration.description:
     text: Remote JVM Debug configuration
 remote.debug.configuration.display.name:
     text: Remote JVM Debug
+run.configuration.jre.auto.select:
+    text: Auto Select
 run.configuration.jre.label:
     text: '&JRE:'
+run.configuration.module.none:
+    text: <no module>
+run.configuration.module.whole.project:
+    text: <whole project>
 run.test:
     text: Run Test
+shorten.command.line.user.local.default:
+    text: 'user-local default: {0}'
 show.swing.inspector:
     text: '&Enable capturing form snapshots'
 show.swing.inspector.disabled:

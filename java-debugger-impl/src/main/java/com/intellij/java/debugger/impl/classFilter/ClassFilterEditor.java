@@ -321,16 +321,9 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
 
   @RequiredReadAction
   protected void addClassFilter() {
-    TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject).createNoInnerClassesScopeChooser(
-      UILocalize.classFilterEditorChooseClassTitle().get(),
-      GlobalSearchScope.allScope(myProject),
-      myChooserFilter,
-      null
-    );
-    chooser.showDialog();
-    PsiClass selectedClass = chooser.getSelected();
-    if (selectedClass != null) {
-      com.intellij.java.debugger.ui.classFilter.ClassFilter filter = createFilter(getJvmClassName(selectedClass));
+    String pattern = chooseClassPattern(myProject, myChooserFilter);
+    if (pattern != null) {
+      com.intellij.java.debugger.ui.classFilter.ClassFilter filter = createFilter(pattern);
       myTableModel.addRow(filter);
       int row = myTableModel.getRowCount() - 1;
       myTable.getSelectionModel().setSelectionInterval(row, row);
@@ -338,6 +331,20 @@ public class ClassFilterEditor extends JPanel implements ComponentWithEmptyText 
 
       myTable.requestFocus();
     }
+  }
+
+  @Nullable
+  @RequiredReadAction
+  static String chooseClassPattern(Project project, @Nullable ClassFilter chooserFilter) {
+    TreeClassChooser chooser = TreeClassChooserFactory.getInstance(project).createNoInnerClassesScopeChooser(
+      UILocalize.classFilterEditorChooseClassTitle().get(),
+      GlobalSearchScope.allScope(project),
+      chooserFilter,
+      null
+    );
+    chooser.showDialog();
+    PsiClass selectedClass = chooser.getSelected();
+    return selectedClass == null ? null : getJvmClassName(selectedClass);
   }
 
   @Nullable

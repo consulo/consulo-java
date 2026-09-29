@@ -13,187 +13,290 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * Class RemoteConfigurable
- * @author Jeka
- */
 package com.intellij.java.execution.impl.remote;
 
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.java.execution.impl.ui.ConfigurationArgumentsHelpArea;
-import com.intellij.java.execution.impl.ui.ConfigurationModuleSelector;
+import com.intellij.java.execution.impl.ui.UnifiedConfigurationModuleSelector;
 import consulo.configurable.ConfigurationException;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.localize.ExecutionLocalize;
+import consulo.java.execution.localize.JavaExecutionLocalize;
+import consulo.localize.LocalizeValue;
 import consulo.platform.Platform;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
+import consulo.ui.ComboBox;
+import consulo.ui.Component;
+import consulo.ui.HasValidator.ValidationInfo;
+import consulo.ui.Label;
+import consulo.ui.TextBox;
+import consulo.ui.TextBoxWithExtensions;
+import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.awt.LabeledComponent;
-import consulo.ui.ex.awt.event.DocumentAdapter;
-
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.event.*;
+import consulo.ui.util.FormBuilder;
+import consulo.util.lang.StringUtil;
+import org.jspecify.annotations.Nullable;
 
 public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
-  JPanel myPanel;
-  private JRadioButton myRbSocket;
-  private JRadioButton myRbShmem;
-  private JRadioButton myRbListen;
-  private JRadioButton myRbAttach;
-  private JTextField myAddressField;
-  private JTextField myHostField;
-  private JTextField myPortField;
-  private JPanel myShmemPanel;
-  private JPanel mySocketPanel;
-  private ConfigurationArgumentsHelpArea myHelpArea;
-  private ConfigurationArgumentsHelpArea myJDK13HelpArea;
-  private ConfigurationArgumentsHelpArea myJDK14HelpArea;
-  private LabeledComponent<JComboBox> myModule;
-  private String myHostName = "";
-  protected static final String LOCALHOST = "localhost";
-  private final ConfigurationModuleSelector myModuleSelector;
+    private enum Mode {
+        ATTACH(JavaExecutionLocalize.remoteConfigurationModeAttach()),
+        LISTEN(JavaExecutionLocalize.remoteConfigurationModeListen());
 
-  @RequiredUIAccess
-  public RemoteConfigurable(final Project project) {
-    myHelpArea.setLabelText(ExecutionLocalize.remoteConfigurationRemoteDebuggingAllowsYouToConnectIdeaToARunningJvmLabel().get());
-    myHelpArea.setToolbarVisible();
+        private final LocalizeValue myText;
 
-    myJDK13HelpArea.setLabelText(ExecutionLocalize.environmentVariablesHelperUseArgumentsJdk13Label().get());
-    myJDK13HelpArea.setToolbarVisible();
-    myJDK14HelpArea.setLabelText(ExecutionLocalize.environmentVariablesHelperUseArgumentsJdk14Label().get());
-    myJDK14HelpArea.setToolbarVisible();
-
-    final ButtonGroup transportGroup = new ButtonGroup();
-    transportGroup.add(myRbSocket);
-    transportGroup.add(myRbShmem);
-
-    final ButtonGroup connectionGroup = new ButtonGroup();
-    connectionGroup.add(myRbListen);
-    connectionGroup.add(myRbAttach);
-
-    final DocumentListener helpTextUpdater = new DocumentAdapter() {
-      public void textChanged(DocumentEvent event) {
-        updateHelpText();
-      }
-    };
-    myAddressField.getDocument().addDocumentListener(helpTextUpdater);
-    myHostField.getDocument().addDocumentListener(helpTextUpdater);
-    myPortField.getDocument().addDocumentListener(helpTextUpdater);
-    myRbSocket.setSelected(true);
-    final ActionListener listener = e -> {
-      final Object source = e.getSource();
-      if (source.equals(myRbSocket)) {
-         myShmemPanel.setVisible(false);
-         mySocketPanel.setVisible(true);
-      }
-      else if (source.equals(myRbShmem)) {
-         myShmemPanel.setVisible(true);
-         mySocketPanel.setVisible(false);
-      }
-      myPanel.repaint();
-      updateHelpText();
-    };
-    myRbShmem.addActionListener(listener);
-    myRbSocket.addActionListener(listener);
-
-    final ItemListener updateListener = e -> {
-      final boolean isAttach = myRbAttach.isSelected();
-
-      if (!isAttach && myHostField.isEditable()) {
-        myHostName = myHostField.getText();
-      }
-
-      myHostField.setEditable(isAttach);
-      myHostField.setEnabled(isAttach);
-
-      myHostField.setText(isAttach ? myHostName : LOCALHOST);
-      updateHelpText();
-    };
-    myRbAttach.addItemListener(updateListener);
-    myRbListen.addItemListener(updateListener);
-
-    final FocusListener fieldFocusListener = new FocusAdapter() {
-      public void focusLost(final FocusEvent e) {
-        updateHelpText();
-      }
-    };
-    myAddressField.addFocusListener(fieldFocusListener);
-    myPortField.addFocusListener(fieldFocusListener);
-
-    myModuleSelector = new ConfigurationModuleSelector(project, myModule.getComponent(), "<whole project>");
-  }
-
-  public void applyEditorTo(final RemoteConfiguration configuration) throws ConfigurationException {
-    configuration.HOST = (myHostField.isEditable() ? myHostField.getText() : myHostName).trim();
-    if (configuration.HOST != null && configuration.HOST.isEmpty()) {
-      configuration.HOST = null;
+        Mode(LocalizeValue text) {
+            myText = text;
+        }
     }
-    configuration.PORT = myPortField.getText().trim();
-    if (configuration.PORT != null && configuration.PORT.isEmpty()) {
-      configuration.PORT = null;
-    }
-    configuration.SHMEM_ADDRESS = myAddressField.getText().trim();
-    if (configuration.SHMEM_ADDRESS != null && configuration.SHMEM_ADDRESS.isEmpty()) {
-      configuration.SHMEM_ADDRESS = null;
-    }
-    configuration.USE_SOCKET_TRANSPORT = myRbSocket.isSelected();
-    configuration.SERVER_MODE = myRbListen.isSelected();
-    myModuleSelector.applyTo(configuration);
-  }
 
-  public void resetEditorFrom(final RemoteConfiguration configuration) {
-    if (!Platform.current().os().isWindows()) {
-      configuration.USE_SOCKET_TRANSPORT = true;
-      myRbShmem.setEnabled(false);
-      myAddressField.setEditable(false);
+    private enum Transport {
+        SOCKET(ExecutionLocalize.remoteConfigurationSocketRadio()),
+        SHMEM(ExecutionLocalize.remoteConfigurationSharedMemoryRadio());
+
+        private final LocalizeValue myText;
+
+        Transport(LocalizeValue text) {
+            myText = text;
+        }
     }
-    myAddressField.setText(configuration.SHMEM_ADDRESS);
-    myHostName = configuration.HOST;
-    myHostField.setText(configuration.HOST);
-    myPortField.setText(configuration.PORT);
-    if (configuration.USE_SOCKET_TRANSPORT) {
-      myRbSocket.doClick();
+
+    private enum JDKVersionItem {
+        JDK9(JavaExecutionLocalize.remoteConfigurationJdk9OrLater()) {
+            @Override
+            String getLaunchCommandLine(RemoteConnection connection) {
+                String commandLine = JDK5to8.getLaunchCommandLine(connection);
+                if (connection.isUseSockets() && !connection.isServerMode()) {
+                    String address = connection.getAddress();
+                    commandLine = commandLine.replace("address=" + address, "address=*:" + address);
+                }
+                return commandLine;
+            }
+        },
+        JDK5to8(JavaExecutionLocalize.remoteConfigurationJdk5To8()) {
+            @Override
+            String getLaunchCommandLine(RemoteConnection connection) {
+                return connection.getLaunchCommandLine().replace("-Xdebug", "").replace("-Xrunjdwp:", "-agentlib:jdwp=").trim();
+            }
+        },
+        JDK1_4(JavaExecutionLocalize.remoteConfigurationJdk14()) {
+            @Override
+            String getLaunchCommandLine(RemoteConnection connection) {
+                return connection.getLaunchCommandLine();
+            }
+        },
+        JDK1_3(JavaExecutionLocalize.remoteConfigurationJdk13()) {
+            @Override
+            String getLaunchCommandLine(RemoteConnection connection) {
+                return "-Xnoagent -Djava.compiler=NONE " + connection.getLaunchCommandLine();
+            }
+        };
+
+        private final LocalizeValue myText;
+
+        JDKVersionItem(LocalizeValue text) {
+            myText = text;
+        }
+
+        abstract String getLaunchCommandLine(RemoteConnection connection);
     }
-    else {
-      myRbShmem.doClick();
+
+    private static final int MIN_PORT_VALUE = 0;
+    private static final int MAX_PORT_VALUE = 0xFFFF;
+
+    private final Project myProject;
+
+    private @Nullable RemoteForm myForm;
+
+    public RemoteConfigurable(Project project) {
+        myProject = project;
     }
-    if (configuration.SERVER_MODE) {
-      myRbListen.doClick();
+
+    @Override
+    @RequiredUIAccess
+    protected Component createUIComponent() {
+        RemoteForm form = new RemoteForm();
+        myForm = form;
+        return form.myComponent;
     }
-    else {
-      myRbAttach.doClick();
+
+    @Override
+    @RequiredUIAccess
+    protected void resetEditorFrom(RemoteConfiguration configuration) {
+        RemoteForm form = myForm;
+        if (form != null) {
+            form.reset(configuration);
+        }
     }
-    myRbShmem.setEnabled(Platform.current().os().isWindows());
-    myModuleSelector.reset(configuration);
-  }
 
-  public JComponent createEditor() {
-    return myPanel;
-  }
+    @Override
+    @RequiredUIAccess
+    protected void applyEditorTo(RemoteConfiguration configuration) throws ConfigurationException {
+        RemoteForm form = myForm;
+        if (form != null) {
+            form.apply(configuration);
+        }
+    }
 
-  public void disposeEditor() {
-  }
+    private static @Nullable ValidationInfo validatePort(@Nullable String port) {
+        if (StringUtil.isEmpty(port)) {
+            return null;
+        }
+        try {
+            int portValue = Integer.parseInt(port);
+            if (portValue >= MIN_PORT_VALUE && portValue <= MAX_PORT_VALUE) {
+                return null;
+            }
+            return new ValidationInfo(JavaExecutionLocalize.remoteConfigurationPortOutOfRange().get());
+        }
+        catch (NumberFormatException e) {
+            return new ValidationInfo(JavaExecutionLocalize.remoteConfigurationPortNotANumber().get());
+        }
+    }
 
-  @RequiredUIAccess
-  private void updateHelpText() {
-    boolean useSockets = !myRbShmem.isSelected();
+    private class RemoteForm {
+        private final ComboBox<Mode> myModeCombo;
+        private final ComboBox<Transport> myTransportCombo;
+        private final Label myHostLabel;
+        private final TextBox myHostName;
+        private final Label myPortLabel;
+        private final TextBox myPort;
+        private final Label myAddressLabel;
+        private final TextBox myAddress;
+        private final ComboBox<JDKVersionItem> myJdkVersionCombo;
+        private final TextBoxWithExtensions myArgsBox;
+        private final UnifiedConfigurationModuleSelector myModuleSelector;
+        private final Component myComponent;
 
-    final RemoteConnection connection = new RemoteConnection(
-      useSockets,
-      myHostName,
-      useSockets ? myPortField.getText().trim() : myAddressField.getText().trim(),
-      myRbListen.isSelected()
-    );
-    final String cmdLine = connection.getLaunchCommandLine();
-    // -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=7007
-    final String jvmtiCmdLine = cmdLine.replace("-Xdebug", "").replace("-Xrunjdwp:", "-agentlib:jdwp=").trim();
-    myHelpArea.updateText(jvmtiCmdLine);
-    myJDK14HelpArea.updateText(cmdLine);
-    myJDK13HelpArea.updateText("-Xnoagent -Djava.compiler=NONE " + cmdLine);
-  }
+        @RequiredUIAccess
+        private RemoteForm() {
+            boolean windows = Platform.current().os().isWindows();
 
+            myModeCombo = ComboBox.create(Mode.values());
+            myModeCombo.setTextRenderer(mode -> mode == null ? LocalizeValue.empty() : mode.myText);
+            myModeCombo.setValue(Mode.ATTACH, false);
 
+            myTransportCombo = ComboBox.create(Transport.values());
+            myTransportCombo.setTextRenderer(transport -> transport == null ? LocalizeValue.empty() : transport.myText);
+            myTransportCombo.setValue(Transport.SOCKET, false);
+
+            myHostLabel = Label.create(ExecutionLocalize.remoteConfigurationHostLabel());
+            myHostName = TextBox.create();
+
+            myPortLabel = Label.create(ExecutionLocalize.remoteConfigurationPortLabel());
+            myPort = TextBox.create(Integer.toString(MAX_PORT_VALUE));
+            myPort.addValidator(RemoteConfigurable::validatePort);
+
+            myAddressLabel = Label.create(ExecutionLocalize.remoteConfigurationSharedMemoryAddressLabel());
+            myAddress = TextBox.create();
+
+            myJdkVersionCombo = ComboBox.create(JDKVersionItem.values());
+            myJdkVersionCombo.setTextRenderer(item -> item == null ? LocalizeValue.empty() : item.myText);
+            myJdkVersionCombo.setValue(JDKVersionItem.JDK9, false);
+
+            myArgsBox = TextBoxWithExtensions.create();
+            myArgsBox.setEditable(false);
+            myArgsBox.addLastExtension(new TextBoxWithExtensions.Extension(
+                false,
+                PlatformIconGroup.actionsCopy(),
+                null,
+                event -> UIAccess.current().getClipboard().setText(StringUtil.notNullize(myArgsBox.getValue()))
+            ));
+
+            myModuleSelector = new UnifiedConfigurationModuleSelector(myProject, JavaExecutionLocalize.runConfigurationModuleWholeProject());
+
+            FormBuilder builder = FormBuilder.create();
+            builder.addLabeled(ExecutionLocalize.remoteConfigurationDebuggerModeLabel(), myModeCombo);
+            if (windows) {
+                builder.addLabeled(ExecutionLocalize.remoteConfigurationTransportLabel(), myTransportCombo);
+                builder.addLabeled(myAddressLabel, myAddress);
+            }
+            builder.addLabeled(myHostLabel, myHostName);
+            builder.addLabeled(myPortLabel, myPort);
+            builder.addLabeled(JavaExecutionLocalize.remoteConfigurationJvmArgumentsFormatLabel(), myJdkVersionCombo);
+            builder.addLabeled(JavaExecutionLocalize.remoteConfigurationCommandLineArgumentsLabel(), myArgsBox);
+            builder.addLabeled(JavaExecutionLocalize.remoteConfigurationModuleLabel(), myModuleSelector.getComponent());
+            myComponent = builder.build();
+
+            myModeCombo.addValueListener(event -> updateArgsText());
+            myTransportCombo.addValueListener(event -> {
+                updateTransportVisibility();
+                updateArgsText();
+            });
+            myHostName.addValueListener(event -> updateArgsText());
+            myPort.addValueListener(event -> updateArgsText());
+            myAddress.addValueListener(event -> updateArgsText());
+            myJdkVersionCombo.addValueListener(event -> updateArgsText());
+
+            updateTransportVisibility();
+            updateArgsText();
+        }
+
+        private boolean isSocket() {
+            return myTransportCombo.getValue() != Transport.SHMEM;
+        }
+
+        @RequiredUIAccess
+        private void updateTransportVisibility() {
+            boolean socket = isSocket();
+
+            myHostLabel.setVisible(socket);
+            myHostName.setVisible(socket);
+            myPortLabel.setVisible(socket);
+            myPort.setVisible(socket);
+
+            myAddressLabel.setVisible(!socket);
+            myAddress.setVisible(!socket);
+        }
+
+        @RequiredUIAccess
+        private void updateArgsText() {
+            boolean useSockets = isSocket();
+
+            RemoteConnection connection = new RemoteConnection(
+                useSockets,
+                StringUtil.notNullize(myHostName.getValue()).trim(),
+                StringUtil.notNullize(useSockets ? myPort.getValue() : myAddress.getValue()).trim(),
+                myModeCombo.getValue() == Mode.LISTEN
+            );
+
+            JDKVersionItem versionItem = myJdkVersionCombo.getValue();
+            myArgsBox.setValue((versionItem == null ? JDKVersionItem.JDK9 : versionItem).getLaunchCommandLine(connection));
+        }
+
+        @RequiredUIAccess
+        private void reset(RemoteConfiguration configuration) {
+            boolean windows = Platform.current().os().isWindows();
+
+            myModeCombo.setValue(configuration.SERVER_MODE ? Mode.LISTEN : Mode.ATTACH, false);
+
+            if (windows) {
+                myTransportCombo.setValue(configuration.USE_SOCKET_TRANSPORT ? Transport.SOCKET : Transport.SHMEM, false);
+                if (!configuration.USE_SOCKET_TRANSPORT) {
+                    myAddress.setValue(configuration.SHMEM_ADDRESS, false);
+                }
+            }
+
+            if (!windows || configuration.USE_SOCKET_TRANSPORT) {
+                configuration.USE_SOCKET_TRANSPORT = true;
+
+                myHostName.setValue(configuration.HOST, false);
+                myPort.setValue(configuration.PORT, false);
+            }
+
+            myModuleSelector.reset(configuration);
+
+            updateTransportVisibility();
+            updateArgsText();
+        }
+
+        @RequiredUIAccess
+        private void apply(RemoteConfiguration configuration) {
+            configuration.HOST = StringUtil.nullize(StringUtil.notNullize(myHostName.getValue()).trim());
+            configuration.PORT = StringUtil.nullize(StringUtil.notNullize(myPort.getValue()).trim());
+            configuration.SHMEM_ADDRESS = StringUtil.nullize(StringUtil.notNullize(myAddress.getValue()).trim());
+            configuration.USE_SOCKET_TRANSPORT = isSocket();
+            configuration.SERVER_MODE = myModeCombo.getValue() == Mode.LISTEN;
+            myModuleSelector.applyTo(configuration);
+        }
+    }
 }

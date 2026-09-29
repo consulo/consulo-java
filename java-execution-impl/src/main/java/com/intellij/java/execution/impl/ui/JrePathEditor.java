@@ -20,7 +20,6 @@ import consulo.annotation.DeprecationInfo;
 import consulo.content.bundle.BundleHolder;
 import consulo.content.bundle.SdkModelFactory;
 import consulo.java.execution.localize.JavaExecutionLocalize;
-import consulo.localize.LocalizeValue;
 import consulo.module.ui.awt.SdkComboBox;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.awt.LabeledComponent;
@@ -34,6 +33,7 @@ import java.awt.event.ActionListener;
 /**
  * @author nik
  */
+@Deprecated
 public class JrePathEditor extends Wrapper implements PanelWithAnchor {
   private SdkComboBox mySdkComboBox;
 
@@ -53,7 +53,7 @@ public class JrePathEditor extends Wrapper implements PanelWithAnchor {
       model,
       id -> id instanceof JavaSdkType,
       null,
-      LocalizeValue.localizeTODO("Auto Select"),
+      JavaExecutionLocalize.runConfigurationJreAutoSelect(),
       PlatformIconGroup.actionsFind()
     );
 

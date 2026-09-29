@@ -64,6 +64,10 @@ run.configuration.coverage.branches:
     text: Branch coverage
 run.configuration.coverage.branches.comment:
     text: Collect coverage for all branches of if/switch statements
+run.configuration.coverage.sampling:
+    text: Sampling
+run.configuration.coverage.tracing:
+    text: Tracing
 run.configuration.enable.coverage.in.test.folders:
     text: Collect coverage in test folders
 run.configuration.track.per.test.coverage:

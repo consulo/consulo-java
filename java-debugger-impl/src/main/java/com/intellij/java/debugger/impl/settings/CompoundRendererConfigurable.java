@@ -42,6 +42,7 @@ import consulo.project.Project;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Pair;
 
 import javax.swing.*;
@@ -150,7 +151,7 @@ class CompoundRendererConfigurable extends JPanel {
         panel.add(myShowTypeCheckBox, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, JBUI.insetsLeft(7), 0, 0));
         panel.add(myRbDefaultLabel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, JBUI.insetsLeft(10), 0, 0));
         panel.add(myRbExpressionLabel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, JBUI.insetsLeft(10), 0, 0));
-        panel.add(myLabelEditor.getComponent(), new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.insetsLeft
+        panel.add(TargetAWT.to(myLabelEditor.getUIComponent()), new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.insetsLeft
             (30), 0, 0));
         panel.add(myOnDemandCheckBox, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.insetsLeft(30), 0, 0));
 
@@ -160,11 +161,11 @@ class CompoundRendererConfigurable extends JPanel {
             0));
         panel.add(myRbExpressionChildrenRenderer, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, JBUI.insetsLeft(10),
             0, 0));
-        panel.add(myChildrenEditor.getComponent(), new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.insetsLeft
+        panel.add(TargetAWT.to(myChildrenEditor.getUIComponent()), new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.insetsLeft
             (30), 0, 0));
         myExpandedLabel = new JLabel(DebuggerBundle.message("label.compound.renderer.configurable.test.can.expand"));
         panel.add(myExpandedLabel, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, JBUI.insets(4, 30, 0, 0), 0, 0));
-        panel.add(myChildrenExpandedEditor.getComponent(), new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI
+        panel.add(TargetAWT.to(myChildrenExpandedEditor.getUIComponent()), new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI
             .insetsLeft(30), 0, 0));
         panel.add(myRbListChildrenRenderer, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 1, 1, 1.0, 0.0, GridBagConstraints.NORTHWEST, GridBagConstraints.HORIZONTAL, JBUI.insetsLeft(10),
             0, 0));
@@ -227,7 +228,7 @@ class CompoundRendererConfigurable extends JPanel {
 
         XDebuggerExpressionEditorFactory factory = myProject.getInstance(XDebuggerExpressionEditorFactory.class);
         myListChildrenEditor = factory.create(editorsProvider, "NamedChildrenConfigurable", null, XExpression.EMPTY_EXPRESSION, false, false, false);
-        JComponent editorComponent = myListChildrenEditor.getComponent();
+        JComponent editorComponent = (JComponent) TargetAWT.to(myListChildrenEditor.getUIComponent());
 
         AbstractTableCellEditor editor = new AbstractTableCellEditor() {
             @Override

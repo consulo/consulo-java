@@ -15,187 +15,207 @@
  */
 package com.intellij.java.execution.impl.application;
 
-import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.java.execution.JavaExecutionUtil;
-import com.intellij.java.execution.ShortenCommandLine;
 import com.intellij.java.execution.configurations.ConfigurationUtil;
-import com.intellij.java.execution.impl.ui.*;
-import com.intellij.java.execution.impl.util.JreVersionDetector;
-import com.intellij.java.language.impl.ui.EditorTextFieldWithBrowseButton;
+import com.intellij.java.execution.impl.ui.ClassBrowser;
+import com.intellij.java.execution.impl.ui.CommonJavaParametersLayout;
+import com.intellij.java.execution.impl.ui.UnifiedConfigurationModuleSelector;
+import com.intellij.java.execution.impl.ui.UnifiedJrePathEditor;
+import com.intellij.java.execution.impl.ui.UnifiedShortenCommandLineModeCombo;
+import com.intellij.java.language.impl.JavaFileType;
+import com.intellij.java.language.impl.ui.JavaReferenceEditorUtil;
 import com.intellij.java.language.psi.JavaCodeFragment;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.util.PsiMethodUtil;
+import consulo.application.concurrent.coroutine.ReadLock;
 import consulo.configurable.ConfigurationException;
+import consulo.document.Document;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.localize.ExecutionLocalize;
-import consulo.java.execution.JavaExecutionBundle;
 import consulo.java.execution.localize.JavaExecutionLocalize;
-import consulo.language.psi.PsiElement;
-import consulo.module.ui.awt.ModuleDescriptionsComboBox;
+import consulo.language.editor.ui.EditorBox;
+import consulo.language.editor.ui.EditorBoxBuilderFactory;
+import consulo.localize.LocalizeValue;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.CheckBox;
-import consulo.ui.ex.awt.JBCheckBox;
-import consulo.ui.ex.awt.LabeledComponent;
-import consulo.ui.ex.awt.UIUtil;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
-
-import javax.swing.*;
+import consulo.ui.Component;
+import consulo.ui.UIAction;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.action.ActionGroup;
+import consulo.ui.ex.action.ActionToolbar;
+import consulo.ui.ex.action.ActionToolbarFactory;
+import consulo.ui.ex.action.DumbAwareAction;
+import consulo.ui.ex.dialog.DialogService;
+import consulo.ui.util.FormBuilder;
+import consulo.util.concurrent.coroutine.Coroutine;
+import consulo.util.concurrent.coroutine.CoroutineScope;
+import consulo.util.lang.StringUtil;
+import org.jspecify.annotations.Nullable;
 
 public class ApplicationConfigurable extends SettingsEditor<ApplicationConfiguration> {
-  private final JreVersionDetector myVersionDetector;
-  private final ConfigurationModuleSelector myModuleSelector;
-  private final Project myProject;
+    private final Project myProject;
 
-  private ModuleDescriptionsComboBox myModuleDescriptionsComboBox;
-  private ShortenCommandLineModeCombo myShortenCommandLineModeCombo;
-  private CommonJavaParametersPanel myCommonJavaParametersPanel;
-  private EditorTextFieldWithBrowseButton myMainClassField;
-  private JBCheckBox myIncludeProviderDepsBox;
-  private CheckBox myShowSwingInspectorBox;
-  private JrePathEditor myJrePathEditor;
+    private @Nullable ApplicationParametersLayout myLayout;
 
-  public ApplicationConfigurable(final Project project) {
-    myProject = project;
-    myVersionDetector = new JreVersionDetector();
-
-    myMainClassField = new EditorTextFieldWithBrowseButton(project, true, new JavaCodeFragment.VisibilityChecker() {
-      @Override
-      public Visibility isDeclarationVisible(PsiElement declaration, PsiElement place) {
-        if (declaration instanceof PsiClass aClass) {
-          if (ConfigurationUtil.MAIN_CLASS.test(aClass) && PsiMethodUtil.findMainMethod(aClass) != null
-            || place.getParent() != null && myModuleSelector.findClass(aClass.getQualifiedName()) != null) {
-            return Visibility.VISIBLE;
-          }
-        }
-        return Visibility.NOT_VISIBLE;
-      }
-    });
-    myMainClassField.setButtonIcon(PlatformIconGroup.nodesClass());
-
-    myModuleDescriptionsComboBox = new ModuleDescriptionsComboBox();
-    myJrePathEditor = new JrePathEditor();
-    myJrePathEditor.setDefaultJreSelector(DefaultJreSelector.fromSourceRootsDependencies(myModuleDescriptionsComboBox, myMainClassField));
-
-    myShortenCommandLineModeCombo = new ShortenCommandLineModeCombo(myProject, myJrePathEditor, myModuleDescriptionsComboBox);
-    myIncludeProviderDepsBox = new JBCheckBox(JavaExecutionBundle.message("application.configuration.include.provided.scope"));
-
-    myModuleSelector = new ConfigurationModuleSelector(project, myModuleDescriptionsComboBox);
-    myModuleDescriptionsComboBox.addActionListener(e -> myCommonJavaParametersPanel.setModuleContext(myModuleSelector.getModule()));
-
-    myShowSwingInspectorBox = CheckBox.create(JavaExecutionLocalize.showSwingInspector());
-
-    myCommonJavaParametersPanel = new CommonJavaParametersPanel(false) {
-      private LabeledComponent myClassFieldLabel;
-      private LabeledComponent myModuleBoxLabel;
-      private LabeledComponent myShortenLabel;
-
-      @Override
-      protected void addComponents() {
-        add(myClassFieldLabel = LabeledComponent.create(myMainClassField, JavaExecutionBundle.message("application.configuration.main.class.label")));
-
-        super.addComponents();
-
-        add(myModuleBoxLabel = LabeledComponent.create(myModuleDescriptionsComboBox, JavaExecutionBundle.message("application.configuration.use.classpath.and.jdk.of.module.label")));
-
-        add(myIncludeProviderDepsBox);
-
-        add(myJrePathEditor);
-
-        add(myShortenLabel = LabeledComponent.create(myShortenCommandLineModeCombo, JavaExecutionBundle.message("application.configuration.shorten.command.line.label")));
-
-        add(TargetAWT.to(myShowSwingInspectorBox));
-      }
-
-      @Override
-      public void setAnchor(JComponent labelAnchor) {
-        myClassFieldLabel.setAnchor(labelAnchor);
-        super.setAnchor(labelAnchor);
-        myModuleBoxLabel.setAnchor(labelAnchor);
-        myShortenLabel.setAnchor(labelAnchor);
-      }
-
-      @Override
-      public void applyTo(CommonJavaRunConfigurationParameters configuration) {
-        super.applyTo(configuration);
-
-        ApplicationConfiguration app = (ApplicationConfiguration) configuration;
-
-        final String className = myMainClassField.getText();
-        final PsiClass aClass = myModuleSelector.findClass(className);
-        app.MAIN_CLASS_NAME = aClass != null ? JavaExecutionUtil.getRuntimeQualifiedName(aClass) : className;
-
-        myModuleSelector.applyTo(app);
-
-        app.ALTERNATIVE_JRE_PATH = myJrePathEditor.getJrePathOrName();
-        app.ALTERNATIVE_JRE_PATH_ENABLED = myJrePathEditor.isAlternativeJreSelected();
-        app.ENABLE_SWING_INSPECTOR = (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(app)) && myShowSwingInspectorBox
-            .getValue();
-        app.setShortenCommandLine((ShortenCommandLine) myShortenCommandLineModeCombo.getSelectedItem());
-        app.setIncludeProvidedScope(myIncludeProviderDepsBox.isSelected());
-
-        updateShowSwingInspector(app);
-      }
-
-      @Override
-      public void reset(CommonJavaRunConfigurationParameters configuration) {
-        super.reset(configuration);
-
-        ApplicationConfiguration app = (ApplicationConfiguration) configuration;
-
-        myMainClassField.setText(app.MAIN_CLASS_NAME != null ? app.MAIN_CLASS_NAME.replaceAll("\\$", "\\.") : "");
-
-        myModuleSelector.reset(app);
-        myJrePathEditor.setPathOrName(app.ALTERNATIVE_JRE_PATH, app.ALTERNATIVE_JRE_PATH_ENABLED);
-        myShortenCommandLineModeCombo.setSelectedItem(app.getShortenCommandLine());
-        myIncludeProviderDepsBox.setSelected(app.isProvidedScopeIncluded());
-
-        updateShowSwingInspector(app);
-      }
-    };
-
-    myCommonJavaParametersPanel.init();
-    myCommonJavaParametersPanel.setPreferredSize(null);
-
-    myCommonJavaParametersPanel.setModuleContext(myModuleSelector.getModule());
-
-    UIUtil.mergeComponentsWithAnchor(myCommonJavaParametersPanel);
-
-    ClassBrowser.createApplicationClassBrowser(project, myModuleSelector).setField(myMainClassField);
-  }
-
-  @Override
-  public void applyEditorTo(final ApplicationConfiguration configuration) throws ConfigurationException {
-    myCommonJavaParametersPanel.applyTo(configuration);
-  }
-
-  @Override
-  public void resetEditorFrom(final ApplicationConfiguration configuration) {
-    myCommonJavaParametersPanel.reset(configuration);
-  }
-
-  private void updateShowSwingInspector(final ApplicationConfiguration configuration) {
-    if (myVersionDetector.isJre50Configured(configuration) || myVersionDetector.isModuleJre50Configured(configuration)) {
-      myShowSwingInspectorBox.setEnabled(true);
-      myShowSwingInspectorBox.setValue(configuration.ENABLE_SWING_INSPECTOR);
-      myShowSwingInspectorBox.setLabelText(ExecutionLocalize.showSwingInspector());
-    } else {
-      myShowSwingInspectorBox.setEnabled(false);
-      myShowSwingInspectorBox.setValue(false);
-      myShowSwingInspectorBox.setLabelText(ExecutionLocalize.showSwingInspectorDisabled());
+    public ApplicationConfigurable(Project project) {
+        myProject = project;
     }
-  }
 
-  public EditorTextFieldWithBrowseButton getMainClassField() {
-    return myMainClassField;
-  }
+    @Override
+    @RequiredUIAccess
+    protected Component createUIComponent() {
+        ApplicationParametersLayout layout = new ApplicationParametersLayout();
+        layout.build();
+        myLayout = layout;
+        return layout.getComponent();
+    }
 
-  public CommonJavaParametersPanel getCommonProgramParameters() {
-    return myCommonJavaParametersPanel;
-  }
+    @Override
+    @RequiredUIAccess
+    protected void resetEditorFrom(ApplicationConfiguration configuration) {
+        ApplicationParametersLayout layout = myLayout;
+        if (layout != null) {
+            layout.reset(configuration);
+        }
+    }
 
-  @Override
-  public JComponent createEditor() {
-    return myCommonJavaParametersPanel;
-  }
+    @Override
+    @RequiredUIAccess
+    protected void applyEditorTo(ApplicationConfiguration configuration) throws ConfigurationException {
+        ApplicationParametersLayout layout = myLayout;
+        if (layout != null) {
+            layout.apply(configuration);
+        }
+    }
+
+    private class ApplicationParametersLayout extends CommonJavaParametersLayout<ApplicationConfiguration> {
+        private final UnifiedConfigurationModuleSelector myModuleSelector;
+        private final EditorBox myMainClassField;
+        private final UnifiedJrePathEditor myJrePathEditor;
+        private final UnifiedShortenCommandLineModeCombo myShortenCommandLineModeCombo;
+        private final CheckBox myIncludeProviderDepsBox;
+
+        @RequiredUIAccess
+        private ApplicationParametersLayout() {
+            super(myProject.getApplication().getInstance(DialogService.class));
+
+            myModuleSelector = new UnifiedConfigurationModuleSelector(myProject, JavaExecutionLocalize.runConfigurationModuleNone());
+            myModuleSelector.addValueListener(this::setModuleContext);
+            myMainClassField = createMainClassField();
+            myJrePathEditor = new UnifiedJrePathEditor(ApplicationConfigurable.this);
+            myShortenCommandLineModeCombo = new UnifiedShortenCommandLineModeCombo(myProject, myJrePathEditor, myModuleSelector);
+            myIncludeProviderDepsBox = CheckBox.create(JavaExecutionLocalize.applicationConfigurationIncludeProvidedScope());
+        }
+
+        @RequiredUIAccess
+        private EditorBox createMainClassField() {
+            EditorBox mainClassField = myProject.getApplication().getInstance(EditorBoxBuilderFactory.class).create(myProject).build();
+            if (myProject.isDefault()) {
+                return mainClassField;
+            }
+
+            JavaCodeFragment.VisibilityChecker visibilityChecker = (declaration, place) -> {
+                if (declaration instanceof PsiClass aClass
+                    && (ConfigurationUtil.MAIN_CLASS.test(aClass) && PsiMethodUtil.findMainMethod(aClass) != null
+                    || place.getParent() != null && myModuleSelector.findClass(aClass.getQualifiedName()) != null)) {
+                    return JavaCodeFragment.VisibilityChecker.Visibility.VISIBLE;
+                }
+                return JavaCodeFragment.VisibilityChecker.Visibility.NOT_VISIBLE;
+            };
+
+            CoroutineScope.launchAsync(
+                myProject.coroutineContext(),
+                () -> Coroutine
+                    .first(ReadLock.<Void, @Nullable Document>apply(
+                        ignored -> JavaReferenceEditorUtil.createDocument("", myProject, true, visibilityChecker)
+                    ))
+                    .then(UIAction.<@Nullable Document, Void>apply(document -> {
+                        if (document != null) {
+                            String text = StringUtil.notNullize(mainClassField.getValue());
+                            mainClassField.setDocument(document, JavaFileType.INSTANCE);
+                            mainClassField.setValue(text);
+                        }
+                        return null;
+                    }))
+            );
+
+            if (!myProject.getApplication().isUnifiedApplication()) {
+                ClassBrowser classBrowser = ClassBrowser.createApplicationClassBrowser(myProject, myModuleSelector);
+
+                ActionGroup actions = ActionGroup.newImmutableBuilder()
+                    .add(DumbAwareAction.create(
+                        ExecutionLocalize.chooseMainClassDialogTitle(),
+                        LocalizeValue.empty(),
+                        PlatformIconGroup.nodesClass(),
+                        e -> {
+                            String className = classBrowser.chooseClass(mainClassField.getValue());
+                            if (className != null) {
+                                mainClassField.setValue(className);
+                            }
+                        }
+                    ))
+                    .build();
+
+                ActionToolbar toolbar = ActionToolbarFactory.getInstance()
+                    .createActionToolbar("ApplicationConfigurableMainClass", actions, ActionToolbar.Style.INPLACE);
+                toolbar.setTargetUIComponent(mainClassField);
+                toolbar.updateActionsAsync();
+
+                mainClassField.setSuffixComponent(toolbar.getUIComponent());
+            }
+            return mainClassField;
+        }
+
+        @Override
+        @RequiredUIAccess
+        protected void addBefore(FormBuilder builder) {
+            builder.addLabeled(JavaExecutionLocalize.applicationConfigurationMainClassLabel(), myMainClassField);
+            super.addBefore(builder);
+        }
+
+        @Override
+        @RequiredUIAccess
+        protected void addAfter(FormBuilder builder) {
+            builder.addLabeled(
+                JavaExecutionLocalize.applicationConfigurationUseClasspathAndJdkOfModuleLabel(),
+                myModuleSelector.getComponent()
+            );
+            builder.addLabeled(JavaExecutionLocalize.runConfigurationJreLabel(), myJrePathEditor.getComponent());
+            builder.addLabeled(
+                JavaExecutionLocalize.applicationConfigurationShortenCommandLineLabel(),
+                myShortenCommandLineModeCombo.getComponent()
+            );
+            builder.addBottom(myIncludeProviderDepsBox);
+        }
+
+        @Override
+        @RequiredUIAccess
+        public void apply(ApplicationConfiguration configuration) {
+            super.apply(configuration);
+
+            configuration.setMainClassName(StringUtil.notNullize(myMainClassField.getValue()));
+
+            myModuleSelector.applyTo(configuration);
+
+            configuration.ALTERNATIVE_JRE_PATH = myJrePathEditor.getJrePathOrName();
+            configuration.ALTERNATIVE_JRE_PATH_ENABLED = myJrePathEditor.isAlternativeJreSelected();
+            configuration.setShortenCommandLine(myShortenCommandLineModeCombo.getSelectedItem());
+            configuration.setIncludeProvidedScope(myIncludeProviderDepsBox.getValueOrError());
+        }
+
+        @Override
+        @RequiredUIAccess
+        public void reset(ApplicationConfiguration configuration) {
+            super.reset(configuration);
+
+            String mainClassName = configuration.getMainClassName();
+            myMainClassField.setValue(mainClassName != null ? mainClassName.replace('$', '.') : "");
+
+            myModuleSelector.reset(configuration);
+            setModuleContext(myModuleSelector.getModule());
+            myJrePathEditor.setByName(configuration.ALTERNATIVE_JRE_PATH_ENABLED ? configuration.ALTERNATIVE_JRE_PATH : null);
+            myShortenCommandLineModeCombo.setSelectedItem(configuration.getShortenCommandLine());
+            myIncludeProviderDepsBox.setValue(configuration.isProvidedScopeIncluded());
+        }
+    }
 }

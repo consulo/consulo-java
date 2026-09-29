@@ -44,6 +44,11 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
 
   @Nullable
   protected String showDialog() {
+    return chooseClass(getText());
+  }
+
+  @Nullable
+  public String chooseClass(@Nullable String currentClassName) {
     final ClassFilter.ClassFilterWithScope classFilter;
     try {
       classFilter = getFilter();
@@ -53,7 +58,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
       return null;
     }
     final TreeClassChooser dialog = createClassChooser(classFilter);
-    configureDialog(dialog);
+    configureDialog(dialog, currentClassName);
     dialog.showDialog();
     final PsiClass psiClass = dialog.getSelected();
     if (psiClass == null) return null;
@@ -71,8 +76,8 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
   protected void onClassChoosen(final PsiClass psiClass) {
   }
 
-  private void configureDialog(final TreeClassChooser dialog) {
-    final String className = getText();
+  private void configureDialog(final TreeClassChooser dialog, @Nullable String className) {
+    if (className == null) return;
     final PsiClass psiClass = findClass(className);
     if (psiClass == null) return;
     final PsiDirectory directory = psiClass.getContainingFile().getContainingDirectory();
@@ -83,7 +88,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
   protected abstract PsiClass findClass(String className);
 
   public static ClassBrowser createApplicationClassBrowser(final Project project,
-                                                           final ConfigurationModuleSelector moduleSelector) {
+                                                           final BaseConfigurationModuleSelector moduleSelector) {
     final ClassFilter applicationClass = new ClassFilter() {
       @Override
       public boolean isAccepted(final PsiClass aClass) {
@@ -103,7 +108,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
     };
   }
 
-  public static ClassBrowser createAppletClassBrowser(final Project project, final ConfigurationModuleSelector moduleSelector) {
+  public static ClassBrowser createAppletClassBrowser(final Project project, final BaseConfigurationModuleSelector moduleSelector) {
     final String title = ExecutionLocalize.chooseAppletClassDialogTitle().get();
     return new MainClassBrowser(project, moduleSelector, title) {
       @Override
@@ -121,10 +126,10 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
 
   private abstract static class MainClassBrowser extends ClassBrowser {
     protected final Project myProject;
-    private final ConfigurationModuleSelector myModuleSelector;
+    private final BaseConfigurationModuleSelector myModuleSelector;
 
     public MainClassBrowser(final Project project,
-                            final ConfigurationModuleSelector moduleSelector,
+                            final BaseConfigurationModuleSelector moduleSelector,
                             final String title) {
       super(project, title);
       myProject = project;
@@ -180,7 +185,7 @@ public abstract class ClassBrowser extends BrowseModuleValueActionListener {
       ));
     }
 
-    public static NoFilterException moduleDoesntExist(final ConfigurationModuleSelector moduleSelector) {
+    public static NoFilterException moduleDoesntExist(final BaseConfigurationModuleSelector moduleSelector) {
       final Project project = moduleSelector.getProject();
       final String moduleName = moduleSelector.getModuleName();
       return new NoFilterException(new MessagesEx.MessageInfo(

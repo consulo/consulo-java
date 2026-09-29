@@ -24,6 +24,7 @@ import consulo.ui.ex.awt.LabeledComponent;
 import javax.swing.*;
 import java.awt.*;
 
+@Deprecated
 public class CommonJavaParametersPanel extends CommonProgramParametersPanel {
   private LabeledComponent<RawCommandLineEditor> myVMParametersComponent;
 

@@ -2,10 +2,7 @@
 package com.intellij.java.execution.impl.ui;
 
 import com.intellij.java.execution.ShortenCommandLine;
-import consulo.content.bundle.Sdk;
-import consulo.content.bundle.SdkTable;
-import consulo.java.language.module.extension.JavaModuleExtension;
-import consulo.language.util.ModuleUtilCore;
+import consulo.java.execution.localize.JavaExecutionLocalize;
 import consulo.module.Module;
 import consulo.module.ui.awt.ModuleDescriptionsComboBox;
 import consulo.project.Project;
@@ -29,7 +26,7 @@ public class ShortenCommandLineModeCombo extends ComboBox<ShortenCommandLine> {
       protected void customizeCellRenderer(JList<? extends ShortenCommandLine> list, ShortenCommandLine value, int index, boolean selected, boolean hasFocus) {
         if (value == null) {
           ShortenCommandLine defaultMode = ShortenCommandLine.getDefaultMethod(myProject, getJdkRoot(pathEditor, component.getSelectedModule()));
-          append("user-local default: " + defaultMode.getPresentableName());
+          append(JavaExecutionLocalize.shortenCommandLineUserLocalDefault(defaultMode.getPresentableName()).get());
           append(" - " + defaultMode.getDescription(), SimpleTextAttributes.GRAYED_ATTRIBUTES);
         } else {
           append(value.getPresentableName());
@@ -51,10 +48,8 @@ public class ShortenCommandLineModeCombo extends ComboBox<ShortenCommandLine> {
 
     String jdkRoot = getJdkRoot(pathEditor, module);
     addItem(null);
-    for (ShortenCommandLine mode : ShortenCommandLine.values()) {
-      if (mode.isApplicable(jdkRoot)) {
-        addItem(mode);
-      }
+    for (ShortenCommandLine mode : UnifiedShortenCommandLineModeCombo.getApplicableModes(jdkRoot)) {
+      addItem(mode);
     }
 
     setSelectedItem(preselection);
@@ -62,19 +57,6 @@ public class ShortenCommandLineModeCombo extends ComboBox<ShortenCommandLine> {
 
   @Nullable
   private static String getJdkRoot(JrePathEditor pathEditor, Module module) {
-    if (!pathEditor.isAlternativeJreSelected() && module != null) {
-      Sdk sdk = ModuleUtilCore.getSdk(module, JavaModuleExtension.class);
-      return sdk != null ? sdk.getHomePath() : null;
-    }
-    String jrePathOrName = pathEditor.getJrePathOrName();
-    if (jrePathOrName != null) {
-      Sdk configuredJdk = SdkTable.getInstance().findSdk(jrePathOrName);
-      if (configuredJdk != null) {
-        return configuredJdk.getHomePath();
-      } else {
-        return jrePathOrName;
-      }
-    }
-    return null;
+    return UnifiedShortenCommandLineModeCombo.getJdkRoot(pathEditor.isAlternativeJreSelected(), pathEditor.getJrePathOrName(), module);
   }
 }

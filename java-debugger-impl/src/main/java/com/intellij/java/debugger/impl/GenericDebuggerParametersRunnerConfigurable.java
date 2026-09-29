@@ -15,37 +15,77 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.configurable.ConfigurationException;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
+import consulo.ui.Button;
+import consulo.ui.Component;
+import consulo.ui.Label;
+import consulo.ui.RadioGroup;
+import consulo.ui.TextBox;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.layout.HorizontalLayout;
+import consulo.ui.util.FormBuilder;
 import consulo.util.lang.StringUtil;
-
-import javax.swing.*;
-import java.awt.event.ActionListener;
+import org.jspecify.annotations.Nullable;
 
 public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<GenericDebuggerRunnerSettings> {
-    private static final Logger LOGGER = Logger.getInstance(GenericDebuggerParametersRunnerConfigurable.class);
+    private static final Logger LOG = Logger.getInstance(GenericDebuggerParametersRunnerConfigurable.class);
 
-    private JPanel myPanel;
-    private JTextField myAddressField;
-    private JPanel myShMemPanel;
-    private JPanel myPortPanel;
-    private JTextField myPortField;
-    private boolean myIsLocal = false;
-    private JButton myDebuggerSettings;
-    private JRadioButton mySocketTransport;
-    private JRadioButton myShmemTransport;
-    private JPanel myTransportPanel;
+    private final Project myProject;
 
-    public GenericDebuggerParametersRunnerConfigurable(final Project project) {
-        myDebuggerSettings.addActionListener(e -> {
-            XDebuggerManager.getInstance(project).showSettings();
+    private boolean myIsLocal;
+
+    private @Nullable RadioGroup<Integer> myTransportGroup;
+    private @Nullable Label myPortLabel;
+    private @Nullable TextBox myPortField;
+    private @Nullable Label myAddressLabel;
+    private @Nullable TextBox myAddressField;
+    private @Nullable Button myDebuggerSettingsButton;
+
+    public GenericDebuggerParametersRunnerConfigurable(Project project) {
+        myProject = project;
+    }
+
+    @RequiredUIAccess
+    @Override
+    protected Component createUIComponent() {
+        RadioGroup<Integer> transportGroup = RadioGroup.create();
+
+        HorizontalLayout transportLayout = HorizontalLayout.create();
+        transportLayout.add(transportGroup.newButton(
+            JavaDebuggerLocalize.labelGenericDebuggerParametersPatcherConfigurableSocket(),
+            DebuggerSettings.SOCKET_TRANSPORT
+        ));
+        transportLayout.add(transportGroup.newButton(
+            JavaDebuggerLocalize.labelGenericDebuggerParametersPatcherConfigurableShmem(),
+            DebuggerSettings.SHMEM_TRANSPORT
+        ));
+        transportGroup.setValue(DebuggerSettings.SOCKET_TRANSPORT);
+        transportGroup.addValueListener(value -> {
+            suggestAvailablePortIfNotSpecified();
+            updateUI();
+        });
+        myTransportGroup = transportGroup;
+
+        Label portLabel = Label.create(JavaDebuggerLocalize.labelGenericDebuggerParametersPatcherConfigurablePort());
+        TextBox portField = TextBox.create();
+        myPortLabel = portLabel;
+        myPortField = portField;
+
+        Label addressLabel = Label.create(JavaDebuggerLocalize.labelGenericDebuggerParametersPatcherConfigurableShmemAddress());
+        TextBox addressField = TextBox.create();
+        myAddressLabel = addressLabel;
+        myAddressField = addressField;
+
+        Button debuggerSettingsButton = Button.create(JavaDebuggerLocalize.buttonDebuggerSettings(), event -> {
+            XDebuggerManager.getInstance(myProject).showSettings();
 
             if (myIsLocal) {
                 setTransport(DebuggerSettings.getInstance().DEBUGGER_TRANSPORT);
@@ -54,60 +94,74 @@ public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<
             suggestAvailablePortIfNotSpecified();
             updateUI();
         });
+        myDebuggerSettingsButton = debuggerSettingsButton;
 
-        final ActionListener listener = e -> {
-            suggestAvailablePortIfNotSpecified();
-            updateUI();
-            myPanel.repaint();
-        };
-        mySocketTransport.addActionListener(listener);
-        myShmemTransport.addActionListener(listener);
+        FormBuilder builder = FormBuilder.create();
+        builder.addLabeled(JavaDebuggerLocalize.labelGenericDebuggerParametersPatcherConfigurableTransport(), transportLayout);
+        builder.addLabeled(portLabel, portField);
+        builder.addLabeled(addressLabel, addressField);
+        builder.addBottom(debuggerSettingsButton);
 
         updateUI();
-
-        myTransportPanel.setVisible(false);
-
-        ButtonGroup group = new ButtonGroup();
-        group.add(mySocketTransport);
-        group.add(myShmemTransport);
+        return builder.build();
     }
 
     private boolean isSocket() {
         return getTransport() == DebuggerSettings.SOCKET_TRANSPORT;
     }
 
-    @Override
-    public JComponent createEditor() {
-        return myPanel;
-    }
-
+    @RequiredUIAccess
     private void updateUI() {
-        myPortPanel.setVisible(isSocket());
-        myShMemPanel.setVisible(!isSocket());
-        myAddressField.setEditable(!myIsLocal);
-        myPortField.setEditable(!myIsLocal);
-        mySocketTransport.setEnabled(!myIsLocal);
-        myShmemTransport.setEnabled(!myIsLocal);
+        boolean socket = isSocket();
+
+        setVisible(myPortLabel, socket);
+        setVisible(myPortField, socket);
+        setVisible(myAddressLabel, !socket);
+        setVisible(myAddressField, !socket);
+
+        TextBox addressField = myAddressField;
+        if (addressField != null) {
+            addressField.setEditable(!myIsLocal);
+        }
+
+        TextBox portField = myPortField;
+        if (portField != null) {
+            portField.setEditable(!myIsLocal);
+        }
+
+        Button debuggerSettingsButton = myDebuggerSettingsButton;
+        if (debuggerSettingsButton != null) {
+            debuggerSettingsButton.setVisible(myIsLocal);
+        }
     }
 
-    @Override
-    public void disposeEditor() {
+    @RequiredUIAccess
+    private static void setVisible(@Nullable Component component, boolean visible) {
+        if (component != null) {
+            component.setVisible(visible);
+        }
     }
 
+    @RequiredUIAccess
     @Override
     public void resetEditorFrom(GenericDebuggerRunnerSettings runnerSettings) {
-        setIsLocal(runnerSettings.LOCAL);
-        setTransport(runnerSettings.getTransport());
+        myIsLocal = runnerSettings.LOCAL;
+
+        RadioGroup<Integer> transportGroup = myTransportGroup;
+        if (transportGroup != null) {
+            transportGroup.setValue(runnerSettings.getTransport(), false);
+        }
+
         setPort(StringUtil.notNullize(runnerSettings.getDebugPort()));
         suggestAvailablePortIfNotSpecified();
         updateUI();
     }
 
+    @RequiredUIAccess
     private void suggestAvailablePortIfNotSpecified() {
         String port = getPort();
         boolean portSpecified = !StringUtil.isEmpty(port);
-        boolean isSocketTransport = getTransport() == DebuggerSettings.SOCKET_TRANSPORT;
-        if (isSocketTransport) {
+        if (isSocket()) {
             try {
                 Integer.parseInt(port);
             }
@@ -118,10 +172,10 @@ public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<
 
         if (!portSpecified) {
             try {
-                setPort(DebuggerUtils.getInstance().findAvailableDebugAddress(getTransport() == DebuggerSettings.SOCKET_TRANSPORT));
+                setPort(DebuggerUtils.getInstance().findAvailableDebugAddress(isSocket()));
             }
             catch (ExecutionException e) {
-                LOGGER.info(e);
+                LOG.info(e);
             }
         }
     }
@@ -130,54 +184,50 @@ public class GenericDebuggerParametersRunnerConfigurable extends SettingsEditor<
         if (myIsLocal) {
             return DebuggerSettings.getInstance().DEBUGGER_TRANSPORT;
         }
-        else {
-            return mySocketTransport.isSelected() ? DebuggerSettings.SOCKET_TRANSPORT : DebuggerSettings.SHMEM_TRANSPORT;
-        }
+
+        RadioGroup<Integer> transportGroup = myTransportGroup;
+        Integer transport = transportGroup != null ? transportGroup.getValue() : null;
+        return transport != null ? transport : DebuggerSettings.SOCKET_TRANSPORT;
     }
 
     private String getPort() {
-        if (isSocket()) {
-            return myPortField.getText();
+        TextBox field = isSocket() ? myPortField : myAddressField;
+        return field != null ? StringUtil.notNullize(field.getValue()) : "";
+    }
+
+    @RequiredUIAccess
+    private void setTransport(int transport) {
+        RadioGroup<Integer> transportGroup = myTransportGroup;
+        if (transportGroup != null) {
+            transportGroup.setValue(transport, false);
         }
-        else {
-            return myAddressField.getText();
+    }
+
+    @RequiredUIAccess
+    private void setPort(String port) {
+        TextBox field = isSocket() ? myPortField : myAddressField;
+        if (field != null) {
+            field.setValue(port);
         }
     }
 
     private void checkPort() throws ConfigurationException {
-        if (isSocket() && myPortField.getText().length() > 0) {
+        TextBox portField = myPortField;
+        String port = portField != null ? StringUtil.notNullize(portField.getValue()) : "";
+        if (isSocket() && !port.isEmpty()) {
             try {
-                final int port = Integer.parseInt(myPortField.getText());
-                if (port < 0 || port > 0xffff) {
+                int value = Integer.parseInt(port);
+                if (value < 0 || value > 0xffff) {
                     throw new NumberFormatException();
                 }
             }
             catch (NumberFormatException e) {
-                throw new ConfigurationException(DebuggerBundle.message("error.text.invalid.port.0", myPortField.getText()));
+                throw new ConfigurationException(JavaDebuggerLocalize.errorTextInvalidPort());
             }
         }
     }
 
-    private void setTransport(int transport) {
-        mySocketTransport.setSelected(transport == DebuggerSettings.SOCKET_TRANSPORT);
-        myShmemTransport.setSelected(transport != DebuggerSettings.SOCKET_TRANSPORT);
-    }
-
-    private void setIsLocal(boolean b) {
-        myTransportPanel.setVisible(true);
-        myDebuggerSettings.setVisible(b);
-        myIsLocal = b;
-    }
-
-    private void setPort(String port) {
-        if (isSocket()) {
-            myPortField.setText(port);
-        }
-        else {
-            myAddressField.setText(port);
-        }
-    }
-
+    @RequiredUIAccess
     @Override
     public void applyEditorTo(GenericDebuggerRunnerSettings runnerSettings) throws ConfigurationException {
         runnerSettings.LOCAL = myIsLocal;

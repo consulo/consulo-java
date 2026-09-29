@@ -33,6 +33,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 
+@Deprecated
 public class ConfigurationArgumentsHelpArea extends JPanel {
   private TextBoxWithExpandAction myHelpArea;
   private JLabel myLabel;

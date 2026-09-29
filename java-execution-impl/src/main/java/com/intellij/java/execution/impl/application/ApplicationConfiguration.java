@@ -86,7 +86,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   @Override
   public void setMainClass(final PsiClass psiClass) {
     final Module originalModule = getConfigurationModule().getModule();
-    setMainClassName(JavaExecutionUtil.getRuntimeQualifiedName(psiClass));
+    setMainClassName(psiClass.getQualifiedName());
     setModule(JavaExecutionUtil.findModule(psiClass));
     restoreOriginalModule(originalModule);
   }
@@ -118,7 +118,12 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   @Override
   @Nullable
   public PsiClass getMainClass() {
-    return getConfigurationModule().findClass(MAIN_CLASS_NAME);
+    return DumbService.getInstance(getProject()).computeWithAlternativeResolveEnabled(() -> getConfigurationModule().findClass(MAIN_CLASS_NAME));
+  }
+
+  @Nullable
+  public String getMainClassName() {
+    return MAIN_CLASS_NAME;
   }
 
   @Override
@@ -233,7 +238,11 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   @Override
   @Nullable
   public String getRunClass() {
-    return MAIN_CLASS_NAME;
+    PsiClass mainClass = getMainClass();
+    if (mainClass == null) {
+      return null;
+    }
+    return JavaExecutionUtil.getRuntimeQualifiedName(mainClass);
   }
 
   @Override
@@ -320,12 +329,17 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
       final OwnJavaParameters params = new OwnJavaParameters();
       T configuration = getConfiguration();
 
+      final String mainClass = ReadAction.compute(myConfiguration::getRunClass);
+
       final JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
       final String alternativeJreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
       if (module.getModule() != null) {
         DumbService.getInstance(module.getProject()).runWithAlternativeResolveEnabled(() ->
         {
-          int classPathType = JavaParametersUtil.getClasspathType(module, myConfiguration.MAIN_CLASS_NAME, false, myConfiguration.isProvidedScopeIncluded());
+          if (mainClass == null) {
+            throw new CantRunException(ExecutionLocalize.noMainClassSpecifiedErrorText().get());
+          }
+          int classPathType = JavaParametersUtil.getClasspathType(module, mainClass, false, myConfiguration.isProvidedScopeIncluded());
           JavaParametersUtil.configureModule(module, params, classPathType, alternativeJreHome);
         });
       } else {
@@ -335,7 +349,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
       // we need set #setShortenCommandLine after jdk set since, some default values checked
       params.setShortenCommandLine(configuration.getShortenCommandLine(), configuration.getProject());
 
-      params.setMainClass(myConfiguration.MAIN_CLASS_NAME);
+      params.setMainClass(mainClass);
 
       setupJavaParameters(params);
 

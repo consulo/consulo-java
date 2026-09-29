@@ -15,78 +15,118 @@
  */
 package com.intellij.java.execution.impl.jar;
 
-import com.intellij.java.execution.impl.ui.CommonJavaParametersPanel;
-import com.intellij.java.execution.impl.ui.DefaultJreSelector;
-import com.intellij.java.execution.impl.ui.JrePathEditor;
+import com.intellij.java.execution.impl.ui.CommonJavaParametersLayout;
+import com.intellij.java.execution.impl.ui.UnifiedConfigurationModuleSelector;
+import com.intellij.java.execution.impl.ui.UnifiedJrePathEditor;
 import consulo.configurable.ConfigurationException;
 import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.fileChooser.FileChooserDescriptor;
-import consulo.module.ui.awt.ModulesComboBox;
+import consulo.fileChooser.FileChooserTextBoxBuilder;
+import consulo.java.execution.localize.JavaExecutionLocalize;
+import consulo.module.Module;
 import consulo.project.Project;
-import consulo.ui.ex.awt.LabeledComponent;
-import consulo.ui.ex.awt.PanelWithAnchor;
-import consulo.ui.ex.awt.TextFieldWithBrowseButton;
-import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.Component;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.dialog.DialogService;
+import consulo.ui.util.FormBuilder;
 import consulo.util.io.FileUtil;
-
+import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
-import javax.swing.*;
 
-public class JarApplicationConfigurable extends SettingsEditor<JarApplicationConfiguration> implements PanelWithAnchor {
-  private CommonJavaParametersPanel myCommonProgramParameters;
-  private LabeledComponent<TextFieldWithBrowseButton> myJarPathComponent;
-  private LabeledComponent<ModulesComboBox> myModuleComponent;
-  private JPanel myWholePanel;
+public class JarApplicationConfigurable extends SettingsEditor<JarApplicationConfiguration> {
+    private final Project myProject;
 
-  private JrePathEditor myJrePathEditor;
-  private final Project myProject;
-  private JComponent myAnchor;
+    private @Nullable JarApplicationParametersLayout myLayout;
 
-  public JarApplicationConfigurable(final Project project) {
-    myProject = project;
-    myAnchor = UIUtil.mergeComponentsWithAnchor(myJarPathComponent, myCommonProgramParameters, myJrePathEditor);
-    ModulesComboBox modulesComboBox = myModuleComponent.getComponent();
-    modulesComboBox.allowEmptySelection("<whole project>");
-    modulesComboBox.fillModules(project);
-    myJrePathEditor.setDefaultJreSelector(DefaultJreSelector.fromModuleDependencies(modulesComboBox, true));
-  }
+    public JarApplicationConfigurable(Project project) {
+        myProject = project;
+    }
 
-  public void applyEditorTo(final JarApplicationConfiguration configuration) throws ConfigurationException {
-    myCommonProgramParameters.applyTo(configuration);
-    configuration.setAlternativeJrePath(myJrePathEditor.getJrePathOrName());
-    configuration.setAlternativeJrePathEnabled(myJrePathEditor.isAlternativeJreSelected());
-    configuration.setJarPath(FileUtil.toSystemIndependentName(myJarPathComponent.getComponent().getText()));
-    configuration.setModule(myModuleComponent.getComponent().getSelectedModule());
-  }
+    @Override
+    @RequiredUIAccess
+    protected Component createUIComponent() {
+        JarApplicationParametersLayout layout = new JarApplicationParametersLayout();
+        layout.build();
+        myLayout = layout;
+        return layout.getComponent();
+    }
 
-  public void resetEditorFrom(final JarApplicationConfiguration configuration) {
-    myCommonProgramParameters.reset(configuration);
-    myJarPathComponent.getComponent().setText(FileUtil.toSystemDependentName(configuration.getJarPath()));
-    myJrePathEditor.setPathOrName(configuration.getAlternativeJrePath(), configuration.isAlternativeJrePathEnabled());
-    myModuleComponent.getComponent().setSelectedModule(configuration.getModule());
-  }
+    @Override
+    @RequiredUIAccess
+    protected void resetEditorFrom(JarApplicationConfiguration configuration) {
+        JarApplicationParametersLayout layout = myLayout;
+        if (layout != null) {
+            layout.reset(configuration);
+        }
+    }
 
-  public JComponent createEditor() {
-    return myWholePanel;
-  }
+    @Override
+    @RequiredUIAccess
+    protected void applyEditorTo(JarApplicationConfiguration configuration) throws ConfigurationException {
+        JarApplicationParametersLayout layout = myLayout;
+        if (layout != null) {
+            layout.apply(configuration);
+        }
+    }
 
-  private void createUIComponents() {
-    myJarPathComponent = new LabeledComponent<>();
-    TextFieldWithBrowseButton textFieldWithBrowseButton = new TextFieldWithBrowseButton();
-    textFieldWithBrowseButton.addBrowseFolderListener("Choose JAR File", null, myProject, new FileChooserDescriptor(false, false, true, true, false, false));
-    myJarPathComponent.setComponent(textFieldWithBrowseButton);
-  }
+    private class JarApplicationParametersLayout extends CommonJavaParametersLayout<JarApplicationConfiguration> {
+        private final FileChooserTextBoxBuilder.Controller myJarPathBox;
+        private final UnifiedJrePathEditor myJrePathEditor;
+        private final UnifiedConfigurationModuleSelector myModuleSelector;
 
-  @Override
-  public JComponent getAnchor() {
-    return myAnchor;
-  }
+        @RequiredUIAccess
+        private JarApplicationParametersLayout() {
+            super(myProject.getApplication().getInstance(DialogService.class));
 
-  @Override
-  public void setAnchor(@Nullable JComponent anchor) {
-    myAnchor = anchor;
-    myCommonProgramParameters.setAnchor(anchor);
-    myJrePathEditor.setAnchor(anchor);
-    myJarPathComponent.setAnchor(anchor);
-  }
+            FileChooserTextBoxBuilder jarPathBuilder = FileChooserTextBoxBuilder.create(myProject);
+            jarPathBuilder.fileChooserDescriptor(new FileChooserDescriptor(false, false, true, true, false, false));
+            jarPathBuilder.dialogTitle(JavaExecutionLocalize.jarApplicationConfigurationChooseJarTitle());
+            myJarPathBox = jarPathBuilder.build();
+
+            myJrePathEditor = new UnifiedJrePathEditor(JarApplicationConfigurable.this);
+
+            myModuleSelector = new UnifiedConfigurationModuleSelector(myProject, JavaExecutionLocalize.runConfigurationModuleWholeProject()) {
+                @Override
+                public boolean isModuleAccepted(Module module) {
+                    return true;
+                }
+            };
+        }
+
+        @Override
+        @RequiredUIAccess
+        protected void addBefore(FormBuilder builder) {
+            builder.addLabeled(JavaExecutionLocalize.jarApplicationConfigurationJarPathLabel(), myJarPathBox.getComponent());
+            super.addBefore(builder);
+        }
+
+        @Override
+        @RequiredUIAccess
+        protected void addAfter(FormBuilder builder) {
+            builder.addLabeled(JavaExecutionLocalize.runConfigurationJreLabel(), myJrePathEditor.getComponent());
+            builder.addLabeled(JavaExecutionLocalize.jarApplicationConfigurationModuleLabel(), myModuleSelector.getComponent());
+        }
+
+        @Override
+        @RequiredUIAccess
+        public void apply(JarApplicationConfiguration configuration) {
+            super.apply(configuration);
+
+            configuration.setAlternativeJrePath(myJrePathEditor.getJrePathOrName());
+            configuration.setAlternativeJrePathEnabled(myJrePathEditor.isAlternativeJreSelected());
+            configuration.setJarPath(FileUtil.toSystemIndependentName(StringUtil.notNullize(myJarPathBox.getValue())));
+            configuration.setModule(myModuleSelector.getModule());
+        }
+
+        @Override
+        @RequiredUIAccess
+        public void reset(JarApplicationConfiguration configuration) {
+            super.reset(configuration);
+
+            myJarPathBox.setValue(FileUtil.toSystemDependentName(configuration.getJarPath()));
+            myJrePathEditor.setByName(configuration.isAlternativeJrePathEnabled() ? configuration.getAlternativeJrePath() : null);
+            myModuleSelector.reset();
+            myModuleSelector.setSelectedModule(configuration.getModule());
+        }
+    }
 }

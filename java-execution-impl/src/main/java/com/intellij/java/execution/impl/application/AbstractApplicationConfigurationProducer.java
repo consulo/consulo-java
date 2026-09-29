@@ -76,7 +76,7 @@ public abstract class AbstractApplicationConfigurationProducer<T extends Applica
     }
 
     private void setupConfiguration(T configuration, PsiClass aClass, ConfigurationContext context) {
-        configuration.MAIN_CLASS_NAME = ReadAction.compute(() -> JavaExecutionUtil.getRuntimeQualifiedName(aClass));
+        configuration.MAIN_CLASS_NAME = ReadAction.compute(aClass::getQualifiedName);
         configuration.setGeneratedName();
         setupConfigurationModule(context, configuration);
     }
@@ -103,7 +103,7 @@ public abstract class AbstractApplicationConfigurationProducer<T extends Applica
     public boolean isConfigurationFromContext(T appConfiguration, ConfigurationContext context) {
         PsiElement location = context.getPsiLocation();
         PsiClass aClass = ApplicationConfigurationType.getMainClass(location);
-        if (aClass != null && Comparing.equal(JavaExecutionUtil.getRuntimeQualifiedName(aClass), appConfiguration.MAIN_CLASS_NAME)) {
+        if (aClass != null && Comparing.equal(aClass.getQualifiedName(), appConfiguration.MAIN_CLASS_NAME)) {
             PsiMethod method = PsiTreeUtil.getParentOfType(location, PsiMethod.class, false);
             if (method != null && TestFrameworks.getInstance().isTestMethod(method)) {
                 return false;

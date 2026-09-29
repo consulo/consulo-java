@@ -16,16 +16,11 @@
 package com.intellij.java.language.impl.ui;
 
 import com.intellij.java.language.impl.JavaFileType;
-import consulo.document.Document;
 import consulo.ui.ex.awt.TextAccessor;
 import consulo.virtualFileSystem.fileType.FileType;
 import consulo.project.Project;
 import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import com.intellij.java.language.psi.JavaCodeFragment;
-import com.intellij.java.language.psi.JavaCodeFragmentFactory;
-import com.intellij.java.language.psi.JavaPsiFacade;
-import consulo.language.psi.PsiDocumentManager;
-import consulo.language.psi.PsiElement;
 import consulo.language.editor.ui.awt.EditorTextField;
 
 /**
@@ -60,19 +55,8 @@ public class EditorTextFieldWithBrowseButton extends ComponentWithBrowseButton<E
                                                        JavaCodeFragment.VisibilityChecker visibilityChecker,
                                                        final FileType fileType) {
     if (project.isDefault()) return new EditorTextField();
-    return new EditorTextField(createDocument("", project, isClassAccepted,
-                                             visibilityChecker), project, fileType);
-  }
-
-  private static Document createDocument(final String text,
-                                         Project project,
-                                         boolean isClassesAccepted,
-                                         JavaCodeFragment.VisibilityChecker visibilityChecker) {
-    PsiElement defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
-    final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
-    final JavaCodeFragment fragment = factory.createReferenceCodeFragment(text, defaultPackage, true, isClassesAccepted);
-    fragment.setVisibilityChecker(visibilityChecker);
-    return PsiDocumentManager.getInstance(project).getDocument(fragment);
+    return new EditorTextField(JavaReferenceEditorUtil.createDocument("", project, isClassAccepted,
+                                                                      visibilityChecker), project, fileType);
   }
 
   @Override

@@ -46,10 +46,19 @@ public class JavaReferenceEditorUtil {
   @Nullable
   @RequiredReadAction
   public static Document createDocument(final String text, Project project, boolean isClassesAccepted) {
+    return createDocument(text, project, isClassesAccepted, JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE);
+  }
+
+  @Nullable
+  @RequiredReadAction
+  public static Document createDocument(final String text,
+                                        Project project,
+                                        boolean isClassesAccepted,
+                                        JavaCodeFragment.VisibilityChecker visibilityChecker) {
     final PsiJavaPackage defaultPackage = JavaPsiFacade.getInstance(project).findPackage("");
     final JavaCodeFragmentFactory factory = JavaCodeFragmentFactory.getInstance(project);
     final JavaCodeFragment fragment = factory.createReferenceCodeFragment(text, defaultPackage, true, isClassesAccepted);
-    fragment.setVisibilityChecker(JavaCodeFragment.VisibilityChecker.EVERYTHING_VISIBLE);
+    fragment.setVisibilityChecker(visibilityChecker);
     return PsiDocumentManager.getInstance(project).getDocument(fragment);
   }
 
