@@ -25,8 +25,8 @@ import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
 import consulo.colorScheme.TextAttributes;
-import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
 import consulo.java.analysis.impl.JavaQuickFixBundle;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.hint.QuestionAction;
@@ -38,9 +38,12 @@ import consulo.language.psi.SmartPsiElementPointer;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.popup.AWTListPopup;
+import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.awt.popup.PopupListElementRenderer;
 import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import org.jspecify.annotations.Nullable;
@@ -153,62 +156,58 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
             }
         };
 
-        ListPopupImpl popup = new ListPopupImpl(step) {
-            final PopupListElementRenderer rightArrow = new PopupListElementRenderer(this);
+        AWTListPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopup(project, step, listPopup -> {
+            PopupListElementRenderer rightArrow = new PopupListElementRenderer(listPopup);
+            return new PsiElementListCellRenderer<T>() {
+                public String getElementText(T element) {
+                    return getElementPresentableName(element);
+                }
 
-            @Override
-            protected ListCellRenderer getListElementRenderer() {
-                return new PsiElementListCellRenderer<T>() {
-                    public String getElementText(T element) {
-                        return getElementPresentableName(element);
-                    }
+                public String getContainerText(T element, String name) {
+                    return PsiClassListCellRenderer.getContainerTextStatic(element);
+                }
 
-                    public String getContainerText(T element, String name) {
-                        return PsiClassListCellRenderer.getContainerTextStatic(element);
-                    }
+                public int getIconFlags() {
+                    return 0;
+                }
 
-                    public int getIconFlags() {
-                        return 0;
-                    }
-
-                    @Nullable
-                    @Override
-                    protected TextAttributes getNavigationItemAttributes(Object value) {
-                        TextAttributes attrs = super.getNavigationItemAttributes(value);
-                        if (value instanceof PsiDocCommentOwner && !((PsiDocCommentOwner) value).isDeprecated()) {
-                            PsiClass psiClass = ((T) value).getContainingClass();
-                            if (psiClass != null && psiClass.isDeprecated()) {
-                                return TextAttributes.merge(attrs, super.getNavigationItemAttributes(psiClass));
-                            }
+                @Nullable
+                @Override
+                protected TextAttributes getNavigationItemAttributes(Object value) {
+                    TextAttributes attrs = super.getNavigationItemAttributes(value);
+                    if (value instanceof PsiDocCommentOwner && !((PsiDocCommentOwner) value).isDeprecated()) {
+                        PsiClass psiClass = ((T) value).getContainingClass();
+                        if (psiClass != null && psiClass.isDeprecated()) {
+                            return TextAttributes.merge(attrs, super.getNavigationItemAttributes(psiClass));
                         }
-                        return attrs;
                     }
+                    return attrs;
+                }
 
-                    @Override
-                    protected DefaultListCellRenderer getRightCellRenderer(Object value) {
-                        final DefaultListCellRenderer moduleRenderer = super.getRightCellRenderer(value);
-                        return new DefaultListCellRenderer() {
-                            @Override
-                            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                                JPanel panel = new JPanel(new BorderLayout());
-                                if (moduleRenderer != null) {
-                                    Component moduleComponent = moduleRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                                    if (!isSelected) {
-                                        moduleComponent.setBackground(TargetAWT.to(getBackgroundColor(value)));
-                                    }
-                                    panel.add(moduleComponent, BorderLayout.CENTER);
+                @Override
+                protected DefaultListCellRenderer getRightCellRenderer(Object value) {
+                    final DefaultListCellRenderer moduleRenderer = super.getRightCellRenderer(value);
+                    return new DefaultListCellRenderer() {
+                        @Override
+                        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                            JPanel panel = new JPanel(new BorderLayout());
+                            if (moduleRenderer != null) {
+                                Component moduleComponent = moduleRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                                if (!isSelected) {
+                                    moduleComponent.setBackground(TargetAWT.to(getBackgroundColor(value)));
                                 }
-                                rightArrow.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                                Component rightArrowComponent = rightArrow.getNextStepLabel();
-                                panel.add(rightArrowComponent, BorderLayout.EAST);
-                                return panel;
+                                panel.add(moduleComponent, BorderLayout.CENTER);
                             }
-                        };
-                    }
-                };
-            }
-        };
-        popup.showInBestPositionFor(editor);
+                            rightArrow.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                            Component rightArrowComponent = rightArrow.getNextStepLabel();
+                            panel.add(rightArrowComponent, BorderLayout.EAST);
+                            return panel;
+                        }
+                    };
+                }
+            };
+        });
+        EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
     }
 
     private String getElementPresentableName(T element) {

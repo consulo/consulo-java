@@ -7,10 +7,10 @@ import com.intellij.java.impl.psi.statistics.JavaStatisticsManager;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.application.ApplicationManager;
 import consulo.codeEditor.Editor;
+import consulo.codeEditor.EditorPopupHelper;
 import consulo.codeEditor.ScrollType;
 import consulo.document.Document;
 import consulo.ide.impl.idea.codeInsight.actions.OptimizeImportsProcessor;
-import consulo.ide.impl.idea.ui.popup.list.ListPopupImpl;
 import consulo.ide.setting.ShowSettingsUtil;
 import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.CodeInsightSettings;
@@ -28,8 +28,11 @@ import consulo.logging.Logger;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awt.popup.AWTPopupFactory;
 import consulo.ui.ex.awt.popup.PopupListElementRenderer;
 import consulo.ui.ex.popup.BaseListPopupStep;
+import consulo.ui.ex.popup.JBPopup;
+import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.PopupStep;
 import consulo.ui.image.Image;
 import consulo.util.lang.ObjectUtil;
@@ -127,25 +130,22 @@ public class AddImportAction implements QuestionAction {
             return IconDescriptorUpdaters.getIcon(aValue, 0);
           }
         };
-    ListPopupImpl popup = new ListPopupImpl(step) {
-      @Override
-      protected ListCellRenderer getListElementRenderer() {
-        final PopupListElementRenderer baseRenderer = (PopupListElementRenderer) super.getListElementRenderer();
-        final DefaultPsiElementCellRenderer psiRenderer = new DefaultPsiElementCellRenderer();
-        return new ListCellRenderer<PsiClass>() {
-          @Override
-          public Component getListCellRendererComponent(JList<? extends PsiClass> list, PsiClass value, int index, boolean isSelected, boolean cellHasFocus) {
-            JPanel panel = new JPanel(new BorderLayout());
-            baseRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            panel.add(baseRenderer.getNextStepLabel(), BorderLayout.EAST);
-            panel.add(psiRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus));
-            return panel;
-          }
-        };
-      }
-    };
+    JBPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopup(myProject, step, listPopup -> {
+      PopupListElementRenderer baseRenderer = new PopupListElementRenderer(listPopup);
+      DefaultPsiElementCellRenderer psiRenderer = new DefaultPsiElementCellRenderer();
+      return new ListCellRenderer<PsiClass>() {
+        @Override
+        public Component getListCellRendererComponent(JList<? extends PsiClass> list, PsiClass value, int index, boolean isSelected, boolean cellHasFocus) {
+          JPanel panel = new JPanel(new BorderLayout());
+          baseRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+          panel.add(baseRenderer.getNextStepLabel(), BorderLayout.EAST);
+          panel.add(psiRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus));
+          return panel;
+        }
+      };
+    });
     PopupNavigationUtil.hidePopupIfDumbModeStarts(popup, myProject);
-    popup.showInBestPositionFor(myEditor);
+    EditorPopupHelper.getInstance().showPopupInBestPositionFor(myEditor, popup);
   }
 
   @Nullable
