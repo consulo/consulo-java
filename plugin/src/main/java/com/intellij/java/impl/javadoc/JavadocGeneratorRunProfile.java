@@ -16,7 +16,6 @@
 package com.intellij.java.impl.javadoc;
 
 import com.intellij.java.execution.configurations.JavaCommandLineStateUtil;
-import com.intellij.java.language.JavadocBundle;
 import com.intellij.java.language.impl.projectRoots.ex.PathUtilEx;
 import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
@@ -34,6 +33,7 @@ import consulo.execution.process.ProcessTerminatedListener;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.execution.ui.console.RegexpFilter;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
+import consulo.java.language.localize.JavadocLocalize;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiManager;
@@ -92,7 +92,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
 
   @Override
   public String getName() {
-    return JavadocBundle.message("javadoc.settings.title");
+    return JavadocLocalize.javadocSettingsTitle().get();
   }
 
   @Override
@@ -130,7 +130,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     private void setupExeParams(Sdk jdk, GeneralCommandLine cmdLine) throws ExecutionException {
       String jdkPath = jdk != null && jdk.getSdkType() instanceof JavaSdkType javaSdkType ? javaSdkType.getBinPath(jdk) : null;
       if (jdkPath == null) {
-        throw new CantRunException(JavadocBundle.message("javadoc.generate.no.jdk.path"));
+        throw new CantRunException(JavadocLocalize.javadocGenerateNoJdkPath());
       }
       JavaSdkVersion version = JavaSdkTypeUtil.getVersion(jdk);
       if (myConfiguration.HEAP_SIZE != null && myConfiguration.HEAP_SIZE.trim().length() != 0) {
@@ -151,7 +151,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
           File parent = new File(Platform.current().jvm().getRuntimeProperty("java.home")).getParentFile(); //try system jre
           exePath = parent.getPath() + File.separator + "bin" + javadocExecutableName;
           if (!new File(exePath).exists()) {
-            throw new CantRunException(JavadocBundle.message("javadoc.generate.no.jdk.path"));
+            throw new CantRunException(JavadocLocalize.javadocGenerateNoJdkPath());
           }
         }
         cmdLine.setExePath(exePath);
@@ -223,7 +223,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
             return;
           }
           if (packages.size() + sources.size() == 0) {
-            throw new CantRunException(JavadocBundle.message("javadoc.generate.no.classes.in.selected.packages.error"));
+            throw new CantRunException(JavadocLocalize.javadocGenerateNoClassesInSelectedPackagesError());
           }
           for (String aPackage : packages) {
             writer.println(aPackage);
@@ -291,7 +291,7 @@ public class JavadocGeneratorRunProfile implements ModuleRunProfile {
     @Override
     protected ProcessHandler startProcess() throws ExecutionException {
       ProcessHandler handler = JavaCommandLineStateUtil.startProcess(createCommandLine());
-      ProcessTerminatedListener.attach(handler, myProject, JavadocBundle.message("javadoc.generate.exited"));
+      ProcessTerminatedListener.attach(handler, myProject, JavadocLocalize.javadocGenerateExited().get());
       handler.addProcessListener(new ProcessAdapter() {
         @Override
         public void processTerminated(ProcessEvent event) {
