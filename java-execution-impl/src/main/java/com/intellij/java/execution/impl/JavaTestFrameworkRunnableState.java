@@ -63,6 +63,7 @@ import consulo.language.psi.PsiDirectory;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.GlobalSearchScopesCore;
 import consulo.language.util.ModuleUtilCore;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.process.ExecutionException;
@@ -86,8 +87,13 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.*;
 
-public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfiguration<JavaRunConfigurationModule> & CommonJavaRunConfigurationParameters & ConfigurationWithCommandLineShortener &
-    SMRunnerConsolePropertiesProvider> extends JavaCommandLineState implements RemoteConnectionCreator {
+public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfiguration<JavaRunConfigurationModule>
+    & CommonJavaRunConfigurationParameters
+    & ConfigurationWithCommandLineShortener
+    & SMRunnerConsolePropertiesProvider>
+    extends JavaCommandLineState
+    implements RemoteConnectionCreator {
+
     private static final Logger LOG = Logger.getInstance(JavaTestFrameworkRunnableState.class);
     protected ServerSocket myServerSocket;
     protected File myTempFile;
@@ -293,10 +299,10 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
             if (forkPerModule()) {
                 if (isExecutorDisabledInForkedMode()) {
                     String actionName = executor.getStartActionText().map(Presentation.NO_MNEMONIC).get();
-                    throw new CantRunException(
+                    throw new CantRunException(LocalizeValue.localizeTODO(
                         "'" + actionName + "' is disabled when per-module working directory is configured.<br/>" +
                             "Please specify single working directory, or change test scope to single module."
-                    );
+                    ));
                 }
             }
             else {
@@ -305,9 +311,9 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         }
         else if (isExecutorDisabledInForkedMode()) {
             String actionName = executor.getStartActionText().toLowerCase().map(Presentation.NO_MNEMONIC).get();
-            throw new CantRunException(
+            throw new CantRunException(LocalizeValue.localizeTODO(
                 actionName + " is disabled in fork mode.<br/>Please change fork mode to &lt;none&gt; to " + actionName + "."
-            );
+            ));
         }
 
         OwnJavaParameters javaParameters = getJavaParameters();

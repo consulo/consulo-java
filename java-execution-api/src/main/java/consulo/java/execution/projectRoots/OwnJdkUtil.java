@@ -101,18 +101,18 @@ public class OwnJdkUtil {
     public static GeneralCommandLine setupJVMCommandLine(OwnSimpleJavaParameters javaParameters) throws CantRunException {
         Sdk jdk = javaParameters.getJdk();
         if (jdk == null) {
-            throw new CantRunException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified().get());
+            throw new CantRunException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified());
         }
         SdkTypeId type = jdk.getSdkType();
         if (!(type instanceof JavaSdkType)) {
-            throw new CantRunException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified().get());
+            throw new CantRunException(ExecutionLocalize.runConfigurationErrorNoJdkSpecified());
         }
 
         GeneralCommandLine commandLine = new GeneralCommandLine();
         ((JavaSdkType)type).setupCommandLine(commandLine, jdk);
         String exePath = commandLine.getExePath();
         if (exePath == null) {
-            throw new CantRunException(ExecutionLocalize.runConfigurationCannotFindVmExecutable().get());
+            throw new CantRunException(ExecutionLocalize.runConfigurationCannotFindVmExecutable());
         }
 
         setupCommandLine(commandLine, javaParameters);
@@ -410,7 +410,7 @@ public class OwnJdkUtil {
             return Arrays.asList("-jar", jarPath);
         }
         else {
-            throw new CantRunException(ExecutionLocalize.mainClassIsNotSpecifiedErrorMessage().get());
+            throw new CantRunException(ExecutionLocalize.mainClassIsNotSpecifiedErrorMessage());
         }
     }
 

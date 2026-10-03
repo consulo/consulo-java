@@ -26,7 +26,6 @@ import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.engine.jdi.ThreadReferenceProxy;
 import com.intellij.java.debugger.impl.*;
 import com.intellij.java.debugger.impl.actions.DebuggerAction;
-import com.intellij.java.debugger.impl.actions.DebuggerActions;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationListener;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
@@ -85,7 +84,7 @@ import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.process.event.ProcessListener;
 import consulo.project.Project;
-import consulo.project.ui.notification.NotificationType;
+import consulo.project.ui.notification.NotificationService;
 import consulo.project.ui.wm.ToolWindowId;
 import consulo.proxy.EventDispatcher;
 import consulo.ui.UIAccess;
@@ -99,8 +98,8 @@ import consulo.util.collection.Lists;
 import consulo.util.dataholder.UserDataHolderBase;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
-import org.jspecify.annotations.Nullable;
 import org.intellij.lang.annotations.MagicConstant;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -493,16 +492,16 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                     (ListeningConnector)findConnector(myConnection.isUseSockets() ? SOCKET_LISTENING_CONNECTOR_NAME : SHMEM_LISTENING_CONNECTOR_NAME);
                 if (connector == null) {
                     throw new CantRunException(
-                        JavaDebuggerLocalize.errorDebugConnectorNotFound(DebuggerUtils.getTransportName(myConnection)).get()
+                        JavaDebuggerLocalize.errorDebugConnectorNotFound(DebuggerUtils.getTransportName(myConnection))
                     );
                 }
                 myArguments = connector.defaultArguments();
                 if (myArguments == null) {
-                    throw new CantRunException(JavaDebuggerLocalize.errorNoDebugListenPort().get());
+                    throw new CantRunException(JavaDebuggerLocalize.errorNoDebugListenPort());
                 }
 
                 if (address == null) {
-                    throw new CantRunException(JavaDebuggerLocalize.errorNoDebugListenPort().get());
+                    throw new CantRunException(JavaDebuggerLocalize.errorNoDebugListenPort());
                 }
                 // zero port number means the caller leaves to debugger to decide at which port to listen
                 //noinspection HardCodedStringLiteral
@@ -543,7 +542,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
                 if (connector == null) {
                     throw new CantRunException(
-                        JavaDebuggerLocalize.errorDebugConnectorNotFound(DebuggerUtils.getTransportName(myConnection)).get()
+                        JavaDebuggerLocalize.errorDebugConnectorNotFound(DebuggerUtils.getTransportName(myConnection))
                     );
                 }
                 myArguments = connector.defaultArguments();
@@ -554,7 +553,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                         hostnameArg.setValue(myConnection.getHostName());
                     }
                     if (address == null) {
-                        throw new CantRunException(JavaDebuggerLocalize.errorNoDebugAttachPort().get());
+                        throw new CantRunException(JavaDebuggerLocalize.errorNoDebugAttachPort());
                     }
                     //noinspection HardCodedStringLiteral
                     Connector.Argument portArg = myArguments.get("port");
@@ -564,7 +563,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                 }
                 else {
                     if (address == null) {
-                        throw new CantRunException(JavaDebuggerLocalize.errorNoShmemAddress().get());
+                        throw new CantRunException(JavaDebuggerLocalize.errorNoShmemAddress());
                     }
                     //noinspection HardCodedStringLiteral
                     Connector.Argument nameArg = myArguments.get("name");
@@ -583,7 +582,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                     return connector.attach(myArguments);
                 }
                 catch (IllegalArgumentException e) {
-                    throw new CantRunException(e.getLocalizedMessage());
+                    throw new CantRunException(LocalizeValue.of(e.getLocalizedMessage()));
                 }
             }
         }
@@ -639,20 +638,20 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         }
 
         if (getSession().getAlternativeJre() == null) {
-            Sdk runjre = getSession().getRunJre();
-            if ((runjre == null || runjre.getSdkType() instanceof JavaSdkType) && !versionMatch(runjre, version)) {
+            Sdk runJre = getSession().getRunJre();
+            if ((runJre == null || runJre.getSdkType() instanceof JavaSdkType) && !versionMatch(runJre, version)) {
                 JavaSdkTypeUtil.getAllJavaSdks().stream()
                     .filter(sdk -> versionMatch(sdk, version))
                     .findFirst()
                     .ifPresent(sdk -> {
-                        XDebuggerUIConstants.NOTIFICATION_GROUP.createNotification(
-                            JavaDebuggerLocalize.messageRemoteJreVersionMismatch(
+                        NotificationService.getInstance()
+                            .newInfo(XDebuggerUIConstants.NOTIFICATION_GROUP)
+                            .content(JavaDebuggerLocalize.messageRemoteJreVersionMismatch(
                                 version,
-                                runjre != null ? runjre.getVersionString() : "unknown",
+                                runJre != null ? runJre.getVersionString() : "unknown",
                                 sdk.getName()
-                            ).get(),
-                            NotificationType.INFORMATION
-                        ).notify(myProject);
+                            ))
+                            .notify(myProject);
                         getSession().setAlternativeJre(sdk);
                     });
             }
@@ -1744,7 +1743,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                 // there could be explicit resume as a result of call to voteSuspend()
                 // e.g. when breakpoint was considered invalid, in that case the filter will be applied _after_
                 // resuming and all breakpoints in other threads will be ignored.
-                // As resume() implicitly cleares the filter, the filter must be always applied _before_ any resume() action happens
+                // As resume() implicitly clears the filter, the filter must be always applied _before_ any resume() action happens
                 BreakpointManager breakpointManager = DebuggerManagerEx.getInstanceEx(getProject()).getBreakpointManager();
                 breakpointManager.applyThreadFilter(DebugProcessImpl.this, thread.getThreadReference());
             }
@@ -2037,8 +2036,7 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
                                     processHandler != null && (processHandler.isProcessTerminating() || processHandler.isProcessTerminated());
 
                                 fail();
-                                DebuggerInvocationUtil.swingInvokeLater(myProject, () ->
-                                {
+                                DebuggerInvocationUtil.swingInvokeLater(myProject, () -> {
                                     // propagate exception only in case we succeeded to obtain execution result,
                                     // otherwise if the error is induced by the fact that there is nothing to debug, and there is no need to show
                                     // this problem to the user
