@@ -1,18 +1,6 @@
 Consulo Java: profiler/jfr module (consulo.java.profiler.jfr)
 
-Packages one.jfr and one.jfr.event contain code from async-profiler:
-  src/converter/one/jfr
-  https://github.com/async-profiler/async-profiler, commit 3a43989d9e6fc7133d1631fddc06ca44e09375d2
-  Copyright The async-profiler authors
-  Licensed under the Apache License, Version 2.0 (see LICENSE).
-  Changes by consulo.io (marked in the file headers):
-    one/jfr/JfrReader.java, one/jfr/event/ExecutionSample.java: jdk.NativeMethodSample events are read with the
-    synthetic thread state ExecutionSample.NATIVE_METHOD_SAMPLE, so they can be told apart from jdk.ExecutionSample.
-
-Packages com.microsoft.jfr and com.microsoft.jfr.dcmd contain code from jfr-streaming, unmodified:
-  core/src/main/java/com/microsoft/jfr
-  https://github.com/microsoft/jfr-streaming (archived), commit 5586f7cec58f1f157e4661654f6f82f648140e05
-  Copyright (c) Microsoft Corporation
-  Licensed under the MIT License (see LICENSE-MIT).
-
-Package consulo.java.profiler.jfr is Consulo code (Apache License, Version 2.0).
+Contains code from async-profiler (https://github.com/async-profiler/async-profiler), licensed under the Apache License,
+Version 2.0 (see LICENSE).
+Contains code from jfr-streaming (https://github.com/microsoft/jfr-streaming), Copyright (c) Microsoft Corporation,
+licensed under the MIT License (see LICENSE-MIT).

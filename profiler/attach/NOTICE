@@ -1,11 +1,7 @@
 Consulo Java: profiler/attach module (consulo.java.profiler.attach)
 
-This module contains code from Byte Buddy, byte-buddy-agent module:
-  byte-buddy-agent/src/main/java/net/bytebuddy/agent/VirtualMachine.java
-  https://github.com/raphw/byte-buddy, commit 807fb56674daf54d8bb01a578e84bac4130b5e1c
-It is licensed under the Apache License, Version 2.0 (see LICENSE) and kept in its original package.
-Modified by Consulo contributors: FindBugs annotations removed, Byte Buddy nullability annotations
-replaced by JSpecify @Nullable, one javadoc link to ByteBuddyAgent turned into code text.
+Contains code from Byte Buddy (https://github.com/raphw/byte-buddy), licensed under the Apache License, Version 2.0
+(see LICENSE).
 
 Byte Buddy NOTICE:
 
