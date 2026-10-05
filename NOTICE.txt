@@ -1,2 +1,5 @@
 Initial code was get for IntelliJ IDEA Community Edition. Github repo : github.com/JetBrains/intellij-community
 Debugger agent (java-debugger-agent module) code was get for IntelliJ debugger-agent. Github repo : github.com/JetBrains/debugger-agent
+JVM attach (profiler/attach module) code was get for byte-buddy-agent (Apache License 2.0). Github repo : github.com/raphw/byte-buddy, commit 807fb56674daf54d8bb01a578e84bac4130b5e1c, byte-buddy-agent/src/main/java/net/bytebuddy/agent/VirtualMachine.java (original package). See profiler/attach/NOTICE
+JFR reader (profiler/jfr module) code was get for async-profiler converter (Apache License 2.0). Github repo : github.com/async-profiler/async-profiler, commit 3a43989d9e6fc7133d1631fddc06ca44e09375d2, src/converter/one/jfr (original packages). See profiler/jfr/NOTICE
+JFR streaming (profiler/jfr module) code was get for jfr-streaming (MIT License, Copyright (c) Microsoft Corporation). Github repo : github.com/microsoft/jfr-streaming, commit 5586f7cec58f1f157e4661654f6f82f648140e05, core/src/main/java/com/microsoft/jfr (original packages). See profiler/jfr/NOTICE

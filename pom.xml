@@ -70,6 +70,9 @@
 		<module>java-regexp-impl</module>
 		<module>java-properties-impl</module>
 		<module>java-diagram-impl</module>
+		<module>profiler/attach</module>
+		<module>profiler/jfr</module>
+		<module>profiler/impl</module>
 		<module>jvm-bytecode-viewer</module>
 		<module>java-intellilang</module>
 		<module>jam-api</module>

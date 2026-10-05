@@ -1,0 +1,38 @@
+jfr.error.no.data:
+    text: The JVM wrote no Flight Recorder data
+jfr.error.read:
+    text: 'Can''t read the Flight Recorder data: {0}'
+jfr.name:
+    text: Java Flight Recorder
+jfr.preset.default:
+    text: Default (low overhead)
+jfr.preset.profile:
+    text: Profile (more events, more overhead)
+jfr.settings.cpu.time.sampling:
+    text: CPU-time sampling (JDK 25+, Linux)
+jfr.settings.debug.non.safepoints:
+    text: Precise frames (-XX:+DebugNonSafepoints, launch only)
+jfr.settings.native.samples:
+    text: Include threads in native code
+jfr.settings.preset:
+    text: 'Settings:'
+jfr.settings.sampling.interval:
+    text: 'Sampling interval (ms):'
+monitor.gc.activity:
+    text: GC activity
+monitor.heap.committed:
+    text: Heap committed
+monitor.heap.used:
+    text: Heap used
+monitor.non.heap.used:
+    text: Non-heap used
+monitor.process.cpu:
+    text: Process CPU
+monitor.system.cpu:
+    text: System CPU
+monitor.threads.daemon:
+    text: Daemon threads
+monitor.threads.live:
+    text: Live threads
+settings.display.name:
+    text: Java
