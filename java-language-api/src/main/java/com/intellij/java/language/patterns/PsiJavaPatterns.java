@@ -16,6 +16,7 @@
 package com.intellij.java.language.patterns;
 
 import com.intellij.java.language.psi.*;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.pattern.ElementPattern;
 import consulo.language.pattern.IElementTypePattern;
 import consulo.language.pattern.InitialPatternCondition;
@@ -28,6 +29,7 @@ import consulo.language.util.ProcessingContext;
 import consulo.language.pattern.VirtualFilePattern;
 
 import org.jspecify.annotations.Nullable;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -35,155 +37,160 @@ import java.util.List;
  * @author peter
  */
 public class PsiJavaPatterns extends StandardPatterns {
+    public static IElementTypePattern elementType() {
+        return PlatformPatterns.elementType();
+    }
 
-  public static IElementTypePattern elementType() {
-    return PlatformPatterns.elementType();
-  }
+    public static VirtualFilePattern virtualFile() {
+        return PlatformPatterns.virtualFile();
+    }
 
-  public static VirtualFilePattern virtualFile() {
-    return PlatformPatterns.virtualFile();
-  }
+    public static PsiJavaElementPattern.Capture<PsiElement> psiJavaElement() {
+        return new PsiJavaElementPattern.Capture<>(PsiElement.class);
+    }
 
-  public static PsiJavaElementPattern.Capture<PsiElement> psiJavaElement() {
-    return new PsiJavaElementPattern.Capture<>(PsiElement.class);
-  }
+    public static PsiJavaElementPattern.Capture<PsiElement> psiJavaElement(IElementType type) {
+        return psiJavaElement().withElementType(type);
+    }
 
-  public static PsiJavaElementPattern.Capture<PsiElement> psiJavaElement(IElementType type) {
-    return psiJavaElement().withElementType(type);
-  }
+    public static <T extends PsiElement> PsiJavaElementPattern.Capture<T> psiJavaElement(Class<T> aClass) {
+        return new PsiJavaElementPattern.Capture<>(aClass);
+    }
 
-  public static <T extends PsiElement> PsiJavaElementPattern.Capture<T> psiJavaElement(final Class<T> aClass) {
-    return new PsiJavaElementPattern.Capture<>(aClass);
-  }
-
-  @SafeVarargs
-  public static PsiJavaElementPattern.Capture<PsiElement> psiJavaElement(final Class<? extends PsiElement>... classAlternatives) {
-    return new PsiJavaElementPattern.Capture<>(new InitialPatternCondition<>(PsiElement.class) {
-      @Override
-      public boolean accepts(@Nullable Object o, ProcessingContext context) {
-        for (Class<? extends PsiElement> classAlternative : classAlternatives) {
-          if (classAlternative.isInstance(o)) {
-            return true;
-          }
-        }
-        return false;
-      }
-    });
-  }
-
-  public static PsiJavaElementPattern.Capture<PsiLiteralExpression> literalExpression() {
-    return literalExpression(null);
-  }
-
-  public static PsiJavaElementPattern.Capture<PsiLiteral> psiLiteral() {
-    return psiLiteral(null);
-  }
-
-  public static PsiJavaElementPattern.Capture<PsiLiteral> psiLiteral(@Nullable final ElementPattern value) {
-    return new PsiJavaElementPattern.Capture<>(new InitialPatternConditionPlus<>(PsiLiteral.class) {
-      public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
-        return o instanceof PsiLiteral && (value == null || value.accepts(((PsiLiteral)o).getValue(), context));
-      }
-
-      @Override
-      public List<ElementPattern<?>> getPatterns() {
-        return Collections.<ElementPattern<?>>singletonList(value);
-      }
-    });
-  }
-
-  public static PsiJavaElementPattern.Capture<PsiNewExpression> psiNewExpression(final String... fqns) {
-    return new PsiJavaElementPattern.Capture<>(new InitialPatternCondition<>(PsiNewExpression.class) {
-      public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
-        if(o instanceof PsiNewExpression) {
-          PsiJavaCodeReferenceElement reference = ((PsiNewExpression)o).getClassOrAnonymousClassReference();
-          if (reference != null) {
-            for (String fqn : fqns) {
-              if( fqn.equals(reference.getQualifiedName())) return true;
+    @SafeVarargs
+    public static PsiJavaElementPattern.Capture<PsiElement> psiJavaElement(final Class<? extends PsiElement>... classAlternatives) {
+        return new PsiJavaElementPattern.Capture<>(new InitialPatternCondition<>(PsiElement.class) {
+            @Override
+            @RequiredReadAction
+            public boolean accepts(@Nullable Object o, ProcessingContext context) {
+                for (Class<? extends PsiElement> classAlternative : classAlternatives) {
+                    if (classAlternative.isInstance(o)) {
+                        return true;
+                    }
+                }
+                return false;
             }
-          }
-        }
-        return  false;
-      }
-    });
-  }
+        });
+    }
 
-  public static PsiJavaElementPattern.Capture<PsiLiteralExpression> literalExpression(@Nullable final ElementPattern value) {
-    return new PsiJavaElementPattern.Capture<>(new InitialPatternConditionPlus<>(PsiLiteralExpression.class) {
-      public boolean accepts(@Nullable final Object o, final ProcessingContext context) {
-        return o instanceof PsiLiteralExpression && (value == null || value.accepts(((PsiLiteralExpression)o).getValue(), context));
-      }
+    public static PsiJavaElementPattern.Capture<PsiLiteralExpression> literalExpression() {
+        return literalExpression(null);
+    }
 
-      @Override
-      public List<ElementPattern<?>> getPatterns() {
-        return Collections.<ElementPattern<?>>singletonList(value);
-      }
-    });
-  }
+    public static PsiJavaElementPattern.Capture<PsiLiteral> psiLiteral() {
+        return psiLiteral(null);
+    }
 
-  public static PsiMemberPattern.Capture psiMember() {
-    return new PsiMemberPattern.Capture();
-  }
+    public static PsiJavaElementPattern.Capture<PsiLiteral> psiLiteral(@Nullable final ElementPattern value) {
+        return new PsiJavaElementPattern.Capture<>(new InitialPatternConditionPlus<>(PsiLiteral.class) {
+            @Override
+            public boolean accepts(@Nullable Object o, ProcessingContext context) {
+                return o instanceof PsiLiteral literal && (value == null || value.accepts(literal.getValue(), context));
+            }
 
-  public static PsiMethodPattern psiMethod() {
-    return new PsiMethodPattern();
-  }
+            @Override
+            public List<ElementPattern<?>> getPatterns() {
+                return Collections.<ElementPattern<?>>singletonList(value);
+            }
+        });
+    }
 
-  public static PsiParameterPattern psiParameter() {
-    return new PsiParameterPattern();
-  }
+    public static PsiJavaElementPattern.Capture<PsiNewExpression> psiNewExpression(final String... fqns) {
+        return new PsiJavaElementPattern.Capture<>(new InitialPatternCondition<>(PsiNewExpression.class) {
+            @Override
+            public boolean accepts(@Nullable Object o, ProcessingContext context) {
+                if (o instanceof PsiNewExpression newExpr) {
+                    PsiJavaCodeReferenceElement reference = newExpr.getClassOrAnonymousClassReference();
+                    if (reference != null) {
+                        for (String fqn : fqns) {
+                            if (fqn.equals(reference.getQualifiedName())) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+        });
+    }
 
-  public static PsiModifierListOwnerPattern.Capture<PsiModifierListOwner> psiModifierListOwner() {
-    return new PsiModifierListOwnerPattern.Capture<>(new InitialPatternCondition<>(PsiModifierListOwner.class) {
-      @Override
-      public boolean accepts(@Nullable Object o, ProcessingContext context) {
-        return o instanceof PsiModifierListOwner;
-      }
-    });
-  }
+    public static PsiJavaElementPattern.Capture<PsiLiteralExpression> literalExpression(@Nullable final ElementPattern value) {
+        return new PsiJavaElementPattern.Capture<>(new InitialPatternConditionPlus<>(PsiLiteralExpression.class) {
+            @Override
+            public boolean accepts(@Nullable Object o, ProcessingContext context) {
+                return o instanceof PsiLiteralExpression literal && (value == null || value.accepts(literal.getValue(), context));
+            }
 
+            @Override
+            public List<ElementPattern<?>> getPatterns() {
+                return Collections.<ElementPattern<?>>singletonList(value);
+            }
+        });
+    }
 
-  public static PsiFieldPattern psiField() {
-    return new PsiFieldPattern();
-  }
+    public static PsiMemberPattern.Capture psiMember() {
+        return new PsiMemberPattern.Capture();
+    }
 
-  public static PsiClassPattern psiClass() {
-    return new PsiClassPattern();
-  }
+    public static PsiMethodPattern psiMethod() {
+        return new PsiMethodPattern();
+    }
 
-  public static PsiAnnotationPattern psiAnnotation() {
-    return new PsiAnnotationPattern();
-  }
+    public static PsiParameterPattern psiParameter() {
+        return new PsiParameterPattern();
+    }
 
-  public static PsiNameValuePairPattern psiNameValuePair() {
-    return new PsiNameValuePairPattern();
-  }
+    public static PsiModifierListOwnerPattern.Capture<PsiModifierListOwner> psiModifierListOwner() {
+        return new PsiModifierListOwnerPattern.Capture<>(new InitialPatternCondition<>(PsiModifierListOwner.class) {
+            @Override
+            @RequiredReadAction
+            public boolean accepts(@Nullable Object o, ProcessingContext context) {
+                return o instanceof PsiModifierListOwner;
+            }
+        });
+    }
 
-  public static PsiTypePattern psiType() {
-    return new PsiTypePattern();
-  }
+    public static PsiFieldPattern psiField() {
+        return new PsiFieldPattern();
+    }
 
-  public static PsiExpressionPattern.Capture<PsiExpression> psiExpression() {
-    return new PsiExpressionPattern.Capture<>(PsiExpression.class);
-  }
+    public static PsiClassPattern psiClass() {
+        return new PsiClassPattern();
+    }
 
-  public static PsiBinaryExpressionPattern psiBinaryExpression() {
-    return new PsiBinaryExpressionPattern();
-  }
+    public static PsiAnnotationPattern psiAnnotation() {
+        return new PsiAnnotationPattern();
+    }
 
-  public static PsiTypeCastExpressionPattern psiTypeCastExpression() {
-    return new PsiTypeCastExpressionPattern();
-  }
+    public static PsiNameValuePairPattern psiNameValuePair() {
+        return new PsiNameValuePairPattern();
+    }
 
-  public static PsiJavaElementPattern.Capture<PsiReferenceExpression> psiReferenceExpression() {
-    return psiJavaElement(PsiReferenceExpression.class);
-  }
+    public static PsiTypePattern psiType() {
+        return new PsiTypePattern();
+    }
 
-  public static PsiStatementPattern.Capture<PsiExpressionStatement> psiExpressionStatement() {
-    return new PsiStatementPattern.Capture<>(PsiExpressionStatement.class);
-  }
+    public static PsiExpressionPattern.Capture<PsiExpression> psiExpression() {
+        return new PsiExpressionPattern.Capture<>(PsiExpression.class);
+    }
 
-  public static PsiStatementPattern.Capture<PsiReturnStatement> psiReturnStatement() {
-    return new PsiStatementPattern.Capture<>(PsiReturnStatement.class);
-  }
+    public static PsiBinaryExpressionPattern psiBinaryExpression() {
+        return new PsiBinaryExpressionPattern();
+    }
+
+    public static PsiTypeCastExpressionPattern psiTypeCastExpression() {
+        return new PsiTypeCastExpressionPattern();
+    }
+
+    public static PsiJavaElementPattern.Capture<PsiReferenceExpression> psiReferenceExpression() {
+        return psiJavaElement(PsiReferenceExpression.class);
+    }
+
+    public static PsiStatementPattern.Capture<PsiExpressionStatement> psiExpressionStatement() {
+        return new PsiStatementPattern.Capture<>(PsiExpressionStatement.class);
+    }
+
+    public static PsiStatementPattern.Capture<PsiReturnStatement> psiReturnStatement() {
+        return new PsiStatementPattern.Capture<>(PsiReturnStatement.class);
+    }
 }
