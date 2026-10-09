@@ -22,6 +22,7 @@ import consulo.compiler.ModuleCompilerPathsManager;
 import consulo.content.ContentFolderTypeProvider;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.coverage.*;
+import consulo.execution.coverage.localize.ExecutionCoverageLocalize;
 import consulo.execution.coverage.view.CoverageViewExtension;
 import consulo.execution.test.AbstractTestProxy;
 import consulo.java.coverage.localize.JavaCoverageLocalize;
@@ -32,6 +33,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiPackage;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.module.content.ModuleRootManager;
@@ -193,13 +195,13 @@ public class JavaCoverageEngine extends CoverageEngine {
         CoverageSuitesBundle suite,
         Runnable chooseSuiteAction
     ) {
-        Path outputpath =
+        Path outputPath =
             ModuleCompilerPathsManager.getInstance(module).getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
-        Path testOutputpath =
+        Path testOutputPath =
             ModuleCompilerPathsManager.getInstance(module).getCompilerOutputPath(TestContentFolderTypeProvider.getInstance());
 
-        if ((outputpath == null && isModuleOutputNeeded(module, ProductionContentFolderTypeProvider.getInstance()))
-            || (suite.isTrackTestFolders() && testOutputpath == null
+        if ((outputPath == null && isModuleOutputNeeded(module, ProductionContentFolderTypeProvider.getInstance()))
+            || (suite.isTrackTestFolders() && testOutputPath == null
             && isModuleOutputNeeded(module, TestContentFolderTypeProvider.getInstance()))) {
             Project project = module.getProject();
             if (suite.isModuleChecked(module)) {
@@ -332,11 +334,11 @@ public class JavaCoverageEngine extends CoverageEngine {
         }
         Set<File> classFiles = new HashSet<>();
         ModuleCompilerPathsManager pathsManager = ModuleCompilerPathsManager.getInstance(module);
-        Path outputpath = pathsManager.getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
-        Path testOutputpath = pathsManager.getCompilerOutputPath(TestContentFolderTypeProvider.getInstance());
+        Path outputPath = pathsManager.getCompilerOutputPath(ProductionContentFolderTypeProvider.getInstance());
+        Path testOutputPath = pathsManager.getCompilerOutputPath(TestContentFolderTypeProvider.getInstance());
 
         for (JavaCoverageEngineExtension extension : JavaCoverageEngineExtension.EP_NAME.getExtensions()) {
-            if (extension.collectOutputFiles(srcFile, outputpath, testOutputpath, suite, classFiles)) {
+            if (extension.collectOutputFiles(srcFile, outputPath, testOutputPath, suite, classFiles)) {
                 return classFiles;
             }
         }
@@ -345,21 +347,21 @@ public class JavaCoverageEngine extends CoverageEngine {
         String packageVmName = packageFQName.replace('.', '/');
 
         List<File> children = new ArrayList<>();
-        File vDir = outputpath == null
+        File vDir = outputPath == null
             ? null
             : packageVmName.length() > 0
-            ? new File(outputpath.toFile(), packageVmName)
-            : outputpath.toFile();
+            ? new File(outputPath.toFile(), packageVmName)
+            : outputPath.toFile();
         if (vDir != null && vDir.exists()) {
             Collections.addAll(children, vDir.listFiles());
         }
 
         if (suite.isTrackTestFolders()) {
-            File testDir = testOutputpath == null
+            File testDir = testOutputPath == null
                 ? null
                 : packageVmName.length() > 0
-                ? new File(testOutputpath.toFile(), packageVmName)
-                : testOutputpath.toFile();
+                ? new File(testOutputPath.toFile(), packageVmName)
+                : testOutputPath.toFile();
             if (testDir != null && testDir.exists()) {
                 Collections.addAll(children, testDir.listFiles());
             }
@@ -384,7 +386,7 @@ public class JavaCoverageEngine extends CoverageEngine {
 
     @Override
     @RequiredReadAction
-    public String generateBriefReport(
+    public LocalizeValue generateBriefReport(
         Editor editor,
         PsiFile psiFile,
         int lineNumber,
@@ -393,13 +395,12 @@ public class JavaCoverageEngine extends CoverageEngine {
         @Nullable CoverageLine coverageLine
     ) {
         LineData lineData = coverageLine instanceof AgentCoverageLine agentLine ? agentLine.getLineData() : null;
-        StringBuilder buf = new StringBuilder();
-        buf.append("Hits: ");
         if (lineData == null) {
-            buf.append(0);
-            return buf.toString();
+            return ExecutionCoverageLocalize.hitsTitle(0);
         }
-        buf.append(lineData.getHits()).append("\n");
+
+        StringBuilder buf = new StringBuilder();
+        buf.append(ExecutionCoverageLocalize.hitsTitle(lineData.getHits()).get()).append("\n");
 
         List<PsiExpression> expressions = new ArrayList<>();
 
@@ -442,7 +443,7 @@ public class JavaCoverageEngine extends CoverageEngine {
                     }
                 }
                 catch (AnalysisCanceledException e) {
-                    return buf.toString();
+                    return LocalizeValue.of(buf.toString());
                 }
             }
         }
@@ -508,9 +509,9 @@ public class JavaCoverageEngine extends CoverageEngine {
         }
         catch (Exception e) {
             LOG.info(e);
-            return "Hits: " + lineData.getHits();
+            return ExecutionCoverageLocalize.hitsTitle(0);
         }
-        return buf.toString();
+        return LocalizeValue.of(buf.toString());
     }
 
     @Nullable
