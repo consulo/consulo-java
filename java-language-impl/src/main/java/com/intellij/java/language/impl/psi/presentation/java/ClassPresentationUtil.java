@@ -16,75 +16,93 @@
 package com.intellij.java.language.impl.psi.presentation.java;
 
 import com.intellij.java.language.psi.*;
-import consulo.language.psi.PsiBundle;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.localize.LanguageLocalize;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
+import consulo.util.lang.StringUtil;
+import org.jspecify.annotations.Nullable;
 
 public class ClassPresentationUtil {
-  private ClassPresentationUtil() {
-  }
-
-  public static String getNameForClass(PsiClass aClass, boolean qualified) {
-    if (aClass instanceof PsiAnonymousClass) {
-      if (aClass instanceof PsiEnumConstantInitializer) {
-        PsiEnumConstant enumConstant = ((PsiEnumConstantInitializer) aClass).getEnumConstant();
-        String name = enumConstant.getName();
-        return PsiBundle.message("enum.constant.context", name, getContextName(enumConstant, qualified));
-      }
-      return PsiBundle.message("anonymous.class.context.display", getContextName(aClass, qualified));
-    }
-    if (qualified) {
-      String qName = aClass.getQualifiedName();
-      if (qName != null) {
-        return qName;
-      }
+    private ClassPresentationUtil() {
     }
 
-    String className = aClass.getName();
-    String contextName = getContextName(aClass, qualified);
-    return contextName != null ? PsiBundle.message("class.context.display", className, contextName) : className;
-  }
+    @RequiredReadAction
+    public static LocalizeValue getNameForClass(PsiClass aClass, boolean qualified) {
+        if (aClass instanceof PsiAnonymousClass) {
+            if (aClass instanceof PsiEnumConstantInitializer enumInitializer) {
+                PsiEnumConstant enumConstant = enumInitializer.getEnumConstant();
+                return LanguageLocalize.enumConstantContext(
+                    StringUtil.notNullize(enumConstant.getName()),
+                    StringUtil.notNullize(getContextName(enumConstant, qualified))
+                );
+            }
+            return LanguageLocalize.anonymousClassContextDisplay(StringUtil.notNullize(getContextName(aClass, qualified)));
+        }
+        if (qualified) {
+            String qName = aClass.getQualifiedName();
+            if (qName != null) {
+                return LocalizeValue.of(qName);
+            }
+        }
 
-  private static String getNameForElement(PsiElement element, boolean qualified) {
-    if (element instanceof PsiClass) {
-      return getNameForClass((PsiClass) element, qualified);
-    } else if (element instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod) element;
-      String methodName = method.getName();
-      return PsiBundle.message("method.context.display", methodName, getContextName(method, qualified));
-    } else if (element instanceof PsiClassOwner) {
-      return null;
-    } else if (element instanceof PsiFile) {
-      return ((PsiFile) element).getName();
-    } else if (element instanceof PsiField) {
-      return ((PsiField) element).getName();
-    } else {
-      return null;
+        String className = aClass.getName();
+        String contextName = getContextName(aClass, qualified);
+        return contextName != null
+            ? LanguageLocalize.classContextDisplay(StringUtil.notNullize(className), contextName)
+            : LocalizeValue.ofNullable(className);
     }
-  }
 
-  public static String getContextName(PsiElement element, boolean qualified) {
-    PsiElement parent = PsiTreeUtil.getStubOrPsiParentOfType(element, PsiMember.class);
-    if (parent == null) {
-      parent = element.getContainingFile();
+    @RequiredReadAction
+    private static LocalizeValue getNameForElement(PsiElement element, boolean qualified) {
+        if (element instanceof PsiClass psiClass) {
+            return getNameForClass(psiClass, qualified);
+        }
+        else if (element instanceof PsiMethod method) {
+            return LanguageLocalize.methodContextDisplay(
+                StringUtil.notNullize(method.getName()),
+                StringUtil.notNullize(getContextName(method, qualified))
+            );
+        }
+        else if (element instanceof PsiClassOwner) {
+            return LocalizeValue.empty();
+        }
+        else if (element instanceof PsiFile file) {
+            return LocalizeValue.of(file.getName());
+        }
+        else if (element instanceof PsiField field) {
+            return LocalizeValue.ofNullable(field.getName());
+        }
+        else {
+            return LocalizeValue.empty();
+        }
     }
-    while (true) {
-      if (parent == null) {
-        return null;
-      }
-      String name = getNameForElement(parent, qualified);
-      if (name != null) {
-        return name;
-      }
-      if (parent instanceof PsiFile) {
-        return null;
-      }
-      parent = PsiTreeUtil.getStubOrPsiParent(parent);
-    }
-  }
 
-  public static String getFunctionalExpressionPresentation(PsiFunctionalExpression functionalExpression, boolean qualified) {
-    return "Functional expression in " + getContextName(functionalExpression, qualified);
-  }
+    @RequiredReadAction
+    public static @Nullable String getContextName(PsiElement element, boolean qualified) {
+        PsiElement parent = PsiTreeUtil.getStubOrPsiParentOfType(element, PsiMember.class);
+        if (parent == null) {
+            parent = element.getContainingFile();
+        }
+        while (true) {
+            if (parent == null) {
+                return null;
+            }
+            LocalizeValue name = getNameForElement(parent, qualified);
+            if (name.isNotEmpty()) {
+                return name.get();
+            }
+            if (parent instanceof PsiFile) {
+                return null;
+            }
+            parent = PsiTreeUtil.getStubOrPsiParent(parent);
+        }
+    }
+
+    @RequiredReadAction
+    public static LocalizeValue getFunctionalExpressionPresentation(PsiFunctionalExpression functionalExpression, boolean qualified) {
+        return LocalizeValue.localizeTODO("Functional expression in " + getContextName(functionalExpression, qualified));
+    }
 }

@@ -47,7 +47,7 @@ public class MethodOrFunctionalExpressionPresentationProvider implements TargetP
 
             PsiNamedElement container = fetchContainer(method);
             String text = container instanceof PsiClass psiClass
-                ? ClassPresentationUtil.getNameForClass(psiClass, false)
+                ? ClassPresentationUtil.getNameForClass(psiClass, false).get()
                 : String.valueOf(container.getName());
             if (showMethodNames) {
                 text += "." + PsiFormatUtil.formatMethod(

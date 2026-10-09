@@ -20,19 +20,19 @@ import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUt
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiFunctionalExpression;
-import consulo.application.AllIcons;
 import consulo.colorScheme.TextAttributes;
-import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
-import consulo.ui.ex.util.CompositeAppearance;
 import consulo.ide.localize.IdeLocalize;
+import consulo.language.editor.hierarchy.HierarchyNodeDescriptor;
 import consulo.language.psi.PsiElement;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.util.CompositeAppearance;
 import consulo.ui.image.ImageEffects;
-import consulo.util.lang.Comparing;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
+import java.util.Objects;
 
 public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
     public TypeHierarchyNodeDescriptor(
@@ -59,6 +59,7 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
         return getPsiElement() instanceof PsiClass psiClass ? psiClass.getQualifiedName() : "";
     }
 
+    @Override
     @RequiredUIAccess
     public final boolean update() {
         boolean changes = super.update();
@@ -72,7 +73,7 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
         }
 
         if (changes && myIsBase) {
-            setIcon(ImageEffects.appendRight(AllIcons.Hierarchy.Base, getIcon()));
+            setIcon(ImageEffects.appendRight(PlatformIconGroup.hierarchyBase(), getIcon()));
         }
 
         PsiElement psiElement = getPsiClass();
@@ -86,18 +87,19 @@ public final class TypeHierarchyNodeDescriptor extends HierarchyNodeDescriptor {
             classNameAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
         }
         if (psiElement instanceof PsiClass psiClass) {
-            myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass(psiClass, false), classNameAttributes);
+            myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass(psiClass, false).get(), classNameAttributes);
             myHighlightedText.getEnding().addText(
                 " (" + JavaHierarchyUtil.getPackageName(psiClass) + ")",
                 HierarchyNodeDescriptor.getPackageNameAttributes()
             );
         }
         else if (psiElement instanceof PsiFunctionalExpression functionalExpression) {
-            myHighlightedText.getEnding().addText(ClassPresentationUtil.getFunctionalExpressionPresentation(functionalExpression, false));
+            myHighlightedText.getEnding()
+                .addText(ClassPresentationUtil.getFunctionalExpressionPresentation(functionalExpression, false).get());
         }
         myName = myHighlightedText.getText();
 
-        if (!Comparing.equal(myHighlightedText, oldText)) {
+        if (!Objects.equals(myHighlightedText, oldText)) {
             changes = true;
         }
         return changes;

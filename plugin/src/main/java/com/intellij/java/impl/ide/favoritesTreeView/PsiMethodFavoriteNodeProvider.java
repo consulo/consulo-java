@@ -32,7 +32,6 @@ import consulo.bookmark.ui.view.BookmarkNodeProvider;
 import consulo.dataContext.DataContext;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
-import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.project.Project;
 import consulo.project.ui.view.tree.AbstractTreeNode;
@@ -44,93 +43,96 @@ import java.util.Collection;
 
 @ExtensionImpl
 public class PsiMethodFavoriteNodeProvider implements BookmarkNodeProvider {
-  @Override
-  public Collection<AbstractTreeNode> getFavoriteNodes(DataContext context, ViewSettings viewSettings) {
-    Project project = context.getData(Project.KEY);
-    if (project == null) {
-      return null;
-    }
-    PsiElement[] elements = context.getData(PsiElement.KEY_OF_ARRAY);
-    if (elements == null) {
-      PsiElement element = context.getData(PsiElement.KEY);
-      if (element != null) {
-        elements = new PsiElement[]{element};
-      }
-    }
-    if (elements != null) {
-      Collection<AbstractTreeNode> result = new ArrayList<>();
-      for (PsiElement element : elements) {
-        if (element instanceof PsiMethod) {
-          result.add(new MethodSmartPointerNode(project, element, viewSettings));
+    @Override
+    public Collection<AbstractTreeNode> getFavoriteNodes(DataContext context, ViewSettings viewSettings) {
+        Project project = context.getData(Project.KEY);
+        if (project == null) {
+            return null;
         }
-      }
-      return result.isEmpty() ? null : result;
+        PsiElement[] elements = context.getData(PsiElement.KEY_OF_ARRAY);
+        if (elements == null) {
+            PsiElement element = context.getData(PsiElement.KEY);
+            if (element != null) {
+                elements = new PsiElement[]{element};
+            }
+        }
+        if (elements != null) {
+            Collection<AbstractTreeNode> result = new ArrayList<>();
+            for (PsiElement element : elements) {
+                if (element instanceof PsiMethod) {
+                    result.add(new MethodSmartPointerNode(project, element, viewSettings));
+                }
+            }
+            return result.isEmpty() ? null : result;
+        }
+        return null;
     }
-    return null;
-  }
 
-  @Override
-  public AbstractTreeNode createNode(Project project, Object element, ViewSettings viewSettings) {
-    return element instanceof PsiMethod
-      ? new MethodSmartPointerNode(project, element, viewSettings)
-      : BookmarkNodeProvider.super.createNode(project, element, viewSettings);
-  }
-
-  @Override
-  public boolean elementContainsFile(Object element, VirtualFile vFile) {
-    return false;
-  }
-
-  @Override
-  public int getElementWeight(Object value, boolean isSortByType) {
-    if (value instanceof PsiMethod) {
-      return 5;
+    @Override
+    public AbstractTreeNode createNode(Project project, Object element, ViewSettings viewSettings) {
+        return element instanceof PsiMethod
+            ? new MethodSmartPointerNode(project, element, viewSettings)
+            : BookmarkNodeProvider.super.createNode(project, element, viewSettings);
     }
-    return -1;
-  }
 
-  @Override
-  public String getElementLocation(Object element) {
-    if (element instanceof PsiMethod method) {
-      PsiClass parent = method.getContainingClass();
-      if (parent != null) {
-        return ClassPresentationUtil.getNameForClass(parent, true);
-      }
+    @Override
+    public boolean elementContainsFile(Object element, VirtualFile vFile) {
+        return false;
     }
-    return null;
-  }
 
-  @Override
-  public boolean isInvalidElement(Object element) {
-    return element instanceof PsiMethod method && !method.isValid();
-  }
-
-  @Override
-  public String getFavoriteTypeId() {
-    return "method";
-  }
-
-  @Override
-  public String getElementUrl(Object element) {
-    return element instanceof PsiMethod method ? PsiFormatUtil.getExternalName(method) : null;
-  }
-
-  @Override
-  @RequiredReadAction
-  public String getElementModuleName(Object element) {
-    if (element instanceof PsiMethod aMethod) {
-      Module module = ModuleUtilCore.findModuleForPsiElement(aMethod);
-      return module != null ? module.getName() : null;
+    @Override
+    public int getElementWeight(Object value, boolean isSortByType) {
+        if (value instanceof PsiMethod) {
+            return 5;
+        }
+        return -1;
     }
-    return null;
-  }
 
-  @Override
-  public Object[] createPathFromUrl(Project project, String url, String moduleName) {
-    PsiMethod method = RefMethodImpl.findPsiMethod(PsiManager.getInstance(project), url);
-    if (method == null) {
-      return null;
+    @Override
+    @RequiredReadAction
+    public String getElementLocation(Object element) {
+        if (element instanceof PsiMethod method) {
+            PsiClass parent = method.getContainingClass();
+            if (parent != null) {
+                return ClassPresentationUtil.getNameForClass(parent, true).get();
+            }
+        }
+        return null;
     }
-    return new Object[]{method};
-  }
+
+    @Override
+    @RequiredReadAction
+    public boolean isInvalidElement(Object element) {
+        return element instanceof PsiMethod method && !method.isValid();
+    }
+
+    @Override
+    public String getFavoriteTypeId() {
+        return "method";
+    }
+
+    @Override
+    public String getElementUrl(Object element) {
+        return element instanceof PsiMethod method ? PsiFormatUtil.getExternalName(method) : null;
+    }
+
+    @Override
+    @RequiredReadAction
+    public String getElementModuleName(Object element) {
+        if (element instanceof PsiMethod method) {
+            Module module = method.getModule();
+            return module != null ? module.getName() : null;
+        }
+        return null;
+    }
+
+    @Override
+    @RequiredReadAction
+    public Object[] createPathFromUrl(Project project, String url, String moduleName) {
+        PsiMethod method = RefMethodImpl.findPsiMethod(PsiManager.getInstance(project), url);
+        if (method == null) {
+            return null;
+        }
+        return new Object[]{method};
+    }
 }

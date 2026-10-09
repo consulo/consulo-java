@@ -17,6 +17,7 @@ package com.intellij.java.language.impl.psi.presentation.java;
 
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.codeEditor.CodeInsightColors;
 import consulo.colorScheme.TextAttributesKey;
@@ -33,43 +34,43 @@ import consulo.ui.image.Image;
  */
 @ExtensionImpl
 public class ClassPresentationProvider implements ItemPresentationProvider<PsiClass> {
-  @Override
-  public Class<PsiClass> getItemClass() {
-    return PsiClass.class;
-  }
+    @Override
+    public Class<PsiClass> getItemClass() {
+        return PsiClass.class;
+    }
 
-  @Override
-  public ItemPresentation getPresentation(final PsiClass psiClass) {
-    return new ColoredItemPresentation() {
-      @Override
-      public String getPresentableText() {
-        return ClassPresentationUtil.getNameForClass(psiClass, false);
-      }
+    @Override
+    public ItemPresentation getPresentation(final PsiClass psiClass) {
+        return new ColoredItemPresentation() {
+            @Override
+            @RequiredReadAction
+            public String getPresentableText() {
+                return ClassPresentationUtil.getNameForClass(psiClass, false).get();
+            }
 
-      @Override
-      public String getLocationString() {
-        PsiFile file = psiClass.getContainingFile();
-        if (file instanceof PsiClassOwner) {
-          PsiClassOwner classOwner = (PsiClassOwner) file;
-          String packageName = classOwner.getPackageName();
-          if (packageName.length() == 0) return null;
-          return "(" + packageName + ")";
-        }
-        return null;
-      }
+            @Override
+            public String getLocationString() {
+                PsiFile file = psiClass.getContainingFile();
+                if (file instanceof PsiClassOwner classOwner) {
+                    String packageName = classOwner.getPackageName();
+                    return packageName.isEmpty() ? null : "(" + packageName + ")";
+                }
+                return null;
+            }
 
-      @Override
-      public TextAttributesKey getTextAttributesKey() {
-        if (psiClass.isDeprecated()) {
-          return CodeInsightColors.DEPRECATED_ATTRIBUTES;
-        }
-        return null;
-      }
+            @Override
+            public TextAttributesKey getTextAttributesKey() {
+                if (psiClass.isDeprecated()) {
+                    return CodeInsightColors.DEPRECATED_ATTRIBUTES;
+                }
+                return null;
+            }
 
-      @Override
-      public Image getIcon() {
-        return IconDescriptorUpdaters.getIcon(psiClass, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
-      }
-    };
-  }
+            @Override
+            @RequiredReadAction
+            public Image getIcon() {
+                return IconDescriptorUpdaters.getIcon(psiClass, Iconable.ICON_FLAG_VISIBILITY | Iconable.ICON_FLAG_READ_STATUS);
+            }
+        };
+    }
 }

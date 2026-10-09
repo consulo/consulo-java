@@ -65,14 +65,14 @@ public class GutterIconTooltipHelper {
         Set<LocalizeValue> names = new LinkedHashSet<>();
         for (PsiElement element : elements) {
             if (element instanceof PsiClass psiClass) {
-                String className = ClassPresentationUtil.getNameForClass(psiClass, true);
-                names.add(pattern.apply("", className));
+                LocalizeValue className = ClassPresentationUtil.getNameForClass(psiClass, true);
+                names.add(pattern.apply("", className.get()));
             }
             else if (element instanceof PsiMethod method) {
                 String methodName = method.getName();
                 PsiClass aClass = method.getContainingClass();
-                String className = aClass == null ? "" : ClassPresentationUtil.getNameForClass(aClass, true);
-                names.add(pattern.apply(methodName, className));
+                LocalizeValue className = aClass == null ? LocalizeValue.empty() : ClassPresentationUtil.getNameForClass(aClass, true);
+                names.add(pattern.apply(methodName, className.get()));
             }
             else if (element instanceof PsiFile file) {
                 names.add(pattern.apply("", file.getName()));

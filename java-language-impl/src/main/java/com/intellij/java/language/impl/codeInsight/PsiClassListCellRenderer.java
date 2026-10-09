@@ -15,42 +15,42 @@
  */
 package com.intellij.java.language.impl.codeInsight;
 
-import consulo.language.editor.ui.PsiElementListCellRenderer;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.language.editor.ui.PsiElementListCellRenderer;
 import consulo.language.psi.PsiElement;
-import consulo.language.psi.PsiFile;
 import org.jspecify.annotations.Nullable;
 
 public class PsiClassListCellRenderer extends PsiElementListCellRenderer<PsiClass> {
-  public static final PsiClassListCellRenderer INSTANCE = new PsiClassListCellRenderer();
+    public static final PsiClassListCellRenderer INSTANCE = new PsiClassListCellRenderer();
 
-  @Override
-  public String getElementText(PsiClass element) {
-    return ClassPresentationUtil.getNameForClass(element, false);
-  }
-
-  @Override
-  protected String getContainerText(PsiClass element, final String name) {
-    return getContainerTextStatic(element);
-  }
-
-  @Nullable
-  public static String getContainerTextStatic(final PsiElement element) {
-    PsiFile file = element.getContainingFile();
-    if (file instanceof PsiClassOwner) {
-      String packageName = ((PsiClassOwner) file).getPackageName();
-      if (packageName.isEmpty()) {
-        return null;
-      }
-      return "(" + packageName + ")";
+    @Override
+    @RequiredReadAction
+    public String getElementText(PsiClass element) {
+        return ClassPresentationUtil.getNameForClass(element, false).get();
     }
-    return null;
-  }
 
-  @Override
-  public int getIconFlags() {
-    return 0;
-  }
+    @Override
+    protected String getContainerText(PsiClass element, String name) {
+        return getContainerTextStatic(element);
+    }
+
+    @Nullable
+    public static String getContainerTextStatic(PsiElement element) {
+        if (element.getContainingFile() instanceof PsiClassOwner classOwner) {
+            String packageName = classOwner.getPackageName();
+            if (packageName.isEmpty()) {
+                return null;
+            }
+            return "(" + packageName + ")";
+        }
+        return null;
+    }
+
+    @Override
+    public int getIconFlags() {
+        return 0;
+    }
 }

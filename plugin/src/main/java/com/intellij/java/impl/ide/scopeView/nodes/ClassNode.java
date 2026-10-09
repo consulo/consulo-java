@@ -15,36 +15,44 @@
  */
 package com.intellij.java.impl.ide.scopeView.nodes;
 
-import consulo.ide.impl.idea.ide.scopeView.nodes.BasePsiNode;
 import com.intellij.java.impl.ide.projectView.impl.nodes.ClassTreeNode;
 import com.intellij.java.language.impl.psi.presentation.java.ClassPresentationUtil;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.ide.impl.idea.ide.scopeView.nodes.BasePsiNode;
 
 /**
- * User: anna
- * Date: 30-Jan-2006
+ * @author anna
+ * @since 2006-01-30
  */
-public class ClassNode extends BasePsiNode<PsiClass> implements Comparable<ClassNode>{
-  public ClassNode(PsiClass aClass) {
-    super(aClass);
-  }
-
-  public String toString() {
-    PsiClass aClass = (PsiClass)getPsiElement();
-    return aClass != null && aClass.isValid() ? ClassPresentationUtil.getNameForClass(aClass, false) : "";
-  }
-
-  @Override
-  public boolean isDeprecated() {
-    PsiClass psiClass = (PsiClass)getPsiElement();
-    return psiClass != null && psiClass.isDeprecated();
-  }
-
-  public int compareTo(ClassNode o) {
-    int comparision = ClassTreeNode.getClassPosition((PsiClass)getPsiElement()) - ClassTreeNode.getClassPosition((PsiClass)o.getPsiElement());
-    if (comparision == 0) {
-      return toString().compareToIgnoreCase(o.toString());
+public class ClassNode extends BasePsiNode<PsiClass> implements Comparable<ClassNode> {
+    @RequiredReadAction
+    public ClassNode(PsiClass aClass) {
+        super(aClass);
     }
-    return comparision;
-  }
+
+    @Override
+    @RequiredReadAction
+    public String toString() {
+        PsiClass aClass = (PsiClass) getPsiElement();
+        return aClass != null && aClass.isValid() ? ClassPresentationUtil.getNameForClass(aClass, false).get() : "";
+    }
+
+    @Override
+    @RequiredReadAction
+    public boolean isDeprecated() {
+        PsiClass psiClass = (PsiClass) getPsiElement();
+        return psiClass != null && psiClass.isDeprecated();
+    }
+
+    @Override
+    @RequiredReadAction
+    public int compareTo(ClassNode o) {
+        int comparison = ClassTreeNode.getClassPosition((PsiClass) getPsiElement()) -
+            ClassTreeNode.getClassPosition((PsiClass) o.getPsiElement());
+        if (comparison == 0) {
+            return toString().compareToIgnoreCase(o.toString());
+        }
+        return comparison;
+    }
 }
