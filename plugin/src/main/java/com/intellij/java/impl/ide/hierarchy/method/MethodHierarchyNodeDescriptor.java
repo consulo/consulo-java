@@ -138,7 +138,7 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
             classNameAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
         }
         if (aClass instanceof PsiClass psiClass) {
-            myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass(psiClass, false), classNameAttributes);
+            myHighlightedText.getEnding().addText(ClassPresentationUtil.getNameForClass(psiClass, false).get(), classNameAttributes);
             myHighlightedText.getEnding().addText(
                 "  (" + JavaHierarchyUtil.getPackageName(psiClass) + ")",
                 HierarchyNodeDescriptor.getPackageNameAttributes()
@@ -146,7 +146,7 @@ public final class MethodHierarchyNodeDescriptor extends HierarchyNodeDescriptor
         }
         else if (aClass instanceof PsiFunctionalExpression functionalExpression) {
             myHighlightedText.getEnding()
-                .addText(ClassPresentationUtil.getFunctionalExpressionPresentation(functionalExpression, false));
+                .addText(ClassPresentationUtil.getFunctionalExpressionPresentation(functionalExpression, false).get());
         }
         myName = myHighlightedText.getText();
 

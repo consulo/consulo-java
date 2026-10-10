@@ -23,7 +23,7 @@ public class PsiClassOrFunctionalExpressionPresentationProvider implements Targe
     @RequiredReadAction
     public TargetPresentation getPresentation(NavigatablePsiElement element) {
         String text = element instanceof PsiClass psiClass
-            ? ClassPresentationUtil.getNameForClass(psiClass, false)
+            ? ClassPresentationUtil.getNameForClass(psiClass, false).get()
             : PsiExpressionTrimRenderer.render((PsiExpression)element);
 
         TargetPresentationBuilder builder = Application.get().getInstance(PsiTargetPresentationFactory.class)

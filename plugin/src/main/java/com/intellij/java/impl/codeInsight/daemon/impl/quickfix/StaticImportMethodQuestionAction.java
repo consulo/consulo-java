@@ -23,11 +23,12 @@ import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiDocCommentOwner;
 import com.intellij.java.language.psi.PsiMember;
 import com.intellij.java.language.psi.util.PsiUtil;
-import consulo.application.ApplicationManager;
+import consulo.annotation.access.RequiredReadAction;
+import consulo.application.Application;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.colorScheme.TextAttributes;
-import consulo.java.analysis.impl.JavaQuickFixBundle;
+import consulo.java.analysis.impl.localize.JavaQuickFixLocalize;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.editor.hint.QuestionAction;
 import consulo.language.editor.ui.PsiElementListCellRenderer;
@@ -59,7 +60,12 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
     private List<T> myCandidates;
     private final SmartPsiElementPointer<? extends PsiElement> myRef;
 
-    public StaticImportMethodQuestionAction(Project project, Editor editor, List<T> candidates, SmartPsiElementPointer<? extends PsiElement> ref) {
+    public StaticImportMethodQuestionAction(
+        Project project,
+        Editor editor,
+        List<T> candidates,
+        SmartPsiElementPointer<? extends PsiElement> ref
+    ) {
         myProject = project;
         myEditor = editor;
         myCandidates = candidates;
@@ -67,10 +73,11 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
     }
 
     protected String getPopupTitle() {
-        return JavaQuickFixBundle.message("method.to.import.chooser.title");
+        return JavaQuickFixLocalize.methodToImportChooserTitle().get();
     }
 
     @Override
+    @RequiredUIAccess
     public boolean execute() {
         PsiDocumentManager.getInstance(myProject).commitAllDocuments();
 
@@ -94,23 +101,33 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
         return true;
     }
 
+    @RequiredUIAccess
     private void doImport(T toImport) {
         Project project = toImport.getProject();
         PsiElement element = myRef.getElement();
         if (element == null) {
             return;
         }
-        WriteCommandAction.runWriteCommandAction(project, JavaQuickFixBundle.message("add.import"), null, () -> AddSingleMemberStaticImportAction.bindAllClassRefs(element.getContainingFile(),
-            toImport, toImport.getName(), toImport.getContainingClass()));
+        WriteCommandAction.runWriteCommandAction(
+            project,
+            JavaQuickFixLocalize.addImport().get(),
+            null,
+            () -> AddSingleMemberStaticImportAction.bindAllClassRefs(
+                element.getContainingFile(),
+                toImport,
+                toImport.getName(),
+                toImport.getContainingClass()
+            )
+        );
     }
 
+    @RequiredUIAccess
     private void chooseAndImport(Editor editor, final Project project) {
-        if (ApplicationManager.getApplication().isUnitTestMode()) {
+        if (Application.get().isUnitTestMode()) {
             doImport(myCandidates.get(0));
             return;
         }
-        final BaseListPopupStep<T> step = new BaseListPopupStep<T>(getPopupTitle(), myCandidates) {
-
+        BaseListPopupStep<T> step = new BaseListPopupStep<T>(getPopupTitle(), myCandidates) {
             @Override
             public boolean isAutoSelectionEnabled() {
                 return false;
@@ -128,8 +145,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
                 }
 
                 if (finalChoice) {
-                    return doFinalStep(() ->
-                    {
+                    return doFinalStep(() -> {
                         PsiDocumentManager.getInstance(project).commitAllDocuments();
                         LOG.assertTrue(selectedValue.isValid());
                         doImport(selectedValue);
@@ -145,6 +161,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
             }
 
             @Override
+            @RequiredReadAction
             public String getTextFor(T value) {
                 return getElementPresentableName(value);
             }
@@ -159,14 +176,18 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
         AWTListPopup popup = ((AWTPopupFactory) JBPopupFactory.getInstance()).createListPopup(project, step, listPopup -> {
             PopupListElementRenderer rightArrow = new PopupListElementRenderer(listPopup);
             return new PsiElementListCellRenderer<T>() {
+                @Override
+                @RequiredReadAction
                 public String getElementText(T element) {
                     return getElementPresentableName(element);
                 }
 
+                @Override
                 public String getContainerText(T element, String name) {
                     return PsiClassListCellRenderer.getContainerTextStatic(element);
                 }
 
+                @Override
                 public int getIconFlags() {
                     return 0;
                 }
@@ -175,7 +196,7 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
                 @Override
                 protected TextAttributes getNavigationItemAttributes(Object value) {
                     TextAttributes attrs = super.getNavigationItemAttributes(value);
-                    if (value instanceof PsiDocCommentOwner && !((PsiDocCommentOwner) value).isDeprecated()) {
+                    if (value instanceof PsiDocCommentOwner docCommentOwner && !docCommentOwner.isDeprecated()) {
                         PsiClass psiClass = ((T) value).getContainingClass();
                         if (psiClass != null && psiClass.isDeprecated()) {
                             return TextAttributes.merge(attrs, super.getNavigationItemAttributes(psiClass));
@@ -189,10 +210,22 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
                     final DefaultListCellRenderer moduleRenderer = super.getRightCellRenderer(value);
                     return new DefaultListCellRenderer() {
                         @Override
-                        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                        public Component getListCellRendererComponent(
+                            JList list,
+                            Object value,
+                            int index,
+                            boolean isSelected,
+                            boolean cellHasFocus
+                        ) {
                             JPanel panel = new JPanel(new BorderLayout());
                             if (moduleRenderer != null) {
-                                Component moduleComponent = moduleRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                                Component moduleComponent = moduleRenderer.getListCellRendererComponent(
+                                    list,
+                                    value,
+                                    index,
+                                    isSelected,
+                                    cellHasFocus
+                                );
                                 if (!isSelected) {
                                     moduleComponent.setBackground(TargetAWT.to(getBackgroundColor(value)));
                                 }
@@ -210,10 +243,11 @@ public class StaticImportMethodQuestionAction<T extends PsiMember> implements Qu
         EditorPopupHelper.getInstance().showPopupInBestPositionFor(editor, popup);
     }
 
+    @RequiredReadAction
     private String getElementPresentableName(T element) {
         PsiClass aClass = element.getContainingClass();
         LOG.assertTrue(aClass != null);
-        return ClassPresentationUtil.getNameForClass(aClass, false) + "." + element.getName();
+        return ClassPresentationUtil.getNameForClass(aClass, false).get() + "." + element.getName();
     }
 }
 

@@ -33,47 +33,51 @@ import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.scope.LocalSearchScope;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class ClassHierarchyScopeDescriptor extends ScopeDescriptor {
-  private SearchScope myCachedScope;
-  private final Project myProject;
+    private SearchScope myCachedScope;
+    private final Project myProject;
 
-  public ClassHierarchyScopeDescriptor(Project project) {
-    super(null);
-    myProject = project;
-  }
-
-  @Override
-  public String getDisplayName() {
-    return JavaLocalize.javaScopeClassHierarchy().get();
-  }
-
-  @Nullable
-  public SearchScope getScope() {
-    if (myCachedScope == null) {
-      TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject)
-        .createAllProjectScopeChooser(IdeLocalize.promptChooseBaseClassOfTheHierarchy().get());
-
-      chooser.showDialog();
-
-      PsiClass aClass = chooser.getSelected();
-      if (aClass == null) return null;
-
-      List<PsiElement> classesToSearch = new LinkedList<>();
-      classesToSearch.add(aClass);
-
-      classesToSearch.addAll(ClassInheritorsSearch.search(aClass, true).findAll());
-
-      myCachedScope = new LocalSearchScope(
-        PsiUtilBase.toPsiElementArray(classesToSearch),
-        IdeLocalize.scopeHierarchy(ClassPresentationUtil.getNameForClass(aClass, true)).get()
-      );
+    public ClassHierarchyScopeDescriptor(Project project) {
+        super(null);
+        myProject = project;
     }
 
-    return myCachedScope;
-  }
+    @Override
+    public String getDisplayName() {
+        return JavaLocalize.javaScopeClassHierarchy().get();
+    }
+
+    @Nullable
+    @RequiredUIAccess
+    public SearchScope getScope() {
+        if (myCachedScope == null) {
+            TreeClassChooser chooser = TreeClassChooserFactory.getInstance(myProject)
+                .createAllProjectScopeChooser(IdeLocalize.promptChooseBaseClassOfTheHierarchy().get());
+
+            chooser.showDialog();
+
+            PsiClass aClass = chooser.getSelected();
+            if (aClass == null) {
+                return null;
+            }
+
+            List<PsiElement> classesToSearch = new LinkedList<>();
+            classesToSearch.add(aClass);
+
+            classesToSearch.addAll(ClassInheritorsSearch.search(aClass, true).findAll());
+
+            myCachedScope = new LocalSearchScope(
+                PsiUtilBase.toPsiElementArray(classesToSearch),
+                IdeLocalize.scopeHierarchy(ClassPresentationUtil.getNameForClass(aClass, true)).get()
+            );
+        }
+
+        return myCachedScope;
+    }
 }

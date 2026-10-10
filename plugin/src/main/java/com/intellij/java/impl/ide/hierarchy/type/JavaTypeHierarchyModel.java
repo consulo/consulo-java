@@ -69,14 +69,14 @@ public class JavaTypeHierarchyModel implements HierarchyModel<PsiClass> {
         );
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public HierarchyViewType getDefaultViewType() {
         return StandardHierarchyViewTypes.CLASS;
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public HierarchyViewType correctViewType(HierarchyViewType viewType) {
         return StandardHierarchyViewTypes.CLASS.equals(viewType) && isInterface(myTarget)
             ? StandardHierarchyViewTypes.SUBTYPES
@@ -93,8 +93,8 @@ public class JavaTypeHierarchyModel implements HierarchyModel<PsiClass> {
         return !StandardHierarchyViewTypes.SUPERTYPES.equals(viewType);
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public @Nullable HierarchyTreeStructure createTreeStructure(HierarchyRequest<PsiClass> request) {
         PsiClass target = request.getTarget();
         HierarchyViewType viewType = request.getViewType();
@@ -113,31 +113,31 @@ public class JavaTypeHierarchyModel implements HierarchyModel<PsiClass> {
         return null;
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public boolean isApplicableElement(PsiElement element) {
         return element instanceof PsiClass;
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public boolean canBeBase(PsiElement element) {
         return element instanceof PsiClass psiClass && !CommonClassNames.JAVA_LANG_OBJECT.equals(psiClass.getQualifiedName());
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public LocalizeValue getBaseOnThisText(PsiElement element) {
         return isInterface(element)
             ? LanguageEditorLocalize.actionBaseOnThisInterface()
             : LanguageEditorLocalize.actionBaseOnThisClass();
     }
 
-    @RequiredReadAction
     @Override
+    @RequiredReadAction
     public LocalizeValue getContentDisplayName(HierarchyViewType viewType, PsiElement element) {
         return element instanceof PsiClass psiClass
-            ? viewType.contentTitle(ClassPresentationUtil.getNameForClass(psiClass, false))
+            ? viewType.contentTitle(ClassPresentationUtil.getNameForClass(psiClass, false).get())
             : LocalizeValue.empty();
     }
 

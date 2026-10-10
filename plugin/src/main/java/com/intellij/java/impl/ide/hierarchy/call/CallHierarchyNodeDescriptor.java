@@ -146,7 +146,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
         if (myColor != null) {
             mainTextAttributes = new TextAttributes(myColor, null, null, null, Font.PLAIN);
         }
-        if (enclosingElement instanceof PsiMethod) {
+        if (enclosingElement instanceof PsiMethod enclosingMethod) {
             if (enclosingElement instanceof SyntheticElement) {
                 PsiFile file = enclosingElement.getContainingFile();
                 myHighlightedText.getEnding().addText(
@@ -155,15 +155,14 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
                 );
             }
             else {
-                PsiMethod method = (PsiMethod)enclosingElement;
                 StringBuilder buffer = new StringBuilder(128);
-                PsiClass containingClass = method.getContainingClass();
+                PsiClass containingClass = enclosingMethod.getContainingClass();
                 if (containingClass != null) {
-                    buffer.append(ClassPresentationUtil.getNameForClass(containingClass, false));
+                    buffer.append(ClassPresentationUtil.getNameForClass(containingClass, false).get());
                     buffer.append('.');
                 }
                 String methodText = PsiFormatUtil.formatMethod(
-                    method,
+                    enclosingMethod,
                     PsiSubstitutor.EMPTY,
                     PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS,
                     PsiFormatUtilBase.SHOW_TYPE
@@ -175,7 +174,7 @@ public final class CallHierarchyNodeDescriptor extends HierarchyNodeDescriptor i
         }
         else {
             myHighlightedText.getEnding()
-                .addText(ClassPresentationUtil.getNameForClass((PsiClass)enclosingElement, false), mainTextAttributes);
+                .addText(ClassPresentationUtil.getNameForClass((PsiClass)enclosingElement, false).get(), mainTextAttributes);
         }
 
         if (myUsageCount > 1) {
