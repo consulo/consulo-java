@@ -91,13 +91,13 @@ public class HighlightOverridingMethodsHandler extends HighlightUsagesHandlerBas
             if (myClass.getApplication().isUnitTestMode()) {
                 return;
             }
-            String name;
+            LocalizeValue name;
             if (classes.size() == 1) {
                 ItemPresentation presentation = classes.get(0).getPresentation();
-                name = presentation != null ? presentation.getPresentableText() : "";
+                name = presentation != null ? presentation.getPresentableText() : LocalizeValue.empty();
             }
             else {
-                name = "";
+                name = LocalizeValue.empty();
             }
             myHintText = LocalizeValue.localizeTODO(
                 CodeInsightBundle.message("no.methods.overriding.0.are.found", classes.size(), name)

@@ -15,11 +15,13 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import consulo.application.AllIcons;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.component.util.WeighedItem;
 import consulo.fileEditor.structureView.tree.Group;
 import consulo.fileEditor.structureView.tree.TreeElement;
 import com.intellij.java.language.psi.*;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.ColoredItemPresentation;
 import consulo.navigation.ItemPresentation;
 import consulo.codeEditor.CodeInsightColors;
@@ -29,224 +31,261 @@ import consulo.language.psi.*;
 import com.intellij.java.language.psi.util.PropertyUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.ui.image.Image;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class PropertyGroup implements Group, ColoredItemPresentation, AccessLevelProvider, WeighedItem {
-  private final String myPropertyName;
-  private final PsiType myPropertyType;
+    private final String myPropertyName;
+    private final PsiType myPropertyType;
 
-  private SmartPsiElementPointer myFieldPointer;
-  private SmartPsiElementPointer myGetterPointer;
-  private SmartPsiElementPointer mySetterPointer;
-  private boolean myIsStatic;
-  public static final Image PROPERTY_READ_ICON = AllIcons.Nodes.PropertyRead;
-  public static final Image PROPERTY_READ_STATIC_ICON = AllIcons.Nodes.PropertyReadStatic;
-  public static final Image PROPERTY_WRITE_ICON = AllIcons.Nodes.PropertyWrite;
-  public static final Image PROPERTY_WRITE_STATIC_ICON = AllIcons.Nodes.PropertyWriteStatic;
-  public static final Image PROPERTY_READ_WRITE_ICON = AllIcons.Nodes.PropertyReadWrite;
-  public static final Image PROPERTY_READ_WRITE_STATIC_ICON = AllIcons.Nodes.PropertyReadWriteStatic;
-  private final Project myProject;
-  private final Collection<TreeElement> myChildren = new ArrayList<TreeElement>();
+    private SmartPsiElementPointer myFieldPointer;
+    private SmartPsiElementPointer myGetterPointer;
+    private SmartPsiElementPointer mySetterPointer;
+    private boolean myIsStatic;
+    public static final Image PROPERTY_READ_ICON = PlatformIconGroup.nodesPropertyread();
+    public static final Image PROPERTY_READ_STATIC_ICON = PlatformIconGroup.nodesPropertyreadstatic();
+    public static final Image PROPERTY_WRITE_ICON = PlatformIconGroup.nodesPropertywrite();
+    public static final Image PROPERTY_WRITE_STATIC_ICON = PlatformIconGroup.nodesPropertywritestatic();
+    public static final Image PROPERTY_READ_WRITE_ICON = PlatformIconGroup.nodesPropertyreadwrite();
+    public static final Image PROPERTY_READ_WRITE_STATIC_ICON = PlatformIconGroup.nodesPropertyreadwritestatic();
+    private final Project myProject;
+    private final Collection<TreeElement> myChildren = new ArrayList<>();
 
-  private PropertyGroup(String propertyName, PsiType propertyType, boolean isStatic, Project project) {
-    myPropertyName = propertyName;
-    myPropertyType = propertyType;
-    myIsStatic = isStatic;
-    myProject = project;
-  }
-
-  public static PropertyGroup createOn(PsiElement object, TreeElement treeElement) {
-    if (object instanceof PsiField) {
-      PsiField field = (PsiField)object;
-      PropertyGroup group = new PropertyGroup(PropertyUtil.suggestPropertyName(field), field.getType(),
-                                              field.hasModifierProperty(PsiModifier.STATIC), object.getProject());
-      group.setField(field);
-      group.myChildren.add(treeElement);
-      return group;
-    }
-    else if (object instanceof PsiMethod) {
-      PsiMethod method = (PsiMethod)object;
-      if (PropertyUtil.isSimplePropertyGetter(method)) {
-        PropertyGroup group = new PropertyGroup(PropertyUtil.getPropertyNameByGetter(method), method.getReturnType(),
-                                                method.hasModifierProperty(PsiModifier.STATIC), object.getProject());
-        group.setGetter(method);
-        group.myChildren.add(treeElement);
-        return group;
-      }
-      else if (PropertyUtil.isSimplePropertySetter(method)) {
-        PropertyGroup group =
-          new PropertyGroup(PropertyUtil.getPropertyNameBySetter(method), method.getParameterList().getParameters()[0].getType(),
-                            method.hasModifierProperty(PsiModifier.STATIC), object.getProject());
-        group.setSetter(method);
-        group.myChildren.add(treeElement);
-        return group;
-      }
-    }
-    return null;
-  }
-
-  public Collection<TreeElement> getChildren() {
-    return myChildren;
-  }
-
-  public ItemPresentation getPresentation() {
-    return this;
-  }
-
-  public Image getIcon() {
-    if (isStatic()) {
-      if (getGetter() != null && getSetter() != null) {
-        return PROPERTY_READ_WRITE_STATIC_ICON;
-      }
-      else if (getGetter() != null) {
-        return PROPERTY_READ_STATIC_ICON;
-      }
-      else {
-        return PROPERTY_WRITE_STATIC_ICON;
-      }
-    }
-    else {
-      if (getGetter() != null && getSetter() != null) {
-        return PROPERTY_READ_WRITE_ICON;
-      }
-      else if (getGetter() != null) {
-        return PROPERTY_READ_ICON;
-      }
-      else {
-        return PROPERTY_WRITE_ICON;
-      }
+    private PropertyGroup(String propertyName, PsiType propertyType, boolean isStatic, Project project) {
+        myPropertyName = propertyName;
+        myPropertyType = propertyType;
+        myIsStatic = isStatic;
+        myProject = project;
     }
 
-  }
-
-  private boolean isStatic() {
-    return myIsStatic;
-  }
-
-  public String getLocationString() {
-    return null;
-  }
-
-  public String getPresentableText() {
-    return myPropertyName + ": " + myPropertyType.getPresentableText();
-  }
-
-  public String toString() {
-    return myPropertyName;
-  }
-
-
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof PropertyGroup)) return false;
-
-    PropertyGroup propertyGroup = (PropertyGroup)o;
-
-    if (myPropertyName != null ? !myPropertyName.equals(propertyGroup.myPropertyName) : propertyGroup.myPropertyName != null) return false;
-
-    if (myPropertyType != null && !myPropertyType.isValid()) return false;
-    if (propertyGroup.myPropertyType != null && !propertyGroup.myPropertyType.isValid()) return false;
-
-    if (myPropertyType != null && myPropertyType.isValid()
-        ? !myPropertyType.equals(propertyGroup.myPropertyType)
-        : propertyGroup.myPropertyType != null) {
-      return false;
+    public static PropertyGroup createOn(PsiElement object, TreeElement treeElement) {
+        if (object instanceof PsiField field) {
+            PropertyGroup group = new PropertyGroup(
+                PropertyUtil.suggestPropertyName(field),
+                field.getType(),
+                field.isStatic(),
+                object.getProject()
+            );
+            group.setField(field);
+            group.myChildren.add(treeElement);
+            return group;
+        }
+        else if (object instanceof PsiMethod method) {
+            if (PropertyUtil.isSimplePropertyGetter(method)) {
+                PropertyGroup group = new PropertyGroup(
+                    PropertyUtil.getPropertyNameByGetter(method),
+                    method.getReturnType(),
+                    method.isStatic(),
+                    object.getProject()
+                );
+                group.setGetter(method);
+                group.myChildren.add(treeElement);
+                return group;
+            }
+            else if (PropertyUtil.isSimplePropertySetter(method)) {
+                PropertyGroup group =
+                    new PropertyGroup(
+                        PropertyUtil.getPropertyNameBySetter(method),
+                        method.getParameterList().getParameters()[0].getType(),
+                        method.isStatic(),
+                        object.getProject()
+                    );
+                group.setSetter(method);
+                group.myChildren.add(treeElement);
+                return group;
+            }
+        }
+        return null;
     }
-    return true;
-  }
 
-
-
-  public int hashCode() {
-    int result;
-    result = myPropertyName != null?myPropertyName.hashCode():0;
-    result = 29 * result + (myPropertyType != null ? myPropertyType.hashCode() : 0);
-    return result;
-  }
-
-
-  public String getGetterName() {
-    return PropertyUtil.suggestGetterName(myPropertyName, myPropertyType);
-  }
-
-  public int getAccessLevel() {
-    int result = PsiUtil.ACCESS_LEVEL_PRIVATE;
-    if (getGetter() != null) {
-      result = Math.max(result, PsiUtil.getAccessLevel(getGetter().getModifierList()));
+    @Override
+    public Collection<TreeElement> getChildren() {
+        return myChildren;
     }
-    if (getSetter() != null) {
-      result = Math.max(result, PsiUtil.getAccessLevel(getSetter().getModifierList()));
+
+    @Override
+    public ItemPresentation getPresentation() {
+        return this;
     }
-    if (getField() != null) {
-      result = Math.max(result, PsiUtil.getAccessLevel(getField().getModifierList()));
+
+    @Override
+    @RequiredReadAction
+    public Image getIcon() {
+        if (isStatic()) {
+            if (getGetter() != null && getSetter() != null) {
+                return PROPERTY_READ_WRITE_STATIC_ICON;
+            }
+            else if (getGetter() != null) {
+                return PROPERTY_READ_STATIC_ICON;
+            }
+            else {
+                return PROPERTY_WRITE_STATIC_ICON;
+            }
+        }
+        else {
+            if (getGetter() != null && getSetter() != null) {
+                return PROPERTY_READ_WRITE_ICON;
+            }
+            else if (getGetter() != null) {
+                return PROPERTY_READ_ICON;
+            }
+            else {
+                return PROPERTY_WRITE_ICON;
+            }
+        }
     }
-    return result;
-  }
 
-  public int getSubLevel() {
-    return 0;
-  }
+    private boolean isStatic() {
+        return myIsStatic;
+    }
 
-  public void setField(PsiField field) {
-    myFieldPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(field);
-    myIsStatic &= field.hasModifierProperty(PsiModifier.STATIC);
-  }
+    @Override
+    public String getLocationString() {
+        return null;
+    }
 
-  public void setGetter(PsiMethod getter) {
-    myGetterPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(getter);
-    myIsStatic &= getter.hasModifierProperty(PsiModifier.STATIC);
-  }
+    @Override
+    public LocalizeValue getPresentableText() {
+        return LocalizeValue.of(myPropertyName + ": " + myPropertyType.getPresentableText());
+    }
 
-  public void setSetter(PsiMethod setter) {
-    mySetterPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(setter);
-    myIsStatic &= setter.hasModifierProperty(PsiModifier.STATIC);
-  }
+    @Override
+    public String toString() {
+        return myPropertyName;
+    }
 
-  public PsiField getField() {
-    return (PsiField)(myFieldPointer == null ? null : myFieldPointer.getElement());
-  }
+    @Override
+    public boolean equals(@Nullable Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof PropertyGroup that)) {
+            return false;
+        }
 
-  public PsiMethod getGetter() {
-    return (PsiMethod)(myGetterPointer == null ? null : myGetterPointer.getElement());
-  }
+        if (!Objects.equals(myPropertyName, that.myPropertyName)) {
+            return false;
+        }
 
-  public PsiMethod getSetter() {
-    return (PsiMethod)(mySetterPointer == null ? null : mySetterPointer.getElement());
-  }
+        if (myPropertyType != null && !myPropertyType.isValid()) {
+            return false;
+        }
+        if (that.myPropertyType != null && !that.myPropertyType.isValid()) {
+            return false;
+        }
 
-  void copyAccessorsFrom(PropertyGroup group) {
-    if (group.getGetter() != null) setGetter(group.getGetter());
-    if (group.getSetter() != null) setSetter(group.getSetter());
-    if (group.getField() != null) setField(group.getField());
-    myChildren.addAll(group.myChildren);
-  }
+        return myPropertyType != null && myPropertyType.isValid()
+            ? myPropertyType.equals(that.myPropertyType)
+            : that.myPropertyType == null;
+    }
 
-  public TextAttributesKey getTextAttributesKey() {
-    return isDeprecated() ? CodeInsightColors.DEPRECATED_ATTRIBUTES : null;
-  }
 
-  private boolean isDeprecated() {
-    return isDeprecated(getField()) && isDeprecated(getGetter()) && isDeprecated(getSetter());
-  }
+    @Override
+    public int hashCode() {
+        return 29 * Objects.hashCode(myPropertyName) + Objects.hashCode(myPropertyType);
+    }
 
-  private static boolean isDeprecated(PsiElement element) {
-    if (element == null) return false;
-    if (!element.isValid()) return false;
-    if (!(element instanceof PsiDocCommentOwner)) return false;
-    return ((PsiDocCommentOwner)element).isDeprecated();
-  }
+    public String getGetterName() {
+        return PropertyUtil.suggestGetterName(myPropertyName, myPropertyType);
+    }
 
-  public boolean isComplete() {
-    return getGetter() != null || getSetter() != null;
-  }
+    @Override
+    public int getAccessLevel() {
+        int result = PsiUtil.ACCESS_LEVEL_PRIVATE;
+        if (getGetter() != null) {
+            result = Math.max(result, PsiUtil.getAccessLevel(getGetter().getModifierList()));
+        }
+        if (getSetter() != null) {
+            result = Math.max(result, PsiUtil.getAccessLevel(getSetter().getModifierList()));
+        }
+        if (getField() != null) {
+            result = Math.max(result, PsiUtil.getAccessLevel(getField().getModifierList()));
+        }
+        return result;
+    }
 
-  public Object getValue() {
-    return this;
-  }
+    @Override
+    public int getSubLevel() {
+        return 0;
+    }
 
-  public int getWeight() {
-    return 60;
-  }
+    public void setField(PsiField field) {
+        myFieldPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(field);
+        myIsStatic &= field.isStatic();
+    }
+
+    public void setGetter(PsiMethod getter) {
+        myGetterPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(getter);
+        myIsStatic &= getter.isStatic();
+    }
+
+    public void setSetter(PsiMethod setter) {
+        mySetterPointer = SmartPointerManager.getInstance(myProject).createSmartPsiElementPointer(setter);
+        myIsStatic &= setter.isStatic();
+    }
+
+    @RequiredReadAction
+    public PsiField getField() {
+        return (PsiField) (myFieldPointer == null ? null : myFieldPointer.getElement());
+    }
+
+    @RequiredReadAction
+    public PsiMethod getGetter() {
+        return (PsiMethod) (myGetterPointer == null ? null : myGetterPointer.getElement());
+    }
+
+    @RequiredReadAction
+    public PsiMethod getSetter() {
+        return (PsiMethod) (mySetterPointer == null ? null : mySetterPointer.getElement());
+    }
+
+    @RequiredReadAction
+    void copyAccessorsFrom(PropertyGroup group) {
+        if (group.getGetter() != null) {
+            setGetter(group.getGetter());
+        }
+        if (group.getSetter() != null) {
+            setSetter(group.getSetter());
+        }
+        if (group.getField() != null) {
+            setField(group.getField());
+        }
+        myChildren.addAll(group.myChildren);
+    }
+
+    @Override
+    @RequiredReadAction
+    public TextAttributesKey getTextAttributesKey() {
+        return isDeprecated() ? CodeInsightColors.DEPRECATED_ATTRIBUTES : null;
+    }
+
+    @RequiredReadAction
+    private boolean isDeprecated() {
+        return isDeprecated(getField()) && isDeprecated(getGetter()) && isDeprecated(getSetter());
+    }
+
+    @RequiredReadAction
+    private static boolean isDeprecated(PsiElement element) {
+        return element != null
+            && element.isValid()
+            && element instanceof PsiDocCommentOwner docCommentOwner
+            && docCommentOwner.isDeprecated();
+    }
+
+    @RequiredReadAction
+    public boolean isComplete() {
+        return getGetter() != null || getSetter() != null;
+    }
+
+    public Object getValue() {
+        return this;
+    }
+
+    @Override
+    public int getWeight() {
+        return 60;
+    }
 }

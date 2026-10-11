@@ -72,8 +72,8 @@ public class ConflictsUtil {
 
         if (method != null && method != refactoredMethod) {
             if (aClass.equals(method.getContainingClass())) {
-                String classDescr = aClass instanceof PsiAnonymousClass
-                    ? RefactoringLocalize.currentClass().get()
+                LocalizeValue classDescr = aClass instanceof PsiAnonymousClass
+                    ? RefactoringLocalize.currentClass()
                     : RefactoringUIUtil.getDescription(aClass, false);
                 conflicts.putValue(
                     method,
@@ -130,23 +130,21 @@ public class ConflictsUtil {
         PsiField existingField = aClass != null ? aClass.findFieldByName(newName, true) : null;
         if (existingField != null) {
             if (aClass.equals(existingField.getContainingClass())) {
-                String className = aClass instanceof PsiAnonymousClass
-                    ? RefactoringLocalize.currentClass().get()
+                LocalizeValue className = aClass instanceof PsiAnonymousClass
+                    ? RefactoringLocalize.currentClass()
                     : RefactoringUIUtil.getDescription(aClass, false);
                 LocalizeValue conflict = RefactoringLocalize.field0IsAlreadyDefinedInThe1(existingField.getName(), className);
                 conflicts.putValue(existingField, conflict);
             }
-            else { // method somewhere in base class
-                if (!existingField.isPrivate()) {
-                    String fieldInfo = PsiFormatUtil.formatVariable(
-                        existingField,
-                        PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.TYPE_AFTER,
-                        PsiSubstitutor.EMPTY
-                    );
-                    String className = RefactoringUIUtil.getDescription(existingField.getContainingClass(), false);
-                    LocalizeValue descr = RefactoringLocalize.field0WillHideField1OfTheBaseClass(newName, fieldInfo, className);
-                    conflicts.putValue(existingField, descr);
-                }
+            else if (!existingField.isPrivate()) { // method somewhere in base class
+                String fieldInfo = PsiFormatUtil.formatVariable(
+                    existingField,
+                    PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_TYPE | PsiFormatUtil.TYPE_AFTER,
+                    PsiSubstitutor.EMPTY
+                );
+                LocalizeValue className = RefactoringUIUtil.getDescription(existingField.getContainingClass(), false);
+                LocalizeValue descr = RefactoringLocalize.field0WillHideField1OfTheBaseClass(newName, fieldInfo, className);
+                conflicts.putValue(existingField, descr);
             }
         }
     }

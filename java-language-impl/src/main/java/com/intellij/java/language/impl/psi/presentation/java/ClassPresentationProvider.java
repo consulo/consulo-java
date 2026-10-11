@@ -24,6 +24,7 @@ import consulo.colorScheme.TextAttributesKey;
 import consulo.component.util.Iconable;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiFile;
+import consulo.localize.LocalizeValue;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.ui.ex.ColoredItemPresentation;
@@ -44,8 +45,8 @@ public class ClassPresentationProvider implements ItemPresentationProvider<PsiCl
         return new ColoredItemPresentation() {
             @Override
             @RequiredReadAction
-            public String getPresentableText() {
-                return ClassPresentationUtil.getNameForClass(psiClass, false).get();
+            public LocalizeValue getPresentableText() {
+                return ClassPresentationUtil.getNameForClass(psiClass, false);
             }
 
             @Override

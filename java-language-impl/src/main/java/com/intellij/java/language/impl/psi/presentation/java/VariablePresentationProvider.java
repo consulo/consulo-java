@@ -16,7 +16,9 @@
 package com.intellij.java.language.impl.psi.presentation.java;
 
 import com.intellij.java.language.psi.PsiVariable;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.localize.LocalizeValue;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
 import consulo.navigation.NavigationItem;
@@ -26,24 +28,26 @@ import consulo.ui.image.Image;
  * @author yole
  */
 public abstract class VariablePresentationProvider<T extends PsiVariable & NavigationItem> implements ItemPresentationProvider<T> {
-  @Override
-  public ItemPresentation getPresentation(final T variable) {
-    return new ItemPresentation() {
-      @Override
-      public String getPresentableText() {
-        //return PsiFormatUtil.formatVariable(variable, PsiFormatUtilBase.SHOW_TYPE, PsiSubstitutor.EMPTY);
-        return variable.getName();
-      }
+    @Override
+    public ItemPresentation getPresentation(final T variable) {
+        return new ItemPresentation() {
+            @Override
+            @RequiredReadAction
+            public LocalizeValue getPresentableText() {
+                //return PsiFormatUtil.formatVariable(variable, PsiFormatUtilBase.SHOW_TYPE, PsiSubstitutor.EMPTY);
+                return LocalizeValue.ofNullable(variable.getName());
+            }
 
-      @Override
-      public String getLocationString() {
-        return "";
-      }
+            @Override
+            public String getLocationString() {
+                return "";
+            }
 
-      @Override
-      public Image getIcon() {
-        return IconDescriptorUpdaters.getIcon(variable, 0);
-      }                                                                                                   
-    };
-  }
+            @Override
+            @RequiredReadAction
+            public Image getIcon() {
+                return IconDescriptorUpdaters.getIcon(variable, 0);
+            }
+        };
+    }
 }

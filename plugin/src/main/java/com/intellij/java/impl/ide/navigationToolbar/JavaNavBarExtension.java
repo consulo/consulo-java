@@ -12,14 +12,15 @@ import consulo.annotation.component.ExtensionImpl;
 import consulo.application.ui.UISettings;
 import consulo.fileEditor.structureView.tree.NodeProvider;
 import consulo.ide.navigationToolbar.StructureAwareNavBarModelExtension;
-import consulo.java.impl.JavaBundle;
+import consulo.java.localize.JavaLocalize;
 import consulo.language.Language;
 import consulo.language.psi.*;
+import consulo.localize.LocalizeValue;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
 import consulo.usage.UsageViewShortNameLocation;
+import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.VirtualFile;
-
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -43,31 +44,32 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
   @Override
   @RequiredReadAction
   public String getPresentableText(Object object, boolean forPopup) {
-    if (object instanceof PsiMember) {
-      if (forPopup && object instanceof PsiMethod) {
-        return PsiFormatUtil.formatMethod((PsiMethod) object,
+    if (object instanceof PsiMember member) {
+      if (forPopup && object instanceof PsiMethod method) {
+        return PsiFormatUtil.formatMethod(
+            method,
             PsiSubstitutor.EMPTY,
             SHOW_NAME | TYPE_AFTER | SHOW_PARAMETERS,
-            SHOW_TYPE);
+            SHOW_TYPE
+        );
       }
-      return ElementDescriptionUtil.getElementDescription((PsiElement) object, UsageViewShortNameLocation.INSTANCE);
-    } else if (object instanceof PsiJavaPackage) {
-      String name = ((PsiJavaPackage) object).getName();
-      return name != null ? name : JavaBundle.message("dependencies.tree.node.default.package.abbreviation");
-    } else if (object instanceof PsiDirectory && JrtFileSystem.isRoot(((PsiDirectory) object).getVirtualFile())) {
-      return JavaBundle.message("jrt.node.short");
+      return ElementDescriptionUtil.getElementDescription(member, UsageViewShortNameLocation.INSTANCE).getNullIfEmpty();
+    } else if (object instanceof PsiJavaPackage javaPackage) {
+      return LocalizeValue.ofNullable(javaPackage.getName()).orIfEmpty(JavaLocalize.dependenciesTreeNodeDefaultPackageAbbreviation()).get();
+    } else if (object instanceof PsiDirectory directory && JrtFileSystem.isRoot(directory.getVirtualFile())) {
+      return JavaLocalize.jrtNodeShort().get();
     } else if (object instanceof PsiLambdaExpression) {
       return "Lambda";
     }
     return null;
   }
 
-  @RequiredReadAction
   @Override
+  @RequiredReadAction
   public PsiElement getParent(PsiElement psiElement) {
-    if (psiElement instanceof PsiPackage) {
-      PsiPackage parentPackage = ((PsiPackage) psiElement).getParentPackage();
-      if (parentPackage != null && parentPackage.getQualifiedName().length() > 0) {
+    if (psiElement instanceof PsiPackage psiPackage) {
+      PsiPackage parentPackage = psiPackage.getParentPackage();
+      if (parentPackage != null && StringUtil.isNotEmpty(parentPackage.getQualifiedName())) {
         return parentPackage;
       }
     }
@@ -114,9 +116,6 @@ public class JavaNavBarExtension extends StructureAwareNavBarModelExtension {
 
   @Override
   protected boolean acceptParentFromModel(@Nullable PsiElement psiElement) {
-    if (psiElement instanceof PsiJavaFile) {
-      return ((PsiJavaFile) psiElement).getClasses().length > 1;
-    }
-    return true;
+    return !(psiElement instanceof PsiJavaFile javaFile) || javaFile.getClasses().length > 1;
   }
 }

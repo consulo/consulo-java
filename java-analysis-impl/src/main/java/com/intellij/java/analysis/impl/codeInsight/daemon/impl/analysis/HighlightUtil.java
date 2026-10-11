@@ -3559,13 +3559,13 @@ public class HighlightUtil extends HighlightUtilBase {
         if (element instanceof PsiField field) {
             return formatField(field);
         }
-        return ElementDescriptionUtil.getElementDescription(element, HighlightUsagesDescriptionLocation.INSTANCE);
+        return ElementDescriptionUtil.getElementDescription(element, HighlightUsagesDescriptionLocation.INSTANCE).get();
     }
 
     private static PsiElement getOuterReferenceParent(PsiJavaCodeReferenceElement ref) {
         PsiElement element = ref;
-        while (element instanceof PsiJavaCodeReferenceElement) {
-            element = element.getParent();
+        while (element instanceof PsiJavaCodeReferenceElement thisRef) {
+            element = thisRef.getParent();
         }
         return element;
     }

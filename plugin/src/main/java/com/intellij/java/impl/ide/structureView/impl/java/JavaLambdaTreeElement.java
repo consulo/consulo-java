@@ -15,9 +15,11 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import consulo.application.AllIcons;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.fileEditor.structureView.StructureViewTreeElement;
 import com.intellij.java.language.util.PsiLambdaNameHelper;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.DumbService;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import com.intellij.java.language.psi.PsiType;
@@ -26,81 +28,69 @@ import consulo.ui.image.Image;
 import java.util.Collection;
 import java.util.Collections;
 
-public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExpression>
-{
-	public static final JavaLambdaTreeElement[] EMPTY_ARRAY = {};
+public class JavaLambdaTreeElement extends JavaClassTreeElementBase<PsiLambdaExpression> {
+    public static final JavaLambdaTreeElement[] EMPTY_ARRAY = {};
 
-	private String myName;
-	private String myFunctionalName;
+    private String myName;
+    private String myFunctionalName;
 
-	public JavaLambdaTreeElement(PsiLambdaExpression lambdaExpression)
-	{
-		super(false, lambdaExpression);
-	}
+    public JavaLambdaTreeElement(PsiLambdaExpression lambdaExpression) {
+        super(false, lambdaExpression);
+    }
 
-	@Override
-	public boolean isPublic()
-	{
-		return false;
-	}
+    @Override
+    public boolean isPublic() {
+        return false;
+    }
 
-	@Override
-	public String getPresentableText()
-	{
-		if(myName != null)
-		{
-			return myName;
-		}
-		PsiLambdaExpression element = getElement();
+    @Override
+    @RequiredReadAction
+    public LocalizeValue getPresentableText() {
+        if (myName != null) {
+            return LocalizeValue.of(myName);
+        }
+        PsiLambdaExpression element = getElement();
 
-		if(element != null)
-		{
-			myName = PsiLambdaNameHelper.getVMName(element);
-			return myName;
-		}
-		return "Lambda";
-	}
+        if (element != null) {
+            myName = PsiLambdaNameHelper.getVMName(element);
+            return LocalizeValue.of(myName);
+        }
+        return LocalizeValue.localizeTODO("Lambda");
+    }
 
+    @Override
+    public boolean isSearchInLocationString() {
+        return true;
+    }
 
-	@Override
-	public boolean isSearchInLocationString()
-	{
-		return true;
-	}
+    @Override
+    public String getLocationString() {
+        if (myFunctionalName == null) {
+            PsiLambdaExpression lambdaExpression = getElement();
+            if (lambdaExpression != null && !DumbService.isDumb(lambdaExpression.getProject())) {
+                PsiType interfaceType = lambdaExpression.getFunctionalInterfaceType();
+                if (interfaceType != null) {
+                    myFunctionalName = interfaceType.getPresentableText();
+                }
+            }
+        }
+        return myFunctionalName;
+    }
 
-	@Override
-	public String getLocationString()
-	{
-		if(myFunctionalName == null)
-		{
-			PsiLambdaExpression lambdaExpression = getElement();
-			if(lambdaExpression != null && !DumbService.isDumb(lambdaExpression.getProject()))
-			{
-				PsiType interfaceType = lambdaExpression.getFunctionalInterfaceType();
-				if(interfaceType != null)
-				{
-					myFunctionalName = interfaceType.getPresentableText();
-				}
-			}
-		}
-		return myFunctionalName;
-	}
+    @Override
+    @RequiredReadAction
+    public String toString() {
+        return super.toString() + (myFunctionalName == null ? "" : " (" + getLocationString() + ")");
+    }
 
-	@Override
-	public String toString()
-	{
-		return super.toString() + (myFunctionalName == null ? "" : " (" + getLocationString() + ")");
-	}
+    @Override
+    public Collection<StructureViewTreeElement> getChildrenBase() {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public Collection<StructureViewTreeElement> getChildrenBase()
-	{
-		return Collections.emptyList();
-	}
-
-	@Override
-	public Image getIcon()
-	{
-		return AllIcons.Nodes.Lambda;
-	}
+    @Override
+    @RequiredReadAction
+    public Image getIcon() {
+        return PlatformIconGroup.nodesLambda();
+    }
 }

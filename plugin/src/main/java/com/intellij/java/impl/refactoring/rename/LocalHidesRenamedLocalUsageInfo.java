@@ -40,7 +40,7 @@ public class LocalHidesRenamedLocalUsageInfo extends UnresolvableCollisionUsageI
     public LocalizeValue getDescription() {
         PsiElement element = getElement();
         String type = element == null ? "element" : UsageViewUtil.getType(element);
-        String elemDescr = RefactoringUIUtil.getDescription(myConflictingElement, true);
+        LocalizeValue elemDescr = RefactoringUIUtil.getDescription(myConflictingElement, true);
         return RefactoringLocalize.thereIsAlreadyA0ItWillConflictWithTheRenamed1(elemDescr, type);
     }
 }

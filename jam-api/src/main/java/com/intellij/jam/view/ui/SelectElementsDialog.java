@@ -23,6 +23,7 @@ import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.NavigationItem;
 import consulo.project.Project;
@@ -146,7 +147,7 @@ public class SelectElementsDialog extends DialogWrapper {
       final NavigationItem navigationItem = (NavigationItem)psiElement;
       final ItemPresentation presentation = navigationItem.getPresentation();
       if (presentation != null) {
-        return StringUtil.notNullize(presentation.getPresentableText(), JamMessages.message("unnamed.element.presentable.name"));
+        return presentation.getPresentableText().orIfEmpty(LocalizeValue.localizeTODO(JamMessages.message("unnamed.element.presentable.name"))).get();
       }
     }
     return psiElement.toString();

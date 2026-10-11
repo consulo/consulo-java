@@ -15,8 +15,10 @@
  */
 package com.intellij.java.language.impl.psi.presentation.java;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.AllIcons;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.ex.ColoredItemPresentation;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
@@ -24,36 +26,36 @@ import consulo.colorScheme.TextAttributesKey;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import consulo.ui.image.Image;
 
-
 @ExtensionImpl
 public class PackagePresentationProvider implements ItemPresentationProvider<PsiJavaPackage> {
-  @Override
-  public Class<PsiJavaPackage> getItemClass() {
-    return PsiJavaPackage.class;
-  }
+    @Override
+    public Class<PsiJavaPackage> getItemClass() {
+        return PsiJavaPackage.class;
+    }
 
-  @Override
-  public ItemPresentation getPresentation(final PsiJavaPackage aPackage) {
-    return new ColoredItemPresentation() {
-      @Override
-      public TextAttributesKey getTextAttributesKey() {
-        return null;
-      }
+    @Override
+    public ItemPresentation getPresentation(PsiJavaPackage aPackage) {
+        return new ColoredItemPresentation() {
+            @Override
+            public TextAttributesKey getTextAttributesKey() {
+                return null;
+            }
 
-      @Override
-      public String getPresentableText() {
-        return aPackage.getName();
-      }
+            @Override
+            @RequiredReadAction
+            public LocalizeValue getPresentableText() {
+                return LocalizeValue.ofNullable(aPackage.getName());
+            }
 
-      @Override
-      public String getLocationString() {
-        return aPackage.getQualifiedName();
-      }
+            @Override
+            public String getLocationString() {
+                return aPackage.getQualifiedName();
+            }
 
-      @Override
-      public Image getIcon() {
-        return AllIcons.Nodes.Package;
-      }
-    };
-  }
+            @Override
+            public Image getIcon() {
+                return PlatformIconGroup.nodesPackage();
+            }
+        };
+    }
 }

@@ -35,6 +35,7 @@ import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiManager;
 import consulo.language.psi.event.PsiTreeChangeAdapter;
 import consulo.language.psi.event.PsiTreeChangeEvent;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ui.wm.ToolWindowManager;
 import consulo.ui.ex.awt.UIUtil;
@@ -198,11 +199,10 @@ public class SliceManager implements PersistentStateComponent<SliceManager.Store
     if (elementToSlice == null) {
       elementToSlice = element;
     }
-    String desc = ElementDescriptionUtil.getElementDescription(elementToSlice, RefactoringDescriptionLocation.WITHOUT_PARENT);
-    return "<html><head>" + UIUtil.getCssFontDeclaration(getLabelFont()) + "</head><body>" + (prefix == null ? "" : prefix) + StringUtil.first(
-      desc,
-      100,
-      true) + (suffix == null ? "" : suffix) +
+    LocalizeValue desc = ElementDescriptionUtil.getElementDescription(elementToSlice, RefactoringDescriptionLocation.WITHOUT_PARENT);
+    return "<html><head>" + UIUtil.getCssFontDeclaration(getLabelFont()) + "</head><body>" + (prefix == null ? "" : prefix) +
+      StringUtil.first(desc.get(), 100, true) +
+      (suffix == null ? "" : suffix) +
       "</body></html>";
   }
 

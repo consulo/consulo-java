@@ -18,39 +18,50 @@ package com.intellij.java.impl.refactoring.util;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiJavaPackage;
 import com.intellij.java.language.psi.PsiMember;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.util.lang.StringUtil;
+import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
-import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
+import consulo.localize.LocalizeValue;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class JavaNonCodeSearchElementDescriptionProvider implements ElementDescriptionProvider {
-  @Override
-  public String getElementDescription(PsiElement element, ElementDescriptionLocation location) {
-    if (!(location instanceof NonCodeSearchDescriptionLocation)) return null;
-    NonCodeSearchDescriptionLocation ncdLocation = (NonCodeSearchDescriptionLocation) location;
-    if (element instanceof PsiJavaPackage) {
-      return ncdLocation.isNonJava() ? ((PsiJavaPackage) element).getQualifiedName() : StringUtil.notNullize(((PsiJavaPackage) element).getName());
+    @Override
+    @RequiredReadAction
+    public LocalizeValue getElementDescription(PsiElement element, ElementDescriptionLocation location) {
+        if (!(location instanceof NonCodeSearchDescriptionLocation)) {
+            return LocalizeValue.empty();
+        }
+        NonCodeSearchDescriptionLocation ncdLocation = (NonCodeSearchDescriptionLocation) location;
+        if (element instanceof PsiJavaPackage javaPackage) {
+            return ncdLocation.isNonJava()
+                ? LocalizeValue.ofNullable(javaPackage.getQualifiedName())
+                : LocalizeValue.ofNullable(javaPackage.getName());
+        }
+        if (element instanceof PsiClass psiClass) {
+            return ncdLocation.isNonJava()
+                ? LocalizeValue.ofNullable(psiClass.getQualifiedName())
+                : LocalizeValue.ofNullable(psiClass.getName());
+        }
+        if (element instanceof PsiMember member) {
+            String name = member.getName();
+            if (name == null) {
+                return LocalizeValue.empty();
+            }
+            if (!ncdLocation.isNonJava()) {
+                return LocalizeValue.of(name);
+            }
+            PsiClass containingClass = member.getContainingClass();
+            if (containingClass == null || containingClass.getQualifiedName() == null) {
+                return LocalizeValue.empty();
+            }
+            return LocalizeValue.of(containingClass.getQualifiedName() + "." + name);
+        }
+        return LocalizeValue.empty();
     }
-    if (element instanceof PsiClass) {
-      return ncdLocation.isNonJava() ? ((PsiClass) element).getQualifiedName() : ((PsiClass) element).getName();
-    }
-    if (element instanceof PsiMember) {
-      PsiMember member = (PsiMember) element;
-      String name = member.getName();
-      if (name == null) return null;
-      if (!ncdLocation.isNonJava()) {
-        return name;
-      }
-      PsiClass containingClass = member.getContainingClass();
-      if (containingClass == null || containingClass.getQualifiedName() == null) return null;
-      return containingClass.getQualifiedName() + "." + name;
-    }
-    return null;
-  }
 }

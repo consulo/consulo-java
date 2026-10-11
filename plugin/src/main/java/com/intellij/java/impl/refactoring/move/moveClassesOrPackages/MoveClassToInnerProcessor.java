@@ -355,7 +355,7 @@ public class MoveClassToInnerProcessor extends BaseRefactoringProcessor {
                 myReportedContainers.add(container);
                 String targetDescription = (targetElement == myClassToMove)
                     ? "Class " + CommonRefactoringUtil.htmlEmphasize(myClassToMove.getName())
-                    : StringUtil.capitalize(RefactoringUIUtil.getDescription(targetElement, true));
+                    : RefactoringUIUtil.getDescription(targetElement, true).capitalize().get();
                 LocalizeValue message = RefactoringLocalize.elementWillNoLongerBeAccessible(
                     targetDescription,
                     RefactoringUIUtil.getDescription(container, true)
