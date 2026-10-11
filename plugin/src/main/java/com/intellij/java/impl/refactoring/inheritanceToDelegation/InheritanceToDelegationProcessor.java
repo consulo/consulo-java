@@ -234,7 +234,7 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
         //Set reportedObjectUpcasts = new HashSet();
 
         //String nameJavaLangObject = ConflictsUtil.htmlEmphasize(CommonClassNames.JAVA_LANG_OBJECT);
-        String classDescription = RefactoringUIUtil.getDescription(myClass, false);
+        LocalizeValue classDescription = RefactoringUIUtil.getDescription(myClass, false);
 
         for (UsageInfo aUsage : usage) {
             PsiElement element = aUsage.getElement();

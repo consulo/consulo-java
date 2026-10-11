@@ -15,9 +15,9 @@
  */
 package com.intellij.jam.view.ui;
 
-import com.intellij.jam.JamMessages;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.java.jam.localize.JavaAnnotationModelLocalize;
 import consulo.language.editor.refactoring.ui.EnableDisableAction;
 import consulo.language.icon.IconDescriptorUpdaters;
 import consulo.language.psi.PsiElement;
@@ -142,11 +142,10 @@ public class SelectElementsDialog extends DialogWrapper {
         return annotation.getContainingFile().getName() + ": @" + annotation.getQualifiedName();
       }
     }
-    else if (psiElement instanceof NavigationItem) {
-      final NavigationItem navigationItem = (NavigationItem)psiElement;
-      final ItemPresentation presentation = navigationItem.getPresentation();
+    else if (psiElement instanceof NavigationItem navigationItem) {
+      ItemPresentation presentation = navigationItem.getPresentation();
       if (presentation != null) {
-        return StringUtil.notNullize(presentation.getPresentableText(), JamMessages.message("unnamed.element.presentable.name"));
+        return presentation.getPresentableText().orIfEmpty(JavaAnnotationModelLocalize.unnamedElementPresentableName()).get();
       }
     }
     return psiElement.toString();
@@ -200,7 +199,7 @@ public class SelectElementsDialog extends DialogWrapper {
           protected void customizeCellRenderer(JTable table, Object value, boolean selected, boolean hasFocus, int row, int column) {
             append((String)value, SimpleTextAttributes.REGULAR_ATTRIBUTES);
             if (!psiElement.isPhysical()) {
-              append("  [" + JamMessages.message("postfix.not.physical.element") + "]", SimpleTextAttributes.GRAY_ATTRIBUTES);
+              append("  [" + JavaAnnotationModelLocalize.postfixNotPhysicalElement().get() + "]", SimpleTextAttributes.GRAY_ATTRIBUTES);
             }
             setIcon(IconDescriptorUpdaters.getIcon(psiElement, 0));
             setOpaque(false);

@@ -15,111 +15,113 @@
  */
 package com.intellij.java.language.impl.psi.presentation.java;
 
-import consulo.ui.ex.ColoredItemPresentation;
-import consulo.navigation.ItemPresentation;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.codeEditor.CodeInsightColors;
 import consulo.colorScheme.TextAttributesKey;
 import consulo.component.util.Iconable;
-import consulo.language.psi.PsiBundle;
-import com.intellij.java.language.psi.PsiClass;
-import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiField;
-import consulo.language.psi.PsiFile;
-import com.intellij.java.language.psi.PsiJavaFile;
-import com.intellij.java.language.psi.PsiMember;
-import com.intellij.java.language.psi.PsiMethod;
-import com.intellij.java.language.psi.PsiSubstitutor;
-import com.intellij.java.language.psi.util.PsiFormatUtil;
-import consulo.language.psi.util.PsiTreeUtil;
 import consulo.language.icon.IconDescriptorUpdaters;
+import consulo.language.localize.LanguageLocalize;
+import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
+import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
+import consulo.navigation.ItemPresentation;
+import consulo.ui.ex.ColoredItemPresentation;
 import consulo.ui.image.Image;
 import org.jspecify.annotations.Nullable;
 
 public class JavaPresentationUtil {
-  private JavaPresentationUtil() {
-  }
+    private JavaPresentationUtil() {
+    }
 
-  public static ColoredItemPresentation getMethodPresentation(final PsiMethod psiMethod) {
-    return new ColoredItemPresentation() {
-      @Override
-      public String getPresentableText() {
-        return PsiFormatUtil.formatMethod(
-          psiMethod,
-          PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS,
-          PsiFormatUtil.SHOW_TYPE
-        );
-      }
+    public static ColoredItemPresentation getMethodPresentation(final PsiMethod psiMethod) {
+        return new ColoredItemPresentation() {
+            @Override
+            public LocalizeValue getPresentableText() {
+                return LocalizeValue.of(PsiFormatUtil.formatMethod(
+                    psiMethod,
+                    PsiSubstitutor.EMPTY, PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS,
+                    PsiFormatUtil.SHOW_TYPE
+                ));
+            }
 
-      @Override
-      public TextAttributesKey getTextAttributesKey() {
-        if (psiMethod.isDeprecated()) {
-          return CodeInsightColors.DEPRECATED_ATTRIBUTES;
+            @Override
+            public TextAttributesKey getTextAttributesKey() {
+                if (psiMethod.isDeprecated()) {
+                    return CodeInsightColors.DEPRECATED_ATTRIBUTES;
+                }
+                return null;
+            }
+
+            @Override
+            @RequiredReadAction
+            public String getLocationString() {
+                return getJavaSymbolContainerText(psiMethod);
+            }
+
+            @Override
+            @RequiredReadAction
+            public Image getIcon() {
+                return IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY);
+            }
+        };
+    }
+
+    public static ItemPresentation getFieldPresentation(final PsiField psiField) {
+        return new ColoredItemPresentation() {
+            @Override
+            public LocalizeValue getPresentableText() {
+                return LocalizeValue.ofNullable(psiField.getName());
+            }
+
+            @Override
+            public TextAttributesKey getTextAttributesKey() {
+                if (psiField.isDeprecated()) {
+                    return CodeInsightColors.DEPRECATED_ATTRIBUTES;
+                }
+                return null;
+            }
+
+            @Override
+            @RequiredReadAction
+            public String getLocationString() {
+                return getJavaSymbolContainerText(psiField);
+            }
+
+            @Override
+            @RequiredReadAction
+            public Image getIcon() {
+                return IconDescriptorUpdaters.getIcon(psiField, Iconable.ICON_FLAG_VISIBILITY);
+            }
+        };
+    }
+
+    @Nullable
+    @RequiredReadAction
+    private static String getJavaSymbolContainerText(PsiElement element) {
+        String result;
+        PsiElement container = PsiTreeUtil.getParentOfType(element, PsiMember.class, PsiFile.class);
+
+        if (container instanceof PsiClass psiClass) {
+            String qName = psiClass.getQualifiedName();
+            if (qName != null) {
+                result = qName;
+            }
+            else {
+                result = psiClass.getName();
+            }
+        }
+        else if (container instanceof PsiJavaFile javaFile) {
+            result = javaFile.getPackageName();
+        }
+        else {//TODO: local classes
+            result = null;
+        }
+        if (result != null) {
+            return LanguageLocalize.auxContextDisplay(result).get();
         }
         return null;
-      }
-
-      @Override
-      public String getLocationString() {
-        return getJavaSymbolContainerText(psiMethod);
-      }
-
-      @Override
-      public Image getIcon() {
-        return IconDescriptorUpdaters.getIcon(psiMethod, Iconable.ICON_FLAG_VISIBILITY);
-      }
-    };
-  }
-
-  public static ItemPresentation getFieldPresentation(final PsiField psiField) {
-    return new ColoredItemPresentation() {
-      @Override
-      public String getPresentableText() {
-        return psiField.getName();
-      }
-
-      @Override
-      public TextAttributesKey getTextAttributesKey() {
-        if (psiField.isDeprecated()) {
-          return CodeInsightColors.DEPRECATED_ATTRIBUTES;
-        }
-        return null;
-      }
-
-      @Override
-      public String getLocationString() {
-        return getJavaSymbolContainerText(psiField);
-      }
-
-      @Override
-      public Image getIcon() {
-        return IconDescriptorUpdaters.getIcon(psiField, Iconable.ICON_FLAG_VISIBILITY);
-      }
-    };
-  }
-
-  @Nullable
-  private static String getJavaSymbolContainerText(final PsiElement element) {
-    final String result;
-    PsiElement container = PsiTreeUtil.getParentOfType(element, PsiMember.class, PsiFile.class);
-
-    if (container instanceof PsiClass) {
-      String qName = ((PsiClass)container).getQualifiedName();
-      if (qName != null) {
-        result = qName;
-      }
-      else {
-        result = ((PsiClass)container).getName();
-      }
     }
-    else if (container instanceof PsiJavaFile) {
-      result = ((PsiJavaFile)container).getPackageName();
-    }
-    else {//TODO: local classes
-      result = null;
-    }
-    if (result != null) {
-      return PsiBundle.message("aux.context.display", result);
-    }
-    return null;
-  }
 }

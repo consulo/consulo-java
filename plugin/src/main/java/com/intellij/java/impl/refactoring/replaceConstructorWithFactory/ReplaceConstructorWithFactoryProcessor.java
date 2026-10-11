@@ -159,7 +159,7 @@ public class ReplaceConstructorWithFactoryProcessor extends BaseRefactoringProce
         }
 
         Set<PsiElement> reportedContainers = new HashSet<>();
-        String targetClassDescription = RefactoringUIUtil.getDescription(myTargetClass, true);
+        LocalizeValue targetClassDescription = RefactoringUIUtil.getDescription(myTargetClass, true);
         for (UsageInfo usage : usages) {
             PsiElement container = ConflictsUtil.getContainer(usage.getElement());
             if (!reportedContainers.contains(container)) {

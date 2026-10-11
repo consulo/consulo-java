@@ -393,11 +393,11 @@ public class MoveInnerProcessor extends BaseRefactoringProcessor {
             containerSet.add(resolved);
             String placesDescription;
             if (containerSet.size() == 1) {
-                placesDescription = RefactoringUIUtil.getDescription(resolved, true);
+                placesDescription = RefactoringUIUtil.getDescription(resolved, true).get();
             }
             else {
                 placesDescription = "<ol><li>" +
-                    StringUtil.join(containerSet, element -> RefactoringUIUtil.getDescription(element, true), "</li><li>") +
+                    StringUtil.join(containerSet, element -> RefactoringUIUtil.getDescription(element, true).get(), "</li><li>") +
                     "</li></ol>";
             }
             LocalizeValue message =

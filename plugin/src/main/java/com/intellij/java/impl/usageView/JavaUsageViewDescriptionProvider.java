@@ -17,50 +17,60 @@ package com.intellij.java.impl.usageView;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.LangBundle;
+import consulo.language.localize.LanguageLocalize;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
-import consulo.usage.UsageViewBundle;
+import consulo.localize.LocalizeValue;
 import consulo.usage.UsageViewLongNameLocation;
 import consulo.usage.UsageViewShortNameLocation;
-
+import consulo.usage.localize.UsageLocalize;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class JavaUsageViewDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(PsiElement element, ElementDescriptionLocation location) {
-    if (location instanceof UsageViewShortNameLocation) {
-      if (element instanceof PsiThrowStatement) {
-        return UsageViewBundle.message("usage.target.exception");
-      }
-    }
-
-    if (location instanceof UsageViewLongNameLocation) {
-      if (element instanceof PsiJavaPackage) {
-        return ((PsiJavaPackage) element).getQualifiedName();
-      } else if (element instanceof PsiClass) {
-        if (element instanceof PsiAnonymousClass) {
-          return LangBundle.message("java.terms.anonymous.class");
-        } else {
-          String ret = ((PsiClass) element).getQualifiedName(); // It happens for local classes
-          if (ret == null) {
-            ret = ((PsiClass) element).getName();
-          }
-          return ret;
+    @Override
+    @RequiredReadAction
+    public LocalizeValue getElementDescription(PsiElement element, ElementDescriptionLocation location) {
+        if (location instanceof UsageViewShortNameLocation) {
+            if (element instanceof PsiThrowStatement) {
+                return UsageLocalize.usageTargetException();
+            }
         }
-      } else if (element instanceof PsiVariable) {
-        return ((PsiVariable) element).getName();
-      } else if (element instanceof PsiMethod) {
-        PsiMethod psiMethod = (PsiMethod) element;
-        return PsiFormatUtil.formatMethod(psiMethod, PsiSubstitutor.EMPTY,
-            PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS, PsiFormatUtil.SHOW_TYPE);
-      }
-    }
 
-    return null;
-  }
+        if (location instanceof UsageViewLongNameLocation) {
+            if (element instanceof PsiJavaPackage javaPackage) {
+                return LocalizeValue.ofNullable(javaPackage.getQualifiedName());
+            }
+            else if (element instanceof PsiClass psiClass) {
+                if (element instanceof PsiAnonymousClass) {
+                    return LanguageLocalize.javaTermsAnonymousClass();
+                }
+                else {
+                    String ret = psiClass.getQualifiedName(); // It happens for local classes
+                    if (ret == null) {
+                        ret = psiClass.getName();
+                    }
+                    return LocalizeValue.ofNullable(ret);
+                }
+            }
+            else if (element instanceof PsiVariable variable) {
+                return LocalizeValue.ofNullable(variable.getName());
+            }
+            else if (element instanceof PsiMethod method) {
+                return LocalizeValue.of(PsiFormatUtil.formatMethod(
+                    method,
+                    PsiSubstitutor.EMPTY,
+                    PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS,
+                    PsiFormatUtil.SHOW_TYPE
+                ));
+            }
+        }
+
+        return LocalizeValue.empty();
+    }
 }

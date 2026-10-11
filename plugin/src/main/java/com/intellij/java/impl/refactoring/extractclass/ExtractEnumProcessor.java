@@ -124,7 +124,7 @@ public class ExtractEnumProcessor {
                             result.add(new ConflictUsageInfo(
                                 expression,
                                 LocalizeValue.localizeTODO(
-                                    StringUtil.capitalize(RefactoringUIUtil.getDescription(element, false)) + " is out of project"
+                                    RefactoringUIUtil.getDescription(element, false).capitalize().get() + " is out of project"
                                 )
                             ));
                         }

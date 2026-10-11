@@ -18,8 +18,9 @@ package com.intellij.java.language.impl.psi.presentation.java;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;
 import com.intellij.java.language.psi.PsiJavaModule;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.java.language.impl.JavaIcons;
+import consulo.java.language.impl.icon.JavaPsiImplIconGroup;
 import consulo.language.content.FileIndexFacade;
+import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.navigation.ItemPresentation;
 import consulo.navigation.ItemPresentationProvider;
@@ -32,46 +33,44 @@ import java.util.regex.Pattern;
 
 @ExtensionImpl
 public class JavaModulePresentationProvider implements ItemPresentationProvider<PsiJavaModule> {
-  private static final Pattern JAR_NAME = Pattern.compile(".+/([^/]+\\.jar)!/.*");
+    private static final Pattern JAR_NAME = Pattern.compile(".+/([^/]+\\.jar)!/.*");
 
-  @Override
-  public Class<PsiJavaModule> getItemClass() {
-    return PsiJavaModule.class;
-  }
+    @Override
+    public Class<PsiJavaModule> getItemClass() {
+        return PsiJavaModule.class;
+    }
 
-  @Override
-  public ItemPresentation getPresentation(final PsiJavaModule item) {
-    return new ItemPresentation() {
-      @Nullable
-      @Override
-      public String getPresentableText() {
-        return item.getName();
-      }
+    @Override
+    public ItemPresentation getPresentation(final PsiJavaModule item) {
+        return new ItemPresentation() {
+            @Override
+            public LocalizeValue getPresentableText() {
+                return LocalizeValue.ofNullable(item.getName());
+            }
 
-      @Nullable
-      @Override
-      public String getLocationString() {
-        VirtualFile file = PsiImplUtil.getModuleVirtualFile(item);
-        FileIndexFacade index = FileIndexFacade.getInstance(item.getProject());
-        if (index.isInLibraryClasses(file)) {
-          Matcher matcher = JAR_NAME.matcher(file.getPath());
-          if (matcher.find()) {
-            return matcher.group(1);
-          }
-        } else if (index.isInSource(file)) {
-          Module module = index.getModuleForFile(file);
-          if (module != null) {
-            return '[' + module.getName() + ']';
-          }
-        }
-        return null;
-      }
+            @Override
+            public @Nullable String getLocationString() {
+                VirtualFile file = PsiImplUtil.getModuleVirtualFile(item);
+                FileIndexFacade index = FileIndexFacade.getInstance(item.getProject());
+                if (index.isInLibraryClasses(file)) {
+                    Matcher matcher = JAR_NAME.matcher(file.getPath());
+                    if (matcher.find()) {
+                        return matcher.group(1);
+                    }
+                }
+                else if (index.isInSource(file)) {
+                    Module module = index.getModuleForFile(file);
+                    if (module != null) {
+                        return '[' + module.getName() + ']';
+                    }
+                }
+                return null;
+            }
 
-      @Nullable
-      @Override
-      public Image getIcon() {
-        return JavaIcons.Nodes.JavaModule;
-      }
-    };
-  }
+            @Override
+            public @Nullable Image getIcon() {
+                return JavaPsiImplIconGroup.nodesJavamodule();
+            }
+        };
+    }
 }

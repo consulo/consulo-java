@@ -13,15 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.intellij.jam;
 
+import consulo.annotation.DeprecationInfo;
+import consulo.annotation.internal.MigratedExtensionsTo;
 import consulo.component.util.localize.AbstractBundle;
+import consulo.java.jam.localize.JavaAnnotationModelLocalize;
 import org.jetbrains.annotations.PropertyKey;
 
 /**
  * @author Gregory.Shrago
  */
+@Deprecated
+@DeprecationInfo("Use JavaAnnotationModelLocalize")
+@MigratedExtensionsTo(JavaAnnotationModelLocalize.class)
 public class JamMessages extends AbstractBundle {
 
   protected static final String PATH_TO_BUNDLE = "messages.JamBundle";

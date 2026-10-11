@@ -143,17 +143,17 @@ public class InlineConstantFieldProcessor extends BaseRefactoringProcessor {
                 }
             };
             if (mySearchInCommentsAndStrings) {
-                String stringToSearch =
+                LocalizeValue stringToSearch =
                     ElementDescriptionUtil.getElementDescription(myField, NonCodeSearchDescriptionLocation.STRINGS_AND_COMMENTS);
-                TextOccurrencesUtil.addUsagesInStringsAndComments(myField, stringToSearch, usages, nonCodeUsageFactory);
+                TextOccurrencesUtil.addUsagesInStringsAndComments(myField, stringToSearch.get(), usages, nonCodeUsageFactory);
             }
 
             if (mySearchForTextOccurrences) {
-                String stringToSearch =
+                LocalizeValue stringToSearch =
                     ElementDescriptionUtil.getElementDescription(myField, NonCodeSearchDescriptionLocation.NON_JAVA);
                 TextOccurrencesUtil.addTextOccurences(
                     myField,
-                    stringToSearch,
+                    stringToSearch.get(),
                     GlobalSearchScope.projectScope(myProject),
                     usages,
                     nonCodeUsageFactory

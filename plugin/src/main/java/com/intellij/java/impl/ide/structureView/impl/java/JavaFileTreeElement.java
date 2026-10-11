@@ -15,8 +15,10 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
+import consulo.annotation.access.RequiredReadAction;
 import consulo.fileEditor.structureView.StructureViewTreeElement;
 import consulo.language.editor.structureView.PsiTreeElementBase;
+import consulo.localize.LocalizeValue;
 import consulo.navigation.ItemPresentation;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiClassOwner;
@@ -25,34 +27,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class JavaFileTreeElement extends PsiTreeElementBase<PsiClassOwner> implements ItemPresentation
-{
-	public JavaFileTreeElement(PsiClassOwner file)
-	{
-		super(file);
-	}
+public class JavaFileTreeElement extends PsiTreeElementBase<PsiClassOwner> implements ItemPresentation {
+    public JavaFileTreeElement(PsiClassOwner file) {
+        super(file);
+    }
 
-	@Override
-	public String getPresentableText()
-	{
-		PsiClassOwner element = getElement();
-		return element == null ? "" : element.getName();
-	}
+    @Override
+    @RequiredReadAction
+    public LocalizeValue getPresentableText() {
+        PsiClassOwner element = getElement();
+        return element == null ? LocalizeValue.empty() : LocalizeValue.ofNullable(element.getName());
+    }
 
-	@Override
-	public Collection<StructureViewTreeElement> getChildrenBase()
-	{
-		PsiClassOwner element = getElement();
-		if(element == null)
-		{
-			return Collections.emptyList();
-		}
-		PsiClass[] classes = element.getClasses();
-		ArrayList<StructureViewTreeElement> result = new ArrayList<>();
-		for(PsiClass aClass : classes)
-		{
-			result.add(new JavaClassTreeElement(aClass, false));
-		}
-		return result;
-	}
+    @Override
+    @RequiredReadAction
+    public Collection<StructureViewTreeElement> getChildrenBase() {
+        PsiClassOwner element = getElement();
+        if (element == null) {
+            return Collections.emptyList();
+        }
+        PsiClass[] classes = element.getClasses();
+        ArrayList<StructureViewTreeElement> result = new ArrayList<>();
+        for (PsiClass aClass : classes) {
+            result.add(new JavaClassTreeElement(aClass, false));
+        }
+        return result;
+    }
 }

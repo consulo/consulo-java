@@ -15,82 +15,76 @@
  */
 package com.intellij.java.impl.ide.structureView.impl.java;
 
-import consulo.application.AllIcons;
+import consulo.annotation.access.RequiredReadAction;
 import com.intellij.java.language.util.JavaAnonymousClassesHelper;
 import com.intellij.java.language.psi.PsiAnonymousClass;
 import com.intellij.java.language.psi.PsiClass;
+import consulo.localize.LocalizeValue;
+import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.ui.image.Image;
 
 /**
  * @author Konstantin Bulenkov
  */
-public class JavaAnonymousClassTreeElement extends JavaClassTreeElement
-{
-	public static final JavaAnonymousClassTreeElement[] EMPTY_ARRAY = {};
+public class JavaAnonymousClassTreeElement extends JavaClassTreeElement {
+    public static final JavaAnonymousClassTreeElement[] EMPTY_ARRAY = {};
 
-	private String myName;
-	private String myBaseName;
+    private String myName;
+    private String myBaseName;
 
-	public JavaAnonymousClassTreeElement(PsiAnonymousClass aClass)
-	{
-		super(aClass, false);
-	}
+    public JavaAnonymousClassTreeElement(PsiAnonymousClass aClass) {
+        super(aClass, false);
+    }
 
-	@Override
-	public boolean isPublic()
-	{
-		return false;
-	}
+    @Override
+    @RequiredReadAction
+    public boolean isPublic() {
+        return false;
+    }
 
-	@Override
-	public String getPresentableText()
-	{
-		if(myName != null)
-		{
-			return myName;
-		}
-		PsiClass element = getElement();
+    @Override
+    @RequiredReadAction
+    public LocalizeValue getPresentableText() {
+        if (myName != null) {
+            return LocalizeValue.of(myName);
+        }
+        PsiClass element = getElement();
 
-		if(element != null)
-		{
-			myName = JavaAnonymousClassesHelper.getName((PsiAnonymousClass) element);
-			if(myName != null)
-			{
-				return myName;
-			}
-		}
-		return "Anonymous";
-	}
+        if (element != null) {
+            myName = JavaAnonymousClassesHelper.getName((PsiAnonymousClass) element);
+            if (myName != null) {
+                return LocalizeValue.of(myName);
+            }
+        }
+        return LocalizeValue.localizeTODO("Anonymous");
+    }
 
-	@Override
-	public boolean isSearchInLocationString()
-	{
-		return true;
-	}
+    @Override
+    public boolean isSearchInLocationString() {
+        return true;
+    }
 
-	@Override
-	public String getLocationString()
-	{
-		if(myBaseName == null)
-		{
-			PsiAnonymousClass anonymousClass = (PsiAnonymousClass) getElement();
-			if(anonymousClass != null)
-			{
-				myBaseName = anonymousClass.getBaseClassType().getClassName();
-			}
-		}
-		return myBaseName;
-	}
+    @Override
+    @RequiredReadAction
+    public String getLocationString() {
+        if (myBaseName == null) {
+            PsiAnonymousClass anonymousClass = (PsiAnonymousClass) getElement();
+            if (anonymousClass != null) {
+                myBaseName = anonymousClass.getBaseClassType().getClassName();
+            }
+        }
+        return myBaseName;
+    }
 
-	@Override
-	public String toString()
-	{
-		return super.toString() + (myBaseName == null ? "" : " (" + getLocationString() + ")");
-	}
+    @Override
+    @RequiredReadAction
+    public String toString() {
+        return super.toString() + (myBaseName == null ? "" : " (" + getLocationString() + ")");
+    }
 
-	@Override
-	public Image getIcon()
-	{
-		return AllIcons.Nodes.AnonymousClass;
-	}
+    @Override
+    @RequiredReadAction
+    public Image getIcon() {
+        return PlatformIconGroup.nodesAnonymousclass();
+    }
 }

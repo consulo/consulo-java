@@ -102,7 +102,7 @@ public class MoveDirectoryWithClassesProcessor extends BaseRefactoringProcessor 
     }
 
     protected String getTargetName() {
-        return RefactoringUIUtil.getDescription(getTargetDirectory(null).getTargetDirectory(), false);
+        return RefactoringUIUtil.getDescription(getTargetDirectory(null).getTargetDirectory(), false).get();
     }
 
     @Override

@@ -18,53 +18,70 @@ package com.intellij.java.impl.codeInsight.highlighting;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.language.LangBundle;
 import consulo.language.editor.highlight.HighlightUsagesDescriptionLocation;
+import consulo.language.localize.LanguageLocalize;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
-
+import consulo.localize.LocalizeValue;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class JavaHighlightUsagesDescriptionProvider implements ElementDescriptionProvider {
-  @Override
-  public String getElementDescription(PsiElement element, ElementDescriptionLocation location) {
-    if (!(location instanceof HighlightUsagesDescriptionLocation)) return null;
+    @Override
+    @RequiredReadAction
+    public LocalizeValue getElementDescription(PsiElement element, ElementDescriptionLocation location) {
+        if (!(location instanceof HighlightUsagesDescriptionLocation)) {
+            return LocalizeValue.empty();
+        }
 
-    String elementName = null;
-    if (element instanceof PsiClass) {
-      elementName = ((PsiClass) element).getQualifiedName();
-      if (elementName == null) {
-        elementName = ((PsiClass) element).getName();
-      }
-      elementName = (((PsiClass) element).isInterface() ?
-          LangBundle.message("java.terms.interface") :
-          LangBundle.message("java.terms.class")) + " " + elementName;
-    } else if (element instanceof PsiMethod) {
-      elementName = PsiFormatUtil.formatMethod((PsiMethod) element,
-          PsiSubstitutor.EMPTY, PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS |
-              PsiFormatUtilBase.SHOW_CONTAINING_CLASS,
-          PsiFormatUtilBase.SHOW_TYPE);
-      elementName = LangBundle.message("java.terms.method") + " " + elementName;
-    } else if (element instanceof PsiVariable) {
-      elementName = PsiFormatUtil.formatVariable((PsiVariable) element,
-          PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS,
-          PsiSubstitutor.EMPTY);
-      if (element instanceof PsiField) {
-        elementName = LangBundle.message("java.terms.field") + " " + elementName;
-      } else if (element instanceof PsiParameter) {
-        elementName = LangBundle.message("java.terms.parameter") + " " + elementName;
-      } else {
-        elementName = LangBundle.message("java.terms.variable") + " " + elementName;
-      }
-    } else if (element instanceof PsiJavaPackage) {
-      elementName = ((PsiJavaPackage) element).getQualifiedName();
-      elementName = LangBundle.message("java.terms.package") + " " + elementName;
+        if (element instanceof PsiClass psiClass) {
+            String elementName = psiClass.getQualifiedName();
+            if (elementName == null) {
+                elementName = psiClass.getName();
+            }
+            return LocalizeValue.join(
+                psiClass.isInterface() ? LanguageLocalize.javaTermsInterface() : LanguageLocalize.javaTermsClass(),
+                LocalizeValue.space(),
+                LocalizeValue.ofNullable(elementName)
+            );
+        }
+        else if (element instanceof PsiMethod method) {
+            String elementName = PsiFormatUtil.formatMethod(
+                method,
+                PsiSubstitutor.EMPTY,
+                PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_PARAMETERS | PsiFormatUtilBase.SHOW_CONTAINING_CLASS,
+                PsiFormatUtilBase.SHOW_TYPE
+            );
+            return LocalizeValue.join(LanguageLocalize.javaTermsMethod(), LocalizeValue.space(), LocalizeValue.of(elementName));
+        }
+        else if (element instanceof PsiVariable variable) {
+            String elementName = PsiFormatUtil.formatVariable(
+                variable,
+                PsiFormatUtilBase.SHOW_NAME | PsiFormatUtilBase.SHOW_CONTAINING_CLASS,
+                PsiSubstitutor.EMPTY
+            );
+            if (element instanceof PsiField) {
+                return LocalizeValue.join(LanguageLocalize.javaTermsField(), LocalizeValue.space(), LocalizeValue.of(elementName));
+            }
+            else if (element instanceof PsiParameter) {
+                return LocalizeValue.join(LanguageLocalize.javaTermsParameter(), LocalizeValue.space(), LocalizeValue.of(elementName));
+            }
+            else {
+                return LocalizeValue.join(LanguageLocalize.javaTermsVariable(), LocalizeValue.space(), LocalizeValue.of(elementName));
+            }
+        }
+        else if (element instanceof PsiJavaPackage javaPackage) {
+            return LocalizeValue.join(
+                LanguageLocalize.javaTermsPackage(),
+                LocalizeValue.space(),
+                LocalizeValue.of(javaPackage.getQualifiedName())
+            );
+        }
+        return LocalizeValue.empty();
     }
-    return elementName;
-  }
 }

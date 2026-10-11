@@ -22,29 +22,34 @@ import consulo.language.editor.refactoring.util.DeleteTypeDescriptionLocation;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 
 /**
  * @author yole
  */
 @ExtensionImpl
 public class JavaDeleteTypeDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(PsiElement element, ElementDescriptionLocation location) {
-    if (location instanceof DeleteTypeDescriptionLocation deleteTypeDescriptionLocation && deleteTypeDescriptionLocation.isPlural()) {
-      if (element instanceof PsiMethod) {
-        return IdeLocalize.promptDeleteMethod(2).get();
-      } else if (element instanceof PsiField) {
-        return IdeLocalize.promptDeleteField(2).get();
-      } else if (element instanceof PsiClass psiClass) {
-        if (psiClass.isInterface()) {
-          return IdeLocalize.promptDeleteInterface(2).get();
+    @Override
+    public LocalizeValue getElementDescription(PsiElement element, ElementDescriptionLocation location) {
+        if (location instanceof DeleteTypeDescriptionLocation deleteTypeDescriptionLocation && deleteTypeDescriptionLocation.isPlural()) {
+            if (element instanceof PsiMethod) {
+                return IdeLocalize.promptDeleteMethod(2);
+            }
+            else if (element instanceof PsiField) {
+                return IdeLocalize.promptDeleteField(2);
+            }
+            else if (element instanceof PsiClass psiClass) {
+                if (psiClass.isInterface()) {
+                    return IdeLocalize.promptDeleteInterface(2);
+                }
+                return element instanceof PsiTypeParameter
+                    ? IdeLocalize.promptDeleteTypeParameter(2)
+                    : IdeLocalize.promptDeleteClass(2);
+            }
+            else if (element instanceof PsiJavaPackage) {
+                return IdeLocalize.promptDeletePackage(2);
+            }
         }
-        return element instanceof PsiTypeParameter
-          ? IdeLocalize.promptDeleteTypeParameter(2).get()
-          : IdeLocalize.promptDeleteClass(2).get();
-      } else if (element instanceof PsiJavaPackage) {
-        return IdeLocalize.promptDeletePackage(2).get();
-      }
+        return LocalizeValue.empty();
     }
-    return null;
-  }
 }

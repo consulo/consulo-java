@@ -5,6 +5,7 @@ import com.intellij.java.language.psi.PsiEnumConstant;
 import com.intellij.java.language.psi.PsiEnumConstantInitializer;
 import com.intellij.java.language.psi.PsiField;
 import com.intellij.java.language.psi.PsiSubstitutor;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.fileEditor.structureView.StructureViewTreeElement;
 import consulo.fileEditor.structureView.tree.SortableTreeElement;
 import consulo.project.DumbService;
@@ -16,23 +17,24 @@ import java.util.Collections;
 import static com.intellij.java.language.psi.util.PsiFormatUtil.*;
 
 public class PsiFieldTreeElement extends JavaVariableBaseTreeElement<PsiField> implements SortableTreeElement {
-  public PsiFieldTreeElement(PsiField field, boolean isInherited) {
-    super(isInherited, field);
-  }
-
-  @Override
-  public Collection<StructureViewTreeElement> getChildrenBase() {
-    PsiField field = getField();
-    if (field instanceof PsiEnumConstant) {
-      PsiEnumConstantInitializer initializingClass = ((PsiEnumConstant)field).getInitializingClass();
-      if (initializingClass != null) {
-        return JavaClassTreeElement.getClassChildren(initializingClass);
-      }
+    public PsiFieldTreeElement(PsiField field, boolean isInherited) {
+        super(isInherited, field);
     }
-    return Collections.emptyList();
-  }
 
-  public PsiField getField() {
-    return getElement();
-  }
+    @Override
+    @RequiredReadAction
+    public Collection<StructureViewTreeElement> getChildrenBase() {
+        if (getField() instanceof PsiEnumConstant enumConstant) {
+            PsiEnumConstantInitializer initializingClass = enumConstant.getInitializingClass();
+            if (initializingClass != null) {
+                return JavaClassTreeElement.getClassChildren(initializingClass);
+            }
+        }
+        return Collections.emptyList();
+    }
+
+    @RequiredReadAction
+    public PsiField getField() {
+        return getElement();
+    }
 }

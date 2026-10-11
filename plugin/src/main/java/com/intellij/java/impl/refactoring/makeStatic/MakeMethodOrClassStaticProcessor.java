@@ -138,14 +138,14 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
                     processed.add(referencedElement);
                     if (referencedElement instanceof PsiField field) {
                         if (mySettings.getNameForField(field) == null) {
-                            String description = RefactoringUIUtil.getDescription(field, true);
+                            LocalizeValue description = RefactoringUIUtil.getDescription(field, true);
                             LocalizeValue message =
                                 RefactoringLocalize.zeroUsesNonStatic1WhichIsNotPassedAsAParameter(typeString, description);
                             conflicts.putValue(field, message);
                         }
                     }
                     else {
-                        String description = RefactoringUIUtil.getDescription(referencedElement, true);
+                        LocalizeValue description = RefactoringUIUtil.getDescription(referencedElement, true);
                         LocalizeValue message = RefactoringLocalize.zeroUses1WhichNeedsClassInstance(typeString, description);
                         conflicts.putValue(referencedElement, message);
                     }

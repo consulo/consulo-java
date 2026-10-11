@@ -549,3 +549,5 @@ wrap.return.value.title:
     text: Wrap Return Value
 wrapped.return.command.name:
     text: Wrapped return as {0} for {1}{2}{3}()
+dialog.message.0.would.hide.which.1.used.by.moved.2:
+    text: '{0} would hide {1} which is used by moved {2}.'

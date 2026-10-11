@@ -17,6 +17,7 @@ package com.intellij.java.impl.refactoring.util;
 
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
@@ -25,62 +26,76 @@ import consulo.language.findUsage.DescriptiveNameUtil;
 import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
+import consulo.localize.LocalizeValue;
 
 @ExtensionImpl
 public class JavaRefactoringElementDescriptionProvider implements ElementDescriptionProvider {
-  public String getElementDescription(PsiElement element, ElementDescriptionLocation location) {
-    if (!(location instanceof RefactoringDescriptionLocation)) return null;
-    RefactoringDescriptionLocation rdLocation = (RefactoringDescriptionLocation) location;
+    @Override
+    @RequiredReadAction
+    public LocalizeValue getElementDescription(PsiElement element, ElementDescriptionLocation location) {
+        if (!(location instanceof RefactoringDescriptionLocation rdLocation)) {
+            return LocalizeValue.empty();
+        }
 
-    if (element instanceof PsiField field) {
-      int options = PsiFormatUtil.SHOW_NAME;
-      if (rdLocation.includeParent()) {
-        options |= PsiFormatUtil.SHOW_CONTAINING_CLASS;
-      }
-      String fieldEmphasized = CommonRefactoringUtil.htmlEmphasize(PsiFormatUtil.formatVariable(field, options, PsiSubstitutor.EMPTY));
-      return RefactoringLocalize.fieldDescription(fieldEmphasized).get();
-    }
+        if (element instanceof PsiField field) {
+            int options = PsiFormatUtil.SHOW_NAME;
+            if (rdLocation.includeParent()) {
+                options |= PsiFormatUtil.SHOW_CONTAINING_CLASS;
+            }
+            String fieldEmphasized = CommonRefactoringUtil.htmlEmphasize(PsiFormatUtil.formatVariable(
+                field,
+                options,
+                PsiSubstitutor.EMPTY
+            ));
+            return RefactoringLocalize.fieldDescription(fieldEmphasized);
+        }
 
-    if (element instanceof PsiMethod method) {
-      int options = PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS;
-      if (rdLocation.includeParent()) {
-        options |= PsiFormatUtil.SHOW_CONTAINING_CLASS;
-      }
-      String empasizedMethod =
-        CommonRefactoringUtil.htmlEmphasize(PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, options, PsiFormatUtil.SHOW_TYPE));
-      return method.isConstructor()
-        ? RefactoringLocalize.constructorDescription(empasizedMethod).get()
-        : RefactoringLocalize.methodDescription(empasizedMethod).get();
-    }
+        if (element instanceof PsiMethod method) {
+            int options = PsiFormatUtil.SHOW_NAME | PsiFormatUtil.SHOW_PARAMETERS;
+            if (rdLocation.includeParent()) {
+                options |= PsiFormatUtil.SHOW_CONTAINING_CLASS;
+            }
+            String emphasizedMethod = CommonRefactoringUtil.htmlEmphasize(PsiFormatUtil.formatMethod(
+                method,
+                PsiSubstitutor.EMPTY,
+                options,
+                PsiFormatUtil.SHOW_TYPE
+            ));
+            return method.isConstructor()
+                ? RefactoringLocalize.constructorDescription(emphasizedMethod)
+                : RefactoringLocalize.methodDescription(emphasizedMethod);
+        }
 
-    if (element instanceof PsiClassInitializer) {
-      PsiClassInitializer initializer = (PsiClassInitializer) element;
-      boolean isStatic = initializer.hasModifierProperty(PsiModifier.STATIC);
-      String elementDescription = getElementDescription(initializer.getContainingClass(), RefactoringDescriptionLocation.WITHOUT_PARENT);
-      return isStatic
-        ? RefactoringLocalize.staticInitializerDescription(elementDescription).get()
-        : RefactoringLocalize.instanceInitializerDescription(elementDescription).get();
-    }
+        if (element instanceof PsiClassInitializer initializer) {
+            boolean isStatic = initializer.isStatic();
+            LocalizeValue elementDescription = getElementDescription(
+                initializer.getContainingClass(),
+                RefactoringDescriptionLocation.WITHOUT_PARENT
+            );
+            return isStatic
+                ? RefactoringLocalize.staticInitializerDescription(elementDescription)
+                : RefactoringLocalize.instanceInitializerDescription(elementDescription);
+        }
 
-    if (element instanceof PsiParameter parameter) {
-      String paramNameEmpasized = CommonRefactoringUtil.htmlEmphasize(parameter.getName());
-      return parameter.getDeclarationScope() instanceof PsiForeachStatement
-        ? RefactoringLocalize.localVariableDescription(paramNameEmpasized).get()
-        : RefactoringLocalize.parameterDescription(paramNameEmpasized).get();
-    }
+        if (element instanceof PsiParameter parameter) {
+            String paramNameEmphasized = CommonRefactoringUtil.htmlEmphasize(parameter.getName());
+            return parameter.getDeclarationScope() instanceof PsiForeachStatement
+                ? RefactoringLocalize.localVariableDescription(paramNameEmphasized)
+                : RefactoringLocalize.parameterDescription(paramNameEmphasized);
+        }
 
-    if (element instanceof PsiLocalVariable localVariable) {
-      return RefactoringLocalize.localVariableDescription(CommonRefactoringUtil.htmlEmphasize(localVariable.getName())).get();
-    }
+        if (element instanceof PsiLocalVariable localVariable) {
+            return RefactoringLocalize.localVariableDescription(CommonRefactoringUtil.htmlEmphasize(localVariable.getName()));
+        }
 
-    if (element instanceof PsiJavaPackage javaPackage) {
-      return RefactoringLocalize.packageDescription(CommonRefactoringUtil.htmlEmphasize(javaPackage.getName())).get();
-    }
+        if (element instanceof PsiJavaPackage javaPackage) {
+            return RefactoringLocalize.packageDescription(CommonRefactoringUtil.htmlEmphasize(javaPackage.getName()));
+        }
 
-    if (element instanceof PsiClass psiClass) {
-      //TODO : local & anonymous
-      return RefactoringLocalize.classDescription(CommonRefactoringUtil.htmlEmphasize(DescriptiveNameUtil.getDescriptiveName(psiClass))).get();
+        if (element instanceof PsiClass psiClass) {
+            //TODO : local & anonymous
+            return RefactoringLocalize.classDescription(CommonRefactoringUtil.htmlEmphasize(DescriptiveNameUtil.getDescriptiveName(psiClass)));
+        }
+        return LocalizeValue.empty();
     }
-    return null;
-  }
 }

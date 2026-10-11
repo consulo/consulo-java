@@ -19,28 +19,27 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.VisibilityUtil;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.java.localize.JavaRefactoringLocalize;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.localize.LocalizeValue;
-import consulo.module.Module;
-import consulo.module.content.util.ModuleContentUtil;
-import consulo.project.Project;
-import consulo.module.content.ModuleRootManager;
-import consulo.module.content.ProjectRootManager;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.language.psi.*;
+import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
+import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.impl.psi.LightElement;
+import consulo.language.psi.*;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.scope.PsiSearchScopeUtil;
 import consulo.language.psi.search.ReferencesSearch;
 import consulo.language.psi.util.PsiTreeUtil;
-import consulo.language.psi.PsiUtilCore;
-import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.usage.MoveRenameUsageInfo;
-import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
-import consulo.usage.UsageInfo;
 import consulo.language.util.IncorrectOperationException;
+import consulo.localize.LocalizeValue;
+import consulo.module.Module;
+import consulo.module.content.ModuleRootManager;
+import consulo.module.content.ProjectRootManager;
+import consulo.module.content.util.ModuleContentUtil;
+import consulo.project.Project;
+import consulo.usage.MoveRenameUsageInfo;
+import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
-
+import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
@@ -233,10 +232,10 @@ public class RefactoringConflictsUtil {
             if (fieldInSubClass != null && fieldInSubClass != refMember) {
                 conflicts.putValue(
                     refMember,
-                    LocalizeValue.localizeTODO(
-                        CommonRefactoringUtil.capitalize(RefactoringUIUtil.getDescription(fieldInSubClass, true)) +
-                            " would hide " + RefactoringUIUtil.getDescription(refMember, true) +
-                            " which is used by moved " + RefactoringUIUtil.getDescription(member, false)
+                    JavaRefactoringLocalize.dialogMessage0WouldHideWhich1UsedByMoved2(
+                        RefactoringUIUtil.getDescription(fieldInSubClass, true).capitalize(),
+                        RefactoringUIUtil.getDescription(refMember, true),
+                        RefactoringUIUtil.getDescription(member, false)
                     )
                 );
             }
@@ -297,9 +296,9 @@ public class RefactoringConflictsUtil {
                         && !CommonRefactoringUtil.isAncestor(resolved, scopes)
                         && !PsiSearchScopeUtil.isInScope(resolveScope, resolved)
                         && !(resolved instanceof LightElement)) {
-                        String scopeDescription = RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(reference), true);
+                        LocalizeValue scopeDescription = RefactoringUIUtil.getDescription(ConflictsUtil.getContainer(reference), true);
                         LocalizeValue message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleInModule2(
-                            CommonRefactoringUtil.capitalize(RefactoringUIUtil.getDescription(resolved, true)),
+                            RefactoringUIUtil.getDescription(resolved, true).capitalize(),
                             scopeDescription,
                             CommonRefactoringUtil.htmlEmphasize(targetModule.getName())
                         );
@@ -332,7 +331,7 @@ public class RefactoringConflictsUtil {
                     else {
                         container = usageFile;
                     }
-                    String scopeDescription = RefactoringUIUtil.getDescription(container, true);
+                    LocalizeValue scopeDescription = RefactoringUIUtil.getDescription(container, true);
                     VirtualFile usageVFile = usageFile.getVirtualFile();
                     if (usageVFile != null) {
                         Module module = ProjectRootManager.getInstance(project).getFileIndex().getModuleForFile(usageVFile);
@@ -342,7 +341,7 @@ public class RefactoringConflictsUtil {
                                 ? moveRenameUsageInfo.getReferencedElement()
                                 : usage.getElement();
                             assert referencedElement != null : usage;
-                            String description = RefactoringUIUtil.getDescription(referencedElement, true);
+                            LocalizeValue description = RefactoringUIUtil.getDescription(referencedElement, true);
                             String emphasizedName = CommonRefactoringUtil.htmlEmphasize(module.getName());
                             if (module == targetModule && isInTestSources) {
                                 message = RefactoringLocalize.zeroReferencedIn1WillNotBeAccessibleFromProductionOfModule2(

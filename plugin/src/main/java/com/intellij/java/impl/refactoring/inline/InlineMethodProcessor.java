@@ -169,15 +169,16 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                 }
             };
             if (mySearchInComments) {
-                String stringToSearch =
+                LocalizeValue stringToSearch =
                     ElementDescriptionUtil.getElementDescription(myMethod, NonCodeSearchDescriptionLocation.STRINGS_AND_COMMENTS);
-                TextOccurrencesUtil.addUsagesInStringsAndComments(myMethod, stringToSearch, usages, infoFactory);
+                TextOccurrencesUtil.addUsagesInStringsAndComments(myMethod, stringToSearch.get(), usages, infoFactory);
             }
 
             if (mySearchForTextOccurrences) {
-                String stringToSearch = ElementDescriptionUtil.getElementDescription(myMethod, NonCodeSearchDescriptionLocation.NON_JAVA);
+                LocalizeValue stringToSearch =
+                    ElementDescriptionUtil.getElementDescription(myMethod, NonCodeSearchDescriptionLocation.NON_JAVA);
                 TextOccurrencesUtil
-                    .addTextOccurences(myMethod, stringToSearch, GlobalSearchScope.projectScope(myProject), usages, infoFactory);
+                    .addTextOccurences(myMethod, stringToSearch.get(), GlobalSearchScope.projectScope(myProject), usages, infoFactory);
             }
         }
 
@@ -367,7 +368,7 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
                                 "Inlined method calls " + methodCallExpression.getText() + " which won't be accessed in " +
                                     StringUtil.join(
                                         targetContainingClasses,
-                                        psiClass -> RefactoringUIUtil.getDescription(psiClass, false),
+                                        psiClass -> RefactoringUIUtil.getDescription(psiClass, false).get(),
                                         ","
                                     )
                             )
@@ -392,8 +393,8 @@ public class InlineMethodProcessor extends BaseRefactoringProcessor {
         for (PsiMember container : containers) {
             Set<PsiMember> referencedInaccessible = containersToReferenced.get(container);
             for (PsiMember referenced : referencedInaccessible) {
-                String referencedDescription = RefactoringUIUtil.getDescription(referenced, true);
-                String containerDescription = RefactoringUIUtil.getDescription(container, true);
+                LocalizeValue referencedDescription = RefactoringUIUtil.getDescription(referenced, true);
+                LocalizeValue containerDescription = RefactoringUIUtil.getDescription(container, true);
                 LocalizeValue message = RefactoringLocalize.zeroThatIsUsedInInlinedMethodIsNotAccessibleFromCallSiteSIn1(
                     referencedDescription,
                     containerDescription

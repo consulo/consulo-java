@@ -25,40 +25,38 @@ import java.util.Comparator;
  * @author Konstantin Bulenkov
  */
 public class AnonymousClassesSorter implements Sorter {
-  public static Sorter INSTANCE = new AnonymousClassesSorter();
+    public static Sorter INSTANCE = new AnonymousClassesSorter();
 
-  private Comparator myComparator = new Comparator() {
-    @Override
-    public int compare(Object o1, Object o2) {
-      String s1 = SorterUtil.getStringPresentation(o1);
-      String s2 = SorterUtil.getStringPresentation(o2);
-      if (s1.startsWith("$") && s2.startsWith("$")) {
-        try {
-          return Integer.parseInt(s1.substring(1)) - Integer.parseInt(s2.substring(1));
-        } catch (NumberFormatException e) {//
+    private Comparator myComparator = (o1, o2) -> {
+        String s1 = SorterUtil.getStringPresentation(o1).get();
+        String s2 = SorterUtil.getStringPresentation(o2).get();
+        if (s1.startsWith("$") && s2.startsWith("$")) {
+            try {
+                return Integer.parseInt(s1.substring(1)) - Integer.parseInt(s2.substring(1));
+            }
+            catch (NumberFormatException e) {//
+            }
         }
-      }
-      return 0;
+        return 0;
+    };
+
+    @Override
+    public Comparator getComparator() {
+        return myComparator;
     }
-  };
-  
-  @Override
-  public Comparator getComparator() {
-    return myComparator;
-  }
 
-  @Override
-  public boolean isVisible() {
-    return false;
-  }
+    @Override
+    public boolean isVisible() {
+        return false;
+    }
 
-  @Override
-  public ActionPresentation getPresentation() {
-    return ALPHA_SORTER.getPresentation();
-  }
+    @Override
+    public ActionPresentation getPresentation() {
+        return ALPHA_SORTER.getPresentation();
+    }
 
-  @Override
-  public String getName() {
-    return "ANONYMOUS_CLASSES_SORTER";
-  }
+    @Override
+    public String getName() {
+        return "ANONYMOUS_CLASSES_SORTER";
+    }
 }
