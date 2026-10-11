@@ -1,6 +1,6 @@
 /**
  * @author VISTALL
- * @since 02/12/2022
+ * @since 2022-12-02
  */
 module consulo.java.jam.api {
     requires transitive consulo.java.language.api;
@@ -25,5 +25,6 @@ module consulo.java.jam.api {
     exports com.intellij.jam.view;
     exports com.intellij.jam.view.tree;
     exports com.intellij.jam.view.ui;
+    exports consulo.java.jam.localize;
     exports consulo.java.jam.util;
 }

@@ -8,7 +8,6 @@ import consulo.fileEditor.structureView.tree.SortableTreeElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.DumbService;
 import consulo.util.lang.StringUtil;
-import org.jspecify.annotations.Nullable;
 
 import static com.intellij.java.language.psi.util.PsiFormatUtil.formatVariable;
 import static com.intellij.java.language.psi.util.PsiFormatUtilBase.*;
