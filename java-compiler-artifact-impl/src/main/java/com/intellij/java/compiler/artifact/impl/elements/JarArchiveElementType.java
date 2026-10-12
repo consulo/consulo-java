@@ -17,7 +17,6 @@ package com.intellij.java.compiler.artifact.impl.elements;
 
 import consulo.annotation.component.ExtensionImpl;
 import consulo.compiler.artifact.Artifact;
-import consulo.compiler.artifact.ArtifactUtil;
 import consulo.compiler.artifact.element.*;
 import consulo.compiler.artifact.ui.ArtifactEditorContext;
 import consulo.compiler.localize.CompilerLocalize;
@@ -26,11 +25,10 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.awt.Messages;
 import consulo.ui.image.Image;
-import consulo.util.io.FileUtil;
-import consulo.util.io.PathUtil;
 import org.jspecify.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author nik
@@ -70,28 +68,19 @@ public class JarArchiveElementType extends CompositePackagingElementType<JarArch
 
     @Override
     @RequiredUIAccess
-    public CompositePackagingElement<?> createComposite(
+    public CompletableFuture<CompositePackagingElement<?>> createComposite(
         CompositePackagingElement<?> parent,
         @Nullable String baseName,
         ArtifactEditorContext context
     ) {
-        String initialValue = ArtifactUtil.suggestFileName(parent, baseName != null ? baseName : "archive", ".jar");
-        String path = Messages.showInputDialog(
-            context.getProject(),
-            "Enter archive name: ",
-            "New Archive",
-            null,
-            initialValue,
-            new FilePathValidator()
+        return createCompositeByPath(
+            parent,
+            context,
+            CompilerLocalize.dialogTitleNewArchive(),
+            CompilerLocalize.dialogMessageEnterArchiveName(),
+            baseName != null ? baseName : "archive",
+            ".jar",
+            JarArchivePackagingElement::new
         );
-        if (path == null) {
-            return null;
-        }
-        path = FileUtil.toSystemIndependentName(path);
-        String parentPath = PathUtil.getParentPath(path);
-        String fileName = PathUtil.getFileName(path);
-        PackagingElement<?> element = new JarArchivePackagingElement(fileName);
-        return (CompositePackagingElement<?>)PackagingElementFactory.getInstance(context.getProject())
-            .createParentDirectories(parentPath, element);
     }
 }

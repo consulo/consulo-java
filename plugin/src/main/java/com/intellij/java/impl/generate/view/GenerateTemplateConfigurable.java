@@ -30,6 +30,7 @@ import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorFactory;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
+import consulo.disposer.Disposable;
 import consulo.document.Document;
 import consulo.language.editor.WriteCommandAction;
 import consulo.language.file.FileTypeManager;
@@ -38,8 +39,10 @@ import consulo.language.psi.PsiDocumentManager;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiFileFactory;
 import consulo.project.Project;
+import consulo.ui.Component;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.MultiLineLabel;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.LocalTimeCounter;
 import consulo.util.lang.StringUtil;
@@ -96,10 +99,10 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable {
   }
 
   @Override
-  public JComponent createComponent() {
+  public Component createUIComponent(Disposable parentDisposable) {
     JComponent component = myEditor.getComponent();
     if (myAvailableImplicits.isEmpty()) {
-      return component;
+      return TargetAWT.wrap(component);
     }
     JPanel panel = new JPanel(new BorderLayout());
     panel.add(component, BorderLayout.CENTER);
@@ -107,7 +110,7 @@ public class GenerateTemplateConfigurable implements UnnamedConfigurable {
       new MultiLineLabel("<html>Available implicit variables:\n" + StringUtil.join(myAvailableImplicits, ", ") + "</html>");
     label.setPreferredSize(JBUI.size(250, 30));
     panel.add(label, BorderLayout.SOUTH);
-    return panel;
+    return TargetAWT.wrap(panel);
   }
 
   @Override

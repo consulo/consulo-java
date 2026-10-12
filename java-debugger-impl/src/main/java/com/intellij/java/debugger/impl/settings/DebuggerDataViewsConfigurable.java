@@ -23,13 +23,16 @@ import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.PrimitiveRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.ToStringRenderer;
 import consulo.configurable.SearchableConfigurable;
+import consulo.disposer.Disposable;
 import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.StateRestoringCheckBox;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
@@ -80,7 +83,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable {
 
     @RequiredUIAccess
     @Override
-    public JComponent createComponent() {
+    public Component createUIComponent(Disposable parentDisposable) {
         if (myProject == null) {
             myProject = JavaDebuggerSupport.getContextProjectForEditorFieldsInDebuggerConfigurables();
         }
@@ -167,7 +170,7 @@ public class DebuggerDataViewsConfigurable implements SearchableConfigurable {
         myToStringFilterEditor.setMinimumSize(JBUI.size(50, 100));
         panel.add(myToStringFilterEditor, new GridBagConstraints(0, GridBagConstraints.RELATIVE, 3, 1, 1.0, 1.0, GridBagConstraints.CENTER, GridBagConstraints.BOTH, new Insets(0, 12, 0, 0), 0, 0));
 
-        return panel;
+        return TargetAWT.wrap(panel);
     }
 
     @RequiredUIAccess

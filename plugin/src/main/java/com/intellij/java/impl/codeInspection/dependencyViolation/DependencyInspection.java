@@ -37,6 +37,7 @@ import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
@@ -80,7 +81,7 @@ public class DependencyInspection extends BaseLocalInspectionTool {
             if (project == null) {
                 project = ProjectManager.getInstance().getDefaultProject();
             }
-            ShowSettingsUtil.getInstance().editConfigurable(editDependencies, new DependencyConfigurable(project));
+            ShowSettingsUtil.getInstance().editConfigurable(TargetAWT.wrap(editDependencies), new DependencyConfigurable(project));
         });
 
         JPanel depPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

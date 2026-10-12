@@ -49,6 +49,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
 import org.jetbrains.java.generate.GenerateToStringActionHandler;
@@ -273,7 +274,7 @@ public class GenerateToStringActionHandlerImpl implements GenerateToStringAction
                     };
 
                     ShowSettingsUtil.getInstance().editConfigurable(
-                        MemberChooserHeaderPanel.this,
+                        TargetAWT.wrap(MemberChooserHeaderPanel.this),
                         composite,
                         () -> ui.selectItem(ToStringTemplatesManager.getInstance().getDefaultTemplate())
                     );

@@ -50,7 +50,6 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.event.ComponentEvent;
 import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.popup.BaseListPopupStep;
 import consulo.ui.ex.popup.JBPopupFactory;
 import consulo.ui.ex.popup.ListSeparator;
@@ -337,13 +336,15 @@ public class AttachSourcesNotificationProvider implements EditorNotificationProv
 
             UIAccess uiAccess = UIAccess.current();
 
-            future.whenCompleteAsync((candidates, throwable) -> {
+            future.thenComposeAsync(
+                candidates -> PathUIUtils.scanAndSelectDetectedJavaSourceRoots(e.getComponent(), myProject, candidates),
+                uiAccess
+            ).whenCompleteAsync((files, throwable) -> {
                 if (throwable != null) {
                     result.completeExceptionally(throwable);
                     return;
                 }
 
-                VirtualFile[] files = PathUIUtils.scanAndSelectDetectedJavaSourceRoots(TargetAWT.to(e.getComponent()), candidates);
                 if (files.length == 0) {
                     result.completeExceptionally(new CancellationException());
                     return;

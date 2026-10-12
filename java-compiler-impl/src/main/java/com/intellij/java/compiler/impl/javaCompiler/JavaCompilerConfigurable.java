@@ -3,14 +3,18 @@ package com.intellij.java.compiler.impl.javaCompiler;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.ProjectConfigurable;
+import consulo.disposer.Disposable;
 import consulo.java.compiler.JavaCompilerBundle;
+import consulo.java.compiler.localize.JavaCompilerLocalize;
 import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.LabeledComponent;
 import consulo.ui.ex.awt.VerticalFlowLayout;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.lang.Comparing;
 import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
@@ -50,7 +54,7 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
     @RequiredUIAccess
     @Nullable
     @Override
-    public JComponent createComponent() {
+    public Component createUIComponent(Disposable parentDisposable) {
         JPanel panel = new JPanel(new VerticalFlowLayout());
 
         myComboBox = new JComboBox<>();
@@ -72,13 +76,13 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
         panel.add(LabeledComponent.left(myComboBox, "Compiler"));
 
         myNotNullAssertion =
-            new JCheckBox(JavaCompilerBundle.message("add.notnull.assertions"), myCompilerConfiguration.isAddNotNullAssertions());
+            new JCheckBox(JavaCompilerLocalize.addNotnullAssertions().get(), myCompilerConfiguration.isAddNotNullAssertions());
         panel.add(myNotNullAssertion);
 
         myTargetOptionsComponent = new TargetOptionsComponent(myProject);
         panel.add(myTargetOptionsComponent);
 
-        return panel;
+        return TargetAWT.wrap(panel);
     }
 
     @RequiredUIAccess

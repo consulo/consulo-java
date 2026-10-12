@@ -26,10 +26,13 @@ import consulo.project.Project;
 import consulo.project.ProjectManager;
 import consulo.language.codeStyle.CodeStyleSettings;
 import com.intellij.java.impl.psi.codeStyle.JavaCodeStyleSettings;
+import consulo.disposer.Disposable;
+import consulo.ui.Component;
 import consulo.ui.ex.awt.ToolbarDecorator;
 import consulo.ui.ex.awt.JBList;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,10 +74,10 @@ public class CodeStyleGenerationConfigurable implements Configurable {
 
     @RequiredUIAccess
     @Override
-    public JComponent createComponent() {
+    public Component createUIComponent(Disposable parentDisposable) {
         JPanel panel = ToolbarDecorator.createDecorator(myMembersOrderList).disableAddAction().disableRemoveAction().createPanel();
         myMembersPanel.add(panel, BorderLayout.CENTER);
-        return myPanel;
+        return TargetAWT.wrap(myPanel);
     }
 
     @Override

@@ -34,6 +34,7 @@ import consulo.ui.ex.awt.ComboBox;
 import consulo.ui.ex.awt.ComponentWithBrowseButton;
 import consulo.ui.ex.awt.ListCellRendererWrapper;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
@@ -109,7 +110,7 @@ public abstract class GenerateGetterSetterHandlerBase extends GenerateMembersHan
                     }
                 };
                 ui.selectNodeInTree(templatesManager.getDefaultTemplate());
-                ShowSettingsUtil.getInstance().editConfigurable(panel, ui).whenComplete((res, t) -> {
+                ShowSettingsUtil.getInstance().editConfigurable(TargetAWT.wrap(panel), ui).whenComplete((res, t) -> {
                     if (t != null) {
                         return;
                     }

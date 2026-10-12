@@ -19,9 +19,12 @@ import com.intellij.java.analysis.impl.generate.config.Config;
 import com.intellij.java.impl.generate.view.ConfigUI;
 import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
+import consulo.disposer.Disposable;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.Component;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import org.jetbrains.java.generate.GenerateToStringContext;
 
 import javax.swing.*;
@@ -50,8 +53,8 @@ public class GenerateToStringConfigurable implements Configurable {
     }
 
     @Override
-    public JComponent createComponent() {
-        return configUI = new ConfigUI(GenerateToStringContext.getConfig(), myProject);
+    public Component createUIComponent(Disposable parentDisposable) {
+        return TargetAWT.wrap(configUI = new ConfigUI(GenerateToStringContext.getConfig(), myProject));
     }
 
     @Override

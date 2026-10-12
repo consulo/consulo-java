@@ -47,6 +47,7 @@ import consulo.ui.ex.awt.HyperlinkLabel;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.MultiLineLabel;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
@@ -146,7 +147,7 @@ public class JavaI18nizeQuickFixDialog extends I18nizeQuickFixDialog {
                 final FileTemplateConfigurable configurable = new FileTemplateConfigurable(project);
                 final FileTemplate template = FileTemplateManager.getInstance(project).getCodeTemplate(templateName);
                 SwingUtilities.invokeLater(() -> configurable.setTemplate(template, null));
-                ShowSettingsUtil.getInstance().editConfigurable(myPanel, configurable).whenComplete((res, throwable) -> {
+                ShowSettingsUtil.getInstance().editConfigurable(TargetAWT.wrap(myPanel), configurable).whenComplete((res, throwable) -> {
                     if (throwable != null) {
                         return;
                     }

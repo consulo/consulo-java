@@ -22,8 +22,11 @@ import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SearchableConfigurable;
+import consulo.disposer.Disposable;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.Component;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import jakarta.inject.Inject;
 
 import org.jspecify.annotations.Nullable;
@@ -71,9 +74,9 @@ public class AnnotationProcessorsConfigurable implements ProjectConfigurable, Se
   }
 
   @Override
-  public JComponent createComponent() {
+  public Component createUIComponent(Disposable parentDisposable) {
     myMainPanel = new AnnotationProcessorsPanel(myProject);
-    return myMainPanel;
+    return TargetAWT.wrap(myMainPanel);
   }
 
   @Override

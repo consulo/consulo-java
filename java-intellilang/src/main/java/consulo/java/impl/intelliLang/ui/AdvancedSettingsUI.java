@@ -24,6 +24,7 @@ import com.intellij.java.language.util.TreeClassChooserFactory;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.SearchableConfigurable;
+import consulo.disposer.Disposable;
 import consulo.document.Document;
 import consulo.java.impl.intelliLang.util.PsiUtilEx;
 import consulo.language.editor.ui.awt.ReferenceEditorWithBrowseButton;
@@ -32,6 +33,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
@@ -56,9 +58,9 @@ public class AdvancedSettingsUI implements SearchableConfigurable {
 
   @Override
   @RequiredUIAccess
-  public JComponent createComponent() {
+  public consulo.ui.Component createUIComponent(Disposable parentDisposable) {
     myPanel = new AdvancedSettingsPanel();
-    return myPanel.myRoot;
+    return TargetAWT.wrap(myPanel.myRoot);
   }
 
   @Override

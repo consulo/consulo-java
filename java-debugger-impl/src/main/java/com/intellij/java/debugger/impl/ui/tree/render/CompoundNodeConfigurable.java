@@ -17,6 +17,10 @@ package com.intellij.java.debugger.impl.ui.tree.render;
 
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
+import consulo.disposer.Disposable;
+import consulo.ui.Component;
+import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,8 +32,10 @@ public class CompoundNodeConfigurable implements UnnamedConfigurable {
   private final UnnamedConfigurable myChildrenConfigurable;
 
   private final static UnnamedConfigurable NULL_CONFIGURABLE = new UnnamedConfigurable() {
-    public JComponent createComponent() {
-      return new JPanel();
+    @RequiredUIAccess
+    @Override
+    public Component createUIComponent(Disposable parentDisposable) {
+      return TargetAWT.wrap(new JPanel());
     }
 
     public boolean isModified() {
@@ -53,7 +59,9 @@ public class CompoundNodeConfigurable implements UnnamedConfigurable {
     return myRenderer;
   }
 
-  public JComponent createComponent() {
+  @RequiredUIAccess
+  @Override
+  public Component createUIComponent(Disposable parentDisposable) {
     JPanel panel = new JPanel(new GridBagLayout());
     GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
@@ -61,15 +69,15 @@ public class CompoundNodeConfigurable implements UnnamedConfigurable {
     c.insets = new Insets(0, 0, 5, 0);
     c.gridwidth = GridBagConstraints.REMAINDER;
 
-    panel.add(myLabelConfigurable.createComponent(), c);
+    panel.add(TargetAWT.to(myLabelConfigurable.createUIComponent(parentDisposable)), c);
 
     c.ipady = 1;
     panel.add(new JSeparator(JSeparator.HORIZONTAL), c);
 
     c.ipady = 0;
     c.weighty = 1.0;
-    panel.add(myChildrenConfigurable.createComponent(), c);
-    return panel;
+    panel.add(TargetAWT.to(myChildrenConfigurable.createUIComponent(parentDisposable)), c);
+    return TargetAWT.wrap(panel);
   }
 
   public boolean isModified() {

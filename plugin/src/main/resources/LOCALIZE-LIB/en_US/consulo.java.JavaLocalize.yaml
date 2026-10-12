@@ -302,3 +302,19 @@ title.lambda:
     text: Lambda
 title.record:
     text: Record
+module.extension.bytecode.version.label:
+    text: 'Bytecode Version:'
+module.extension.compiler.argument.message:
+    text: Compiler argument
+module.extension.compiler.argument.title:
+    text: Enter Compiler Argument
+module.extension.compiler.arguments.label:
+    text: 'Additional compiler arguments:'
+module.extension.compiler.options.group:
+    text: Compiler Options
+module.extension.language.level.label:
+    text: 'Language Level:'
+module.extension.special.dir.module:
+    text: Module dir
+module.extension.special.dir.source:
+    text: Source dir

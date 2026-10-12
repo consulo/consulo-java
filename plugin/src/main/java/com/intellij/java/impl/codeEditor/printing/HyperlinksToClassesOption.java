@@ -26,11 +26,14 @@ import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
+import consulo.disposer.Disposable;
 import consulo.ide.impl.idea.codeEditor.printing.CodeEditorBundle;
 import consulo.language.editor.action.PrintOption;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.language.psi.PsiReference;
+import consulo.ui.Component;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.virtualFileSystem.fileType.FileType;
 import org.jspecify.annotations.Nullable;
 
@@ -82,9 +85,9 @@ public class HyperlinksToClassesOption extends PrintOption {
   private class HyperlinksToClassesConfigurable implements UnnamedConfigurable {
     private JCheckBox myCbGenerateHyperlinksToClasses;
 
-    public JComponent createComponent() {
+    public Component createUIComponent(Disposable parentDisposable) {
       myCbGenerateHyperlinksToClasses = new JCheckBox(CodeEditorBundle.message("export.to.html.generate.hyperlinks.checkbox"), isGenerateHyperlinksToClasses);
-      return myCbGenerateHyperlinksToClasses;
+      return TargetAWT.wrap(myCbGenerateHyperlinksToClasses);
     }
 
     public boolean isModified() {

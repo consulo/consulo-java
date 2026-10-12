@@ -21,10 +21,13 @@ import consulo.application.Application;
 import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
+import consulo.disposer.Disposable;
+import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -122,7 +125,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 
 	@RequiredUIAccess
 	@Override
-	public JComponent createComponent()
+	public Component createUIComponent(Disposable parentDisposable)
 	{
 		myPanel = new JPanel(new GridBagLayout());
 
@@ -236,7 +239,7 @@ public class ArrayRendererConfigurable implements UnnamedConfigurable, Configura
 				updateEndIndex();
 			}
 		});
-		return myPanel;
+		return TargetAWT.wrap(myPanel);
 	}
 
 	private static int getInt(JTextField textField)

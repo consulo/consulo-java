@@ -17,6 +17,7 @@ import consulo.configurable.Configurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.ProjectConfigurable;
 import consulo.configurable.SearchableConfigurable;
+import consulo.disposer.Disposable;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserFactory;
 import consulo.fileChooser.FileSaverDescriptor;
@@ -25,6 +26,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
+import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.CustomShortcutSet;
@@ -41,6 +43,7 @@ import consulo.ui.ex.awt.Splitter;
 import consulo.ui.ex.awt.ToolbarDecorator;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
@@ -158,7 +161,7 @@ public final class CaptureConfigurable implements SearchableConfigurable, Projec
 
     @RequiredUIAccess
     @Override
-    public @Nullable JComponent createComponent() {
+    public @Nullable Component createUIComponent(Disposable parentDisposable) {
         myConfigureAnnotationsButton.addActionListener(e -> new AsyncAnnotationsDialog(myProject).showAsync());
 
         myDebuggerAgent.addChangeListener(e -> setThrottlingCheckboxEnabled());
@@ -169,7 +172,7 @@ public final class CaptureConfigurable implements SearchableConfigurable, Projec
         boolean breakpointsEnabled = Registry.is("debugger.async.stacks.via.breakpoints", false);
         myCaptureVariables.setVisible(breakpointsEnabled);
         if (!breakpointsEnabled) {
-            return myPanel;
+            return myPanel == null ? null : TargetAWT.wrap(myPanel);
         }
 
         JBTable table = new JBTable(myTableModel);
@@ -383,7 +386,7 @@ public final class CaptureConfigurable implements SearchableConfigurable, Projec
         );
         myCapturePanel.add(decorator.createPanel(), BorderLayout.CENTER);
 
-        return myPanel;
+        return myPanel == null ? null : TargetAWT.wrap(myPanel);
     }
 
     private void setThrottlingCheckboxEnabled() {

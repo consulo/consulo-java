@@ -37,6 +37,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.AnActionWithSyncUpdate;
 import consulo.ui.ex.action.DumbAwareAction;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -88,7 +89,7 @@ public class CustomizeContextViewAction extends DumbAwareAction implements AnAct
                 @RequiredUIAccess
                 protected void createConfigurableTabs() {
                     for (Configurable configurable : getConfigurables()) {
-                        JComponent component = configurable.createComponent(disposable);
+                        JComponent component = (JComponent) TargetAWT.to(configurable.createUIComponent(disposable));
                         assert component != null;
                         component.setBorder(new EmptyBorder(8, 8, 8, 8));
                         myTabbedPane.addTab(configurable.getDisplayName().get(), component);

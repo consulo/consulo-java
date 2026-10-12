@@ -27,12 +27,11 @@ import consulo.language.editor.impl.action.BaseAnalysisAction;
 import consulo.language.editor.scope.AnalysisScope;
 import consulo.language.editor.ui.awt.scope.BaseAnalysisActionDialog;
 import consulo.project.Project;
+import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.event.DocumentAdapter;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.layout.VerticalLayout;
 
-import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 
 @ActionImpl(
@@ -66,7 +65,7 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
     @Override
     protected void extendMainLayout(BaseAnalysisActionDialog dialog, VerticalLayout layout, Project project) {
         myConfigurable = new JavadocConfigurable(JavadocGenerationManager.getInstance(project).getConfiguration());
-        JComponent component = myConfigurable.createComponent();
+        Component component = myConfigurable.createUIComponent(dialog.getDisposable());
         myConfigurable.reset();
         myConfigurable.getOutputDirField().getDocument().addDocumentListener(new DocumentAdapter() {
             @Override
@@ -76,7 +75,7 @@ public final class GenerateJavadocAction extends BaseAnalysisAction {
         });
         updateAvailability(dialog);
 
-        layout.add(TargetAWT.wrap(component));
+        layout.add(component);
     }
 
     private void updateAvailability(BaseAnalysisActionDialog dialog) {

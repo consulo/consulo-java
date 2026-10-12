@@ -17,7 +17,10 @@ package com.intellij.java.impl.javadoc;
 
 import com.intellij.java.language.psi.PsiKeyword;
 import consulo.configurable.Configurable;
+import consulo.disposer.Disposable;
 import consulo.localize.LocalizeValue;
+import consulo.ui.Component;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 
 import javax.swing.*;
 import java.io.File;
@@ -30,9 +33,9 @@ public final class JavadocConfigurable implements Configurable {
         myConfiguration = configuration;
     }
 
-    public JComponent createComponent() {
+    public Component createUIComponent(Disposable parentDisposable) {
         myPanel = new JavadocGenerationPanel();
-        return myPanel.myPanel;
+        return TargetAWT.wrap(myPanel.myPanel);
     }
 
     public void applyTo(JavadocConfiguration configuration) {

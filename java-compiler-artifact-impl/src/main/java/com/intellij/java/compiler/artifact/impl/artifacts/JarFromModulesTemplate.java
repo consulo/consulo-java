@@ -22,6 +22,7 @@ import consulo.compiler.artifact.ArtifactTemplate;
 import consulo.compiler.artifact.ArtifactUtil;
 import consulo.compiler.artifact.PlainArtifactType;
 import consulo.compiler.artifact.element.*;
+import consulo.java.compiler.artifact.impl.localize.JavaCompilerArtifactLocalize;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
 import consulo.localize.LocalizeValue;
@@ -32,6 +33,7 @@ import consulo.module.content.layer.ModulesProvider;
 import consulo.module.content.layer.OrderEnumerator;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
+import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.virtualFileSystem.VirtualFile;
@@ -41,6 +43,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author nik
@@ -56,20 +60,22 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
 
     @Override
     @RequiredUIAccess
-    public NewArtifactConfiguration createArtifact() {
+    public CompletableFuture<NewArtifactConfiguration> createArtifact() {
         JarArtifactFromModulesDialog dialog = new JarArtifactFromModulesDialog(myContext);
-        dialog.show();
-        if (!dialog.isOK()) {
-            return null;
-        }
-
-        return doCreateArtifact(
-            dialog.getSelectedModules(),
-            dialog.getMainClassName(),
-            dialog.getDirectoryForManifest(),
-            dialog.isExtractLibrariesToJar(),
-            dialog.isIncludeTests()
-        );
+        UIAccess uiAccess = UIAccess.current();
+        return dialog.showAsync().thenApplyAsync(ignored -> {
+            NewArtifactConfiguration configuration = doCreateArtifact(
+                dialog.getSelectedModules(),
+                dialog.getMainClassName(),
+                dialog.getDirectoryForManifest(),
+                dialog.isExtractLibrariesToJar(),
+                dialog.isIncludeTests()
+            );
+            if (configuration == null) {
+                throw new CancellationException();
+            }
+            return configuration;
+        }, uiAccess);
     }
 
     @Nullable
@@ -213,6 +219,6 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
 
     @Override
     public LocalizeValue getPresentableName() {
-        return LocalizeValue.localizeTODO("From modules with dependencies...");
+        return JavaCompilerArtifactLocalize.jarFromModulesTemplateName();
     }
 }

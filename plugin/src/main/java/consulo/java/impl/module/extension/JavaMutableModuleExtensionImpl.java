@@ -23,15 +23,11 @@ import consulo.java.language.module.extension.JavaMutableModuleExtension;
 import consulo.java.language.module.extension.SpecialDirLocation;
 import consulo.module.content.layer.ModuleRootLayer;
 import consulo.module.extension.MutableModuleInheritableNamedPointer;
-import consulo.module.extension.swing.SwingMutableModuleExtension;
 import consulo.ui.Component;
-import consulo.ui.Label;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.layout.VerticalLayout;
 import consulo.util.lang.Comparing;
 import org.jspecify.annotations.Nullable;
 
-import javax.swing.*;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -39,7 +35,7 @@ import java.util.List;
  * @author VISTALL
  * @since 12:39/19.05.13
  */
-public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl>, SwingMutableModuleExtension {
+public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl implements JavaMutableModuleExtension<JavaModuleExtensionImpl> {
     public JavaMutableModuleExtensionImpl(String id, ModuleRootLayer moduleRootLayer) {
         super(id, moduleRootLayer);
     }
@@ -47,15 +43,8 @@ public class JavaMutableModuleExtensionImpl extends JavaModuleExtensionImpl impl
     @RequiredUIAccess
     @Nullable
     @Override
-    public JComponent createConfigurablePanel(Disposable disposable, Runnable updateOnCheck) {
-        return new JavaModuleExtensionPanel(this, updateOnCheck);
-    }
-
-    @RequiredUIAccess
-    @Nullable
-    @Override
     public Component createConfigurationComponent(Disposable disposable, Runnable runnable) {
-        return VerticalLayout.create().add(Label.create("Unsupported platform"));
+        return JavaModuleExtensionPanel.create(this, disposable, runnable);
     }
 
     @Override

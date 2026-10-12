@@ -15,5 +15,4 @@ module consulo.java.compiler.artifact.impl {
     exports com.intellij.java.compiler.artifact.impl.artifacts;
     exports com.intellij.java.compiler.artifact.impl.elements;
     exports com.intellij.java.compiler.artifact.impl.ui;
-    exports com.intellij.java.compiler.artifact.impl.ui.properties;
 }

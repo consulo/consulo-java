@@ -15,17 +15,20 @@
  */
 package com.intellij.java.impl.openapi.roots.ui.configuration;
 
+import consulo.content.library.LibraryTypeService;
 import consulo.content.library.OrderRoot;
 import consulo.content.library.ui.LibraryRootsDetector;
-import consulo.ide.impl.idea.openapi.roots.libraries.ui.impl.RootDetectionUtil;
 import consulo.java.impl.library.JavaSourceRootDetector;
+import consulo.project.Project;
+import consulo.ui.Component;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.util.VirtualFileUtil;
+import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * This utility class contains utility methods for selecting paths.
@@ -41,18 +44,29 @@ public class PathUIUtils {
      * if multiple candidates or non root source directories are found whithin some
      * directories, it shows a dialog that allows selecting or deselecting them.
      *
-     * @param parentComponent a parent parent or project
+     * @param parentComponent a parent component of the dialog
+     * @param project         a project the dialog is shown for
      * @param rootCandidates  a candidates for roots
-     * @return a array of source folders or empty array if non was selected or dialog was canceled.
+     * @return a array of source folders or empty array if non was selected, completed exceptionally if the user cancelled
      */
-    public static VirtualFile[] scanAndSelectDetectedJavaSourceRoots(Component parentComponent, VirtualFile[] rootCandidates) {
-        List<OrderRoot> orderRoots = RootDetectionUtil.detectRoots(List.of(rootCandidates), parentComponent, null,
-            LibraryRootsDetector.of(Collections.singletonList(new JavaSourceRootDetector())),
-            Collections.emptyList());
-        List<VirtualFile> result = new ArrayList<VirtualFile>();
-        for (OrderRoot root : orderRoots) {
-            result.add(root.getFile());
-        }
-        return VirtualFileUtil.toVirtualFileArray(result);
+    @RequiredUIAccess
+    public static CompletableFuture<VirtualFile[]> scanAndSelectDetectedJavaSourceRoots(
+        @Nullable Component parentComponent,
+        @Nullable Project project,
+        VirtualFile[] rootCandidates
+    ) {
+        return LibraryTypeService.getInstance().detectRootsAsync(
+            List.of(rootCandidates),
+            parentComponent,
+            project,
+            LibraryRootsDetector.of(List.of(new JavaSourceRootDetector())),
+            List.of()
+        ).thenApply(orderRoots -> {
+            List<VirtualFile> result = new ArrayList<>();
+            for (OrderRoot root : orderRoots) {
+                result.add(root.getFile());
+            }
+            return VirtualFileUtil.toVirtualFileArray(result);
+        });
     }
 }

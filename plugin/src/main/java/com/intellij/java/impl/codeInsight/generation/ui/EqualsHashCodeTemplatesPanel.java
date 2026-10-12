@@ -21,12 +21,16 @@ import com.intellij.java.impl.generate.template.TemplateResource;
 import com.intellij.java.impl.generate.view.GenerateTemplateConfigurable;
 import consulo.configurable.ConfigurationException;
 import consulo.configurable.UnnamedConfigurable;
+import consulo.disposer.Disposable;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.ui.Component;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.NamedItemsListEditor;
 import consulo.ui.ex.awt.Splitter;
 import consulo.ui.ex.awt.TitledSeparator;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Couple;
@@ -137,26 +141,26 @@ public class EqualsHashCodeTemplatesPanel extends NamedItemsListEditor<Couple<Te
     final GenerateTemplateConfigurable equalsConfigurable = new GenerateTemplateConfigurable(item.first, GenerateEqualsHelper.getEqualsImplicitVars(myProject), myProject);
     final GenerateTemplateConfigurable hashCodeConfigurable = new GenerateTemplateConfigurable(item.second, GenerateEqualsHelper.getHashCodeImplicitVars(), myProject);
     return new UnnamedConfigurable() {
-      @Nullable
+      @RequiredUIAccess
       @Override
-      public JComponent createComponent() {
+      public Component createUIComponent(Disposable parentDisposable) {
         Splitter splitter = new Splitter(true);
 
         JPanel eqPanel = new JPanel(new BorderLayout());
         eqPanel.add(new TitledSeparator("Equals Template:"), BorderLayout.NORTH);
-        JComponent eqPane = equalsConfigurable.createComponent();
+        JComponent eqPane = (JComponent) TargetAWT.to(equalsConfigurable.createUIComponent(parentDisposable));
         eqPane.setPreferredSize(JBUI.size(300, 200));
         eqPanel.add(eqPane, BorderLayout.CENTER);
         splitter.setFirstComponent(eqPanel);
 
         JPanel hcPanel = new JPanel(new BorderLayout());
         hcPanel.add(new TitledSeparator("HashCode Template:"), BorderLayout.NORTH);
-        JComponent hcPane = hashCodeConfigurable.createComponent();
+        JComponent hcPane = (JComponent) TargetAWT.to(hashCodeConfigurable.createUIComponent(parentDisposable));
         hcPane.setPreferredSize(JBUI.size(300, 200));
         hcPanel.add(hcPane, BorderLayout.CENTER);
         splitter.setSecondComponent(hcPanel);
 
-        return splitter;
+        return TargetAWT.wrap(splitter);
       }
 
       @Override

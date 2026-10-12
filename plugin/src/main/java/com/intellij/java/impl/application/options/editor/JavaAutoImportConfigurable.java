@@ -31,11 +31,13 @@ import consulo.language.editor.DaemonCodeAnalyzerSettings;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectManager;
+import consulo.ui.Component;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.ColoredListCellRenderer;
 import consulo.ui.ex.awt.JBLabel;
 import consulo.ui.ex.awt.JBUI;
 import consulo.ui.ex.awt.TitledSeparator;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import org.jspecify.annotations.Nullable;
 import jakarta.inject.Inject;
 
@@ -154,8 +156,8 @@ public class JavaAutoImportConfigurable implements ProjectConfigurable {
 
     @RequiredUIAccess
     @Override
-    public JComponent createComponent(Disposable disposable) {
-        return myWholePanel;
+    public Component createUIComponent(Disposable disposable) {
+        return TargetAWT.wrap(myWholePanel);
     }
 
     @RequiredUIAccess

@@ -422,7 +422,7 @@ public class GenerateEqualsWizard extends AbstractGenerateEqualsWizard<PsiClass,
                 EqualsHashCodeTemplatesManager templatesManager = EqualsHashCodeTemplatesManager.getInstance();
                 EqualsHashCodeTemplatesPanel ui = new EqualsHashCodeTemplatesPanel(myProject, EqualsHashCodeTemplatesManager.getInstance());
                 ui.selectNodeInTree(templatesManager.getDefaultTemplateBaseName());
-                ShowSettingsUtil.getInstance().editConfigurable(myParent, ui);
+                ShowSettingsUtil.getInstance().editConfigurable(TargetAWT.wrap(myParent), ui);
                 myComboBox.setModel(new DefaultComboBoxModel<>(templatesManager.getTemplateNames()));
                 myComboBox.setSelectedItem(templatesManager.getDefaultTemplateBaseName());
             }
