@@ -56,7 +56,7 @@ public class UnifiedShortenCommandLineModeCombo implements PseudoComponent {
         myModuleSelector = moduleSelector;
         myModel = FlatDataModel.of(List.of());
         myComboBox = ComboBox.create(myModel);
-        myComboBox.setRender((presentation, renderItem) -> {
+        myComboBox.setRenderer((presentation, renderItem) -> {
             Item item = renderItem.getValue();
             if (item == null) {
                 return;

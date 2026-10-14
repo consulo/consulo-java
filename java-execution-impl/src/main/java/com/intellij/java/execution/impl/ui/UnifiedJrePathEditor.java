@@ -48,6 +48,7 @@ public class UnifiedJrePathEditor implements PseudoComponent {
         return myBundleBox.getSelectedBundleName();
     }
 
+    @RequiredUIAccess
     public boolean isAlternativeJreSelected() {
         return !(myBundleBox.getComponent().getValue() instanceof BundleBox.NullBundleBoxItem);
     }
@@ -57,7 +58,8 @@ public class UnifiedJrePathEditor implements PseudoComponent {
         myBundleBox.setSelectedBundle(StringUtil.nullize(name, true));
     }
 
-    public Disposable addValueListener(Runnable listener) {
+    @RequiredUIAccess
+    public Disposable addValueListener(@RequiredUIAccess Runnable listener) {
         return myBundleBox.getComponent().addValueListener(event -> listener.run());
     }
 }
