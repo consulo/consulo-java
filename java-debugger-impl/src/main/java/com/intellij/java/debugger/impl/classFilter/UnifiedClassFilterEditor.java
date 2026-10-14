@@ -21,7 +21,7 @@ import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.CheckBox;
 import consulo.ui.Component;
-import consulo.ui.ComponentItemRender;
+import consulo.ui.ComponentItemRenderer;
 import consulo.ui.PseudoComponent;
 import consulo.ui.Table;
 import consulo.ui.TableItemEditor;
@@ -76,36 +76,38 @@ public class UnifiedClassFilterEditor implements PseudoComponent {
         myTable.setShowHeader(false);
         myTable.addColumn(LocalizeValue.empty(), row -> row.myFilter.isEnabled())
             .setWidth(40)
-            .setRender(ComponentItemRender.reusable(
+            .setRenderer(ComponentItemRenderer.reusable(
                 () -> CheckBox.create(LocalizeValue.empty()),
                 (checkBox, item) -> checkBox.setValue(Boolean.TRUE.equals(item.getValue()))
             ))
             .setEditor(new TableItemEditor<>() {
-                @RequiredUIAccess
                 @Override
+                @RequiredUIAccess
                 public ValueComponent<Boolean> createComponent(FilterRow row) {
                     return CheckBox.create(LocalizeValue.empty(), row.myFilter.isEnabled());
                 }
 
-                @RequiredUIAccess
                 @Override
+                @RequiredUIAccess
                 public void commit(FilterRow row, @Nullable Boolean value) {
                     row.myFilter.setEnabled(Boolean.TRUE.equals(value));
                     myModel.update(row);
                 }
             });
         myTable.addColumn(LocalizeValue.empty(), row -> row.myFilter.getPattern())
-            .setRender((presentation, value, row) ->
-                presentation.append(StringUtil.notNullize(value.getValue()), row.myFilter.isEnabled() ? TextAttribute.REGULAR : TextAttribute.GRAYED))
+            .setRenderer((presentation, value, row) -> presentation.append(
+                StringUtil.notNullize(value.getValue()),
+                row.myFilter.isEnabled() ? TextAttribute.REGULAR : TextAttribute.GRAYED
+            ))
             .setEditor(new TableItemEditor<>() {
-                @RequiredUIAccess
                 @Override
+                @RequiredUIAccess
                 public ValueComponent<String> createComponent(FilterRow row) {
                     return TextBox.create(row.myFilter.getPattern());
                 }
 
-                @RequiredUIAccess
                 @Override
+                @RequiredUIAccess
                 public void commit(FilterRow row, @Nullable String value) {
                     row.myFilter.setPattern(StringUtil.notNullize(value).trim());
                     myModel.update(row);
@@ -139,7 +141,12 @@ public class UnifiedClassFilterEditor implements PseudoComponent {
             .disableAction(DownMoveAction.class);
 
         if (!myProject.isDefault() && !myProject.getApplication().isUnifiedApplication()) {
-            builder.addExtraAction(DumbAwareAction.create(getAddButtonText(), LocalizeValue.empty(), getAddButtonIcon(), e -> addClassFilter()));
+            builder.addExtraAction(DumbAwareAction.create(
+                getAddButtonText(),
+                LocalizeValue.empty(),
+                getAddButtonIcon(),
+                e -> addClassFilter()
+            ));
             if (addPatternButtonVisible()) {
                 builder.addExtraAction(DumbAwareAction.create(
                     getAddPatternButtonText(),

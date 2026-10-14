@@ -50,7 +50,7 @@ public class UnifiedConfigurationModuleSelector extends BaseConfigurationModuleS
         super(project);
         myModel = FlatDataModel.of(List.of(ModuleItem.NONE));
         myComboBox = ComboBox.create(myModel);
-        myComboBox.setRender((presentation, item) -> {
+        myComboBox.setRenderer((presentation, item) -> {
             ModuleItem moduleItem = item.getValue();
             Module module = moduleItem == null ? null : moduleItem.module();
             if (module == null) {
@@ -74,7 +74,7 @@ public class UnifiedConfigurationModuleSelector extends BaseConfigurationModuleS
         return myComboBox;
     }
 
-    public Disposable addValueListener(Consumer<@Nullable Module> listener) {
+    public Disposable addValueListener(@RequiredUIAccess Consumer<@Nullable Module> listener) {
         return myComboBox.addValueListener(event -> {
             ModuleItem item = event.getValue();
             listener.accept(item == null ? null : item.module());

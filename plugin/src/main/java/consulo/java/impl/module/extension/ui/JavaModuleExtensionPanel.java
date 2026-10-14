@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package consulo.java.impl.module.extension.ui;
 
 import com.intellij.java.compiler.impl.javaCompiler.TargetOptionsComponent;
@@ -66,7 +65,7 @@ import java.util.Map;
 
 /**
  * @author VISTALL
- * @since 15.03.2015
+ * @since 2015-03-15
  */
 public final class JavaModuleExtensionPanel {
     private JavaModuleExtensionPanel() {
@@ -217,7 +216,7 @@ public final class JavaModuleExtensionPanel {
         }
 
         ComboBox<Object> languageLevelBox = ComboBox.create(items);
-        languageLevelBox.setRender((presentation, item) -> {
+        languageLevelBox.setRenderer((presentation, item) -> {
             Object value = item.getValue();
             if (value == ObjectUtil.NULL) {
                 presentation.append(TargetOptionsComponent.COMPILER_DEFAULT, TextAttribute.GRAYED);
@@ -249,7 +248,7 @@ public final class JavaModuleExtensionPanel {
                 inheritableLanguageLevel.set(null, languageLevel.getName());
             }
             else if (value == ObjectUtil.NULL) {
-                inheritableLanguageLevel.set((String) null, (String) null);
+                inheritableLanguageLevel.set((String) null, null);
             }
             else if (value != null) {
                 inheritableLanguageLevel.set(value.toString(), null);
