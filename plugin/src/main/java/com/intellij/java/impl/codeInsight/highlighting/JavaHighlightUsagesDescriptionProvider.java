@@ -79,7 +79,7 @@ public class JavaHighlightUsagesDescriptionProvider implements ElementDescriptio
             return LocalizeValue.join(
                 LanguageLocalize.javaTermsPackage(),
                 LocalizeValue.space(),
-                LocalizeValue.of(javaPackage.getQualifiedName())
+                LocalizeValue.ofNullable(javaPackage.getQualifiedName())
             );
         }
         return LocalizeValue.empty();
