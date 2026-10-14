@@ -47,7 +47,7 @@ public class JavaUsageViewDescriptionProvider implements ElementDescriptionProvi
                 return LocalizeValue.ofNullable(javaPackage.getQualifiedName());
             }
             else if (element instanceof PsiClass psiClass) {
-                if (element instanceof PsiAnonymousClass) {
+                if (psiClass instanceof PsiAnonymousClass) {
                     return LanguageLocalize.javaTermsAnonymousClass();
                 }
                 else {

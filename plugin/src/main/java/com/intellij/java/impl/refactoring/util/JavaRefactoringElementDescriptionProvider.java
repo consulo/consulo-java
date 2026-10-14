@@ -27,6 +27,7 @@ import consulo.language.psi.ElementDescriptionLocation;
 import consulo.language.psi.ElementDescriptionProvider;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
+import consulo.util.lang.StringUtil;
 
 @ExtensionImpl
 public class JavaRefactoringElementDescriptionProvider implements ElementDescriptionProvider {
@@ -42,11 +43,8 @@ public class JavaRefactoringElementDescriptionProvider implements ElementDescrip
             if (rdLocation.includeParent()) {
                 options |= PsiFormatUtil.SHOW_CONTAINING_CLASS;
             }
-            String fieldEmphasized = CommonRefactoringUtil.htmlEmphasize(PsiFormatUtil.formatVariable(
-                field,
-                options,
-                PsiSubstitutor.EMPTY
-            ));
+            String fieldEmphasized =
+                CommonRefactoringUtil.htmlEmphasize(PsiFormatUtil.formatVariable(field, options, PsiSubstitutor.EMPTY));
             return RefactoringLocalize.fieldDescription(fieldEmphasized);
         }
 
@@ -55,12 +53,9 @@ public class JavaRefactoringElementDescriptionProvider implements ElementDescrip
             if (rdLocation.includeParent()) {
                 options |= PsiFormatUtil.SHOW_CONTAINING_CLASS;
             }
-            String emphasizedMethod = CommonRefactoringUtil.htmlEmphasize(PsiFormatUtil.formatMethod(
-                method,
-                PsiSubstitutor.EMPTY,
-                options,
-                PsiFormatUtil.SHOW_TYPE
-            ));
+            String emphasizedMethod = CommonRefactoringUtil.htmlEmphasize(
+                PsiFormatUtil.formatMethod(method, PsiSubstitutor.EMPTY, options, PsiFormatUtil.SHOW_TYPE)
+            );
             return method.isConstructor()
                 ? RefactoringLocalize.constructorDescription(emphasizedMethod)
                 : RefactoringLocalize.methodDescription(emphasizedMethod);
@@ -68,28 +63,32 @@ public class JavaRefactoringElementDescriptionProvider implements ElementDescrip
 
         if (element instanceof PsiClassInitializer initializer) {
             boolean isStatic = initializer.isStatic();
-            LocalizeValue elementDescription = getElementDescription(
-                initializer.getContainingClass(),
-                RefactoringDescriptionLocation.WITHOUT_PARENT
-            );
+            PsiClass containingClass = initializer.getContainingClass();
+            LocalizeValue elementDescription = containingClass != null
+                ? getElementDescription(containingClass, RefactoringDescriptionLocation.WITHOUT_PARENT)
+                : LocalizeValue.empty();
             return isStatic
                 ? RefactoringLocalize.staticInitializerDescription(elementDescription)
                 : RefactoringLocalize.instanceInitializerDescription(elementDescription);
         }
 
         if (element instanceof PsiParameter parameter) {
-            String paramNameEmphasized = CommonRefactoringUtil.htmlEmphasize(parameter.getName());
+            String paramNameEmphasized = CommonRefactoringUtil.htmlEmphasize(StringUtil.notNullize(parameter.getName()));
             return parameter.getDeclarationScope() instanceof PsiForeachStatement
                 ? RefactoringLocalize.localVariableDescription(paramNameEmphasized)
                 : RefactoringLocalize.parameterDescription(paramNameEmphasized);
         }
 
         if (element instanceof PsiLocalVariable localVariable) {
-            return RefactoringLocalize.localVariableDescription(CommonRefactoringUtil.htmlEmphasize(localVariable.getName()));
+            return RefactoringLocalize.localVariableDescription(
+                CommonRefactoringUtil.htmlEmphasize(StringUtil.notNullize(localVariable.getName()))
+            );
         }
 
         if (element instanceof PsiJavaPackage javaPackage) {
-            return RefactoringLocalize.packageDescription(CommonRefactoringUtil.htmlEmphasize(javaPackage.getName()));
+            return RefactoringLocalize.packageDescription(
+                CommonRefactoringUtil.htmlEmphasize(StringUtil.notNullize(javaPackage.getName()))
+            );
         }
 
         if (element instanceof PsiClass psiClass) {
