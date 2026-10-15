@@ -19,7 +19,6 @@
 	<version>SNAPHOT</version>
 	<vendor>Jetbrains and others</vendor>
 	<depends optional="true">com.intellij.regexp</depends>
-	<depends optional="true">com.intellij.images</depends>
 	<depends optional="true">com.intellij.properties</depends>
 	<depends optional="true">consulo.json</depends>
 	<depends>com.intellij.xml</depends>

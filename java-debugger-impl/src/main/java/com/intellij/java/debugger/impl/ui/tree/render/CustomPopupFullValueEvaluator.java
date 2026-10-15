@@ -17,14 +17,15 @@ package com.intellij.java.debugger.impl.ui.tree.render;
 
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
-import consulo.application.Application;
 import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.execution.debug.ui.DebuggerUIUtil;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ui.wm.WindowManager;
+import consulo.ui.Component;
 import consulo.ui.ex.RelativePoint;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.popup.JBPopup;
 
 import javax.swing.*;
@@ -33,7 +34,7 @@ import java.awt.*;
 /**
  * @author egor
  */
-public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFullValueEvaluator {
+public abstract class CustomPopupFullValueEvaluator<T, C extends Component> extends JavaValue.JavaFullValueEvaluator {
     public CustomPopupFullValueEvaluator(LocalizeValue linkText, EvaluationContextImpl evaluationContext) {
         super(linkText, evaluationContext);
         setShowValuePopup(false);
@@ -41,19 +42,24 @@ public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFul
 
     protected abstract T getData();
 
-    protected abstract JComponent createComponent(T data);
+    protected abstract C createComponent(T data);
+
+    protected void afterPopupShow(C component) {
+    }
 
     @Override
     public void evaluate(final XFullValueEvaluationCallback callback) {
+        Project project = getEvaluationContext().getProject();
+        JFrame frame = WindowManager.getInstance().getFrame(project);
+
         final T data = getData();
-        Application.get().invokeLater(() -> {
+        project.getUIAccess().execute(() -> {
             if (callback.isObsolete()) {
                 return;
             }
-            final JComponent comp = createComponent(data);
-            Project project = getEvaluationContext().getProject();
-            JBPopup popup = DebuggerUIUtil.createValuePopup(project, comp, null);
-            JFrame frame = WindowManager.getInstance().getFrame(project);
+
+            final C comp = createComponent(data);
+            JBPopup popup = DebuggerUIUtil.createValuePopup(project, (JComponent) TargetAWT.to(comp), null);
             Dimension frameSize = frame.getSize();
             Dimension size = new Dimension(frameSize.width / 2, frameSize.height / 2);
             popup.setSize(size);
@@ -62,6 +68,8 @@ public abstract class CustomPopupFullValueEvaluator<T> extends JavaValue.JavaFul
             }
             callback.evaluated("");
             popup.show(new RelativePoint(frame, new Point(size.width / 2, size.height / 2)));
+
+            afterPopupShow(comp);
         });
     }
 }

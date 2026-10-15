@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.image.impl;
 
-import com.intellij.java.debugger.DebuggerBundle;
 import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
@@ -28,22 +27,19 @@ import com.intellij.java.debugger.impl.ui.tree.render.CustomPopupFullValueEvalua
 import com.intellij.java.debugger.impl.ui.tree.render.ToStringBasedRenderer;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.Application;
 import consulo.execution.debug.frame.XFullValueEvaluator;
-import consulo.images.ui.EmbeddedImageViewFactory;
 import consulo.internal.com.sun.jdi.*;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.ui.Component;
 import consulo.ui.Label;
-import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.image.Image;
 import consulo.ui.image.ImageEffects;
-import org.jspecify.annotations.Nullable;
+import consulo.ui.image.viewer.ImageViewer;
 import jakarta.inject.Inject;
+import org.jspecify.annotations.Nullable;
 
-import javax.swing.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,10 +71,13 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
 
     static Component createIconViewer(@Nullable Image uiImage) {
         if (uiImage == null) {
-            return Label.create("No data");
+            return Label.create(LocalizeValue.localizeTODO("No data"));
         }
 
-        return Application.get().getInstance(EmbeddedImageViewFactory.class).createViewer(uiImage);
+        ImageViewer viewer = ImageViewer.create();
+        viewer.getZoom().zoomToFit();
+        viewer.setImage(uiImage);
+        return viewer;
     }
 
     @Nullable
@@ -129,14 +128,21 @@ class ImageObjectRenderer extends ToStringBasedRenderer implements FullValueEval
         return null;
     }
 
-    static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Image> {
+    static abstract class IconPopupEvaluator extends CustomPopupFullValueEvaluator<Image, Component> {
         public IconPopupEvaluator(LocalizeValue linkText, EvaluationContextImpl evaluationContext) {
             super(linkText, evaluationContext);
         }
 
         @Override
-        protected JComponent createComponent(Image data) {
-            return (JComponent) TargetAWT.to(createIconViewer(data));
+        protected Component createComponent(Image data) {
+            return createIconViewer(data);
+        }
+
+        @Override
+        protected void afterPopupShow(Component component) {
+            if (component instanceof ImageViewer imageViewer) {
+                imageViewer.getZoom().zoomToFit();
+            }
         }
     }
 }
