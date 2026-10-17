@@ -20,6 +20,7 @@ import com.intellij.java.debugger.impl.DebuggerSession;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.project.Project;
+import consulo.virtualFileSystem.VirtualFile;
 
 
 /**
@@ -32,6 +33,11 @@ public abstract class HotSwapUI {
   }
 
   public abstract void reloadChangedClasses(DebuggerSession session, boolean compileBeforeHotswap);
+
+  /**
+   * Compiles the given files and reloads the classes compiled from them into the debugged application, without asking first.
+   */
+  public abstract void compileAndReload(DebuggerSession session, VirtualFile... files);
 
   public abstract void dontPerformHotswapAfterThisCompilation();
 

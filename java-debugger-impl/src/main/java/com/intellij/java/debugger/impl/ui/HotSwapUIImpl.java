@@ -28,6 +28,7 @@ import consulo.compiler.CompilerManager;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.project.ui.notification.NotificationType;
+import consulo.virtualFileSystem.VirtualFile;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
@@ -36,6 +37,7 @@ import consulo.util.collection.Lists;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 
+import java.nio.file.Path;
 import java.util.*;
 
 /**
@@ -184,6 +186,17 @@ public class HotSwapUIImpl extends HotSwapUI {
                 hotSwapSessions(Collections.singletonList(session));
             }
         }
+    }
+
+    @Override
+    public void compileAndReload(DebuggerSession session, VirtualFile... files) {
+        dontAskHotswapAfterThisCompilation();
+        List<Path> paths = new ArrayList<>(files.length);
+        for (VirtualFile file : files) {
+            paths.add(file.toNioPath());
+        }
+        CompilerManager.getInstance(session.getProject()).compile(paths, null);
+        // The control flow continues at HotSwapUIImplListeners.MyCompilationStatusListener.compilationFinished.
     }
 
     @Override
