@@ -36,13 +36,13 @@ import consulo.process.ProcessHandler;
 import consulo.project.Project;
 import consulo.project.ui.notification.Notification;
 import consulo.project.ui.notification.NotificationGroup;
+import consulo.project.ui.notification.NotificationService;
 import consulo.project.ui.notification.NotificationType;
-import consulo.project.ui.notification.Notifications;
 import consulo.util.collection.ArrayUtil;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
-import org.jspecify.annotations.Nullable;
 import org.jdom.Element;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,14 +90,13 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
             Sdk jdk = params.getJdk();
             if (jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_7)
                 && coverageRunner instanceof JavaCoverageRunner javaCoverageRunner && !javaCoverageRunner.isJdk7Compatible()) {
-                Notifications.Bus.notify(new Notification(
-                    NotificationGroup.balloonGroup("Coverage"),
-                    "Coverage instrumentation is not fully compatible with JDK 7",
-                    coverageRunner.getPresentableName() +
+                NotificationService.getInstance()
+                    .newWarn(NotificationGroup.balloonGroup("Coverage"))
+                    .title(LocalizeValue.localizeTODO("Coverage instrumentation is not fully compatible with JDK 7"))
+                    .content(LocalizeValue.localizeTODO(coverageRunner.getPresentableName() +
                         " coverage instrumentation can lead to java.lang.VerifyError errors with JDK 7. " +
-                        "If so, please try IDEA coverage runner.",
-                    NotificationType.WARNING
-                ));
+                        "If so, please try IDEA coverage runner."))
+                    .notify(configuration.getProject());
             }
         }
     }

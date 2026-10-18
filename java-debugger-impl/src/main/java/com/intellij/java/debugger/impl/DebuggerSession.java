@@ -544,21 +544,20 @@ public class DebuggerSession implements AbstractDebuggerSession {
                             JavaDebuggerLocalize.statusBreakpointReachedInThreadSwitch().get(),
                             NotificationType.INFORMATION,
                             (notification, event) -> {
-                                if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                                    notification.expire();
-                                    getProcess().getManagerThread().schedule(new SuspendContextCommandImpl(suspendContext) {
-                                        @Override
-                                        public void contextAction() throws Exception {
-                                            DebuggerContextImpl debuggerContext =
-                                                DebuggerContextUtil.createDebuggerContext(DebuggerSession.this, suspendContext);
+                                notification.expire();
 
-                                            DebuggerInvocationUtil.invokeLater(
-                                                getProject(),
-                                                () -> getContextManager().setState(debuggerContext, State.PAUSED, Event.PAUSE)
-                                            );
-                                        }
-                                    });
-                                }
+                                getProcess().getManagerThread().schedule(new SuspendContextCommandImpl(suspendContext) {
+                                    @Override
+                                    public void contextAction(SuspendContextImpl suspendContext) throws Exception {
+                                        DebuggerContextImpl debuggerContext =
+                                            DebuggerContextUtil.createDebuggerContext(DebuggerSession.this, suspendContext);
+
+                                        DebuggerInvocationUtil.invokeLater(
+                                            getProject(),
+                                            () -> getContextManager().setState(debuggerContext, State.PAUSED, Event.PAUSE)
+                                        );
+                                    }
+                                });
                             }
                         ).notify(getProject());
                     }
