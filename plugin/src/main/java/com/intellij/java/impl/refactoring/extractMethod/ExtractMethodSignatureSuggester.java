@@ -49,6 +49,7 @@ import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.IdeBorderFactory;
 import consulo.ui.ex.awt.JBUI;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.util.collection.HashingStrategy;
 import consulo.util.collection.Maps;
 import consulo.util.collection.Sets;
@@ -412,7 +413,7 @@ public class ExtractMethodSignatureSuggester {
       diffPanel.setRequest(request);
 
       JPanel panel = new JPanel(new BorderLayout());
-      panel.add(diffPanel.getComponent(), BorderLayout.CENTER);
+      panel.add(TargetAWT.to(diffPanel.getComponent()), BorderLayout.CENTER);
       panel.setBorder(IdeBorderFactory.createEmptyBorder(JBUI.insetsTop(5)));
       return panel;
     }
