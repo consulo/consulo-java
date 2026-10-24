@@ -40,20 +40,12 @@ public class UnifiedShortenCommandLineModeCombo implements PseudoComponent {
     }
 
     private final Project myProject;
-    private final UnifiedJrePathEditor myJrePathEditor;
-    private final UnifiedConfigurationModuleSelector myModuleSelector;
     private final MutableFlatDataModel<Item> myModel;
     private final ComboBox<Item> myComboBox;
 
     @RequiredUIAccess
-    public UnifiedShortenCommandLineModeCombo(
-        Project project,
-        UnifiedJrePathEditor jrePathEditor,
-        UnifiedConfigurationModuleSelector moduleSelector
-    ) {
+    public UnifiedShortenCommandLineModeCombo(Project project) {
         myProject = project;
-        myJrePathEditor = jrePathEditor;
-        myModuleSelector = moduleSelector;
         myModel = FlatDataModel.of(List.of());
         myComboBox = ComboBox.create(myModel);
         myComboBox.setRenderer((presentation, renderItem) -> {
@@ -72,10 +64,7 @@ public class UnifiedShortenCommandLineModeCombo implements PseudoComponent {
             presentation.append(" - " + shownMode.getDescription(), TextAttribute.GRAYED);
         });
 
-        initModel(null);
-
-        jrePathEditor.addValueListener(() -> initModel(getSelectedItem()));
-        moduleSelector.addValueListener(module -> initModel(getSelectedItem()));
+        refresh(null);
     }
 
     @Override
@@ -100,13 +89,12 @@ public class UnifiedShortenCommandLineModeCombo implements PseudoComponent {
         myComboBox.selectFirst();
     }
 
+    /**
+     * Lists the modes the JDK at {@code jdkRoot} supports, keeping the selection.
+     */
     @RequiredUIAccess
-    private void initModel(@Nullable ShortenCommandLine preselection) {
-        String jdkRoot = getJdkRoot(
-            myJrePathEditor.isAlternativeJreSelected(),
-            myJrePathEditor.getJrePathOrName(),
-            myModuleSelector.getModule()
-        );
+    public void refresh(@Nullable String jdkRoot) {
+        ShortenCommandLine preselection = getSelectedItem();
 
         List<Item> items = new ArrayList<>();
         items.add(new Item(null, ShortenCommandLine.getDefaultMethod(myProject, jdkRoot)));

@@ -2,21 +2,39 @@
 package com.intellij.java.execution.impl;
 
 import com.intellij.java.execution.ShortenCommandLine;
+import consulo.execution.configuration.fragment.FragmentStateHolder;
+import consulo.java.execution.configurations.fragment.ShortenCommandLineFragmentState;
 import consulo.project.Project;
 
 import org.jspecify.annotations.Nullable;
 
-public interface ConfigurationWithCommandLineShortener {
+/**
+ * A Java run configuration whose command line can be shortened, kept in {@link ShortenCommandLineFragmentState}.
+ */
+public interface ConfigurationWithCommandLineShortener extends FragmentStateHolder {
   /**
    * @return null if option was not selected explicitly, legacy user-local options to be used
    */
   @Nullable
-  ShortenCommandLine getShortenCommandLine();
+  default ShortenCommandLine getShortenCommandLine() {
+    String mode = getFragmentState(ShortenCommandLineFragmentState.class).getMode();
+    if (mode == null) {
+      return null;
+    }
+    for (ShortenCommandLine value : ShortenCommandLine.values()) {
+      if (value.name().equals(mode)) {
+        return value;
+      }
+    }
+    return null;
+  }
 
   /**
-   * Called from UI, when user explicitly selects method to be used to shorten the command line or from the deserialization
+   * Called from UI, when user explicitly selects method to be used to shorten the command line
    */
-  void setShortenCommandLine(ShortenCommandLine mode);
+  default void setShortenCommandLine(@Nullable ShortenCommandLine mode) {
+    getFragmentState(ShortenCommandLineFragmentState.class).setMode(mode == null ? null : mode.name());
+  }
 
   Project getProject();
 }

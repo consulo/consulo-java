@@ -39,9 +39,6 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.io.ClassPathUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import org.jdom.Element;
 
 import org.jspecify.annotations.Nullable;
 import java.io.File;
@@ -57,11 +54,6 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
   public static final boolean TESTDISCOVERY_ENABLED = Boolean.valueOf(Platform.current().jvm().getRuntimeProperty("testDiscovery.enabled"));
 
   private static final Logger LOG = Logger.getInstance(TestDiscoveryExtension.class);
-
-  @Override
-  public String getSerializationId() {
-    return "testDiscovery";
-  }
 
   @Override
   protected void attachToProcess(final RunConfigurationBase configuration, final ProcessHandler handler, @Nullable RunnerSettings runnerSettings) {
@@ -130,15 +122,6 @@ public class TestDiscoveryExtension extends RunConfigurationExtension {
     return false;
     // FIXME [VISTALL] TestDiscoveryListener is not in root classloder
     //return listener instanceof TestDiscoveryListener && (runnerSettings != null || !isApplicableFor(configuration));
-  }
-
-  @Override
-  public void readExternal(final RunConfigurationBase runConfiguration, Element element) throws InvalidDataException {
-  }
-
-  @Override
-  public void writeExternal(RunConfigurationBase runConfiguration, Element element) throws WriteExternalException {
-    throw new WriteExternalException();
   }
 
   @Override

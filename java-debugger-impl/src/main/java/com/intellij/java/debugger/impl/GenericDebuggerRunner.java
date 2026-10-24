@@ -15,7 +15,6 @@
  */
 package com.intellij.java.debugger.impl;
 
-import com.intellij.java.debugger.RunConfigurationWithRunnerSettings;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
@@ -29,7 +28,6 @@ import consulo.document.FileDocumentManager;
 import consulo.execution.DefaultExecutionResult;
 import consulo.execution.ExecutionResult;
 import consulo.execution.configuration.*;
-import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.debug.DefaultDebugExecutor;
 import consulo.execution.debug.XDebuggerManager;
 import consulo.execution.executor.Executor;
@@ -191,14 +189,5 @@ public class GenericDebuggerRunner extends JavaPatchableProgramRunner<GenericDeb
             .asyncAgent(beforeExecution)
             .project(project)
             .create(javaParameters);
-    }
-
-    @Override
-    public SettingsEditor<GenericDebuggerRunnerSettings> getSettingsEditor(Executor executor, RunConfiguration configuration) {
-        if (configuration instanceof RunConfigurationWithRunnerSettings runConfigurationWithRunnerSettings
-            && runConfigurationWithRunnerSettings.isSettingsNeeded()) {
-            return new GenericDebuggerParametersRunnerConfigurable(configuration.getProject());
-        }
-        return null;
     }
 }

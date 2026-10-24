@@ -19,12 +19,10 @@ import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.action.Location;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.configuration.RunnerSettings;
-import consulo.execution.configuration.ui.SettingsEditor;
 import consulo.execution.coverage.CoverageDataManager;
 import consulo.execution.coverage.CoverageEnabledConfiguration;
 import consulo.execution.coverage.CoverageRunner;
 import consulo.execution.coverage.CoverageRunnerData;
-import consulo.execution.coverage.localize.ExecutionCoverageLocalize;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
@@ -39,14 +37,10 @@ import consulo.project.ui.notification.NotificationGroup;
 import consulo.project.ui.notification.NotificationService;
 import consulo.project.ui.notification.NotificationType;
 import consulo.util.collection.ArrayUtil;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import org.jdom.Element;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Registers "Coverage" tab in Java run configurations
@@ -60,16 +54,6 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
         RunnerSettings runnerSettings
     ) {
         CoverageDataManager.getInstance(configuration.getProject()).attachToProcess(handler, configuration, runnerSettings);
-    }
-
-    @Override
-    public Map.@Nullable Entry<LocalizeValue, SettingsEditor> createEditor(RunConfigurationBase configuration) {
-        return Map.entry(ExecutionCoverageLocalize.coverageTabTitle(), new CoverageConfigurable(configuration));
-    }
-
-    @Override
-    public String getSerializationId() {
-        return "coverage";
     }
 
     @Override
@@ -99,25 +83,6 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
                     .notify(configuration.getProject());
             }
         }
-    }
-
-    @Override
-    public void readExternal(RunConfigurationBase runConfiguration, Element element) throws InvalidDataException {
-        if (!isApplicableFor(runConfiguration)) {
-            return;
-        }
-
-        //noinspection ConstantConditions
-        JavaCoverageEnabledConfiguration.getFrom(runConfiguration).readExternal(element);
-    }
-
-    @Override
-    public void writeExternal(RunConfigurationBase runConfiguration, Element element) throws WriteExternalException {
-        if (!isApplicableFor(runConfiguration)) {
-            return;
-        }
-        //noinspection ConstantConditions
-        JavaCoverageEnabledConfiguration.getFrom(runConfiguration).writeExternal(element);
     }
 
     @Override
@@ -162,7 +127,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
                 if (element instanceof PsiClass psiClass) {
                     int idx = ArrayUtil.find(filters, psiClass.getQualifiedName());
                     if (idx > -1) {
-                        RefactoringListeners.Accessor<PsiClass> accessor = new MyClassAccessor(project, patterns, idx, filters);
+                        RefactoringListeners.Accessor<PsiClass> accessor = new MyClassAccessor(project, coverageEnabledConfiguration, patterns, idx, filters);
                         RefactoringElementListener classListener = RefactoringListeners.getClassOrPackageListener(element, accessor);
                         if (classListener != null) {
                             listener = appendListener(listener, classListener);
@@ -177,13 +142,13 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
                             if (filters[i].endsWith("*")) {
                                 packageListener = RefactoringListeners.getListener(
                                     (PsiJavaPackage) element,
-                                    new MyPackageAccessor(project, patterns, i, filters)
+                                    new MyPackageAccessor(project, coverageEnabledConfiguration, patterns, i, filters)
                                 );
                             }
                             else {
                                 packageListener = RefactoringListeners.getClassOrPackageListener(
                                     element,
-                                    new MyClassAccessor(project, patterns, i, filters)
+                                    new MyClassAccessor(project, coverageEnabledConfiguration, patterns, i, filters)
                                 );
                             }
                             if (packageListener != null) {
@@ -247,8 +212,8 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
     private static class MyPackageAccessor extends MyAccessor implements RefactoringListeners.Accessor<PsiJavaPackage> {
 
 
-        private MyPackageAccessor(Project project, ClassFilter[] patterns, int idx, String[] filters) {
-            super(project, patterns, idx, filters);
+        private MyPackageAccessor(Project project, JavaCoverageEnabledConfiguration configuration, ClassFilter[] patterns, int idx, String[] filters) {
+            super(project, configuration, patterns, idx, filters);
         }
 
         @Override
@@ -270,8 +235,8 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
 
     private static class MyClassAccessor extends MyAccessor implements RefactoringListeners.Accessor<PsiClass> {
 
-        private MyClassAccessor(Project project, ClassFilter[] patterns, int idx, String[] filters) {
-            super(project, patterns, idx, filters);
+        private MyClassAccessor(Project project, JavaCoverageEnabledConfiguration configuration, ClassFilter[] patterns, int idx, String[] filters) {
+            super(project, configuration, patterns, idx, filters);
         }
 
         @Override
@@ -287,12 +252,14 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
 
     private static class MyAccessor {
         private final Project myProject;
+        private final JavaCoverageEnabledConfiguration myConfiguration;
         private final ClassFilter[] myPatterns;
         private final int myIdx;
         private final String[] myFilters;
 
-        private MyAccessor(Project project, ClassFilter[] patterns, int idx, String[] filters) {
+        private MyAccessor(Project project, JavaCoverageEnabledConfiguration configuration, ClassFilter[] patterns, int idx, String[] filters) {
             myProject = project;
+            myConfiguration = configuration;
             myPatterns = patterns;
             myIdx = idx;
             myFilters = filters;
@@ -300,6 +267,7 @@ public class CoverageJavaRunConfigurationExtension extends RunConfigurationExten
 
         public void setName(String qName) {
             myPatterns[myIdx] = new ClassFilter(qName);
+            myConfiguration.setCoveragePatterns(myPatterns);
         }
 
         public String getName() {

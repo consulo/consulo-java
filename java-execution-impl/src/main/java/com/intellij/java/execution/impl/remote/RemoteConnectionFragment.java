@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2026 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
 package com.intellij.java.execution.impl.remote;
 
 import com.intellij.java.execution.configurations.RemoteConnection;
-import com.intellij.java.execution.impl.ui.UnifiedConfigurationModuleSelector;
-import consulo.configurable.ConfigurationException;
-import consulo.execution.configuration.ui.SettingsEditor;
+import consulo.disposer.Disposable;
+import consulo.execution.configuration.fragment.RunConfigurationFragment;
+import consulo.execution.configuration.fragment.RunConfigurationFragmentEditor;
+import consulo.execution.configuration.fragment.RunConfigurationFragmentLayout;
 import consulo.execution.localize.ExecutionLocalize;
 import consulo.java.execution.localize.JavaExecutionLocalize;
 import consulo.localize.LocalizeValue;
@@ -26,18 +27,22 @@ import consulo.platform.Platform;
 import consulo.platform.base.icon.PlatformIconGroup;
 import consulo.project.Project;
 import consulo.ui.ComboBox;
-import consulo.ui.Component;
 import consulo.ui.HasValidator.ValidationInfo;
-import consulo.ui.Label;
 import consulo.ui.TextBox;
 import consulo.ui.TextBoxWithExtensions;
 import consulo.ui.UIAccess;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.util.FormBuilder;
 import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
 
-public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
+/**
+ * How a {@link RemoteConfiguration} connects to the JVM, with the JVM options to start it with; the shared memory transport
+ * exists on Windows only.
+ *
+ * @author VISTALL
+ * @since 2026-10-24
+ */
+class RemoteConnectionFragment implements RunConfigurationFragment<RemoteConfiguration> {
     private enum Mode {
         ATTACH(JavaExecutionLocalize.remoteConfigurationModeAttach()),
         LISTEN(JavaExecutionLocalize.remoteConfigurationModeListen());
@@ -103,38 +108,25 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
     private static final int MIN_PORT_VALUE = 0;
     private static final int MAX_PORT_VALUE = 0xFFFF;
 
-    private final Project myProject;
-
-    private @Nullable RemoteForm myForm;
-
-    public RemoteConfigurable(Project project) {
-        myProject = project;
+    @Override
+    public String getId() {
+        return "remoteConnection";
     }
 
     @Override
-    @RequiredUIAccess
-    protected Component createUIComponent() {
-        RemoteForm form = new RemoteForm();
-        myForm = form;
-        return form.myComponent;
+    public LocalizeValue getName() {
+        return JavaExecutionLocalize.remoteConfigurationFragmentConnection();
     }
 
     @Override
-    @RequiredUIAccess
-    protected void resetEditorFrom(RemoteConfiguration configuration) {
-        RemoteForm form = myForm;
-        if (form != null) {
-            form.reset(configuration);
-        }
+    public boolean isRemovable() {
+        return false;
     }
 
-    @Override
     @RequiredUIAccess
-    protected void applyEditorTo(RemoteConfiguration configuration) throws ConfigurationException {
-        RemoteForm form = myForm;
-        if (form != null) {
-            form.apply(configuration);
-        }
+    @Override
+    public RunConfigurationFragmentEditor<RemoteConfiguration> createEditor(Project project, Disposable parent) {
+        return new Editor();
     }
 
     private static @Nullable ValidationInfo validatePort(@Nullable String port) {
@@ -153,24 +145,18 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
         }
     }
 
-    private class RemoteForm {
+    private static class Editor implements RunConfigurationFragmentEditor<RemoteConfiguration> {
+        private final boolean myWindows = Platform.current().os().isWindows();
         private final ComboBox<Mode> myModeCombo;
         private final ComboBox<Transport> myTransportCombo;
-        private final Label myHostLabel;
         private final TextBox myHostName;
-        private final Label myPortLabel;
         private final TextBox myPort;
-        private final Label myAddressLabel;
         private final TextBox myAddress;
         private final ComboBox<JDKVersionItem> myJdkVersionCombo;
         private final TextBoxWithExtensions myArgsBox;
-        private final UnifiedConfigurationModuleSelector myModuleSelector;
-        private final Component myComponent;
 
         @RequiredUIAccess
-        private RemoteForm() {
-            boolean windows = Platform.current().os().isWindows();
-
+        private Editor() {
             myModeCombo = ComboBox.create(Mode.values());
             myModeCombo.setTextRenderer(mode -> mode == null ? LocalizeValue.empty() : mode.myText);
             myModeCombo.setValue(Mode.ATTACH, false);
@@ -179,14 +165,9 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
             myTransportCombo.setTextRenderer(transport -> transport == null ? LocalizeValue.empty() : transport.myText);
             myTransportCombo.setValue(Transport.SOCKET, false);
 
-            myHostLabel = Label.create(ExecutionLocalize.remoteConfigurationHostLabel());
             myHostName = TextBox.create();
-
-            myPortLabel = Label.create(ExecutionLocalize.remoteConfigurationPortLabel());
             myPort = TextBox.create(Integer.toString(MAX_PORT_VALUE));
-            myPort.addValidator(RemoteConfigurable::validatePort);
-
-            myAddressLabel = Label.create(ExecutionLocalize.remoteConfigurationSharedMemoryAddressLabel());
+            myPort.addValidator(RemoteConnectionFragment::validatePort);
             myAddress = TextBox.create();
 
             myJdkVersionCombo = ComboBox.create(JDKVersionItem.values());
@@ -202,24 +183,9 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
                 event -> UIAccess.current().getClipboard().setText(StringUtil.notNullize(myArgsBox.getValue()))
             ));
 
-            myModuleSelector = new UnifiedConfigurationModuleSelector(myProject, JavaExecutionLocalize.runConfigurationModuleWholeProject());
-
-            FormBuilder builder = FormBuilder.create();
-            builder.addLabeled(ExecutionLocalize.remoteConfigurationDebuggerModeLabel(), myModeCombo);
-            if (windows) {
-                builder.addLabeled(ExecutionLocalize.remoteConfigurationTransportLabel(), myTransportCombo);
-                builder.addLabeled(myAddressLabel, myAddress);
-            }
-            builder.addLabeled(myHostLabel, myHostName);
-            builder.addLabeled(myPortLabel, myPort);
-            builder.addLabeled(JavaExecutionLocalize.remoteConfigurationJvmArgumentsFormatLabel(), myJdkVersionCombo);
-            builder.addLabeled(JavaExecutionLocalize.remoteConfigurationCommandLineArgumentsLabel(), myArgsBox);
-            builder.addLabeled(JavaExecutionLocalize.remoteConfigurationModuleLabel(), myModuleSelector.getComponent());
-            myComponent = builder.build();
-
             myModeCombo.addValueListener(event -> updateArgsText());
             myTransportCombo.addValueListener(event -> {
-                updateTransportVisibility();
+                updateTransportState();
                 updateArgsText();
             });
             myHostName.addValueListener(event -> updateArgsText());
@@ -227,25 +193,34 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
             myAddress.addValueListener(event -> updateArgsText());
             myJdkVersionCombo.addValueListener(event -> updateArgsText());
 
-            updateTransportVisibility();
+            updateTransportState();
             updateArgsText();
         }
 
+        @RequiredUIAccess
+        @Override
+        public void addRows(RunConfigurationFragmentLayout layout) {
+            layout.addLabeled(ExecutionLocalize.remoteConfigurationDebuggerModeLabel(), myModeCombo);
+            if (myWindows) {
+                layout.addLabeled(ExecutionLocalize.remoteConfigurationTransportLabel(), myTransportCombo);
+                layout.addLabeled(ExecutionLocalize.remoteConfigurationSharedMemoryAddressLabel(), myAddress);
+            }
+            layout.addLabeled(ExecutionLocalize.remoteConfigurationHostLabel(), myHostName);
+            layout.addLabeled(ExecutionLocalize.remoteConfigurationPortLabel(), myPort);
+            layout.addLabeled(JavaExecutionLocalize.remoteConfigurationJvmArgumentsFormatLabel(), myJdkVersionCombo);
+            layout.addLabeled(JavaExecutionLocalize.remoteConfigurationCommandLineArgumentsLabel(), myArgsBox);
+        }
+
         private boolean isSocket() {
-            return myTransportCombo.getValue() != Transport.SHMEM;
+            return !myWindows || myTransportCombo.getValue() != Transport.SHMEM;
         }
 
         @RequiredUIAccess
-        private void updateTransportVisibility() {
+        private void updateTransportState() {
             boolean socket = isSocket();
-
-            myHostLabel.setVisible(socket);
-            myHostName.setVisible(socket);
-            myPortLabel.setVisible(socket);
-            myPort.setVisible(socket);
-
-            myAddressLabel.setVisible(!socket);
-            myAddress.setVisible(!socket);
+            myHostName.setEnabled(socket);
+            myPort.setEnabled(socket);
+            myAddress.setEnabled(!socket);
         }
 
         @RequiredUIAccess
@@ -264,39 +239,28 @@ public class RemoteConfigurable extends SettingsEditor<RemoteConfiguration> {
         }
 
         @RequiredUIAccess
-        private void reset(RemoteConfiguration configuration) {
-            boolean windows = Platform.current().os().isWindows();
+        @Override
+        public void reset(RemoteConfiguration target) {
+            RemoteConfigurationOptions options = target.getOptions();
+            myModeCombo.setValue(options.isServerMode() ? Mode.LISTEN : Mode.ATTACH, false);
+            myTransportCombo.setValue(options.isUseSocketTransport() ? Transport.SOCKET : Transport.SHMEM, false);
+            myAddress.setValue(StringUtil.notNullize(options.getShmemAddress()), false);
+            myHostName.setValue(StringUtil.notNullize(options.getHost()), false);
+            myPort.setValue(StringUtil.notNullize(options.getPort()), false);
 
-            myModeCombo.setValue(configuration.SERVER_MODE ? Mode.LISTEN : Mode.ATTACH, false);
-
-            if (windows) {
-                myTransportCombo.setValue(configuration.USE_SOCKET_TRANSPORT ? Transport.SOCKET : Transport.SHMEM, false);
-                if (!configuration.USE_SOCKET_TRANSPORT) {
-                    myAddress.setValue(configuration.SHMEM_ADDRESS, false);
-                }
-            }
-
-            if (!windows || configuration.USE_SOCKET_TRANSPORT) {
-                configuration.USE_SOCKET_TRANSPORT = true;
-
-                myHostName.setValue(configuration.HOST, false);
-                myPort.setValue(configuration.PORT, false);
-            }
-
-            myModuleSelector.reset(configuration);
-
-            updateTransportVisibility();
+            updateTransportState();
             updateArgsText();
         }
 
         @RequiredUIAccess
-        private void apply(RemoteConfiguration configuration) {
-            configuration.HOST = StringUtil.nullize(StringUtil.notNullize(myHostName.getValue()).trim());
-            configuration.PORT = StringUtil.nullize(StringUtil.notNullize(myPort.getValue()).trim());
-            configuration.SHMEM_ADDRESS = StringUtil.nullize(StringUtil.notNullize(myAddress.getValue()).trim());
-            configuration.USE_SOCKET_TRANSPORT = isSocket();
-            configuration.SERVER_MODE = myModeCombo.getValue() == Mode.LISTEN;
-            myModuleSelector.applyTo(configuration);
+        @Override
+        public void apply(RemoteConfiguration target) {
+            RemoteConfigurationOptions options = target.getOptions();
+            options.setHost(StringUtil.notNullize(myHostName.getValue()).trim());
+            options.setPort(StringUtil.notNullize(myPort.getValue()).trim());
+            options.setShmemAddress(StringUtil.notNullize(myAddress.getValue()).trim());
+            options.setUseSocketTransport(isSocket());
+            options.setServerMode(myModeCombo.getValue() == Mode.LISTEN);
         }
     }
 }

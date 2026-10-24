@@ -28,18 +28,20 @@ import consulo.execution.ProgramRunnerUtil;
 import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.RuntimeConfigurationWarning;
 import consulo.execution.configuration.*;
-import consulo.execution.configuration.log.ui.LogConfigurationPanel;
-import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.execution.configuration.ui.SettingsEditorGroup;
+import consulo.execution.configuration.fragment.EnvironmentFragmentState;
+import consulo.execution.configuration.fragment.ProgramParametersFragmentState;
+import consulo.execution.configuration.fragment.RunConfigurationFragment;
+import consulo.execution.configuration.fragment.WorkingDirectoryFragmentState;
 import consulo.execution.executor.Executor;
 import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.runner.ExecutionEnvironment;
-import consulo.execution.ui.awt.EnvironmentVariablesComponent;
 import consulo.execution.ui.console.ArgumentFileFilter;
 import consulo.execution.ui.console.TextConsoleBuilderFactory;
 import consulo.execution.util.ProgramParametersUtil;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.java.execution.configurations.OwnJavaParameters;
+import consulo.java.execution.configurations.fragment.JreFragmentState;
+import consulo.java.execution.configurations.fragment.VmParametersFragmentState;
 import consulo.java.execution.projectRoots.OwnJdkUtil;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.editor.refactoring.event.RefactoringListenerProvider;
@@ -51,31 +53,15 @@ import consulo.process.cmd.GeneralCommandLine;
 import consulo.project.DumbService;
 import consulo.project.Project;
 import consulo.util.lang.BitUtil;
-import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.virtualFileSystem.util.PathsList;
 import org.jspecify.annotations.Nullable;
-import org.jdom.Element;
 
 import java.util.Collection;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters, ConfigurationWithCommandLineShortener,
     SingleClassConfiguration, RefactoringListenerProvider, GenericDebugRunnerConfiguration {
-  public String MAIN_CLASS_NAME;
-  public String VM_PARAMETERS;
-  public String PROGRAM_PARAMETERS;
-  public String WORKING_DIRECTORY;
-  public boolean ALTERNATIVE_JRE_PATH_ENABLED;
-  public String ALTERNATIVE_JRE_PATH;
-  public boolean ENABLE_SWING_INSPECTOR;
-  public boolean INCLUDE_PROVIDED_SCOPE = false;
-
-  private ShortenCommandLine myShortenCommandLine = null;
-
-  private final Map<String, String> myEnvs = new LinkedHashMap<>();
-  public boolean PASS_PARENT_ENVS = true;
-
   public ApplicationConfiguration(String name, Project project, ApplicationConfigurationType applicationConfigurationType) {
     this(name, project, applicationConfigurationType.getConfigurationFactories()[0]);
   }
@@ -93,20 +79,46 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   }
 
   @Override
+  protected Class<ApplicationConfigurationOptions> getOptionsClass() {
+    return ApplicationConfigurationOptions.class;
+  }
+
+  @Override
+  public ApplicationConfigurationOptions getOptions() {
+    return (ApplicationConfigurationOptions) super.getOptions();
+  }
+
+  @Override
+  protected void convertLegacyState(LegacyRunConfigurationConverter converter) {
+    super.convertLegacyState(converter);
+
+    ApplicationConfigurationLegacyState old = converter.readXml(ApplicationConfigurationLegacyState.class);
+
+    ApplicationConfigurationOptions options = new ApplicationConfigurationOptions();
+    options.setMainClass(old.MAIN_CLASS_NAME);
+    options.setIncludeProvidedScope(old.INCLUDE_PROVIDED_SCOPE);
+    converter.setOptions(options);
+
+    converter.addFragment(new ProgramParametersFragmentState(old.PROGRAM_PARAMETERS));
+    converter.addFragment(new WorkingDirectoryFragmentState(old.WORKING_DIRECTORY));
+    converter.addFragment(new EnvironmentFragmentState(converter.readEnvs(), old.PASS_PARENT_ENVS));
+    converter.addFragment(new VmParametersFragmentState(old.VM_PARAMETERS));
+    if (old.ALTERNATIVE_JRE_PATH_ENABLED) {
+      converter.addFragment(new JreFragmentState(old.ALTERNATIVE_JRE_PATH));
+    }
+  }
+
+  @Override
+  public List<RunConfigurationFragment<?>> createFragments() {
+    return List.of(new ApplicationMainClassFragment(), new ApplicationIncludeProvidedScopeFragment());
+  }
+
+  @Override
   public RunProfileState getState(Executor executor, ExecutionEnvironment env) throws ExecutionException {
     JavaCommandLineState state = new JavaApplicationCommandLineState<>(this, env);
     JavaRunConfigurationModule module = getConfigurationModule();
     state.setConsoleBuilder(TextConsoleBuilderFactory.getInstance().createBuilder(getProject(), module.getSearchScope()));
     return state;
-  }
-
-  @Override
-  public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    SettingsEditorGroup<ApplicationConfiguration> group = new SettingsEditorGroup<>();
-    group.addEditor(ExecutionLocalize.runConfigurationConfigurationTabTitle(), new ApplicationConfigurable(getProject()));
-    JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
-    group.addEditor(ExecutionLocalize.logsTabTitle(), new LogConfigurationPanel<>());
-    return group;
   }
 
   @Override
@@ -119,12 +131,12 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   @Override
   @Nullable
   public PsiClass getMainClass() {
-    return DumbService.getInstance(getProject()).computeWithAlternativeResolveEnabled(() -> getConfigurationModule().findClass(MAIN_CLASS_NAME));
+    return DumbService.getInstance(getProject()).computeWithAlternativeResolveEnabled(() -> getConfigurationModule().findClass(getMainClassName()));
   }
 
   @Nullable
   public String getMainClassName() {
-    return MAIN_CLASS_NAME;
+    return getOptions().getMainClass();
   }
 
   @Override
@@ -151,89 +163,41 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
   @Override
   @Nullable
   public String suggestedName() {
-    if (MAIN_CLASS_NAME == null) {
+    String mainClassName = getMainClassName();
+    if (mainClassName == null) {
       return null;
     }
-    return JavaExecutionUtil.getPresentableClassName(MAIN_CLASS_NAME);
+    return JavaExecutionUtil.getPresentableClassName(mainClassName);
   }
 
   @Override
   public String getActionName() {
-    if (MAIN_CLASS_NAME == null || MAIN_CLASS_NAME.length() == 0) {
+    String mainClassName = getMainClassName();
+    if (mainClassName == null) {
       return null;
     }
-    return ProgramRunnerUtil.shortenName(JavaExecutionUtil.getShortClassName(MAIN_CLASS_NAME), 6) + ".main()";
+    return ProgramRunnerUtil.shortenName(JavaExecutionUtil.getShortClassName(mainClassName), 6) + ".main()";
   }
 
   @Override
-  public void setMainClassName(String qualifiedName) {
-    MAIN_CLASS_NAME = qualifiedName;
+  public void setMainClassName(@Nullable String qualifiedName) {
+    getOptions().setMainClass(qualifiedName);
   }
 
   @Override
   public void checkConfiguration() throws RuntimeConfigurationException {
     JavaParametersUtil.checkAlternativeJRE(this);
     JavaRunConfigurationModule configurationModule = getConfigurationModule();
+    String mainClassName = getMainClassName();
     PsiClass psiClass = configurationModule.checkModuleAndClassName(
-      MAIN_CLASS_NAME,
+      mainClassName,
       ExecutionLocalize.noMainClassSpecifiedErrorText().get()
     );
     if (!PsiMethodUtil.hasMainMethod(psiClass)) {
-      throw new RuntimeConfigurationWarning(ExecutionLocalize.mainMethodNotFoundInClassErrorMessage(MAIN_CLASS_NAME));
+      throw new RuntimeConfigurationWarning(ExecutionLocalize.mainMethodNotFoundInClassErrorMessage(mainClassName));
     }
     ProgramParametersUtil.checkWorkingDirectoryExist(this, getProject(), configurationModule.getModule());
     JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
-  }
-
-  @Override
-  public void setVMParameters(String value) {
-    VM_PARAMETERS = value;
-  }
-
-  @Override
-  public String getVMParameters() {
-    return VM_PARAMETERS;
-  }
-
-  @Override
-  public void setProgramParameters(String value) {
-    PROGRAM_PARAMETERS = value;
-  }
-
-  @Override
-  public String getProgramParameters() {
-    return PROGRAM_PARAMETERS;
-  }
-
-  @Override
-  public void setWorkingDirectory(String value) {
-    WORKING_DIRECTORY = ExternalizablePath.urlValue(value);
-  }
-
-  @Override
-  public String getWorkingDirectory() {
-    return ExternalizablePath.localPathValue(WORKING_DIRECTORY);
-  }
-
-  @Override
-  public void setPassParentEnvs(boolean passParentEnvs) {
-    PASS_PARENT_ENVS = passParentEnvs;
-  }
-
-  @Override
-  public Map<String, String> getEnvs() {
-    return myEnvs;
-  }
-
-  @Override
-  public void setEnvs(Map<String, String> envs) {
-    myEnvs.clear();
-    myEnvs.putAll(envs);
-  }
-
-  @Override
-  public boolean isPassParentEnvs() {
-    return PASS_PARENT_ENVS;
   }
 
   @Override
@@ -252,73 +216,18 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
     return null;
   }
 
-  @Override
-  public boolean isAlternativeJrePathEnabled() {
-    return ALTERNATIVE_JRE_PATH_ENABLED;
-  }
-
-  @Override
-  public void setAlternativeJrePathEnabled(boolean enabled) {
-    ALTERNATIVE_JRE_PATH_ENABLED = enabled;
-  }
-
-  @Nullable
-  @Override
-  public String getAlternativeJrePath() {
-    return ALTERNATIVE_JRE_PATH;
-  }
-
-  @Override
-  public void setAlternativeJrePath(String path) {
-    ALTERNATIVE_JRE_PATH = path;
-  }
-
   public boolean isProvidedScopeIncluded() {
-    return INCLUDE_PROVIDED_SCOPE;
+    return getOptions().isIncludeProvidedScope();
   }
 
   public void setIncludeProvidedScope(boolean value) {
-    INCLUDE_PROVIDED_SCOPE = value;
+    getOptions().setIncludeProvidedScope(value);
   }
 
   @Override
   @RequiredReadAction
   public Collection<Module> getValidModules() {
-    return JavaRunConfigurationModule.getModulesForClass(getProject(), MAIN_CLASS_NAME);
-  }
-
-  @Override
-  public void readExternal(Element element) {
-    super.readExternal(element);
-    JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
-    DefaultJDOMExternalizer.readExternal(this, element);
-    EnvironmentVariablesComponent.readExternal(element, getEnvs());
-    setShortenCommandLine(ShortenCommandLine.readShortenClasspathMethod(element));
-  }
-
-  @Override
-  public void writeExternal(Element element) {
-    super.writeExternal(element);
-
-    JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
-    DefaultJDOMExternalizer.writeExternal(this, element);
-
-    Map<String, String> envs = getEnvs();
-
-    EnvironmentVariablesComponent.writeExternal(element, envs);
-
-    ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);
-  }
-
-  @Nullable
-  @Override
-  public ShortenCommandLine getShortenCommandLine() {
-    return myShortenCommandLine;
-  }
-
-  @Override
-  public void setShortenCommandLine(ShortenCommandLine mode) {
-    myShortenCommandLine = mode;
+    return JavaRunConfigurationModule.getModulesForClass(getProject(), getMainClassName());
   }
 
   public static class JavaApplicationCommandLineState<T extends ApplicationConfiguration> extends BaseJavaApplicationCommandLineState<T> {
@@ -334,7 +243,7 @@ public class ApplicationConfiguration extends ModuleBasedConfiguration<JavaRunCo
       String mainClass = ReadAction.compute(myConfiguration::getRunClass);
 
       JavaRunConfigurationModule module = myConfiguration.getConfigurationModule();
-      String alternativeJreHome = myConfiguration.ALTERNATIVE_JRE_PATH_ENABLED ? myConfiguration.ALTERNATIVE_JRE_PATH : null;
+      String alternativeJreHome = myConfiguration.getAlternativeJrePath();
       if (module.getModule() != null) {
         DumbService.getInstance(module.getProject()).runWithAlternativeResolveEnabled(() -> {
           if (mainClass == null) {

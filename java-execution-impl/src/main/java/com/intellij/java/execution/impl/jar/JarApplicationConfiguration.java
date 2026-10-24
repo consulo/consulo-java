@@ -7,87 +7,82 @@ import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.RuntimeConfigurationWarning;
-import consulo.execution.configuration.*;
-import consulo.execution.configuration.log.ui.LogConfigurationPanel;
-import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.execution.configuration.ui.SettingsEditorGroup;
+import consulo.execution.configuration.ConfigurationFactory;
+import consulo.execution.configuration.LegacyRunConfigurationConverter;
+import consulo.execution.configuration.ModuleBasedConfiguration;
+import consulo.execution.configuration.RunProfileState;
+import consulo.execution.configuration.fragment.EnvironmentFragmentState;
+import consulo.execution.configuration.fragment.ProgramParametersFragmentState;
+import consulo.execution.configuration.fragment.RunConfigurationFragment;
+import consulo.execution.configuration.fragment.WorkingDirectoryFragmentState;
 import consulo.execution.executor.Executor;
-import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.runner.ExecutionEnvironment;
-import consulo.execution.ui.awt.EnvironmentVariablesComponent;
 import consulo.execution.util.ProgramParametersUtil;
+import consulo.java.execution.configurations.fragment.JreFragmentState;
+import consulo.java.execution.configurations.fragment.VmParametersFragmentState;
 import consulo.module.Module;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
-import consulo.util.xml.serializer.*;
+import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
-import org.jdom.Element;
 
 import java.io.File;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author nik
  */
-public class JarApplicationConfiguration extends LocatableConfigurationBase implements CommonJavaRunConfigurationParameters, SearchScopeProvidingRunProfile {
-  private static final SkipDefaultValuesSerializationFilters SERIALIZATION_FILTERS = new SkipDefaultValuesSerializationFilters();
-  private JarApplicationConfigurationBean myBean = new JarApplicationConfigurationBean();
-  private Map<String, String> myEnvs = new LinkedHashMap<>();
-  private JavaRunConfigurationModule myConfigurationModule;
-
+public class JarApplicationConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters {
   public JarApplicationConfiguration(Project project, ConfigurationFactory factory, String name) {
-    super(project, factory, name);
-    myConfigurationModule = new JavaRunConfigurationModule(project, true);
+    super(name, new JavaRunConfigurationModule(project, true), factory);
   }
 
   @Override
-  public SettingsEditor<? extends RunConfiguration> getConfigurationEditor() {
-    SettingsEditorGroup<JarApplicationConfiguration> group = new SettingsEditorGroup<>();
-    group.addEditor(ExecutionLocalize.runConfigurationConfigurationTabTitle().get(), new JarApplicationConfigurable(getProject()));
-    JavaRunConfigurationExtensionManager.getInstance().appendEditors(this, group);
-    group.addEditor(ExecutionLocalize.logsTabTitle().get(), new LogConfigurationPanel<>());
-    return group;
+  protected Class<JarApplicationConfigurationOptions> getOptionsClass() {
+    return JarApplicationConfigurationOptions.class;
   }
 
   @Override
-  public void readExternal(Element element) throws InvalidDataException {
-    super.readExternal(element);
-    JavaRunConfigurationExtensionManager.getInstance().readExternal(this, element);
-    XmlSerializer.deserializeInto(myBean, element);
-    EnvironmentVariablesComponent.readExternal(element, getEnvs());
-    myConfigurationModule.readExternal(element);
+  public JarApplicationConfigurationOptions getOptions() {
+    return (JarApplicationConfigurationOptions) super.getOptions();
   }
 
   @Override
-  public RunConfiguration clone() {
-    JarApplicationConfiguration clone = (JarApplicationConfiguration) super.clone();
-    clone.myEnvs = new LinkedHashMap<>(myEnvs);
-    clone.myConfigurationModule = new JavaRunConfigurationModule(getProject(), true);
-    clone.myConfigurationModule.setModule(myConfigurationModule.getModule());
-    clone.myBean = XmlSerializerUtil.createCopy(myBean);
-    return clone;
-  }
+  protected void convertLegacyState(LegacyRunConfigurationConverter converter) {
+    super.convertLegacyState(converter);
 
-  public void setModule(Module module) {
-    myConfigurationModule.setModule(module);
-  }
+    JarApplicationConfigurationLegacyState old = converter.readXml(JarApplicationConfigurationLegacyState.class);
 
-  public Module getModule() {
-    return myConfigurationModule.getModule();
-  }
+    JarApplicationConfigurationOptions options = new JarApplicationConfigurationOptions();
+    options.setJarPath(old.JAR_PATH);
+    converter.setOptions(options);
 
-  @Override
-  public void writeExternal(Element element) throws WriteExternalException {
-    super.writeExternal(element);
-    JavaRunConfigurationExtensionManager.getInstance().writeExternal(this, element);
-    XmlSerializer.serializeInto(myBean, element, SERIALIZATION_FILTERS);
-    EnvironmentVariablesComponent.writeExternal(element, getEnvs());
-    if (myConfigurationModule.getModule() != null) {
-      myConfigurationModule.writeExternal(element);
+    converter.addFragment(new ProgramParametersFragmentState(old.PROGRAM_PARAMETERS));
+    converter.addFragment(new WorkingDirectoryFragmentState(old.WORKING_DIRECTORY));
+    converter.addFragment(new EnvironmentFragmentState(converter.readEnvs(), old.PASS_PARENT_ENVS));
+    converter.addFragment(new VmParametersFragmentState(old.VM_PARAMETERS));
+    if (old.ALTERNATIVE_JRE_PATH_ENABLED) {
+      converter.addFragment(new JreFragmentState(old.ALTERNATIVE_JRE_PATH));
     }
+  }
+
+  @Override
+  public List<RunConfigurationFragment<?>> createFragments() {
+    return List.of(new JarPathFragment());
+  }
+
+  @Override
+  @RequiredReadAction
+  public Collection<Module> getValidModules() {
+    return getAllModules();
+  }
+
+  public @Nullable Module getModule() {
+    return getConfigurationModule().getModule();
   }
 
   @Override
@@ -101,11 +96,6 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
     JavaRunConfigurationExtensionManager.checkConfigurationIsValid(this);
   }
 
-  public Module[] getModules() {
-    Module module = myConfigurationModule.getModule();
-    return module != null ? new Module[]{module} : Module.EMPTY_ARRAY;
-  }
-
   @Nullable
   @Override
   public RunProfileState getState(Executor executor, ExecutionEnvironment environment) throws ExecutionException {
@@ -113,42 +103,11 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
   }
 
   public String getJarPath() {
-    return myBean.JAR_PATH;
+    return StringUtil.notNullize(getOptions().getJarPath());
   }
 
-  public void setJarPath(String jarPath) {
-    myBean.JAR_PATH = jarPath;
-  }
-
-  @Override
-  public void setVMParameters(@Nullable String value) {
-    myBean.VM_PARAMETERS = value;
-  }
-
-  @Override
-  public String getVMParameters() {
-    return myBean.VM_PARAMETERS;
-  }
-
-  @Override
-  public boolean isAlternativeJrePathEnabled() {
-    return myBean.ALTERNATIVE_JRE_PATH_ENABLED;
-  }
-
-  @Override
-  public void setAlternativeJrePathEnabled(boolean enabled) {
-    myBean.ALTERNATIVE_JRE_PATH_ENABLED = enabled;
-  }
-
-  @Nullable
-  @Override
-  public String getAlternativeJrePath() {
-    return myBean.ALTERNATIVE_JRE_PATH;
-  }
-
-  @Override
-  public void setAlternativeJrePath(String path) {
-    myBean.ALTERNATIVE_JRE_PATH = path;
+  public void setJarPath(@Nullable String jarPath) {
+    getOptions().setJarPath(jarPath);
   }
 
   @Nullable
@@ -161,58 +120,5 @@ public class JarApplicationConfiguration extends LocatableConfigurationBase impl
   @Override
   public String getPackage() {
     return null;
-  }
-
-  @Override
-  public void setProgramParameters(@Nullable String value) {
-    myBean.PROGRAM_PARAMETERS = value;
-  }
-
-  @Nullable
-  @Override
-  public String getProgramParameters() {
-    return myBean.PROGRAM_PARAMETERS;
-  }
-
-  @Override
-  public void setWorkingDirectory(@Nullable String value) {
-    myBean.WORKING_DIRECTORY = value;
-  }
-
-  @Nullable
-  @Override
-  public String getWorkingDirectory() {
-    return myBean.WORKING_DIRECTORY;
-  }
-
-  @Override
-  public void setEnvs(Map<String, String> envs) {
-    myEnvs.clear();
-    myEnvs.putAll(envs);
-  }
-
-  @Override
-  public Map<String, String> getEnvs() {
-    return myEnvs;
-  }
-
-  @Override
-  public void setPassParentEnvs(boolean passParentEnvs) {
-    myBean.PASS_PARENT_ENVS = passParentEnvs;
-  }
-
-  @Override
-  public boolean isPassParentEnvs() {
-    return myBean.PASS_PARENT_ENVS;
-  }
-
-  private static class JarApplicationConfigurationBean {
-    public String JAR_PATH = "";
-    public String VM_PARAMETERS = "";
-    public String PROGRAM_PARAMETERS = "";
-    public String WORKING_DIRECTORY = "";
-    public boolean ALTERNATIVE_JRE_PATH_ENABLED;
-    public String ALTERNATIVE_JRE_PATH = "";
-    public boolean PASS_PARENT_ENVS = true;
   }
 }

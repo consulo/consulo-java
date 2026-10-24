@@ -20,6 +20,9 @@ module consulo.java.execution.api {
 	exports com.intellij.java.execution.unscramble;
 	exports consulo.java.execution;
 	exports consulo.java.execution.configurations;
+	exports consulo.java.execution.configurations.fragment;
 	exports consulo.java.execution.projectRoots;
 	exports consulo.java.execution.localize;
+
+	opens consulo.java.execution.configurations.fragment to consulo.util.xml.serializer, consulo.execution.api;
 }

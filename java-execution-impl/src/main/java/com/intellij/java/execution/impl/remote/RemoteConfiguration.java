@@ -13,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * @author Jeka
- */
 package com.intellij.java.execution.impl.remote;
 
 import com.intellij.java.debugger.impl.GenericDebuggerRunnerSettings;
@@ -26,80 +22,79 @@ import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.java.execution.configurations.RemoteConnection;
 import consulo.compiler.execution.CompileStepBeforeRun;
 import consulo.execution.configuration.*;
-import consulo.execution.configuration.log.ui.LogConfigurationPanel;
-import consulo.execution.configuration.ui.SettingsEditor;
-import consulo.execution.configuration.ui.SettingsEditorGroup;
+import consulo.execution.configuration.fragment.RunConfigurationFragment;
 import consulo.execution.executor.Executor;
-import consulo.execution.localize.ExecutionLocalize;
 import consulo.execution.runner.ExecutionEnvironment;
 import consulo.java.debugger.impl.GenericDebugRunnerConfiguration;
 import consulo.module.Module;
+import consulo.platform.Platform;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
-import consulo.util.xml.serializer.DefaultJDOMExternalizer;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import org.jdom.Element;
 
 import java.util.Collection;
+import java.util.List;
 
+/*
+ * @author Jeka
+ */
 public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements
 		RunConfigurationWithSuppressedDefaultRunAction, CompileStepBeforeRun.Suppressor, GenericDebugRunnerConfiguration, RemoteRunProfile
 {
-
-	@Override
-	public void writeExternal(final Element element) throws WriteExternalException
-	{
-		super.writeExternal(element);
-		final Module module = getConfigurationModule().getModule();
-		if (module != null)
-		{ // default value
-			writeModule(element);
-		}
-		DefaultJDOMExternalizer.writeExternal(this, element);
-	}
-
-	@Override
-	public void readExternal(final Element element) throws InvalidDataException
-	{
-		super.readExternal(element);
-		readModule(element);
-		DefaultJDOMExternalizer.readExternal(this, element);
-	}
-
-	public boolean USE_SOCKET_TRANSPORT;
-	public boolean SERVER_MODE;
-	public String SHMEM_ADDRESS;
-	public String HOST;
-	public String PORT;
-
 	public RemoteConfiguration(final Project project, ConfigurationFactory configurationFactory)
 	{
 		super(new JavaRunConfigurationModule(project, true), configurationFactory);
 	}
 
+	@Override
+	protected Class<RemoteConfigurationOptions> getOptionsClass()
+	{
+		return RemoteConfigurationOptions.class;
+	}
+
+	@Override
+	public RemoteConfigurationOptions getOptions()
+	{
+		return (RemoteConfigurationOptions) super.getOptions();
+	}
+
+	@Override
+	protected void convertLegacyState(LegacyRunConfigurationConverter converter)
+	{
+		super.convertLegacyState(converter);
+
+		RemoteConfigurationLegacyState old = converter.readXml(RemoteConfigurationLegacyState.class);
+
+		RemoteConfigurationOptions options = new RemoteConfigurationOptions();
+		options.setUseSocketTransport(old.USE_SOCKET_TRANSPORT || !Platform.current().os().isWindows());
+		options.setServerMode(old.SERVER_MODE);
+		options.setShmemAddress(old.SHMEM_ADDRESS);
+		options.setHost(old.HOST);
+		options.setPort(old.PORT);
+		converter.setOptions(options);
+	}
+
+	@Override
+	public List<RunConfigurationFragment<?>> createFragments()
+	{
+		return List.of(new RemoteConnectionFragment());
+	}
+
 	public RemoteConnection createRemoteConnection()
 	{
-		return new RemoteConnection(USE_SOCKET_TRANSPORT, HOST, USE_SOCKET_TRANSPORT ? PORT : SHMEM_ADDRESS, SERVER_MODE);
+		RemoteConfigurationOptions options = getOptions();
+		boolean useSockets = options.isUseSocketTransport();
+		return new RemoteConnection(useSockets, options.getHost(), useSockets ? options.getPort() : options.getShmemAddress(), options.isServerMode());
 	}
 
 	@Override
 	public RunProfileState getState(final Executor executor, final ExecutionEnvironment env) throws ExecutionException
 	{
+		RemoteConfigurationOptions options = getOptions();
 		GenericDebuggerRunnerSettings debuggerSettings = (GenericDebuggerRunnerSettings) env.getRunnerSettings();
 		debuggerSettings.LOCAL = false;
-		debuggerSettings.setDebugPort(USE_SOCKET_TRANSPORT ? PORT : SHMEM_ADDRESS);
-		debuggerSettings.setTransport(USE_SOCKET_TRANSPORT ? DebuggerSettings.SOCKET_TRANSPORT : DebuggerSettings.SHMEM_TRANSPORT);
+		debuggerSettings.setDebugPort(options.isUseSocketTransport() ? options.getPort() : options.getShmemAddress());
+		debuggerSettings.setTransport(options.isUseSocketTransport() ? DebuggerSettings.SOCKET_TRANSPORT : DebuggerSettings.SHMEM_TRANSPORT);
 		return new RemoteStateState(getProject(), createRemoteConnection());
-	}
-
-	@Override
-	public SettingsEditor<? extends RunConfiguration> getConfigurationEditor()
-	{
-		SettingsEditorGroup<RemoteConfiguration> group = new SettingsEditorGroup<>();
-		group.addEditor(ExecutionLocalize.runConfigurationConfigurationTabTitle().get(), new RemoteConfigurable(getProject()));
-		group.addEditor(ExecutionLocalize.logsTabTitle().get(), new LogConfigurationPanel<>());
-		return group;
 	}
 
 	@Override
@@ -107,6 +102,4 @@ public class RemoteConfiguration extends ModuleBasedConfiguration<JavaRunConfigu
 	{
 		return getAllModules();
 	}
-
-
 }

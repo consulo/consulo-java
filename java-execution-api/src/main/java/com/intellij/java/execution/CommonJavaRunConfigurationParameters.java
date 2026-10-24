@@ -17,22 +17,39 @@ package com.intellij.java.execution;
 
 import com.intellij.java.execution.configurations.ConfigurationWithAlternativeJre;
 import consulo.execution.CommonProgramRunConfigurationParameters;
+import consulo.java.execution.configurations.fragment.JreFragmentState;
+import consulo.java.execution.configurations.fragment.VmParametersFragmentState;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * A Java run configuration: the shared program fragments plus VM options ({@link VmParametersFragmentState}) and the JRE
+ * ({@link JreFragmentState}).
+ */
 public interface CommonJavaRunConfigurationParameters extends CommonProgramRunConfigurationParameters, ConfigurationWithAlternativeJre {
-  void setVMParameters(String value);
+  default void setVMParameters(@Nullable String value) {
+    getFragmentState(VmParametersFragmentState.class).setValue(value);
+  }
 
-  String getVMParameters();
+  default @Nullable String getVMParameters() {
+    return getFragmentState(VmParametersFragmentState.class).getValue();
+  }
 
   @Override
-  boolean isAlternativeJrePathEnabled();
-
-  void setAlternativeJrePathEnabled(boolean enabled);
+  default boolean isAlternativeJrePathEnabled() {
+    return getAlternativeJrePath() != null;
+  }
 
   @Override
-  String getAlternativeJrePath();
+  default @Nullable String getAlternativeJrePath() {
+    return getFragmentState(JreFragmentState.class).getPath();
+  }
 
-  void setAlternativeJrePath(String path);
+  /**
+   * @param path a JDK name or a JRE home path, {@code null} for the JDK of the module or the project
+   */
+  default void setAlternativeJrePath(@Nullable String path) {
+    getFragmentState(JreFragmentState.class).setPath(path);
+  }
 
   @Nullable
   String getRunClass();

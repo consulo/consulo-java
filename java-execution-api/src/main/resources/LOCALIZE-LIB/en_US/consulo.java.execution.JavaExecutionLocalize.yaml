@@ -1,5 +1,9 @@
 application.configuration.description:
     text: Java Application configuration
+application.configuration.fragment.include.provided.scope:
+    text: Add dependencies with “provided” scope to classpath
+application.configuration.fragment.main.class:
+    text: Main class
 application.configuration.include.provided.scope:
     text: Include dependencies with "Provided" scope
 application.configuration.main.class.label:
@@ -14,6 +18,8 @@ jar.application.configuration.choose.jar.title:
     text: Choose JAR File
 jar.application.configuration.description:
     text: Configuration to run a JAR file using 'java -jar' command
+jar.application.configuration.fragment.jar.path:
+    text: Path to JAR
 jar.application.configuration.jar.path.label:
     text: 'Path to &JAR:'
 jar.application.configuration.module.label:
@@ -24,6 +30,8 @@ jre.path.is.not.valid.jre.home.error.message:
     text: '''''{0}'''' is not a valid JRE home'
 remote.configuration.command.line.arguments.label:
     text: '&Command line arguments for remote JVM:'
+remote.configuration.fragment.connection:
+    text: Connection
 remote.configuration.jdk.1.3:
     text: JDK 1.3.x or earlier
 remote.configuration.jdk.1.4:
@@ -48,6 +56,14 @@ remote.debug.configuration.description:
     text: Remote JVM Debug configuration
 remote.debug.configuration.display.name:
     text: Remote JVM Debug
+run.configuration.fragment.group.java:
+    text: Java
+run.configuration.fragment.jre:
+    text: JRE
+run.configuration.fragment.shorten.command.line:
+    text: Shorten command line
+run.configuration.fragment.vm.parameters:
+    text: Add VM options
 run.configuration.jre.auto.select:
     text: Auto Select
 run.configuration.jre.label:

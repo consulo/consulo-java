@@ -31,4 +31,6 @@ module consulo.java.coverage.impl {
     exports com.intellij.java.coverage.info;
     exports com.intellij.java.coverage.view;
     exports consulo.java.coverage.localize;
+
+    opens com.intellij.java.coverage to consulo.util.xml.serializer, consulo.execution.api, consulo.component.impl;
 }

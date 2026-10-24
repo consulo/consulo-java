@@ -4,7 +4,6 @@
 package com.intellij.java.execution.impl;
 
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
-import com.intellij.java.execution.ShortenCommandLine;
 import com.intellij.java.execution.configurations.JavaRunConfigurationModule;
 import com.intellij.java.language.psi.PsiClass;
 import com.intellij.java.language.psi.PsiMethod;
@@ -15,17 +14,11 @@ import consulo.execution.test.TestSearchScope;
 import consulo.execution.test.sm.runner.SMRunnerConsolePropertiesProvider;
 import consulo.language.editor.refactoring.event.RefactoringListenerProvider;
 import consulo.language.psi.PsiElement;
-import consulo.util.xml.serializer.InvalidDataException;
-import consulo.util.xml.serializer.WriteExternalException;
-import org.jdom.Element;
 
-import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration<JavaRunConfigurationModule> implements CommonJavaRunConfigurationParameters, ConfigurationWithCommandLineShortener,
     RefactoringListenerProvider, SMRunnerConsolePropertiesProvider {
-  private ShortenCommandLine myShortenCommandLine = null;
-
   public JavaTestConfigurationBase(String name, JavaRunConfigurationModule configurationModule, ConfigurationFactory factory) {
     super(name, configurationModule, factory);
   }
@@ -49,27 +42,4 @@ public abstract class JavaTestConfigurationBase extends ModuleBasedConfiguration
   }
 
   public abstract TestSearchScope getTestSearchScope();
-
-  @Nullable
-  @Override
-  public ShortenCommandLine getShortenCommandLine() {
-    return myShortenCommandLine;
-  }
-
-  @Override
-  public void setShortenCommandLine(ShortenCommandLine shortenCommandLine) {
-    myShortenCommandLine = shortenCommandLine;
-  }
-
-  @Override
-  public void readExternal(Element element) throws InvalidDataException {
-    super.readExternal(element);
-    setShortenCommandLine(ShortenCommandLine.readShortenClasspathMethod(element));
-  }
-
-  @Override
-  public void writeExternal(Element element) throws WriteExternalException {
-    super.writeExternal(element);
-    ShortenCommandLine.writeShortenClasspathMethod(element, myShortenCommandLine);
-  }
 }

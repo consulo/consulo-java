@@ -1,5 +1,5 @@
 /*
- * Copyright 2000-2009 JetBrains s.r.o.
+ * Copyright 2013-2026 consulo.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.intellij.java.debugger;
+package com.intellij.java.execution.impl.remote;
 
-import consulo.execution.configuration.RunConfiguration;
+import org.jspecify.annotations.Nullable;
 
-public interface RunConfigurationWithRunnerSettings extends RunConfiguration {
-  boolean isSettingsNeeded();
+/**
+ * The {@code <option name value>} fields a remote configuration wrote before the fragment model.
+ *
+ * @author VISTALL
+ * @since 2026-10-24
+ */
+public class RemoteConfigurationLegacyState {
+    public boolean USE_SOCKET_TRANSPORT;
+    public boolean SERVER_MODE;
+    public @Nullable String SHMEM_ADDRESS;
+    public @Nullable String HOST;
+    public @Nullable String PORT;
 }
