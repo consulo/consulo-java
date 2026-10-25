@@ -33,7 +33,6 @@ import consulo.compiler.artifact.element.*;
 import consulo.compiler.artifact.ui.ArtifactEditorContext;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
-import consulo.fileChooser.IdeaFileChooser;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
@@ -260,19 +259,6 @@ public class ManifestFileUtil {
             ArtifactUtil.processPackagingElements(element, null, processor, context, true, artifactType);
         }
         return classpath;
-    }
-
-    @Nullable
-    @RequiredUIAccess
-    public static VirtualFile showDialogAndCreateManifest(ArtifactEditorContext context, CompositePackagingElement<?> element) {
-        FileChooserDescriptor descriptor = createDescriptorForManifestDirectory();
-        VirtualFile directory = suggestManifestFileDirectory(element, context, context.getArtifactType());
-        VirtualFile file = IdeaFileChooser.chooseFile(descriptor, context.getProject(), directory);
-        if (file == null) {
-            return null;
-        }
-
-        return createManifestFile(file, context.getProject());
     }
 
     @Nullable

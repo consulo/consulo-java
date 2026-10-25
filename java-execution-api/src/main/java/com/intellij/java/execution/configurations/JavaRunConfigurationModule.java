@@ -30,6 +30,7 @@ import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
 import consulo.module.ModuleManager;
 import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
@@ -65,8 +66,8 @@ public class JavaRunConfigurationModule extends RunConfigurationModule {
   }
 
   @RequiredReadAction
-  public static Collection<Module> getModulesForClass(final Project project, final String className) {
-    if (project.isDefault()) return Arrays.asList(ModuleManager.getInstance(project).getModules());
+  public static Collection<Module> getModulesForClass(final Project project, final @Nullable String className) {
+    if (project.isDefault() || StringUtil.isEmpty(className)) return Arrays.asList(ModuleManager.getInstance(project).getModules());
     PsiDocumentManager.getInstance(project).commitAllDocuments();
     final PsiClass[] possibleClasses = JavaPsiFacade.getInstance(project).findClasses(className, GlobalSearchScope.projectScope(project));
 

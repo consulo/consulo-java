@@ -25,7 +25,7 @@ import consulo.application.ApplicationManager;
 import consulo.application.util.function.Computable;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
-import consulo.fileChooser.IdeaFileChooser;
+import consulo.fileChooser.FileChooserFactory;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.move.MoveCallback;
 import consulo.language.editor.refactoring.move.MoveHandler;
@@ -83,10 +83,17 @@ public class MoveClassesOrPackagesToNewDirectoryDialog extends DialogWrapper {
     final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
     myDestDirectoryField.getButton().addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        VirtualFile file = IdeaFileChooser.chooseFile(descriptor, myDirectory.getProject(), directory.getVirtualFile());
-        if (file != null) {
-          myDestDirectoryField.setText(FileUtil.toSystemDependentName(file.getPath()));
-        }
+        VirtualFile directoryFile = directory.getVirtualFile();
+        FileChooserFactory.getInstance()
+          .newBuilder(descriptor)
+          .project(myDirectory.getProject())
+          .toSelect(directoryFile.getFileSystem().getNioPath(directoryFile))
+          .showSingle()
+          .whenComplete((path, error) -> {
+            if (path != null) {
+              myDestDirectoryField.setText(path.toString());
+            }
+          });
       }
     });
     if (elementsToMove.length == 1) {

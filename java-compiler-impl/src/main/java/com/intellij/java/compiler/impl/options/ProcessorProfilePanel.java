@@ -18,14 +18,13 @@ package com.intellij.java.compiler.impl.options;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
-import consulo.fileChooser.IdeaFileChooser;
+import consulo.fileChooser.FileChooserFactory;
 import consulo.project.Project;
 import consulo.ui.ex.awt.*;
 import consulo.ui.ex.awt.table.JBTable;
 import consulo.ui.ex.awt.util.TableUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.StringUtil;
-import consulo.virtualFileSystem.VirtualFile;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -42,6 +41,7 @@ import java.awt.event.ItemListener;
 import java.io.File;
 import java.util.List;
 import java.util.*;
+import java.nio.file.Path;
 
 /**
  * @author Eugene Zhuravlev
@@ -97,17 +97,24 @@ public class ProcessorProfilePanel extends JPanel {
     myProcessorPathField = new TextFieldWithBrowseButton(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         final FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createAllButJarContentsDescriptor();
-        final VirtualFile[] files = IdeaFileChooser.chooseFiles(descriptor, myProcessorPathField, myProject, null);
-        if (files.length > 0) {
-          final StringBuilder builder = new StringBuilder();
-          for (VirtualFile file : files) {
-            if (builder.length() > 0) {
-              builder.append(File.pathSeparator);
+        FileChooserFactory.getInstance()
+          .newBuilder(descriptor)
+          .project(myProject)
+          .parent(myProcessorPathField)
+          .showMultiple()
+          .whenComplete((paths, error) -> {
+            if (paths == null) {
+              return;
             }
-            builder.append(FileUtil.toSystemDependentName(file.getPath()));
-          }
-          myProcessorPathField.setText(builder.toString());
-        }
+            final StringBuilder builder = new StringBuilder();
+            for (Path path : paths) {
+              if (builder.length() > 0) {
+                builder.append(File.pathSeparator);
+              }
+              builder.append(path);
+            }
+            myProcessorPathField.setText(builder.toString());
+          });
       }
     });
 

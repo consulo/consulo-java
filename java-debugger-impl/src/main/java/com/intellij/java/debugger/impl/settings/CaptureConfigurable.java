@@ -21,7 +21,6 @@ import consulo.disposer.Disposable;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserFactory;
 import consulo.fileChooser.FileSaverDescriptor;
-import consulo.fileChooser.IdeaFileChooser;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.base.icon.PlatformIconGroup;
@@ -49,8 +48,6 @@ import consulo.util.collection.ArrayUtil;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.jdom.JDOMUtil;
 import consulo.util.xml.serializer.XmlSerializer;
-import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.VirtualFileWrapper;
 import jakarta.inject.Inject;
 import one.util.streamex.IntStreamEx;
 import one.util.streamex.StreamEx;
@@ -76,6 +73,10 @@ import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.util.Collections;
 import java.util.List;
+import java.io.File;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @ExtensionImpl
 public final class CaptureConfigurable implements SearchableConfigurable, ProjectConfigurable, Configurable.NoScroll {
@@ -307,29 +308,31 @@ public final class CaptureConfigurable implements SearchableConfigurable, Projec
                     .withTitle(JavaDebuggerLocalize.importCapturePoints())
                     .withDescription(JavaDebuggerLocalize.pleaseSelectAFileToImport());
 
-                VirtualFile[] files = IdeaFileChooser.chooseFiles(descriptor, e.getData(Project.KEY), null);
-                if (ArrayUtil.isEmpty(files)) {
-                    return;
-                }
+                Project project = e.getData(Project.KEY);
+                FileChooserFactory.getInstance().newBuilder(descriptor).project(project).showMultiple().whenComplete((paths, error) -> {
+                    if (paths == null) {
+                        return;
+                    }
 
-                table.getSelectionModel().clearSelection();
+                    table.getSelectionModel().clearSelection();
 
-                for (VirtualFile file : files) {
-                    try {
-                        for (Element element : JDOMUtil.load(file.getInputStream()).getChildren()) {
-                            int idx = myTableModel.addIfNeeded(XmlSerializer.deserialize(element, CapturePoint.class));
-                            table.getSelectionModel().addSelectionInterval(idx, idx);
+                    for (Path path : paths) {
+                        try (InputStream stream = Files.newInputStream(path)) {
+                            for (Element element : JDOMUtil.load(stream).getChildren()) {
+                                int idx = myTableModel.addIfNeeded(XmlSerializer.deserialize(element, CapturePoint.class));
+                                table.getSelectionModel().addSelectionInterval(idx, idx);
+                            }
+                        }
+                        catch (Exception ex) {
+                            String msg = ex.getLocalizedMessage();
+                            Messages.showErrorDialog(
+                                project,
+                                msg != null && !msg.isEmpty() ? msg : ex.toString(),
+                                JavaDebuggerLocalize.exportFailed().get()
+                            );
                         }
                     }
-                    catch (Exception ex) {
-                        String msg = ex.getLocalizedMessage();
-                        Messages.showErrorDialog(
-                            e.getData(Project.KEY),
-                            msg != null && !msg.isEmpty() ? msg : ex.toString(),
-                            JavaDebuggerLocalize.exportFailed().get()
-                        );
-                    }
-                }
+                });
             }
         });
         decorator.addExtraAction(new CapturePointsActionButton(
@@ -340,16 +343,17 @@ public final class CaptureConfigurable implements SearchableConfigurable, Projec
             @RequiredUIAccess
             @Override
             public void actionPerformed(AnActionEvent e) {
-                VirtualFileWrapper wrapper = FileChooserFactory.getInstance()
-                    .createSaveFileDialog(
-                        new FileSaverDescriptor(JavaDebuggerLocalize.exportSelectedCapturePointsToFile().get(), "", "xml"),
-                        e.getData(Project.KEY)
-                    )
-                    .save(null, null);
-                if (wrapper == null) {
-                    return;
-                }
+                Project project = e.getData(Project.KEY);
+                FileSaverDescriptor descriptor =
+                    new FileSaverDescriptor(JavaDebuggerLocalize.exportSelectedCapturePointsToFile().get(), "", "xml");
+                FileChooserFactory.getInstance().newSaverBuilder(descriptor).project(project).showAsync().whenComplete((path, error) -> {
+                    if (path != null) {
+                        exportCapturePoints(project, path.toFile());
+                    }
+                });
+            }
 
+            private void exportCapturePoints(Project project, File file) {
                 Element rootElement = new Element("capture-points");
                 selectedCapturePoints(table).forEach(c -> {
                     try {
@@ -362,12 +366,12 @@ public final class CaptureConfigurable implements SearchableConfigurable, Projec
                     }
                 });
                 try {
-                    JDOMUtil.writeDocument(new Document(rootElement), wrapper.getFile(), "\n");
+                    JDOMUtil.writeDocument(new Document(rootElement), file, "\n");
                 }
                 catch (Exception ex) {
                     String msg = ex.getLocalizedMessage();
                     Messages.showErrorDialog(
-                        e.getData(Project.KEY),
+                        project,
                         msg != null && !msg.isEmpty() ? msg : ex.toString(),
                         JavaDebuggerLocalize.exportFailed().get()
                     );

@@ -44,7 +44,7 @@ import consulo.document.FileDocumentManager;
 import consulo.document.util.TextRange;
 import consulo.fileChooser.FileChooserDescriptor;
 import consulo.fileChooser.FileChooserDescriptorFactory;
-import consulo.fileChooser.IdeaFileChooser;
+import consulo.fileChooser.FileChooserFactory;
 import consulo.fileEditor.FileEditorManager;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.editor.FileModificationService;
@@ -111,6 +111,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author anna
@@ -183,7 +184,27 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
       notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
       return;
     }
-    for (OrderEntry entry : entries) {
+    annotateEntriesExternally(entries, 0, project, listOwner, annotationFQName, fromFile, packageName, value);
+  }
+
+  /**
+   * Annotates in the order entries from the given index - an entry without an annotations root asks for one, and the
+   * next entries are processed once it is chosen.
+   */
+  @RequiredUIAccess
+  private void annotateEntriesExternally(
+    List<OrderEntry> entries,
+    int fromIndex,
+    Project project,
+    PsiModifierListOwner listOwner,
+    String annotationFQName,
+    PsiFile fromFile,
+    String packageName,
+    @Nullable PsiNameValuePair[] value
+  ) {
+    Application application = listOwner.getApplication();
+    for (int i = fromIndex; i < entries.size(); i++) {
+      OrderEntry entry = entries.get(i);
       if (entry instanceof ModuleOrderEntry) {
         continue;
       }
@@ -197,14 +218,17 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
           notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
           return;
         }
-        DumbService.getInstance(project).setAlternativeResolveEnabled(true);
-        try {
-          if (!setupRootAndAnnotateExternally(entry, project, listOwner, annotationFQName, fromFile, packageName, value)) {
-            throw CanceledConfigurationException.INSTANCE;
-          }
-        } finally {
-          DumbService.getInstance(project).setAlternativeResolveEnabled(false);
-        }
+        int nextIndex = i + 1;
+        DumbService dumbService = DumbService.getInstance(project);
+        dumbService.setAlternativeResolveEnabled(true);
+        setupRootAndAnnotateExternally(entry, project, listOwner, annotationFQName, fromFile, packageName, value)
+          .whenComplete((annotated, error) -> {
+            dumbService.setAlternativeResolveEnabled(false);
+            if (Boolean.TRUE.equals(annotated)) {
+              annotateEntriesExternally(entries, nextIndex, project, listOwner, annotationFQName, fromFile, packageName, value);
+            }
+          });
+        return;
       }
     }
   }
@@ -224,8 +248,12 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     return xmlFiles;
   }
 
+  /**
+   * Asks for an annotations root of the entry and annotates there - completes on the UI thread, with {@code false}
+   * when no root is chosen.
+   */
   @RequiredUIAccess
-  private boolean setupRootAndAnnotateExternally(
+  private CompletableFuture<Boolean> setupRootAndAnnotateExternally(
     final OrderEntry entry,
     final Project project,
     final PsiModifierListOwner listOwner,
@@ -237,11 +265,32 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
     FileChooserDescriptor descriptor = FileChooserDescriptorFactory.createSingleFolderDescriptor();
     descriptor.withTitle(ProjectLocalize.externalAnnotationsRootChooserTitle(entry.getPresentableName()));
     descriptor.withDescription(ProjectLocalize.externalAnnotationsRootChooserDescription());
-    final VirtualFile newRoot = IdeaFileChooser.chooseFile(descriptor, project, null);
-    if (newRoot == null) {
-      notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
-      return false;
-    }
+    UIAccess uiAccess = UIAccess.current();
+    return FileChooserFactory.getInstance()
+      .newBuilder(descriptor)
+      .project(project)
+      .showSingleAsVirtualFile()
+      .handleAsync((newRoot, error) -> {
+        if (newRoot == null) {
+          notifyAfterAnnotationChanging(listOwner, annotationFQName, false);
+          return false;
+        }
+        annotateInChosenRoot(entry, project, listOwner, annotationFQName, fromFile, packageName, value, newRoot);
+        return true;
+      }, uiAccess);
+  }
+
+  @RequiredUIAccess
+  private void annotateInChosenRoot(
+    OrderEntry entry,
+    Project project,
+    PsiModifierListOwner listOwner,
+    String annotationFQName,
+    PsiFile fromFile,
+    String packageName,
+    @Nullable PsiNameValuePair[] value,
+    VirtualFile newRoot
+  ) {
     new WriteCommandAction(project) {
       @Override
       @RequiredWriteAction
@@ -264,7 +313,6 @@ public class ExternalAnnotationsManagerImpl extends ReadableExternalAnnotationsM
         }
       }
     }.execute();
-    return true;
   }
 
   @Nullable
