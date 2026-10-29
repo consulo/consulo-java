@@ -2,7 +2,6 @@ package com.intellij.java.compiler.impl.javaCompiler;
 
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.ProcessorConfigProfile;
 import com.intellij.java.compiler.impl.javaCompiler.annotationProcessing.impl.ProcessorConfigProfileImpl;
-import consulo.annotation.DeprecationInfo;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
@@ -10,7 +9,6 @@ import consulo.annotation.component.ServiceImpl;
 import consulo.component.persist.PersistentStateComponent;
 import consulo.component.persist.State;
 import consulo.component.persist.Storage;
-import consulo.component.persist.StoragePathMacros;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.util.ModuleUtilCore;
 import consulo.module.Module;
@@ -22,18 +20,13 @@ import consulo.util.lang.StringUtil;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.jdom.Element;
-
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.*;
 
 @Singleton
-@State(
-    name = "JavaCompilerConfiguration",
-    storages = {
-        @Storage(file = StoragePathMacros.PROJECT_CONFIG_DIR + "/compiler.xml")
-    })
+@State(name = "JavaCompilerConfiguration", storages = @Storage("compiler"))
 @ServiceAPI(ComponentScope.PROJECT)
 @ServiceImpl
 public class JavaCompilerConfiguration implements PersistentStateComponent<Element> {
@@ -42,20 +35,16 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     }
 
     public static final String ANNOTATION_PROCESSING = "annotation-processing";
-    public static final String BYTECODE_TARGET_LEVEL = "bytecode-target-level";
 
     public static final String ADD_NOTNULL_ASSERTIONS = "add-not-null-assertions";
-    public static final String ENTRY = "entry";
     public static final String NAME = "name";
     public static final String ENABLED = "enabled";
-    public static final String MODULE = "module";
-    public static final String TARGET_ATTRIBUTE = "target";
 
     public static final String DEFAULT_COMPILER = "JavacCompiler";
 
     private final Project myProject;
 
-    private BackendCompiler myBackendCompilerCache;
+    private BackendCompiler myBackendCompiler;
 
     private final ProcessorConfigProfile myDefaultProcessorsProfile = new ProcessorConfigProfileImpl("Default");
     private final List<ProcessorConfigProfile> myModuleProcessorProfiles = new ArrayList<>();
@@ -63,13 +52,6 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     // the map is calculated by module processor profiles list for faster access to module settings
     private Map<Module, ProcessorConfigProfile> myProcessorsProfilesMap = null;
     private boolean myAddNotNullAssertions;
-
-    @Nullable
-    private String myBytecodeTargetLevel = null;  // null means compiler default
-
-    @Deprecated
-    @DeprecationInfo("We used JavaModuleExtension for store info about bytecode version")
-    private final Map<String, String> myModuleBytecodeTarget = new HashMap<>();
 
     @Inject
     public JavaCompilerConfiguration(Project project) {
@@ -79,11 +61,6 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
     @Nullable
     @RequiredReadAction
     public String getBytecodeTargetLevel(Module module) {
-        String level = myModuleBytecodeTarget.get(module.getName());
-        if (level != null) {
-            return level.isEmpty() ? null : level;
-        }
-
         JavaModuleExtension extension = ModuleUtilCore.getExtension(module, JavaModuleExtension.class);
         if (extension != null) {
             String bytecodeVersion = extension.getBytecodeVersion();
@@ -91,18 +68,18 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
                 return StringUtil.nullize(bytecodeVersion);
             }
         }
-        return myBytecodeTargetLevel;
+        return null;
     }
 
     public BackendCompiler getActiveCompiler() {
-        if (myBackendCompilerCache == null) {
-            myBackendCompilerCache = findCompiler(DEFAULT_COMPILER);
+        if (myBackendCompiler == null) {
+            myBackendCompiler = findCompiler(DEFAULT_COMPILER);
         }
-        return myBackendCompilerCache;
+        return myBackendCompiler;
     }
 
     public void setActiveCompiler(BackendCompiler key) {
-        myBackendCompilerCache = key;
+        myBackendCompiler = key;
     }
 
     @Nullable
@@ -130,27 +107,10 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
         parentNode.setAttribute(
             "compiler",
-            myBackendCompilerCache == null ? DEFAULT_COMPILER : myBackendCompilerCache.getClass().getSimpleName()
+            myBackendCompiler == null ? DEFAULT_COMPILER : myBackendCompiler.getClass().getSimpleName()
         );
         if (myAddNotNullAssertions) {
             parentNode.setAttribute(ADD_NOTNULL_ASSERTIONS, String.valueOf(Boolean.TRUE));
-        }
-
-        if (!StringUtil.isEmpty(myBytecodeTargetLevel) || !myModuleBytecodeTarget.isEmpty()) {
-            Element bytecodeTarget = addChild(parentNode, BYTECODE_TARGET_LEVEL);
-            if (!StringUtil.isEmpty(myBytecodeTargetLevel)) {
-                bytecodeTarget.setAttribute(TARGET_ATTRIBUTE, myBytecodeTargetLevel);
-            }
-            if (!myModuleBytecodeTarget.isEmpty()) {
-                List<String> moduleNames = new ArrayList<>(myModuleBytecodeTarget.keySet());
-                Collections.sort(moduleNames, String.CASE_INSENSITIVE_ORDER);
-                for (String name : moduleNames) {
-                    Element moduleElement = addChild(bytecodeTarget, MODULE);
-                    moduleElement.setAttribute(NAME, name);
-                    String value = myModuleBytecodeTarget.get(name);
-                    moduleElement.setAttribute(TARGET_ATTRIBUTE, value != null ? value : "");
-                }
-            }
         }
         return parentNode;
     }
@@ -163,7 +123,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
     @Override
     public void loadState(Element parentNode) {
-        myBackendCompilerCache = findCompiler(parentNode.getAttributeValue("compiler"));
+        myBackendCompiler = findCompiler(parentNode.getAttributeValue("compiler"));
         myAddNotNullAssertions = Boolean.parseBoolean(parentNode.getAttributeValue(ADD_NOTNULL_ASSERTIONS, String.valueOf(Boolean.FALSE)));
 
         Element annotationProcessingSettings = parentNode.getChild(ANNOTATION_PROCESSING);
@@ -171,7 +131,7 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
             List profiles = annotationProcessingSettings.getChildren("profile");
             if (!profiles.isEmpty()) {
                 for (Object elem : profiles) {
-                    Element profileElement = (Element)elem;
+                    Element profileElement = (Element) elem;
                     boolean isDefault = "true".equals(profileElement.getAttributeValue("default"));
                     if (isDefault) {
                         AnnotationProcessorProfileSerializer.readExternal(myDefaultProcessorsProfile, profileElement);
@@ -188,25 +148,6 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
                 loadProfilesFromOldFormat(annotationProcessingSettings);
             }
         }
-
-        myBytecodeTargetLevel = null;
-        myModuleBytecodeTarget.clear();
-        Element bytecodeTargetElement = parentNode.getChild(BYTECODE_TARGET_LEVEL);
-        if (bytecodeTargetElement != null) {
-            myBytecodeTargetLevel = bytecodeTargetElement.getAttributeValue(TARGET_ATTRIBUTE);
-            for (Element elem : bytecodeTargetElement.getChildren(MODULE)) {
-                String name = elem.getAttributeValue(NAME);
-                if (name == null) {
-                    continue;
-                }
-                String target = elem.getAttributeValue(TARGET_ATTRIBUTE);
-                if (target == null) {
-                    continue;
-                }
-                myModuleBytecodeTarget.put(name, target);
-            }
-        }
-
     }
 
     private void loadProfilesFromOldFormat(Element processing) {
@@ -219,8 +160,8 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
         List<Pair<String, String>> modulesToProcess = new ArrayList<>();
 
         for (Object child : processing.getChildren("processorPath")) {
-            Element pathElement = (Element)child;
-            String path = pathElement.getAttributeValue("value", (String)null);
+            Element pathElement = (Element) child;
+            String path = pathElement.getAttributeValue("value", (String) null);
             if (path != null) {
                 if (processorPath.length() > 0) {
                     processorPath.append(File.pathSeparator);
@@ -230,8 +171,8 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
         }
 
         for (Object child : processing.getChildren("processor")) {
-            Element processorElement = (Element)child;
-            String proc = processorElement.getAttributeValue(NAME, (String)null);
+            Element processorElement = (Element) child;
+            String proc = processorElement.getAttributeValue(NAME, (String) null);
             if (proc != null) {
                 processors.add(proc);
             }
@@ -243,12 +184,12 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
         }
 
         for (Object child : processing.getChildren("processModule")) {
-            Element moduleElement = (Element)child;
-            String name = moduleElement.getAttributeValue(NAME, (String)null);
+            Element moduleElement = (Element) child;
+            String name = moduleElement.getAttributeValue(NAME, (String) null);
             if (name == null) {
                 continue;
             }
-            String dir = moduleElement.getAttributeValue("generatedDirName", (String)null);
+            String dir = moduleElement.getAttributeValue("generatedDirName", (String) null);
             modulesToProcess.add(Couple.of(name, dir));
         }
 
@@ -376,25 +317,5 @@ public class JavaCompilerConfiguration implements PersistentStateComponent<Eleme
 
     public boolean isAddNotNullAssertions() {
         return myAddNotNullAssertions;
-    }
-
-    @Deprecated
-    public void setModulesBytecodeTargetMap(Map<String, String> mapping) {
-        myModuleBytecodeTarget.clear();
-        myModuleBytecodeTarget.putAll(mapping);
-    }
-
-    @Deprecated
-    public Map<String, String> getModulesBytecodeTargetMap() {
-        return myModuleBytecodeTarget;
-    }
-
-    public void setProjectBytecodeTarget(@Nullable String level) {
-        myBytecodeTargetLevel = level;
-    }
-
-    @Nullable
-    public String getProjectBytecodeTarget() {
-        return myBytecodeTargetLevel;
     }
 }

@@ -27,7 +27,6 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
     private final Project myProject;
     private JComboBox<BackendCompiler> myComboBox;
     private JCheckBox myNotNullAssertion;
-    private TargetOptionsComponent myTargetOptionsComponent;
 
     @Inject
     public JavaCompilerConfigurable(Project project, JavaCompilerConfiguration javaCompilerConfiguration) {
@@ -79,9 +78,6 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
             new JCheckBox(JavaCompilerLocalize.addNotnullAssertions().get(), myCompilerConfiguration.isAddNotNullAssertions());
         panel.add(myNotNullAssertion);
 
-        myTargetOptionsComponent = new TargetOptionsComponent(myProject);
-        panel.add(myTargetOptionsComponent);
-
         return TargetAWT.wrap(panel);
     }
 
@@ -95,12 +91,6 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
         if (myNotNullAssertion.isSelected() != myCompilerConfiguration.isAddNotNullAssertions()) {
             return true;
         }
-        if (!Comparing.equal(myTargetOptionsComponent.getProjectBytecodeTarget(), myCompilerConfiguration.getProjectBytecodeTarget())) {
-            return true;
-        }
-        if (!Comparing.equal(myTargetOptionsComponent.getModulesBytecodeTargetMap(), myCompilerConfiguration.getModulesBytecodeTargetMap())) {
-            return true;
-        }
         return false;
     }
 
@@ -111,9 +101,6 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
 
         myCompilerConfiguration.setActiveCompiler(ep);
         myCompilerConfiguration.setAddNotNullAssertions(myNotNullAssertion.isSelected());
-
-        myCompilerConfiguration.setProjectBytecodeTarget(myTargetOptionsComponent.getProjectBytecodeTarget());
-        myCompilerConfiguration.setModulesBytecodeTargetMap(myTargetOptionsComponent.getModulesBytecodeTargetMap());
     }
 
     @RequiredUIAccess
@@ -121,8 +108,5 @@ public class JavaCompilerConfigurable implements ProjectConfigurable {
     public void reset() {
         myComboBox.setSelectedItem(myCompilerConfiguration.getActiveCompiler());
         myNotNullAssertion.setSelected(myCompilerConfiguration.isAddNotNullAssertions());
-
-        myTargetOptionsComponent.setProjectBytecodeTargetLevel(myCompilerConfiguration.getProjectBytecodeTarget());
-        myTargetOptionsComponent.setModuleTargetLevels(myCompilerConfiguration.getModulesBytecodeTargetMap());
     }
 }
