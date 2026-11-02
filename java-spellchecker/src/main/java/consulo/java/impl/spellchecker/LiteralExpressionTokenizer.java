@@ -20,89 +20,86 @@ import java.util.Arrays;
 /**
  * @author shkate@jetbrains.com
  */
-public class LiteralExpressionTokenizer extends EscapeSequenceTokenizer<PsiLiteralExpression>
-{
-	@Override
-	public void tokenize(PsiLiteralExpression expression, TokenConsumer consumer)
-	{
-		String text;
-		if(!ExpressionUtils.hasStringType(expression))
-		{
-			text = null;
-		}
-		else if(expression.isTextBlock())
-		{
-			text = expression.getText();
-			if(text.length() < 7)
-			{
-				return;
-			}
-			text = text.substring(3, text.length() - 3);
-		}
-		else
-		{
-			text = PsiLiteralUtil.getStringLiteralContent(expression);
-		}
+public class LiteralExpressionTokenizer extends EscapeSequenceTokenizer<PsiLiteralExpression> {
+    @Override
+    public void tokenize(PsiLiteralExpression expression, TokenConsumer consumer) {
+        String text;
+        if (!ExpressionUtils.hasStringType(expression)) {
+            text = null;
+        }
+        else if (expression.isTextBlock()) {
+            text = expression.getText();
+            if (text.length() < 7) {
+                return;
+            }
+            text = text.substring(3, text.length() - 3);
+        }
+        else {
+            text = PsiLiteralUtil.getStringLiteralContent(expression);
+        }
 
-		// optimization to avoid expensive injection check
-		if(StringUtil.isEmpty(text) || text.length() <= 2)
-		{
-			return;
-		}
+        // optimization to avoid expensive injection check
+        if (StringUtil.isEmpty(text) || text.length() <= 2) {
+            return;
+        }
 
-		if(InjectedLanguageManager.getInstance(expression.getProject()).getInjectedPsiFiles(expression) != null)
-		{
-			return;
-		}
+        if (InjectedLanguageManager.getInstance(expression.getProject()).getInjectedPsiFiles(expression) != null) {
+            return;
+        }
 
-		final PsiModifierListOwner listOwner = PsiTreeUtil.getParentOfType(skipParenthesizedExprUp(expression), PsiModifierListOwner.class);
-		if(listOwner != null && AnnotationUtil.isAnnotated(listOwner, AnnotationUtil.NON_NLS, AnnotationUtil.CHECK_EXTERNAL))
-		{
-			PsiElement targetElement = skipParenthesizedExprUp(getCompleteStringValueExpression(expression));
-			if(listOwner instanceof PsiMethod)
-			{
-				if(Arrays.stream(PsiUtil.findReturnStatements(((PsiMethod) listOwner))).map(s -> s.getReturnValue()).anyMatch(e -> e == targetElement))
-				{
-					return;
-				}
-			}
-			else if(listOwner instanceof PsiVariable && ((PsiVariable) listOwner).getInitializer() == targetElement)
-			{
-				return;
-			}
-		}
+        if (shouldBeIgnored(expression)) {
+            return;
+        }
 
-		if(!text.contains("\\"))
-		{
-			consumer.consumeToken(expression, PlainTextTokenSplitter.getInstance());
-		}
-		else
-		{
-			processTextWithEscapeSequences(expression, text, consumer);
-		}
-	}
+        if (!text.contains("\\")) {
+            consumer.consumeToken(expression, PlainTextTokenSplitter.getInstance());
+        }
+        else {
+            processTextWithEscapeSequences(expression, text, consumer);
+        }
+    }
 
-	private static PsiElement skipParenthesizedExprUp(PsiElement expression)
-	{
-		while(expression.getParent() instanceof PsiParenthesizedExpression)
-		{
-			expression = expression.getParent();
-		}
-		return expression;
-	}
+    public static boolean shouldBeIgnored(PsiLiteralExpression expression) {
+        PsiModifierListOwner listOwner = PsiTreeUtil.getParentOfType(skipParenthesizedExprUp(expression), PsiModifierListOwner.class);
+        if (listOwner != null && !shouldProcessLiteralExpression(expression, listOwner)) {
+            if (AnnotationUtil.isAnnotated(listOwner, AnnotationUtil.NON_NLS, AnnotationUtil.CHECK_EXTERNAL)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public static void processTextWithEscapeSequences(PsiLiteralExpression element, String text, TokenConsumer consumer)
-	{
-		StringBuilder unescapedText = new StringBuilder();
-		int[] offsets = new int[text.length() + 1];
-		CodeInsightUtilCore.parseStringCharacters(text, unescapedText, offsets);
+    private static boolean shouldProcessLiteralExpression(PsiLiteralExpression expression, PsiModifierListOwner listOwner) {
+        PsiElement targetElement = skipParenthesizedExprUp(getCompleteStringValueExpression(expression));
+        if (listOwner instanceof PsiMethod) {
+            if (Arrays.stream(PsiUtil.findReturnStatements(((PsiMethod) listOwner))).map(s -> s.getReturnValue()).anyMatch(e -> e == targetElement)) {
+                return false;
+            }
+        }
+        else if (listOwner instanceof PsiVariable && ((PsiVariable) listOwner).getInitializer() == targetElement) {
+            return false;
+        }
 
-		int startOffset = (element != null && element.isTextBlock()) ? 3 : 1;
-		processTextWithOffsets(element, consumer, unescapedText, offsets, startOffset);
-	}
+        return true;
+    }
 
-	public static PsiElement getCompleteStringValueExpression(PsiExpression expression)
-	{
-		return ExpressionUtils.isStringConcatenationOperand(expression) ? expression.getParent() : expression;
-	}
+    private static PsiElement skipParenthesizedExprUp(PsiElement expression) {
+        while (expression.getParent() instanceof PsiParenthesizedExpression) {
+            expression = expression.getParent();
+        }
+        return expression;
+    }
+
+    public static void processTextWithEscapeSequences(PsiLiteralExpression element, String text, TokenConsumer consumer) {
+        StringBuilder unescapedText = new StringBuilder();
+        int[] offsets = new int[text.length() + 1];
+        CodeInsightUtilCore.parseStringCharacters(text, unescapedText, offsets);
+
+        int startOffset = (element != null && element.isTextBlock()) ? 3 : 1;
+        processTextWithOffsets(element, consumer, unescapedText, offsets, startOffset);
+    }
+
+    public static PsiElement getCompleteStringValueExpression(PsiExpression expression) {
+        return ExpressionUtils.isStringConcatenationOperand(expression) ? expression.getParent() : expression;
+    }
 }
