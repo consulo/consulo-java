@@ -57,7 +57,6 @@ public class ByteCodeViewerComponent extends JPanel implements Disposable {
         settings.setLineNumbersShown(false);
         settings.setFoldingOutlineShown(false);
 
-        myEditor.setBorder(null);
         add(myEditor.getComponent(), BorderLayout.CENTER);
         final ActionManager actionManager = ActionManager.getInstance();
         final DefaultActionGroup actions = new DefaultActionGroup();
