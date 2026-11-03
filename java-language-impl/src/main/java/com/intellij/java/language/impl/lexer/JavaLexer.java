@@ -1,4 +1,4 @@
-// Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
+// Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.impl.lexer;
 
 import com.intellij.java.language.LanguageLevel;
@@ -9,9 +9,10 @@ import consulo.language.ast.TokenType;
 import consulo.language.lexer.LexerBase;
 import consulo.util.collection.CharSequenceHashingStrategy;
 import consulo.util.collection.Sets;
+import consulo.util.collection.primitive.ints.IntStack;
 import consulo.util.lang.CharArrayUtil;
-
 import org.jspecify.annotations.Nullable;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -47,14 +48,37 @@ public final class JavaLexer extends LexerBase {
       level.isAtLeast(LanguageLevel.JDK_20) && WHEN.contentEquals(id);
   }
 
+  private static final int STATE_DEFAULT = 0;
+  private static final int STATE_TEXT_BLOCK_TEMPLATE = 1;
+
+  private enum LiteralType {
+    STRING('"'), CHAR('\''), TEXT_BLOCK('"');
+
+    final char c;
+
+    LiteralType(char c) {
+      this.c = c;
+    }
+  }
+
   private final _JavaLexer myFlexLexer;
+  private final IntStack myStateStack = new IntStack(1);
   private CharSequence myBuffer;
-  @Nullable
-  private char[] myBufferArray;
+  private char @Nullable [] myBufferArray;
   private int myBufferIndex;
   private int myBufferEndOffset;
   private int myTokenEndOffset;  // positioned after the last symbol of the current token
-  private IElementType myTokenType;
+  private @Nullable IElementType myTokenType;
+
+  /**
+   * State at the start of the current token; {@link #getState} must reflect this, not the post-mutation top of {@link #myStateStack}.
+   */
+  private int myStateBeforeToken;
+
+  /**
+   * The length of the last valid unicode escape (6 or greater), or 1 when no unicode escape was found.
+   */
+  private int mySymbolLength = 1;
 
   public JavaLexer(LanguageLevel level) {
     myFlexLexer = new _JavaLexer(level);
@@ -68,22 +92,27 @@ public final class JavaLexer extends LexerBase {
     myBufferEndOffset = endOffset;
     myTokenType = null;
     myTokenEndOffset = startOffset;
+    mySymbolLength = 1;
+    myStateStack.clear();
+    myStateStack.push(initialState);
+    myStateBeforeToken = initialState;
     myFlexLexer.reset(myBuffer, startOffset, endOffset, 0);
   }
 
   @Override
   public int getState() {
-    return 0;
+    return myStateBeforeToken;
   }
 
   @Override
-  public IElementType getTokenType() {
+  public @Nullable IElementType getTokenType() {
     locateToken();
     return myTokenType;
   }
 
   @Override
   public int getTokenStart() {
+    locateToken();
     return myBufferIndex;
   }
 
@@ -99,6 +128,10 @@ public final class JavaLexer extends LexerBase {
     myTokenType = null;
   }
 
+  /**
+   * Handles whitespace, comment, string literal, text block and string template tokens. Other tokens are handled by calling
+   * the flex lexer.
+   */
   private void locateToken() {
     if (myTokenType != null) {
       return;
@@ -109,76 +142,136 @@ public final class JavaLexer extends LexerBase {
       return;
     }
 
+    myStateBeforeToken = myStateStack.peek();
     myBufferIndex = myTokenEndOffset;
 
-    char c = charAt(myBufferIndex);
+    char c = locateCharAt(myBufferIndex);
     switch (c) {
-      case ' ':
-      case '\t':
-      case '\n':
-      case '\r':
-      case '\f':
+      //allowed only at the end of files
+      case '\u001a' -> {
+        if (myBufferIndex + mySymbolLength == myBufferEndOffset) {
+          myTokenType = TokenType.WHITE_SPACE;
+          myTokenEndOffset = myBufferIndex + mySymbolLength;
+        }
+        else {
+          flexLocateToken();
+        }
+      }
+      case ' ', '\t', '\n', '\r', '\f' -> {
         myTokenType = TokenType.WHITE_SPACE;
-        myTokenEndOffset = getWhitespaces(myBufferIndex + 1);
-        break;
-
-      case '/':
-        if (myBufferIndex + 1 >= myBufferEndOffset) {
+        myTokenEndOffset = getWhitespaces(myBufferIndex + mySymbolLength);
+      }
+      case '{' -> {
+        int count1 = myStateStack.peek() >> 16;
+        if (count1 > 0) {
+          myStateStack.push((myStateStack.pop() & STATE_TEXT_BLOCK_TEMPLATE) | ((count1 + 1) << 16));
+        }
+        myTokenType = JavaTokenType.LBRACE;
+        myTokenEndOffset = myBufferIndex + mySymbolLength;
+      }
+      case '}' -> {
+        int count2 = myStateStack.peek() >> 16;
+        boolean updateToken = true;
+        if (count2 > 0) {
+          if (count2 != 1) {
+            myStateStack.push((myStateStack.pop() & STATE_TEXT_BLOCK_TEMPLATE) | ((count2 - 1) << 16));
+          }
+          else {
+            int state = myStateStack.pop();
+            if (myStateStack.size() == 0) {
+              myStateStack.push(STATE_DEFAULT);
+            }
+            if ((state & STATE_TEXT_BLOCK_TEMPLATE) != 0) {
+              boolean fragment = locateLiteralEnd(myBufferIndex + mySymbolLength, LiteralType.TEXT_BLOCK);
+              myTokenType = fragment ? JavaTokenType.TEXT_BLOCK_TEMPLATE_MID : JavaTokenType.TEXT_BLOCK_TEMPLATE_END;
+            }
+            else {
+              boolean fragment = locateLiteralEnd(myBufferIndex + mySymbolLength, LiteralType.STRING);
+              myTokenType = fragment ? JavaTokenType.STRING_TEMPLATE_MID : JavaTokenType.STRING_TEMPLATE_END;
+            }
+            updateToken = false;
+          }
+        }
+        if (updateToken) {
+          myTokenType = JavaTokenType.RBRACE;
+          myTokenEndOffset = myBufferIndex + mySymbolLength;
+        }
+      }
+      case '/' -> {
+        if (myBufferIndex + mySymbolLength >= myBufferEndOffset) {
           myTokenType = JavaTokenType.DIV;
           myTokenEndOffset = myBufferEndOffset;
         }
         else {
-          char nextChar = charAt(myBufferIndex + 1);
+          int l1 = mySymbolLength;
+          char nextChar = locateCharAt(myBufferIndex + l1);
           if (nextChar == '/') {
-            myTokenType = JavaTokenType.END_OF_LINE_COMMENT;
-            myTokenEndOffset = getLineTerminator(myBufferIndex + 2);
-          }
-          else if (nextChar == '*') {
-            if (myBufferIndex + 2 >= myBufferEndOffset ||
-              (charAt(myBufferIndex + 2)) != '*' ||
-              (myBufferIndex + 3 < myBufferEndOffset &&
-                (charAt(myBufferIndex + 3)) == '/')) {
-              myTokenType = JavaTokenType.C_STYLE_COMMENT;
-              myTokenEndOffset = getClosingComment(myBufferIndex + 2);
+            int l2 = mySymbolLength;
+            if (myBufferIndex + l1 + l2 < myBufferEndOffset && locateCharAt(myBufferIndex + l1 + l2) == '/') {
+              // Java 23 Markdown comments
+              myTokenType = JavaDocElementType.DOC_MARKDOWN_COMMENT;
+              myTokenEndOffset = getClosingMarkdownComment(myBufferIndex + l1 + l2);
             }
             else {
-              myTokenType = JavaDocElementType.DOC_COMMENT;
-              myTokenEndOffset = getClosingComment(myBufferIndex + 3);
+              myTokenType = JavaTokenType.END_OF_LINE_COMMENT;
+              myTokenEndOffset = getLineTerminator(myBufferIndex + l1 + l2);
+            }
+          }
+          else if (nextChar == '*') {
+            int l2 = mySymbolLength;
+            if (myBufferIndex + l1 + l2 < myBufferEndOffset && locateCharAt(myBufferIndex + l1 + l2) == '*') {
+              int l3 = mySymbolLength;
+              if (myBufferIndex + l1 + l2 + l3 < myBufferEndOffset && locateCharAt(myBufferIndex + l1 + l2 + l3) == '/') {
+                myTokenType = JavaTokenType.C_STYLE_COMMENT;
+                myTokenEndOffset = myBufferIndex + l1 + l2 + l3 + mySymbolLength;
+              }
+              else {
+                myTokenType = JavaDocElementType.DOC_COMMENT;
+                myTokenEndOffset = getClosingComment(myBufferIndex + l1 + l2 + l3);
+              }
+            }
+            else {
+              myTokenType = JavaTokenType.C_STYLE_COMMENT;
+              myTokenEndOffset = getClosingComment(myBufferIndex + l1 + l2 + mySymbolLength);
             }
           }
           else {
             flexLocateToken();
           }
         }
-        break;
-
-      case '#':
-        if (myBufferIndex == 0 && myBufferIndex + 1 < myBufferEndOffset && charAt(myBufferIndex + 1) == '!') {
+      }
+      case '#' -> {
+        if (myBufferIndex == 0 && mySymbolLength == 1 && myBufferEndOffset > 1 && charAt(1) == '!') {
           myTokenType = JavaTokenType.END_OF_LINE_COMMENT;
-          myTokenEndOffset = getLineTerminator(myBufferIndex + 2);
+          myTokenEndOffset = getLineTerminator(2);
         }
         else {
           flexLocateToken();
         }
-        break;
-      case '\'':
+      }
+      case '\'' -> {
         myTokenType = JavaTokenType.CHARACTER_LITERAL;
-        myTokenEndOffset = getClosingQuote(myBufferIndex + 1, c);
-        break;
-
-      case '"':
-        if (myBufferIndex + 2 < myBufferEndOffset && charAt(myBufferIndex + 2) == '"' && charAt(myBufferIndex + 1) == '"') {
-          myTokenType = JavaTokenType.TEXT_BLOCK_LITERAL;
-          myTokenEndOffset = getTextBlockEnd(myBufferIndex + 2);
+        locateLiteralEnd(myBufferIndex + mySymbolLength, LiteralType.CHAR);
+      }
+      case '"' -> {
+        int l1 = mySymbolLength;
+        if (myBufferIndex + l1 < myBufferEndOffset && locateCharAt(myBufferIndex + l1) == '"') {
+          int l2 = mySymbolLength;
+          if (myBufferIndex + l1 + l2 < myBufferEndOffset && locateCharAt(myBufferIndex + l1 + l2) == '"') {
+            boolean fragment = locateLiteralEnd(myBufferIndex + l1 + l2 + mySymbolLength, LiteralType.TEXT_BLOCK);
+            myTokenType = fragment ? JavaTokenType.TEXT_BLOCK_TEMPLATE_BEGIN : JavaTokenType.TEXT_BLOCK_LITERAL;
+          }
+          else {
+            myTokenType = JavaTokenType.STRING_LITERAL;
+            myTokenEndOffset = myBufferIndex + l1 + l2;
+          }
         }
         else {
-          myTokenType = JavaTokenType.STRING_LITERAL;
-          myTokenEndOffset = getClosingQuote(myBufferIndex + 1, c);
+          boolean fragment = locateLiteralEnd(myBufferIndex + l1, LiteralType.STRING);
+          myTokenType = fragment ? JavaTokenType.STRING_TEMPLATE_BEGIN : JavaTokenType.STRING_LITERAL;
         }
-        break;
-
-      default:
-        flexLocateToken();
+      }
+      default -> flexLocateToken();
     }
 
     if (myTokenEndOffset > myBufferEndOffset) {
@@ -187,19 +280,40 @@ public final class JavaLexer extends LexerBase {
   }
 
   private int getWhitespaces(int offset) {
-    if (offset >= myBufferEndOffset) {
-      return myBufferEndOffset;
-    }
+    return getChars(offset, " \t\n\r\f", '\u001a');
+  }
 
+  private int getSimpleWhitespaces(int offset) {
+    return getChars(offset, " \t", null);
+  }
+
+  /**
+   * @param offset        the offset to start.
+   * @param charsToDetect the chars to detect.
+   * @param endChar       the char which is applied only at the end of the file, or {@code null} if no end sequence is needed.
+   * @return The new position if none of the chars were detected
+   */
+  private int getChars(int offset, CharSequence charsToDetect, @Nullable Character endChar) {
     int pos = offset;
-    char c = charAt(pos);
-
-    while (c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '\f') {
-      pos++;
-      if (pos == myBufferEndOffset) {
-        return pos;
+    while (pos < myBufferEndOffset) {
+      boolean detected = false;
+      char c = locateCharAt(pos);
+      for (int i = 0; i < charsToDetect.length(); i++) {
+        if (charsToDetect.charAt(i) == c) {
+          pos += mySymbolLength;
+          detected = true;
+          break;
+        }
       }
-      c = charAt(pos);
+      if (!detected && endChar != null && pos + mySymbolLength == myBufferEndOffset) {
+        if (endChar == c) {
+          pos += mySymbolLength;
+          break;
+        }
+      }
+      if (!detected) {
+        break;
+      }
     }
 
     return pos;
@@ -214,111 +328,178 @@ public final class JavaLexer extends LexerBase {
     catch (IOException e) { /* impossible */ }
   }
 
-  private int getClosingQuote(int offset, char quoteChar) {
-    if (offset >= myBufferEndOffset) {
-      return myBufferEndOffset;
-    }
-
+  /**
+   * @param offset      the offset to start.
+   * @param literalType the type of string literal.
+   * @return {@code true} if this is a string template fragment, {@code false} otherwise.
+   */
+  private boolean locateLiteralEnd(int offset, LiteralType literalType) {
     int pos = offset;
-    char c = charAt(pos);
 
-    while (true) {
-      while (c != quoteChar && c != '\n' && c != '\r' && c != '\\') {
-        pos++;
-        if (pos >= myBufferEndOffset) {
-          return myBufferEndOffset;
-        }
-        c = charAt(pos);
-      }
+    while (pos < myBufferEndOffset) {
+      char c = locateCharAt(pos);
 
       if (c == '\\') {
-        pos++;
-        if (pos >= myBufferEndOffset) {
-          return myBufferEndOffset;
+        pos += mySymbolLength;
+        // on (encoded) backslash we also need to skip the next symbol (e.g. \\u005c" is translated to \")
+        if (pos < myBufferEndOffset) {
+          if (locateCharAt(pos) == '{' && literalType != LiteralType.CHAR) {
+            pos += mySymbolLength;
+            myTokenEndOffset = pos;
+            if (myStateStack.peek() == 0) {
+              myStateStack.pop();
+            }
+            if (literalType == LiteralType.TEXT_BLOCK) {
+              myStateStack.push(STATE_TEXT_BLOCK_TEMPLATE | (1 << 16));
+            }
+            else {
+              myStateStack.push(STATE_DEFAULT | (1 << 16));
+            }
+            return true;
+          }
         }
-        c = charAt(pos);
-        if (c == '\n' || c == '\r') {
+      }
+      else if (c == literalType.c) {
+        if (literalType == LiteralType.TEXT_BLOCK) {
+          if ((pos += mySymbolLength) < myBufferEndOffset && locateCharAt(pos) == '"') {
+            if ((pos += mySymbolLength) < myBufferEndOffset && locateCharAt(pos) == '"') {
+              myTokenEndOffset = pos + mySymbolLength;
+              return false;
+            }
+          }
           continue;
         }
-        if (c == 'u') {
-          do {
-            pos++;
-          }
-          while (pos < myBufferEndOffset && charAt(pos) == 'u');
-          if (pos + 3 >= myBufferEndOffset) {
-            return myBufferEndOffset;
-          }
-          boolean isBackSlash = charAt(pos) == '0' && charAt(pos + 1) == '0' && charAt(pos + 2) == '5' && charAt(pos + 3) == 'c';
-          // on encoded backslash we also need to skip escaped symbol (e.g. \\u005c" is translated to \")
-          pos += (isBackSlash ? 5 : 4);
-        }
         else {
-          pos++;
+          myTokenEndOffset = pos + mySymbolLength;
+          return false;
         }
-        if (pos >= myBufferEndOffset) {
-          return myBufferEndOffset;
-        }
-        c = charAt(pos);
       }
-      else if (c == quoteChar) {
+      else if ((c == '\n' || c == '\r') && mySymbolLength == 1 && literalType != LiteralType.TEXT_BLOCK) {
+        myTokenEndOffset = pos;
+        return false;
+      }
+      pos += mySymbolLength;
+    }
+    myTokenEndOffset = pos;
+    return false;
+  }
+
+  private int getClosingMarkdownComment(int offset) {
+    int pos = offset;
+    while (pos < myBufferEndOffset) {
+      pos = getLineTerminator(pos);
+      // Account for whitespaces beforehand
+      int newPos = getSimpleWhitespaces(pos + mySymbolLength);
+
+      newPos = getCharSeqAt(newPos, "///");
+      if (newPos == -1) {
         break;
       }
-      else {
-        pos--;
-        break;
-      }
+      pos = newPos;
     }
 
-    return pos + 1;
+    return pos;
   }
 
   private int getClosingComment(int offset) {
     int pos = offset;
 
-    while (pos < myBufferEndOffset - 1) {
-      char c = charAt(pos);
-      if (c == '*' && (charAt(pos + 1)) == '/') {
+    while (pos < myBufferEndOffset) {
+      char c = locateCharAt(pos);
+      pos += mySymbolLength;
+      if (c == '*' && pos < myBufferEndOffset && locateCharAt(pos) == '/') {
         break;
       }
-      pos++;
     }
 
-    return pos + 2;
+    return pos + mySymbolLength;
   }
 
   private int getLineTerminator(int offset) {
     int pos = offset;
 
     while (pos < myBufferEndOffset) {
-      char c = charAt(pos);
+      char c = locateCharAt(pos);
       if (c == '\r' || c == '\n') {
         break;
       }
+      pos += mySymbolLength;
+    }
+
+    return pos;
+  }
+
+  /**
+   * @return The position after of the last char, -1 otherwise
+   */
+  @SuppressWarnings("SameParameterValue")
+  private int getCharSeqAt(int offset, CharSequence charSequence) {
+    int pos = offset;
+    for (int i = 0; i < charSequence.length(); i++) {
+      if (!isLocatedCharAt(pos, charSequence.charAt(i))) {
+        return -1;
+      }
+      pos += mySymbolLength;
+    }
+    return pos;
+  }
+
+  private boolean isLocatedCharAt(int offset, char charToDetect) {
+    return (offset < myBufferEndOffset) && locateCharAt(offset) == charToDetect;
+  }
+
+  private char charAt(int offset) {
+    char[] bufferArray = myBufferArray;
+    return bufferArray != null ? bufferArray[offset] : myBuffer.charAt(offset);
+  }
+
+  private char locateCharAt(int offset) {
+    mySymbolLength = 1;
+    char first = charAt(offset);
+    if (first != '\\') {
+      return first;
+    }
+    int pos = offset + 1;
+    if (pos < myBufferEndOffset && charAt(pos) == '\\') {
+      return first;
+    }
+    boolean escaped = true;
+    int i = offset;
+    while (--i >= 0 && charAt(i) == '\\') {
+      escaped = !escaped;
+    }
+    if (!escaped) {
+      return first;
+    }
+    if (pos < myBufferEndOffset && charAt(pos) != 'u') {
+      return first;
+    }
+    //noinspection StatementWithEmptyBody
+    while (++pos < myBufferEndOffset && charAt(pos) == 'u') ;
+    if (pos + 3 >= myBufferEndOffset) {
+      return first;
+    }
+    int result = 0;
+    int max = pos + 4;
+    while (pos < max) {
+      result <<= 4;
+      char c = charAt(pos);
+      if ('0' <= c && c <= '9') {
+        result += c - '0';
+      }
+      else if ('a' <= c && c <= 'f') {
+        result += (c - 'a') + 10;
+      }
+      else if ('A' <= c && c <= 'F') {
+        result += (c - 'A') + 10;
+      }
+      else {
+        return first;
+      }
       pos++;
     }
-
-    return pos;
-  }
-
-  private int getTextBlockEnd(int offset) {
-    int pos = offset;
-
-    while ((pos = getClosingQuote(pos + 1, '"')) < myBufferEndOffset) {
-      char current = charAt(pos);
-      if (current == '\\') {
-        pos++;
-      }
-      else if (current == '"' && pos + 1 < myBufferEndOffset && charAt(pos + 1) == '"') {
-        pos += 2;
-        break;
-      }
-    }
-
-    return pos;
-  }
-
-  private char charAt(int position) {
-    return myBufferArray != null ? myBufferArray[position] : myBuffer.charAt(position);
+    mySymbolLength = pos - offset;
+    return (char)result;
   }
 
   @Override

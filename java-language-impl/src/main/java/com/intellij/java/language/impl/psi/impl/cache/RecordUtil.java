@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language.impl.psi.impl.cache;
 
+import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.lexer.JavaDocLexer;
 import com.intellij.java.language.impl.psi.impl.java.stubs.JavaStubElementTypes;
@@ -65,6 +66,9 @@ public class RecordUtil {
   }
 
   public static boolean isDeprecatedByDocComment(LighterAST tree, LighterASTNode comment) {
+    if (comment.getTokenType() == JavaDocElementType.DOC_MARKDOWN_COMMENT) {
+      return false;
+    }
     String text = LightTreeUtil.toFilteredString(tree, comment, null);
     if (text.contains(DEPRECATED_TAG)) {
       JavaDocLexer lexer = new JavaDocLexer(LanguageLevel.HIGHEST);

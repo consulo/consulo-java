@@ -22,6 +22,7 @@ open module consulo.java {
 
     // TODO remove in future after we will use xml api
     requires com.intellij.xml;
+    requires consulo.markdown.documentation.api;
 
     // TODO remove in future
     requires consulo.ide.impl;

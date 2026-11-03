@@ -1805,4 +1805,13 @@ public final class PsiUtil extends PsiUtilCore {
         PsiElementFactory factory = JavaPsiFacade.getElementFactory(aClass.getProject());
         return factory.createType(aClass, factory.createSubstitutor(substitutionMap));
     }
+
+    /**
+     * @return Whether the element is in a markdown doc comment
+     */
+    public static boolean isInMarkdownDocComment(PsiElement element) {
+        PsiDocComment docComment =
+            PsiTreeUtil.getParentOfType(element, PsiDocComment.class);
+        return docComment != null && docComment.isMarkdownComment();
+    }
 }

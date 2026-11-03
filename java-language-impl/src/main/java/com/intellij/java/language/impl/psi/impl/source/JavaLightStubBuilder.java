@@ -93,7 +93,7 @@ public class JavaLightStubBuilder extends LightStubBuilder {
         if (nodeType == JavaElementType.PARAMETER_LIST && parentType == JavaElementType.LAMBDA_EXPRESSION) {
             return true;
         }
-        if (nodeType == JavaDocElementType.DOC_COMMENT) {
+        if (JavaDocElementType.DOC_COMMENT_TOKENS.contains(nodeType)) {
             return true;
         }
 

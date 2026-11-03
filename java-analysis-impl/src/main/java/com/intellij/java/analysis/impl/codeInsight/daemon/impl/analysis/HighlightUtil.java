@@ -3052,7 +3052,8 @@ public class HighlightUtil extends HighlightUtilBase {
         if (!(comment instanceof PsiDocComment) && comment.getTokenType() != JavaTokenType.C_STYLE_COMMENT) {
             return null;
         }
-        if (!comment.getText().endsWith("*/")) {
+        String text = comment.getText();
+        if (text.startsWith("/*") && !text.endsWith("*/")) {
             int start = comment.getTextRange().getEndOffset() - 1;
             int end = start + 1;
             return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)

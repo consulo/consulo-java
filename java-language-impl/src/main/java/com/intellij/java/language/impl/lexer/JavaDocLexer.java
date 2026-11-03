@@ -1,55 +1,42 @@
-/*
- * Copyright 2000-2013 JetBrains s.r.o.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.language.impl.lexer;
 
 import com.intellij.java.language.LanguageLevel;
-import com.intellij.java.language.lexer.DocCommentTokenTypes;
 import com.intellij.java.language.lexer.JavaDocTokenTypes;
 import com.intellij.java.language.lexer._JavaDocLexer;
+import com.intellij.java.language.psi.JavaDocTokenType;
+import consulo.language.ast.IElementType;
 import consulo.language.lexer.LexerBase;
 import consulo.language.lexer.MergingLexerAdapter;
-import consulo.language.ast.IElementType;
 import consulo.util.lang.CharArrayUtil;
+import consulo.util.lang.StringUtil;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 
 public class JavaDocLexer extends MergingLexerAdapter {
   public JavaDocLexer(LanguageLevel level) {
-    this(JavaDocTokenTypes.INSTANCE, level.isAtLeast(LanguageLevel.JDK_1_5));
+    this(level.isAtLeast(LanguageLevel.JDK_1_5));
   }
 
-  private JavaDocLexer(DocCommentTokenTypes tokenTypes, boolean isJdk15Enabled) {
-    super(new AsteriskStripperLexer(new _JavaDocLexer(isJdk15Enabled, tokenTypes), tokenTypes), tokenTypes.spaceCommentsTokenSet());
+  private JavaDocLexer(boolean isJdk15Enabled) {
+    super(new AsteriskStripperLexer(new _JavaDocLexer(isJdk15Enabled)), JavaDocTokenTypes.INSTANCE.spaceCommentsTokenSet());
   }
 
   private static class AsteriskStripperLexer extends LexerBase {
     private final _JavaDocLexer myFlex;
-    private final DocCommentTokenTypes myTokenTypes;
     private CharSequence myBuffer;
     private int myBufferIndex;
     private int myBufferEndOffset;
     private int myTokenEndOffset;
     private int myState;
-    private IElementType myTokenType;
+    private @Nullable IElementType myTokenType;
     private boolean myAfterLineBreak;
     private boolean myInLeadingSpace;
+    private boolean myMarkdownMode;
 
-    public AsteriskStripperLexer(final _JavaDocLexer flex, final DocCommentTokenTypes tokenTypes) {
+    AsteriskStripperLexer(_JavaDocLexer flex) {
       myFlex = flex;
-      myTokenTypes = tokenTypes;
     }
 
     @Override
@@ -59,7 +46,10 @@ public class JavaDocLexer extends MergingLexerAdapter {
       myBufferEndOffset = endOffset;
       myTokenType = null;
       myTokenEndOffset = startOffset;
+      myAfterLineBreak = false;
+      myInLeadingSpace = false;
       myFlex.reset(myBuffer, startOffset, endOffset, initialState);
+      selectLexerMode(buffer, startOffset);
     }
 
     @Override
@@ -78,7 +68,7 @@ public class JavaDocLexer extends MergingLexerAdapter {
     }
 
     @Override
-    public final IElementType getTokenType() {
+    public final @Nullable IElementType getTokenType() {
       locateToken();
       return myTokenType;
     }
@@ -95,25 +85,32 @@ public class JavaDocLexer extends MergingLexerAdapter {
       return myTokenEndOffset;
     }
 
-
     @Override
     public final void advance() {
       locateToken();
       myTokenType = null;
     }
 
-    protected final void locateToken() {
+    private void locateToken() {
       if (myTokenType != null) {
         return;
       }
-      _locateToken();
+      doLocateToken();
 
-      if (myTokenType == myTokenTypes.space()) {
+      if (myTokenType == JavaDocTokenType.DOC_SPACE) {
         myAfterLineBreak = CharArrayUtil.containLineBreaks(myBuffer, getTokenStart(), getTokenEnd());
       }
     }
 
-    private void _locateToken() {
+    /**
+     * Enables markdown mode if necessary
+     */
+    private void selectLexerMode(CharSequence buffer, int startOffset) {
+      myMarkdownMode = StringUtil.startsWith(buffer, startOffset, "///");
+      myFlex._reset(myMarkdownMode);
+    }
+
+    private void doLocateToken() {
       if (myTokenEndOffset == myBufferEndOffset) {
         myTokenType = null;
         myBufferIndex = myBufferEndOffset;
@@ -124,13 +121,21 @@ public class JavaDocLexer extends MergingLexerAdapter {
 
       if (myAfterLineBreak) {
         myAfterLineBreak = false;
-        while (myTokenEndOffset < myBufferEndOffset && myBuffer.charAt(myTokenEndOffset) == '*' && (myTokenEndOffset + 1 >= myBufferEndOffset || myBuffer.charAt(myTokenEndOffset + 1) != '/')) {
-          myTokenEndOffset++;
+
+        if (myMarkdownMode) {
+          while (detectLeadingSlashes()) {
+            myTokenEndOffset += 3;
+          }
+        }
+        else {
+          while (detectLeadingAsterisks()) {
+            myTokenEndOffset++;
+          }
         }
 
         myInLeadingSpace = true;
         if (myBufferIndex < myTokenEndOffset) {
-          myTokenType = myTokenTypes.commentLeadingAsterisks();
+          myTokenType = JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS;
           return;
         }
       }
@@ -145,15 +150,21 @@ public class JavaDocLexer extends MergingLexerAdapter {
           myTokenEndOffset++;
         }
 
-        final int state = myFlex.yystate();
-        if (state == _JavaDocLexer.COMMENT_DATA || myTokenEndOffset < myBufferEndOffset && (myBuffer.charAt(myTokenEndOffset) == '@' || myBuffer.charAt(myTokenEndOffset) == '{' || myBuffer
-            .charAt(myTokenEndOffset) == '\"' || myBuffer.charAt(myTokenEndOffset) == '<')) {
+        int state = myFlex.yystate();
+        if (state == _JavaDocLexer.COMMENT_DATA ||
+            state != _JavaDocLexer.INLINE_TAG_LITERAL_TEXT && myTokenEndOffset < myBufferEndOffset && isTagOrMarkupStart(myBuffer.charAt(myTokenEndOffset))) {
           myFlex.yybegin(_JavaDocLexer.COMMENT_DATA_START);
         }
 
         if (myBufferIndex < myTokenEndOffset) {
-          myTokenType = lf || state == _JavaDocLexer.PARAM_TAG_SPACE || state == _JavaDocLexer.TAG_DOC_SPACE || state == _JavaDocLexer.INLINE_TAG_NAME || state == _JavaDocLexer
-              .DOC_TAG_VALUE_IN_PAREN ? myTokenTypes.space() : myTokenTypes.commentData();
+          myTokenType = lf ||
+                        state == _JavaDocLexer.PARAM_TAG_SPACE ||
+                        state == _JavaDocLexer.TAG_DOC_SPACE ||
+                        state == _JavaDocLexer.INLINE_TAG_NAME ||
+                        state == _JavaDocLexer.DOC_TAG_VALUE_IN_PAREN ||
+                        state == _JavaDocLexer.SNIPPET_TAG_COMMENT_DATA_UNTIL_COLON
+                        ? JavaDocTokenType.DOC_SPACE
+                        : JavaDocTokenType.DOC_COMMENT_DATA;
 
           return;
         }
@@ -162,13 +173,33 @@ public class JavaDocLexer extends MergingLexerAdapter {
       flexLocateToken();
     }
 
+    private static boolean isTagOrMarkupStart(char c) {
+      return c == '@' || c == '{' || c == '\"' || c == '<';
+    }
+
+    /**
+     * @return true for * or *\/
+     */
+    private boolean detectLeadingAsterisks() {
+      return myTokenEndOffset < myBufferEndOffset && myBuffer.charAt(myTokenEndOffset) == '*' &&
+             (myTokenEndOffset + 1 >= myBufferEndOffset || myBuffer.charAt(myTokenEndOffset + 1) != '/');
+    }
+
+    /**
+     * @return The current token is the start of three leading slashes
+     */
+    private boolean detectLeadingSlashes() {
+      return myTokenEndOffset + 2 < myBufferEndOffset && StringUtil.startsWith(myBuffer, myTokenEndOffset, "///");
+    }
+
     private void flexLocateToken() {
       try {
         myState = myFlex.yystate();
         myFlex.goTo(myBufferIndex);
         myTokenType = myFlex.advance();
         myTokenEndOffset = myFlex.getTokenEnd();
-      } catch (IOException e) {
+      }
+      catch (IOException e) {
         // Can't be
       }
     }

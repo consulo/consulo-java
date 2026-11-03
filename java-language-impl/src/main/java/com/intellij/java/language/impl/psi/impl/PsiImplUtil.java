@@ -423,7 +423,7 @@ public class PsiImplUtil {
             node = node.getTreeNext();
         }
 
-        if (node != null && node.getElementType() == JavaDocElementType.DOC_COMMENT) {
+        if (node != null && JavaDocElementType.DOC_COMMENT_TOKENS.contains(node.getElementType())) {
             return node;
         }
         else {
@@ -554,7 +554,7 @@ public class PsiImplUtil {
 
     public static boolean isDeprecatedByDocTag(PsiJavaDocumentedElement owner) {
         PsiDocComment docComment = owner.getDocComment();
-        return docComment != null && docComment.findTagByName("deprecated") != null;
+        return docComment != null && !docComment.isMarkdownComment() && docComment.findTagByName("deprecated") != null;
     }
 
     @Nullable

@@ -71,7 +71,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
       return getCodeBlockPlaceholder(((PsiLambdaExpression) element).getBody());
     }
     if (element instanceof PsiDocComment) {
-      return "/**...*/";
+      return ((PsiDocComment) element).isMarkdownComment() ? "/// ..." : "/**...*/";
     }
     if (element instanceof PsiFile) {
       return "/.../";
@@ -506,7 +506,7 @@ public abstract class JavaFoldingBuilderBase extends CustomFoldingBuilder implem
       // So, our point is to preserve fold descriptor referencing javadoc PSI element.
       if (candidate != null && candidate.getTextRange().equals(range)) {
         ASTNode node = candidate.getNode();
-        if (node != null && node.getElementType() == JavaDocElementType.DOC_COMMENT) {
+        if (node != null && JavaDocElementType.DOC_COMMENT_TOKENS.contains(node.getElementType())) {
           anchorElementToUse = candidate;
         }
       }

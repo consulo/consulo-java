@@ -16,10 +16,12 @@
 package com.intellij.java.language.impl.psi.impl.source.tree;
 
 import com.intellij.java.language.impl.psi.impl.source.Constants;
+import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocFormatString;
 import com.intellij.java.language.impl.psi.impl.source.javadoc.PsiDocTokenImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiIdentifierImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiJavaTokenImpl;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiKeywordImpl;
+import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.tree.java.IJavaDocElementType;
 import com.intellij.java.language.psi.tree.java.IJavaElementType;
@@ -40,6 +42,8 @@ public class CoreJavaASTLeafFactory implements Constants, ASTLeafFactory {
       return new PsiCoreCommentImpl(type, text);
     } else if (type == JavaTokenType.IDENTIFIER) {
       return new PsiIdentifierImpl(text);
+    } else if (type == JavaDocTokenType.DOC_TAG_FORMAT_STRING) {
+      return new PsiDocFormatString(type, text);
     } else if (ElementType.KEYWORD_BIT_SET.contains(type)) {
       return new PsiKeywordImpl(type, text);
     } else if (type instanceof IJavaElementType) {

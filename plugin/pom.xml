@@ -64,6 +64,7 @@
                         <dependency>com.intellij.images</dependency>
                         <dependency>com.intellij.properties</dependency>
                         <dependency>consulo.json</dependency>
+                        <dependency>consulo.markdown</dependency>
                     </dependencies>
                     <packaging>
                         <skip>${dev.mode}</skip>
@@ -530,6 +531,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>com.intellij.xml</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>consulo.markdown.documentation.api</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

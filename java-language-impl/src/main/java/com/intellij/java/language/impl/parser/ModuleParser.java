@@ -57,7 +57,7 @@ public class ModuleParser {
       mapAndAdvance(builder, JavaTokenType.OPEN_KEYWORD);
       text = builder.getTokenText();
     }
-    JavaParserUtil.done(modifierList, JavaElementType.MODIFIER_LIST);
+    JavaParserUtil.done(modifierList, JavaElementType.MODIFIER_LIST, builder);
 
     if (PsiKeyword.MODULE.equals(text)) {
       mapAndAdvance(builder, JavaTokenType.MODULE_KEYWORD);
@@ -87,7 +87,7 @@ public class ModuleParser {
       parseModuleContent(builder);
     }
 
-    JavaParserUtil.done(module, JavaElementType.MODULE);
+    JavaParserUtil.done(module, JavaElementType.MODULE, builder);
 
     if (builder.getTokenType() != null) {
       parseExtras(builder, JavaErrorBundle.message("unexpected.tokens"));
@@ -206,7 +206,7 @@ public class ModuleParser {
       }
       break;
     }
-    JavaParserUtil.done(modifierList, JavaElementType.MODIFIER_LIST);
+    JavaParserUtil.done(modifierList, JavaElementType.MODIFIER_LIST, builder);
 
     if (parseNameRef(builder) != null) {
       semicolon(builder);

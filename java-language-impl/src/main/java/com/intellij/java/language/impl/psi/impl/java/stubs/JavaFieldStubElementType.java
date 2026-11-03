@@ -59,7 +59,7 @@ public abstract class JavaFieldStubElementType extends JavaStubElementType<PsiFi
     boolean expectingInit = false;
     for (final LighterASTNode child : tree.getChildren(node)) {
       final IElementType type = child.getTokenType();
-      if (type == JavaDocElementType.DOC_COMMENT) {
+      if (JavaDocElementType.DOC_COMMENT_TOKENS.contains(type)) {
         hasDocComment = true;
         isDeprecatedByComment = RecordUtil.isDeprecatedByDocComment(tree, child);
       } else if (type == JavaElementType.MODIFIER_LIST) {

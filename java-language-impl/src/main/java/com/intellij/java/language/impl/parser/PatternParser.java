@@ -42,7 +42,7 @@ public class PatternParser implements JavaElementType {
       "_".equals(builder.getTokenText())) {
       emptyElement(builder, TYPE);
       builder.advanceLexer();
-      done(patternStart, UNNAMED_PATTERN);
+      done(patternStart, UNNAMED_PATTERN, builder);
       return true;
     }
     patternStart.rollbackTo();
@@ -91,7 +91,7 @@ public class PatternParser implements JavaElementType {
       if (!expect(builder, JavaTokenType.RPARENTH)) {
         error(builder, JavaPsiBundle.message("expected.rparen"));
       }
-      done(parenPattern, PARENTHESIZED_PATTERN);
+      done(parenPattern, PARENTHESIZED_PATTERN, builder);
       return parenPattern;
     }
     return parseTypeOrRecordPattern(builder, expectVar);
@@ -172,16 +172,16 @@ public class PatternParser implements JavaElementType {
 
     if (isRecord) {
       patternVariable.drop();
-      done(pattern, DECONSTRUCTION_PATTERN);
+      done(pattern, DECONSTRUCTION_PATTERN, builder);
     }
     else {
       if (hasIdentifier) {
-        done(patternVariable, PATTERN_VARIABLE);
+        done(patternVariable, PATTERN_VARIABLE, builder);
       }
       else {
         patternVariable.drop();
       }
-      done(pattern, TYPE_TEST_PATTERN);
+      done(pattern, TYPE_TEST_PATTERN, builder);
     }
     return pattern;
   }

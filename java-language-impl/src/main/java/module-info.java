@@ -7,6 +7,7 @@ open module consulo.java.language.impl {
     requires transitive consulo.java.indexing.api;
 
     requires consulo.language.impl;
+    requires consulo.markdown.language.api;
 
     requires consulo.build.ui.api;
     requires consulo.code.editor.api;

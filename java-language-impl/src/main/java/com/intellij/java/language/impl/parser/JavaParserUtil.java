@@ -4,8 +4,8 @@ package com.intellij.java.language.impl.parser;
 import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.codeInsight.daemon.JavaErrorBundle;
-import com.intellij.java.language.impl.lexer.JavaDocLexer;
 import com.intellij.java.language.impl.lexer.JavaLexer;
+import com.intellij.java.language.impl.psi.impl.source.WhiteSpaceAndCommentSetHolder;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
@@ -26,7 +26,9 @@ import consulo.util.lang.function.Condition;
 import org.jetbrains.annotations.PropertyKey;
 
 import org.jspecify.annotations.Nullable;
+
 import java.util.List;
+import java.util.function.Function;
 
 public class JavaParserUtil {
   private static final Key<LanguageLevel> LANG_LEVEL_KEY = Key.create("JavaParserUtil.LanguageLevel");
@@ -35,81 +37,6 @@ public class JavaParserUtil {
   public interface ParserWrapper {
     void parse(PsiBuilder builder);
   }
-
-  private static class PrecedingWhitespacesAndCommentsBinder implements WhitespacesAndCommentsBinder {
-    private final boolean myAfterEmptyImport;
-
-    public PrecedingWhitespacesAndCommentsBinder(final boolean afterImport) {
-      this.myAfterEmptyImport = afterImport;
-    }
-
-    @Override
-    public int getEdgePosition(final List<IElementType> tokens, final boolean atStreamEdge, final TokenTextGetter getter) {
-      if (tokens.size() == 0) {
-        return 0;
-      }
-
-      // 1. bind doc comment
-      for (int idx = tokens.size() - 1; idx >= 0; idx--) {
-        if (tokens.get(idx) == JavaDocElementType.DOC_COMMENT) {
-          return idx;
-        }
-      }
-
-      // 2. bind plain comments
-      int result = tokens.size();
-      for (int idx = tokens.size() - 1; idx >= 0; idx--) {
-        final IElementType tokenType = tokens.get(idx);
-        if (TokenSet.WHITE_SPACE.contains(tokenType)) {
-          if (StringUtil.getLineBreakCount(getter.get(idx)) > 1) {
-            break;
-          }
-        } else if (ElementType.JAVA_PLAIN_COMMENT_BIT_SET.contains(tokenType)) {
-          if (atStreamEdge || (idx == 0 && myAfterEmptyImport) || (idx > 0 && TokenSet.WHITE_SPACE.contains(tokens.get(idx - 1)) && StringUtil.containsLineBreak(getter.get(idx - 1)))) {
-            result = idx;
-          }
-        } else {
-          break;
-        }
-      }
-
-      return result;
-    }
-  }
-
-  private static class TrailingWhitespacesAndCommentsBinder implements WhitespacesAndCommentsBinder {
-    @Override
-    public int getEdgePosition(final List<IElementType> tokens, final boolean atStreamEdge, final TokenTextGetter getter) {
-      if (tokens.size() == 0) {
-        return 0;
-      }
-
-      int result = 0;
-      for (int idx = 0; idx < tokens.size(); idx++) {
-        final IElementType tokenType = tokens.get(idx);
-        if (TokenSet.WHITE_SPACE.contains(tokenType)) {
-          if (StringUtil.containsLineBreak(getter.get(idx))) {
-            break;
-          }
-        } else if (ElementType.JAVA_PLAIN_COMMENT_BIT_SET.contains(tokenType)) {
-          result = idx + 1;
-        } else {
-          break;
-        }
-      }
-
-      return result;
-    }
-  }
-
-  private static final TokenSet PRECEDING_COMMENT_SET = TokenSet.orSet(TokenSet.create(JavaElementType.MODULE), ElementType.FULL_MEMBER_BIT_SET);
-
-  private static final TokenSet TRAILING_COMMENT_SET = TokenSet.orSet(TokenSet.create(JavaElementType.PACKAGE_STATEMENT), ElementType.IMPORT_STATEMENT_BASE_BIT_SET, ElementType
-      .FULL_MEMBER_BIT_SET, ElementType.JAVA_STATEMENT_BIT_SET);
-
-  public static final WhitespacesAndCommentsBinder PRECEDING_COMMENT_BINDER = new PrecedingWhitespacesAndCommentsBinder(false);
-  public static final WhitespacesAndCommentsBinder SPECIAL_PRECEDING_COMMENT_BINDER = new PrecedingWhitespacesAndCommentsBinder(true);
-  public static final WhitespacesAndCommentsBinder TRAILING_COMMENT_BINDER = new TrailingWhitespacesAndCommentsBinder();
 
   private JavaParserUtil() {
   }
@@ -180,13 +107,27 @@ public class JavaParserUtil {
   }
 
   @Nullable
+  public static ASTNode parseFragmentWithHighestLanguageLevel(ASTNode chameleon, ParserWrapper wrapper, Function<LanguageLevel, Lexer> lexer) {
+    return parseFragment(chameleon, wrapper, true, LanguageLevel.HIGHEST, lexer);
+  }
+
+  @Nullable
   public static ASTNode parseFragment(final ASTNode chameleon, final ParserWrapper wrapper, final boolean eatAll, final LanguageLevel level) {
+    return parseFragment(chameleon, wrapper, eatAll, level, JavaLexer::new);
+  }
+
+  @Nullable
+  public static ASTNode parseFragment(final ASTNode chameleon,
+                                      final ParserWrapper wrapper,
+                                      final boolean eatAll,
+                                      final LanguageLevel level,
+                                      Function<LanguageLevel, Lexer> lexerFactory) {
     final PsiElement psi = (chameleon.getTreeParent() != null ? chameleon.getTreeParent().getPsi() : chameleon.getPsi());
     assert psi != null : chameleon;
     final Project project = psi.getProject();
 
     final PsiBuilderFactory factory = PsiBuilderFactory.getInstance();
-    final Lexer lexer = chameleon.getElementType() == JavaDocElementType.DOC_COMMENT ? new JavaDocLexer(level) : new JavaLexer(level);
+    final Lexer lexer = lexerFactory.apply(level);
     final PsiBuilder builder = factory.createBuilder(project, chameleon, lexer, chameleon.getElementType().getLanguage(), level.toLangVersion(), chameleon.getChars());
     setLanguageLevel(builder, level);
 
@@ -207,10 +148,14 @@ public class JavaParserUtil {
     return builder.getTreeBuilt().getFirstChildNode();
   }
 
-  public static void done(final PsiBuilder.Marker marker, final IElementType type) {
+  public static void done(final PsiBuilder.Marker marker, final IElementType type, final PsiBuilder builder) {
     marker.done(type);
-    final WhitespacesAndCommentsBinder left = PRECEDING_COMMENT_SET.contains(type) ? PRECEDING_COMMENT_BINDER : null;
-    final WhitespacesAndCommentsBinder right = TRAILING_COMMENT_SET.contains(type) ? TRAILING_COMMENT_BINDER : null;
+    final WhitespacesAndCommentsBinder left = WhiteSpaceAndCommentSetHolder.getPrecedingCommentSet().contains(type)
+                                              ? WhiteSpaceAndCommentSetHolder.getPrecedingCommentBinder(getLanguageLevel(builder))
+                                              : null;
+    final WhitespacesAndCommentsBinder right = WhiteSpaceAndCommentSetHolder.getTrailingCommentSet().contains(type)
+                                               ? WhiteSpaceAndCommentSetHolder.getTrailingCommentBinder()
+                                               : null;
     marker.setCustomEdgeTokenBinders(left, right);
   }
 

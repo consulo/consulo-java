@@ -22,6 +22,7 @@
 	<depends optional="true">com.intellij.properties</depends>
 	<depends optional="true">consulo.json</depends>
 	<depends>com.intellij.xml</depends>
+	<depends>consulo.markdown</depends>
 	<resource-bundle>messages.JavaBundle</resource-bundle>
 
 	<tags>

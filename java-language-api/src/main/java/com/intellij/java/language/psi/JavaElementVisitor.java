@@ -121,6 +121,10 @@ public abstract class JavaElementVisitor extends PsiElementVisitor {
     visitElement(value);
   }
 
+  public void visitDocReferenceHolder(PsiDocReferenceHolder refHolder) {
+    visitElement(refHolder);
+  }
+
   public void visitDocToken(PsiDocToken token) {
     visitElement(token);
   }
@@ -411,6 +415,18 @@ public abstract class JavaElementVisitor extends PsiElementVisitor {
 
   public void visitSnippetDocTagBody(PsiSnippetDocTagBody body) {
     visitElement(body);
+  }
+
+  public void visitMarkdownCodeBlock(PsiMarkdownCodeBlock block) {
+    visitElement(block);
+  }
+
+  public void visitMarkdownReferenceLink(PsiMarkdownReferenceLink referenceLink) {
+    visitElement(referenceLink);
+  }
+
+  public void visitMarkdownReferenceLabel(PsiMarkdownReferenceLabel label) {
+    visitElement(label);
   }
 
   public void visitSnippetDocTagValue(PsiSnippetDocTagValue value) {

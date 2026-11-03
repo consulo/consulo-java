@@ -32,8 +32,13 @@ import com.intellij.java.language.psi.PsiElementFactory;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.javadoc.*;
 import com.intellij.java.language.psi.util.PsiFormatUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.psi.util.PsiFormatUtilBase;
+import com.intellij.java.impl.codeInsight.javadoc.markdown.JavaDocMarkdownDocumentationProvider;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.language.Language;
+import consulo.language.editor.codeBlock.CodeBlockHighlighter;
+import consulo.markdown.documentation.MarkdownDocumentationRenderer;
 import consulo.content.bundle.Sdk;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.language.LangBundle;
@@ -110,6 +115,8 @@ public class JavaDocInfoGenerator {
   };
 
   private static final InheritDocProvider<PsiElement[]> ourEmptyElementsProvider = mapProvider(ourEmptyProvider, false);
+
+  private static final MarkdownDocumentationRenderer MARKDOWN_RENDERER = new MarkdownDocumentationRenderer(JavaDocMarkdownDocumentationProvider.FLAVOUR);
 
   private final Project myProject;
   private final PsiElement myElement;
@@ -1521,43 +1528,129 @@ public class JavaDocInfoGenerator {
   @RequiredReadAction
   private void generateValue(StringBuilder buffer, PsiElement[] elements, int startIndex, InheritDocProvider<PsiElement[]> provider) {
     int predictOffset = startIndex < elements.length ? elements[startIndex].getTextOffset() + elements[startIndex].getText().length() : 0;
+
+    // Secondary buffer to flush at each switch between (non-)markdown content
+    boolean isMarkdown = startIndex < elements.length && PsiUtil.isInMarkdownDocComment(elements[startIndex]);
+    StringBuilder subBuffer = new StringBuilder();
+
     for (int i = startIndex; i < elements.length; i++) {
       if (elements[i].getTextOffset() > predictOffset) {
-        buffer.append(" ");
+        subBuffer.append(" ");
       }
       predictOffset = elements[i].getTextOffset() + elements[i].getText().length();
       PsiElement element = elements[i];
       if (element instanceof PsiInlineDocTag tag) {
         final String tagName = tag.getName();
         if (tagName.equals(LINK_TAG)) {
-          generateLinkValue(tag, buffer, false);
+          generateLinkValue(tag, subBuffer, false);
         } else if (tagName.equals(LITERAL_TAG)) {
-          generateLiteralValue(buffer, tag);
+          generateLiteralValue(subBuffer, tag);
         } else if (tagName.equals(CODE_TAG)) {
-          generateCodeValue(tag, buffer);
+          generateCodeValue(tag, subBuffer);
         } else if (tagName.equals(LINKPLAIN_TAG)) {
-          generateLinkValue(tag, buffer, true);
+          generateLinkValue(tag, subBuffer, true);
         } else if (tagName.equals(INHERIT_DOC_TAG)) {
           Pair<PsiElement[], InheritDocProvider<PsiElement[]>> inheritInfo = provider.getInheritDoc();
           if (inheritInfo != null) {
+            flushSubBuffer(buffer, subBuffer, isMarkdown);
             generateValue(buffer, inheritInfo.first, inheritInfo.second);
           }
         } else if (tagName.equals(DOC_ROOT_TAG)) {
-          buffer.append(getDocRoot());
+          subBuffer.append(getDocRoot());
         } else if (tagName.equals(VALUE_TAG)) {
-          generateValueValue(tag, buffer, element);
+          generateValueValue(tag, subBuffer, element);
         }
-      } else {
-        buffer.append(StringUtil.replaceUnicodeEscapeSequences(element.getText()));
+      }
+      else if (element instanceof PsiMarkdownCodeBlock markdownCodeBlock) {
+        if (markdownCodeBlock.isInline()) {
+          printInlineCode(subBuffer, element.getProject(), markdownCodeBlock.getLanguage(), markdownCodeBlock.getCodeText());
+        }
+        else {
+          printCodeBlock(subBuffer, element.getProject(), markdownCodeBlock.getCodeLanguage(), markdownCodeBlock.getCodeText());
+        }
+      }
+      else if (element instanceof PsiMarkdownReferenceLink link) {
+        generateMarkdownLinkValue(link, subBuffer);
+      }
+      else if (element instanceof PsiMarkdownLink link) {
+        collectElementText(subBuffer, link);
+      }
+      else {
+        subBuffer.append(StringUtil.replaceUnicodeEscapeSequences(element.getText()));
       }
     }
+
+    flushSubBuffer(buffer, subBuffer, isMarkdown);
+  }
+
+  private static void flushSubBuffer(StringBuilder buffer, StringBuilder subBuffer, boolean flushAsMarkdown) {
+    buffer.append(flushAsMarkdown ? MARKDOWN_RENDERER.toHtml(subBuffer.toString()) : subBuffer);
+    subBuffer.setLength(0);
+  }
+
+  @RequiredReadAction
+  private static StringBuilder printInlineCode(StringBuilder builder, Project project, @Nullable Language language, String codeSnippet) {
+    return MarkdownDocumentationRenderer.appendInlineCode(builder, project, language, codeSnippet);
+  }
+
+  @RequiredReadAction
+  private static StringBuilder printCodeBlock(StringBuilder builder, Project project, @Nullable Language language, String codeSnippet) {
+    return MarkdownDocumentationRenderer.appendCodeBlock(builder, project, language, codeSnippet);
+  }
+
+  @RequiredReadAction
+  private void generateMarkdownLinkValue(PsiMarkdownReferenceLink referenceLink, StringBuilder buffer) {
+    PsiElement reference = referenceLink.getLinkElement();
+    PsiElement label = referenceLink.getLabel();
+
+    String referenceText = reference != null ? reference.getText() : "";
+    String labelText = label instanceof PsiMarkdownReferenceLabel referenceLabel ? referenceLabel.getLabelText() : null;
+
+    // JEP 467 requires reference brackets to be escaped, remove the escape to match the reference
+    referenceText = referenceText.replace("\\[", "[").replace("\\]", "]");
+    generateLink(buffer, referenceText, labelText, myElement != null ? myElement : referenceLink.getChildren()[0],
+                 !referenceLink.isShortLink());
+  }
+
+  protected void collectElementText(StringBuilder buffer, PsiElement element) {
+    collectElementText(buffer, element, true);
+  }
+
+  protected void collectElementText(StringBuilder buffer, PsiElement element, boolean visitTag) {
+    element.accept(new PsiRecursiveElementWalkingVisitor() {
+      @Override
+      public void visitElement(PsiElement subElement) {
+        if (subElement instanceof PsiInlineDocTag inlineDocTag && ((element != subElement) || visitTag)) {
+          generateValue(buffer, new PsiElement[]{inlineDocTag}, ourEmptyElementsProvider);
+          return;
+        }
+
+        super.visitElement(subElement);
+        if (subElement instanceof PsiWhiteSpace ||
+            subElement instanceof PsiJavaToken ||
+            subElement instanceof PsiDocToken &&
+            ((PsiDocToken)subElement).getTokenType() != JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS) {
+          buffer.append(subElement.getText());
+        }
+      }
+    });
   }
 
   @RequiredReadAction
   private void generateCodeValue(PsiInlineDocTag tag, StringBuilder buffer) {
-    buffer.append("<code>");
-    generateLiteralValue(buffer, tag);
-    buffer.append("</code>");
+    StringBuilder codeSnippetBuilder = new StringBuilder();
+    for (PsiElement element : tag.getDataElements()) {
+      codeSnippetBuilder.append(StringUtil.replaceUnicodeEscapeSequences(element.getText()));
+    }
+
+    if (isInPre(tag)) {
+      // already inside a <pre> block of the comment - only color the code
+      buffer.append(tag.getProject().getApplication().getInstance(CodeBlockHighlighter.class).newHtmlBuilder(tag.getProject(), tag.getLanguage(), codeSnippetBuilder.toString()).build());
+    }
+    else {
+      String codeSnippet = codeSnippetBuilder.toString().replace("\n", "").trim();
+      printInlineCode(buffer, tag.getProject(), tag.getLanguage(), codeSnippet);
+    }
   }
 
   @RequiredReadAction
@@ -1673,22 +1766,13 @@ public class JavaDocInfoGenerator {
     return buffer.toString().trim();
   }
 
-  protected void collectElementText(final StringBuilder buffer, PsiElement element) {
-    element.accept(new PsiRecursiveElementWalkingVisitor() {
-      @RequiredReadAction
-      @Override
-      public void visitElement(PsiElement element) {
-        super.visitElement(element);
-        if (element instanceof PsiWhiteSpace || element instanceof PsiJavaToken
-          || element instanceof PsiDocToken docToken && docToken.getTokenType() != JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS) {
-          buffer.append(element.getText());
-        }
-      }
-    });
-  }
-
   @RequiredReadAction
   private void generateDeprecatedSection(StringBuilder buffer, PsiDocComment comment) {
+    if (comment.isMarkdownComment() &&
+        comment.getOwner() instanceof PsiModifierListOwner owner &&
+        !owner.hasAnnotation(CommonClassNames.JAVA_LANG_DEPRECATED)) {
+      return;
+    }
     PsiDocTag tag = comment.findTagByName("deprecated");
     if (tag != null) {
       buffer.append("<DD><DL>");

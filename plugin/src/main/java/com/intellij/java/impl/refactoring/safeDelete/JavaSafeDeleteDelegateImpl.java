@@ -76,10 +76,10 @@ public class JavaSafeDeleteDelegateImpl implements JavaSafeDeleteDelegate {
         newText.append(")*/");
         usages.add(new SafeDeleteReferenceJavaDeleteUsageInfo(element, parameter, true) {
           public void deleteElement() throws IncorrectOperationException {
-            PsiDocMethodOrFieldRef.MyReference javadocMethodReference =
-              (PsiDocMethodOrFieldRef.MyReference)element.getReference();
+            PsiDocMethodOrFieldRef.MethodOrFieldReference javadocMethodReference =
+              (PsiDocMethodOrFieldRef.MethodOrFieldReference)element.getReference();
             if (javadocMethodReference != null) {
-              javadocMethodReference.bindToText(method.getContainingClass(), newText);
+              javadocMethodReference.bindToText(newText);
             }
           }
         });

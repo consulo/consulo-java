@@ -20,8 +20,11 @@ import consulo.language.editor.annotation.AnnotationHolder;
 import consulo.language.editor.annotation.Annotator;
 import consulo.language.editor.annotation.HighlightSeverity;
 import consulo.language.psi.PsiElement;
+import consulo.markdown.documentation.MarkdownDocumentationHighlighter;
+import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.javadoc.PsiDocTag;
 import com.intellij.java.language.psi.javadoc.PsiDocTagValue;
+import com.intellij.java.language.psi.javadoc.PsiMarkdownLink;
 
 
 /**
@@ -39,6 +42,15 @@ public class JavaDocAnnotator implements Annotator {
           holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(tagValue).textAttributes(JavaHighlightingColors.DOC_COMMENT_TAG_VALUE).create();
         }
       }
+    }
+
+    if (element instanceof PsiMarkdownLink) {
+      holder.newSilentAnnotation(HighlightSeverity.INFORMATION).range(element).textAttributes(JavaHighlightingColors.DOC_COMMENT_MARKUP)
+        .create();
+    }
+
+    if (element instanceof PsiDocComment comment && comment.isMarkdownComment()) {
+      MarkdownDocumentationHighlighter.highlight(comment, holder);
     }
   }
 }

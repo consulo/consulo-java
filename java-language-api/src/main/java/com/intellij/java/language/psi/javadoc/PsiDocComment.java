@@ -15,48 +15,53 @@
  */
 package com.intellij.java.language.psi.javadoc;
 
-import org.jspecify.annotations.Nullable;
-
+import com.intellij.java.language.psi.PsiJavaDocumentedElement;
 import consulo.language.psi.PsiDocCommentBase;
 import consulo.language.psi.PsiElement;
-import com.intellij.java.language.psi.PsiJavaDocumentedElement;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a JavaDoc comment.
  */
-public interface PsiDocComment extends PsiDocCommentBase
-{
-	/**
-	 * Returns the class, method or field described by the comment.
-	 */
-	@Override
-	@Nullable
-	PsiJavaDocumentedElement getOwner();
+public interface PsiDocComment extends PsiDocCommentBase {
+    /**
+     * Returns the class, method or field described by the comment.
+     */
+    @Override
+    @Nullable
+    PsiJavaDocumentedElement getOwner();
 
-	/**
-	 * Returns the PSI elements containing the description of the element being documented
-	 * (all significant tokens up to the first doc comment tag).
-	 */
-	PsiElement[] getDescriptionElements();
+    /**
+     * Returns the PSI elements containing the description of the element being documented
+     * (all significant tokens up to the first doc comment tag).
+     */
+    PsiElement[] getDescriptionElements();
 
-	/**
-	 * Returns the list of JavaDoc tags in the comment.
-	 */
-	PsiDocTag[] getTags();
+    /**
+     * Returns the list of JavaDoc tags in the comment.
+     */
+    PsiDocTag[] getTags();
 
-	/**
-	 * Finds the first JavaDoc tag with the specified name.
-	 *
-	 * @param name The name of the tags to find (not including the leading @ character).
-	 * @return the tag with the specified name, or null if not found.
-	 */
-	@Nullable
-	PsiDocTag findTagByName(String name);
+    /**
+     * Finds the first JavaDoc tag with the specified name.
+     *
+     * @param name The name of the tags to find (not including the leading @ character).
+     * @return the tag with the specified name, or null if not found.
+     */
+    @Nullable
+    PsiDocTag findTagByName(String name);
 
-	/**
-	 * Finds all JavaDoc tags with the specified name.
-	 *
-	 * @param name The name of the tags to find (not including the leading @ character).
-	 */
-	PsiDocTag[] findTagsByName(String name);
+    /**
+     * Finds all JavaDoc tags with the specified name.
+     *
+     * @param name The name of the tags to find (not including the leading @ character).
+     */
+    PsiDocTag[] findTagsByName(String name);
+
+    /**
+     * Finds whether the start of the comment uses markdown notation
+     */
+    default boolean isMarkdownComment() {
+        return false;
+    }
 }

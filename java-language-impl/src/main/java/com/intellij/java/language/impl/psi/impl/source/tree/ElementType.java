@@ -23,7 +23,7 @@ public interface ElementType extends JavaTokenType, JavaDocTokenType, JavaElemen
   TokenSet JAVA_WHITESPACE_BIT_SET = TokenSet.create(WHITE_SPACE);
 
   TokenSet JAVA_PLAIN_COMMENT_BIT_SET = TokenSet.create(END_OF_LINE_COMMENT, C_STYLE_COMMENT);
-  TokenSet JAVA_COMMENT_BIT_SET = TokenSet.orSet(JAVA_PLAIN_COMMENT_BIT_SET, TokenSet.create(DOC_COMMENT));
+  TokenSet JAVA_COMMENT_BIT_SET = TokenSet.orSet(JAVA_PLAIN_COMMENT_BIT_SET, TokenSet.create(DOC_COMMENT, DOC_MARKDOWN_COMMENT));
 
   TokenSet JAVA_COMMENT_OR_WHITESPACE_BIT_SET = TokenSet.orSet(JAVA_WHITESPACE_BIT_SET, JAVA_COMMENT_BIT_SET);
 

@@ -115,6 +115,12 @@ public enum JavaFeature {
     //JEP 507
     PRIMITIVE_TYPES_IN_PATTERNS(LanguageLevel.JDK_23_PREVIEW, "feature.primitive.types.in.patterns"),
 
+    /**
+     * Usually, this type of comments is shown as Javadoc despite language level.
+     * This option can be used only to adjust behavior for cases with conflicts between different types of comments (markdown and old-style)
+     */
+    MARKDOWN_COMMENT(LanguageLevel.JDK_23, "feature.markdown.comment"),
+
     //JEP 494
     PACKAGE_IMPORTS_SHADOW_MODULE_IMPORTS(LanguageLevel.JDK_24_PREVIEW, "feature.package.import.shadow.module.import") {
         @Override

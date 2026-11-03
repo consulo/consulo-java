@@ -37,7 +37,11 @@ public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Con
   private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(
     DOC_TAG_VALUE_ELEMENT, DOC_METHOD_OR_FIELD_REF, DOC_PARAMETER_REF);
   private static final TokenSet VALUE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
-    JavaDocTokenType.DOC_TAG_VALUE_TOKEN, JAVA_CODE_REFERENCE, JavaDocTokenType.DOC_COMMENT_DATA, DOC_INLINE_TAG, DOC_REFERENCE_HOLDER));
+    JavaDocTokenType.DOC_TAG_VALUE_TOKEN, JAVA_CODE_REFERENCE, JavaDocTokenType.DOC_COMMENT_DATA, DOC_INLINE_TAG, DOC_REFERENCE_HOLDER,
+    DOC_MARKDOWN_REFERENCE_LINK, DOC_FRAGMENT_REF,
+    DOC_SHARP, DOC_LBRACKET, DOC_RBRACKET, DOC_LPAREN, DOC_RPAREN, DOC_CODE_FENCE, DOC_INLINE_CODE_FENCE, DOC_MARKDOWN_CODE_BLOCK,
+    DOC_COMMA,
+    DOC_MARKDOWN_LINK));
 
   public PsiDocTagImpl() {
     super(DOC_TAG);
@@ -82,7 +86,7 @@ public class PsiDocTagImpl extends CompositePsiElement implements PsiDocTag, Con
     if (i == JavaDocTokenType.DOC_TAG_NAME) {
       return ChildRole.DOC_TAG_NAME;
     }
-    else if (i == JavaDocElementType.DOC_COMMENT || i == DOC_INLINE_TAG) {
+    else if (JavaDocElementType.DOC_COMMENT_TOKENS.contains(i) || i == DOC_INLINE_TAG) {
       return ChildRole.DOC_CONTENT;
     }
     else if (i == JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS) {

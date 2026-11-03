@@ -32,14 +32,17 @@ import consulo.language.psi.PsiElementVisitor;
 import consulo.language.util.IncorrectOperationException;
 
 public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlineDocTag, Constants {
-  private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(DOC_TAG_VALUE_ELEMENT, DOC_METHOD_OR_FIELD_REF);
+  private static final TokenSet TAG_VALUE_BIT_SET = TokenSet.create(DOC_TAG_VALUE_ELEMENT, DOC_METHOD_OR_FIELD_REF, DOC_FRAGMENT_REF);
   private static final TokenSet VALUE_NO_WHITESPACE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
     JAVA_CODE_REFERENCE,
     JavaDocTokenType.DOC_TAG_VALUE_TOKEN,
     JavaDocTokenType.DOC_COMMENT_DATA,
     DOC_INLINE_TAG,
     DOC_REFERENCE_HOLDER,
-    JavaDocTokenType.DOC_COMMENT_BAD_CHARACTER));
+    JavaDocTokenType.DOC_COMMENT_BAD_CHARACTER,
+    DOC_SNIPPET_TAG_VALUE,
+    DOC_SHARP, DOC_LBRACKET, DOC_RBRACKET, DOC_LPAREN, DOC_RPAREN, DOC_CODE_FENCE, DOC_INLINE_CODE_FENCE, DOC_MARKDOWN_CODE_BLOCK,
+    DOC_COMMA, DOC_MARKDOWN_LINK));
   public static final TokenSet VALUE_BIT_SET = TokenSet.orSet(TAG_VALUE_BIT_SET, TokenSet.create(
     JAVA_CODE_REFERENCE,
     JavaDocTokenType.DOC_TAG_VALUE_TOKEN,
@@ -47,7 +50,10 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
     JavaDocTokenType.DOC_COMMENT_DATA,
     DOC_INLINE_TAG,
     DOC_REFERENCE_HOLDER,
-    JavaDocTokenType.DOC_COMMENT_BAD_CHARACTER));
+    JavaDocTokenType.DOC_COMMENT_BAD_CHARACTER,
+    DOC_SNIPPET_TAG_VALUE,
+    DOC_SHARP, DOC_LBRACKET, DOC_RBRACKET, DOC_LPAREN, DOC_RPAREN, DOC_CODE_FENCE, DOC_INLINE_CODE_FENCE, DOC_MARKDOWN_CODE_BLOCK,
+    DOC_COMMA, DOC_MARKDOWN_LINK));
 
   public PsiInlineDocTagImpl() {
     super(DOC_INLINE_TAG);
@@ -56,7 +62,7 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
   @Override
   public PsiDocComment getContainingComment() {
     ASTNode scope = getTreeParent();
-    while (scope.getElementType() != JavaDocElementType.DOC_COMMENT) {
+    while (!JavaDocElementType.DOC_COMMENT_TOKENS.contains(scope.getElementType())) {
       scope = scope.getTreeParent();
     }
     return (PsiDocComment)SourceTreeToPsiMap.treeElementToPsi(scope);
@@ -97,7 +103,7 @@ public class PsiInlineDocTagImpl extends CompositePsiElement implements PsiInlin
     if (i == JavaDocTokenType.DOC_TAG_NAME) {
       return ChildRole.DOC_TAG_NAME;
     }
-    else if (i == JavaDocElementType.DOC_COMMENT || i == DOC_INLINE_TAG) {
+    else if (JavaDocElementType.DOC_COMMENT_TOKENS.contains(i) || i == DOC_INLINE_TAG) {
       return ChildRole.DOC_CONTENT;
     }
     else if (i == JavaDocTokenType.DOC_INLINE_TAG_START) {

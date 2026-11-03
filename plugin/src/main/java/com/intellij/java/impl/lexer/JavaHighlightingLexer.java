@@ -22,6 +22,8 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaDocElementType;
 import com.intellij.java.language.psi.JavaDocTokenType;
 import com.intellij.java.language.psi.JavaTokenType;
 import consulo.language.ast.IElementType;
+import consulo.language.ast.TokenSet;
+import consulo.language.lexer.FuseMergingLexer;
 import consulo.language.lexer.LayeredLexer;
 import consulo.language.lexer.StringLiteralLexer;
 import consulo.xml.lexer.HtmlHighlightingLexer;
@@ -39,12 +41,24 @@ public class JavaHighlightingLexer extends LayeredLexer {
     registerSelfStoppingLayer(new StringLiteralLexer('\'', JavaTokenType.STRING_LITERAL),
         new IElementType[]{JavaTokenType.CHARACTER_LITERAL}, IElementType.EMPTY_ARRAY);
 
-    LayeredLexer docLexer = new LayeredLexer(new JavaDocLexer(languageLevel));
+    LayeredLexer docLexer = new LayeredLexer(new FuseMergingLexer(
+      new JavaDocLexer(languageLevel),
+      JavaDocTokenType.DOC_COMMENT_DATA,
+      TokenSet.create(
+        JavaDocTokenType.DOC_CODE_FENCE,
+        JavaDocTokenType.DOC_SHARP,
+        JavaDocTokenType.DOC_DOUBLE_SHARP,
+        JavaDocTokenType.DOC_COMMA,
+        JavaDocTokenType.DOC_TAG_VALUE_SLASH,
+        JavaDocTokenType.DOC_GT,
+        JavaDocTokenType.DOC_LT
+      )
+    ));
 
     HtmlHighlightingLexer lexer = new HtmlHighlightingLexer();
     lexer.setHasNoEmbeddments(true);
     docLexer.registerLayer(lexer, JavaDocTokenType.DOC_COMMENT_DATA);
 
-    registerSelfStoppingLayer(docLexer, new IElementType[]{JavaDocElementType.DOC_COMMENT}, IElementType.EMPTY_ARRAY);
+    registerSelfStoppingLayer(docLexer, new IElementType[]{JavaDocElementType.DOC_COMMENT, JavaDocElementType.DOC_MARKDOWN_COMMENT}, IElementType.EMPTY_ARRAY);
   }
 }

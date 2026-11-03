@@ -82,6 +82,7 @@ public class JavaFileHighlighter extends LanguageVersionableSyntaxHighlighter {
 
     ourMap1.put(JavaTokenType.C_STYLE_COMMENT, JavaHighlightingColors.JAVA_BLOCK_COMMENT);
     ourMap1.put(JavaDocElementType.DOC_COMMENT, JavaHighlightingColors.DOC_COMMENT);
+    ourMap1.put(JavaDocElementType.DOC_MARKDOWN_COMMENT, JavaHighlightingColors.DOC_COMMENT);
     ourMap1.put(JavaTokenType.END_OF_LINE_COMMENT, JavaHighlightingColors.LINE_COMMENT);
     ourMap1.put(TokenType.BAD_CHARACTER, HighlighterColors.BAD_CHARACTER);
 

@@ -22,8 +22,8 @@ import consulo.language.ast.TokenSet;
 /**
  * @author yole
  */
-public class JavaDocTokenTypes implements DocCommentTokenTypes {
-  public static final DocCommentTokenTypes INSTANCE = new JavaDocTokenTypes();
+public final class JavaDocTokenTypes implements JavaDocCommentTokenTypes {
+  public static final JavaDocCommentTokenTypes INSTANCE = new JavaDocTokenTypes();
   private final TokenSet mySpaceCommentsSet = TokenSet.create(JavaDocTokenType.DOC_SPACE, JavaDocTokenType.DOC_COMMENT_DATA);
 
   private JavaDocTokenTypes() { }
@@ -69,8 +69,23 @@ public class JavaDocTokenTypes implements DocCommentTokenTypes {
   }
 
   @Override
+  public IElementType tagValueQuote() {
+    return JavaDocTokenType.DOC_TAG_VALUE_QUOTE;
+  }
+
+  @Override
+  public IElementType tagValueColon() {
+    return JavaDocTokenType.DOC_TAG_VALUE_COLON;
+  }
+
+  @Override
   public IElementType tagValueSharp() {
     return JavaDocTokenType.DOC_TAG_VALUE_SHARP_TOKEN;
+  }
+
+  @Override
+  public IElementType tagValueSlash() {
+    return JavaDocTokenType.DOC_TAG_VALUE_SLASH;
   }
 
   @Override
@@ -111,5 +126,45 @@ public class JavaDocTokenTypes implements DocCommentTokenTypes {
   @Override
   public IElementType commentLeadingAsterisks() {
     return JavaDocTokenType.DOC_COMMENT_LEADING_ASTERISKS;
+  }
+
+  @Override
+  public IElementType codeFence() {
+    return JavaDocTokenType.DOC_CODE_FENCE;
+  }
+
+  @Override
+  public IElementType rightBracket() {
+    return JavaDocTokenType.DOC_RBRACKET;
+  }
+
+  @Override
+  public IElementType leftBracket() {
+    return JavaDocTokenType.DOC_LBRACKET;
+  }
+
+  @Override
+  public IElementType leftParenthesis() {
+    return JavaDocTokenType.DOC_LPAREN;
+  }
+
+  @Override
+  public IElementType rightParenthesis() {
+    return JavaDocTokenType.DOC_RPAREN;
+  }
+
+  @Override
+  public IElementType sharp() {
+    return JavaDocTokenType.DOC_SHARP;
+  }
+
+  @Override
+  public IElementType inlineCodeFence() {
+    return JavaDocTokenType.DOC_INLINE_CODE_FENCE;
+  }
+
+  @Override
+  public IElementType comma() {
+    return JavaDocTokenType.DOC_COMMA;
   }
 }

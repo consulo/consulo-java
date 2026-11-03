@@ -70,7 +70,7 @@ public class EnumConstantElement extends CompositeElement implements Constants {
   public int getChildRole(ASTNode child) {
     LOG.assertTrue(child.getTreeParent() == this);
     IElementType i = child.getElementType();
-    if (i == JavaDocElementType.DOC_COMMENT) {
+    if (JavaDocElementType.DOC_COMMENT_TOKENS.contains(i)) {
       return getChildRole(child, ChildRole.DOC_COMMENT);
     } else if (i == JavaTokenType.C_STYLE_COMMENT || i == JavaTokenType.END_OF_LINE_COMMENT) {
       {

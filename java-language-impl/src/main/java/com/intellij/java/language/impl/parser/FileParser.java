@@ -7,6 +7,7 @@ import consulo.language.parser.PsiBuilder;
 import consulo.util.lang.Pair;
 import com.intellij.java.language.psi.JavaTokenType;
 import com.intellij.java.language.psi.PsiKeyword;
+import com.intellij.java.language.impl.psi.impl.source.WhiteSpaceAndCommentSetHolder;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import consulo.language.ast.IElementType;
@@ -97,8 +98,8 @@ public class FileParser
 
 		if(impListInfo.second && firstDeclarationOk == Boolean.TRUE)
 		{
-			impListInfo.first.setCustomEdgeTokenBinders(PRECEDING_COMMENT_BINDER, null);  // pass comments behind fake import list
-			firstDeclaration.setCustomEdgeTokenBinders(SPECIAL_PRECEDING_COMMENT_BINDER, null);
+			impListInfo.first.setCustomEdgeTokenBinders(WhiteSpaceAndCommentSetHolder.getPrecedingCommentBinder(getLanguageLevel(builder)), null);  // pass comments behind fake import list
+			firstDeclaration.setCustomEdgeTokenBinders(WhiteSpaceAndCommentSetHolder.getSpecialPrecedingCommentBinder(getLanguageLevel(builder)), null);
 		}
 	}
 
@@ -133,7 +134,7 @@ public class FileParser
 		{
 			PsiBuilder.Marker modList = builder.mark();
 			myParser.getDeclarationParser().parseAnnotations(builder);
-			done(modList, JavaElementType.MODIFIER_LIST);
+			done(modList, JavaElementType.MODIFIER_LIST, builder);
 			if(!expect(builder, JavaTokenType.PACKAGE_KEYWORD))
 			{
 				statement.rollbackTo();
@@ -150,7 +151,7 @@ public class FileParser
 
 		semicolon(builder);
 
-		done(statement, JavaElementType.PACKAGE_STATEMENT);
+		done(statement, JavaElementType.PACKAGE_STATEMENT, builder);
 	}
 
 	protected Pair<PsiBuilder.Marker, Boolean> parseImportList(PsiBuilder builder, Predicate<? super PsiBuilder> stopper)
@@ -202,7 +203,7 @@ public class FileParser
 			list = precede;
 		}
 
-		done(list, JavaElementType.IMPORT_LIST);
+		done(list, JavaElementType.IMPORT_LIST, builder);
 		return Pair.create(list, isEmpty);
 	}
 
@@ -236,7 +237,7 @@ public class FileParser
 			semicolon(builder);
 		}
 
-		done(statement, type);
+		done(statement, type, builder);
 		return statement;
 	}
 
