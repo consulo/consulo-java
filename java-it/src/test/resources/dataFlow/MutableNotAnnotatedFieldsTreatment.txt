@@ -1,0 +1,2 @@
+376:384 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation.sure
+702:716 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition

@@ -78,6 +78,7 @@
 		<module>jam-api</module>
 		<module>jam-impl</module>
 		<module>plugin</module>
+		<module>java-it</module>
 
 		<module>jdk-annotations</module>
 

@@ -1,0 +1,11 @@
+116:120 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.passing.null.argument
+136:140 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+194:198 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+261:265 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.passing.null.argument
+281:285 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+371:375 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+438:442 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.passing.null.argument
+458:462 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+538:542 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+607:618 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+678:689 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition

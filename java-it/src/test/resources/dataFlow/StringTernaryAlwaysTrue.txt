@@ -1,0 +1,2 @@
+74:78 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+98:102 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition

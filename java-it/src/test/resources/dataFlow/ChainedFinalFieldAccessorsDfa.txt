@@ -1,0 +1,4 @@
+1098:1106 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+283:291 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+437:445 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+628:636 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation

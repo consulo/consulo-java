@@ -1,0 +1,11 @@
+1169:1172 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.nullable.from.notnull
+1361:1364 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.value
+1382:1385 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+1583:1596 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+1593:1596 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.value
+1632:1635 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.value
+1632:1645 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+1695:1698 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.value
+1716:1719 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+778:784 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+994:997 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.nullable.from.notnull
