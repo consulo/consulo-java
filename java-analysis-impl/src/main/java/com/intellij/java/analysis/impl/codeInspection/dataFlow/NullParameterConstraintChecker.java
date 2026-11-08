@@ -1,6 +1,7 @@
 // Copyright 2000-2021 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import consulo.language.dataFlow.interpreter.StandardDataFlowInterpreter;
@@ -62,7 +63,7 @@ final class NullParameterConstraintChecker {
     flow.keepVariables(desc -> desc.getPsiElement() instanceof PsiParameter psi && nullableParameters.contains(psi));
     DfaMemoryState state = new JvmDfaMemoryStateImpl(factory);
     for (PsiParameter parameter : nullableParameters) {
-      state.applyCondition(PlainDescriptor.createVariableValue(factory, parameter).eq(DfaNullability.NULLABLE.asDfType()));
+      state.applyCondition(PlainDescriptor.createVariableValue(factory, parameter).eq(JavaDfaNullability.asDfType(DfaNullability.NULLABLE)));
     }
 
     interpreter.interpret(state);

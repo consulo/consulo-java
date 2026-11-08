@@ -1,7 +1,8 @@
 // Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.transfer;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraints;
 import consulo.language.dataFlow.interpreter.DataFlowInterpreter;
@@ -107,7 +108,7 @@ public class TryCatchTrap implements Trap {
     DfaMemoryState catchingCopy = state.createCopy();
     if (param != null) {
       DfaVariableValue value = interpreter.getFactory().getVarFactory().createVariableValue(param);
-      catchingCopy.meetDfType(value, constraint.asDfType().meet(DfaNullability.NOT_NULL.asDfType()));
+      catchingCopy.meetDfType(value, constraint.asDfType().meet(JavaDfaNullability.asDfType(DfaNullability.NOT_NULL)));
     }
     return catchingCopy;
   }

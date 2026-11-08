@@ -2,12 +2,13 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.java.inst;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CustomMethodHandlers;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaCallArguments;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaCallState;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.HardcodedContracts;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
@@ -417,9 +418,9 @@ public class MethodCallInstruction extends ExpressionPushingInstruction {
     if (precomputedValue != null) {
       if (myReturnNullability == Nullability.NOT_NULL) {
         if (precomputedValue instanceof DfaVariableValue) {
-          state.meetDfType(precomputedValue, DfaNullability.NOT_NULL.asDfType());
+          state.meetDfType(precomputedValue, JavaDfaNullability.asDfType(DfaNullability.NOT_NULL));
         } else {
-          precomputedValue = factory.fromDfType(precomputedValue.getDfType().meet(DfaNullability.NOT_NULL.asDfType()));
+          precomputedValue = factory.fromDfType(precomputedValue.getDfType().meet(JavaDfaNullability.asDfType(DfaNullability.NOT_NULL)));
         }
       }
       return precomputedValue;
@@ -464,7 +465,7 @@ public class MethodCallInstruction extends ExpressionPushingInstruction {
         }
       }
       else {
-        dfType = TypeConstraints.instanceOf(type).asDfType().meet(DfaNullability.fromNullability(nullability).asDfType());
+        dfType = TypeConstraints.instanceOf(type).asDfType().meet(JavaDfaNullability.asDfType(JavaDfaNullability.fromNullability(nullability)));
       }
       if (InheritanceUtil.isInheritor(type, JAVA_UTIL_STREAM_BASE_STREAM)) {
         dfType = dfType.meet(((DfReferenceType)CONSUMED_STREAM.asDfType(DfStreamStateType.OPEN)).dropNullability());

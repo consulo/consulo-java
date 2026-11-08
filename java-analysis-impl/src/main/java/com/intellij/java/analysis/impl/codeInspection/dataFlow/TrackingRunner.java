@@ -1,6 +1,7 @@
 // Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
+import consulo.language.dataFlow.types.DfaNullability;
 import consulo.localize.LocalizeManager;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.NullabilityAnnotationInfo;
@@ -1290,7 +1291,7 @@ public final class TrackingRunner extends StandardDataFlowRunner {
     if (owner != null) {
       NullabilityAnnotationInfo info = NullableNotNullManager.getInstance(owner.getProject()).findEffectiveNullabilityInfo(owner);
       String name = ((PsiNamedElement)owner).getName();
-      if (info != null && DfaNullability.fromNullability(info.getNullability()) == nullability) {
+      if (info != null && JavaDfaNullability.fromNullability(info.getNullability()) == nullability) {
         String message;
         if (info.isInferred()) {
           if (owner instanceof PsiParameter &&
@@ -1345,21 +1346,21 @@ public final class TrackingRunner extends StandardDataFlowRunner {
       if (owner instanceof PsiField && FieldChecker.getChecker(getFactory().getContext()).canTrustFieldInitializer((PsiField)owner)) {
         Pair<PsiExpression, Nullability> fieldNullability =
           NullabilityUtil.getNullabilityFromFieldInitializers((PsiField)owner);
-        if (fieldNullability.second == DfaNullability.toNullability(nullability)) {
+        if (fieldNullability.second == JavaDfaNullability.toNullability(nullability)) {
           PsiExpression initializer = fieldNullability.first;
           if (initializer != null) {
             if (initializer.getContainingFile() == anchor.getContainingFile()) {
               anchor = initializer;
             }
             return new CauseItem(JavaAnalysisBundle.message("dfa.find.cause.field.initializer.nullability", name,
-                                                            DfaNullability.fromNullability(fieldNullability.second).getPresentationName()),
+                                                            JavaDfaNullability.fromNullability(fieldNullability.second).getPresentationName()),
                                  anchor);
           }
           if (owner.getContainingFile() == anchor.getContainingFile()) {
             anchor = owner;
           }
           return new CauseItem(JavaAnalysisBundle.message("dfa.find.cause.field.assigned.nullability", name,
-                                                          DfaNullability.fromNullability(fieldNullability.second).getPresentationName()),
+                                                          JavaDfaNullability.fromNullability(fieldNullability.second).getPresentationName()),
                                anchor);
         }
       }

@@ -1,11 +1,12 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
 import consulo.language.dataFlow.types.DfType;
 import consulo.language.dataFlow.types.DfConstantType;
 
 import com.intellij.java.language.codeInsight.Nullability;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.Mutability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraints;
@@ -451,7 +452,7 @@ public final class DfTypes {
       mutability = Mutability.UNMODIFIABLE_VIEW;
     }
     return new DfGenericObjectType(Set.of(), constraint,
-                                   DfaNullability.fromNullability(nullability), mutability, null, DfType.BOTTOM, false);
+                                   JavaDfaNullability.fromNullability(nullability), mutability, null, DfType.BOTTOM, false);
   }
 
   /**

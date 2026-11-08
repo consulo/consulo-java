@@ -1,6 +1,7 @@
 // Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfReferenceType;
 import consulo.language.dataFlow.types.DfType;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;

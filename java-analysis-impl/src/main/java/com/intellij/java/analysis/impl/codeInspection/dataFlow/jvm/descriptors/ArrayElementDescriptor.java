@@ -1,8 +1,9 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.descriptors;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
 import com.intellij.java.language.codeInsight.Nullability;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityUtil;
@@ -83,7 +84,7 @@ public final class ArrayElementDescriptor extends JvmVariableDescriptor {
           if (!(psiType instanceof PsiArrayType arrayType)) return dfType;
           psiType = arrayType.getComponentType();
         }
-        return dfType.meet(DfaNullability.fromNullability(DfaPsiUtil.getTypeNullability(psiType)).asDfType());
+        return dfType.meet(JavaDfaNullability.asDfType(JavaDfaNullability.fromNullability(DfaPsiUtil.getTypeNullability(psiType))));
       }
     }
     return dfType;
@@ -217,7 +218,7 @@ public final class ArrayElementDescriptor extends JvmVariableDescriptor {
     if (componentType instanceof DfReferenceType && 
         array instanceof DfaVariableValue var && var.getDescriptor() instanceof PsiVarDescriptor varDescriptor &&
         varDescriptor.getType(var.getQualifier()) instanceof PsiArrayType arrayType) {
-      return componentType.meet(DfaNullability.fromNullability(DfaPsiUtil.getTypeNullability(arrayType.getComponentType())).asDfType());
+      return componentType.meet(JavaDfaNullability.asDfType(JavaDfaNullability.fromNullability(DfaPsiUtil.getTypeNullability(arrayType.getComponentType()))));
     }
     return componentType;
   }

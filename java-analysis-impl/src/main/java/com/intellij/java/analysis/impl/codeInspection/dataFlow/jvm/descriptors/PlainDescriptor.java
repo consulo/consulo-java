@@ -1,10 +1,11 @@
 // Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.descriptors;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
 import com.intellij.java.language.psi.util.ExpressionUtil;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityUtil;
@@ -175,7 +176,7 @@ public final class PlainDescriptor extends PsiVarDescriptor {
     PsiType type = getType(qualifier);
     Nullability nullability = DfaPsiUtil.getElementNullabilityForRead(type, myVariable);
     if (nullability != Nullability.UNKNOWN) {
-      return DfaNullability.fromNullability(nullability);
+      return JavaDfaNullability.fromNullability(nullability);
     }
 
     if (myVariable instanceof PsiParameter && myVariable.getParent() instanceof PsiForeachStatement forEach) {
@@ -183,13 +184,13 @@ public final class PlainDescriptor extends PsiVarDescriptor {
       if (iteratedValue != null) {
         PsiType itemType = JavaGenericsUtil.getCollectionItemType(iteratedValue);
         if (itemType != null) {
-          return DfaNullability.fromNullability(DfaPsiUtil.getElementNullabilityForRead(itemType, myVariable));
+          return JavaDfaNullability.fromNullability(DfaPsiUtil.getElementNullabilityForRead(itemType, myVariable));
         }
       }
     }
 
     if (field != null && FieldChecker.getChecker(context).canTrustFieldInitializer(field)) {
-      return DfaNullability.fromNullability(NullabilityUtil.getNullabilityFromFieldInitializers(field).second);
+      return JavaDfaNullability.fromNullability(NullabilityUtil.getNullabilityFromFieldInitializers(field).second);
     }
     return DfaNullability.UNKNOWN;
   }

@@ -2,7 +2,7 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import consulo.language.dataFlow.memory.DfaMemoryStateImpl;
 import consulo.language.dataFlow.memory.DistinctPairSet;

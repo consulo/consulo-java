@@ -1,9 +1,10 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
 import com.intellij.java.language.codeInsight.Nullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractValue;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.MethodContract;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.Mutability;
@@ -227,12 +228,12 @@ public enum SpecialField implements DerivedVariableDescriptor {
     @Override
     public DfType getInitialDfType(DfaVariableValue thisValue,
                                             @Nullable PsiElement context) {
-      return getDfType(thisValue.getQualifier()).meet(DfaNullability.NULLABLE.asDfType());
+      return getDfType(thisValue.getQualifier()).meet(JavaDfaNullability.asDfType(DfaNullability.NULLABLE));
     }
 
     @Override
     public DfType getDefaultValue() {
-      return DfaNullability.NULLABLE.asDfType();
+      return JavaDfaNullability.asDfType(DfaNullability.NULLABLE);
     }
 
     @Override

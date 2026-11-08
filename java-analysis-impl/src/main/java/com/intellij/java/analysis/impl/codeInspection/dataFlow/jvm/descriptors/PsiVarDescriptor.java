@@ -1,8 +1,9 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.descriptors;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
 import com.intellij.java.language.codeInsight.Nullability;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.Mutability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.JvmPsiRangeSetUtil;
@@ -83,7 +84,7 @@ public abstract class PsiVarDescriptor extends JvmVariableDescriptor {
         mutability = Mutability.UNKNOWN;
       }
       dfType = dfType.meet(mutability.asDfType());
-      dfType = dfType.meet(calcCanBeNull(thisValue, context).asDfType());
+      dfType = dfType.meet(JavaDfaNullability.asDfType(calcCanBeNull(thisValue, context)));
     }
     return dfType;
   }

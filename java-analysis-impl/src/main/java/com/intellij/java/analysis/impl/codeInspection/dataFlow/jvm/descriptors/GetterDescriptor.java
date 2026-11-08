@@ -1,9 +1,10 @@
 // Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.descriptors;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.CustomMethodHandlers;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaCallArguments;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.MutationSignature;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
@@ -132,7 +133,7 @@ public final class GetterDescriptor extends PsiVarDescriptor {
   @Override
   DfaNullability calcCanBeNull(DfaVariableValue value, @Nullable PsiElement context) {
     PsiType type = getType(value.getQualifier());
-    return DfaNullability.fromNullability(DfaPsiUtil.getElementNullabilityForRead(type, myGetter));
+    return JavaDfaNullability.fromNullability(DfaPsiUtil.getElementNullabilityForRead(type, myGetter));
   }
 
   @Override

@@ -5,7 +5,7 @@ import consulo.language.dataFlow.types.DfType;
 import consulo.language.dataFlow.types.DfConstantType;
 import consulo.language.dataFlow.types.DfAntiConstantType;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.Mutability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;

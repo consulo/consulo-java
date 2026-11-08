@@ -2,7 +2,7 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.java.inst;
 
 import com.intellij.java.language.codeInsight.Nullability;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import consulo.language.dataFlow.interpreter.DataFlowInterpreter;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.descriptors.GetterDescriptor;
 import consulo.language.dataFlow.ir.DfaAnchor;

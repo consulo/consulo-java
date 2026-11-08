@@ -1,9 +1,11 @@
 // Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
+import consulo.language.dataFlow.types.DfNullableType;
 import consulo.language.dataFlow.types.DfType;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.Mutability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraints;
@@ -17,10 +19,11 @@ import java.util.Map;
 /**
  * Type that corresponds to JVM reference type; represents subset of possible reference values (may include null)
  */
-public interface DfReferenceType extends DfType {
+public interface DfReferenceType extends DfNullableType {
   /**
    * @return nullability of this type
    */
+  @Override
   DfaNullability getNullability();
 
   /**
@@ -66,6 +69,7 @@ public interface DfReferenceType extends DfType {
   /**
    * @return this type without nullability knowledge, or simply this type if it's a constant
    */
+  @Override
   DfReferenceType dropNullability();
 
   /**
@@ -88,7 +92,7 @@ public interface DfReferenceType extends DfType {
     if (inherentNullability == DfaNullability.NULLABLE) {
       DfaNullability nullability = DfaNullability.fromDfType(typeBeforeFlush);
       if (nullability == DfaNullability.FLUSHED || nullability == DfaNullability.NOT_NULL) {
-        return dropNullability().meet(DfaNullability.FLUSHED.asDfType());
+        return dropNullability().meet(JavaDfaNullability.asDfType(DfaNullability.FLUSHED));
       }
     }
     return this;

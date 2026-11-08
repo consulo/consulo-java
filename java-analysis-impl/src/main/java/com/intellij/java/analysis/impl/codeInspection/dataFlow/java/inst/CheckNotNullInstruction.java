@@ -1,7 +1,7 @@
 // Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.java.inst;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityProblemKind;
 import consulo.language.dataFlow.interpreter.DataFlowInterpreter;
 import consulo.language.dataFlow.interpreter.StandardDataFlowInterpreter;

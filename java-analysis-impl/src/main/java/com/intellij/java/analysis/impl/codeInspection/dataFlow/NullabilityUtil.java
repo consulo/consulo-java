@@ -1,6 +1,7 @@
 // Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.codeInsight.daemon.JavaImplicitUsageProvider;
 import com.intellij.java.language.codeInsight.DataflowNullabilityContributor;
 import com.intellij.java.analysis.impl.codeInsight.JavaPsiEquivalenceUtil;
@@ -140,7 +141,7 @@ public final class NullabilityUtil {
         return getExpressionNullability(elseExpression, useDataflow);
       }
       if (useDataflow && !dumb) {
-        return DfaNullability.toNullability(DfaNullability.fromDfType(CommonDataflow.getDfType(expression)));
+        return JavaDfaNullability.toNullability(DfaNullability.fromDfType(CommonDataflow.getDfType(expression)));
       }
       Nullability left = getExpressionNullability(thenExpression, false);
       if (left == Nullability.UNKNOWN) return Nullability.UNKNOWN;
@@ -157,7 +158,7 @@ public final class NullabilityUtil {
       return Nullability.NOT_NULL;
     }
     if (useDataflow && !dumb) {
-      return DfaNullability.toNullability(DfaNullability.fromDfType(CommonDataflow.getDfType(expression)));
+      return JavaDfaNullability.toNullability(DfaNullability.fromDfType(CommonDataflow.getDfType(expression)));
     }
     if (expression instanceof PsiReferenceExpression ref) {
       PsiElement target = ref.resolve();

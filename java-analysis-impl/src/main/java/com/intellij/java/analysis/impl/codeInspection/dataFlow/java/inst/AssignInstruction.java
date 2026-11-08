@@ -2,7 +2,8 @@
 
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.java.inst;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaDfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import consulo.language.dataFlow.interpreter.DataFlowInterpreter;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.java.JavaDfaHelpers;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.java.anchor.JavaExpressionAnchor;
@@ -94,7 +95,7 @@ public class AssignInstruction extends ExpressionPushingInstruction {
       interpreter.getListener().afterAssignment(dfaSource, dfaDest, stateBefore, getDfaAnchor());
       if (DfaNullability.fromDfType(var.getInherentType()) == DfaNullability.NULLABLE &&
           DfaNullability.fromDfType(stateBefore.getDfType(var)) == DfaNullability.UNKNOWN && isVariableInitializer()) {
-        stateBefore.meetDfType(var, DfaNullability.NULLABLE.asDfType());
+        stateBefore.meetDfType(var, JavaDfaNullability.asDfType(DfaNullability.NULLABLE));
       }
     }
 

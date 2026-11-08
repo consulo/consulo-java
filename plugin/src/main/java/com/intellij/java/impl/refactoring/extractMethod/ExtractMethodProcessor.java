@@ -97,7 +97,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_TYPE;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardDataFlowRunner;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.java.JavaDfaListener;
 import com.intellij.java.language.psi.PsiCodeBlock;
@@ -469,7 +469,7 @@ public class ExtractMethodProcessor implements MatchProvider {
       }
     };
     final RunnerResult rc = dfaRunner.analyzeMethod(block, interceptor);
-    return rc == RunnerResult.OK && interceptor.myVisited ? DfaNullability.toNullability(interceptor.myNullability) : Nullability.UNKNOWN;
+    return rc == RunnerResult.OK && interceptor.myVisited ? JavaDfaNullability.toNullability(interceptor.myNullability) : Nullability.UNKNOWN;
   }
 
     protected boolean checkOutputVariablesCount() {

@@ -4,7 +4,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 import consulo.language.dataFlow.types.DfType;
 import consulo.language.dataFlow.types.DfConstantType;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import consulo.language.dataFlow.types.DfaNullability;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraints;
 import org.jspecify.annotations.Nullable;
