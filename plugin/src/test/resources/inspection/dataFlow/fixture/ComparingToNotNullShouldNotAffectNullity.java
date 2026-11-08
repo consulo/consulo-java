@@ -1,8 +1,10 @@
+import javax.annotation.Nonnull;
 
 import java.util.Collection;
 
 public class Bar3 {
 
+  @Nonnull
   Object getObj() {
     return new Object();
   }

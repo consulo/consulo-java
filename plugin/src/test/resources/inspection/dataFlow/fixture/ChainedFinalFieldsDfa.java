@@ -1,4 +1,4 @@
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 public class BrokenAlignment {
 
   void main(Data data) {
@@ -29,11 +29,10 @@ public class BrokenAlignment {
   }
 
   private static class Data {
-    @jakarta.annotation.Nullable
-    public final String text;
+    @Nullable public final String text;
     @Nullable public final Data inner;
 
-    Data(@jakarta.annotation.Nullable String text, Data inner) {
+    Data(@Nullable String text, Data inner) {
       this.text = text;
       this.inner = inner;
     }

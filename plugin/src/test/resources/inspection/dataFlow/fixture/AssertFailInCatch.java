@@ -1,3 +1,4 @@
+import javax.annotation.Nonnull;
 
 import org.junit.Assert;
 
@@ -18,7 +19,7 @@ class Test {
     }
   }
 
-  private static 
+  private static @Nonnull
   String createString() {
     throw new NullPointerException();
   }

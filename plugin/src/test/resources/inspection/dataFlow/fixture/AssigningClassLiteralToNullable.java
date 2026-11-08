@@ -1,4 +1,5 @@
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class BrokenAlignment {
 
@@ -7,7 +8,7 @@ public class BrokenAlignment {
     output2(object);
   }
 
-  public static void output2(Object value) {
+  public static void output2(@Nonnull Object value) {
     System.out.println(value);
   }
 }

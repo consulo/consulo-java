@@ -1,10 +1,10 @@
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 
 public class Bar {
 
     void navigateTo() {
         Computable c = new Computable() {
-            @jakarta.annotation.Nullable
+            @javax.annotation.Nullable
             public Object compute() {
                 return null;
             }
@@ -14,6 +14,5 @@ public class Bar {
 }
 
 interface Computable {
-    @Nullable
-    Object compute();
+    @Nullable Object compute();
 }

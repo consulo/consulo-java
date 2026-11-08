@@ -1,4 +1,4 @@
-import org.jspecify.annotations.Nullable;
+import javax.annotation.Nullable;
 
 class Fun {
   @Nullable

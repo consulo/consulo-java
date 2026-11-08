@@ -1,7 +1,5 @@
-import org.jspecify.annotations.Nullable;
-
 class Class1 {
-  public void f(@Nullable Object o) {
+  public void f(@javax.annotation.Nullable Object o) {
     o = o != null ? o : Class2.O;
     o.toString();
   }

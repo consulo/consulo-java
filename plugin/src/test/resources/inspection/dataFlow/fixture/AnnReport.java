@@ -1,3 +1,4 @@
+import javax.annotation.Nonnull;
 
 public class ASD {
   static void foo(Object any) {
@@ -13,6 +14,7 @@ public class ASD {
     }
   }
 
+  @Nonnull
   static Object bar() {
     return new Object();
   }
