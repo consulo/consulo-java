@@ -203,4 +203,12 @@ public interface PsiMethod extends PsiMember, PsiNameIdentifierOwner, PsiModifie
   default JvmReferenceType[] getThrowsTypes() {
     return getThrowsList().getReferencedTypes();
   }
+
+  /**
+   * @return true if the method is a default constructor, false otherwise
+   * @see #isConstructor()
+   */
+  default boolean isDefaultConstructor() {
+    return false;
+  }
 }

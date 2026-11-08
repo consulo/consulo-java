@@ -1,52 +1,57 @@
-/*
- * Copyright 2013-2017 consulo.io
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.fix;
 
-import com.intellij.java.language.psi.JavaPsiFacade;
-import com.intellij.java.language.psi.PsiExpression;
-import com.intellij.java.language.psi.PsiInstanceOfExpression;
-import consulo.annotation.access.RequiredWriteAction;
-import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
+import com.intellij.java.language.psi.*;
+import com.intellij.java.language.psi.codeStyle.JavaCodeStyleManager;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.CommentTracker;
+import consulo.language.editor.inspection.LocalQuickFixOnPsiElement;
 import consulo.language.editor.inspection.localize.InspectionLocalize;
 import consulo.language.psi.PsiElement;
+import consulo.language.psi.PsiFile;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import consulo.util.collection.ArrayUtil;
 
-/**
- * @author peter
- */
-public class RedundantInstanceofFix implements LocalQuickFix
-{
-	@Override
-	public LocalizeValue getName()
-	{
-		return InspectionLocalize.inspectionDataFlowRedundantInstanceofQuickfix();
-	}
+public class RedundantInstanceofFix extends LocalQuickFixOnPsiElement {
+  public RedundantInstanceofFix(PsiElement element) {
+    super(element);
+  }
 
-	@Override
-	@RequiredWriteAction
-	public void applyFix(Project project, ProblemDescriptor descriptor)
-	{
-		final PsiElement psiElement = descriptor.getPsiElement();
-		if (psiElement instanceof PsiInstanceOfExpression instanceOfExpression)
-		{
-			PsiExpression compareToNull = JavaPsiFacade.getInstance(psiElement.getProject()).getElementFactory()
-				.createExpressionFromText(instanceOfExpression.getOperand().getText() + " != null", psiElement.getParent());
-			psiElement.replace(compareToNull);
-		}
-	}
+  @Override
+  public LocalizeValue getText() {
+    return InspectionLocalize.inspectionDataFlowRedundantInstanceofQuickfix();
+  }
+
+  @Override
+  public void invoke(Project project, PsiFile file, PsiElement element, PsiElement endElement) {
+    PsiElement psiElement = element;
+    CommentTracker ct = new CommentTracker();
+    JavaCodeStyleManager javaCodeStyleManager = JavaCodeStyleManager.getInstance(project);
+    if (psiElement instanceof PsiMethodReferenceExpression) {
+      String replacement = CommonClassNames.JAVA_UTIL_OBJECTS + "::nonNull";
+      javaCodeStyleManager.shortenClassReferences(ct.replaceAndRestoreComments(psiElement, replacement));
+      return;
+    }
+    String nonNullExpression = null;
+    if (psiElement instanceof PsiInstanceOfExpression instanceOf) {
+      nonNullExpression = ct.text(instanceOf.getOperand());
+    }
+    else if (psiElement instanceof PsiMethodCallExpression call) {
+      PsiExpression arg = ArrayUtil.getFirstElement(call.getArgumentList().getExpressions());
+      if (arg == null) return;
+      nonNullExpression = ct.text(arg);
+    }
+    if (nonNullExpression == null) return;
+    PsiElement parent = PsiUtil.skipParenthesizedExprUp(psiElement.getParent());
+    String replacement;
+    if (parent instanceof PsiExpression expression && BoolUtils.isNegation(expression)) {
+      replacement = nonNullExpression + "==null";
+      psiElement = parent;
+    } else {
+      replacement = nonNullExpression + "!=null";
+    }
+    javaCodeStyleManager.shortenClassReferences(ct.replaceAndRestoreComments(psiElement, replacement));
+  }
 }

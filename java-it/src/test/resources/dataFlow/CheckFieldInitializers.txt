@@ -1,1 +1,1 @@
-226:235 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.passing.nullable.argument
+226:235 Argument Foo.foo() might be null

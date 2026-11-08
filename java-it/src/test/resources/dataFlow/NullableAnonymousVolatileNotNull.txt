@@ -1,2 +1,2 @@
-327:336 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
-441:445 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.assigning.null
+327:336 Condition o != null is always true
+441:445 null is assigned to a variable that is annotated with @NotNull

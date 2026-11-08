@@ -1,4 +1,4 @@
-421:429 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation.sure
-549:557 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-678:686 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-831:845 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+421:429 Method invocation hashCode will produce NullPointerException
+549:557 Method invocation hashCode may produce NullPointerException
+678:686 Method invocation hashCode may produce NullPointerException
+831:845 Condition f.data == null is always false

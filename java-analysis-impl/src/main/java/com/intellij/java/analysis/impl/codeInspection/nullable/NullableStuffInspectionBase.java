@@ -8,7 +8,7 @@ import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix
 import com.intellij.java.analysis.impl.codeInsight.intention.AddTypeAnnotationFix;
 import com.intellij.java.analysis.impl.codeInspection.RemoveAnnotationQuickFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.MethodCallInstruction;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.java.inst.MethodCallInstruction;
 import com.intellij.java.analysis.impl.psi.impl.search.JavaNullMethodArgumentUtil;
 import com.intellij.java.indexing.impl.search.JavaOverridingMethodsSearcher;
 import com.intellij.java.indexing.search.searches.OverridingMethodsSearch;

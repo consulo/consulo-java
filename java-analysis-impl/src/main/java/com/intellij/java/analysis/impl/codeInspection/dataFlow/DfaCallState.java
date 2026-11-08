@@ -1,32 +1,55 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
+import consulo.language.dataFlow.memory.DfaMemoryState;
+import consulo.language.dataFlow.value.DfaValue;
 
-final class DfaCallState
-{
-	final DfaMemoryState myMemoryState;
-	final DfaCallArguments myCallArguments;
+public final class DfaCallState {
+  final DfaMemoryState myMemoryState;
+  final DfaCallArguments myCallArguments;
+  final DfaValue myReturnValue;
 
-	DfaCallState(DfaMemoryState state, DfaCallArguments arguments)
-	{
-		myMemoryState = state;
-		myCallArguments = arguments;
-	}
+  public DfaCallState(DfaMemoryState state,
+               DfaCallArguments arguments,
+               DfaValue returnValue) {
+    myMemoryState = state;
+    myCallArguments = arguments;
+    myReturnValue = returnValue;
+  }
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if(this == o)
-			return true;
-		if(!(o instanceof DfaCallState))
-			return false;
-		DfaCallState that = (DfaCallState) o;
-		return myMemoryState.equals(that.myMemoryState) && myCallArguments.equals(that.myCallArguments);
-	}
+  public DfaMemoryState getMemoryState() {
+    return myMemoryState;
+  }
 
-	@Override
-	public int hashCode()
-	{
-		return 31 * myMemoryState.hashCode() + myCallArguments.hashCode();
-	}
+  public DfaCallArguments getCallArguments() {
+    return myCallArguments;
+  }
+
+  public DfaValue getReturnValue() {
+    return myReturnValue;
+  }
+
+  public DfaCallState withMemoryState(DfaMemoryState state) {
+    return new DfaCallState(state, myCallArguments, myReturnValue);
+  }
+
+  public DfaCallState withArguments(DfaCallArguments arguments) {
+    return new DfaCallState(myMemoryState, arguments, myReturnValue);
+  }
+
+  public DfaCallState withReturnValue(DfaValue returnValue) {
+    return new DfaCallState(myMemoryState, myCallArguments, returnValue);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof DfaCallState that)) return false;
+    return myMemoryState.equals(that.myMemoryState) && myCallArguments.equals(that.myCallArguments);
+  }
+
+  @Override
+  public int hashCode() {
+    return 31 * myMemoryState.hashCode() + myCallArguments.hashCode();
+  }
 }

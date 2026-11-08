@@ -1,112 +1,111 @@
-// Copyright 2000-2020 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfType;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
-import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.ig.psiutils.ExpressionUtils;
+import consulo.localize.LocalizeValue;
+import consulo.language.editor.localize.CommonQuickFixLocalize;
+import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.language.editor.inspection.LocalQuickFix;
-import consulo.language.editor.inspection.ProblemDescriptor;
-import consulo.language.editor.localize.CommonQuickFixLocalize;
-import consulo.language.psi.PsiElement;
-import consulo.language.psi.util.PsiTreeUtil;
-import consulo.localize.LocalizeValue;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.SpecialField;
+import consulo.language.dataFlow.types.DfType;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes;
+import com.intellij.java.analysis.impl.codeInspection.util.OptionalUtil;
 import consulo.project.Project;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.PsiClass;
+import consulo.language.psi.PsiElement;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import consulo.language.psi.util.PsiTreeUtil;
+import com.intellij.java.language.psi.util.PsiUtil;
+import com.siyeh.ig.psiutils.ExpressionUtils;
 import org.jspecify.annotations.Nullable;
 
 /**
  * @author anet, peter
  */
 public final class DfaOptionalSupport {
-    @Nullable
-    public static LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(PsiExpression qualifier) {
-        PsiMethodCallExpression call = findCallExpression(qualifier);
-        PsiMethod method = call == null ? null : call.resolveMethod();
-        PsiClass containingClass = method == null ? null : method.getContainingClass();
-        if (containingClass != null && "of".equals(method.getName())) {
-            String qualifiedName = containingClass.getQualifiedName();
-            if (CommonClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName)) {
-                return new ReplaceOptionalCallFix("ofNullable", false);
-            }
-            if (OptionalUtil.GUAVA_OPTIONAL.equals(qualifiedName)) {
-                return new ReplaceOptionalCallFix("fromNullable", false);
-            }
-        }
-        return null;
+
+  public static @Nullable LocalQuickFix registerReplaceOptionalOfWithOfNullableFix(PsiExpression qualifier) {
+    final PsiMethodCallExpression call = findCallExpression(qualifier);
+    final PsiMethod method = call == null ? null : call.resolveMethod();
+    final PsiClass containingClass = method == null ? null : method.getContainingClass();
+    if (containingClass != null && "of".equals(method.getName())) {
+      final String qualifiedName = containingClass.getQualifiedName();
+      if (CommonClassNames.JAVA_UTIL_OPTIONAL.equals(qualifiedName)) {
+        return new ReplaceOptionalCallFix("ofNullable", false);
+      }
+      if (OptionalUtil.GUAVA_OPTIONAL.equals(qualifiedName)) {
+        return new ReplaceOptionalCallFix("fromNullable", false);
+      }
+    }
+    return null;
+  }
+
+  private static PsiMethodCallExpression findCallExpression(PsiElement anchor) {
+    final PsiElement argList = PsiUtil.skipParenthesizedExprUp(anchor).getParent();
+    if (argList instanceof PsiExpressionList) {
+      final PsiElement parent = argList.getParent();
+      if (parent instanceof PsiMethodCallExpression) {
+        return (PsiMethodCallExpression)parent;
+      }
+    }
+    return null;
+  }
+
+  public static @Nullable LocalQuickFix createReplaceOptionalOfNullableWithEmptyFix(PsiElement anchor) {
+    final PsiMethodCallExpression parent = findCallExpression(anchor);
+    if (parent == null) return null;
+    boolean jdkOptional = OptionalUtil.JDK_OPTIONAL_OF_NULLABLE.test(parent);
+    return new ReplaceOptionalCallFix(jdkOptional ? "empty" : "absent", true);
+  }
+
+  public static @Nullable LocalQuickFix createReplaceOptionalOfNullableWithOfFix(PsiElement anchor) {
+    final PsiMethodCallExpression parent = findCallExpression(anchor);
+    if (parent == null) return null;
+    return new ReplaceOptionalCallFix("of", false);
+  }
+
+  /**
+   * Creates a DfType which represents present or absent optional (non-null)
+   * @param present whether the value should be present
+   * @return a DfType representing an Optional
+   */
+  public static DfType getOptionalValue(boolean present) {
+    DfType valueType = present ? DfTypes.NOT_NULL_OBJECT : DfTypes.NULL;
+    return SpecialField.OPTIONAL_VALUE.asDfType(valueType);
+  }
+
+  private static class ReplaceOptionalCallFix implements LocalQuickFix {
+    private final String myTargetMethodName;
+    private final boolean myClearArguments;
+
+    ReplaceOptionalCallFix(final String targetMethodName, boolean clearArguments) {
+      myTargetMethodName = targetMethodName;
+      myClearArguments = clearArguments;
     }
 
-    private static PsiMethodCallExpression findCallExpression(PsiElement anchor) {
-        if (PsiUtil.skipParenthesizedExprUp(anchor).getParent() instanceof PsiExpressionList argList) {
-            PsiElement parent = argList.getParent();
-            if (parent instanceof PsiMethodCallExpression methodCall) {
-                return methodCall;
-            }
-        }
-        return null;
+    @Override
+    public LocalizeValue getName() {
+      return CommonQuickFixLocalize.fixReplaceWithX("." + myTargetMethodName + "()");
     }
 
-    @Nullable
-    public static LocalQuickFix createReplaceOptionalOfNullableWithEmptyFix(PsiElement anchor) {
-        PsiMethodCallExpression parent = findCallExpression(anchor);
-        if (parent == null) {
-            return null;
+    @Override
+    @RequiredReadAction
+    public void applyFix(Project project, ProblemDescriptor descriptor) {
+      final PsiMethodCallExpression methodCallExpression = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
+      if (methodCallExpression != null) {
+        ExpressionUtils.bindCallTo(methodCallExpression, myTargetMethodName);
+        if (myClearArguments) {
+          PsiExpressionList argList = methodCallExpression.getArgumentList();
+          PsiExpression[] args = argList.getExpressions();
+          if (args.length > 0) {
+            argList.deleteChildRange(args[0], args[args.length - 1]);
+          }
         }
-        boolean jdkOptional = OptionalUtil.JDK_OPTIONAL_OF_NULLABLE.test(parent);
-        return new ReplaceOptionalCallFix(jdkOptional ? "empty" : "absent", true);
+      }
     }
-
-    @Nullable
-    public static LocalQuickFix createReplaceOptionalOfNullableWithOfFix(PsiElement anchor) {
-        PsiMethodCallExpression parent = findCallExpression(anchor);
-        if (parent == null) {
-            return null;
-        }
-        return new ReplaceOptionalCallFix("of", false);
-    }
-
-    /**
-     * Creates a DfType which represents present or absent optional (non-null)
-     *
-     * @param present whether the value should be present
-     * @return a DfType representing an Optional
-     */
-    public static DfType getOptionalValue(boolean present) {
-        DfType valueType = present ? DfTypes.NOT_NULL_OBJECT : DfTypes.NULL;
-        return SpecialField.OPTIONAL_VALUE.asDfType(valueType);
-    }
-
-    private static class ReplaceOptionalCallFix implements LocalQuickFix {
-        private final String myTargetMethodName;
-        private final boolean myClearArguments;
-
-        ReplaceOptionalCallFix(String targetMethodName, boolean clearArguments) {
-            myTargetMethodName = targetMethodName;
-            myClearArguments = clearArguments;
-        }
-
-        @Override
-        public LocalizeValue getName() {
-            return CommonQuickFixLocalize.fixReplaceWithX("." + myTargetMethodName + "()");
-        }
-
-        @Override
-        @RequiredReadAction
-        public void applyFix(Project project, ProblemDescriptor descriptor) {
-            PsiMethodCallExpression
-                methodCallExpression = PsiTreeUtil.getParentOfType(descriptor.getPsiElement(), PsiMethodCallExpression.class);
-            if (methodCallExpression != null) {
-                ExpressionUtils.bindCallTo(methodCallExpression, myTargetMethodName);
-                if (myClearArguments) {
-                    PsiExpressionList argList = methodCallExpression.getArgumentList();
-                    PsiExpression[] args = argList.getExpressions();
-                    if (args.length > 0) {
-                        argList.deleteChildRange(args[0], args[args.length - 1]);
-                    }
-                }
-            }
-        }
-    }
+  }
 }

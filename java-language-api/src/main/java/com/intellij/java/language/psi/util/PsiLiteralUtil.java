@@ -832,4 +832,8 @@ public final class PsiLiteralUtil {
       return lineBreakIdx + 1;
     }
   }
+
+  public static boolean isTextBlockWhiteSpace(char c) {
+    return c == ' ' || c == '\t' || c == '\f';
+  }
 }

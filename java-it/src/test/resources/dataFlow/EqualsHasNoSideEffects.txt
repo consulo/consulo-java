@@ -1,2 +1,2 @@
-517:540 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition.when.reached
-733:739 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+517:540 Condition identifier.user == null is always true when reached
+733:739 Method invocation equals may produce NullPointerException

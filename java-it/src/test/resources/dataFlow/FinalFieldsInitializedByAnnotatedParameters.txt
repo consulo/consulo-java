@@ -1,2 +1,2 @@
-376:387 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
-399:405 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+376:387 Condition myB != null is always true
+399:405 Method invocation equals may produce NullPointerException

@@ -18,7 +18,7 @@ package com.intellij.java.impl.refactoring.extractMethod;
 import com.intellij.java.analysis.impl.codeInsight.daemon.impl.analysis.JavaHighlightUtil;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.value.DfaValue;
+import consulo.language.dataFlow.value.DfaValue;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.ExtractMethodUtil;
 import com.intellij.java.analysis.impl.refactoring.extractMethod.InputVariables;
 import com.intellij.java.analysis.impl.refactoring.util.VariableData;
@@ -97,6 +97,13 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static com.intellij.java.language.codeInsight.AnnotationUtil.CHECK_TYPE;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardDataFlowRunner;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.java.JavaDfaListener;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiExpression;
+import consulo.language.dataFlow.interpreter.RunnerResult;
+import consulo.language.dataFlow.memory.DfaMemoryState;
 
 public class ExtractMethodProcessor implements MatchProvider {
     private static final Logger LOG = Logger.getInstance(ExtractMethodProcessor.class);
@@ -445,29 +452,25 @@ public class ExtractMethodProcessor implements MatchProvider {
 
     @RequiredReadAction
     private static Nullability inferNullability(PsiCodeBlock block, PsiExpression expr) {
-        DataFlowRunner dfaRunner = new DataFlowRunner(block.getProject());
+    final var dfaRunner = new StandardDataFlowRunner(block.getProject());
 
-        class Visitor extends StandardInstructionVisitor {
-            DfaNullability myNullability = DfaNullability.NOT_NULL;
-            boolean myVisited = false;
+    var interceptor = new JavaDfaListener() {
+      DfaNullability myNullability = DfaNullability.NOT_NULL;
+      boolean myVisited = false;
 
-            @Override
-            protected void beforeExpressionPush(
-                DfaValue value,
-                PsiExpression expression,
-                @Nullable TextRange range,
-                DfaMemoryState state
-            ) {
-                if (expression == expr && range == null) {
-                    myVisited = true;
-                    myNullability = myNullability.unite(DfaNullability.fromDfType(state.getDfType(value)));
-                }
-            }
+      @Override
+      public void beforeExpressionPush(DfaValue value,
+                                       PsiExpression expression,
+                                       DfaMemoryState state) {
+        if (expression == expr) {
+          myVisited = true;
+          myNullability = myNullability.unite(DfaNullability.fromDfType(state.getDfType(value)));
         }
-        Visitor visitor = new Visitor();
-        RunnerResult rc = dfaRunner.analyzeMethod(block, visitor);
-        return rc == RunnerResult.OK && visitor.myVisited ? DfaNullability.toNullability(visitor.myNullability) : Nullability.UNKNOWN;
-    }
+      }
+    };
+    final RunnerResult rc = dfaRunner.analyzeMethod(block, interceptor);
+    return rc == RunnerResult.OK && interceptor.myVisited ? DfaNullability.toNullability(interceptor.myNullability) : Nullability.UNKNOWN;
+  }
 
     protected boolean checkOutputVariablesCount() {
         int outputCount = (myHasExpressionOutput ? 1 : 0) + (myGenerateConditionalExit ? 1 : 0) + myOutputVariables.length;

@@ -1,1 +1,1 @@
-281:294 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+281:294 Condition field == null is always true

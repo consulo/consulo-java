@@ -1,1 +1,1 @@
-198:222 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition.when.reached
+198:222 Condition oldCount2 != getCount2() is always false when reached

@@ -104,7 +104,7 @@ public interface MethodReturnInferenceResult
 				return Mutability.UNKNOWN;
 			}
 
-			return delegateCalls.stream().map(it -> getDelegateMutability(it, body.get())).reduce(Mutability::unite).orElse(Mutability.UNKNOWN);
+			return delegateCalls.stream().map(it -> getDelegateMutability(it, body.get())).reduce(Mutability::join).orElse(Mutability.UNKNOWN);
 		}
 
 		private Mutability getDelegateMutability(ExpressionRange delegate, PsiCodeBlock body)

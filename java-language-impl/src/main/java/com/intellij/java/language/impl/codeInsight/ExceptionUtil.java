@@ -26,7 +26,9 @@ import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.infos.MethodCandidateInfo;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.MethodSignatureUtil;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
+import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.psi.util.TypeConversionUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.java.language.impl.codeInsight.ExtraExceptionHandler;
@@ -466,6 +468,70 @@ public class ExceptionUtil {
         }
 
         return array;
+    }
+
+    /**
+     * Returns all checked exceptions that the specified element throws itself (a call, a throw statement, a method reference,
+     * an enum constant constructor call, a resource close or a string template processing) and that are not handled.
+     */
+    public static List<PsiClassType> getOwnUnhandledExceptions(PsiElement element) {
+        if (element instanceof PsiEnumConstant) {
+            final PsiMethod method = ((PsiEnumConstant) element).resolveMethod();
+            if (method != null) {
+                return getUnhandledExceptions(method, element, null, PsiSubstitutor.EMPTY);
+            }
+            return Collections.emptyList();
+        }
+        if (element instanceof PsiCallExpression) {
+            return getUnhandledExceptions((PsiCallExpression) element, null);
+        }
+        if (element instanceof PsiThrowStatement) {
+            return getUnhandledExceptions((PsiThrowStatement) element, null);
+        }
+        if (element instanceof PsiMethodReferenceExpression) {
+            return new ArrayList<>(getUnhandledExceptions((PsiMethodReferenceExpression) element, null));
+        }
+        if (element instanceof PsiResourceListElement) {
+            return getUnhandledCloserExceptions((PsiResourceListElement) element, null);
+        }
+        if (element instanceof PsiTemplateExpression) {
+            return getUnhandledProcessorExceptions((PsiTemplateExpression) element, null);
+        }
+        return Collections.emptyList();
+    }
+
+    /**
+     * Returns all checked exceptions that are thrown by the specified {@code templateExpression}
+     * and not handled inside the specified {@code topElement}.
+     *
+     * @param templateExpression the template expression to check
+     * @param topElement         ancestor element which may handle exceptions in e.g., try-catch statements.
+     */
+    public static List<PsiClassType> getUnhandledProcessorExceptions(PsiTemplateExpression templateExpression,
+                                                                     @Nullable PsiElement topElement) {
+        if (!PsiUtil.getLanguageLevel(templateExpression).equals(LanguageLevel.JDK_21_PREVIEW)) {
+            return new ArrayList<>(collectUnhandledExceptions(templateExpression, topElement));
+        }
+        PsiExpression processor = templateExpression.getProcessor();
+        if (processor == null) {
+            return Collections.emptyList();
+        }
+        PsiType type = processor.getType();
+        List<PsiClassType> result = new ArrayList<>();
+        for (PsiClassType classType : PsiTypesUtil.getClassTypeComponents(type)) {
+            // Currently, a generic parameter type is considered as unhandled exception; not actual exceptions declared by 'process' method
+            PsiType substituted = PsiUtil.substituteTypeParameter(classType, CommonClassNames.JAVA_LANG_STRING_TEMPLATE_PROCESSOR, 1, false);
+            if (substituted instanceof PsiCapturedWildcardType wildcardType) {
+                substituted = wildcardType.getUpperBound();
+            }
+            if (!(substituted instanceof PsiClassType exceptionType)) {
+                continue;
+            }
+            if (!isUncheckedException(exceptionType) && !isHandled(templateExpression, exceptionType, topElement)) {
+                result.add(exceptionType);
+            }
+        }
+        return result;
     }
 
     public static List<PsiClassType> getUnhandledExceptions(PsiElement element) {

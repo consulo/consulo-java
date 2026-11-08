@@ -39,18 +39,15 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction {
-    private final boolean myUnknownMembersAsNullable;
     private final boolean myIgnoreAssertStatements;
     private final SmartPsiElementPointer<PsiExpression> myAnchor;
     private final TrackingRunner.DfaProblemType myProblemType;
 
     public FindDfaProblemCauseFix(
-        boolean unknownMembersAsNullable,
         boolean ignoreAssertStatements,
         PsiExpression anchor,
         TrackingRunner.DfaProblemType problemType
     ) {
-        myUnknownMembersAsNullable = unknownMembersAsNullable;
         myIgnoreAssertStatements = ignoreAssertStatements;
         myAnchor = SmartPointerManager.createPointer(anchor);
         myProblemType = problemType;
@@ -73,7 +70,7 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction 
             if (element == null) {
                 return null;
             }
-            return TrackingRunner.findProblemCause(myUnknownMembersAsNullable, myIgnoreAssertStatements, element, myProblemType);
+            return TrackingRunner.findProblemCause(myIgnoreAssertStatements, element, myProblemType);
         };
         TrackingRunner.CauseItem item = ProgressManager.getInstance().runProcessWithProgressSynchronously(
             () -> ReadAction.compute(causeFinder), "Finding Cause", true, project);

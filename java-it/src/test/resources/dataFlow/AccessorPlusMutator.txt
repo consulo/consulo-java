@@ -1,1 +1,1 @@
-311:314 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.value
+311:314 Value tmp is always 'null'

@@ -1,1 +1,1 @@
-91:96 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.field.access
+91:96 Dereference of fff() may produce NullPointerException

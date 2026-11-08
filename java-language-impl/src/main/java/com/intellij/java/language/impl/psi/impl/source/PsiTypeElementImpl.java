@@ -10,7 +10,7 @@ import com.intellij.java.language.impl.psi.impl.source.tree.JavaElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.JavaSharedImplUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.PsiAugmentProvider;
-import com.intellij.java.language.psi.util.JavaPsiPatternUtil;
+import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.psi.util.JavaVarTypeUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import com.intellij.java.language.util.JavaTypeNullabilityUtil;

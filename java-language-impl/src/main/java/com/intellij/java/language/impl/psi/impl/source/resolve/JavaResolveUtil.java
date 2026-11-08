@@ -30,7 +30,7 @@ import com.intellij.java.language.psi.infos.CandidateInfo;
 import com.intellij.java.language.psi.javadoc.PsiDocComment;
 import com.intellij.java.language.psi.util.InheritanceUtil;
 import com.intellij.java.language.psi.util.JavaModuleGraphHelper;
-import com.intellij.java.language.psi.util.JavaPsiPatternUtil;
+import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.psi.util.PsiTypesUtil;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.language.impl.ast.FileElement;

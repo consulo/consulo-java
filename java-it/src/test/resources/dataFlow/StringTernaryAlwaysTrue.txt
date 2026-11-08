@@ -1,2 +1,2 @@
-74:78 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
-98:102 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+74:78 Condition flag is always true
+98:102 Condition flag is always true

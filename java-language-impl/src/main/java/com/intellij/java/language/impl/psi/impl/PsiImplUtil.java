@@ -898,10 +898,13 @@ public class PsiImplUtil {
      * @return enclosing label statement or null if given expression is not a label statement expression
      */
     @Nullable
-    public static PsiSwitchLabelStatementBase getSwitchLabel(PsiExpression expression) {
-        if (PsiUtil.skipParenthesizedExprUp(expression.getParent()) instanceof PsiExpressionList exprList
-            && exprList.getParent() instanceof PsiSwitchLabelStatementBase switchLabelStmt) {
-            return switchLabelStmt;
+    public static PsiSwitchLabelStatementBase getSwitchLabel(PsiCaseLabelElement labelElement) {
+        PsiElement parent = PsiUtil.skipParenthesizedExprUp(labelElement.getParent());
+        if (parent instanceof PsiCaseLabelElementList) {
+            PsiElement grand = parent.getParent();
+            if (grand instanceof PsiSwitchLabelStatementBase) {
+                return (PsiSwitchLabelStatementBase) grand;
+            }
         }
         return null;
     }

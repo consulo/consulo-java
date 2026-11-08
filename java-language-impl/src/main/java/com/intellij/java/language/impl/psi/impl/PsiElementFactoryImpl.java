@@ -15,6 +15,10 @@
  */
 package com.intellij.java.language.impl.psi.impl;
 
+import com.intellij.java.language.JavaFeature;
+
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.lexer.JavaLexer;
 import com.intellij.java.language.impl.parser.JavaParser;
@@ -585,6 +589,14 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
 
   @Override
   public PsiDeclarationStatement createVariableDeclarationStatement(final String name, final PsiType type, final PsiExpression initializer) throws IncorrectOperationException {
+    return createVariableDeclarationStatement(name, type, initializer, null);
+  }
+
+  @Override
+  public PsiDeclarationStatement createVariableDeclarationStatement(String name,
+                                                                   PsiType type,
+                                                                   @Nullable PsiExpression initializer,
+                                                                   @Nullable PsiElement context) throws IncorrectOperationException {
     if (!PsiNameHelper.getInstance(myManager.getProject()).isIdentifier(name)) {
       throw new IncorrectOperationException("\"" + name + "\" is not an identifier.");
     }
@@ -592,11 +604,15 @@ public class PsiElementFactoryImpl extends PsiJavaParserFacadeImpl implements Ps
       throw new IncorrectOperationException("Cannot create variable with type \"null\".");
     }
 
-    final String text = "X " + name + (initializer != null ? " = x" : "") + ";";
+    final String text = "var " + name + (initializer != null ? " = x" : "") + ";";
 
-    final PsiDeclarationStatement statement = (PsiDeclarationStatement) createStatementFromText(text, null);
+    final PsiDeclarationStatement statement = (PsiDeclarationStatement) createStatementFromText(text, context);
     final PsiVariable variable = (PsiVariable) statement.getDeclaredElements()[0];
-    replace(variable.getTypeElement(), createTypeElement(type), text);
+    boolean generateVar = !PsiTypesUtil.isDenotableType(type, variable) && initializer != null &&
+                          PsiUtil.isAvailable(JavaFeature.LVTI, initializer);
+    if (!generateVar) {
+      replace(variable.getTypeElement(), createTypeElement(GenericsUtil.getVariableTypeByExpressionType(type)), text);
+    }
     PsiUtil.setModifierProperty(variable, PsiModifier.FINAL, JavaCodeStyleSettingsFacade.getInstance(myManager.getProject()).isGenerateFinalLocals());
     if (initializer != null) {
       replace(variable.getInitializer(), initializer, text);

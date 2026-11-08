@@ -2,4 +2,8 @@
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
 public interface DfFloatingPointType extends DfPrimitiveType {
+  @Override
+  default boolean hasNonStandardEquivalence() {
+    return true;
+  }
 }

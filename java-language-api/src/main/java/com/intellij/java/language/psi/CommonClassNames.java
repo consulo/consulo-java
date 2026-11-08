@@ -115,4 +115,39 @@ public interface CommonClassNames {
     String JAVA_UTIL_STREAM_COLLECTORS = "java.util.stream.Collectors";
 
     String JAVAX_ANNOTATION_GENERATED = "javax.annotation.Generated";
+
+  String JAVA_LANG_SYSTEM = "java.lang.System";
+  String JAVA_UTIL_LINKED_HASH_MAP = "java.util.LinkedHashMap";
+  String JAVA_UTIL_NAVIGABLE_MAP = "java.util.NavigableMap";
+  String JAVA_UTIL_LINKED_LIST = "java.util.LinkedList";
+  String JAVA_UTIL_LINKED_HASH_SET = "java.util.LinkedHashSet";
+  String JAVA_UTIL_NAVIGABLE_SET = "java.util.NavigableSet";
+  String JAVA_UTIL_STACK = "java.util.Stack";
+  String JAVA_UTIL_UUID = "java.util.UUID";
+  String JAVA_IO_BYTE_ARRAY_OUTPUT_STREAM = "java.io.ByteArrayOutputStream";
+  String JAVA_IO_SERIAL = "java.io.Serial";
+  String JAVA_IO_FILE_INPUT_STREAM = "java.io.FileInputStream";
+  String JAVA_IO_FILE_OUTPUT_STREAM = "java.io.FileOutputStream";
+  String JAVA_IO_FILE_READER = "java.io.FileReader";
+  String JAVA_IO_FILE_WRITER = "java.io.FileWriter";
+  String JAVA_IO_WRITER = "java.io.Writer";
+  String JAVA_LANG_STRING_TEMPLATE = "java.lang.StringTemplate";
+  String JAVA_LANG_STRING_TEMPLATE_PROCESSOR = "java.lang.StringTemplate.Processor";
+  String JAVA_LANG_IO = "java.lang.IO";
+  String JAVA_NIO_CHARSET_CHARSET = "java.nio.charset.Charset";
+  String JAVA_NET_URI = "java.net.URI";
+  String JAVA_NET_URL = "java.net.URL";
+  String JAVA_TIME_LOCAL_DATE = "java.time.LocalDate";
+  String JAVA_TIME_LOCAL_TIME = "java.time.LocalTime";
+  String JAVA_TIME_LOCAL_DATE_TIME = "java.time.LocalDateTime";
+  String JAVA_TIME_OFFSET_DATE_TIME = "java.time.OffsetDateTime";
+  String JAVA_TIME_OFFSET_TIME = "java.time.OffsetTime";
+  String JAVA_TIME_ZONED_DATE_TIME = "java.time.ZonedDateTime";
+  String JAVA_UTIL_CONCURRENT_COMPLETABLE_FUTURE = "java.util.concurrent.CompletableFuture";
+  String JAVA_UTIL_CONCURRENT_COMPLETION_STAGE = "java.util.concurrent.CompletionStage";
+  String JAVA_UTIL_FORMATTER = "java.util.Formatter";
+  String JAVA_UTIL_FUNCTION_SUPPLIER = "java.util.function.Supplier";
+  String CLASS_FILE_EXTENSION = ".class";
+  String SERIAL_VERSION_UID_FIELD_NAME = "serialVersionUID";
+  String JAVA_UTIL_SERVICE_LOADER = "java.util.ServiceLoader";
 }

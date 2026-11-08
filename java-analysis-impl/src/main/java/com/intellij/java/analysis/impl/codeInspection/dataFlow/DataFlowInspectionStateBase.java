@@ -13,4 +13,6 @@ public class DataFlowInspectionStateBase {
     public boolean REPORT_NULLS_PASSED_TO_NOT_NULL_PARAMETER = true;
     public boolean REPORT_NULLABLE_METHODS_RETURNING_NOT_NULL = true;
     public boolean REPORT_UNSOUND_WARNINGS = true;
+    public boolean REPORT_MATCHED_EXCEPTION = true;
+    public boolean REPORT_UNSPECIFIED_PARAMETRIC_NULLNESS = false;
 }

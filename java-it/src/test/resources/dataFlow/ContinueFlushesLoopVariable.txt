@@ -1,1 +1,1 @@
-286:293 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+286:293 Condition escaped is always true

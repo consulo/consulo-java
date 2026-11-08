@@ -26,6 +26,33 @@ import consulo.util.lang.ObjectUtil;
 
 import org.jspecify.annotations.Nullable;
 import java.util.*;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiCallExpression;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiConditionalExpression;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiInstanceOfExpression;
+import com.intellij.java.language.psi.PsiLambdaParameterType;
+import com.intellij.java.language.psi.PsiMember;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiStatement;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
+import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiTypes;
+import com.intellij.java.language.psi.PsiVariable;
+import com.intellij.java.language.psi.util.TypeConversionUtil;
+import consulo.language.psi.PsiFile;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class VariableAccessUtils {
 
@@ -470,5 +497,118 @@ public class VariableAccessUtils {
     public Set<PsiVariable> getUsedVariables() {
       return usedVariables;
     }
+  }
+
+
+  /**
+   * Finds all references to the specified variable in the declaration scope of the variable,
+   * i.e. everywhere the variable is accessible.
+   * NOTE: this method will only search in the containing file for the variable. This may lead to incorrect results for fields.
+   *
+   * @param variable  the variable to find references for
+   * @return a list of references, empty list if no references were found.
+   */
+  public static List<PsiReferenceExpression> getVariableReferences(PsiVariable variable) {
+    PsiFile file = variable.getContainingFile();
+    if (file == null) return List.of();
+    // Consulo has no LocalRefUseInfo (the cache of the highlighting pass), the references are searched in the scope of the variable
+    return getVariableReferences(variable, variable instanceof PsiField ? file : PsiUtil.getVariableCodeBlock(variable, null));
+  }
+
+
+  /**
+   * @param statement statement to scan
+   * @return list of variables declared inside given element that could conflict with other declarations on statement level.
+   * I.e. all local and pattern declarations declared inside, except declarations from the local/anonymous classes.
+   */
+  public static List<PsiVariable> findDeclaredVariables(PsiStatement statement) {
+    List<PsiVariable> variables = new ArrayList<>();
+    statement.accept(new JavaRecursiveElementWalkingVisitor() {
+
+      @Override
+      public void visitClass(final PsiClass aClass) {}
+
+      @Override
+      public void visitVariable(PsiVariable variable) {
+        variables.add(variable);
+        super.visitVariable(variable);
+      }
+    });
+    return variables;
+  }
+
+
+  /// Returns true if the type of element that `reference` refers to can be safely changed to `targetType`.
+  ///
+  /// ### Example
+  ///
+  /// Consider the following (obviously wrong, but good enough for demo purpose) code:
+  ///
+  /// ```java
+  /// void foo(Optional<String> opt) {
+  ///   Object obj = opt.get();
+  ///   if (obj instanceof Integer) {
+  ///     doStuff();
+  ///   }
+  ///   // ...
+  /// }
+  /// ```
+  ///
+  /// Let's say you'd like to know if it's "safe" to change the type of local variable `obj` from `Object` to `String`.
+  /// "Safe" means that there likely will be no compile-time errors or behavior difference after such a type change is performed.
+  ///
+  /// In our example, this method returns false because changing the type of `obj`
+  /// to `String` will cause a compile-time error like `cannot cast 'java.lang.String' to 'java.lang.Integer'`.
+  ///
+  /// It's possible there are cases not covered by this method.
+  /// If you discover such a case, consider updating the implementation.
+  public static boolean isVariableTypeChangeSafeForReference(PsiType targetType, PsiReferenceExpression reference) {
+    if (targetType instanceof PsiLambdaParameterType || PsiTypes.nullType().equals(targetType)) return false;
+    PsiElement parent = PsiUtil.skipParenthesizedExprUp(reference.getParent());
+    if (PsiUtil.isAccessedForWriting(reference)) {
+      if (!(parent instanceof PsiAssignmentExpression assignment)) return false;
+      PsiExpression rValue = assignment.getRExpression();
+      if (rValue == null) return false;
+      PsiType rValueType = rValue.getType();
+      return rValueType != null && targetType.isAssignableFrom(rValueType);
+    }
+    while (parent instanceof PsiConditionalExpression) {
+      parent = PsiUtil.skipParenthesizedExprUp(parent.getParent());
+    }
+    if (parent instanceof PsiInstanceOfExpression instanceOf) {
+      PsiTypeElement checkTypeElement = instanceOf.getCheckType();
+      if (checkTypeElement == null) return false;
+      PsiType checkType = checkTypeElement.getType();
+      // Could be always false instanceof which will become compilation error after fix
+      return TypeConversionUtil.areTypesConvertible(targetType, checkType);
+    }
+    if (parent instanceof PsiTypeCastExpression parentCast) {
+      PsiTypeElement castTypeElement = parentCast.getCastType();
+      if (castTypeElement == null) return false;
+      PsiType castType = castTypeElement.getType();
+      // Another replacement could become invalid due to this change
+      return TypeConversionUtil.areTypesConvertible(targetType, castType);
+    }
+    // Some method call can be mis-resolved after update, check this
+    if (parent instanceof PsiExpressionList && parent.getParent() instanceof PsiCallExpression call) {
+      PsiMethod method = call.resolveMethod();
+      if (method == null) return false;
+      PsiCallExpression callCopy = (PsiCallExpression)call.copy();
+      PsiElement refCopy = PsiTreeUtil.findSameElementInCopy(reference, call, callCopy);
+      if (refCopy == null) return false;
+      PsiElementFactory factory = JavaPsiFacade.getElementFactory(call.getProject());
+      PsiTypeCastExpression insertedCast = (PsiTypeCastExpression)refCopy.replace(
+        factory.createExpressionFromText("(a)"+reference.getReferenceName(), refCopy));
+      Objects.requireNonNull(insertedCast.getCastType()).replace(factory.createTypeElement(targetType));
+      return callCopy.resolveMethod() == method;
+    }
+    if (parent instanceof PsiReferenceExpression ref) {
+      final PsiElement resolve = ref.resolve();
+      // private member cannot be accessed on a subtype qualifier
+      if (resolve instanceof PsiMember member && member.hasModifierProperty(PsiModifier.PRIVATE)) {
+        return false;
+      }
+    }
+    return true;
   }
 }

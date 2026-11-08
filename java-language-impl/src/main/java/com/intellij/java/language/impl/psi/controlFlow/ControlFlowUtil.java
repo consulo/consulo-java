@@ -21,6 +21,22 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import com.intellij.java.language.psi.PsiJavaCodeReferenceElement;
+import com.intellij.java.language.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiVariable;
+import consulo.application.util.CachedValueProvider;
+import consulo.language.psi.PsiModificationTracker;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import java.util.HashSet;
+import java.util.List;
 
 public final class ControlFlowUtil {
   private static final Logger LOG = Logger.getInstance(ControlFlowUtil.class);
@@ -2511,5 +2527,132 @@ public final class ControlFlowUtil {
       }
     }
     return true;
+  }
+
+
+  /**
+   * @param variable variable to check
+   * @param scope variable scope
+   * @return true if the variable is effectively final
+   */
+  public static boolean isEffectivelyFinal(PsiVariable variable, PsiElement scope) {
+    return isEffectivelyFinal(variable, scope, null);
+  }
+
+
+  /**
+   * @param variable variable to check
+   * @param scope variable scope
+   * @param context context element (actual for fields, ignored for local variables and parameters)
+   * @return true if the variable is effectively final
+   */
+  public static boolean isEffectivelyFinal(PsiVariable variable, PsiElement scope, 
+                                           @Nullable PsiJavaCodeReferenceElement context) {
+    if (variable instanceof PsiParameter) {
+      return !variableIsAssigned(variable, ((PsiParameter)variable).getDeclarationScope());
+    }
+    else {
+      PsiElement codeBlock = PsiUtil.getVariableCodeBlock(variable, context);
+      if (codeBlock == null) return true;
+
+      Collection<VariableInfo> result = LanguageCachedValueUtil.getCachedValue(codeBlock, () -> {
+        ControlFlow flow = getControlFlow(codeBlock);
+        Collection<VariableInfo> initializedTwice = flow == null
+                                                    ? Collections.emptyList()
+                                                    : addReassignedInLoopProblems(getInitializedTwice(flow), flow);
+        return new CachedValueProvider.Result<>(initializedTwice, PsiModificationTracker.MODIFICATION_COUNT);
+      });
+      return !result.contains(new VariableInfo(variable, null)) && !variableIsAssigned(variable, scope);
+    }
+  }
+
+
+  /**
+   * @param variable         variable to check (local variable or parameter)
+   * @param finalVarProblems cache map to reuse information
+   * @return true if the variable is reassigned
+   */
+  public static boolean isReassigned(PsiVariable variable, Map<PsiElement, Collection<VariableInfo>> finalVarProblems) {
+    if (variable instanceof PsiLocalVariable) {
+      PsiElement parent = variable.getParent();
+      if (parent == null) return false;
+      PsiElement declarationScope = parent.getParent();
+      if (declarationScope == null) return false;
+      Collection<VariableInfo> codeBlockProblems = getFinalVariableProblemsInBlock(finalVarProblems, declarationScope);
+      return codeBlockProblems.contains(new VariableInfo(variable, null));
+    }
+    if (variable instanceof PsiParameter) {
+      PsiParameter parameter = (PsiParameter)variable;
+      return variableIsAssigned(parameter, parameter.getDeclarationScope());
+    }
+    return false;
+  }
+
+
+  private static @Nullable ControlFlow getControlFlow(PsiElement codeBlock) {
+    try {
+      LocalsOrMyInstanceFieldsControlFlowPolicy policy = LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance();
+      return ControlFlowFactory.getControlFlow(codeBlock, policy, ControlFlowOptions.create(true, true, true));
+    }
+    catch (AnalysisCanceledException e) {
+      return null;
+    }
+  }
+
+
+  private static boolean variableIsAssigned(PsiVariable variable, PsiElement scope) {
+    return !PsiTreeUtil.processElements(scope, PsiReferenceExpression.class, 
+                                        e -> !(PsiUtil.isAccessedForWriting(e) && e.isReferenceTo(variable)));
+  }
+
+
+  private static Collection<VariableInfo> getFinalVariableProblemsInBlock(
+    Map<PsiElement, Collection<VariableInfo>> finalVarProblems, PsiElement codeBlock) {
+    Collection<VariableInfo> codeBlockProblems =
+      finalVarProblems.computeIfAbsent(codeBlock, cb -> {
+        ControlFlow controlFlow = getControlFlow(codeBlock);
+        return controlFlow == null ? Collections.emptyList() : addReassignedInLoopProblems(getInitializedTwice(controlFlow), controlFlow);
+      });
+    return codeBlockProblems;
+  }
+
+
+  private static Collection<VariableInfo> addReassignedInLoopProblems(
+    Collection<VariableInfo> codeBlockProblems,
+    ControlFlow controlFlow) {
+    List<Instruction> instructions = controlFlow.getInstructions();
+    for (int index = 0; index < instructions.size(); index++) {
+      Instruction instruction = instructions.get(index);
+      if (instruction instanceof WriteVariableInstruction) {
+        PsiVariable variable = ((WriteVariableInstruction)instruction).variable;
+        if (variable instanceof PsiLocalVariable || variable instanceof PsiField) {
+          PsiElement anchor = controlFlow.getElement(index);
+          if (anchor instanceof PsiAssignmentExpression) {
+            PsiExpression ref = PsiUtil.skipParenthesizedExprDown(((PsiAssignmentExpression)anchor).getLExpression());
+            if (ref instanceof PsiReferenceExpression) {
+              VariableInfo varInfo = new InitializedInLoopProblemInfo(variable, ref);
+              if (!codeBlockProblems.contains(varInfo) && isInstructionReachable(controlFlow, index, index)) {
+                if (!(codeBlockProblems instanceof HashSet)) {
+                  codeBlockProblems = new HashSet<>(codeBlockProblems);
+                }
+                codeBlockProblems.add(varInfo);
+              }
+            }
+          }
+        }
+      }
+    }
+    return codeBlockProblems;
+  }
+
+
+  /**
+   * A kind of final variable problem returned from {@link #getFinalVariableProblemsInBlock(Map, PsiElement)}
+   * which designates a final variable which is initialized in a loop.
+   */
+  private static class InitializedInLoopProblemInfo extends VariableInfo {
+    InitializedInLoopProblemInfo(PsiVariable variable, @Nullable PsiElement expression) {
+      super(variable, expression);
+    }
   }
 }

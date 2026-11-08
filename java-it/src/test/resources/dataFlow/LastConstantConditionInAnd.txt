@@ -1,1 +1,1 @@
-149:156 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition.when.reached
+149:156 Condition isTuple is always true when reached

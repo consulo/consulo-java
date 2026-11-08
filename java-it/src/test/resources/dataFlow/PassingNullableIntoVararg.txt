@@ -1,1 +1,1 @@
-179:180 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.value
+179:180 Value o is always 'null'

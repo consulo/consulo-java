@@ -1,1 +1,1 @@
-183:187 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.assigning.null.notannotated
+183:187 Assigning null value to non-annotated field

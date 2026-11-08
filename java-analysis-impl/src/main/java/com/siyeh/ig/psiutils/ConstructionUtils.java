@@ -27,6 +27,13 @@ import org.jetbrains.annotations.Contract;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiParameterList;
+import com.intellij.java.language.psi.PsiType;
+import java.util.Objects;
 
 /**
  * @author Tagir Valeev
@@ -277,4 +284,20 @@ public class ConstructionUtils {
         }
         return true;
     }
+
+
+  /**
+   * @param ctor method to check
+   * @return true if given method is a constructor that accepts a collection or map
+   */
+  public static boolean isCollectionConstructor(PsiMethod ctor) {
+    if (ctor == null || !ctor.isConstructor() || !ctor.getModifierList().hasExplicitModifier(PsiModifier.PUBLIC)) return false;
+    PsiParameterList list = ctor.getParameterList();
+    if (list.getParametersCount() != 1) return false;
+    PsiType type = Objects.requireNonNull(list.getParameter(0)).getType();
+    PsiClass aClass = PsiUtil.resolveClassInClassTypeOnly(type);
+    return aClass != null &&
+           (CommonClassNames.JAVA_UTIL_COLLECTION.equals(aClass.getQualifiedName()) ||
+            CommonClassNames.JAVA_UTIL_MAP.equals(aClass.getQualifiedName()));
+  }
 }

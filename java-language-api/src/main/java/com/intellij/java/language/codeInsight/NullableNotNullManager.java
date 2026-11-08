@@ -394,7 +394,7 @@ public abstract class NullableNotNullManager {
                     break;
                 }
             }
-            return new NullabilityAnnotationInfo(memberAnno.annotation, nullability, memberAnno.owner == owner ? null : memberAnno.owner, false);
+            return new NullabilityAnnotationInfo(memberAnno.annotation, nullability, memberAnno.owner == owner ? null : memberAnno.owner, false, false);
         }
         if (type == null || type instanceof PsiPrimitiveType) {
             return null;
@@ -566,4 +566,15 @@ public abstract class NullableNotNullManager {
         return getInstance(annotation.getProject()).getAllNullabilityAnnotationsWithNickNames()
             .getNullability(annotation.getQualifiedName()) != null;
     }
+
+
+  /**
+   * @param annotationFqn fully qualified name of a known nullability annotation
+   * @param nullability   wanted nullability
+   * @return the preferred annotation that denotes the given {@code nullability} and belongs to the same
+   * annotation framework as {@code annotationFqn}, or {@code null} if {@code annotationFqn} is not a known
+   * nullability annotation, or its framework doesn't define an annotation for the given nullability
+   */
+  public abstract @Nullable String getNullabilityAnnotationInSameFramework(String annotationFqn,
+                                                                              Nullability nullability);
 }

@@ -1,1 +1,1 @@
-158:182 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+158:182 Condition this.bar == FFI.this.bar is always true

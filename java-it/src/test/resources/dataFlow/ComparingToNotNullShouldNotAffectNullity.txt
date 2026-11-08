@@ -1,1 +1,1 @@
-504:517 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+504:517 Condition first == null is always false

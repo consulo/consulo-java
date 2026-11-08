@@ -19,7 +19,7 @@ package com.intellij.java.analysis.impl.codeInspection.dataFlow.inference;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractReturnValue;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.StandardMethodContract;
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.instructions.MethodCallInstruction;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.java.inst.MethodCallInstruction;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.PsiUtil;

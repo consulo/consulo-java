@@ -1,38 +1,47 @@
-// Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2025 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow;
 
-import com.intellij.java.analysis.impl.codeInsight.DefaultInferredAnnotationProvider;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
-import com.intellij.java.language.impl.psi.impl.light.LightRecordMethod;
-import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.PsiUtil;
-import com.siyeh.ig.psiutils.ExpressionUtils;
-import com.siyeh.ig.psiutils.MethodCallUtils;
-import consulo.application.util.CachedValueProvider;
-import consulo.language.psi.PsiModificationTracker;
-import consulo.language.psi.util.LanguageCachedValueUtil;
-import consulo.project.Project;
-import consulo.util.lang.ObjectUtil;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.codeInsight.NullabilityAnnotationInfo;
+import com.intellij.java.language.codeInsight.NullableNotNullManager;
+import com.intellij.java.language.codeInsight.StaticAnalysisAnnotationManager;
+import com.intellij.java.language.library.JavaLibraryModificationTracker;
+import consulo.module.content.ProjectFileIndex;
 import consulo.util.lang.StringUtil;
-import org.jspecify.annotations.Nullable;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiAnnotation;
+import com.intellij.java.language.psi.PsiCallExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import consulo.language.psi.PsiFile;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.impl.psi.impl.light.LightRecordMethod;
+import consulo.application.util.CachedValueProvider.Result;
+import consulo.language.psi.util.LanguageCachedValueUtil;
+import consulo.language.psi.PsiModificationTracker;
+import com.intellij.java.language.psi.util.PsiUtil;
+import consulo.util.lang.ObjectUtil;
+import consulo.util.collection.ContainerUtil;
+import com.siyeh.ig.callMatcher.CallMatcher;
+import one.util.streamex.EntryStream;
 import one.util.streamex.StreamEx;
-import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Methods to operate on Java contracts
  */
-public class JavaMethodContractUtil {
-  private JavaMethodContractUtil() {
-  }
+public final class JavaMethodContractUtil {
+  private JavaMethodContractUtil() {}
 
-  /**
-   * JetBrains contract annotation fully-qualified name
-   */
-  public static final String ORG_JETBRAINS_ANNOTATIONS_CONTRACT = Contract.class.getName();
+  public static final String ORG_JETBRAINS_ANNOTATIONS_CONTRACT = "org.jetbrains.annotations.Contract";
 
   /**
    * Returns a list of contracts defined for given method call (including hardcoded contracts if any)
@@ -49,15 +58,25 @@ public class JavaMethodContractUtil {
    * Returns a list of contracts defined for given method call (including hardcoded contracts if any)
    *
    * @param method a method to check the contracts for
-   * @param call   an optional call site. If specified, could be taken into account to derive contracts for some
-   *               testing methods like assertThat(x, is(null))
+   * @param call an optional call site. If specified, could be taken into account to derive contracts for some
+   *             testing methods like assertThat(x, is(null))
    * @return list of contracts (empty list if no contracts found)
    */
-  public static List<? extends MethodContract> getMethodCallContracts(final PsiMethod method,
-                                                                      @Nullable PsiCallExpression call) {
-    List<MethodContract> contracts =
+  public static List<? extends MethodContract> getMethodCallContracts(PsiMethod method,
+                                                                               @Nullable PsiCallExpression call) {
+    List<MethodContract> hardcoded =
       HardcodedContracts.getHardcodedContracts(method, ObjectUtil.tryCast(call, PsiMethodCallExpression.class));
-    return !contracts.isEmpty() ? contracts : getMethodContracts(method);
+    if (!hardcoded.isEmpty()) {
+      NullabilityAnnotationInfo info = NullableNotNullManager.getInstance(method.getProject()).findEffectiveNullabilityInfo(method);
+      if (info == null || info.isExternal() || info.getNullability() != Nullability.NOT_NULL) {
+        return hardcoded;
+      }
+      if (HardcodedContracts.getHardcodedContracts(method, null).isEmpty()) {
+        // Contract is derived for the call (like AssertJ assertion) -- preserve it
+        return hardcoded;
+      }
+    }
+    return getMethodContracts(method);
   }
 
   /**
@@ -66,7 +85,7 @@ public class JavaMethodContractUtil {
    * @param method a method to check the contracts for
    * @return list of contracts (empty list if no contracts found)
    */
-  public static List<StandardMethodContract> getMethodContracts(final PsiMethod method) {
+  public static List<StandardMethodContract> getMethodContracts(PsiMethod method) {
     return getContractInfo(method).getContracts();
   }
 
@@ -85,22 +104,50 @@ public class JavaMethodContractUtil {
    * purity and mutation signature (if exist) are left as is.
    *
    * @param annotation original annotation to update
-   * @param contracts  new contracts
+   * @param contracts new contracts
    * @return new {@link PsiAnnotation} object which describes updated contracts or null if no annotation is required to represent
    * the target contracts (i.e. contracts is empty, method has no mutation signature and is not marked as pure).
    */
-  @Nullable
-  public static PsiAnnotation updateContract(PsiAnnotation annotation, List<StandardMethodContract> contracts) {
+  public static @Nullable PsiAnnotation updateContract(PsiAnnotation annotation, List<StandardMethodContract> contracts) {
     boolean pure = Boolean.TRUE.equals(AnnotationUtil.getBooleanAttributeValue(annotation, "pure"));
     String mutates = StringUtil.notNullize(AnnotationUtil.getStringAttributeValue(annotation, MutationSignature.ATTR_MUTATES));
     String resultValue = StreamEx.of(contracts).joining("; ");
-    Project project = annotation.getProject();
-    return DefaultInferredAnnotationProvider.createContractAnnotation(project, pure, resultValue, mutates);
+    String attributes = createAttributesText(resultValue, pure, mutates);
+    if (attributes.isEmpty()) return null;
+    return JavaPsiFacade.getElementFactory(annotation.getProject())
+      .createAnnotationFromText("@" + annotation.getQualifiedName() + "(" + attributes + ")", annotation);
+  }
+
+  /**
+   * Creates a string representing attributes for a method's contract annotation based on provided parameters.
+   *
+   * @param contracts a string describing the method's contracts using the contract syntax
+   * @param pure indicates whether the method is pure (does not modify any state)
+   * @param mutates specifier which describes which method parameters can be mutated during the method cal, if pure is passed as true, this
+   *                argument is ignored.
+   * @return contract arguments as a string, for example <code>value = "null, _ -> false", pure = true</code>
+   */
+  public static String createAttributesText(String contracts, boolean pure, String mutates) {
+    Map<String, String> attrMap = new LinkedHashMap<>();
+    if (!contracts.isEmpty()) {
+      attrMap.put("value", StringUtil.wrapWithDoubleQuote(contracts));
+    }
+    if (pure) {
+      attrMap.put("pure", "true");
+    }
+    else if (!mutates.trim().isEmpty()) {
+      attrMap.put("mutates", StringUtil.wrapWithDoubleQuote(mutates));
+    }
+    if (attrMap.isEmpty()) {
+      return "";
+    }
+    return attrMap.keySet().equals(Collections.singleton("value")) ?
+           attrMap.get("value") : EntryStream.of(attrMap).join(" = ").joining(", ");
   }
 
   static class ContractInfo {
     static final ContractInfo EMPTY = new ContractInfo(Collections.emptyList(), false, false, MutationSignature.UNKNOWN);
-    static final ContractInfo PURE = new ContractInfo(Collections.emptyList(), true, false, MutationSignature.PURE);
+    static final ContractInfo PURE = new ContractInfo(Collections.emptyList(), true, false, MutationSignature.transparent());
 
     private final List<StandardMethodContract> myContracts;
     private final boolean myPure;
@@ -131,21 +178,26 @@ public class JavaMethodContractUtil {
     }
   }
 
+  /**
+   * TODO: replace with external annotations when annotations for Java 26+ will be supported
+   */
+  private static final CallMatcher ADDITIONAL_PURE_METHODS =
+      CallMatcher.instanceCall("java.lang.LazyConstant", "get", "isInitialized");
+
   static ContractInfo getContractInfo(PsiMethod method) {
-    if (PsiUtil.isAnnotationMethod(method) || method instanceof LightRecordMethod) {
+    if (PsiUtil.isAnnotationMethod(method) || method instanceof LightRecordMethod || ADDITIONAL_PURE_METHODS.methodMatches(method)) {
       return ContractInfo.PURE;
     }
     return LanguageCachedValueUtil.getCachedValue(method, () -> {
-      final PsiAnnotation contractAnno = findContractAnnotation(method);
+      PsiAnnotation contractAnno = findContractAnnotation(method);
       ContractInfo info = ContractInfo.EMPTY;
       if (contractAnno != null) {
         List<StandardMethodContract> contracts = parseContracts(method, contractAnno);
         boolean pure = Boolean.TRUE.equals(AnnotationUtil.getBooleanAttributeValue(contractAnno, "pure"));
         MutationSignature mutationSignature = MutationSignature.UNKNOWN;
         if (pure) {
-          mutationSignature = MutationSignature.PURE;
-        }
-        else {
+          mutationSignature = MutationSignature.pure();
+        } else {
           String mutationText = AnnotationUtil.getStringAttributeValue(contractAnno, MutationSignature.ATTR_MUTATES);
           if (mutationText != null) {
             try {
@@ -158,7 +210,16 @@ public class JavaMethodContractUtil {
         boolean explicit = !AnnotationUtil.isInferredAnnotation(contractAnno);
         info = new ContractInfo(contracts, pure, explicit, mutationSignature);
       }
-      return CachedValueProvider.Result.create(info, method, PsiModificationTracker.MODIFICATION_COUNT);
+
+      PsiFile file = method.getContainingFile();
+      if (file != null
+          && file.getVirtualFile() != null
+          && ProjectFileIndex.getInstance(method.getProject()).isInLibrary(file.getVirtualFile())) {
+        // there is no need to recompute info on changes in the project code
+        return Result.create(info, JavaLibraryModificationTracker.getInstance(method.getProject()));
+      }
+
+      return Result.create(info, method, PsiModificationTracker.MODIFICATION_COUNT);
     });
   }
 
@@ -166,19 +227,18 @@ public class JavaMethodContractUtil {
    * Parse contracts for given method. Calling this method is rarely necessary in client code; it exists mainly to
    * aid the inference procedure. Use {@link #getMethodContracts(PsiMethod)} instead.
    *
-   * @param method       method to parse contracts for
+   * @param method method to parse contracts for
    * @param contractAnno a contract annotation
    * @return a list of parsed contracts
    */
   public static List<StandardMethodContract> parseContracts(PsiMethod method, @Nullable PsiAnnotation contractAnno) {
-    if (contractAnno == null)
-      return Collections.emptyList();
+    if (contractAnno == null) return Collections.emptyList();
     String text = AnnotationUtil.getStringAttributeValue(contractAnno, null);
     if (text != null) {
       try {
         final int paramCount = method.getParameterList().getParametersCount();
         List<StandardMethodContract> parsed = StandardMethodContract.parseContract(text);
-        if (parsed.stream().allMatch(c -> c.getParameterCount() == paramCount)) {
+        if (ContainerUtil.and(parsed, c -> c.getParameterCount() == paramCount)) {
           return parsed;
         }
       }
@@ -189,14 +249,28 @@ public class JavaMethodContractUtil {
   }
 
   /**
-   * Returns a contract annotation for given method, checking the hierarchy
+   * Returns a contract annotation for a given method, checking the hierarchy
+   *
+   * @param method a method
+   * @param skipExternal to skip external annotations
+   * @return a found annotation (null if not found)
+   */
+  public static @Nullable PsiAnnotation findContractAnnotation(PsiMethod method, boolean skipExternal) {
+    return AnnotationUtil.findAnnotationInHierarchy(method,
+                                                    Set.of(StaticAnalysisAnnotationManager.getInstance().getKnownContractAnnotations()),
+                                                    skipExternal);
+  }
+
+  /**
+   * Returns a contract annotation for a given method, checking the hierarchy
    *
    * @param method a method
    * @return a found annotation (null if not found)
    */
-  @Nullable
-  public static PsiAnnotation findContractAnnotation(PsiMethod method) {
-    return AnnotationUtil.findAnnotationInHierarchy(method, Collections.singleton(ORG_JETBRAINS_ANNOTATIONS_CONTRACT));
+  public static @Nullable PsiAnnotation findContractAnnotation(PsiMethod method) {
+    return AnnotationUtil.findAnnotationInHierarchy(method,
+                                                    Set.of(StaticAnalysisAnnotationManager.getInstance().getKnownContractAnnotations()),
+                                                    false);
   }
 
   /**
@@ -206,7 +280,7 @@ public class JavaMethodContractUtil {
    * @return true if the method known to be pure (see {@link Contract#pure()} for details).
    */
   public static boolean isPure(PsiMethod method) {
-    return getContractInfo(method).myPure;
+    return getContractInfo(method).isPure();
   }
 
   /**
@@ -215,12 +289,11 @@ public class JavaMethodContractUtil {
    * @param contracts method contracts
    * @return common return value or null if there's no common return value
    */
-  @Nullable
-  public static ContractReturnValue getNonFailingReturnValue(List<? extends MethodContract> contracts) {
+  public static @Nullable ContractReturnValue getNonFailingReturnValue(List<? extends MethodContract> contracts) {
     List<ContractValue> failConditions = new ArrayList<>();
     for (MethodContract contract : contracts) {
       List<ContractValue> conditions = contract.getConditions();
-      if (conditions.isEmpty() || conditions.stream().allMatch(c -> failConditions.stream().anyMatch(c::isExclusive))) {
+      if (conditions.isEmpty() || ContainerUtil.and(conditions, c -> failConditions.stream().anyMatch(c::isExclusive))) {
         return contract.getReturnValue();
       }
       if (contract.getReturnValue().isFail()) {
@@ -244,27 +317,11 @@ public class JavaMethodContractUtil {
    * @return the expression which is always returned by this method if it completes successfully,
    * null if method may return something less trivial or its contract is unknown.
    */
-  @Nullable
-  @Contract("null -> null")
-  public static PsiExpression findReturnedValue(@Nullable PsiMethodCallExpression call) {
-    if (call == null)
-      return null;
+  public static @Nullable PsiExpression findReturnedValue(@Nullable PsiMethodCallExpression call) {
+    if (call == null) return null;
     List<? extends MethodContract> contracts = getMethodCallContracts(call);
     ContractReturnValue returnValue = getNonFailingReturnValue(contracts);
-    if (returnValue == null)
-      return null;
-    if (returnValue.equals(ContractReturnValue.returnThis())) {
-      return ExpressionUtils.getEffectiveQualifier(call.getMethodExpression());
-    }
-    if (returnValue instanceof ContractReturnValue.ParameterReturnValue) {
-      int number = ((ContractReturnValue.ParameterReturnValue)returnValue).getParameterNumber();
-      PsiExpression[] args = call.getArgumentList().getExpressions();
-      if (args.length <= number)
-        return null;
-      if (args.length == number + 1 && MethodCallUtils.isVarArgCall(call))
-        return null;
-      return args[number];
-    }
-    return null;
+    if (returnValue == null) return null;
+    return returnValue.findPlace(call);
   }
 }

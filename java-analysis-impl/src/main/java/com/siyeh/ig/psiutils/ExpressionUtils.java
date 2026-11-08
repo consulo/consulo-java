@@ -15,6 +15,8 @@
  */
 package com.siyeh.ig.psiutils;
 
+import consulo.language.ast.ASTNode;
+
 import com.intellij.java.analysis.impl.codeInspection.ControlFlowUtils;
 import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.language.codeInsight.AnnotationUtil;
@@ -48,6 +50,46 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static consulo.util.lang.ObjectUtil.tryCast;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiArrayInitializerExpression;
+import com.intellij.java.language.psi.PsiArrayType;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiBlockStatement;
+import com.intellij.java.language.psi.PsiClassObjectAccessExpression;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiConditionalExpression;
+import com.intellij.java.language.psi.PsiDeclarationStatement;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionStatement;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiForStatement;
+import com.intellij.java.language.psi.PsiLiteralExpression;
+import com.intellij.java.language.psi.PsiLocalVariable;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiModifier;
+import com.intellij.java.language.psi.PsiModifierList;
+import com.intellij.java.language.psi.PsiModifierListOwner;
+import com.intellij.java.language.psi.PsiNewExpression;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiThisExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.PsiVariable;
+import com.intellij.java.language.psi.util.PsiTypesUtil;
+import consulo.fileEditor.structureView.tree.TreeElement;
+import consulo.language.codeStyle.CodeStyleManager;
+import consulo.language.editor.CodeInsightUtilCore;
+import consulo.language.impl.ast.Factory;
+import consulo.util.collection.ContainerUtil;
+import java.util.Objects;
+import com.siyeh.ig.callMatcher.CallMatcher;
+import static com.intellij.java.language.psi.CommonClassNames.JAVA_UTIL_COLLECTIONS;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiLambdaExpression;
 
 public class ExpressionUtils {
     static final Set<String> STRING_BUILDER_CLASS_NAMES = Set.of(CommonClassNames.JAVA_LANG_STRING_BUILDER, CommonClassNames.JAVA_LANG_STRING_BUFFER);
@@ -1373,4 +1415,203 @@ public class ExpressionUtils {
             }
         );
     }
+
+
+  /**
+   * Returns true if the expression can be moved to earlier point in program order without possible semantic change or
+   * notable performance handicap. Examples of simple expressions are:
+   * <ul>
+   * <li>literal (number, char, string, class literal, true, false, null)</li>
+   * <li>compile-time constant</li>
+   * <li>this</li>
+   * <li>variable/parameter read</li>
+   * <li>final field read (either static or this-qualified)</li>
+   * <li>some static method calls known to return final static field (like {@code Collections.emptyList()})</li>
+   * </ul>
+   *
+   * @param expression an expression to test (must be valid expression)
+   * @return true if the supplied expression is simple
+   */
+  public static boolean isSafelyRecomputableExpression(@Nullable PsiExpression expression) {
+    expression = PsiUtil.skipParenthesizedExprDown(expression);
+    if (expression instanceof PsiLiteralExpression ||
+        expression instanceof PsiThisExpression ||
+        expression instanceof PsiClassObjectAccessExpression ||
+        isEvaluatedAtCompileTime(expression)) {
+      return true;
+    }
+    if (expression instanceof PsiArrayInitializerExpression initializer) {
+      return ContainerUtil.all(initializer.getInitializers(), e -> isSafelyRecomputableExpression(e));
+    }
+    if (expression instanceof PsiConditionalExpression cond) {
+      return isSafelyRecomputableExpression(cond.getCondition()) &&
+             isSafelyRecomputableExpression(cond.getThenExpression()) &&
+             isSafelyRecomputableExpression(cond.getElseExpression());
+    }
+    if (expression instanceof PsiReferenceExpression ref) {
+      PsiElement target = ref.resolve();
+      if (target instanceof PsiLocalVariable || target instanceof PsiParameter) return true;
+      PsiExpression qualifier = ref.getQualifierExpression();
+      if (target == null && qualifier == null) return true;
+      if (target instanceof PsiField field) {
+        if (!field.hasModifierProperty(PsiModifier.FINAL)) return false;
+        return qualifier == null || qualifier instanceof PsiThisExpression || field.hasModifierProperty(PsiModifier.STATIC);
+      }
+    }
+    if (expression instanceof PsiMethodCallExpression call) {
+      return KNOWN_SIMPLE_CALLS.test(call);
+    }
+    return false;
+  }
+
+
+  public static @Nullable PsiVariable resolveVariable(@Nullable PsiExpression expression) {
+    if (!(PsiUtil.skipParenthesizedExprDown(expression) instanceof PsiReferenceExpression ref)) return null;
+    return ref.resolve() instanceof PsiVariable var ? var : null;
+  }
+
+
+  /**
+   * Convert initializer expression to a normal expression that could be used in another context.
+   * Currently, the only case when initializer cannot be used in another context is array initializer:
+   * in this case it's necessary to add explicit array creation like {@code new ArrayType[] {...}}.
+   *
+   * <p>
+   * If conversion is required a non-physical expression is created without affecting the original expression.
+   * No write action is required.
+   * @param initializer initializer to convert
+   * @param factory element factory to use
+   * @param type expected expression type
+   * @return the converted expression. May return the original expression if conversion is not necessary.
+   */
+  public static PsiExpression convertInitializerToExpression(@Nullable PsiExpression initializer,
+                                                             PsiElementFactory factory,
+                                                             @Nullable PsiType type) {
+    if (initializer instanceof PsiArrayInitializerExpression && type instanceof PsiArrayType) {
+      PsiNewExpression result =
+        (PsiNewExpression)factory.createExpressionFromText("new " + type.getCanonicalText() + "{}", null);
+      Objects.requireNonNull(result.getArrayInitializer()).replace(initializer);
+      return result;
+    }
+    return initializer;
+  }
+
+
+  /**
+   * Splits variable declaration and initialization. Currently works for single variable declarations only. Requires write action.
+   *
+   * @param declaration declaration to split
+   * @param project current project.
+   * @return the assignment expression created if the declaration was successfully split.
+   * In this case, the declaration is still valid and could be used afterwards.
+   * Returns null if the splitting wasn't successful (no changes in the document are performed in this case).
+   */
+  public static @Nullable PsiAssignmentExpression splitDeclaration(PsiDeclarationStatement declaration, Project project) {
+    if (declaration.getDeclaredElements().length == 1) {
+      PsiLocalVariable var = (PsiLocalVariable)declaration.getDeclaredElements()[0];
+      var.normalizeDeclaration();
+      final PsiTypeElement typeElement = var.getTypeElement();
+      if (typeElement.isInferredType()) {
+        PsiTypesUtil.replaceWithExplicitType(typeElement);
+      }
+      final String name = var.getName();
+      PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+      PsiExpressionStatement statement = (PsiExpressionStatement)factory.createStatementFromText(name + "=xxx;", declaration);
+      statement = (PsiExpressionStatement)CodeStyleManager.getInstance(project).reformat(statement);
+      PsiAssignmentExpression assignment = (PsiAssignmentExpression)statement.getExpression();
+      PsiExpression initializer = var.getInitializer();
+      assert initializer != null;
+      PsiExpression rExpression = convertInitializerToExpression(initializer, factory, var.getType());
+
+      final PsiExpression expression = assignment.getRExpression();
+      assert expression != null;
+      expression.replace(rExpression);
+
+      PsiElement block = declaration.getParent();
+      if (block instanceof PsiForStatement) {
+        final PsiDeclarationStatement varDeclStatement =
+          factory.createVariableDeclarationStatement(name, var.getType(), null);
+
+        // For index can't be final, right?
+        for (PsiElement varDecl : varDeclStatement.getDeclaredElements()) {
+          if (varDecl instanceof PsiModifierListOwner owner) {
+            final PsiModifierList modList = owner.getModifierList();
+            assert modList != null;
+            modList.setModifierProperty(PsiModifier.FINAL, false);
+          }
+        }
+
+        final PsiElement parent = block.getParent();
+        PsiExpressionStatement replaced = (PsiExpressionStatement)new CommentTracker().replaceAndRestoreComments(declaration, statement);
+        if (!(parent instanceof PsiCodeBlock)) {
+          final PsiBlockStatement blockStatement =
+            (PsiBlockStatement)JavaPsiFacade.getElementFactory(project).createStatementFromText("{}", block);
+          final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+          codeBlock.add(varDeclStatement);
+          codeBlock.add(block);
+          block.replace(blockStatement);
+        }
+        else {
+          parent.addBefore(varDeclStatement, block);
+        }
+        return (PsiAssignmentExpression)replaced.getExpression();
+      }
+      else {
+        try {
+          PsiElement declaredElement = declaration.getDeclaredElements()[0];
+          if (!PsiUtil.isJavaToken(declaredElement.getLastChild(), JavaTokenType.SEMICOLON)) {
+            ASTNode semicolon = Factory.createSingleLeafElement(JavaTokenType.SEMICOLON, ";", 0, 1, null, declaration.getManager());
+            CodeInsightUtilCore.forcePsiPostprocessAndRestoreElement(declaration.addAfter(semicolon.getPsi(), declaredElement));
+          }
+          return (PsiAssignmentExpression)((PsiExpressionStatement)block.addAfter(statement, declaration)).getExpression();
+        }
+        finally {
+          initializer = ((PsiLocalVariable)declaration.getDeclaredElements()[0]).getInitializer();
+          if (initializer != null) {
+            initializer.delete();
+          }
+        }
+      }
+    }
+    else {
+      ((PsiLocalVariable)declaration.getDeclaredElements()[0]).normalizeDeclaration();
+    }
+    return null;
+  }
+
+
+  private static final CallMatcher KNOWN_SIMPLE_CALLS =
+    CallMatcher.staticCall(JAVA_UTIL_COLLECTIONS, "emptyList", "emptySet", "emptyIterator", "emptyMap", "emptySortedMap",
+                           "emptySortedSet", "emptyListIterator").parameterCount(0);
+
+
+  /**
+   * Returns ancestor expression for given subexpression which parent is not an expression anymore (except lambda)
+   *
+   * @param expression an expression to find its ancestor
+   * @return a top-level expression for given expression (may return an expression itself)
+   */
+  public static PsiExpression getTopLevelExpression(PsiExpression expression) {
+    while(true) {
+      PsiElement parent = expression.getParent();
+      if (parent instanceof PsiExpression e && !(parent instanceof PsiLambdaExpression)) {
+        expression = e;
+      }
+      else if (parent instanceof PsiExpressionList) {
+        PsiElement grandParent = parent.getParent();
+        if (grandParent instanceof PsiExpression e) {
+          expression = e;
+        }
+        else if (grandParent instanceof PsiAnonymousClass c && c.getParent() instanceof PsiExpression e) {
+          expression = e;
+        }
+        else {
+          return expression;
+        }
+      }
+      else {
+        return expression;
+      }
+    }
+  }
 }

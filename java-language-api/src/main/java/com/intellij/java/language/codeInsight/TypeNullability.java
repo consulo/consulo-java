@@ -187,14 +187,21 @@ public final class TypeNullability {
      */
     public @Nullable NullabilityAnnotationInfo toNullabilityAnnotationInfo() {
         NullabilitySource source = source();
+        boolean isExtended = false;
         if (source instanceof NullabilitySource.ExtendsBound) {
             source = ((NullabilitySource.ExtendsBound) source).boundSource();
+            isExtended = true;
         }
         if (source instanceof NullabilitySource.MultiSource) {
             source = ((NullabilitySource.MultiSource) source).sources().iterator().next();
         }
         if (source instanceof NullabilitySource.ExplicitAnnotation) {
-            return new NullabilityAnnotationInfo(((NullabilitySource.ExplicitAnnotation) source).annotation(), nullability(), false);
+            NullabilityAnnotationInfo info =
+                new NullabilityAnnotationInfo(((NullabilitySource.ExplicitAnnotation) source).annotation(), nullability(), false);
+            if (isExtended) {
+                info = info.setExtendedBounds();
+            }
+            return info;
         }
         if (source instanceof NullabilitySource.ContainerAnnotation) {
             return new NullabilityAnnotationInfo(((NullabilitySource.ContainerAnnotation) source).annotation(), nullability(), true);

@@ -49,6 +49,10 @@ public class CreateDefaultBranchFix extends BaseSwitchFix {
         if (switchBlock == null) {
             return;
         }
+        addDefault(switchBlock);
+    }
+
+    public static void addDefault(PsiSwitchBlock switchBlock) {
         PsiCodeBlock body = switchBlock.getBody();
         if (body == null) {
             return;

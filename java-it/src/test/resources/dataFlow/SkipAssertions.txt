@@ -1,4 +1,4 @@
-108:119 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
-185:196 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
-313:324 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
-428:439 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+108:119 Condition foo != null is always true
+185:196 Condition foo == null is always false
+313:324 Condition foo == null is always false
+428:439 Condition foo != null is always true

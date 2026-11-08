@@ -1,1 +1,1 @@
-422:437 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition.when.reached
+422:437 Condition prevIsUppercase is always false when reached

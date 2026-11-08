@@ -51,6 +51,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 import static com.intellij.java.language.codeInsight.AnnotationUtil.NOT_NULL;
+import java.util.List;
+import static com.intellij.java.language.codeInsight.AnnotationUtil.NULLABLE;
 
 @Singleton
 @State(name = "NullableNotNullManager", storages = @Storage("misc.xml"))
@@ -460,4 +462,16 @@ public class NullableNotNullManagerImpl extends NullableNotNullManager implement
     public long getModificationCount() {
         return myTracker.getModificationCount();
     }
+
+
+  @Override
+  public @Nullable String getNullabilityAnnotationInSameFramework(String annotationFqn, Nullability nullability) {
+    AnnotationPackageSupport support = AnnotationPackageSupport.EP_NAME.findFirstSafe(
+      e -> e.getNullabilityAnnotations(Nullability.NOT_NULL).contains(annotationFqn) ||
+           e.getNullabilityAnnotations(Nullability.NULLABLE).contains(annotationFqn) ||
+           e.getNullabilityAnnotations(Nullability.UNKNOWN).contains(annotationFqn));
+    if (support == null) return null;
+    List<String> annotations = support.getNullabilityAnnotations(nullability);
+    return annotations.isEmpty() ? null : annotations.getFirst();
+  }
 }

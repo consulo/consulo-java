@@ -1,1 +1,1 @@
-263:278 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+263:278 Condition strings != null is always true

@@ -456,6 +456,16 @@ inspection.compiler.javac.quirks.qualifier.type.args.fix:
     text: Remove generic parameter
 inspection.compiler.javac.quirks.qualifier.type.args.problem:
     text: Generics in qualifier reference may cause compilation error in some Javac versions (e.g. JDK 5 and JDK 6).
+inspection.conditional.break.in.infinite.loop:
+    text: Move condition to loop
+inspection.conditional.break.in.infinite.loop.allow.condition.fusion:
+    text: Allow merging with existing loop condition
+inspection.conditional.break.in.infinite.loop.description:
+    text: Conditional break inside loop
+inspection.conditional.break.in.infinite.loop.no.conversion.with.do.while:
+    text: "Don't suggest to replace with 'do while'"
+inspection.conditional.break.in.infinite.loop.suggest.conversion.when.if.is.single.stmt.in.loop:
+    text: "Suggest conversion when 'if' is a single statement in loop"
 inspection.contract.display.name:
     text: Contract issues
 inspection.convert.to.local.quickfix:

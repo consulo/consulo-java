@@ -22,6 +22,7 @@ open module consulo.java.language.api {
   exports com.intellij.java.language.codeInsight.daemon.impl.analysis;
   exports com.intellij.java.language.codeInsight.folding;
   exports com.intellij.java.language.codeInsight.runner;
+  exports com.intellij.java.language.library;
   exports com.intellij.java.language.jvm;
   exports com.intellij.java.language.jvm.facade;
   exports com.intellij.java.language.jvm.types;

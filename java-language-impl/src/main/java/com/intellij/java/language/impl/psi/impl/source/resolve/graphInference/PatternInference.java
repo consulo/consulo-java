@@ -16,6 +16,14 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiPattern;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiTypeParameter;
 
 /**
  * Utility class for pattern inference
@@ -104,5 +112,42 @@ public final class PatternInference {
       }
     }
     return true;
+  }
+
+
+  /**
+   * Infers the type arguments of a pattern class (a record) from the type of the expression that the pattern is matched against.
+   * Unlike {@link #inferPatternGenerics}, this method needs no resolve result, so a caller that only wants the type
+   * arguments can use it. The inference keeps the nullability of the context type.
+   *
+   * @param pattern      pattern to infer the type arguments for
+   * @param patternClass class of the pattern type
+   * @param type         context type; type of the expression, which is matched against the pattern
+   * @return the inferred substitutor. If the inference is not possible or there are no type arguments to infer,
+   * {@link PsiSubstitutor#EMPTY} is returned.
+   */
+  public static PsiSubstitutor inferPatternSubstitutor(PsiPattern pattern,
+                                                                PsiClass patternClass,
+                                                                @Nullable PsiType type) {
+    InferenceSession session = createSession(pattern, patternClass, type);
+    return session == null ? PsiSubstitutor.EMPTY : session.infer();
+  }
+
+
+  private static @Nullable InferenceSession createSession(PsiPattern pattern,
+                                                          PsiClass recordClass,
+                                                          @Nullable PsiType type) {
+    // JLS 18.5.5
+    if (type == null) return null;
+    type = JavaVarTypeUtil.getUpwardProjection(type);
+    Project project = recordClass.getProject();
+    PsiElementFactory factory = JavaPsiFacade.getElementFactory(project);
+    PsiClassType recordRawType = factory.createType(recordClass);
+    if (!recordRawType.isConvertibleFrom(type) || JavaGenericsUtil.isUncheckedCast(recordRawType, type)) {
+      return null;
+    }
+    PsiTypeParameter[] parameters = recordClass.getTypeParameters();
+    InferenceSession session = new InferenceSession(parameters, PsiSubstitutor.EMPTY, PsiManager.getInstance(project), pattern);
+    return addConstraints(recordClass, type, factory, session) ? session : null;
   }
 }

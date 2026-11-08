@@ -16,7 +16,7 @@
 package com.intellij.java.analysis.impl.codeInspection;
 
 import com.intellij.java.language.psi.*;
-import com.intellij.java.language.psi.util.JavaPsiPatternUtil;
+import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.siyeh.ig.psiutils.ExpressionUtils;
 import com.siyeh.ig.psiutils.MethodCallUtils;
 import consulo.language.psi.PsiComment;
@@ -25,6 +25,23 @@ import consulo.language.psi.PsiWhiteSpace;
 import consulo.language.psi.util.PsiTreeUtil;
 import org.jspecify.annotations.Nullable;
 import org.jetbrains.annotations.Contract;
+import com.intellij.java.language.psi.PsiBlockStatement;
+import com.intellij.java.language.psi.PsiCodeBlock;
+import com.intellij.java.language.psi.PsiConditionalLoopStatement;
+import com.intellij.java.language.psi.PsiEmptyStatement;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiForStatement;
+import com.intellij.java.language.psi.PsiIfStatement;
+import com.intellij.java.language.psi.PsiReturnStatement;
+import com.intellij.java.language.psi.PsiStatement;
+import com.siyeh.ig.psiutils.BoolUtils;
+import consulo.util.lang.ObjectUtil;
+import com.intellij.java.language.psi.JavaRecursiveElementWalkingVisitor;
+import com.intellij.java.language.psi.PsiAnonymousClass;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiLambdaExpression;
+import consulo.application.util.function.Processor;
 
 public class ControlFlowUtils {
 
@@ -1071,4 +1088,129 @@ public class ControlFlowUtils {
             return found;
         }
     }
+
+
+  public static boolean isEndlessLoop(@Nullable PsiConditionalLoopStatement loopStatement) {
+    if (loopStatement == null) return false;
+    if (loopStatement instanceof PsiForStatement forStatement) {
+      PsiExpression condition = forStatement.getCondition();
+      if (condition != null && !BoolUtils.isTrue(condition)) return false;
+      return (forStatement.getInitialization() == null || forStatement.getInitialization() instanceof PsiEmptyStatement)
+             && (forStatement.getUpdate() == null || forStatement.getUpdate() instanceof PsiEmptyStatement);
+    }
+    return BoolUtils.isTrue(loopStatement.getCondition());
+  }
+
+
+
+  public static PsiStatement [] unwrapBlock(@Nullable PsiStatement statement) {
+    final PsiBlockStatement block = ObjectUtil.tryCast(statement, PsiBlockStatement.class);
+    if (block != null) {
+      return block.getCodeBlock().getStatements();
+    }
+    return statement == null ? PsiStatement.EMPTY_ARRAY : new PsiStatement[]{statement};
+  }
+
+
+  /**
+   * Finds the return statement which will be always executed after the supplied statement. It supports constructs like this:
+   * <pre>{@code
+   * if(condition) {
+   *   statement(); // this statement is supplied as a parameter
+   * }
+   * return true; // this return statement will be returned
+   * }</pre>
+   *
+   * @param statement statement to find the return after
+   * @return the found return statement or null.
+   */
+  public static @Nullable PsiReturnStatement getNextReturnStatement(PsiStatement statement) {
+    while (true) {
+      PsiElement nextStatement = PsiTreeUtil.skipWhitespacesAndCommentsForward(statement);
+      if (nextStatement instanceof PsiReturnStatement) return (PsiReturnStatement)nextStatement;
+      PsiElement parent = statement.getParent();
+      if (parent instanceof PsiCodeBlock) {
+        PsiStatement[] statements = ((PsiCodeBlock)parent).getStatements();
+        if (statements.length == 0 || statements[statements.length - 1] != statement) return null;
+        parent = parent.getParent();
+      }
+      if (!(parent instanceof PsiIfStatement) && !(parent instanceof PsiBlockStatement)) return null;
+      statement = (PsiStatement)parent;
+    }
+  }
+
+
+  /**
+   * Returns true if statement essentially contains no executable code
+   *
+   * @param statement statement to test
+   * @return true if statement essentially contains no executable code
+   */
+  public static boolean statementIsEmpty(PsiStatement statement) {
+    if (statement == null) {
+      return false;
+    }
+    if (statement instanceof PsiEmptyStatement) {
+      return true;
+    }
+    if (statement instanceof final PsiBlockStatement blockStatement) {
+      final PsiCodeBlock codeBlock = blockStatement.getCodeBlock();
+      final PsiStatement[] codeBlockStatements = codeBlock.getStatements();
+      for (PsiStatement codeBlockStatement : codeBlockStatements) {
+        if (!statementIsEmpty(codeBlockStatement)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+
+  /**
+   * Processes elements in the current scope (not in lambda, nested classes on so on) using a given processor.
+   *
+   * @param context the context element to start the processing from
+   * @param processor the processor to be used for element processing
+   */
+  public static void processElementsInCurrentScope(PsiElement context,
+                                                   Processor<? super PsiElement> processor) {
+    class Visitor extends JavaRecursiveElementWalkingVisitor {
+      boolean stop = false;
+
+      @Override
+      public void visitElement(PsiElement psiElement) {
+        if (psiElement != context) {
+          PsiElement parent = psiElement.getParent();
+          // do not process any anonymous class children except its getArgumentList()
+          //if the visitor was not called from inside anonymous class
+          if (parent instanceof PsiAnonymousClass && !(psiElement instanceof PsiExpressionList)) {
+            return;
+          }
+        }
+        stop = !processor.process(psiElement);
+        if (stop) {
+          return;
+        }
+        super.visitElement(psiElement);
+      }
+
+      @Override
+      public void visitAnonymousClass(PsiAnonymousClass aClass) {
+        // process anonymous getArgumentList()
+        visitElement(aClass);
+      }
+
+      @Override
+      public void visitClass(PsiClass aClass) {
+      }
+
+      @Override
+      public void visitLambdaExpression(PsiLambdaExpression expression) {
+      }
+    }
+
+    Visitor visitor = new Visitor();
+    context.accept(visitor);
+  }
 }

@@ -92,7 +92,7 @@ public class ReplaceWithTernaryOperatorFix implements LocalQuickFix {
     }
 
     @RequiredReadAction
-    private static PsiConditionalExpression replaceWithConditionalExpression(
+    static PsiConditionalExpression replaceWithConditionalExpression(
         Project project,
         String condition,
         PsiExpression expression,

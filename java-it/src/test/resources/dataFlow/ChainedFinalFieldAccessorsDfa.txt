@@ -1,4 +1,7 @@
-1098:1106 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-283:291 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-437:445 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-628:636 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+1098:1106 Method invocation hashCode may produce NullPointerException
+238:242 Passing null argument to non-annotated parameter
+283:291 Method invocation hashCode may produce NullPointerException
+437:445 Method invocation hashCode may produce NullPointerException
+460:483 Condition data.getInner() != null is always true
+580:584 Passing null argument to non-annotated parameter
+628:636 Method invocation hashCode may produce NullPointerException

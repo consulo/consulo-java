@@ -1,10 +1,10 @@
-1047:1055 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-1196:1204 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-1281:1289 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-175:183 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-310:318 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-430:438 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-471:479 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-554:562 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-636:644 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-820:828 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+1047:1055 Method invocation hashCode may produce NullPointerException
+1196:1204 Method invocation hashCode may produce NullPointerException
+1281:1289 Method invocation hashCode may produce NullPointerException
+175:183 Method invocation hashCode may produce NullPointerException
+310:318 Method invocation hashCode may produce NullPointerException
+430:438 Method invocation hashCode may produce NullPointerException
+471:479 Method invocation hashCode may produce NullPointerException
+554:562 Method invocation hashCode may produce NullPointerException
+636:644 Method invocation hashCode may produce NullPointerException
+820:828 Method invocation hashCode may produce NullPointerException

@@ -15,6 +15,8 @@
  */
 package com.intellij.java.analysis.impl.codeInspection;
 
+import com.intellij.java.language.impl.psi.util.JavaPatternExhaustivenessUtil;
+import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.analysis.codeInspection.ParenthesesUtils;
 import com.intellij.java.language.JavaFeature;
 import com.intellij.java.language.LanguageLevel;
@@ -34,6 +36,22 @@ import org.jetbrains.annotations.Contract;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import com.intellij.java.language.psi.PsiCaseLabelElement;
+import com.intellij.java.language.psi.PsiCaseLabelElementList;
+import com.intellij.java.language.psi.PsiDefaultCaseLabelElement;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiExpressionStatement;
+import com.intellij.java.language.psi.PsiSwitchBlock;
+import com.intellij.java.language.psi.PsiSwitchExpression;
+import com.intellij.java.language.psi.PsiSwitchLabelStatementBase;
+import com.intellij.java.language.psi.PsiSwitchLabeledRuleStatement;
+import com.intellij.java.language.psi.PsiSwitchStatement;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.util.ExpressionUtil;
+import com.intellij.java.language.impl.psi.util.JavaPsiSwitchUtil;
+import com.siyeh.ig.psiutils.BreakConverter;
+import java.util.Arrays;
+import com.intellij.java.language.psi.PsiPattern;
 
 public class SwitchUtils {
     /**
@@ -523,4 +541,114 @@ public class SwitchUtils {
             return m_used;
         }
     }
+
+
+  /**
+   * Checks if the given switch label statement contains a {@code default} case
+   *
+   * @param label a switch label statement to test
+   * @return {@code true} if the given switch label statement contains a {@code default} case, {@code false} otherwise
+   */
+  public static boolean isDefaultLabel(@Nullable PsiSwitchLabelStatementBase label) {
+    if (label == null) return false;
+    if (label.isDefaultCase()) return true;
+    PsiCaseLabelElementList labelElementList = label.getCaseLabelElementList();
+    if (labelElementList == null) return false;
+    return ContainerUtil.exists(labelElementList.getElements(), element -> element instanceof PsiDefaultCaseLabelElement);
+  }
+
+
+  /**
+   * Finds the removable unreachable branches in a switch statement.
+   * Default case is not included in this list and should be checked separately
+   *
+   * @param reachableLabel The label that is reachable.
+   * @param statement The switch statement to analyze.
+   * @return A list of unreachable branches that can be safely removed.
+   */
+  public static List<PsiCaseLabelElement> findRemovableUnreachableBranches(PsiCaseLabelElement reachableLabel,
+                                                                           PsiSwitchBlock statement) {
+    PsiSwitchLabelStatementBase labelStatement = PsiTreeUtil.getParentOfType(reachableLabel, PsiSwitchLabelStatementBase.class);
+    List<PsiSwitchLabelStatementBase> allBranches =
+      PsiTreeUtil.getChildrenOfTypeAsList(statement.getBody(), PsiSwitchLabelStatementBase.class);
+    boolean hasDefault = false;
+    List<PsiCaseLabelElement> unreachableElements = new ArrayList<>();
+    for (PsiSwitchLabelStatementBase branch : allBranches) {
+      if (branch.isDefaultCase()) {
+        hasDefault = true;
+        continue;
+      }
+      PsiCaseLabelElementList elementList = branch.getCaseLabelElementList();
+      if (elementList == null) {
+        continue;
+      }
+      PsiCaseLabelElement[] elements = elementList.getElements();
+      unreachableElements.addAll(Arrays.asList(elements));
+    }
+    unreachableElements.remove(reachableLabel);
+    boolean canUnwrap = (statement instanceof PsiSwitchStatement && BreakConverter.from(statement) != null) ||
+                        (statement instanceof PsiSwitchExpression &&
+                         labelStatement instanceof PsiSwitchLabeledRuleStatement ruleStatement &&
+                         ruleStatement.getBody() instanceof PsiExpressionStatement);
+    if (canUnwrap) {
+      return unreachableElements;
+    }
+
+    if (unreachableElements.isEmpty() || hasDefault) {
+      return unreachableElements;
+    }
+    boolean isEnhancedSwitch = ExpressionUtil.isEnhancedSwitch(statement);
+    if (isEnhancedSwitch) {
+      PsiExpression expression = statement.getExpression();
+      if (expression == null) {
+        return List.of();
+      }
+      PsiType selectorType = expression.getType();
+      if (selectorType == null) {
+        return List.of();
+      }
+      List<PsiCaseLabelElement> toDelete = new ArrayList<>();
+      for (int i = 0; i < unreachableElements.size(); i++) {
+        PsiCaseLabelElement currentElement = unreachableElements.get(i);
+        boolean isDominated = false;
+        for (int j = i + 1; j < unreachableElements.size(); j++) {
+          PsiCaseLabelElement nextElement = unreachableElements.get(j);
+          isDominated = JavaPsiSwitchUtil.isDominated(currentElement, nextElement, selectorType);
+          if (!isDominated) {
+            break;
+          }
+        }
+
+        if (!isDominated) {
+          toDelete.add(currentElement);
+        }
+      }
+      unreachableElements.removeAll(toDelete);
+    }
+    return unreachableElements;
+  }
+
+
+  /**
+   * Checks if the given switch label statement contains a {@code default} case or an unconditional pattern
+   *
+   * @param label a switch label statement to test
+   * @return {@code true} if the given switch label statement contains a {@code default} case or an unconditional pattern,
+   * {@code false} otherwise.
+   */
+  public static boolean isUnconditionalLabel(@Nullable PsiSwitchLabelStatementBase label) {
+    if (label == null) return false;
+    if (isDefaultLabel(label)) return true;
+    PsiSwitchBlock switchBlock = label.getEnclosingSwitchBlock();
+    if (switchBlock == null) return false;
+    PsiExpression expression = switchBlock.getExpression();
+    if (expression == null) return false;
+    PsiType type = expression.getType();
+    if (type == null) return false;
+    PsiCaseLabelElementList labelElementList = label.getCaseLabelElementList();
+    if (labelElementList == null) return false;
+    return StreamEx.of(labelElementList.getElements())
+      .select(PsiPattern.class)
+      .anyMatch(pattern -> JavaPsiPatternUtil.isUnconditionalForType(pattern, type));
+  }
 }

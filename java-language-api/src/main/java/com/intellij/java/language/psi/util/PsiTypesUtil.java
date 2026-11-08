@@ -35,6 +35,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiCapturedWildcardType;
+import com.intellij.java.language.psi.PsiIntersectionType;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class PsiTypesUtil {
   private static final Map<String, String> ourUnboxedTypes = new HashMap<>();
@@ -559,5 +567,40 @@ public class PsiTypesUtil {
       }
       return false;
     }
+  }
+
+
+  /**
+   * @param type type to test
+   * @param qualifiedClassName desired fully-qualified class name
+   * @return true if given type is a class type that resolves to the specified class
+   */
+  public static boolean classNameEquals(@Nullable PsiType type, String qualifiedClassName) {
+    if (!(type instanceof PsiClassType)) return false;
+    PsiClassType classType = (PsiClassType)type;
+    String className = classType.getClassName();
+    if (className == null || !qualifiedClassName.endsWith(className)) return false;
+    PsiClass psiClass = classType.resolve();
+    if (psiClass == null) return false;
+    return qualifiedClassName.equals(psiClass.getQualifiedName());
+  }
+
+
+  /**
+   * @return class types which are probably wrapped inside captured wildcard or inside intersection type
+   */
+  public static List<? extends PsiClassType> getClassTypeComponents(PsiType type) {
+    if (type instanceof PsiClassType) return Collections.singletonList((PsiClassType)type);
+    if (type instanceof PsiCapturedWildcardType) {
+      return getClassTypeComponents(((PsiCapturedWildcardType)type).getUpperBound());
+    }
+    if (type instanceof PsiIntersectionType) {
+      List<PsiClassType> classTypes = new ArrayList<>();
+      for (PsiType conjunct : ((PsiIntersectionType)type).getConjuncts()) {
+        classTypes.addAll(getClassTypeComponents(conjunct));
+      }
+      return classTypes;
+    }
+    return Collections.emptyList();
   }
 }

@@ -1,37 +1,46 @@
-// Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
+// Copyright 2000-2024 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license.
 package com.intellij.java.analysis.impl.codeInspection.dataFlow.types;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.*;
-import com.intellij.java.language.psi.PsiModifierListOwner;
-import com.intellij.java.language.psi.PsiType;
+import consulo.language.dataFlow.types.DfType;
+import consulo.language.dataFlow.types.DfConstantType;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaNullability;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.DfaPsiUtil;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.Mutability;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraint;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.TypeConstraints;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.jvm.SpecialField;
+import com.intellij.java.language.psi.PsiModifierListOwner;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Set;
 
-import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes.BOTTOM;
-import static com.intellij.java.analysis.impl.codeInspection.dataFlow.types.DfTypes.TOP;
+import static java.util.Objects.hash;
 
 public class DfReferenceConstantType extends DfConstantType<Object> implements DfReferenceType {
-  private final 
-  PsiType myPsiType;
-  private final 
-  TypeConstraint myConstraint;
-  private final 
-  Mutability myMutability;
-  private final @Nullable
-  SpecialField mySpecialField;
-  private final 
-  DfType mySpecialFieldType;
-  
-  DfReferenceConstantType(Object constant, PsiType psiType, TypeConstraint type) {
+  private final TypeConstraint myConstraint;
+  private final Mutability myMutability;
+  private final @Nullable SpecialField myJvmSpecialField;
+  private final DfType mySpecialFieldType;
+  private final boolean myDropConstantOnWiden;
+
+  DfReferenceConstantType(Object constant, TypeConstraint type, boolean dropConstantOnWiden) {
     super(constant);
-    myPsiType = psiType;
     myConstraint = type;
     myMutability = constant instanceof PsiModifierListOwner ? Mutability.getMutability((PsiModifierListOwner)constant) : Mutability.UNKNOWN;
-    mySpecialField = SpecialField.fromQualifierType(psiType);
-    mySpecialFieldType = mySpecialField == null ? BOTTOM : mySpecialField.fromConstant(constant);
+    myJvmSpecialField = SpecialField.fromQualifierType(this);
+    mySpecialFieldType = myJvmSpecialField == null ? BOTTOM : myJvmSpecialField.fromConstant(constant);
+    myDropConstantOnWiden = dropConstantOnWiden;
+  }
+
+  @Override
+  public DfType widen() {
+    if (myDropConstantOnWiden) {
+      return new DfGenericObjectType(Set.of(), myConstraint, DfaNullability.NOT_NULL, myMutability,
+                                     myJvmSpecialField, mySpecialFieldType.widen(), false);
+    }
+    return this;
   }
 
   @Override
@@ -43,16 +52,11 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
       if (type.isSuperType(this)) return this;
       TypeConstraint constraint = type.getConstraint().meet(myConstraint);
       if (constraint != TypeConstraints.BOTTOM) {
-        DfReferenceConstantType subConstant = new DfReferenceConstantType(getValue(), myPsiType, constraint);
+        DfReferenceConstantType subConstant = new DfReferenceConstantType(getValue(), constraint, myDropConstantOnWiden);
         if (type.isSuperType(subConstant)) return subConstant;
       }
     }
     return BOTTOM;
-  }
-
-  @Override
-  public PsiType getPsiType() {
-    return myPsiType;
   }
 
   @Override
@@ -70,10 +74,9 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
     return myMutability;
   }
 
-  @Nullable
   @Override
-  public SpecialField getSpecialField() {
-    return mySpecialField;
+  public @Nullable SpecialField getSpecialField() {
+    return myJvmSpecialField;
   }
 
   @Override
@@ -89,7 +92,14 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
 
   @Override
   public DfReferenceType dropNullability() {
-    return this;
+    // Nullable constant is not constant anymore
+    return new DfGenericObjectType(
+      Set.of(), myConstraint, DfaNullability.UNKNOWN, myMutability, myJvmSpecialField, mySpecialFieldType, false);
+  }
+  
+  @Override
+  public DfReferenceType convert(TypeConstraints.TypeConstraintFactory factory) {
+    return new DfReferenceConstantType(getValue(), myConstraint.convert(factory), myDropConstantOnWiden);
   }
 
   @Override
@@ -99,14 +109,43 @@ public class DfReferenceConstantType extends DfConstantType<Object> implements D
     }
     if (isSuperType(other)) return this;
     if (other.isSuperType(this)) return other;
-    if (!(other instanceof DfReferenceType)) return TOP;
-    DfReferenceType type = (DfReferenceType)other;
+    if (!(other instanceof DfReferenceType type)) return TOP;
     TypeConstraint constraint = getConstraint().join(type.getConstraint());
     DfaNullability nullability = getNullability().unite(type.getNullability());
-    Mutability mutability = getMutability().unite(type.getMutability());
+    Mutability mutability = getMutability().join(type.getMutability());
     boolean locality = isLocal() && type.isLocal();
     SpecialField sf = Objects.equals(getSpecialField(), type.getSpecialField()) ? getSpecialField() : null;
     DfType sfType = sf == null ? BOTTOM : getSpecialFieldType().join(type.getSpecialFieldType());
+    if (constraint.isSingleton() && nullability == DfaNullability.NOT_NULL) {
+      return new DfReferenceConstantType(constraint, constraint, false);
+    }
     return new DfGenericObjectType(Set.of(), constraint, nullability, mutability, sf, sfType, locality);
+  }
+
+  @Override
+  public @Nullable DfType tryJoinExactly(DfType other) {
+    if (isMergeable(other)) return this;
+    if (other.isMergeable(this)) return other;
+    if (other instanceof DfGenericObjectType) {
+      other.tryJoinExactly(this);
+    }
+    return null;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    return super.equals(obj) && 
+           obj instanceof DfReferenceConstantType refConstant &&
+           myConstraint.equals(refConstant.myConstraint);
+  }
+
+  @Override
+  public int hashCode() {
+    return hash(super.hashCode(), myConstraint);
+  }
+
+  @Override
+  public String toString() {
+    return DfaPsiUtil.renderValue(getValue());
   }
 }

@@ -76,4 +76,32 @@ public class JavaWithIfSurrounder extends JavaStatementsSurrounder{
     }
     return ifStatement.getTextRange();
   }
+
+  /**
+   * Surrounds the statements with {@code if (condition) {...}}
+   * (JetBrains' helper of the ModCommand surrounder; the container helpers are the ones of the editor-based surrounder above)
+   *
+   * @return the new if statement; null if there is nothing to surround
+   */
+  public PsiIfStatement surroundStatements(Project project, PsiElement container, PsiElement[] statements, String condition) {
+    statements = SurroundWithUtil.moveDeclarationsOut(container, statements, true);
+    if (statements.length == 0) {
+      return null;
+    }
+
+    String text = "if(" + condition + "){\n}";
+    PsiIfStatement ifStatement = (PsiIfStatement)JavaPsiFacade.getElementFactory(project).createStatementFromText(text, null);
+    ifStatement = (PsiIfStatement)CodeStyleManager.getInstance(project).reformat(ifStatement);
+    ifStatement = (PsiIfStatement)container.addAfter(ifStatement, statements[statements.length - 1]);
+
+    final PsiStatement thenBranch = ifStatement.getThenBranch();
+    if (thenBranch != null) {
+      PsiCodeBlock thenBlock = ((PsiBlockStatement)thenBranch).getCodeBlock();
+      SurroundWithUtil.indentCommentIfNecessary(thenBlock, statements);
+      thenBlock.addRange(statements[0], statements[statements.length - 1]);
+      container.deleteChildRange(statements[0], statements[statements.length - 1]);
+    }
+
+    return ifStatement;
+  }
 }

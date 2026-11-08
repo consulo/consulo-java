@@ -17,13 +17,12 @@
 package com.intellij.java.analysis.impl.codeInsight.guess.impl;
 
 import java.util.HashMap;
-import java.util.Map;
 
 class MethodPatternMap {
-  private final Map<String, MethodPattern> myMethodNameToPatternsMap = new HashMap<String, MethodPattern>();
+  private final HashMap<String, MethodPattern> myMethodNameToPatternsMap = new HashMap<>();
 
   public void addPattern(MethodPattern pattern){
-    myMethodNameToPatternsMap.put(pattern.methodName + "#" + pattern.parameterCount, pattern);
+    myMethodNameToPatternsMap.put(pattern.methodName() + "#" + pattern.parameterCount(), pattern);
   }
 
   public MethodPattern findPattern(String name, int parameterCount){

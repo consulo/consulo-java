@@ -31,6 +31,17 @@ import consulo.util.dataholder.Key;
 
 import java.util.HashMap;
 import java.util.Map;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiElementFactory;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiParameter;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeCastExpression;
+import com.intellij.java.language.psi.PsiTypeElement;
+import com.intellij.java.language.psi.TypeAnnotationProvider;
 
 /**
  * @author ven
@@ -136,6 +147,47 @@ public class ExtractMethodUtil {
           PsiTypeCastExpression cast = (PsiTypeCastExpression) copy.getArgumentList().getExpressions()[i];
           if (!RedundantCastUtil.isCastRedundant(cast)) {
             oldarg.replace(cast);
+          }
+        }
+      }
+    }
+  }
+
+
+  public static void addCastsToEnsureResolveTarget(final PsiMethod oldTarget,
+                                                   PsiSubstitutor oldSubstitutor,
+                                                   final PsiMethodCallExpression call)
+    throws IncorrectOperationException {
+    final PsiMethod newTarget = call.resolveMethod();
+    final PsiManager manager = oldTarget.getManager();
+    final PsiElementFactory factory = JavaPsiFacade.getElementFactory(manager.getProject());
+    if (!manager.areElementsEquivalent(oldTarget, newTarget)) {
+      final PsiParameter[] oldParameters = oldTarget.getParameterList().getParameters();
+      if (oldParameters.length > 0) {
+        final PsiMethodCallExpression copy = (PsiMethodCallExpression)call.copy();
+        PsiExpression[] args = copy.getArgumentList().getExpressions();
+        for (int i = 0; i < args.length; i++) {
+          PsiExpression arg = args[i];
+          PsiType paramType = i < oldParameters.length ? oldParameters[i].getType() : oldParameters[oldParameters.length - 1].getType();
+          paramType = paramType.annotate(TypeAnnotationProvider.EMPTY);
+          paramType = oldSubstitutor.substitute(paramType);
+          final PsiTypeCastExpression cast = (PsiTypeCastExpression)factory.createExpressionFromText("(a)b", null);
+          final PsiTypeElement typeElement = cast.getCastType();
+          assert typeElement != null;
+          typeElement.replace(factory.createTypeElement(paramType));
+          final PsiExpression operand = cast.getOperand();
+          assert operand != null;
+          operand.replace(arg);
+          arg.replace(cast);
+        }
+
+        args = copy.getArgumentList().getExpressions();
+        PsiExpression[] oldArgs = call.getArgumentList().getExpressions();
+        for (int i = 0; i < args.length; i++) {
+          PsiExpression oldArg = oldArgs[i];
+          PsiTypeCastExpression cast = (PsiTypeCastExpression)args[i];
+          if (!RedundantCastUtil.isCastRedundant(cast)) {
+            oldArg.replace(cast);
           }
         }
       }

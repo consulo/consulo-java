@@ -1,2 +1,2 @@
-291:295 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.assigning.null.notannotated
-594:598 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.assigning.null.notannotated
+291:295 Assigning null value to non-annotated field
+594:598 Assigning null value to non-annotated field

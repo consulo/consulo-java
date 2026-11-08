@@ -1,7 +1,7 @@
 // Copyright 2000-2018 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInsight.daemon.impl.quickfix;
 
-import com.intellij.java.analysis.impl.codeInspection.dataFlow.fix.DeleteSwitchLabelFix;
+import com.intellij.java.impl.codeInspection.dataFlow.fix.DeleteSwitchLabelFix;
 import com.intellij.java.impl.ig.controlflow.SwitchStatementWithTooFewBranchesInspection.UnwrapSwitchStatementFix;
 import com.intellij.java.language.impl.codeInsight.BlockUtils;
 import com.intellij.java.language.impl.psi.impl.PsiImplUtil;

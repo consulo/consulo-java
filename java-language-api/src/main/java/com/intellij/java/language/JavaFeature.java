@@ -29,6 +29,7 @@ public enum JavaFeature {
     BIN_LITERALS(LanguageLevel.JDK_1_7, "feature.binary.literals"),
     UNDERSCORES(LanguageLevel.JDK_1_7, "feature.underscores.in.literals"),
     STRING_SWITCH(LanguageLevel.JDK_1_7, "feature.string.switch"),
+    OBJECTS_CLASS(LanguageLevel.JDK_1_7, "feature.objects.class"),
     STREAM_OPTIONAL(LanguageLevel.JDK_1_8, "feature.stream.and.optional.api", true),
     /**
      * java.util.Arrays.setAll, java.util.Collection#removeIf, java.util.List.sort(Comparator),
@@ -120,6 +121,20 @@ public enum JavaFeature {
      * This option can be used only to adjust behavior for cases with conflicts between different types of comments (markdown and old-style)
      */
     MARKDOWN_COMMENT(LanguageLevel.JDK_23, "feature.markdown.comment"),
+
+    MODULE_IMPORT_DECLARATIONS(LanguageLevel.JDK_23_PREVIEW, "feature.module.import.declarations") {
+        @Override
+        public boolean isSufficient(LanguageLevel useSiteLevel) {
+            return useSiteLevel.isAtLeast(LanguageLevel.JDK_25) ||
+                LanguageLevel.JDK_24_PREVIEW == useSiteLevel || //jep 494
+                LanguageLevel.JDK_23_PREVIEW == useSiteLevel; //jep 776
+        }
+
+        @Override
+        public LanguageLevel getStandardLevel() {
+            return LanguageLevel.JDK_25;
+        }
+    },
 
     //JEP 494
     PACKAGE_IMPORTS_SHADOW_MODULE_IMPORTS(LanguageLevel.JDK_24_PREVIEW, "feature.package.import.shadow.module.import") {
@@ -236,6 +251,8 @@ public enum JavaFeature {
                 return SCOPED_VALUES;
             case "STRUCTURED_CONCURRENCY":
                 return STRUCTURED_CONCURRENCY;
+            case "MODULE_IMPORTS":
+                return MODULE_IMPORT_DECLARATIONS;
             case "CLASSFILE_API":
                 return CLASSFILE_API;
             case "STREAM_GATHERERS":

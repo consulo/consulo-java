@@ -40,6 +40,26 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import com.intellij.java.language.psi.PsiAssignmentExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.PsiMethodCallExpression;
+import com.intellij.java.language.psi.PsiPolyadicExpression;
+import com.intellij.java.language.psi.PsiPrefixExpression;
+import com.intellij.java.analysis.impl.codeInspection.SideEffectChecker;
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.NullabilityUtil;
+import com.intellij.java.language.codeInsight.Nullability;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiExpressionList;
+import com.intellij.java.language.psi.PsiPatternVariable;
+import com.intellij.java.language.psi.PsiReferenceExpression;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypes;
+import com.siyeh.ig.psiutils.BoolUtils;
+import com.siyeh.ig.psiutils.CodeBlockSurrounder;
+import com.siyeh.ig.psiutils.MethodCallUtils;
+import consulo.language.psi.util.PsiTreeUtil;
+import java.util.function.Predicate;
 
 @ExtensionImpl
 public class PointlessBooleanExpressionInspection extends BaseInspection {
@@ -434,4 +454,122 @@ public class PointlessBooleanExpressionInspection extends BaseInspection {
             return referenceFound;
         }
     }
+
+  public enum BooleanExpressionKind {
+    USELESS, USELESS_WITH_SIDE_EFFECTS, UNKNOWN
+  }
+
+
+  public BooleanExpressionKind getExpressionKind(PsiExpression expression) {
+    if ((expression instanceof PsiPrefixExpression || expression instanceof PsiPolyadicExpression) &&
+        containsEscapingPatternVariable(expression)) {
+      return BooleanExpressionKind.UNKNOWN;
+    }
+    if (expression instanceof PsiPrefixExpression || expression instanceof PsiAssignmentExpression) {
+      return evaluate(expression) != null ? BooleanExpressionKind.USELESS : BooleanExpressionKind.UNKNOWN;
+    }
+    if (expression instanceof PsiPolyadicExpression polyadicExpression) {
+      return getPolyadicKind(polyadicExpression);
+    }
+    if (expression instanceof PsiMethodCallExpression methodCallExpression) {
+      if (staticCallOnBoolean(methodCallExpression) != null) {
+        return BooleanExpressionKind.USELESS;
+      }
+    }
+
+    return BooleanExpressionKind.UNKNOWN;
+  }
+
+
+  /**
+   * Analyzes a {@link PsiMethodCallExpression} to determine if the following two conditions are met:
+   * <ul>
+   *   <li>it is a call to {@link Object#equals} on {@link Boolean#TRUE} or {@link Boolean#FALSE}</li>
+   *   <li>the expression passed as argument to {@link Object#equals} is of type {@code boolean}. </li>
+   * </ul>
+   *
+   * @param call the method call expression to analyze.
+   * @return When the conditions above are met, it returns {@link Boolean#TRUE} or {@link Boolean#FALSE} 
+   * depending on which {@link Object#equals} was called. Otherwise, it returns null.
+   */
+  private static Boolean staticCallOnBoolean(PsiMethodCallExpression call) {
+    PsiReferenceExpression expression = call.getMethodExpression();
+    if (!MethodCallUtils.isEqualsCall(call)) return null;
+    PsiExpressionList list = call.getArgumentList();
+    if (list.isEmpty()) return null;
+    PsiExpression argument = list.getExpressions()[0];
+    if (argument == null || !PsiTypes.booleanType().equals(argument.getType())) return null;
+    return BoolUtils.fromBoxedConstantReference(expression.getQualifierExpression());
+  }
+
+
+  private BooleanExpressionKind getPolyadicKind(PsiPolyadicExpression expression) {
+    final IElementType sign = expression.getOperationTokenType();
+    if (!booleanTokens.contains(sign)) {
+      return BooleanExpressionKind.UNKNOWN;
+    }
+    final PsiExpression[] operands = expression.getOperands();
+    boolean containsConstant = false;
+    boolean stopCheckingSideEffects = false;
+    boolean sideEffectMayBeRemoved = false;
+    boolean reducedToConstant = false;
+    for (int i = 0; i < operands.length; i++) {
+      PsiExpression operand = operands[i];
+      if (operand == null) {
+        return BooleanExpressionKind.UNKNOWN;
+      }
+      final PsiType type = operand.getType();
+      if (i > 0 && operand.getType() != null) {
+        PsiExpression previousOperand = operands[i - 1];
+        var typeNullability = NullabilityUtil.getExpressionNullability(operand, true);
+        var previousTypeNullability = NullabilityUtil.getExpressionNullability(previousOperand, true);
+        if (typeNullability != Nullability.NOT_NULL || previousTypeNullability != Nullability.NOT_NULL) {
+          return BooleanExpressionKind.UNKNOWN;
+        }
+      }
+
+      if (type == null || !type.equals(PsiTypes.booleanType()) && !type.equalsToText(CommonClassNames.JAVA_LANG_BOOLEAN)) {
+        return BooleanExpressionKind.UNKNOWN;
+      }
+      if (!stopCheckingSideEffects && SideEffectChecker.mayHaveSideEffects(operand)) {
+        sideEffectMayBeRemoved = true;
+        continue;
+      }
+      Boolean value = evaluate(operand);
+      if (value != null) {
+        containsConstant = true;
+        if ((JavaTokenType.ANDAND.equals(sign) && !value) || (JavaTokenType.OROR.equals(sign) && value)) {
+          stopCheckingSideEffects = true;
+          reducedToConstant = true;
+        }
+        if ((JavaTokenType.AND.equals(sign) && !value) || (JavaTokenType.OR.equals(sign) && value)) {
+          reducedToConstant = true;
+        }
+      }
+    }
+    if (containsConstant) {
+      if (sideEffectMayBeRemoved && reducedToConstant) {
+        return CodeBlockSurrounder.canSurround(expression)
+               ? BooleanExpressionKind.USELESS_WITH_SIDE_EFFECTS
+               : BooleanExpressionKind.UNKNOWN;
+      }
+      return BooleanExpressionKind.USELESS;
+    }
+    return BooleanExpressionKind.UNKNOWN;
+  }
+
+
+  private static boolean containsEscapingPatternVariable(PsiExpression expression) {
+    return hasMatchingOffspring(expression, PsiPatternVariable.class, v -> {
+      final PsiElement scope = v.getDeclarationScope();
+      return !PsiTreeUtil.isAncestor(expression, scope, false) &&
+             hasMatchingOffspring(scope, PsiReferenceExpression.class,
+                                  r -> r.isReferenceTo(v) && !PsiTreeUtil.isAncestor(expression, r, true));
+    });
+  }
+
+
+  private static <T extends PsiElement> boolean hasMatchingOffspring(PsiElement root, Class<T> elementClass, Predicate<T> predicate) {
+    return !PsiTreeUtil.processElements(root, elementClass, x -> !predicate.test(x));
+  }
 }

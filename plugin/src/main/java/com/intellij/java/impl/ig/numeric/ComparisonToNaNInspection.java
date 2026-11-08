@@ -29,6 +29,12 @@ import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
+import com.intellij.java.language.psi.PsiBinaryExpression;
+import com.intellij.java.language.psi.PsiExpression;
+import com.intellij.java.language.psi.CommonClassNames;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiReferenceExpression;
 
 @ExtensionImpl
 public class ComparisonToNaNInspection extends BaseInspection {
@@ -137,5 +143,45 @@ public class ComparisonToNaNInspection extends BaseInspection {
       String qualifiedName = containingClass.getQualifiedName();
       return CommonClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || CommonClassNames.JAVA_LANG_FLOAT.equals(qualifiedName);
     }
+  }
+
+
+  public static PsiExpression extractNaNFromComparison(PsiBinaryExpression expression) {
+    if (!ComparisonUtils.isComparison(expression)) {
+      return null;
+    }
+    final PsiExpression lhs = expression.getLOperand();
+    final PsiExpression rhs = expression.getROperand();
+    if (rhs == null || !TypeUtils.hasFloatingPointType(lhs) && !TypeUtils.hasFloatingPointType(rhs)) {
+      return null;
+    }
+    if (isNaN(lhs)) {
+      return lhs;
+    }
+    else if (isNaN(rhs)) {
+      return rhs;
+    }
+    return null;
+  }
+
+
+  private static boolean isNaN(PsiExpression expression) {
+    if (!(expression instanceof PsiReferenceExpression referenceExpression)) {
+      return false;
+    }
+    final String referenceName = referenceExpression.getReferenceName();
+    if (!"NaN".equals(referenceName)) {
+      return false;
+    }
+    final PsiElement target = referenceExpression.resolve();
+    if (!(target instanceof PsiField field)) {
+      return false;
+    }
+    final PsiClass containingClass = field.getContainingClass();
+    if (containingClass == null) {
+      return false;
+    }
+    final String qualifiedName = containingClass.getQualifiedName();
+    return CommonClassNames.JAVA_LANG_DOUBLE.equals(qualifiedName) || CommonClassNames.JAVA_LANG_FLOAT.equals(qualifiedName);
   }
 }

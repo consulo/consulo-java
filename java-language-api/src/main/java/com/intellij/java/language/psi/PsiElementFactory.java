@@ -383,6 +383,21 @@ public interface PsiElementFactory extends PsiJavaParserFacade, JVMElementFactor
   PsiDeclarationStatement createVariableDeclarationStatement(String name, PsiType type, @Nullable PsiExpression initializer) throws IncorrectOperationException;
 
   /**
+   * Creates a local variable declaration statement with the specified name, type and initializer,
+   * optionally without reformatting the declaration.
+   * <p>
+   * Note that depending on code style settings the resulting variable may be declared as {@code final}.
+   * </p>
+   *
+   * @param context the context used to resolve symbols in the resulting declaration.
+   * @throws IncorrectOperationException if {@code name} is not a valid identifier or
+   *                                     {@code type} is not a valid type.
+   */
+  PsiDeclarationStatement createVariableDeclarationStatement(String name, PsiType type,
+                                                             @Nullable PsiExpression initializer, @Nullable PsiElement context)
+    throws IncorrectOperationException;
+
+  /**
    * Creates a PSI element for the "&#64;param" JavaDoc tag.
    *
    * @param parameterName the name of the parameter for which the tag is created.

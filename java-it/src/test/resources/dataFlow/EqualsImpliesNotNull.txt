@@ -1,4 +1,4 @@
-208:216 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-446:454 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-541:549 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
-594:602 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation
+208:216 Method invocation toString may produce NullPointerException
+446:454 Method invocation toString may produce NullPointerException
+541:549 Method invocation toString may produce NullPointerException
+594:602 Method invocation toString may produce NullPointerException

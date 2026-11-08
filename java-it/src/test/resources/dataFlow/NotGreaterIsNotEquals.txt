@@ -1,1 +1,1 @@
-848:870 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+848:870 Condition other.depth > me.depth is always false

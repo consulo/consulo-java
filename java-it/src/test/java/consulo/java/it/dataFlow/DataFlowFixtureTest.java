@@ -16,6 +16,7 @@
 package consulo.java.it.dataFlow;
 
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.DataFlowInspectionStateBase;
+import com.intellij.java.impl.codeInspection.dataFlow.ConstantValueInspection;
 import com.intellij.java.impl.codeInspection.dataFlow.DataFlowInspection;
 import com.intellij.java.language.projectRoots.JavaSdkType;
 import consulo.application.ReadAction;
@@ -28,6 +29,7 @@ import consulo.it.HeadlessModules;
 import consulo.it.HeadlessProjectExtension;
 import consulo.it.HeadlessProjects;
 import consulo.java.impl.module.extension.JavaMutableModuleExtensionImpl;
+import consulo.language.editor.inspection.LocalInspectionTool;
 import consulo.language.editor.inspection.LocalInspectionToolSession;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.impl.internal.inspection.ProblemsHolderImpl;
@@ -164,11 +166,22 @@ public class DataFlowFixtureTest {
         return description.replace("&lt;", "<").replace("&gt;", ">").replace("&quot;", "\"").replace("&#39;", "'").replace("&amp;", "&");
     }
 
+    /**
+     * Runs {@link DataFlowInspection} and {@link ConstantValueInspection}: together they report what the "ConstantConditions"
+     * inspection reported before JetBrains split it
+     */
     private static List<String> runInspection(PsiFile file) {
         DataFlowInspection inspection = new DataFlowInspection();
         DataFlowInspectionStateBase state = (DataFlowInspectionStateBase) inspection.createStateProvider().getState();
         state.SUGGEST_NULLABLE_ANNOTATIONS = true;
 
+        List<String> actual = runInspection(file, inspection, state);
+        ConstantValueInspection constantValue = new ConstantValueInspection();
+        actual.addAll(runInspection(file, constantValue, constantValue.createStateProvider().getState()));
+        return actual;
+    }
+
+    private static List<String> runInspection(PsiFile file, LocalInspectionTool inspection, Object state) {
         InspectionManager manager = InspectionManager.getInstance(file.getProject());
         ProblemsHolder holder = new ProblemsHolderImpl(manager, file, false);
         LocalInspectionToolSession session = new LocalInspectionToolSession(file, 0, file.getTextLength());

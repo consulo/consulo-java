@@ -1,6 +1,7 @@
 // Copyright 2000-2019 JetBrains s.r.o. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 package com.intellij.java.impl.codeInspection.dataFlow;
 
+import com.intellij.java.analysis.impl.codeInspection.dataFlow.ContractInspection;
 import com.intellij.java.analysis.impl.codeInsight.DefaultInferredAnnotationProvider;
 import com.intellij.java.analysis.impl.codeInsight.intention.AddAnnotationPsiFix;
 import com.intellij.java.analysis.impl.codeInspection.dataFlow.JavaMethodContractUtil;
@@ -202,7 +203,11 @@ public class EditContractIntention extends BaseIntentionAction implements LowPri
     }
 
     private static LocalizeValue getMutatesErrorMessage(String mutates, PsiMethod method) {
-        return StringUtil.isEmpty(mutates) ? LocalizeValue.empty() : MutationSignature.checkSignature(mutates, method);
+        if (StringUtil.isEmpty(mutates)) {
+            return LocalizeValue.empty();
+        }
+        String error = MutationSignature.checkSignature(mutates, method);
+        return error == null ? LocalizeValue.empty() : LocalizeValue.of(error);
     }
 
     @Nullable

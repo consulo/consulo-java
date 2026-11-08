@@ -1,1 +1,2 @@
-446:456 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+446:456 Condition condition2 is always false
+547:551 null is returned by the method which is not declared as @Nullable

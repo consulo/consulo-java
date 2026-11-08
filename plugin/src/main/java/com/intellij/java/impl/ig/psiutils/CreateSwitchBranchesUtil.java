@@ -28,6 +28,13 @@ import one.util.streamex.StreamEx;
 
 import java.util.*;
 import java.util.function.Function;
+import com.intellij.java.language.psi.PsiSwitchBlock;
+import com.intellij.java.language.psi.PsiSwitchExpression;
+import com.intellij.java.language.psi.codeStyle.VariableKind;
+import consulo.util.lang.StringUtil;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class CreateSwitchBranchesUtil {
     /**
@@ -235,4 +242,33 @@ public class CreateSwitchBranchesUtil {
         PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(document);
         return editor;
     }
+
+
+  /**
+   * @param caseLabelName will be added after case keyword, i.e. case "caseLabelName"
+   * @param switchBlock a switch block, that is going to be changed
+   * @param isRuleBasedFormat true, if a switch block consists of arrows
+   * @param isPatternsGenerated specify whether patterns are generated. If true, then pattern variable identifiers
+   *                            will be generated as well i.e. case "caseLabelName" "patternVariableName"
+   * @return list of generated statements depending on type of switch block
+   */
+  public static List<String> generateStatements(String caseLabelName, PsiSwitchBlock switchBlock,
+                                                        boolean isRuleBasedFormat, boolean isPatternsGenerated) {
+    final String patternVariableName =
+      isPatternsGenerated ? " " + new VariableNameGenerator(switchBlock, VariableKind.PARAMETER).byName(
+        StringUtil.getShortName(caseLabelName)).generate(false) : "";
+    if (switchBlock instanceof PsiSwitchExpression) {
+      String value = TypeUtils.getDefaultValue(((PsiSwitchExpression)switchBlock).getType());
+      if (isRuleBasedFormat) {
+        return Collections.singletonList("case " + caseLabelName + patternVariableName + " -> " + value + ";");
+      }
+      else {
+        return Arrays.asList("case " + caseLabelName + patternVariableName + ":", "yield " + value + ";");
+      }
+    }
+    if (isRuleBasedFormat) {
+      return Collections.singletonList("case " + caseLabelName + patternVariableName + " -> {}");
+    }
+    return Arrays.asList("case " + caseLabelName + patternVariableName + ":", "break;");
+  }
 }

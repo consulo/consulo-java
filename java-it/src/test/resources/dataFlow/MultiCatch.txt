@@ -1,1 +1,2 @@
-856:860 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.return.null.from.notnull
+1018:1022 null is returned by the method which is not declared as @Nullable
+856:860 null is returned by the method declared as @Nonnull

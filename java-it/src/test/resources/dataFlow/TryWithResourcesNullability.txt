@@ -1,2 +1,2 @@
-281:292 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.method.invocation.sure
-409:410 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.value
+281:292 Method invocation getResource will produce NullPointerException
+409:410 Value r is always 'null'

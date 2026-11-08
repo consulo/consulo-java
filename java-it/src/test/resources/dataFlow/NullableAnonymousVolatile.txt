@@ -1,2 +1,2 @@
-458:467 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
-530:534 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.assigning.null.notannotated
+458:467 Condition u != null is always true
+530:534 Assigning null value to non-annotated field

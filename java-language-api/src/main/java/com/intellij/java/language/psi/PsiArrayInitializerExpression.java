@@ -28,4 +28,18 @@ public interface PsiArrayInitializerExpression extends PsiExpression {
    * @return the array of member initializer expressions.
    */
   PsiExpression[] getInitializers();
+
+  /**
+   * @return the number of initializer expressions in this array initializer expression
+   */
+  default int getInitializerCount() {
+    return getInitializers().length;
+  }
+
+  /**
+   * @return {@code true} if this array initializer expression contains no expressions
+   */
+  default boolean isEmpty() {
+    return getInitializerCount() == 0;
+  }
 }

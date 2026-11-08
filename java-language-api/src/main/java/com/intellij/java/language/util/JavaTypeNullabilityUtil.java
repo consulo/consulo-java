@@ -15,6 +15,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import com.intellij.java.language.psi.JavaPsiFacade;
+import com.intellij.java.language.psi.PsiArrayType;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiClassType;
+import com.intellij.java.language.psi.PsiEllipsisType;
+import com.intellij.java.language.psi.PsiSubstitutor;
+import com.intellij.java.language.psi.PsiType;
+import com.intellij.java.language.psi.PsiTypeParameter;
+import com.intellij.java.language.psi.PsiWildcardType;
 
 /**
  * Helper methods to compute nullability of Java types.
@@ -416,4 +425,70 @@ public final class JavaTypeNullabilityUtil {
          */
         UNKNOWN
     }
+
+
+  /**
+   * Copies the nullability of one type onto a structurally equal type. The walk goes into the type arguments, the array
+   * components and the wildcard bounds. A part where the two types are not structurally equal keeps its own nullability.
+   *
+   * @param target type to copy the nullability to
+   * @param source type to copy the nullability from
+   * @return the target type with the nullability of the source type
+   */
+  public static PsiType withNullabilityFrom(PsiType target, PsiType source) {
+    return withNullabilityFrom(target, source, 0);
+  }
+
+
+  private static PsiType withNullabilityFrom(PsiType target, PsiType source, int depth) {
+    if (depth > MAX_NULLABILITY_OVERLAY_DEPTH) return target;
+    if (target instanceof PsiArrayType && !(target instanceof PsiEllipsisType) && source instanceof PsiArrayType) {
+      PsiType component = withNullabilityFrom(((PsiArrayType)target).getComponentType(),
+                                              ((PsiArrayType)source).getComponentType(), depth + 1);
+      return new PsiArrayType(component, target.getAnnotationProvider()).withNullability(source.getNullability());
+    }
+    if (target instanceof PsiWildcardType && source instanceof PsiWildcardType) {
+      PsiWildcardType targetWildcard = (PsiWildcardType)target;
+      PsiWildcardType sourceWildcard = (PsiWildcardType)source;
+      PsiType targetBound = targetWildcard.getBound();
+      PsiType sourceBound = sourceWildcard.getBound();
+      if (targetBound == null || sourceBound == null || targetWildcard.isExtends() != sourceWildcard.isExtends()) {
+        return target.withNullability(source.getNullability());
+      }
+      PsiType bound = withNullabilityFrom(targetBound, sourceBound, depth + 1);
+      return targetWildcard.isExtends()
+             ? PsiWildcardType.createExtends(targetWildcard.getManager(), bound)
+             : PsiWildcardType.createSuper(targetWildcard.getManager(), bound);
+    }
+    if (!(target instanceof PsiClassType) || !(source instanceof PsiClassType)) {
+      return target.withNullability(source.getNullability());
+    }
+    PsiClassType.ClassResolveResult targetResult = ((PsiClassType)target).resolveGenerics();
+    PsiClassType.ClassResolveResult sourceResult = ((PsiClassType)source).resolveGenerics();
+    PsiClass targetClass = targetResult.getElement();
+    if (targetClass == null || targetClass != sourceResult.getElement() || ((PsiClassType)target).isRaw()) {
+      return target.withNullability(source.getNullability());
+    }
+    PsiSubstitutor targetSubstitutor = targetResult.getSubstitutor();
+    PsiSubstitutor sourceSubstitutor = sourceResult.getSubstitutor();
+    PsiSubstitutor result = PsiSubstitutor.EMPTY;
+    boolean changed = false;
+    for (PsiTypeParameter parameter : PsiUtil.typeParametersIterable(targetClass)) {
+      PsiType targetArgument = targetSubstitutor.substitute(parameter);
+      PsiType sourceArgument = sourceSubstitutor.substitute(parameter);
+      PsiType argument = targetArgument == null || sourceArgument == null
+                         ? targetArgument
+                         : withNullabilityFrom(targetArgument, sourceArgument, depth + 1);
+      changed |= argument != targetArgument;
+      result = result.put(parameter, argument);
+    }
+    if (!changed) return target.withNullability(source.getNullability());
+    return JavaPsiFacade.getElementFactory(targetClass.getProject()).createType(targetClass, result)
+      .withNullability(source.getNullability());
+  }
+
+  /**
+   * Limits the walk of {@link #withNullabilityFrom}, so that a recursive generic type cannot make it loop.
+   */
+  private static final int MAX_NULLABILITY_OVERLAY_DEPTH = 10;
 }

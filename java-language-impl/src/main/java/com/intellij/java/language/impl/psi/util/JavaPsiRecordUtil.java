@@ -13,6 +13,9 @@ import consulo.util.lang.ObjectUtil;
 
 import org.jspecify.annotations.Nullable;
 import java.util.stream.Stream;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiMethod;
+import com.intellij.java.language.psi.PsiRecordComponent;
 
 /**
  * Utility methods to support Java records
@@ -163,6 +166,21 @@ public final class JavaPsiRecordUtil {
       if (isCompactConstructor(constructor) || hasCanonicalSignature(constructor, components)) {
         return constructor;
       }
+    }
+    return null;
+  }
+
+
+  /**
+   * @param component record component
+   * @return an accessor method for corresponding record component, or null if not found.
+   * Note that if accessor is not well-formed (e.g. has wrong return type), it will still be returned.
+   */
+  public static @Nullable PsiMethod getAccessorForRecordComponent(PsiRecordComponent component) {
+    PsiClass aClass = component.getContainingClass();
+    if (aClass == null || !aClass.isRecord()) return null;
+    for (PsiMethod method : aClass.findMethodsByName(component.getName(), false)) {
+      if (method.getParameterList().isEmpty()) return method;
     }
     return null;
   }

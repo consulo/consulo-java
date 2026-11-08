@@ -87,4 +87,17 @@ public class MergeIfAndIntention extends Intention {
             childConditionText + ')' + childThenBranch.getText();
         replaceStatement(statement, parentStatement);
     }
+
+
+  /**
+   * Merges {@code ifStatement} with the if statement in its then-branch, if {@link MergeIfAndIntention} is available there.
+   * The availability check keeps the else-branch of the nested if statement.
+   */
+  public static void mergeWithNestedIf(PsiIfStatement ifStatement) {
+    MergeIfAndIntention intention = new MergeIfAndIntention();
+    PsiElement token = ifStatement.getFirstChild();
+    if (intention.getElementPredicate().satisfiedBy(token)) {
+      intention.processIntention(token);
+    }
+  }
 }

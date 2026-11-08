@@ -1,2 +1,1 @@
-175:181 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
-207:213 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.constant.condition
+175:181 Condition a == b is always true

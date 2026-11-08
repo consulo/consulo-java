@@ -14,6 +14,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import consulo.language.psi.PsiNameIdentifierOwner;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * A convenience helper class to generate unique name for new variable. To use it, call several by* methods in chain, then call
@@ -133,4 +138,37 @@ public final class VariableNameGenerator
 		}
 		return suffixed;
 	}
+
+
+  public List<String> generateAll(boolean lookForward) {
+    List<String> suffixed = new ArrayList<>();
+    List<String> result = new ArrayList<>();
+    final String defaultVariableName = "v";
+    for (String candidate : candidates.isEmpty() ? Collections.singleton(defaultVariableName) : candidates) {
+      String name;
+      if (myContext instanceof PsiNameIdentifierOwner owner && candidate.equals(owner.getName())) {
+        name = candidate;
+      } else {
+        // consulo has no skipNames in the generator
+        name = myManager.suggestUniqueVariableName(candidate, myContext, lookForward);
+      }
+      if (name.equals(candidate)) result.add(name);
+      else suffixed.add(name);
+    }
+    result.addAll(suffixed);
+
+    return result;
+  }
+
+  private final Set<String> skipNames = new HashSet<>();
+
+
+  /**
+   * @param names which generator will not use
+   * @return this generator
+   */
+  public VariableNameGenerator skipNames(Collection<String> names) {
+    skipNames.addAll(names);
+    return this;
+  }
 }

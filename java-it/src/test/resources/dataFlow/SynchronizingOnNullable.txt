@@ -1,1 +1,1 @@
-101:102 consulo.java.analysis.JavaAnalysisLocalize@dataflow.message.npe.field.access
+101:102 Dereference of n may produce NullPointerException

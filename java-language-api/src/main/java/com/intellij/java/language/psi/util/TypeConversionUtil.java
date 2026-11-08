@@ -37,6 +37,18 @@ import org.jetbrains.annotations.Contract;
 
 import java.util.*;
 import java.util.function.Supplier;
+import com.intellij.java.language.psi.PsiClass;
+import com.intellij.java.language.psi.PsiReferenceList;
+import consulo.util.collection.SmartList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import com.intellij.java.language.psi.JavaElementVisitor;
+import com.intellij.java.language.psi.PsiEnumConstant;
+import com.intellij.java.language.psi.PsiField;
+import com.intellij.java.language.psi.PsiJavaFile;
+import com.intellij.java.language.psi.PsiModifier;
 
 public class TypeConversionUtil {
   private static final Logger LOG = Logger.getInstance(TypeConversionUtil.class);
@@ -2080,5 +2092,102 @@ public class TypeConversionUtil {
 
   private static PsiType wrapperToPrimitive(Object o) {
     return WRAPPER_TO_PRIMITIVE.get(o.getClass());
+  }
+
+
+  /**
+   * Check if sealed class can be narrowed down to a given class.
+   * Check performed only if sealed class or class that it should be narrowed down to is an interface.
+   * 
+   * Sealed class can be narrowed down to an interface in one of the following cases:
+   * <ul>
+   *  <li>sealed class implements interface
+   *  <li>sealed class have at least one non-sealed subclass
+   *  <li>at least one of final/sealed subclasses of sealed parent implement interface
+   * </ul>
+   *
+   * <p>Note that sealed subclasses are checked recursively, e.g. in hierarchy:</p>
+   *
+   * <code>
+   * <p>sealed class Parent {}
+   * <p>sealed class A extends Parent {}
+   * <p>final class C extends A {}
+   * </code>
+   * <p>all classes would be checked.</p>
+   * <br>
+   * <p>See JEP-397 for more details.</p>
+   */
+  public static boolean canConvertSealedTo(PsiClass sealedClass, PsiClass psiClass) {
+    LOG.assertTrue(sealedClass.isInterface() || psiClass.isInterface());
+    return canConvertSealedTo(sealedClass, psiClass, new HashSet<>());
+  }
+
+  
+  private static boolean canConvertSealedTo(PsiClass sealedClass,
+                                            PsiClass psiClass,
+                                            Set<PsiClass> visited) {
+    if (visited.contains(sealedClass)) return true;
+    visited.add(sealedClass);
+    PsiReferenceList permitsList = sealedClass.getPermitsList();
+    List<PsiClass> sealedSubClasses = new SmartList<>();
+    boolean hasClassInheritors;
+    if (permitsList == null) {
+      Set<PsiClass> subClasses = findDirectSubClassesInFile(sealedClass);
+      hasClassInheritors = subClasses.stream().anyMatch(subClass -> subClassExtendsClass(subClass, psiClass, sealedSubClasses));
+    }
+    else {
+      hasClassInheritors = Arrays.stream(permitsList.getReferencedTypes())
+        .map(t -> t.resolve())
+        .anyMatch(subClass -> subClassExtendsClass(subClass, psiClass, sealedSubClasses));
+    }
+    return hasClassInheritors || sealedSubClasses.stream().anyMatch(subClass -> canConvertSealedTo(subClass, psiClass, visited));
+  }
+
+
+  private static Set<PsiClass> findDirectSubClassesInFile(PsiClass sealedClass) {
+    Set<PsiClass> subClasses = new HashSet<>();
+
+    if (sealedClass.isEnum()) {
+      for (PsiField field : sealedClass.getFields()) {
+        if (field instanceof PsiEnumConstant) {
+          ContainerUtil.addIfNotNull(subClasses, ((PsiEnumConstant)field).getInitializingClass());
+        }
+      }
+      return subClasses;
+    }
+
+    sealedClass.getContainingFile().accept(new JavaElementVisitor() {
+      @Override
+      public void visitJavaFile(PsiJavaFile file) {
+        for (PsiClass psiClass : file.getClasses()) {
+          visitClass(psiClass);
+        }
+      }
+
+      @Override
+      public void visitClass(PsiClass psiClass) {
+        for (PsiClass inner : psiClass.getInnerClasses()) {
+          visitClass(inner);
+        }
+        if (psiClass.isInheritor(sealedClass, false)) {
+          subClasses.add(psiClass);
+        }
+      }
+    });
+    return subClasses;
+  }
+
+
+  private static boolean subClassExtendsClass(@Nullable PsiClass subClass,
+                                              PsiClass psiClass,
+                                              List<PsiClass> sealedClasses) {
+    if (subClass == null) return false;
+    if (subClass.hasModifierProperty(PsiModifier.SEALED)) {
+      sealedClasses.add(subClass);
+      return false;
+    }
+    //DON'T use `hasModifierProperty(PsiModifier.NON_SEALED)`, because compiled classes don't have this modifier
+    return !subClass.hasModifierProperty(PsiModifier.FINAL) ||
+           InheritanceUtil.isInheritorOrSelf(subClass, psiClass, true);
   }
 }
