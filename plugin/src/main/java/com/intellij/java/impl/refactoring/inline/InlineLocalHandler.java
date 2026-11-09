@@ -33,7 +33,6 @@ import consulo.language.editor.TargetElementUtil;
 import consulo.language.editor.highlight.HighlightManager;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
-import consulo.language.editor.refactoring.util.RefactoringMessageDialog;
 import consulo.language.editor.util.PsiUtilBase;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
@@ -46,7 +45,6 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.collection.ArrayUtil;
 import org.jspecify.annotations.Nullable;
@@ -219,33 +217,6 @@ public class InlineLocalHandler extends JavaInlineActionHandler {
                 RefactoringLocalize.cannotPerformRefactoringWithReason(RefactoringLocalize.variableIsAccessedForWriting(localName));
             CommonRefactoringUtil.showErrorHint(project, editor, message, REFACTORING_NAME, HelpID.INLINE_VARIABLE);
             return;
-        }
-
-        if (editor != null && !project.getApplication().isUnitTestMode()) {
-            // TODO : check if initializer uses fieldNames that possibly will be hidden by other
-            // locals with the same names after inlining
-            highlightManager.addOccurrenceHighlights(
-                editor,
-                refsToInline,
-                EditorColors.SEARCH_RESULT_ATTRIBUTES, true, null
-            );
-            int occurrencesCount = refsToInline.length;
-            LocalizeValue message = isInliningVariableInitializer(defToInline)
-                ? RefactoringLocalize.inlineLocalVariablePrompt(localName)
-                : RefactoringLocalize.inlineLocalVariableDefinitionPrompt(localName);
-            LocalizeValue occurrencesString = RefactoringLocalize.occurencesString(occurrencesCount);
-            RefactoringMessageDialog dialog = new RefactoringMessageDialog(
-                REFACTORING_NAME,
-                LocalizeValue.join(message, LocalizeValue.space(), occurrencesString),
-                HelpID.INLINE_VARIABLE,
-                UIUtil.getQuestionIcon(),
-                true,
-                project
-            );
-            dialog.show();
-            if (!dialog.isOK()) {
-                return;
-            }
         }
 
         @RequiredWriteAction
