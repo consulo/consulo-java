@@ -34,7 +34,7 @@ import consulo.language.editor.refactoring.changeSignature.ChangeSignatureProces
 import consulo.language.editor.refactoring.changeSignature.ChangeSignatureUsageProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.language.editor.refactoring.rename.RenameUtil;
-import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.ConflictsDialogDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
@@ -225,9 +225,8 @@ public class ChangeSignatureProcessor extends ChangeSignatureProcessorBase {
                 throw new ConflictsInTestsException(conflictDescriptions.values());
             }
             if (myPrepareSuccessfulSwingThreadCallback != null) {
-                ConflictsDialog dialog = prepareConflictsDialog(conflictDescriptions, usagesIn);
-                dialog.show();
-                if (!dialog.isOK()) {
+                ConflictsDialogDescriptor dialog = prepareConflictsDialog(conflictDescriptions, usagesIn);
+                if (!Boolean.TRUE.equals(dialog.showAsync().getNow(Boolean.FALSE))) {
                     if (dialog.isShowConflicts()) {
                         prepareSuccessful();
                     }

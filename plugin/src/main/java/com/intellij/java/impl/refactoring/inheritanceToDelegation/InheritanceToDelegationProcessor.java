@@ -38,7 +38,7 @@ import consulo.ide.impl.find.PsiElement2UsageTargetAdapter;
 import consulo.language.codeStyle.CodeStyleManager;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.ConflictsDialogDescriptor;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
@@ -206,9 +206,8 @@ public class InheritanceToDelegationProcessor extends BaseRefactoringProcessor {
 
             analyzeConflicts(usagesIn, conflicts);
             if (!conflicts.isEmpty()) {
-                ConflictsDialog conflictsDialog = prepareConflictsDialog(conflicts, usagesIn);
-                conflictsDialog.show();
-                if (!conflictsDialog.isOK()) {
+                ConflictsDialogDescriptor conflictsDialog = prepareConflictsDialog(conflicts, usagesIn);
+                if (!Boolean.TRUE.equals(conflictsDialog.showAsync().getNow(Boolean.FALSE))) {
                     if (conflictsDialog.isShowConflicts()) {
                         prepareSuccessful();
                     }

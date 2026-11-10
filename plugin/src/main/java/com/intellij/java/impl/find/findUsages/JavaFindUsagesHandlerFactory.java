@@ -31,6 +31,9 @@ import consulo.language.psi.PsiElement;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import jakarta.inject.Inject;
+import org.jspecify.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
 
 
 /**
@@ -85,6 +88,33 @@ public class JavaFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
         }
 
         return new JavaFindUsagesHandler(element, this);
+    }
+
+    @Override
+    @RequiredUIAccess
+    public CompletableFuture<@Nullable FindUsagesHandler> createFindUsagesHandlerAsync(PsiElement element, boolean forHighlightUsages) {
+        if (forHighlightUsages || element instanceof PsiDirectory) {
+            return CompletableFuture.completedFuture(createFindUsagesHandler(element, forHighlightUsages));
+        }
+
+        if (element instanceof PsiMethod method) {
+            return SuperMethodWarningUtil.checkSuperMethodsAsync(method, FindLocalize.findSuperMethodWarningActionVerb(), null)
+                .thenApply(methods -> {
+                    if (methods.length > 1) {
+                        return new JavaFindUsagesHandler(element, methods, PsiElement.EMPTY_ARRAY, this);
+                    }
+                    if (methods.length == 1) {
+                        return new JavaFindUsagesHandler(methods[0], PsiElement.EMPTY_ARRAY, PsiElement.EMPTY_ARRAY, this);
+                    }
+                    return FindUsagesHandler.NULL_HANDLER;
+                });
+        }
+
+        return JavaFindUsagesHandler.getPrimaryElementsAsync(element).thenCompose(
+            primary -> JavaFindUsagesHandler.getSecondaryElementsAsync(element).<@Nullable FindUsagesHandler>thenApply(
+                secondary -> new JavaFindUsagesHandler(element, primary, secondary, this)
+            )
+        );
     }
 
     public JavaClassFindUsagesOptions getFindClassOptions() {

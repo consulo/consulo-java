@@ -26,7 +26,7 @@ import consulo.language.psi.PsiElement;
 
 import java.util.Map;
 
-@ExtensionImpl
+@ExtensionImpl(id = "aliasingPom", order = "after javaClass, after javamethod, after javaVariable, after javaPackage")
 public class RenameAliasingPomTargetProcessor extends RenamePsiElementProcessor {
     @Override
     public boolean canProcessElement(PsiElement element) {

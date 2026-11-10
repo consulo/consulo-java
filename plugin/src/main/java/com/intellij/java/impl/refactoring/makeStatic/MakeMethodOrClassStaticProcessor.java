@@ -24,7 +24,7 @@ import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.access.RequiredWriteAction;
 import consulo.language.editor.refactoring.BaseRefactoringProcessor;
 import consulo.language.editor.refactoring.localize.RefactoringLocalize;
-import consulo.language.editor.refactoring.ui.ConflictsDialog;
+import consulo.language.editor.refactoring.ui.ConflictsDialogDescriptor;
 import consulo.language.editor.refactoring.ui.RefactoringUIUtil;
 import consulo.language.editor.refactoring.util.CommonRefactoringUtil;
 import consulo.language.findUsage.DescriptiveNameUtil;
@@ -79,9 +79,8 @@ public abstract class MakeMethodOrClassStaticProcessor<T extends PsiTypeParamete
         if (myPrepareSuccessfulSwingThreadCallback != null) {
             MultiMap<PsiElement, LocalizeValue> conflicts = getConflictDescriptions(usagesIn);
             if (conflicts.size() > 0) {
-                ConflictsDialog conflictsDialog = prepareConflictsDialog(conflicts, refUsages.get());
-                conflictsDialog.show();
-                if (!conflictsDialog.isOK()) {
+                ConflictsDialogDescriptor conflictsDialog = prepareConflictsDialog(conflicts, refUsages.get());
+                if (!Boolean.TRUE.equals(conflictsDialog.showAsync().getNow(Boolean.FALSE))) {
                     if (conflictsDialog.isShowConflicts()) {
                         prepareSuccessful();
                     }

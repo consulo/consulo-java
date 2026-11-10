@@ -49,6 +49,7 @@ import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
 import consulo.project.Project;
+import consulo.ui.MessageBoxes;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
@@ -58,6 +59,7 @@ import consulo.util.collection.ArrayUtil;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 @ExtensionImpl(id = "javaProcessor")
@@ -149,21 +151,7 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
             return psiMethods;
         }
         else if (element instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod method) {
-            Set<PsiParameter> parametersToDelete = new HashSet<>();
-            parametersToDelete.add(parameter);
-            int parameterIndex = method.getParameterList().getParameterIndex(parameter);
-            List<PsiMethod> superMethods = new ArrayList<>(Arrays.asList(method.findDeepestSuperMethods()));
-            if (superMethods.isEmpty()) {
-                superMethods.add(method);
-            }
-            for (PsiMethod superMethod : superMethods) {
-                parametersToDelete.add(superMethod.getParameterList().getParameters()[parameterIndex]);
-                OverridingMethodsSearch.search(superMethod).forEach(overrider -> {
-                    parametersToDelete.add(overrider.getParameterList().getParameters()[parameterIndex]);
-                    return true;
-                });
-            }
-
+            Set<PsiParameter> parametersToDelete = collectParametersToDelete(parameter, method);
             if (parametersToDelete.size() > 1 && !project.getApplication().isUnitTestMode()) {
                 LocalizeValue message =
                     RefactoringLocalize.zeroIsAPartOfMethodHierarchyDoYouWantToDeleteMultipleParameters(UsageViewUtil.getLongName(method));
@@ -181,6 +169,56 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
         else {
             return Collections.singletonList(element);
         }
+    }
+
+    @Override
+    @RequiredUIAccess
+    public CompletableFuture<@Nullable Collection<? extends PsiElement>> getElementsToSearchAsync(
+        PsiElement element,
+        @Nullable Module module,
+        Collection<PsiElement> allElementsToDelete
+    ) {
+        if (element instanceof PsiMethod method) {
+            return SuperMethodWarningUtil.checkSuperMethodsAsync(method, RefactoringLocalize.toDeleteWithUsageSearch(), allElementsToDelete)
+                .thenApply(methods -> {
+                    if (methods.length == 0) {
+                        return null;
+                    }
+                    List<PsiMethod> psiMethods = new ArrayList<>(Arrays.asList(methods));
+                    psiMethods.add(method);
+                    return psiMethods;
+                });
+        }
+        if (element instanceof PsiParameter parameter && parameter.getDeclarationScope() instanceof PsiMethod method) {
+            Set<PsiParameter> parametersToDelete = collectParametersToDelete(parameter, method);
+            if (parametersToDelete.size() == 1) {
+                return CompletableFuture.completedFuture(parametersToDelete);
+            }
+            return MessageBoxes.yesNo()
+                .title(SafeDeleteHandler.REFACTORING_NAME)
+                .text(RefactoringLocalize.zeroIsAPartOfMethodHierarchyDoYouWantToDeleteMultipleParameters(UsageViewUtil.getLongName(method)))
+                .showAsync(element.getProject())
+                .thenApply(delete -> delete ? parametersToDelete : null);
+        }
+        return CompletableFuture.completedFuture(getElementsToSearch(element, module, allElementsToDelete));
+    }
+
+    private static Set<PsiParameter> collectParametersToDelete(PsiParameter parameter, PsiMethod method) {
+        Set<PsiParameter> parametersToDelete = new HashSet<>();
+        parametersToDelete.add(parameter);
+        int parameterIndex = method.getParameterList().getParameterIndex(parameter);
+        List<PsiMethod> superMethods = new ArrayList<>(Arrays.asList(method.findDeepestSuperMethods()));
+        if (superMethods.isEmpty()) {
+            superMethods.add(method);
+        }
+        for (PsiMethod superMethod : superMethods) {
+            parametersToDelete.add(superMethod.getParameterList().getParameters()[parameterIndex]);
+            OverridingMethodsSearch.search(superMethod).forEach(overrider -> {
+                parametersToDelete.add(overrider.getParameterList().getParameters()[parameterIndex]);
+                return true;
+            });
+        }
+        return parametersToDelete;
     }
 
     @Override
@@ -224,57 +262,100 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
         Collection<PsiElement> allElementsToDelete,
         boolean askUser
     ) {
-        if (element instanceof PsiField field) {
+        if (!(element instanceof PsiField field) || field.getContainingClass() == null) {
+            return null;
+        }
+        PsiMethod[] getters = findGettersToDelete(field, allElementsToDelete);
+        PsiMethod setter = findSetterToDelete(field, allElementsToDelete);
+        if (askUser && (getters != null || setter != null)) {
             Project project = field.getProject();
-            String propertyName = JavaCodeStyleManager.getInstance(project).variableNameToPropertyName(field.getName(), VariableKind.FIELD);
-
-            PsiClass aClass = field.getContainingClass();
-            if (aClass != null) {
-                boolean isStatic = field.isStatic();
-                PsiMethod[] getters = GetterSetterPrototypeProvider.findGetters(aClass, propertyName, isStatic);
-                if (getters != null) {
-                    List<PsiMethod> validGetters = new ArrayList<>(1);
-                    for (PsiMethod getter : getters) {
-                        if (!allElementsToDelete.contains(getter) && (getter != null && getter.isPhysical())) {
-                            validGetters.add(getter);
-                        }
-                    }
-                    getters = validGetters.isEmpty() ? null : validGetters.toArray(new PsiMethod[validGetters.size()]);
-                }
-
-                PsiMethod setter = PropertyUtil.findPropertySetter(aClass, propertyName, isStatic, false);
-                if (allElementsToDelete.contains(setter) || setter != null && !setter.isPhysical()) {
-                    setter = null;
-                }
-                if (askUser && (getters != null || setter != null)) {
-                    String message = RefactoringMessageUtil.getGetterSetterMessage(
-                        field.getName(),
-                        RefactoringLocalize.deleteTitle().get(),
-                        getters != null ? getters[0] : null,
-                        setter
-                    );
-                    if (!project.getApplication().isUnitTestMode()
-                        && Messages.showYesNoDialog(
-                        project,
-                        message,
-                        RefactoringLocalize.safeDeleteTitle().get(),
-                        UIUtil.getQuestionIcon()
-                    ) != 0) {
-                        getters = null;
-                        setter = null;
-                    }
-                }
-                List<PsiElement> elements = new ArrayList<>();
-                if (setter != null) {
-                    elements.add(setter);
-                }
-                if (getters != null) {
-                    Collections.addAll(elements, getters);
-                }
-                return elements;
+            if (!project.getApplication().isUnitTestMode()
+                && Messages.showYesNoDialog(
+                project,
+                getAccessorsMessage(field, getters, setter),
+                RefactoringLocalize.safeDeleteTitle().get(),
+                UIUtil.getQuestionIcon()
+            ) != 0) {
+                return new ArrayList<>();
             }
         }
-        return null;
+        return accessors(getters, setter);
+    }
+
+    @Override
+    @RequiredUIAccess
+    public CompletableFuture<@Nullable Collection<PsiElement>> getAdditionalElementsToDeleteAsync(
+        PsiElement element,
+        Collection<PsiElement> allElementsToDelete,
+        boolean askUser
+    ) {
+        if (!(element instanceof PsiField field) || field.getContainingClass() == null) {
+            return CompletableFuture.completedFuture(null);
+        }
+        PsiMethod[] getters = findGettersToDelete(field, allElementsToDelete);
+        PsiMethod setter = findSetterToDelete(field, allElementsToDelete);
+        if (!askUser || getters == null && setter == null) {
+            return CompletableFuture.completedFuture(accessors(getters, setter));
+        }
+        return MessageBoxes.yesNo()
+            .title(RefactoringLocalize.safeDeleteTitle())
+            .text(LocalizeValue.of(getAccessorsMessage(field, getters, setter)))
+            .showAsync(field.getProject())
+            .thenApply(delete -> delete ? accessors(getters, setter) : new ArrayList<>());
+    }
+
+    private static String getAccessorsMessage(PsiField field, PsiMethod @Nullable [] getters, @Nullable PsiMethod setter) {
+        return RefactoringMessageUtil.getGetterSetterMessage(
+            field.getName(),
+            RefactoringLocalize.deleteTitle().get(),
+            getters != null ? getters[0] : null,
+            setter
+        );
+    }
+
+    private static Collection<PsiElement> accessors(PsiMethod @Nullable [] getters, @Nullable PsiMethod setter) {
+        List<PsiElement> elements = new ArrayList<>();
+        if (setter != null) {
+            elements.add(setter);
+        }
+        if (getters != null) {
+            Collections.addAll(elements, getters);
+        }
+        return elements;
+    }
+
+    private static PsiMethod @Nullable [] findGettersToDelete(PsiField field, Collection<PsiElement> allElementsToDelete) {
+        PsiClass aClass = field.getContainingClass();
+        if (aClass == null) {
+            return null;
+        }
+        PsiMethod[] getters = GetterSetterPrototypeProvider.findGetters(aClass, propertyName(field), field.isStatic());
+        if (getters == null) {
+            return null;
+        }
+        List<PsiMethod> validGetters = new ArrayList<>(1);
+        for (PsiMethod getter : getters) {
+            if (!allElementsToDelete.contains(getter) && (getter != null && getter.isPhysical())) {
+                validGetters.add(getter);
+            }
+        }
+        return validGetters.isEmpty() ? null : validGetters.toArray(new PsiMethod[validGetters.size()]);
+    }
+
+    private static @Nullable PsiMethod findSetterToDelete(PsiField field, Collection<PsiElement> allElementsToDelete) {
+        PsiClass aClass = field.getContainingClass();
+        if (aClass == null) {
+            return null;
+        }
+        PsiMethod setter = PropertyUtil.findPropertySetter(aClass, propertyName(field), field.isStatic(), false);
+        if (allElementsToDelete.contains(setter) || setter != null && !setter.isPhysical()) {
+            return null;
+        }
+        return setter;
+    }
+
+    private static String propertyName(PsiField field) {
+        return JavaCodeStyleManager.getInstance(field.getProject()).variableNameToPropertyName(field.getName(), VariableKind.FIELD);
     }
 
     @Override
@@ -335,6 +416,32 @@ public class JavaSafeDeleteProcessor extends SafeDeleteProcessorDelegateBase {
         }
 
         return result.toArray(new UsageInfo[result.size()]);
+    }
+
+    @Override
+    @RequiredUIAccess
+    public CompletableFuture<UsageInfo @Nullable []> preprocessUsagesAsync(Project project, UsageInfo[] usages) {
+        List<UsageInfo> result = new ArrayList<>();
+        List<UsageInfo> overridingMethods = new ArrayList<>();
+        for (UsageInfo usage : usages) {
+            if (!usage.isNonCodeUsage && usage instanceof SafeDeleteOverridingMethodUsageInfo) {
+                overridingMethods.add(usage);
+            }
+            else {
+                result.add(usage);
+            }
+        }
+
+        if (overridingMethods.isEmpty()) {
+            return CompletableFuture.completedFuture(usages);
+        }
+        return new OverridingMethodsDialogDescriptor(project, overridingMethods).showAsync().thenApply(selected -> {
+            if (selected == null) {
+                return null;
+            }
+            result.addAll(selected);
+            return result.toArray(UsageInfo.EMPTY_ARRAY);
+        });
     }
 
     @Override

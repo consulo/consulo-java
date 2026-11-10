@@ -83,8 +83,7 @@ public abstract class TurnRefsToSuperProcessorBase extends BaseRefactoringProces
         myVariableRenamer = new AutomaticVariableRenamer(myClass, mySuperClassName, filtered);
         if (!myProject.getApplication().isUnitTestMode() && myVariableRenamer.hasAnythingToRename()) {
             AutomaticRenamingDialog dialog = new AutomaticRenamingDialog(myProject, myVariableRenamer);
-            dialog.show();
-            if (!dialog.isOK()) {
+            if (!Boolean.TRUE.equals(dialog.showAsync().getNow(Boolean.FALSE))) {
                 return false;
             }
 

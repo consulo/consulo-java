@@ -28,7 +28,7 @@ import consulo.language.editor.refactoring.rename.RenameHandler;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiFile;
 import consulo.project.Project;
-import consulo.ui.ex.awt.DialogWrapper;
+import consulo.ui.annotation.RequiredUIAccess;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -54,7 +54,7 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
 
   private void performInvoke(@Nullable Editor editor, DataContext dataContext) {
     BeanProperty property = getProperty(dataContext);
-    new PropertyRenameDialog(property, editor).show();
+    new PropertyRenameDialog(property, editor).showAsync();
   }
 
   public static void doRename(BeanProperty property, String newName, boolean searchInComments, boolean isPreview) {
@@ -89,11 +89,13 @@ public abstract class BeanPropertyRenameHandler implements RenameHandler {
       myProperty = property;
     }
 
+    @Override
+    @RequiredUIAccess
     protected void doAction() {
       String newName = getNewName();
       boolean searchInComments = isSearchInComments();
       doRename(myProperty, newName, searchInComments, isPreviewUsages());
-      close(DialogWrapper.OK_EXIT_CODE);
+      closeOKAction();
     }
   }
 }

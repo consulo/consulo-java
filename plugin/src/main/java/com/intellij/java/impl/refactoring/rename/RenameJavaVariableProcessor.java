@@ -41,9 +41,8 @@ import consulo.language.util.IncorrectOperationException;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.Project;
+import consulo.ui.MessageBoxes;
 import consulo.ui.annotation.RequiredUIAccess;
-import consulo.ui.ex.awt.Messages;
-import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.MoveRenameUsageInfo;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.MultiMap;
@@ -53,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @ExtensionImpl(id = "javaVariable")
 public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
@@ -154,13 +154,32 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
     @Override
     @RequiredUIAccess
     public void prepareRenaming(PsiElement element, String newName, Map<PsiElement, String> allRenames) {
-        if (element instanceof PsiField field && JavaLanguage.INSTANCE.equals(element.getLanguage())) {
-            prepareFieldRenaming(field, newName, allRenames);
+        AccessorRenames accessors = findAccessorRenames(element, newName);
+        if (accessors != null && Boolean.TRUE.equals(accessors.ask().getNow(Boolean.FALSE))) {
+            accessors.apply(allRenames);
         }
     }
 
+    @Override
     @RequiredUIAccess
-    private static void prepareFieldRenaming(PsiField field, String newName, Map<PsiElement, String> allRenames) {
+    public CompletableFuture<?> prepareRenamingAsync(PsiElement element, String newName, Map<PsiElement, String> allRenames) {
+        AccessorRenames accessors = findAccessorRenames(element, newName);
+        if (accessors == null) {
+            return CompletableFuture.completedFuture(null);
+        }
+        return accessors.ask().thenAccept(rename -> {
+            if (Boolean.TRUE.equals(rename)) {
+                accessors.apply(allRenames);
+            }
+        });
+    }
+
+    @RequiredUIAccess
+    private static @Nullable AccessorRenames findAccessorRenames(PsiElement element, String newName) {
+        if (!(element instanceof PsiField field) || !JavaLanguage.INSTANCE.equals(element.getLanguage())) {
+            return null;
+        }
+
         // search for getters/setters
         PsiClass aClass = field.getContainingClass();
 
@@ -224,33 +243,72 @@ public class RenameJavaVariableProcessor extends RenameJavaMemberProcessor {
             }
         }
 
-        if ((getter != null || setter != null) && askToRenameAccessors(getter, setter, newName, project)) {
-            getter = null;
-            setter = null;
-            shouldRenameSetterParameter = false;
+        if (getter == null && setter == null) {
+            return null;
         }
 
-        if (getter != null) {
-            addOverriddenAndImplemented(getter, newGetterName, allRenames);
-        }
-
-        if (setter != null) {
-            addOverriddenAndImplemented(setter, newSetterName, allRenames);
-        }
-
-        if (shouldRenameSetterParameter) {
-            PsiParameter parameter = setter.getParameterList().getParameters()[0];
-            allRenames.put(parameter, manager.propertyNameToVariableName(newPropertyName, VariableKind.PARAMETER));
-        }
+        String newParameterName = shouldRenameSetterParameter
+            ? manager.propertyNameToVariableName(newPropertyName, VariableKind.PARAMETER)
+            : null;
+        return new AccessorRenames(project, newName, getter, newGetterName, setter, newSetterName, newParameterName);
     }
 
-    @RequiredUIAccess
-    private static boolean askToRenameAccessors(PsiMethod getter, PsiMethod setter, String newName, Project project) {
-        if (project.getApplication().isUnitTestMode()) {
-            return false;
+    private static final class AccessorRenames {
+        private final Project myProject;
+        private final String myNewName;
+        private final @Nullable PsiMethod myGetter;
+        private final @Nullable String myNewGetterName;
+        private final @Nullable PsiMethod mySetter;
+        private final @Nullable String myNewSetterName;
+        private final @Nullable String myNewParameterName;
+
+        private AccessorRenames(
+            Project project,
+            String newName,
+            @Nullable PsiMethod getter,
+            @Nullable String newGetterName,
+            @Nullable PsiMethod setter,
+            @Nullable String newSetterName,
+            @Nullable String newParameterName
+        ) {
+            myProject = project;
+            myNewName = newName;
+            myGetter = getter;
+            myNewGetterName = newGetterName;
+            mySetter = setter;
+            myNewSetterName = newSetterName;
+            myNewParameterName = newParameterName;
         }
-        String text = RefactoringMessageUtil.getGetterSetterMessage(newName, RefactoringLocalize.renameTitle().get(), getter, setter);
-        return Messages.showYesNoDialog(project, text, RefactoringLocalize.renameTitle().get(), UIUtil.getQuestionIcon()) != 0;
+
+        @RequiredUIAccess
+        private CompletableFuture<Boolean> ask() {
+            if (myProject.getApplication().isUnitTestMode()) {
+                return CompletableFuture.completedFuture(Boolean.TRUE);
+            }
+            String text = RefactoringMessageUtil.getGetterSetterMessage(myNewName, RefactoringLocalize.renameTitle().get(), myGetter, mySetter);
+            return MessageBoxes.yesNo()
+                .asQuestion()
+                .title(RefactoringLocalize.renameTitle())
+                .text(LocalizeValue.of(text))
+                .showAsync(myProject)
+                .thenApply(Boolean.TRUE::equals);
+        }
+
+        @RequiredReadAction
+        private void apply(Map<PsiElement, String> allRenames) {
+            if (myGetter != null && myNewGetterName != null) {
+                addOverriddenAndImplemented(myGetter, myNewGetterName, allRenames);
+            }
+
+            if (mySetter != null && myNewSetterName != null) {
+                addOverriddenAndImplemented(mySetter, myNewSetterName, allRenames);
+            }
+
+            if (mySetter != null && myNewParameterName != null) {
+                PsiParameter parameter = mySetter.getParameterList().getParameters()[0];
+                allRenames.put(parameter, myNewParameterName);
+            }
+        }
     }
 
     private static void addOverriddenAndImplemented(PsiMethod methodPrototype, String newName, Map<PsiElement, String> allRenames) {

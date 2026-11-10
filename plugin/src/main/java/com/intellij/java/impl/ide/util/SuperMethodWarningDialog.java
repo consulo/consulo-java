@@ -15,9 +15,8 @@
  */
 package com.intellij.java.impl.ide.util;
 
+import consulo.annotation.DeprecationInfo;
 import consulo.ide.localize.IdeLocalize;
-import consulo.java.localize.JavaLocalize;
-import consulo.language.editor.refactoring.localize.RefactoringLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
@@ -32,6 +31,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 //TODO: review title and text!!!
+@Deprecated
+@DeprecationInfo("Use SuperMethodWarningUtil#checkSuperMethodAsync")
 class SuperMethodWarningDialog extends DialogWrapper {
     public static final int NO_EXIT_CODE = NEXT_USER_EXIT_CODE + 1;
     private final String myName;
@@ -79,26 +80,16 @@ class SuperMethodWarningDialog extends DialogWrapper {
         }
         JPanel labelsPanel = new JPanel(new GridLayout(0, 1, 0, 0));
         labelsPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 10));
-        int classType = myIsParentInterface ? 0 : 1;
-        labelsPanel.add(new JLabel(JavaLocalize.labelMethod(myName).get()));
-        if (myClassNames.length == 1) {
-            String className = myClassNames[0];
-            labelsPanel.add(new JLabel(
-                myIsContainedInInterface || !myIsSuperAbstract
-                    ? JavaLocalize.labelOverridesMethodOfClassOrInterfaceName(classType, className).get()
-                    : JavaLocalize.labelImplementsMethodOfClassOrInterfaceName(classType, className).get()
-            ));
+        for (LocalizeValue line : SuperMethodWarningUtil.messageLines(
+            myName,
+            myActionString,
+            myIsSuperAbstract,
+            myIsParentInterface,
+            myIsContainedInInterface,
+            myClassNames
+        )) {
+            labelsPanel.add(new JLabel(line.get()));
         }
-        else {
-            labelsPanel.add(new JLabel(JavaLocalize.labelImplementsMethodOfInterfaces().get()));
-            for (String className : myClassNames) {
-                labelsPanel.add(new JLabel("    " + className));
-            }
-        }
-        labelsPanel.add(new JLabel(JavaLocalize.promptDoYouWantToActionVerbTheMethodFromClass(
-            myActionString.orIfEmpty(RefactoringLocalize.toRefactor()),
-            myClassNames.length > 1 ? 2 : 1
-        ).get()));
         panel.add(labelsPanel, BorderLayout.CENTER);
         return panel;
     }

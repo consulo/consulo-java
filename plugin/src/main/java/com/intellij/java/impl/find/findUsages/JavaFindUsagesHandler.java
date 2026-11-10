@@ -31,7 +31,7 @@ import consulo.dataContext.DataContext;
 import consulo.find.FindUsagesHandler;
 import consulo.find.FindUsagesOptions;
 import consulo.find.localize.FindLocalize;
-import consulo.find.ui.AbstractFindUsagesDialog;
+import consulo.find.ui.AbstractFindUsagesDialogDescriptor;
 import consulo.language.editor.refactoring.util.NonCodeSearchDescriptionLocation;
 import consulo.language.psi.PsiElement;
 import consulo.language.psi.PsiPackage;
@@ -39,14 +39,21 @@ import consulo.language.psi.PsiReference;
 import consulo.language.psi.PsiUtilCore;
 import consulo.logging.Logger;
 import consulo.platform.base.localize.CommonLocalize;
+import consulo.ui.MessageBoxBuilder;
+import consulo.ui.MessageButtonRole;
+import consulo.ui.UIAction;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.Messages;
 import consulo.ui.ex.awt.UIUtil;
 import consulo.usage.UsageInfo;
 import consulo.util.collection.ContainerUtil;
+import consulo.util.concurrent.coroutine.Coroutine;
+import consulo.util.concurrent.coroutine.CoroutineScope;
+import consulo.util.concurrent.coroutine.step.Iteration;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 /**
@@ -56,6 +63,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     private static final Logger LOG = Logger.getInstance(JavaFindUsagesHandler.class);
 
     private final PsiElement[] myElementsToSearch;
+    private final PsiElement @Nullable [] mySecondaryElements;
     private final JavaFindUsagesHandlerFactory myFactory;
 
     public JavaFindUsagesHandler(PsiElement psiElement, JavaFindUsagesHandlerFactory factory) {
@@ -67,20 +75,41 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
         PsiElement[] elementsToSearch,
         JavaFindUsagesHandlerFactory factory
     ) {
+        this(psiElement, elementsToSearch, null, factory);
+    }
+
+    /**
+     * @param secondaryElements the answer of {@link #getSecondaryElementsAsync(PsiElement)}, so that no question is asked
+     *                          again; {@code null} to compute them on demand
+     */
+    public JavaFindUsagesHandler(
+        PsiElement psiElement,
+        PsiElement[] elementsToSearch,
+        PsiElement @Nullable [] secondaryElements,
+        JavaFindUsagesHandlerFactory factory
+    ) {
         super(psiElement);
         myElementsToSearch = elementsToSearch;
+        mySecondaryElements = secondaryElements;
         myFactory = factory;
     }
 
     @Override
-    public AbstractFindUsagesDialog getFindUsagesDialog(
+    public boolean supportConsuloUI() {
+        return true;
+    }
+
+    @Override
+    @RequiredUIAccess
+    public AbstractFindUsagesDialogDescriptor createFindUsagesDialogDescriptor(
+        DataContext ctx,
         boolean isSingleFile,
         boolean toShowInNewTab,
         boolean mustOpenInNewTab
     ) {
         PsiElement element = getPsiElement();
         if (element instanceof PsiPackage) {
-            return new FindPackageUsagesDialog(
+            return new FindPackageUsagesDialogDescriptor(
                 element,
                 getProject(),
                 myFactory.getFindPackageOptions(),
@@ -91,7 +120,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
             );
         }
         if (element instanceof PsiClass) {
-            return new FindClassUsagesDialog(
+            return new FindClassUsagesDialogDescriptor(
                 element,
                 getProject(),
                 myFactory.getFindClassOptions(),
@@ -102,7 +131,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
             );
         }
         if (element instanceof PsiMethod) {
-            return new FindMethodUsagesDialog(
+            return new FindMethodUsagesDialogDescriptor(
                 element,
                 getProject(),
                 myFactory.getFindMethodOptions(),
@@ -113,7 +142,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
             );
         }
         if (element instanceof PsiVariable) {
-            return new FindVariableUsagesDialog(
+            return new FindVariableUsagesDialogDescriptor(
                 element,
                 getProject(),
                 myFactory.getFindVariableOptions(),
@@ -124,7 +153,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
             );
         }
         if (ThrowSearchUtil.isSearchable(element)) {
-            return new FindThrowUsagesDialog(
+            return new FindThrowUsagesDialogDescriptor(
                 element,
                 getProject(),
                 myFactory.getFindThrowOptions(),
@@ -134,7 +163,7 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
                 this
             );
         }
-        return super.getFindUsagesDialog(isSingleFile, toShowInNewTab, mustOpenInNewTab);
+        return super.createFindUsagesDialogDescriptor(ctx, isSingleFile, toShowInNewTab, mustOpenInNewTab);
     }
 
     @RequiredUIAccess
@@ -180,7 +209,8 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     @RequiredUIAccess
     public PsiElement[] getPrimaryElements() {
         PsiElement element = getPsiElement();
-        if (element instanceof PsiParameter parameter
+        if (myElementsToSearch.length == 0
+            && element instanceof PsiParameter parameter
             && parameter.getDeclarationScope() instanceof PsiMethod method
             && PsiUtil.canBeOverriden(method)) {
             PsiClass aClass = method.getContainingClass();
@@ -197,60 +227,133 @@ public class JavaFindUsagesHandler extends FindUsagesHandler {
     @Override
     @RequiredUIAccess
     public PsiElement[] getSecondaryElements() {
+        if (mySecondaryElements != null) {
+            return mySecondaryElements;
+        }
         PsiElement element = getPsiElement();
         if (element.getApplication().isUnitTestMode()) {
             return PsiElement.EMPTY_ARRAY;
         }
         if (element instanceof PsiField field) {
-            PsiClass containingClass = field.getContainingClass();
-            if (containingClass != null) {
-                String fieldName = field.getName();
-                String propertyName = JavaCodeStyleManager.getInstance(getProject())
-                    .variableNameToPropertyName(fieldName, VariableKind.FIELD);
-                Set<PsiMethod> accessors = new HashSet<>();
-                boolean isStatic = field.isStatic();
-                PsiMethod getter = PropertyUtil.findPropertyGetterWithType(
-                    propertyName,
-                    isStatic,
-                    field.getType(),
-                    List.of(containingClass.getMethods()).iterator()
-                );
-                if (getter != null) {
-                    accessors.add(getter);
-                }
-                PsiMethod setter = PropertyUtil.findPropertySetterWithType(
-                    propertyName,
-                    isStatic,
-                    field.getType(),
-                    List.of(containingClass.getMethods()).iterator()
-                );
-                if (setter != null) {
-                    accessors.add(setter);
-                }
-                accessors.addAll(PropertyUtil.getAccessors(containingClass, fieldName));
-                if (!accessors.isEmpty()) {
-                    boolean containsPhysical = ContainerUtil.find(accessors, PsiElement::isPhysical) != null;
-                    boolean doSearch = !containsPhysical || Messages.showOkCancelDialog(
-                        FindLocalize.findFieldAccessorsPrompt(fieldName).get(),
-                        FindLocalize.findFieldAccessorsTitle().get(),
-                        CommonLocalize.buttonYes().get(),
-                        CommonLocalize.buttonNo().get(),
-                        UIUtil.getQuestionIcon()
-                    ) == Messages.OK;
-                    if (doSearch) {
-                        Set<PsiElement> elements = new HashSet<>();
-                        for (PsiMethod accessor : accessors) {
-                            ContainerUtil.addAll(
-                                elements,
-                                SuperMethodWarningUtil.checkSuperMethods(accessor, FindLocalize.findSuperMethodWarningActionVerb())
-                            );
-                        }
-                        return PsiUtilCore.toPsiElementArray(elements);
+            Set<PsiMethod> accessors = getFieldAccessors(field);
+            if (!accessors.isEmpty()) {
+                boolean containsPhysical = ContainerUtil.find(accessors, PsiElement::isPhysical) != null;
+                boolean doSearch = !containsPhysical || Messages.showOkCancelDialog(
+                    FindLocalize.findFieldAccessorsPrompt(field.getName()).get(),
+                    FindLocalize.findFieldAccessorsTitle().get(),
+                    CommonLocalize.buttonYes().get(),
+                    CommonLocalize.buttonNo().get(),
+                    UIUtil.getQuestionIcon()
+                ) == Messages.OK;
+                if (doSearch) {
+                    Set<PsiElement> elements = new HashSet<>();
+                    for (PsiMethod accessor : accessors) {
+                        ContainerUtil.addAll(
+                            elements,
+                            SuperMethodWarningUtil.checkSuperMethods(accessor, FindLocalize.findSuperMethodWarningActionVerb())
+                        );
                     }
+                    return PsiUtilCore.toPsiElementArray(elements);
                 }
             }
         }
         return super.getSecondaryElements();
+    }
+
+    /**
+     * Asks the questions {@link #getSecondaryElements()} would ask: whether to search for the field accessors and,
+     * for each accessor, whether to search for its base method instead.
+     */
+    @RequiredUIAccess
+    public static CompletableFuture<PsiElement[]> getSecondaryElementsAsync(PsiElement element) {
+        if (!(element instanceof PsiField field)) {
+            return CompletableFuture.completedFuture(PsiElement.EMPTY_ARRAY);
+        }
+        Set<PsiMethod> accessors = getFieldAccessors(field);
+        if (accessors.isEmpty()) {
+            return CompletableFuture.completedFuture(PsiElement.EMPTY_ARRAY);
+        }
+
+        boolean containsPhysical = ContainerUtil.find(accessors, PsiElement::isPhysical) != null;
+        CompletableFuture<Boolean> doSearch = !containsPhysical
+            ? CompletableFuture.completedFuture(Boolean.TRUE)
+            : MessageBoxBuilder.<Boolean>create()
+                .asQuestion()
+                .title(FindLocalize.findFieldAccessorsTitle())
+                .text(FindLocalize.findFieldAccessorsPrompt(field.getName()))
+                .button(MessageButtonRole.YES, Boolean.TRUE)
+                .asDefaultButton()
+                .button(MessageButtonRole.NO, Boolean.FALSE)
+                .asExitButton()
+                .showAsync(field.getProject());
+
+        Set<PsiElement> elements = new HashSet<>();
+        return Coroutine.first(UIAction.<Set<PsiMethod>, Collection<PsiMethod>>await(
+                all -> doSearch.thenApply(search -> search ? all : List.<PsiMethod>of())
+            ))
+            .then(Iteration.<PsiMethod, Collection<PsiMethod>>forEach(UIAction.<PsiMethod, @Nullable Void>await(
+                accessor -> SuperMethodWarningUtil.checkSuperMethodsAsync(accessor, FindLocalize.findSuperMethodWarningActionVerb(), null)
+                    .thenAccept(methods -> ContainerUtil.addAll(elements, methods))
+            )))
+            .then(UIAction.apply(ignored -> PsiUtilCore.toPsiElementArray(elements)))
+            .runAsync(CoroutineScope.of(field.getProject().coroutineContext()), accessors)
+            .toFuture();
+    }
+
+    /**
+     * Asks the question {@link #getPrimaryElements()} would ask for a parameter of an overridden method: whether to
+     * search for the parameter in the overriding methods too.
+     */
+    @RequiredUIAccess
+    public static CompletableFuture<PsiElement[]> getPrimaryElementsAsync(PsiElement element) {
+        if (element instanceof PsiParameter parameter
+            && parameter.getDeclarationScope() instanceof PsiMethod method
+            && PsiUtil.canBeOverriden(method)
+            && OverridingMethodsSearch.search(method).findFirst() != null) {
+            return MessageBoxBuilder.<Boolean>create()
+                .asQuestion()
+                .title(FindLocalize.findParameterUsagesInOverridingMethodsTitle())
+                .text(FindLocalize.findParameterUsagesInOverridingMethodsPrompt(parameter.getName()))
+                .button(MessageButtonRole.YES, Boolean.TRUE)
+                .asDefaultButton()
+                .button(MessageButtonRole.NO, Boolean.FALSE)
+                .asExitButton()
+                .showAsync(element.getProject())
+                .thenApply(search -> search ? getParameterElementsToSearch(parameter, method) : new PsiElement[]{parameter});
+        }
+        return CompletableFuture.completedFuture(new PsiElement[]{element});
+    }
+
+    private static Set<PsiMethod> getFieldAccessors(PsiField field) {
+        Set<PsiMethod> accessors = new HashSet<>();
+        PsiClass containingClass = field.getContainingClass();
+        if (containingClass == null) {
+            return accessors;
+        }
+        String fieldName = field.getName();
+        String propertyName = JavaCodeStyleManager.getInstance(field.getProject())
+            .variableNameToPropertyName(fieldName, VariableKind.FIELD);
+        boolean isStatic = field.isStatic();
+        PsiMethod getter = PropertyUtil.findPropertyGetterWithType(
+            propertyName,
+            isStatic,
+            field.getType(),
+            List.of(containingClass.getMethods()).iterator()
+        );
+        if (getter != null) {
+            accessors.add(getter);
+        }
+        PsiMethod setter = PropertyUtil.findPropertySetterWithType(
+            propertyName,
+            isStatic,
+            field.getType(),
+            List.of(containingClass.getMethods()).iterator()
+        );
+        if (setter != null) {
+            accessors.add(setter);
+        }
+        accessors.addAll(PropertyUtil.getAccessors(containingClass, fieldName));
+        return accessors;
     }
 
     @Override

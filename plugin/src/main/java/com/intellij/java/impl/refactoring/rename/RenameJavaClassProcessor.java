@@ -55,7 +55,7 @@ import java.util.regex.Pattern;
 /**
  * @author yole
  */
-@ExtensionImpl
+@ExtensionImpl(id = "javaClass")
 public class RenameJavaClassProcessor extends RenamePsiElementProcessor {
     @Override
     public boolean canProcessElement(PsiElement element) {

@@ -22,7 +22,6 @@ import consulo.dataContext.DataManager;
 import consulo.language.editor.inspection.ProblemDescriptor;
 import consulo.language.editor.refactoring.RefactoringFactory;
 import consulo.language.editor.refactoring.RenameRefactoring;
-import consulo.language.editor.refactoring.rename.RenameHandler;
 import consulo.language.editor.refactoring.rename.RenameHandlerRegistry;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
@@ -66,13 +65,11 @@ public class RenameFix extends InspectionGadgetsFix {
         PsiElement elementToRename = nameIdentifier.getParent();
         if (m_targetName == null) {
             AsyncResult<DataContext> contextFromFocus = DataManager.getInstance().getDataContextFromFocus();
-            contextFromFocus.doWhenDone(context -> {
-                RenameHandler renameHandler = RenameHandlerRegistry.getInstance().getRenameHandler(context);
-                if (renameHandler == null) {
-                    return;
+            contextFromFocus.doWhenDone(context -> RenameHandlerRegistry.getInstance().getRenameHandlerAsync(context).thenAccept(renameHandler -> {
+                if (renameHandler != null) {
+                    renameHandler.invoke(project, new PsiElement[]{elementToRename}, context);
                 }
-                renameHandler.invoke(project, new PsiElement[]{elementToRename}, context);
-            });
+            }));
         }
         else {
             RefactoringFactory factory = RefactoringFactory.getInstance(project);

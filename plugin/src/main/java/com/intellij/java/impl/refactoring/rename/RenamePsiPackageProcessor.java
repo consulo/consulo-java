@@ -42,7 +42,7 @@ import java.util.Map;
 /**
  * @author yole
  */
-@ExtensionImpl
+@ExtensionImpl(id = "javaPackage")
 public class RenamePsiPackageProcessor extends RenamePsiElementProcessor {
     @Override
     public boolean canProcessElement(PsiElement element) {
