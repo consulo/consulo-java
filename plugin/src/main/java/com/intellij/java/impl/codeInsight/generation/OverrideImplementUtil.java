@@ -61,6 +61,7 @@ import consulo.ui.ex.action.KeyboardShortcut;
 import consulo.ui.ex.action.Shortcut;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.awt.Messages;
+import consulo.ui.ex.awtUnsafe.TargetAWT;
 import consulo.ui.ex.keymap.Keymap;
 import consulo.ui.ex.keymap.KeymapManager;
 import consulo.undoRedo.CommandProcessor;
@@ -557,7 +558,7 @@ public class OverrideImplementUtil extends OverrideImplementExploreUtil {
         Shortcut[] shortcuts = keymap.getShortcuts(s);
 
         if (shortcuts.length > 0 && shortcuts[0] instanceof KeyboardShortcut keyboardShortcut) {
-            preferredFocusedComponent.getInputMap().put(keyboardShortcut.getFirstKeyStroke(), s);
+            preferredFocusedComponent.getInputMap().put(TargetAWT.to(keyboardShortcut.getFirstKeyStroke()), s);
 
             preferredFocusedComponent.getActionMap().put(s, new AbstractAction() {
                 @Override

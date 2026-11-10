@@ -293,7 +293,7 @@ public final class CaptureConfigurable implements SearchableConfigurable, Projec
                 selectedCapturePoints(table).forEach(c -> c.myEnabled = !c.myEnabled);
                 table.repaint();
             }
-        }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0)), table);
+        }.registerCustomShortcutSet(new CustomShortcutSet(TargetAWT.from(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0))), table);
 
         decorator.addExtraAction(new DumbAwareAction(
             JavaDebuggerLocalize.actionAnactionbuttonTextImport(),

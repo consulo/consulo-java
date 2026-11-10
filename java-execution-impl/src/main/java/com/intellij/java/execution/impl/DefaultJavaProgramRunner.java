@@ -48,12 +48,13 @@ import consulo.process.event.ProcessListener;
 import consulo.process.util.CapturingProcessAdapter;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.event.details.KeyCode;
+import consulo.ui.event.details.KeyStroke;
+import consulo.ui.event.details.ModifiedInputDetails.Modifier;
 import consulo.ui.ex.action.*;
 import consulo.ui.image.Image;
 
 import javax.swing.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.List;
 
 /**
@@ -187,7 +188,7 @@ public class DefaultJavaProgramRunner extends JavaPatchableProgramRunner {
     protected static class ControlBreakAction extends ProxyBasedAction {
         public ControlBreakAction(final ProcessHandler processHandler) {
             super(ExecutionLocalize.runConfigurationDumpThreadsActionName(), LocalizeValue.empty(), AllIcons.Actions.Dump, processHandler);
-            setShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_CANCEL, InputEvent.CTRL_DOWN_MASK)));
+            setShortcutSet(new CustomShortcutSet(KeyStroke.pressed(KeyCode.CANCEL, Modifier.CTRL)));
         }
 
         @Override

@@ -35,6 +35,9 @@ import consulo.module.Module;
 import consulo.module.content.ProjectRootManager;
 import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
+import consulo.ui.event.details.KeyCode;
+import consulo.ui.event.details.KeyStroke;
+import consulo.ui.event.details.ModifiedInputDetails.Modifier;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
@@ -48,8 +51,6 @@ import org.jspecify.annotations.Nullable;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 
 public class CreateClassDialog extends DialogWrapper {
   private final JLabel myInformationLabel = new JLabel("#");
@@ -182,7 +183,7 @@ public class CreateClassDialog extends DialogWrapper {
       public void actionPerformed(AnActionEvent e) {
         myPackageComponent.getButton().doClick();
       }
-    }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK)), myPackageComponent.getChildComponent());
+    }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.pressed(KeyCode.ENTER, Modifier.SHIFT)), myPackageComponent.getChildComponent());
 
     JPanel _panel = new JPanel(new BorderLayout());
     _panel.add(myPackageComponent, BorderLayout.CENTER);

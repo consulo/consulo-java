@@ -29,6 +29,8 @@ import consulo.disposer.Disposer;
 import consulo.execution.debug.XDebuggerActions;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.project.Project;
+import consulo.ui.event.details.KeyCode;
+import consulo.ui.event.details.KeyStroke;
 import consulo.ui.ex.action.ActionPopupMenu;
 import consulo.ui.ex.action.CustomShortcutSet;
 import consulo.ui.ex.action.Shortcut;
@@ -40,7 +42,6 @@ import consulo.util.dataholder.Key;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 
 public abstract class DebuggerTreePanel extends UpdatableDebuggerView implements DataProvider, Disposable
 {
@@ -106,7 +107,7 @@ public abstract class DebuggerTreePanel extends UpdatableDebuggerView implements
 		});
 
 		final Shortcut[] shortcuts = KeymapManager.getInstance().getActiveKeymap().getShortcuts("ToggleBookmark");
-		final CustomShortcutSet shortcutSet = shortcuts.length > 0 ? new CustomShortcutSet(shortcuts) : new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_F11, 0));
+		final CustomShortcutSet shortcutSet = shortcuts.length > 0 ? new CustomShortcutSet(shortcuts) : new CustomShortcutSet(KeyStroke.pressed(KeyCode.F11));
 		overrideShortcut(myTree, XDebuggerActions.MARK_OBJECT, shortcutSet);
 	}
 

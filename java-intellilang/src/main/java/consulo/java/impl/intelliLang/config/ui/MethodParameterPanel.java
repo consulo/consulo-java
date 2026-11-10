@@ -40,6 +40,8 @@ import consulo.language.psi.PsiNamedElement;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.event.details.KeyCode;
+import consulo.ui.event.details.KeyStroke;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
@@ -63,7 +65,6 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.*;
 
 public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameterInjection> {
@@ -149,7 +150,7 @@ public class MethodParameterPanel extends AbstractInjectionPanel<MethodParameter
             public void actionPerformed(final AnActionEvent e) {
                 performToggleAction();
             }
-        }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0)), myParamsTable);
+        }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.pressed(KeyCode.SPACE)), myParamsTable);
     }
 
     private void performToggleAction() {

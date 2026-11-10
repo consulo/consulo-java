@@ -28,6 +28,9 @@ import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.project.ProjectPropertiesComponent;
+import consulo.ui.event.details.KeyCode;
+import consulo.ui.event.details.KeyStroke;
+import consulo.ui.event.details.ModifiedInputDetails.Modifier;
 import consulo.ui.ex.action.*;
 import consulo.ui.ex.awt.DialogWrapper;
 import consulo.ui.ex.keymap.KeymapManager;
@@ -35,8 +38,6 @@ import consulo.util.collection.ContainerUtil;
 import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -197,7 +198,7 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
   private class MySortByOverridingAction extends ToggleAction {
     public MySortByOverridingAction() {
       super(SORT_METHODS_BY_PERCENT_DESCRIPTION, SORT_METHODS_BY_PERCENT_DESCRIPTION, AllIcons.ObjectBrowser.SortedByUsage);
-      registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_U, InputEvent.ALT_MASK)), myTree);
+      registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.pressed(KeyCode.U, Modifier.ALT)), myTree);
     }
 
     @Override
@@ -225,7 +226,7 @@ public class JavaOverrideImplementMemberChooser extends MemberChooser<PsiMethodM
   private class MyMergeAction extends ToggleAction {
     private MyMergeAction() {
       super("Show methods to implement", "Show methods to implement", AllIcons.General.Show_to_implement);
-      registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.ALT_MASK)), myTree);
+      registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.pressed(KeyCode.I, Modifier.ALT)), myTree);
       Shortcut[] shortcuts = KeymapManager.getInstance().getActiveKeymap().getShortcuts("OverrideMethods");
       registerCustomShortcutSet(new CustomShortcutSet(shortcuts), myTree);
     }

@@ -56,6 +56,9 @@ import consulo.platform.base.localize.CommonLocalize;
 import consulo.project.Project;
 import consulo.project.ProjectPropertiesComponent;
 import consulo.ui.annotation.RequiredUIAccess;
+import consulo.ui.event.details.KeyCode;
+import consulo.ui.event.details.KeyStroke;
+import consulo.ui.event.details.ModifiedInputDetails.Modifier;
 import consulo.ui.ex.RecentsManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
@@ -69,8 +72,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.*;
 
@@ -199,7 +200,7 @@ public class CreateTestDialog extends DialogWrapper {
       public void actionPerformed(AnActionEvent e) {
         myTargetPackageField.getButton().doClick();
       }
-    }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, InputEvent.SHIFT_DOWN_MASK)),
+    }.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.pressed(KeyCode.ENTER, Modifier.SHIFT)),
         myTargetPackageField.getChildComponent());
 
     myGenerateBeforeBox = new JCheckBox("setUp/@Before");

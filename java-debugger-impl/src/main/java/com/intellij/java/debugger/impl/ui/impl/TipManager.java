@@ -22,6 +22,8 @@ import consulo.disposer.Disposable;
 import consulo.disposer.Disposer;
 import consulo.execution.debug.setting.XDebuggerSettingsManager;
 import consulo.ide.impl.idea.openapi.keymap.KeymapUtil;
+import consulo.ui.event.details.KeyCode;
+import consulo.ui.event.details.KeyStroke;
 import consulo.ui.ex.IdeGlassPane;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
@@ -299,7 +301,7 @@ public class TipManager implements Disposable, PopupMenuListener {
         });
 
         final HideTooltipAction hide = new HideTooltipAction();
-        hide.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0)), myComponent);
+        hide.registerCustomShortcutSet(new CustomShortcutSet(KeyStroke.pressed(KeyCode.ESCAPE)), myComponent);
         Disposer.register(this, new Disposable() {
             @Override
             public void dispose() {
