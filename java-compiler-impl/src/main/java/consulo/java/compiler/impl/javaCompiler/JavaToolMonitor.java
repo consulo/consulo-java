@@ -10,23 +10,19 @@ import consulo.compiler.localize.CompilerLocalize;
 import consulo.java.rt.common.compiler.JavaCompilerInterface;
 import consulo.localize.LocalizeValue;
 import consulo.navigation.Navigatable;
+import consulo.platform.Platform;
 import consulo.process.ProcessHandler;
 import consulo.process.event.ProcessAdapter;
 import consulo.process.event.ProcessEvent;
 import consulo.util.dataholder.Key;
 import consulo.virtualFileSystem.VirtualFile;
-import consulo.virtualFileSystem.util.VirtualFileUtil;
+import consulo.virtualFileSystem.VirtualFileManager;
 import org.apache.thrift.TException;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TSimpleServer;
-import org.apache.thrift.transport.TServerSocket;
-import org.apache.thrift.transport.TTransportException;
 
-import java.io.File;
-import java.net.InetSocketAddress;
+import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.Future;
 
 /**
@@ -41,29 +37,28 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
     private final BackendCompilerWrapper.ClassParsingHandler myClassParsingHandler;
     private final Future<?> myClassParsingFuture;
 
-    private Path myProjectFilePath;
+    private final Platform myPlatform;
     private ProcessHandler myProcess;
 
     public JavaToolMonitor(NewBackendCompilerProcessBuilder processBuilder) {
         myCompileContext = processBuilder.getCompileContext();
 
-        myProjectFilePath = Paths.get(myCompileContext.getProject().getBasePath());
-
         myClassParsingHandler = myCompileContext.getUserData(BackendCompilerWrapper.CLASS_PARSING_HANDLER_KEY);
 
         assert myClassParsingHandler != null;
 
-        TServerSocket localhost;
         try {
-            localhost = new TServerSocket(new InetSocketAddress("localhost", processBuilder.getPort()));
+            // the compiler process runs on the machine of the JDK - it connects back to a port bound there
+            processBuilder.prepare();
         }
-        catch (TTransportException e) {
+        catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
+        myPlatform = processBuilder.getPlatform();
 
         JavaCompilerInterface.Processor<JavaCompilerInterface.Iface> processor = new JavaCompilerInterface.Processor<>(this);
 
-        myServer = new TSimpleServer(new TServer.Args(localhost).processor(processor));
+        myServer = new TSimpleServer(new TServer.Args(new PlatformServerTransport(processBuilder.getServerSocket())).processor(processor));
 
         myClassParsingFuture = AppExecutorUtil.getAppExecutorService().submit(myClassParsingHandler);
 
@@ -131,7 +126,8 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
     @Override
     public void fileWrote(String filePath) throws TException {
         try {
-            myClassParsingHandler.addPath(new FileObject(new File(filePath)));
+            // a path of the machine of the JDK
+            myClassParsingHandler.addPath(new FileObject(myPlatform.fs().getPath(filePath)));
         }
         catch (CacheCorruptedException e) {
             if (myProcess != null) {
@@ -171,10 +167,18 @@ public class JavaToolMonitor implements BackendCompilerMonitor, JavaCompilerInte
     private void logMessage(CompilerMessageCategory category, String message, String fileUri, long lineNumber, long columnNumber) {
         String fileUrl = null;
         try {
+            // a file: uri of the machine of the JDK
             URI uri = new URI(fileUri);
-            VirtualFile fileByURL = VirtualFileUtil.findFileByURL(uri.toURL());
-            if (fileByURL != null) {
-                fileUrl = fileByURL.getUrl();
+            String path = uri.getPath();
+            if (path != null) {
+                if (myPlatform.os().isWindows() && path.length() > 2 && path.charAt(0) == '/' && path.charAt(2) == ':') {
+                    // /C:/a - a drive
+                    path = path.substring(1);
+                }
+                VirtualFile file = VirtualFileManager.getInstance().findFileByNioPath(myPlatform.fs().getPath(path));
+                if (file != null) {
+                    fileUrl = file.getUrl();
+                }
             }
         }
         catch (Exception ignored) {

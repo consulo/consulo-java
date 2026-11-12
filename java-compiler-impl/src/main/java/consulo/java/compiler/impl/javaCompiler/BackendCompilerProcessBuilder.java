@@ -3,7 +3,7 @@ package consulo.java.compiler.impl.javaCompiler;
 import com.intellij.java.compiler.impl.javaCompiler.javac.JpsJavaCompilerOptions;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.application.Application;
-import consulo.application.util.AsyncFileService;
+import consulo.content.bundle.Sdk;
 import consulo.compiler.CompileContext;
 import consulo.compiler.ModuleChunk;
 import consulo.process.ExecutionException;
@@ -11,8 +11,9 @@ import consulo.process.ProcessHandler;
 import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.local.ProcessHandlerFactory;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,10 @@ import java.util.List;
  */
 public abstract class BackendCompilerProcessBuilder
 {
-	protected final List<File> myTempFiles = new ArrayList<>();
+	/**
+	 * files of the machine of the JDK - the process reads them
+	 */
+	protected final List<Path> myTempFiles = new ArrayList<>();
 
 	protected final ModuleChunk myModuleChunk;
 	protected final String myOutputPath;
@@ -58,6 +62,30 @@ public abstract class BackendCompilerProcessBuilder
 
 	public void clearTempFiles()
 	{
-		Application.get().getInstance(AsyncFileService.class).asyncDelete(myTempFiles);
+		List<Path> files = new ArrayList<>(myTempFiles);
+		myTempFiles.clear();
+		Application.get().executeOnPooledThread(() -> {
+			for(Path file : files)
+			{
+				try
+				{
+					Files.deleteIfExists(file);
+				}
+				catch(IOException ignored)
+				{
+				}
+			}
+		});
+	}
+
+	/**
+	 * A temporary file of the machine of the JDK with the lines - for an argument file of the process.
+	 */
+	public static Path createTempFile(Sdk jdk, String prefix, List<String> lines, List<Path> tempFiles) throws IOException
+	{
+		Path file = jdk.getPlatform().fs().createTempFile(prefix, ".tmp");
+		tempFiles.add(file);
+		Files.write(file, lines);
+		return file;
 	}
 }

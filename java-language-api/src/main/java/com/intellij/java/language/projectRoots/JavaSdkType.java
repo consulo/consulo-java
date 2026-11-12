@@ -20,6 +20,7 @@ import consulo.application.Application;
 import consulo.content.bundle.Sdk;
 import consulo.content.bundle.SdkModificator;
 import consulo.content.bundle.SdkTable;
+import consulo.content.bundle.PlatformAwareSdkType;
 import consulo.content.bundle.SdkType;
 import consulo.localize.LocalizeValue;
 import consulo.process.cmd.GeneralCommandLine;
@@ -27,7 +28,7 @@ import consulo.ui.image.Image;
 
 import java.io.File;
 
-public abstract class JavaSdkType extends SdkType {
+public abstract class JavaSdkType extends PlatformAwareSdkType {
     /**
      * Return default impl JavaSdkType implementation
      */

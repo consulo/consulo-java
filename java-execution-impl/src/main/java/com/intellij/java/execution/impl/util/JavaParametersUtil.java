@@ -19,6 +19,7 @@ import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.language.impl.projectRoots.ex.PathUtilEx;
 import com.intellij.java.language.projectRoots.JavaSdkType;
+import consulo.platform.Platform;
 import com.intellij.java.language.psi.PsiClass;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.content.bundle.Sdk;
@@ -45,6 +46,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jspecify.annotations.Nullable;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -209,7 +211,9 @@ public class JavaParametersUtil {
         }
 
         JavaSdkType javaSdk = JavaSdkType.getDefaultJavaSdkType();
-        return javaSdk.createJdk(ObjectUtil.notNull(javaSdk.getVersionString(jreHome), ""), jreHome);
+        // TODO an alternative JRE of the project platform - the SDK created is of the local machine
+        String versionString = javaSdk.getVersionString(Platform.current(), Path.of(jreHome));
+        return javaSdk.createJdk(ObjectUtil.notNull(versionString, ""), jreHome);
     }
 
     public static void checkAlternativeJRE(CommonJavaRunConfigurationParameters configuration) throws RuntimeConfigurationWarning {

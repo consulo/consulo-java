@@ -30,7 +30,7 @@ public class JavaModuleIconDescriptorUpdater implements IconDescriptorUpdater {
     String name = directory.getName();
     if (name.equals("classes")) {
       return JModFileType.isModuleRoot(directory.getVirtualFile());
-    } else if (directory.getVirtualFile().getFileSystem() instanceof JrtFileSystem) {
+    } else if (JrtFileSystem.isJrt(directory.getVirtualFile().getFileSystem())) {
       return JrtFileSystem.isModuleRoot(directory.getVirtualFile());
     }
     return false;

@@ -2,60 +2,60 @@
 package com.intellij.java.execution.impl.runners;
 
 import com.intellij.java.execution.runners.ProcessProxy;
-import com.intellij.java.language.psi.CommonClassNames;
-import consulo.container.plugin.PluginManager;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
+import consulo.platform.PlatformServerSocket;
+import consulo.platform.PlatformSocket;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerFeature;
 import consulo.util.dataholder.Key;
 import consulo.util.lang.function.ThrowableRunnable;
+import org.jspecify.annotations.Nullable;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.StandardSocketOptions;
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousChannelGroup;
-import java.nio.channels.AsynchronousServerSocketChannel;
-import java.nio.channels.AsynchronousSocketChannel;
-import java.nio.channels.CompletionHandler;
-import java.util.concurrent.TimeUnit;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
- * @author ven
+ * The launcher agent in the process connects back to a port of the machine of the process - the local one, or another
+ * platform, where the port is bound through the platform.
  */
 class ProcessProxyImpl implements ProcessProxy {
   static final Key<ProcessProxyImpl> KEY = Key.create("ProcessProxyImpl");
 
-  private final AsynchronousChannelGroup myGroup;
-  private final int myPort;
+  private final Platform myPlatform;
+  private final PlatformServerSocket myServerSocket;
+  private final @Nullable Path myBreakgenLibrary;
 
   private final Object myLock = new Object();
-  private AsynchronousSocketChannel myConnection;
-  private ProcessHandlerFeature.POSIX myPosixFeature;
+  private @Nullable PlatformSocket myConnection;
+  private ProcessHandlerFeature.@Nullable POSIX myPosixFeature;
 
-  ProcessProxyImpl(String mainClass) throws IOException {
-    myGroup = AsynchronousChannelGroup.withFixedThreadPool(1, r -> new Thread(r, "Process Proxy: " + mainClass));
-    AsynchronousServerSocketChannel channel = AsynchronousServerSocketChannel.open(myGroup).bind(new InetSocketAddress("127.0.0.1", 0)).setOption(StandardSocketOptions.SO_REUSEADDR, true);
-    myPort = ((InetSocketAddress) channel.getLocalAddress()).getPort();
+  /**
+   * @param breakgenLibrary the native helper of the process on windows - a file of the machine of the process
+   */
+  ProcessProxyImpl(String mainClass, Platform platform, @Nullable Path breakgenLibrary) throws IOException {
+    myPlatform = platform;
+    myBreakgenLibrary = breakgenLibrary;
+    myServerSocket = platform.net().bind("127.0.0.1", 0);
 
-    channel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Void>() {
-      @Override
-      public void completed(AsynchronousSocketChannel channel, Void attachment) {
+    Thread.ofVirtual().name("Process Proxy: " + mainClass).start(() -> {
+      try {
+        PlatformSocket connection = myServerSocket.accept();
         synchronized (myLock) {
-          myConnection = channel;
+          myConnection = connection;
         }
       }
-
-      @Override
-      public void failed(Throwable t, Void attachment) {
+      catch (IOException ignored) {
+        // closed before the process connected
       }
     });
   }
 
   int getPortNumber() {
-    return myPort;
+    return myServerSocket.getPort();
   }
 
   @Override
@@ -63,7 +63,6 @@ class ProcessProxyImpl implements ProcessProxy {
     processHandler.putUserData(KEY, this);
     execute(() ->
     {
-      int pid = (int) processHandler.getId();
       ProcessHandlerFeature.POSIX posix = processHandler.getFeature(ProcessHandlerFeature.POSIX.class);
       synchronized (myLock) {
         myPosixFeature = posix;
@@ -74,22 +73,25 @@ class ProcessProxyImpl implements ProcessProxy {
   private void writeLine(String s) {
     execute(() ->
     {
-      ByteBuffer out = ByteBuffer.wrap((s + '\n').getBytes("US-ASCII"));
       synchronized (myLock) {
-        myConnection.write(out);
+        if (myConnection != null) {
+          OutputStream out = myConnection.getOutputStream();
+          out.write((s + '\n').getBytes(StandardCharsets.US_ASCII));
+          out.flush();
+        }
       }
     });
   }
 
   @Override
   public boolean canSendBreak() {
-    if (Platform.current().os().isWindows()) {
+    if (myPlatform.os().isWindows()) {
       synchronized (myLock) {
         if (myConnection == null) {
           return false;
         }
       }
-      return new File(PluginManager.getPluginPath(CommonClassNames.class), "breakgen/breakgen.dll").exists();
+      return myBreakgenLibrary != null && Files.exists(myBreakgenLibrary);
     }
 
     synchronized (myLock) {
@@ -106,7 +108,7 @@ class ProcessProxyImpl implements ProcessProxy {
 
   @Override
   public void sendBreak() {
-    if (Platform.current().os().isWindows()) {
+    if (myPlatform.os().isWindows()) {
       writeLine("BREAK");
     } else {
       ProcessHandlerFeature.POSIX posix;
@@ -135,11 +137,7 @@ class ProcessProxyImpl implements ProcessProxy {
         }
       }
     });
-    execute(() ->
-    {
-      myGroup.shutdownNow();
-      myGroup.awaitTermination(1, TimeUnit.SECONDS);
-    });
+    execute(myServerSocket::close);
   }
 
   private static void execute(ThrowableRunnable<Exception> block) {

@@ -27,6 +27,8 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.java.rt.execution.application.AppMainV2Constants;
 import consulo.logging.Logger;
+import consulo.application.platform.PlatformTransfer;
+import consulo.content.bundle.Sdk;
 import consulo.platform.Platform;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
@@ -35,6 +37,8 @@ import consulo.util.lang.StringUtil;
 import jakarta.inject.Singleton;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Singleton
 @ServiceImpl
@@ -52,12 +56,24 @@ public class ProcessProxyFactoryImpl extends ProcessProxyFactory {
 
       if (runtimeJarFile || javaParameters.getModuleName() == null) {
         try {
-          ProcessProxyImpl proxy = new ProcessProxyImpl(StringUtil.getShortName(mainClass));
+          // the process runs on the machine of its JDK - the agent and its native helpers are files of that machine
+          Sdk jdk = javaParameters.getJdk();
+          Platform platform = jdk == null ? Platform.current() : jdk.getPlatform();
+          PlatformTransfer transfer = PlatformTransfer.getInstance();
+          Path breakgen = new File(PluginManager.getPluginPath(CommonClassNames.class), "breakgen").toPath();
+          Path platformBreakgen = Files.isDirectory(breakgen) ? transfer.transfer(breakgen, platform) : null;
+          String binPath = platformBreakgen == null ? breakgen.toString() : platformBreakgen.toString();
+
+          ProcessProxyImpl proxy = new ProcessProxyImpl(
+            StringUtil.getShortName(mainClass),
+            platform,
+            platformBreakgen == null ? null : platformBreakgen.resolve("breakgen.dll")
+          );
           String port = String.valueOf(proxy.getPortNumber());
-          String binPath = new File(PluginManager.getPluginPath(CommonClassNames.class), "breakgen").getPath();
 
           if (runtimeJarFile && JavaSdkUtil.isJdkAtLeast(javaParameters.getJdk(), JavaSdkVersion.JDK_1_5)) {
-            javaParameters.getVMParametersList().add("-javaagent:" + rtJarPath + '=' + port + ':' + binPath);
+            String platformRtJarPath = transfer.transfer(Path.of(rtJarPath), platform).toString();
+            javaParameters.getVMParametersList().add("-javaagent:" + platformRtJarPath + '=' + port + ':' + binPath);
           }
           else {
             JavaSdkUtil.addRtJar(javaParameters.getClassPath());

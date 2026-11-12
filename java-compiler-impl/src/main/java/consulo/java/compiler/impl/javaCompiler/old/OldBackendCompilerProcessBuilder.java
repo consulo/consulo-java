@@ -22,6 +22,7 @@ import consulo.util.io.FileUtil;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -127,24 +128,21 @@ public class OldBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 		}
 		else
 		{
-			File sourcesFile = File.createTempFile("javac", ".tmp");
-			sourcesFile.deleteOnExit();
-			myTempFiles.add(sourcesFile);
-			try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(sourcesFile))))
+			List<String> sourceLines = new ArrayList<>(files.size());
+			for(final Path file : files)
 			{
-				for(final Path file : files)
+				// Important: should use "/" slashes!
+				// but not for JDK 1.5 - see SCR 36673
+				final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.toString() : FileUtil.toSystemIndependentName(file.toString());
+				if(LOG.isDebugEnabled())
 				{
-					// Important: should use "/" slashes!
-					// but not for JDK 1.5 - see SCR 36673
-					final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.toString() : FileUtil.toSystemIndependentName(file.toString());
-					if(LOG.isDebugEnabled())
-					{
-						LOG.debug("Adding path for compilation " + path);
-					}
-					writer.println(version == JavaSdkVersion.JDK_1_1 ? path : CompilerUtil.quotePath(path));
+					LOG.debug("Adding path for compilation " + path);
 				}
+				sourceLines.add(version == JavaSdkVersion.JDK_1_1 ? path : CompilerUtil.quotePath(path));
 			}
-			parametersList.add("@" + sourcesFile.getAbsolutePath());
+			// a file of the machine of the JDK - javac reads it
+			Path sourcesFile = createTempFile(jdk, "javac", sourceLines, myTempFiles);
+			parametersList.add("@" + sourcesFile);
 		}
 		return commandLine;
 	}

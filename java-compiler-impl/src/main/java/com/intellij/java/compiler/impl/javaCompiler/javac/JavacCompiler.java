@@ -326,7 +326,7 @@ public class JavacCompiler implements BackendCompiler {
     String outputPath,
     Sdk jdk,
     JavaSdkVersion version,
-    List<File> tempFiles,
+    List<Path> tempFiles,
     boolean addSourcePath,
     boolean isAnnotationProcessingMode,
     boolean newCompiler
@@ -560,15 +560,12 @@ public class JavacCompiler implements BackendCompiler {
     final ParametersList parametersList,
     final List<String> cpString,
     final String tempFileName,
-    List<File> tempFiles
+    List<Path> tempFiles
   ) throws IOException {
-    File cpFile = File.createTempFile(tempFileName, ".tmp");
-    cpFile.deleteOnExit();
-    tempFiles.add(cpFile);
+    // a file of the machine of the JDK - javac reads it
+    Path cpFile = BackendCompilerProcessBuilder.createTempFile(jdk, tempFileName, cpString, tempFiles);
 
-    Files.write(cpFile.toPath(), cpString);
-
-    parametersList.add("@" + cpFile.getAbsolutePath());
+    parametersList.add("@" + cpFile);
   }
 
   public static Sdk getJdkForStartupCommand(final ModuleChunk chunk) {

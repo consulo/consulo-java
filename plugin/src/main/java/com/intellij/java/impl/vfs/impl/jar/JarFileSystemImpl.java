@@ -18,9 +18,11 @@ package com.intellij.java.impl.vfs.impl.jar;
 import com.intellij.java.language.impl.JarArchiveFileType;
 import consulo.annotation.component.ExtensionImpl;
 import consulo.virtualFileSystem.archive.ArchiveFile;
+import consulo.virtualFileSystem.archive.ArchiveVfsUtil;
 import consulo.virtualFileSystem.archive.ArchiveFileSystemProvider;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 @ExtensionImpl
 public class JarFileSystemImpl implements ArchiveFileSystemProvider {
@@ -31,7 +33,7 @@ public class JarFileSystemImpl implements ArchiveFileSystemProvider {
   }
 
   @Override
-  public ArchiveFile createArchiveFile(String filePath) throws IOException {
-    return new JarArchiveFile(filePath);
+  public ArchiveFile createArchiveFile(Path path) throws IOException {
+    return ArchiveVfsUtil.openZipArchiveFile(path);
   }
 }

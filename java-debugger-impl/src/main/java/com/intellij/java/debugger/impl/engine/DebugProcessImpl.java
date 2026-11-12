@@ -77,6 +77,7 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.platform.Platform;
+import consulo.platform.PlatformServerSocket;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessOutputTypes;
@@ -140,6 +141,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     private JavaDebugProcess myXDebugProcess;
 
     private volatile Map<String, Connector.Argument> myArguments;
+    /**
+     * the debug port of the machine of the debuggee, while waiting for it to connect
+     */
+    private volatile @Nullable PlatformServerSocket myServerSocket;
 
     private final List<NodeRenderer> myRenderers = new ArrayList<>();
 
@@ -339,6 +344,15 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
     }
 
     private void stopConnecting() {
+        PlatformServerSocket serverSocket = myServerSocket;
+        if (serverSocket != null) {
+            try {
+                serverSocket.close();
+            }
+            catch (IOException e) {
+                LOG.debug(e);
+            }
+        }
         Map<String, Connector.Argument> arguments = myArguments;
         try {
             if (arguments == null) {
@@ -487,6 +501,9 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
             }
 
             String address = myConnection.getAddress();
+            if (myConnection.isServerMode() && myConnection.isUseSockets()) {
+                return listenOnPlatform(address);
+            }
             if (myConnection.isServerMode()) {
                 ListeningConnector connector =
                     (ListeningConnector)findConnector(myConnection.isUseSockets() ? SOCKET_LISTENING_CONNECTOR_NAME : SHMEM_LISTENING_CONNECTOR_NAME);
@@ -594,6 +611,34 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         }
         finally {
             myArguments = null;
+        }
+    }
+
+    /**
+     * The debuggee connects to a port of its machine - the local one, or another platform, where the port is bound through the
+     * platform; the JDWP packets go through it.
+     */
+    private VirtualMachine listenOnPlatform(@Nullable String address) throws IOException, ExecutionException {
+        if (address == null) {
+            throw new CantRunException(JavaDebuggerLocalize.errorNoDebugListenPort());
+        }
+        Platform platform = myConnection.getPlatform();
+        if (platform == null) {
+            platform = Platform.current();
+        }
+        PlatformServerSocket serverSocket = platform.net().bind(DebuggerManagerImpl.LOCALHOST_ADDRESS_FALLBACK, Integer.parseInt(address));
+        myServerSocket = serverSocket;
+        try {
+            myConnection.setAddress(String.valueOf(serverSocket.getPort()));
+
+            myDebugProcessDispatcher.getMulticaster().connectorIsReady();
+
+            PlatformJdwpConnection connection = PlatformJdwpConnection.accept(serverSocket);
+            return Bootstrap.virtualMachineManager().createVirtualMachine(connection);
+        }
+        finally {
+            myServerSocket = null;
+            serverSocket.close();
         }
     }
 

@@ -3,29 +3,31 @@ package com.intellij.java.impl.openapi.projectRoots;
 
 import com.intellij.java.language.projectRoots.OwnJdkVersionDetector;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.Application;
 import consulo.logging.Logger;
 import consulo.platform.CpuArchitecture;
 import consulo.platform.JavaVersion;
 import consulo.platform.Platform;
-import consulo.process.io.BaseOutputReader;
-import consulo.util.io.CharsetToolkit;
+import consulo.process.ExecutionException;
+import consulo.process.cmd.GeneralCommandLine;
+import consulo.process.util.CapturingProcessUtil;
+import consulo.process.util.ProcessOutput;
 import consulo.util.lang.StringUtil;
-import org.jspecify.annotations.Nullable;
 import jakarta.inject.Singleton;
+import org.jspecify.annotations.Nullable;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Future;
-import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 
 /**
+ * Reads the JDK where it is - the files through the {@link Path} of its platform, {@code java -version} run there.
+ *
  * @author nik
  */
 @Singleton
@@ -33,14 +35,16 @@ import java.util.jar.Manifest;
 public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
     private static final Logger LOG = Logger.getInstance(OwnJdkVersionDetectorImpl.class);
 
+    private static final int VERSION_TIMEOUT_MS = 30_000;
+
     @Nullable
     @Override
-    public JdkVersionInfo detectJdkVersionInfo(String homePath) {
+    public JdkVersionInfo detectJdkVersionInfo(Platform platform, Path home) {
         // Java 1.7+
-        File releaseFile = new File(homePath, "release");
-        if (releaseFile.isFile()) {
+        Path releaseFile = home.resolve("release");
+        if (Files.isRegularFile(releaseFile)) {
             Properties p = new Properties();
-            try (FileInputStream stream = new FileInputStream(releaseFile)) {
+            try (InputStream stream = Files.newInputStream(releaseFile)) {
                 p.load(stream);
                 String versionString = p.getProperty("JAVA_FULL_VERSION", p.getProperty("JAVA_VERSION"));
                 if (versionString != null) {
@@ -51,100 +55,55 @@ public class OwnJdkVersionDetectorImpl extends OwnJdkVersionDetector {
                 }
             }
             catch (IOException | IllegalArgumentException e) {
-                LOG.info(releaseFile.getPath(), e);
+                LOG.info(releaseFile.toString(), e);
             }
         }
 
         // Java 1.2 - 1.8
-        File rtFile = new File(homePath, "jre/lib/rt.jar");
-        if (rtFile.isFile()) {
-            try (JarFile rtJar = new JarFile(rtFile, false)) {
+        Path rtFile = home.resolve("jre/lib/rt.jar");
+        if (Files.isRegularFile(rtFile)) {
+            try (JarInputStream rtJar = new JarInputStream(Files.newInputStream(rtFile), false)) {
                 Manifest manifest = rtJar.getManifest();
                 if (manifest != null) {
                     String versionString = manifest.getMainAttributes().getValue("Implementation-Version");
                     if (versionString != null) {
                         JavaVersion version = JavaVersion.parse(versionString);
-                        boolean x64 = Platform.current().os().isMac() || new File(rtFile.getParent(), "amd64").isDirectory();
+                        boolean x64 = platform.os().isMac() || Files.isDirectory(rtFile.getParent().resolve("amd64"));
                         return new JdkVersionInfo(version, x64 ? CpuArchitecture.X86_64 : CpuArchitecture.X86);
                     }
                 }
             }
             catch (IOException | IllegalArgumentException e) {
-                LOG.info(rtFile.getPath(), e);
+                LOG.info(rtFile.toString(), e);
             }
         }
 
         // last resort
-        File javaExe = new File(homePath, "bin/" + (Platform.current().os().isWindows() ? "java.exe" : "java"));
-        if (javaExe.canExecute()) {
+        Path javaExe = home.resolve("bin").resolve(platform.os().isWindows() ? "java.exe" : "java");
+        if (Files.isRegularFile(javaExe)) {
             try {
-                Process process = new ProcessBuilder(javaExe.getPath(), "-version").redirectErrorStream(true).start();
-                VersionOutputReader reader = new VersionOutputReader(process.getInputStream());
-                try {
-                    reader.waitFor();
-                }
-                catch (InterruptedException e) {
-                    LOG.info(e);
-                    process.destroy();
-                }
+                GeneralCommandLine commandLine = new GeneralCommandLine();
+                commandLine.withPlatform(platform);
+                commandLine.setExePath(javaExe.toString());
+                commandLine.addParameter("-version");
+                ProcessOutput output = CapturingProcessUtil.execAndGetOutput(commandLine, VERSION_TIMEOUT_MS);
 
-                if (!reader.myLines.isEmpty()) {
-                    JavaVersion base = JavaVersion.parse(reader.myLines.get(0));
-                    JavaVersion rt = JavaVersion.tryParse(reader.myLines.size() > 2 ? reader.myLines.get(1) : null);
+                // the version is printed to the error stream
+                List<String> lines = new ArrayList<>(output.getStderrLines());
+                lines.addAll(output.getStdoutLines());
+                if (!lines.isEmpty()) {
+                    JavaVersion base = JavaVersion.parse(lines.get(0));
+                    JavaVersion rt = JavaVersion.tryParse(lines.size() > 2 ? lines.get(1) : null);
                     JavaVersion version = rt != null && rt.feature == base.feature && rt.minor == base.minor ? rt : base;
-                    boolean x64 =
-                        reader.myLines.stream().anyMatch(s -> s.contains("64-Bit") || s.contains("x86_64") || s.contains("amd64"));
+                    boolean x64 = lines.stream().anyMatch(s -> s.contains("64-Bit") || s.contains("x86_64") || s.contains("amd64"));
                     return new JdkVersionInfo(version, x64 ? CpuArchitecture.X86_64 : CpuArchitecture.X86);
                 }
             }
-            catch (IOException | IllegalArgumentException e) {
-                LOG.info(javaExe.getPath(), e);
+            catch (ExecutionException | IllegalArgumentException e) {
+                LOG.info(javaExe.toString(), e);
             }
         }
 
         return null;
-    }
-
-    private static class VersionOutputReader extends BaseOutputReader {
-        private static final BaseOutputReader.Options OPTIONS = new BaseOutputReader.Options() {
-            @Override
-            public SleepingPolicy policy() {
-                return SleepingPolicy.BLOCKING;
-            }
-
-            @Override
-            public boolean splitToLines() {
-                return true;
-            }
-
-            @Override
-            public boolean sendIncompleteLines() {
-                return false;
-            }
-
-            @Override
-            public boolean withSeparators() {
-                return false;
-            }
-        };
-
-        private final List<String> myLines;
-
-        VersionOutputReader(InputStream stream) {
-            super(stream, CharsetToolkit.getDefaultSystemCharset(), OPTIONS);
-            myLines = new CopyOnWriteArrayList<>();
-            start("java -version");
-        }
-
-        @Override
-        protected Future<?> executeOnPooledThread(Runnable runnable) {
-            return Application.get().executeOnPooledThread(runnable);
-        }
-
-        @Override
-        protected void onTextAvailable(String text) {
-            myLines.add(text);
-            LOG.trace("text: " + text);
-        }
     }
 }

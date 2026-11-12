@@ -92,7 +92,7 @@ public class BackendCompilerWrapper {
     private final Map<Module, Path> myModuleToTempDirMap = new HashMap<>();
     private final ProjectFileIndex myProjectFileIndex;
     private static final String PACKAGE_ANNOTATION_FILE_NAME = "package-info.java";
-    private static final FileObject ourStopThreadToken = new FileObject(new File(""), new byte[0]);
+    private static final FileObject ourStopThreadToken = new FileObject(Path.of(""), new byte[0]);
     public final Map<String, Set<CompiledClass>> myFileNameToSourceMap = new HashMap<>();
     private final Set<Path> myProcessedPackageInfos = new HashSet<>();
     private final CompileStatistics myStatistics;

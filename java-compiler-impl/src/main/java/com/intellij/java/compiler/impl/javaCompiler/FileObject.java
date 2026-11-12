@@ -16,33 +16,35 @@
 package com.intellij.java.compiler.impl.javaCompiler;
 
 import consulo.util.collection.ArrayUtil;
-import consulo.util.io.FileUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
  * @author cdr
+ */
+/**
+ * A class file written by the compiler - of the machine of the JDK, read and written through its path.
  */
 public class FileObject
 {
 	private static final byte[] NOT_LOADED = ArrayUtil.EMPTY_BYTE_ARRAY;
 
-	private final File myFile;
+	private final Path myPath;
 	private byte[] myContent;
 	private int myClassId = -1;
 
-	public FileObject(File file, byte[] content)
+	public FileObject(Path path, byte[] content)
 	{
-		myFile = file;
+		myPath = path;
 		myContent = content;
 	}
 
-	public FileObject(File file)
+	public FileObject(Path path)
 	{
-		myFile = file;
+		myPath = path;
 		myContent = NOT_LOADED;
 	}
 
@@ -56,16 +58,24 @@ public class FileObject
 		return myClassId;
 	}
 
+	public Path getPath()
+	{
+		return myPath;
+	}
+
+	/**
+	 * The path as a file name - a key of the parsing info; for a file of another machine it names its path there.
+	 */
 	public File getFile()
 	{
-		return myFile;
+		return new File(myPath.toString());
 	}
 
 	public byte[] getOrLoadContent() throws IOException
 	{
 		if(myContent == NOT_LOADED)
 		{
-			return Files.readAllBytes(myFile.toPath());
+			return Files.readAllBytes(myPath);
 		}
 		return myContent;
 	}
@@ -74,21 +84,18 @@ public class FileObject
 	{
 		myContent = content;
 
-		try
+		Path parent = myPath.getParent();
+		if(parent != null)
 		{
-			FileUtil.writeToFile(myFile, myContent);
+			Files.createDirectories(parent);
 		}
-		catch(FileNotFoundException e)
-		{
-			FileUtil.createParentDirs(myFile);
-			FileUtil.writeToFile(myFile, myContent);
-		}
+		Files.write(myPath, myContent);
 		return true;
 	}
 
 	@Override
 	public String toString()
 	{
-		return getFile().toString();
+		return myPath.toString();
 	}
 }

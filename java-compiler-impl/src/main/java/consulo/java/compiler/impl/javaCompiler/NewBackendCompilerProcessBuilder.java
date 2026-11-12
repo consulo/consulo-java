@@ -7,6 +7,8 @@ import com.intellij.java.language.impl.projectRoots.ex.JavaSdkUtil;
 import com.intellij.java.language.projectRoots.JavaSdkType;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.access.RequiredReadAction;
+import consulo.application.ReadAction;
+import consulo.application.platform.PlatformTransfer;
 import consulo.compiler.CompileContext;
 import consulo.compiler.ModuleChunk;
 import consulo.compiler.util.CompilerUtil;
@@ -19,6 +21,8 @@ import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.java.rt.JavaRtClassNames;
 import consulo.java.rt.common.compiler.JavaCompilerInterface;
 import consulo.logging.Logger;
+import consulo.platform.Platform;
+import consulo.platform.PlatformServerSocket;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerBuilder;
@@ -26,13 +30,15 @@ import consulo.process.cmd.GeneralCommandLine;
 import consulo.process.cmd.ParametersList;
 import consulo.util.io.ClassPathUtil;
 import consulo.util.io.FileUtil;
-import consulo.util.io.NetUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.thrift.TServiceClient;
+import org.jspecify.annotations.Nullable;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author VISTALL
@@ -42,7 +48,9 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 {
 	private static final Logger LOG = Logger.getInstance(NewBackendCompilerProcessBuilder.class);
 
-	private int myPort;
+	private @Nullable Platform myPlatform;
+	private @Nullable PlatformServerSocket myServerSocket;
+	private List<String> myClassPath = List.of();
 
 	public NewBackendCompilerProcessBuilder(ModuleChunk moduleChunk,
                                           String outputPath,
@@ -51,8 +59,47 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
                                           boolean annotationProcessorsEnabled)
 	{
 		super(moduleChunk, outputPath, compileContext, javaCompilerOptions, annotationProcessorsEnabled);
+	}
 
-		myPort = NetUtil.tryToFindAvailableSocketPort();
+	/**
+	 * Readies the machine of the JDK for the compiler process - not under a read action, it talks to that machine: the port the
+	 * process connects back to is bound there, the jars of the process are copied there.
+	 */
+	public void prepare() throws IOException
+	{
+		Sdk jdk = ReadAction.compute(() -> JavacCompiler.getJdkForStartupCommand(myModuleChunk));
+		Platform platform = jdk.getPlatform();
+		myPlatform = platform;
+		myServerSocket = platform.net().bind("127.0.0.1", 0);
+
+		PlatformTransfer transfer = PlatformTransfer.getInstance();
+		List<String> classPath = new ArrayList<>();
+		// rt jar, thrift, rt common jar, commons lang 3, slf4j
+		for(String localJar : List.of(JavaSdkUtil.getJavaRtJarNotShadedPath(),
+				ClassPathUtil.getJarPathForClass(TServiceClient.class),
+				ClassPathUtil.getJarPathForClass(JavaCompilerInterface.class),
+				ClassPathUtil.getJarPathForClass(StringUtils.class),
+				ClassPathUtil.getJarPathForClass(org.slf4j.Logger.class)))
+		{
+			classPath.add(transfer.transfer(Path.of(localJar), platform).toString());
+		}
+		myClassPath = classPath;
+	}
+
+	/**
+	 * The machine of the JDK - the compiler process runs there.
+	 */
+	public Platform getPlatform()
+	{
+		return Objects.requireNonNull(myPlatform, "not prepared");
+	}
+
+	/**
+	 * The port of the machine of the JDK the compiler process connects back to.
+	 */
+	public PlatformServerSocket getServerSocket()
+	{
+		return Objects.requireNonNull(myServerSocket, "not prepared");
 	}
 
 	@RequiredReadAction
@@ -68,10 +115,6 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 		return ProcessHandlerBuilder.create(commandLine).silentReader().build();
 	}
 
-	public int getPort()
-	{
-		return myPort;
-	}
 
 	@RequiredReadAction
 	private GeneralCommandLine createNewStartupCommand(ModuleChunk chunk,
@@ -103,20 +146,15 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 
 		javaParameters.setJdk(jdk);
 
-		javaParameters.getVMParametersList().add("-Dconsulo.port=" + myPort);
+		javaParameters.getVMParametersList().add("-Dconsulo.port=" + getServerSocket().getPort());
 
 		javaParameters.getVMParametersList().add("-Xmx" + javacOptions.MAXIMUM_HEAP_SIZE + "m");
 
-		// rt jar
-		javaParameters.getClassPath().add(JavaSdkUtil.getJavaRtJarNotShadedPath());
-		// thrift
-		javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(TServiceClient.class));
-		// rt common jar
-		javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(JavaCompilerInterface.class));
-		// commons lang 3
-		javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(StringUtils.class));
-		// slf4j
-		javaParameters.getClassPath().add(ClassPathUtil.getJarPathForClass(org.slf4j.Logger.class));
+		// the jars of the process, on the machine of the JDK
+		for(String jar : myClassPath)
+		{
+			javaParameters.getClassPath().add(jar);
+		}
 
 		if(!version.isAtLeast(JavaSdkVersion.JDK_1_9))
 		{
@@ -143,28 +181,24 @@ public class NewBackendCompilerProcessBuilder extends BackendCompilerProcessBuil
 
 		JavacCompiler.addCommandLineOptions(compileContext, chunk, params, outputPath, jdk, version, myTempFiles, true, myAnnotationProcessorsEnabled, true);
 
-		File sourcesFile = File.createTempFile("javac", ".tmp");
-		sourcesFile.deleteOnExit();
-		myTempFiles.add(sourcesFile);
-
 		List<Path> files = chunk.getFilesToCompile();
 
-		try (PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(sourcesFile))))
+		List<String> sourceLines = new ArrayList<>(files.size());
+		for(final Path file : files)
 		{
-			for(final Path file : files)
+			// Important: should use "/" slashes!
+			// but not for JDK 1.5 - see SCR 36673
+			final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.toString() : FileUtil.toSystemIndependentName(file.toString());
+			if(LOG.isDebugEnabled())
 			{
-				// Important: should use "/" slashes!
-				// but not for JDK 1.5 - see SCR 36673
-				final String path = version.isAtLeast(JavaSdkVersion.JDK_1_5) ? file.toString() : FileUtil.toSystemIndependentName(file.toString());
-				if(LOG.isDebugEnabled())
-				{
-					LOG.debug("Adding path for compilation " + path);
-				}
-				writer.println(version == JavaSdkVersion.JDK_1_1 ? path : CompilerUtil.quotePath(path));
+				LOG.debug("Adding path for compilation " + path);
 			}
+			sourceLines.add(version == JavaSdkVersion.JDK_1_1 ? path : CompilerUtil.quotePath(path));
 		}
 
-		params.add("@" + sourcesFile.getAbsolutePath());
+		// a file of the machine of the JDK - javac reads it
+		Path sourcesFile = createTempFile(jdk, "javac", sourceLines, myTempFiles);
+		params.add("@" + sourcesFile);
 
 		try
 		{

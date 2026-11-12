@@ -16,6 +16,9 @@
 package com.intellij.java.execution.configurations;
 
 
+import consulo.platform.Platform;
+import org.jspecify.annotations.Nullable;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -24,6 +27,7 @@ public class RemoteConnection {
   private boolean myServerMode;
   private String myHostName;
   private String myAddress;
+  private @Nullable Platform myPlatform;
   public static final String ONTHROW = ",onthrow=<FQ exception class name>";
   public static final String ONUNCAUGHT = ",onuncaught=<y/n>";
 
@@ -50,6 +54,17 @@ public class RemoteConnection {
     return myAddress;
   }
 
+
+  /**
+   * The machine of the debuggee - its debug port is a port of that machine; {@code null} for the local one.
+   */
+  public @Nullable Platform getPlatform() {
+    return myPlatform;
+  }
+
+  public void setPlatform(@Nullable Platform platform) {
+    myPlatform = platform;
+  }
 
   public void setUseSockets(boolean useSockets) {
     myUseSockets = useSockets;

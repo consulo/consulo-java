@@ -46,6 +46,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.jar.Manifest;
 
@@ -96,6 +97,35 @@ public class OwnJdkUtil {
 
     public static boolean isExplodedModularRuntime(String homePath) {
         return new File(homePath, "modules/java.base").isDirectory();
+    }
+
+    /**
+     * Whether the directory is a JDK home - of whatever machine its file system belongs to.
+     */
+    public static boolean checkForJdk(Path homePath) {
+        return (Files.isRegularFile(homePath.resolve("bin/javac")) || Files.isRegularFile(homePath.resolve("bin/javac.exe")))
+            && checkForRuntime(homePath);
+    }
+
+    public static boolean checkForJre(Path homePath) {
+        return Files.isRegularFile(homePath.resolve("bin/java")) || Files.isRegularFile(homePath.resolve("bin/java.exe"));
+    }
+
+    public static boolean checkForRuntime(Path homePath) {
+        return Files.exists(homePath.resolve("jre/lib/rt.jar"))          // JDK
+            || Files.exists(homePath.resolve("lib/rt.jar"))              // JRE
+            || isModularRuntime(homePath)                                // Jigsaw JDK/JRE
+            || Files.exists(homePath.resolve("../Classes/classes.jar"))  // Apple JDK
+            || Files.exists(homePath.resolve("jre/lib/vm.jar"))          // IBM JDK
+            || Files.isDirectory(homePath.resolve("classes"));           // custom build
+    }
+
+    public static boolean isModularRuntime(Path homePath) {
+        return Files.isRegularFile(homePath.resolve("lib/jrt-fs.jar")) || isExplodedModularRuntime(homePath);
+    }
+
+    public static boolean isExplodedModularRuntime(Path homePath) {
+        return Files.isDirectory(homePath.resolve("modules/java.base"));
     }
 
     public static GeneralCommandLine setupJVMCommandLine(OwnSimpleJavaParameters javaParameters) throws CantRunException {
@@ -340,16 +370,20 @@ public class OwnJdkUtil {
 
         appendEncoding(javaParameters, commandLine, vmParameters);
 
+        // the paths are of the machine of the JDK - joined as it joins them
+        Sdk jdk = javaParameters.getJdk();
+        String separator = jdk != null ? jdk.getPlatform().fs().getPathListSeparator() : File.pathSeparator;
+
         PathsList classPath = javaParameters.getClassPath();
         if (!classPath.isEmpty() && !explicitClassPath(vmParameters)) {
             commandLine.addParameter("-classpath");
-            commandLine.addParameter(classPath.getPathsString());
+            commandLine.addParameter(classPath.getPathsString(separator));
         }
 
         PathsList modulePath = javaParameters.getModulePath();
         if (!modulePath.isEmpty() && !explicitModulePath(vmParameters)) {
             commandLine.addParameter("-p");
-            commandLine.addParameter(modulePath.getPathsString());
+            commandLine.addParameter(modulePath.getPathsString(separator));
         }
     }
 

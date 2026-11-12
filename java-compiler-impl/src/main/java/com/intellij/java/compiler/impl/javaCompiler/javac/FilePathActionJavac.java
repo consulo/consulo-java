@@ -24,7 +24,7 @@ import consulo.logging.Logger;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,7 +77,7 @@ public class FilePathActionJavac extends JavacParserAction {
             callback.setProgressText(CompilerLocalize.progressParsingFile(name));
         }
         else if (Comparing.equal(extension, JavaClassFileType.INSTANCE.getDefaultExtension())) {
-            callback.fileGenerated(new FileObject(new File(filePath)));
+            callback.fileGenerated(new FileObject(Path.of(filePath)));
         }
     }
 }

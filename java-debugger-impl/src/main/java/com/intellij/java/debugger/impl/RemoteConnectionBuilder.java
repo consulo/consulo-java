@@ -141,7 +141,13 @@ public class RemoteConnectionBuilder {
             parameters.getVMParametersList().replaceOrPrepend("-agentlib:jdwp=", "-agentlib:jdwp=" + _debuggeeRunProperties);
         });
 
-        return new RemoteConnection(useSockets, DebuggerManagerImpl.LOCALHOST_ADDRESS_FALLBACK, address, myServer);
+        RemoteConnection connection = new RemoteConnection(useSockets, DebuggerManagerImpl.LOCALHOST_ADDRESS_FALLBACK, address, myServer);
+        // the debuggee runs on the machine of its JDK - its debug port is a port of that machine
+        Sdk jdk = parameters.getJdk();
+        if (jdk != null) {
+            connection.setPlatform(jdk.getPlatform());
+        }
+        return connection;
     }
 
     private static void addRtJar(PathsList pathsList) {

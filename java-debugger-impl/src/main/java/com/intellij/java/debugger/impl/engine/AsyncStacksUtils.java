@@ -34,6 +34,7 @@ import com.intellij.java.debugger.impl.ui.breakpoints.StackCapturingLineBreakpoi
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.execution.JavaExecutionUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
+import consulo.application.platform.PlatformTransfer;
 import consulo.application.util.registry.Registry;
 import consulo.container.plugin.PluginManager;
 import consulo.content.bundle.Sdk;
@@ -57,6 +58,7 @@ import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.logging.Logger;
 import consulo.process.cmd.ParametersList;
+import consulo.platform.Platform;
 import consulo.project.Project;
 import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
@@ -74,6 +76,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -368,7 +372,9 @@ public final class AsyncStacksUtils {
                     return;
                 }
 
-                extendParametersForAgent(project, disposable, parametersList, prefix);
+                // the process runs on the machine of its JDK - the agent and its settings are files of that machine
+                Platform platform = jdk != null ? jdk.getPlatform() : Platform.current();
+                extendParametersForAgent(project, disposable, parametersList, prefix, platform);
             }
         }
     }
@@ -376,15 +382,23 @@ public final class AsyncStacksUtils {
     private static void extendParametersForAgent(@Nullable Project project,
                                                  @Nullable Disposable disposable,
                                                  ParametersList parametersList,
-                                                 String prefix) {
+                                                 String prefix,
+                                                 Platform platform) {
         Path agentNativePath = getAgentArtifactPath(project, disposable);
         if (agentNativePath == null) {
             // errors are reported by getAgentArtifactPath
             return;
         }
-        String agentPath = agentNativePath.toString();
+        String agentPath;
+        try {
+            agentPath = PlatformTransfer.getInstance().transfer(agentNativePath, platform).toString();
+        }
+        catch (IOException e) {
+            LOG.error(e);
+            return;
+        }
 
-        parametersList.prepend(prefix + agentPath + generateAgentSettings(project));
+        parametersList.prepend(prefix + agentPath + generateAgentSettings(project, platform));
         if (Registry.is("debugger.async.stacks.coroutines", true)) {
             parametersList.addProperty("kotlinx.coroutines.debug.enable.creation.stack.trace", "false");
             parametersList.addProperty("debugger.agent.enable.coroutines", "true");
@@ -438,7 +452,7 @@ public final class AsyncStacksUtils {
         return null;
     }
 
-    private static String generateAgentSettings(@Nullable Project project) {
+    private static String generateAgentSettings(@Nullable Project project, Platform platform) {
         Properties properties = CaptureSettingsProvider.getPointsProperties(project);
         for (DebuggerAgentParametersModifier modifier : DebuggerAgentParametersModifier.getAgentModifiers()) {
             modifier.modifyProperties(properties, project);
@@ -453,13 +467,15 @@ public final class AsyncStacksUtils {
         properties.setProperty("overheadPercent", Double.toString(overhead));
         if (!properties.isEmpty()) {
             try {
-                File file = FileUtil.createTempFile("capture", ".props", true);
-                try (OutputStream out = Files.newOutputStream(file.toPath())) {
+                Path file = platform.fs().createTempFile("capture", ".props");
+                try (OutputStream out = Files.newOutputStream(file)) {
                     properties.store(out, null);
-                    return "=" + file.toURI().toASCIIString();
                 }
+                // a file: uri of the file as the machine of the process knows it
+                String path = file.toString().replace('\\', '/');
+                return "=" + new URI("file", null, path.startsWith("/") ? path : "/" + path, null).toASCIIString();
             }
-            catch (IOException e) {
+            catch (IOException | URISyntaxException e) {
                 LOG.error(e);
             }
         }
