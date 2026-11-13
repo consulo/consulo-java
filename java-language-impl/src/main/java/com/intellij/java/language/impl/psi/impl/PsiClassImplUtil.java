@@ -1003,6 +1003,10 @@ public class PsiClassImplUtil {
         if (psiClass.isAnnotationType()) {
             return new PsiClassType[]{getAnnotationSuperType(psiClass, JavaPsiFacade.getInstance(psiClass.getProject()).getElementFactory())};
         }
+        if (psiClass.isRecord()) {
+            PsiClass recordClass = findSpecialSuperClass(psiClass, CommonClassNames.JAVA_LANG_RECORD);
+            return recordClass == null ? PsiClassType.EMPTY_ARRAY : new PsiClassType[]{new PsiImmediateClassType(recordClass, PsiSubstitutor.EMPTY)};
+        }
         PsiType upperBound = InferenceSession.getUpperBound(psiClass);
         if (upperBound == null && psiClass instanceof PsiTypeParameter) {
             upperBound = LambdaUtil.getFunctionalTypeMap().get(psiClass);
@@ -1041,6 +1045,9 @@ public class PsiClassImplUtil {
         }
         if (psiClass.isAnnotationType()) {
             return CommonClassNames.JAVA_LANG_ANNOTATION_ANNOTATION.equals(baseClass.getQualifiedName());
+        }
+        if (psiClass.isRecord()) {
+            return CommonClassNames.JAVA_LANG_RECORD.equals(baseClass.getQualifiedName());
         }
         PsiType upperBound = InferenceSession.getUpperBound(psiClass);
         if (upperBound == null && psiClass instanceof PsiTypeParameter) {
