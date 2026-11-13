@@ -143,7 +143,7 @@ public class BackendCompilerWrapper {
         finally {
             for (Path dir : myModuleToTempDirMap.values()) {
                 if (dir != null) {
-                    getAsyncFileService().asyncDelete(dir.toFile());
+                    getAsyncFileService().asyncDelete(dir);
                 }
             }
             myModuleToTempDirMap.clear();
@@ -216,7 +216,7 @@ public class BackendCompilerWrapper {
         }
         finally {
             if (fileToDelete != null) {
-                getAsyncFileService().asyncDelete(fileToDelete);
+                getAsyncFileService().asyncDelete(fileToDelete.toPath());
             }
         }
     }
@@ -606,7 +606,7 @@ public class BackendCompilerWrapper {
             }
         }
         finally {
-            CompilerUtil.refreshIOFiles(toRefresh);
+            CompilerUtil.refreshFiles(toRefresh.stream().map(File::toPath).toList());
             for (Iterator<Map.Entry<String, Collection<TranslatingCompiler.OutputItem>>> it = results.entrySet().iterator(); it.hasNext(); ) {
                 Map.Entry<String, Collection<TranslatingCompiler.OutputItem>> entry = it.next();
                 mySink.add(entry.getKey(), entry.getValue(), List.of());
