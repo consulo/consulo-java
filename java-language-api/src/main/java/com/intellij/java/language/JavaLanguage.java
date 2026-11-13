@@ -15,6 +15,7 @@
  */
 package com.intellij.java.language;
 
+import com.intellij.java.language.jvm.JvmLanguage;
 import consulo.java.language.localize.JavaLanguageLocalize;
 import consulo.language.Language;
 import consulo.language.version.LanguageVersion;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 /**
  * @author max
  */
-public class JavaLanguage extends Language {
+public class JavaLanguage extends Language implements JvmLanguage {
     public static final JavaLanguage INSTANCE = new JavaLanguage();
 
     private JavaLanguage() {
