@@ -273,7 +273,15 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
         myDispatcher.getMulticaster().renderersChanged();
     }
 
+    /**
+     * @deprecated use {@link #getAllRenderers(Project)}, renderers of {@link CompoundRendererProvider} are not included
+     */
+    @Deprecated
     public List<NodeRenderer> getAllRenderers() {
+        return getAllRenderers(null);
+    }
+
+    public List<NodeRenderer> getAllRenderers(@Nullable Project project) {
         // the order is important as the renderers are applied according to it
         List<NodeRenderer> allRenderers = new ArrayList<>();
 
@@ -284,6 +292,12 @@ public class NodeRendererSettings implements PersistentStateComponent<Element> {
         });
 
         // plugins registered renderers come after that
+        if (project != null) {
+            CompoundRendererProvider.EP_NAME.getExtensionList().stream()
+                .filter(provider -> provider.isApplicable(project))
+                .map(CompoundRendererProvider::createRenderer)
+                .forEach(allRenderers::add);
+        }
         Collections.addAll(allRenderers, NodeRenderer.EP_NAME.getExtensions());
 
         // now all predefined stuff

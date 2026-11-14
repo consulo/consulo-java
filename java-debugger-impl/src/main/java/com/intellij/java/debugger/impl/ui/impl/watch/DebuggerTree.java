@@ -20,6 +20,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerInvocationUtil;
 import com.intellij.java.debugger.impl.DebuggerSession;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
@@ -564,19 +565,23 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
         public void threadAction(SuspendContextImpl suspendContext) {
             final DebuggerTreeNodeImpl node = getNode();
             ValueDescriptorImpl descriptor = (ValueDescriptorImpl) node.getDescriptor();
-            try {
-                final NodeRenderer renderer = descriptor.getRenderer(suspendContext.getDebugProcess());
-                renderer.buildChildren(descriptor.getValue(), this, getDebuggerContext().createEvaluationContext());
-            }
-            catch (ObjectCollectedException e) {
-                final String message = e.getMessage();
-                DebuggerInvocationUtil.swingInvokeLater(getProject(), () ->
-                {
-                    node.removeAllChildren();
-                    node.add(getNodeFactory().createMessageNode(new MessageDescriptor(JavaDebuggerLocalize.errorCannotBuildNodeChildrenObjectCollected(message))));
-                    node.childrenChanged(false);
+            descriptor.getRenderer(suspendContext.getDebugProcess())
+                .thenAccept(renderer -> renderer.buildChildren(descriptor.getValue(), this, getDebuggerContext().createEvaluationContext()))
+                .exceptionally(throwable -> {
+                    if (DebuggerUtilsAsync.unwrap(throwable) instanceof ObjectCollectedException e) {
+                        final String message = e.getMessage();
+                        DebuggerInvocationUtil.swingInvokeLater(getProject(), () ->
+                        {
+                            node.removeAllChildren();
+                            node.add(getNodeFactory().createMessageNode(new MessageDescriptor(JavaDebuggerLocalize.errorCannotBuildNodeChildrenObjectCollected(message))));
+                            node.childrenChanged(false);
+                        });
+                    }
+                    else {
+                        LOG.error(throwable);
+                    }
+                    return null;
                 });
-            }
         }
 
         @Override

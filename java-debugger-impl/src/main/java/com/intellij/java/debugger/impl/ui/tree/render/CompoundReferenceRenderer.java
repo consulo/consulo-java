@@ -26,6 +26,11 @@ public class CompoundReferenceRenderer extends CompoundTypeRenderer
 		super(rendererSettings, name, labelRenderer, childrenRenderer);
 	}
 
+	public CompoundReferenceRenderer(String name, ValueLabelRenderer labelRenderer, ChildrenRenderer childrenRenderer)
+	{
+		this(NodeRendererSettings.getInstance(), name, labelRenderer, childrenRenderer);
+	}
+
 	public boolean isApplicable(Type type)
 	{
 		if(type instanceof ReferenceType)

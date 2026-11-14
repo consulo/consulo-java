@@ -20,6 +20,7 @@ import com.intellij.java.debugger.engine.DebugProcess;
 import com.intellij.java.debugger.engine.DebuggerUtils;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
@@ -35,6 +36,7 @@ import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.ui.tree.NodeDescriptorNameAdjuster;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.application.ApplicationManager;
+import consulo.application.ReadAction;
 import consulo.execution.debug.frame.XValueModifier;
 import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.frame.presentation.XRegularValuePresentation;
@@ -51,6 +53,10 @@ import org.jspecify.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.RejectedExecutionException;
 
 public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements ValueDescriptor {
     protected final Project myProject;
@@ -276,17 +282,43 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
     protected LocalizeValue calcRepresentation(EvaluationContextImpl context, DescriptorLabelListener labelListener) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
 
-        final NodeRenderer renderer = getRenderer(context.getDebugProcess());
+        DebugProcessImpl debugProcess = context.getDebugProcess();
+        getRenderer(debugProcess)
+            .thenAccept(renderer -> calcRepresentation(context, labelListener, debugProcess, renderer))
+            .exceptionally(throwable -> {
+                setValueLabelFailed(this, throwable);
+                labelListener.labelChanged();
+                return null;
+            });
 
-        final EvaluateException valueException = myValueException;
-        myIsExpandable = (valueException == null || valueException.getExceptionFromTargetVM() != null) && renderer.isExpandable(getValue(), context, this);
+        return LocalizeValue.empty(); // we have overridden getLabel
+    }
 
-        try {
-            setValueIcon(renderer.calcValueIcon(this, context, labelListener));
+    private void calcRepresentation(EvaluationContextImpl context,
+                                    DescriptorLabelListener originalListener,
+                                    DebugProcessImpl debugProcess,
+                                    NodeRenderer renderer) {
+        DelayedDescriptorLabelListener labelListener = new DelayedDescriptorLabelListener(originalListener);
+        DebuggerManagerThreadImpl.assertIsManagerThread();
+
+        EvaluateException valueException = myValueException;
+        CompletableFuture<Boolean> expandableFuture;
+        if (valueException == null || valueException.getExceptionFromTargetVM() != null) {
+            expandableFuture = getChildrenRenderer(debugProcess)
+                .thenCompose(r -> r.isExpandableAsync(getValue(), context, this));
         }
-        catch (EvaluateException e) {
-            LOG.info(e);
-            setValueIcon(null);
+        else {
+            expandableFuture = CompletableFuture.completedFuture(false);
+        }
+
+        if (!OnDemandRenderer.isOnDemandForced(debugProcess)) {
+            try {
+                setValueIcon(renderer.calcValueIcon(this, context, labelListener));
+            }
+            catch (EvaluateException e) {
+                LOG.info(e);
+                setValueIcon(null);
+            }
         }
 
         String label;
@@ -304,7 +336,24 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 
         setValueLabel(label);
 
-        return LocalizeValue.empty(); // we have overridden getLabel
+        // only call labelChanged when we have expandable value
+        expandableFuture.whenComplete((res, ex) -> {
+            if (ex == null) {
+                myIsExpandable = res;
+            }
+            else {
+                Throwable cause = DebuggerUtilsAsync.unwrap(ex);
+                if (cause instanceof EvaluateException) {
+                    LOG.warn(new Throwable(cause));
+                }
+                else if (!(cause instanceof CancellationException) && !(cause instanceof VMDisconnectedException)) {
+                    LOG.error(new Throwable(cause));
+                }
+            }
+            labelListener.labelChanged();
+        });
+
+        labelListener.start();
     }
 
     private String calcIdLabel() {
@@ -335,6 +384,11 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
             public PsiExpression getDescriptorEvaluation(DebuggerContext context) throws EvaluateException {
                 return null;
             }
+
+            @Override
+            public CompletableFuture<NodeRenderer> getRenderer(DebugProcessImpl debugProcess) {
+                return ValueDescriptorImpl.this.getRenderer(debugProcess);
+            }
         };
         descriptor.myFullValue = true;
         return descriptor;
@@ -354,6 +408,26 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
         final String label = setFailed(e);
         setValueLabel(label);
         return label;
+    }
+
+    public static String setValueLabelFailed(ValueDescriptor descriptor, Throwable throwable) {
+        Throwable cause = DebuggerUtilsAsync.unwrap(throwable);
+        if (cause instanceof EvaluateException evaluateException) {
+            return descriptor.setValueLabelFailed(evaluateException);
+        }
+
+        LocalizeValue message;
+        if (cause instanceof CancellationException) {
+            message = JavaDebuggerLocalize.errorContextHasChanged();
+        }
+        else if (cause instanceof VMDisconnectedException || cause instanceof RejectedExecutionException) {
+            message = JavaDebuggerLocalize.errorVmDisconnected();
+        }
+        else {
+            message = JavaDebuggerLocalize.internalDebuggerError();
+            LOG.error(new Throwable(cause));
+        }
+        return descriptor.setValueLabelFailed(new EvaluateException(message));
     }
 
     @Override
@@ -399,15 +473,38 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
         return value != null ? value.type() : null;
     }
 
-    public NodeRenderer getRenderer(DebugProcessImpl debugProcess) {
-        DebuggerManagerThreadImpl.assertIsManagerThread();
-        Type type = getType();
-        if (type != null && myRenderer != null && myRenderer.isApplicable(type)) {
-            return myRenderer;
+    public CompletableFuture<NodeRenderer> getChildrenRenderer(DebugProcessImpl debugProcess) {
+        if (OnDemandRenderer.isOnDemandForced(debugProcess)) {
+            return CompletableFuture.completedFuture(DebugProcessImpl.getDefaultRenderer(getValue()));
         }
+        return getRenderer(debugProcess);
+    }
 
-        myAutoRenderer = debugProcess.getAutoRenderer(this);
-        return myAutoRenderer;
+    public CompletableFuture<NodeRenderer> getRenderer(DebugProcessImpl debugProcess) {
+        DebuggerManagerThreadImpl.assertIsManagerThread();
+        return DebuggerUtilsAsync.type(getValue())
+            .thenCompose(type -> getRenderer(type, debugProcess));
+    }
+
+    protected final CompletableFuture<NodeRenderer> getRenderer(@Nullable Type type, DebugProcessImpl debugProcess) {
+        DebuggerManagerThreadImpl.assertIsManagerThread();
+        CompletableFuture<Boolean> customCheck = CompletableFuture.completedFuture(false);
+        if (type != null && myRenderer != null) {
+            customCheck = myRenderer.isApplicableAsync(type);
+        }
+        return customCheck.thenCompose(custom -> {
+            DebuggerManagerThreadImpl.assertIsManagerThread();
+            if (custom) {
+                return CompletableFuture.completedFuture(myRenderer);
+            }
+            else {
+                return DebuggerUtilsAsync.reschedule(debugProcess.getAutoRendererAsync(type))
+                    .thenApply(r -> {
+                        myAutoRenderer = r;
+                        return r;
+                    });
+            }
+        });
     }
 
     public void setRenderer(NodeRenderer renderer) {
@@ -417,22 +514,33 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
     }
 
     //returns expression that evaluates tree to this descriptor
-    @Nullable
-    public PsiElement getTreeEvaluation(JavaValue value, DebuggerContextImpl context) throws EvaluateException {
+    public CompletableFuture<@Nullable PsiElement> getTreeEvaluation(JavaValue value, DebuggerContextImpl context) throws EvaluateException {
         JavaValue parent = value.getParent();
         if (parent != null) {
             ValueDescriptorImpl vDescriptor = parent.getDescriptor();
-            PsiElement parentEvaluation = vDescriptor.getTreeEvaluation(parent, context);
 
-            if (!(parentEvaluation instanceof PsiExpression)) {
-                return null;
-            }
+            return vDescriptor.getTreeEvaluation(parent, context).thenCompose(parentEvaluation -> {
+                if (!(parentEvaluation instanceof PsiExpression parentExpression)) {
+                    return CompletableFuture.completedFuture(null);
+                }
 
-            return DebuggerTreeNodeExpression.substituteThis(vDescriptor.getRenderer(context.getDebugProcess()).getChildValueExpression(new DebuggerTreeNodeMock(value), context), ((PsiExpression)
-                parentEvaluation), vDescriptor.getValue());
+                return vDescriptor.getChildrenRenderer(context.getDebugProcess())
+                    .thenApply(childrenRenderer -> {
+                        try {
+                            return ReadAction.compute(() -> DebuggerTreeNodeExpression.substituteThis(
+                                childrenRenderer.getChildValueExpression(new DebuggerTreeNodeMock(value), context),
+                                parentExpression,
+                                vDescriptor.getValue()
+                            ));
+                        }
+                        catch (EvaluateException e) {
+                            throw new CompletionException(e);
+                        }
+                    });
+            });
         }
 
-        return getDescriptorEvaluation(context);
+        return CompletableFuture.completedFuture(ReadAction.compute(() -> getDescriptorEvaluation(context)));
     }
 
     protected static class NeedMarkException extends EvaluateException {
@@ -619,5 +727,30 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 
     public EvaluationContextImpl getStoredEvaluationContext() {
         return myStoredEvaluationContext;
+    }
+
+    private static class DelayedDescriptorLabelListener implements DescriptorLabelListener {
+        private final DescriptorLabelListener myLabelListener;
+        private volatile boolean myStarted = false;
+        private volatile boolean myFired = false;
+
+        DelayedDescriptorLabelListener(DescriptorLabelListener labelListener) {
+            myLabelListener = labelListener;
+        }
+
+        @Override
+        public void labelChanged() {
+            myFired = true;
+            if (myStarted) {
+                myLabelListener.labelChanged();
+            }
+        }
+
+        public void start() {
+            myStarted = true;
+            if (myFired) {
+                myLabelListener.labelChanged();
+            }
+        }
     }
 }

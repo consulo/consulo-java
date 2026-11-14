@@ -18,6 +18,7 @@ package com.intellij.java.debugger.impl.ui.tree.render;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
+import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
@@ -80,6 +81,11 @@ public interface OnDemandRenderer extends FullValueEvaluatorProvider {
   }
 
   static boolean isOnDemandForced(EvaluationContext evaluationContext) {
-    return ForceOnDemandRenderersAction.isForcedOnDemand(((DebugProcessImpl) evaluationContext.getDebugProcess()).getXdebugProcess().getSession());
+    return isOnDemandForced((DebugProcessImpl) evaluationContext.getDebugProcess());
+  }
+
+  static boolean isOnDemandForced(DebugProcessImpl debugProcess) {
+    JavaDebugProcess process = debugProcess.getXdebugProcess();
+    return process != null && ForceOnDemandRenderersAction.isForcedOnDemand(process.getSession());
   }
 }

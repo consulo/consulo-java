@@ -36,6 +36,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author Alexander Podkhalyuzin
@@ -45,7 +46,24 @@ import java.util.List;
 public abstract class JvmSmartStepIntoHandler {
     public static final ExtensionPointName<JvmSmartStepIntoHandler> EP_NAME = ExtensionPointName.create(JvmSmartStepIntoHandler.class);
 
-    public abstract List<SmartStepTarget> findSmartStepTargets(SourcePosition position);
+    public List<SmartStepTarget> findSmartStepTargets(SourcePosition position) {
+        throw new AbstractMethodError();
+    }
+
+    /**
+     * Computes the targets of "Smart Step Into", may complete on any thread
+     */
+    public CompletableFuture<List<SmartStepTarget>> findSmartStepTargetsAsync(SourcePosition position, DebuggerSession session) {
+        return CompletableFuture.completedFuture(findSmartStepTargets(position));
+    }
+
+    /**
+     * Computes the targets offered by "Step Into" when the "always smart step into" setting is on.
+     * A failed future means that the plain step into must be performed.
+     */
+    public CompletableFuture<List<SmartStepTarget>> findStepIntoTargets(SourcePosition position, DebuggerSession session) {
+        return CompletableFuture.failedFuture(new UnsupportedOperationException());
+    }
 
     public abstract boolean isAvailable(SourcePosition position);
 

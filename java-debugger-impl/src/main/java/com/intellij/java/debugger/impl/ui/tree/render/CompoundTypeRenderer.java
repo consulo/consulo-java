@@ -45,8 +45,8 @@ public class CompoundTypeRenderer extends CompoundNodeRenderer
 	{
 		super(rendererSettings, name, labelRenderer, childrenRenderer);
 		myProperties.setClassName(CommonClassNames.JAVA_LANG_OBJECT);
-		LOG.assertTrue(labelRenderer == null || labelRenderer instanceof TypeRenderer);
-		LOG.assertTrue(childrenRenderer == null || childrenRenderer instanceof TypeRenderer);
+		LOG.assertTrue(labelRenderer == null || labelRenderer instanceof TypeRenderer || labelRenderer instanceof ClassRenderer);
+		LOG.assertTrue(childrenRenderer == null || childrenRenderer instanceof TypeRenderer || childrenRenderer instanceof ClassRenderer);
 	}
 
 	public void setLabelRenderer(ValueLabelRenderer labelRenderer)

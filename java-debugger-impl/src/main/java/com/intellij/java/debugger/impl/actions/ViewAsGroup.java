@@ -16,11 +16,11 @@
 package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
 import com.intellij.java.debugger.impl.engine.JavaValue;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
-import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import consulo.annotation.component.ActionImpl;
@@ -35,7 +35,9 @@ import consulo.ui.ex.action.*;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @ActionImpl(id = "Debugger.ViewAsGroup")
 public class ViewAsGroup extends ActionGroup implements DumbAware, AnActionWithSyncUpdate {
@@ -107,37 +109,7 @@ public class ViewAsGroup extends ActionGroup implements DumbAware, AnActionWithS
         return myChildren;
     }
 
-    private static AnAction[] calcChildren(List<JavaValue> values) {
-        List<AnAction> renderers = new ArrayList<>();
-
-        List<NodeRenderer> allRenderers = NodeRendererSettings.getInstance().getAllRenderers();
-
-        boolean anyValueDescriptor = false;
-
-        for (NodeRenderer nodeRenderer : allRenderers) {
-            boolean allApp = true;
-
-            for (JavaValue value : values) {
-                if (value instanceof JavaReferringObjectsValue) { // disable for any referrers at all
-                    return AnAction.EMPTY_ARRAY;
-                }
-                ValueDescriptorImpl valueDescriptor = value.getDescriptor();
-                anyValueDescriptor = true;
-                if (!valueDescriptor.isValueValid() || !nodeRenderer.isApplicable(valueDescriptor.getType())) {
-                    allApp = false;
-                    break;
-                }
-            }
-
-            if (!anyValueDescriptor) {
-                return AnAction.EMPTY_ARRAY;
-            }
-
-            if (allApp) {
-                renderers.add(new RendererAction(nodeRenderer));
-            }
-        }
-
+    private static AnAction[] calcChildren(List<NodeRenderer> renderers) {
         List<AnAction> children = new ArrayList<>();
         AnAction[] viewAsActions =
             ((DefaultActionGroup) ActionManager.getInstance().getAction(DebuggerActions.REPRESENTATION_LIST)).getChildren(null);
@@ -156,7 +128,9 @@ public class ViewAsGroup extends ActionGroup implements DumbAware, AnActionWithS
         if (!children.isEmpty()) {
             children.add(AnSeparator.getInstance());
         }
-        children.addAll(renderers);
+        for (NodeRenderer renderer : renderers) {
+            children.add(new RendererAction(renderer));
+        }
 
         return children.toArray(new AnAction[children.size()]);
     }
@@ -184,9 +158,46 @@ public class ViewAsGroup extends ActionGroup implements DumbAware, AnActionWithS
         process.getManagerThread().schedule(new DebuggerContextCommandImpl(debuggerContext) {
             @Override
             public void threadAction() {
-                myChildren = calcChildren(values);
-                DebuggerAction.enableAction(event, myChildren.length > 0);
+                getApplicableRenderers(values, process)
+                    .whenComplete((renderers, throwable) -> {
+                        if (throwable != null) {
+                            DebuggerUtilsAsync.logError(throwable);
+                            return;
+                        }
+                        myChildren = calcChildren(renderers);
+                        DebuggerAction.enableAction(event, myChildren.length > 0);
+                    });
             }
+        });
+    }
+
+    private static CompletableFuture<List<NodeRenderer>> getApplicableRenderers(List<JavaValue> values, DebugProcessImpl process) {
+        List<CompletableFuture<List<NodeRenderer>>> futures = new ArrayList<>(values.size());
+        for (JavaValue value : values) {
+            if (value instanceof JavaReferringObjectsValue) { // disable for any referrers at all
+                return CompletableFuture.completedFuture(Collections.emptyList());
+            }
+            ValueDescriptorImpl valueDescriptor = value.getDescriptor();
+            if (!valueDescriptor.isValueValid()) {
+                return CompletableFuture.completedFuture(Collections.emptyList());
+            }
+            futures.add(process.getApplicableRenderers(valueDescriptor.getType()));
+        }
+
+        return DebuggerUtilsAsync.reschedule(CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))).thenApply(__ -> {
+            List<NodeRenderer> res = new ArrayList<>();
+            boolean first = true;
+            for (CompletableFuture<List<NodeRenderer>> future : futures) {
+                List<NodeRenderer> list = future.join();
+                if (first) {
+                    res.addAll(list);
+                    first = false;
+                }
+                else {
+                    res.retainAll(list);
+                }
+            }
+            return res;
         });
     }
 

@@ -31,7 +31,9 @@ import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBui
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeExpression;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
+import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
+import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.TreeClassChooser;
@@ -47,6 +49,7 @@ import consulo.internal.com.sun.jdi.InterfaceType;
 import consulo.internal.com.sun.jdi.InternalException;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ReferenceType;
+import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
@@ -69,6 +72,9 @@ import org.jdom.Element;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -301,5 +307,50 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
             }
         }
         return defaultValue;
+    }
+
+    private static CompletableFuture<@Nullable NodeRenderer> getFirstApplicableRenderer(List<CompletableFuture<Boolean>> futures,
+                                                                                       int index,
+                                                                                       List<NodeRenderer> renderers) {
+        if (index >= futures.size()) {
+            return CompletableFuture.completedFuture(null);
+        }
+        return futures.get(index).thenCompose(res -> {
+            if (res) {
+                return CompletableFuture.completedFuture(renderers.get(index));
+            }
+            else {
+                return getFirstApplicableRenderer(futures, index + 1, renderers);
+            }
+        });
+    }
+
+    public static CompletableFuture<@Nullable NodeRenderer> getFirstApplicableRenderer(List<NodeRenderer> renderers, @Nullable Type type) {
+        DebuggerManagerThreadImpl.assertIsManagerThread();
+        List<CompletableFuture<Boolean>> futures = new ArrayList<>(renderers.size());
+        for (NodeRenderer renderer : renderers) {
+            futures.add(renderer.isApplicableAsync(type));
+        }
+        return getFirstApplicableRenderer(futures, 0, renderers);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static CompletableFuture<List<NodeRenderer>> getApplicableRenderers(List<? extends NodeRenderer> renderers, @Nullable Type type) {
+        DebuggerManagerThreadImpl.assertIsManagerThread();
+        CompletableFuture<Boolean>[] futures = renderers.stream().map(r -> r.isApplicableAsync(type)).toArray(CompletableFuture[]::new);
+        return CompletableFuture.allOf(futures).thenApply(__ -> {
+            List<NodeRenderer> res = new ArrayList<>();
+            for (int i = 0; i < futures.length; i++) {
+                try {
+                    if (futures[i].join()) {
+                        res.add(renderers.get(i));
+                    }
+                }
+                catch (Exception e) {
+                    LOG.debug(e);
+                }
+            }
+            return res;
+        });
     }
 }

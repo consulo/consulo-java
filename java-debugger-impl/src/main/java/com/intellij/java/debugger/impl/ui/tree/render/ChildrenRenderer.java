@@ -23,6 +23,8 @@ import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import consulo.language.psi.PsiElement;
 import consulo.internal.com.sun.jdi.Value;
 
+import java.util.concurrent.CompletableFuture;
+
 public interface ChildrenRenderer extends Renderer
 {
 	void buildChildren(Value value, ChildrenBuilder builder, EvaluationContext evaluationContext);
@@ -42,5 +44,17 @@ public interface ChildrenRenderer extends Renderer
 	 */
 	PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException;
 
-	boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor);
+	/**
+	 * @deprecated override {@link #isExpandableAsync(Value, EvaluationContext, NodeDescriptor)}
+	 */
+	@Deprecated
+	default boolean isExpandable(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		throw new AbstractMethodError("isExpandableAsync is not implemented");
+	}
+
+	default CompletableFuture<Boolean> isExpandableAsync(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		return CompletableFuture.completedFuture(isExpandable(value, evaluationContext, parentDescriptor));
+	}
 }

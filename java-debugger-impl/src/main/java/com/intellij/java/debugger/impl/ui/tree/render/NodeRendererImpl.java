@@ -29,8 +29,12 @@ import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.logging.Logger;
 import consulo.language.psi.PsiElement;
 import consulo.internal.com.sun.jdi.ObjectReference;
+import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.ui.image.Image;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 /**
  * @author Eugene Zhuravlev
@@ -40,6 +44,7 @@ public abstract class NodeRendererImpl implements NodeRenderer
 {
 	private static final Logger LOG = Logger.getInstance(NodeRendererImpl.class);
 	protected BasicRendererProperties myProperties;
+	private @Nullable Function<? super Type, ? extends CompletableFuture<Boolean>> myIsApplicableChecker = null;
 
 	protected NodeRendererImpl()
 	{
@@ -107,6 +112,21 @@ public abstract class NodeRendererImpl implements NodeRenderer
 	public PsiElement getChildValueExpression(DebuggerTreeNode node, DebuggerContext context) throws EvaluateException
 	{
 		return null;
+	}
+
+	public void setIsApplicableChecker(Function<? super Type, ? extends CompletableFuture<Boolean>> isApplicableAsync)
+	{
+		myIsApplicableChecker = isApplicableAsync;
+	}
+
+	@Override
+	public final CompletableFuture<Boolean> isApplicableAsync(Type type)
+	{
+		if(myIsApplicableChecker != null)
+		{
+			return myIsApplicableChecker.apply(type);
+		}
+		return NodeRenderer.super.isApplicableAsync(type);
 	}
 
 	@Override

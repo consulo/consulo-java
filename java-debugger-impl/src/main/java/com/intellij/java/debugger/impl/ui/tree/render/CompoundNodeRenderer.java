@@ -16,28 +16,37 @@
 package com.intellij.java.debugger.impl.ui.tree.render;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.jdom.Element;
+import org.jspecify.annotations.Nullable;
 import com.intellij.java.debugger.DebuggerContext;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.EvaluationContext;
+import com.intellij.java.debugger.impl.engine.FullValueEvaluatorProvider;
+import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
+import com.intellij.java.debugger.impl.ui.impl.watch.ValueDescriptorImpl;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.WriteExternalException;
+import consulo.execution.debug.frame.XFullValueEvaluator;
 import consulo.language.psi.PsiElement;
+import consulo.ui.image.Image;
 import consulo.internal.com.sun.jdi.Type;
 import consulo.internal.com.sun.jdi.Value;
 
-public class CompoundNodeRenderer extends NodeRendererImpl
+public class CompoundNodeRenderer extends NodeRendererImpl implements FullValueEvaluatorProvider
 {
 	public static final
 	String UNIQUE_ID = "CompoundNodeRenderer";
 
 	private ValueLabelRenderer myLabelRenderer;
 	private ChildrenRenderer myChildrenRenderer;
+	private @Nullable ValueIconRenderer myIconRenderer = null;
+	private @Nullable FullValueEvaluatorProvider myFullValueEvaluatorProvider;
 	protected final NodeRendererSettings myRendererSettings;
 
 	public CompoundNodeRenderer(NodeRendererSettings rendererSettings, String name, ValueLabelRenderer labelRenderer, ChildrenRenderer childrenRenderer)
@@ -82,6 +91,12 @@ public class CompoundNodeRenderer extends NodeRendererImpl
 	}
 
 	@Override
+	public CompletableFuture<Boolean> isExpandableAsync(Value value, EvaluationContext evaluationContext, NodeDescriptor parentDescriptor)
+	{
+		return getChildrenRenderer().isExpandableAsync(value, evaluationContext, parentDescriptor);
+	}
+
+	@Override
 	public boolean isApplicable(Type type)
 	{
 		return getLabelRenderer().isApplicable(type) && getChildrenRenderer().isApplicable(type);
@@ -91,6 +106,38 @@ public class CompoundNodeRenderer extends NodeRendererImpl
 	public String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
 	{
 		return getLabelRenderer().calcLabel(descriptor, evaluationContext, listener);
+	}
+
+	@Nullable
+	@Override
+	public Image calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException
+	{
+		if(myIconRenderer != null)
+		{
+			return myIconRenderer.calcValueIcon(descriptor, evaluationContext, listener);
+		}
+		return null;
+	}
+
+	void setIconRenderer(@Nullable ValueIconRenderer iconRenderer)
+	{
+		myIconRenderer = iconRenderer;
+	}
+
+	@Nullable
+	@Override
+	public XFullValueEvaluator getFullValueEvaluator(EvaluationContextImpl evaluationContext, ValueDescriptorImpl valueDescriptor)
+	{
+		if(myFullValueEvaluatorProvider != null)
+		{
+			return myFullValueEvaluatorProvider.getFullValueEvaluator(evaluationContext, valueDescriptor);
+		}
+		return null;
+	}
+
+	public void setFullValueEvaluator(@Nullable FullValueEvaluatorProvider fullValueEvaluatorProvider)
+	{
+		myFullValueEvaluatorProvider = fullValueEvaluatorProvider;
 	}
 
 	public ValueLabelRenderer getLabelRenderer()

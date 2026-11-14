@@ -19,6 +19,7 @@ import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.engine.evaluation.expression.Modifier;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
+import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
 import com.intellij.java.debugger.impl.actions.JavaReferringObjectsValue;
 import com.intellij.java.debugger.impl.actions.JumpToObjectAction;
@@ -49,6 +50,9 @@ import consulo.execution.debug.frame.presentation.*;
 import consulo.execution.debug.ui.XValueTextProvider;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
+import consulo.internal.com.sun.jdi.InvalidStackFrameException;
+import consulo.internal.com.sun.jdi.ObjectCollectedException;
+import consulo.internal.com.sun.jdi.VMDisconnectedException;
 import consulo.internal.com.sun.jdi.Value;
 import consulo.language.psi.PsiElement;
 import consulo.localize.LocalizeValue;
@@ -64,6 +68,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 
 /**
  * @author egor
@@ -368,8 +373,8 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
             @Override
             public void contextAction(SuspendContextImpl suspendContext) throws Exception {
-                myValueDescriptor.getRenderer(myEvaluationContext.getDebugProcess())
-                    .buildChildren(myValueDescriptor.getValue(), new ChildrenBuilder() {
+                myValueDescriptor.getChildrenRenderer(myEvaluationContext.getDebugProcess())
+                    .thenAccept(r -> r.buildChildren(myValueDescriptor.getValue(), new ChildrenBuilder() {
                         @Override
                         public NodeDescriptorFactory getDescriptorManager() {
                             return myNodeManager;
@@ -461,9 +466,41 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                         public boolean isObsolete() {
                             return node.isObsolete();
                         }
-                    }, myEvaluationContext);
+                    }, myEvaluationContext))
+                    .exceptionally(throwable -> {
+                        setChildrenError(node, throwable);
+                        return null;
+                    });
             }
         });
+    }
+
+    /**
+     * Shows the failure of building the children in the node, instead of leaving it at "Collecting data"
+     */
+    public static void setChildrenError(XCompositeNode node, Throwable throwable) {
+        if (node.isObsolete()) {
+            return;
+        }
+        Throwable cause = DebuggerUtilsAsync.unwrap(throwable);
+        if (cause == null) {
+            cause = throwable;
+        }
+        LocalizeValue message;
+        if (cause instanceof CancellationException || cause instanceof InvalidStackFrameException || cause instanceof ObjectCollectedException) {
+            message = JavaDebuggerLocalize.errorContextHasChanged();
+        }
+        else if (cause instanceof VMDisconnectedException) {
+            message = JavaDebuggerLocalize.errorVmDisconnected();
+        }
+        else if (cause instanceof EvaluateException && cause.getMessage() != null) {
+            message = LocalizeValue.of(cause.getMessage());
+        }
+        else {
+            LOG.error(cause);
+            message = JavaDebuggerLocalize.errorWhileCollectingData(cause.toString());
+        }
+        node.setErrorMessage(message);
     }
 
     protected static boolean scheduleCommand(EvaluationContextImpl evaluationContext,
@@ -597,36 +634,41 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
                 @Override
                 public void contextAction(SuspendContextImpl suspendContext) throws Exception {
-                    evaluationExpression = ReadAction.compute(() ->
-                    {
-                        try {
-                            PsiElement psiExpression =
-                                getDescriptor().getTreeEvaluation(JavaValue.this, getDebuggerContext());
-                            if (psiExpression != null) {
-                                XExpression res =
-                                    TextWithImportsImpl.toXExpression(new TextWithImportsImpl(psiExpression));
-                                // add runtime imports if any
-                                Set<String> imports =
-                                    psiExpression.getUserData(DebuggerTreeNodeExpression.ADDITIONAL_IMPORTS_KEY);
-                                if (imports != null && res != null) {
-                                    if (res.getCustomInfo() != null) {
-                                        imports.add(res.getCustomInfo());
-                                    }
-                                    res = XDebuggerUtil.getInstance()
-                                        .createExpression(res.getExpression(),
-                                            res.getLanguage(),
-                                            StringUtil.join(imports, ","),
-                                            res.getMode());
+                    try {
+                        getDescriptor().getTreeEvaluation(JavaValue.this, getDebuggerContext())
+                            .whenComplete((psiExpression, ex) -> {
+                                if (ex != null) {
+                                    LOG.info(DebuggerUtilsAsync.unwrap(ex));
+                                    res.setDone(null);
                                 }
-                                return res;
-                            }
-                        }
-                        catch (EvaluateException e) {
-                            LOG.info(e);
-                        }
-                        return null;
-                    });
-                    res.setDone(evaluationExpression);
+                                else if (psiExpression != null) {
+                                    evaluationExpression = ReadAction.compute(() -> {
+                                        XExpression expression = TextWithImportsImpl.toXExpression(new TextWithImportsImpl(psiExpression));
+                                        // add runtime imports if any
+                                        Set<String> imports = psiExpression.getUserData(DebuggerTreeNodeExpression.ADDITIONAL_IMPORTS_KEY);
+                                        if (imports != null && expression != null) {
+                                            if (expression.getCustomInfo() != null) {
+                                                imports.add(expression.getCustomInfo());
+                                            }
+                                            expression = XDebuggerUtil.getInstance()
+                                                .createExpression(expression.getExpression(),
+                                                    expression.getLanguage(),
+                                                    StringUtil.join(imports, ","),
+                                                    expression.getMode());
+                                        }
+                                        return expression;
+                                    });
+                                    res.setDone(evaluationExpression);
+                                }
+                                else {
+                                    res.setDone(null);
+                                }
+                            });
+                    }
+                    catch (EvaluateException e) {
+                        LOG.info(e);
+                        res.setDone(null);
+                    }
                 }
             });
             return res;

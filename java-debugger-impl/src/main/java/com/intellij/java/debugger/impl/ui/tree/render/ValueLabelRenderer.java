@@ -26,9 +26,13 @@ import org.jspecify.annotations.Nullable;
  * Date: Sep 20, 2003
  * Time: 10:12:39 PM
  */
-public interface ValueLabelRenderer extends Renderer {
+public interface ValueLabelRenderer extends Renderer, ValueIconRenderer {
   String calcLabel(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException;
 
   @Nullable
-  Image calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener) throws EvaluateException;
+  @Override
+  default Image calcValueIcon(ValueDescriptor descriptor, EvaluationContext evaluationContext, DescriptorLabelListener listener)
+    throws EvaluateException {
+    return null;
+  }
 }

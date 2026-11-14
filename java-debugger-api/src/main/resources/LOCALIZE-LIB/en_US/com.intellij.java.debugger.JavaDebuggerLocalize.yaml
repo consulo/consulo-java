@@ -383,6 +383,8 @@ error.verification.error:
     text: 'Verification error : {0}'
 error.vm.disconnected:
     text: VM disconnected. Target virtual machine closed connection
+error.while.collecting.data:
+    text: 'Error while collecting data: {0}'
 evaluate.expression.dialog.title:
     text: Expression Evaluation
 evaluate.statement.dialog.title:
@@ -599,6 +601,8 @@ instance.filters.dialog.instance.filters.group:
     text: Instance Filters
 instance.filters.dialog.title:
     text: Instance Filters
+internal.debugger.error:
+    text: Internal error. See logs for more details
 internal.error.locations.of.line:
     text: Internal error loading debug information from ''{0}''.  Breakpoints will be unavailable in this class.
 label.add.field.breakpoint.dialog.field.name:
