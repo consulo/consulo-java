@@ -3,6 +3,7 @@ package com.intellij.java.debugger.impl;
 import com.intellij.java.debugger.engine.evaluation.CodeFragmentFactory;
 import com.intellij.java.debugger.engine.evaluation.TextWithImports;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
+import com.intellij.java.language.JavaLanguage;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import consulo.application.ReadAction;
@@ -19,6 +20,7 @@ import consulo.language.psi.PsiFile;
 import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.language.psi.util.PsiTreeUtil;
 import consulo.project.Project;
+import consulo.util.lang.StringUtil;
 import consulo.virtualFileSystem.fileType.FileType;
 import org.jspecify.annotations.Nullable;
 
@@ -60,9 +62,9 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 	public XExpression createExpression(Project project, Document document, @Nullable Language language, EvaluationMode mode)
 	{
 		PsiFile psiFile = ReadAction.compute(() -> PsiDocumentManager.getInstance(project).getPsiFile(document));
-		if(psiFile != null)
+		if(psiFile instanceof JavaCodeFragment fragment)
 		{
-			return XDebuggerUtil.getInstance().createExpression(psiFile.getText(), language, ((JavaCodeFragment) psiFile).importsToString(), mode);
+			return XDebuggerUtil.getInstance().createExpression(psiFile.getText(), getFragmentLanguage(fragment, language), fragment.importsToString(), mode);
 		}
 		return super.createExpression(project, document, language, mode);
 	}
@@ -73,6 +75,11 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 		TextWithImports text = TextWithImportsImpl.fromXExpression(expression);
 		if(text != null && context != null)
 		{
+			if(isDefaultLanguageOfEmptyExpression(expression, context))
+			{
+				// the editor got the default (Java) language before the source position was known - pick the factory by the context instead
+				text = new TextWithImportsImpl(text.getKind(), text.getText(), text.getImports(), null);
+			}
 			CodeFragmentFactory factory = DebuggerUtilsEx.findAppropriateCodeFragmentFactory(text, context);
 			JavaCodeFragment codeFragment = factory.createPresentationCodeFragment(text, context, project);
 			codeFragment.forceResolveScope(GlobalSearchScope.allScope(project));
@@ -89,5 +96,31 @@ public class JavaDebuggerEditorsProvider extends XDebuggerEditorsProviderBase
 		{
 			return super.createExpressionCodeFragment(project, expression, context, isPhysical);
 		}
+	}
+
+	private static boolean isDefaultLanguageOfEmptyExpression(XExpression expression, PsiElement context)
+	{
+		return StringUtil.isEmptyOrSpaces(expression.getExpression()) &&
+			expression.getLanguage() == JavaLanguage.INSTANCE &&
+			!context.getLanguage().isKindOf(JavaLanguage.INSTANCE);
+	}
+
+	/**
+	 * The language of the expression must match the code fragment that the document holds, otherwise the evaluation picks another code fragment factory
+	 */
+	@Nullable
+	private static Language getFragmentLanguage(JavaCodeFragment fragment, @Nullable Language language)
+	{
+		if(language == null)
+		{
+			return null;
+		}
+		Language fragmentLanguage = fragment.getLanguage();
+		FileType fragmentFileType = fragmentLanguage.getAssociatedFileType();
+		if(fragmentFileType != null && !fragmentFileType.equals(language.getAssociatedFileType()))
+		{
+			return fragmentLanguage;
+		}
+		return language;
 	}
 }
