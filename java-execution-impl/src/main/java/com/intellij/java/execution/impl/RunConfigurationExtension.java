@@ -21,6 +21,8 @@ import consulo.component.extension.ExtensionPointName;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.configuration.RunConfigurationExtensionBase;
 import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.executor.Executor;
+import consulo.execution.ui.console.ConsoleView;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.language.editor.refactoring.event.RefactoringElementListener;
 import consulo.language.psi.PsiElement;
@@ -91,5 +93,15 @@ public abstract class RunConfigurationExtension extends RunConfigurationExtensio
 
     public boolean isListenerDisabled(RunConfigurationBase configuration, Object listener, RunnerSettings runnerSettings) {
         return false;
+    }
+
+    /**
+     * Enhances the run process console by adding any extension-specific information to it.
+     *
+     * @deprecated use {@link com.intellij.java.execution.application.JavaConsoleDecorator#decorate}
+     */
+    @Deprecated
+    protected ConsoleView decorate(ConsoleView console, RunConfigurationBase configuration, Executor executor) {
+        return console;
     }
 }

@@ -14,6 +14,7 @@ module consulo.java.execution.api {
 	requires consulo.ui.ex.awt.api;
 
 	exports com.intellij.java.execution;
+	exports com.intellij.java.execution.application;
 	exports com.intellij.java.execution.configurations;
 	exports com.intellij.java.execution.filters;
 	exports com.intellij.java.execution.runners;

@@ -21,11 +21,14 @@ import com.intellij.java.execution.impl.JavaRunConfigurationExtensionManager;
 import com.intellij.java.execution.impl.RunConfigurationExtension;
 import com.intellij.java.execution.impl.util.JavaParametersUtil;
 import consulo.execution.configuration.RunConfigurationBase;
+import consulo.execution.executor.Executor;
 import consulo.execution.runner.ExecutionEnvironment;
+import consulo.execution.ui.console.ConsoleView;
 import consulo.java.execution.configurations.OwnJavaParameters;
 import consulo.process.ExecutionException;
 import consulo.process.ProcessHandler;
 import consulo.process.ProcessHandlerBuilder;
+import org.jspecify.annotations.Nullable;
 
 /**
  * @author nik
@@ -44,6 +47,15 @@ public abstract class BaseJavaApplicationCommandLineState<T extends RunConfigura
         for (RunConfigurationExtension ext : RunConfigurationExtension.EP_NAME.getExtensionList()) {
             ext.updateJavaParameters(getConfiguration(), params, getRunnerSettings());
         }
+    }
+
+    @Override
+    protected @Nullable ConsoleView createConsole(Executor executor) throws ExecutionException {
+        ConsoleView console = super.createConsole(executor);
+        if (console == null) {
+            return null;
+        }
+        return JavaRunConfigurationExtensionManager.getInstance().decorateExecutionConsole(getConfiguration(), getRunnerSettings(), console, executor);
     }
 
     @Override

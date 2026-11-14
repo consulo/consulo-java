@@ -15,15 +15,20 @@
  */
 package com.intellij.java.execution.impl;
 
+import com.intellij.java.execution.application.JavaConsoleDecorator;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.annotation.component.ServiceImpl;
 import consulo.execution.RuntimeConfigurationException;
 import consulo.execution.configuration.RunConfigurationBase;
 import consulo.execution.configuration.RunConfigurationExtensionsManager;
+import consulo.execution.configuration.RunnerSettings;
+import consulo.execution.executor.Executor;
+import consulo.execution.ui.console.ConsoleView;
 import consulo.application.Application;
 import consulo.logging.Logger;
 import jakarta.inject.Singleton;
+import org.jspecify.annotations.Nullable;
 
 
 /**
@@ -42,6 +47,19 @@ public class JavaRunConfigurationExtensionManager extends RunConfigurationExtens
 
   public static JavaRunConfigurationExtensionManager getInstance() {
     return Application.get().getInstance(JavaRunConfigurationExtensionManager.class);
+  }
+
+  public <T extends RunConfigurationBase> ConsoleView decorateExecutionConsole(
+    T configuration,
+    @Nullable RunnerSettings runnerSettings,
+    ConsoleView console,
+    Executor executor
+  ) {
+    ConsoleView result = console;
+    for (RunConfigurationExtension extension : getEnabledExtensions(configuration, runnerSettings)) {
+      result = extension.decorate(result, configuration, executor);
+    }
+    return JavaConsoleDecorator.decorate(result, configuration, executor);
   }
 
   public static void checkConfigurationIsValid(RunConfigurationBase configuration) throws RuntimeConfigurationException {

@@ -15,6 +15,7 @@
  */
 package com.intellij.java.execution.impl;
 
+import consulo.execution.ui.console.ConsoleView;
 import com.intellij.java.debugger.impl.GenericDebuggerRunnerSettings;
 import com.intellij.java.execution.CommonJavaRunConfigurationParameters;
 import com.intellij.java.execution.JavaTestPatcher;
@@ -166,8 +167,15 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
         testConsoleProperties.setIdBasedTestTree(isIdBasedTestTree());
         testConsoleProperties.setIfUndefined(TestConsoleProperties.HIDE_PASSED_TESTS, false);
 
-        BaseTestsOutputConsoleView consoleView = SMTestRunnerConnectionUtil.createConsole(getFrameworkName(), testConsoleProperties);
-        SMTestRunnerResultsForm viewer = ((SMTRunnerConsoleView)consoleView).getResultsViewer();
+        BaseTestsOutputConsoleView testConsole = SMTestRunnerConnectionUtil.createConsole(getFrameworkName(), testConsoleProperties);
+        SMTestRunnerResultsForm viewer = ((SMTRunnerConsoleView)testConsole).getResultsViewer();
+
+        ConsoleView consoleView = JavaRunConfigurationExtensionManager.getInstance().decorateExecutionConsole(
+            getConfiguration(),
+            getRunnerSettings(),
+            testConsole,
+            executor
+        );
         Disposer.register(getConfiguration().getProject(), consoleView);
 
         final ProcessHandler handler = createHandler(executor);
@@ -203,7 +211,7 @@ public abstract class JavaTestFrameworkRunnableState<T extends ModuleBasedConfig
             }
         });
 
-        AbstractRerunFailedTestsAction rerunFailedTestsAction = testConsoleProperties.createRerunFailedTestsAction(consoleView);
+        AbstractRerunFailedTestsAction rerunFailedTestsAction = testConsoleProperties.createRerunFailedTestsAction(testConsole);
         LOG.assertTrue(rerunFailedTestsAction != null);
         rerunFailedTestsAction.setModelProvider(() -> viewer);
 
