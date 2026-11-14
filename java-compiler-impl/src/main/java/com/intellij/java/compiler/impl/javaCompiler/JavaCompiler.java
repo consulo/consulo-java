@@ -24,6 +24,7 @@ import consulo.compiler.*;
 import consulo.compiler.localize.CompilerLocalize;
 import consulo.compiler.scope.CompileScope;
 import consulo.content.ContentFolderTypeProvider;
+import consulo.java.compiler.JavaCompilerSourceFilter;
 import consulo.java.language.module.extension.JavaModuleExtension;
 import consulo.language.content.ProductionResourceContentFolderTypeProvider;
 import consulo.language.content.TestResourceContentFolderTypeProvider;
@@ -77,7 +78,13 @@ public class JavaCompiler implements TranslatingCompiler {
 
     @Override
     public boolean isCompilableFile(Path file, CompileContext context) {
-        return FileTypeRegistry.getInstance().getFileTypeByFileName(file.getFileName().toString()) == JavaFileType.INSTANCE;
+        if (FileTypeRegistry.getInstance().getFileTypeByFileName(file.getFileName().toString()) != JavaFileType.INSTANCE) {
+            return false;
+        }
+
+        Module module = context.getModuleByFile(file);
+        return module == null || myProject.getExtensionPoint(JavaCompilerSourceFilter.class)
+            .allMatchSafe(filter -> filter.isCompilableByJavaCompiler(module, file));
     }
 
     @Override
