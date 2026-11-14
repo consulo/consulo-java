@@ -22,6 +22,8 @@ import com.intellij.java.debugger.impl.HelpID;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaBreakpointProperties;
 import com.intellij.java.debugger.impl.breakpoints.properties.JavaLineBreakpointProperties;
 import com.intellij.java.debugger.impl.engine.PositionManagerImpl;
+import com.intellij.java.language.psi.JavaTokenType;
+import com.intellij.java.language.psi.PsiJavaToken;
 import com.intellij.java.language.psi.PsiLambdaExpression;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ExtensionImpl;
@@ -223,6 +225,11 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
             properties.setLambdaOrdinal(myLambdaOrdinal);
             return properties;
         }
+
+        @Override
+        public boolean isMultiVariant() {
+            return false;
+        }
     }
 
     public class LineJavaBreakpointVariant extends ExactJavaBreakpointVariant {
@@ -238,6 +245,35 @@ public class JavaLineBreakpointType extends JavaLineBreakpointTypeBase<JavaLineB
         @Override
         public Image getIcon() {
             return ExecutionDebugIconGroup.breakpointBreakpoint();
+        }
+
+        @Override
+        @RequiredReadAction
+        public int getPriority(Project project) {
+            int basePriority = super.getPriority(project);
+
+            PsiFile file = DebuggerUtilsEx.getPsiFile(mySourcePosition, project);
+            if (file == null) {
+                return basePriority;
+            }
+
+            SourcePosition pos = SourcePosition.createFromLine(file, mySourcePosition.getLine());
+            PsiElement firstLineElement = pos.getElementAt();
+            if (firstLineElement == null) {
+                return basePriority;
+            }
+
+            if (isLowPriority(firstLineElement)) {
+                // Thus, we are raising the priority of other variants (i.e., lambda argument).
+                return basePriority - 50;
+            }
+
+            return basePriority;
+        }
+
+        protected boolean isLowPriority(PsiElement firstLineElement) {
+            // Dot at the beginning is the sign of a multi-line statement, lower the line breakpoint priority.
+            return firstLineElement instanceof PsiJavaToken dot && dot.getTokenType() == JavaTokenType.DOT;
         }
     }
 

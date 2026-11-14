@@ -361,10 +361,12 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
         return myValueDescriptor.getValueText();
     }
 
-    private int myChildrenRemaining = -1;
-
     @Override
-    public void computeChildren(final XCompositeNode node) {
+    public void computeChildren(XCompositeNode node) {
+        computeChildren(-1, node);
+    }
+
+    private void computeChildren(int remainingElements, XCompositeNode node) {
         scheduleCommand(myEvaluationContext, node, new SuspendContextCommandImpl(myEvaluationContext.getSuspendContext()) {
             @Override
             public Priority getPriority() {
@@ -393,8 +395,8 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
                         @Override
                         public void initChildrenArrayRenderer(ArrayRenderer renderer, int arrayLength) {
                             renderer.myStartIndex = 0;
-                            if (myChildrenRemaining >= 0) {
-                                renderer.myStartIndex = Math.max(0, arrayLength - myChildrenRemaining);
+                            if (remainingElements >= 0) {
+                                renderer.myStartIndex = Math.max(0, arrayLength - remainingElements);
                             }
                         }
 
@@ -443,8 +445,12 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
                         @Override
                         public void tooManyChildren(int remaining) {
-                            myChildrenRemaining = remaining;
-                            node.tooManyChildren(remaining);
+                            node.tooManyChildren(remaining, () -> computeChildren(remaining, node));
+                        }
+
+                        @Override
+                        public void tooManyChildren(int remaining, Runnable addNextChildren) {
+                            node.tooManyChildren(remaining, addNextChildren);
                         }
 
                         @Override
@@ -736,7 +742,6 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
 
     public void reBuild(final XValueNode node) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
-        myChildrenRemaining = -1;
         Application.get().invokeLater(() -> {
             node.clearChildren();
             computePresentation(node, XValuePlace.TREE);
