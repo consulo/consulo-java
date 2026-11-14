@@ -159,6 +159,7 @@ open module consulo.java {
     exports com.intellij.java.impl.generate.exception;
     exports com.intellij.java.impl.generate.template;
     exports com.intellij.java.impl.generate.template.toString;
+    exports com.intellij.java.impl.generate.tostring;
     exports com.intellij.java.impl.generate.velocity;
     exports com.intellij.java.impl.generate.view;
     exports com.intellij.java.impl.ide;

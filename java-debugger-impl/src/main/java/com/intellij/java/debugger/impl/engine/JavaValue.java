@@ -46,7 +46,6 @@ import consulo.execution.debug.evaluation.XDebuggerEvaluator;
 import consulo.execution.debug.evaluation.XInstanceEvaluator;
 import consulo.execution.debug.frame.*;
 import consulo.execution.debug.frame.presentation.*;
-import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.ui.XValueTextProvider;
 import consulo.internal.com.sun.jdi.ArrayReference;
 import consulo.internal.com.sun.jdi.ArrayType;
@@ -134,8 +133,7 @@ public class JavaValue extends XNamedValue implements NodeDescriptorProvider, XV
     @Override
     public void computePresentation(final XValueNode node, XValuePlace place) {
         if (isOnDemand() && !isCalculated()) {
-            node.setFullValueEvaluator(OnDemandRenderer.createFullValueEvaluator(JavaDebuggerLocalize.messageNodeEvaluate()));
-            node.setPresentation(ExecutionDebugIconGroup.nodeWatch(), new XRegularValuePresentation("", null, ""), false);
+            myValueDescriptor.applyOnDemandPresentation(node);
             return;
         }
         myEvaluationContext.getManagerThread().schedule(new SuspendContextCommandImpl(myEvaluationContext.getSuspendContext()) {

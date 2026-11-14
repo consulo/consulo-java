@@ -1967,7 +1967,9 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
 
         myConnection = environment.getRemoteConnection();
 
-        createVirtualMachine(environment);
+        if (!(myConnection instanceof DelayedRemoteConnection)) {
+            createVirtualMachine(environment);
+        }
 
         ExecutionResult executionResult;
         try {
@@ -1987,6 +1989,10 @@ public abstract class DebugProcessImpl extends UserDataHolderBase implements Deb
         catch (ExecutionException e) {
             fail();
             throw e;
+        }
+
+        if (myConnection instanceof DelayedRemoteConnection connection) {
+            connection.setAttachRunnable(() -> createVirtualMachine(environment));
         }
 
         // writing to volatile field ensures the other threads will see the right values in non-volatile fields

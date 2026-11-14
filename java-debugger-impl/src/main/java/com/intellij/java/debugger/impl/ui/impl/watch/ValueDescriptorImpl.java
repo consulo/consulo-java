@@ -30,11 +30,15 @@ import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.ValueDescriptor;
 import com.intellij.java.debugger.impl.ui.tree.render.*;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import com.intellij.java.debugger.ui.tree.NodeDescriptorNameAdjuster;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.application.ApplicationManager;
 import consulo.execution.debug.frame.XValueModifier;
+import consulo.execution.debug.frame.XValueNode;
+import consulo.execution.debug.frame.presentation.XRegularValuePresentation;
+import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.ui.ValueMarkup;
 import consulo.internal.com.sun.jdi.*;
 import consulo.language.psi.PsiElement;
@@ -75,6 +79,11 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 
     private boolean myShowIdLabel = true;
 
+    private OnDemandPresentationProvider myOnDemandPresentationProvider = node -> {
+        node.setFullValueEvaluator(OnDemandRenderer.createFullValueEvaluator(JavaDebuggerLocalize.messageNodeEvaluate()));
+        node.setPresentation(ExecutionDebugIconGroup.nodeWatch(), new XRegularValuePresentation("", null, ""), false);
+    };
+
     protected ValueDescriptorImpl(Project project, Value value) {
         myProject = project;
         myValue = value;
@@ -83,6 +92,14 @@ public abstract class ValueDescriptorImpl extends NodeDescriptorImpl implements 
 
     protected ValueDescriptorImpl(Project project) {
         myProject = project;
+    }
+
+    public void applyOnDemandPresentation(XValueNode node) {
+        myOnDemandPresentationProvider.setPresentation(node);
+    }
+
+    public void setOnDemandPresentationProvider(OnDemandPresentationProvider onDemandPresentationProvider) {
+        myOnDemandPresentationProvider = onDemandPresentationProvider;
     }
 
     private void assertValueReady() {
