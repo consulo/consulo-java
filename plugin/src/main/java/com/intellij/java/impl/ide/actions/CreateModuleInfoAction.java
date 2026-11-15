@@ -64,9 +64,12 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase impleme
     @Override
     public Coroutine<?, ?> updateAsync(AnActionEvent e) {
         return ActionSafeReadLock.run(e, presentation -> {
-            if (!e.getPresentation().isVisible()) {
+            if (!presentation.isVisible()) {
                 return;
             }
+            // the target directory comes from the IdeView, which only a project provides
+            presentation.setEnabledAndVisible(e.getData(Project.KEY) != null);
+        }, presentation -> {
             DataContext ctx = e.getDataContext();
             boolean available = Optional.ofNullable(ctx.getData(IdeView.KEY))
                 .map(view -> getTargetDirectory(ctx, view))
@@ -80,7 +83,7 @@ public class CreateModuleInfoAction extends CreateFromTemplateActionBase impleme
                     ).isEmpty()
                 )
                 .orElse(false);
-            e.getPresentation().setEnabledAndVisible(available);
+            presentation.setEnabledAndVisible(available);
         }).toCoroutine();
     }
 

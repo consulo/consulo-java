@@ -73,16 +73,17 @@ public class ShowByteCodeAction extends AnAction implements AnActionWithAsyncUpd
     @Override
     public Coroutine<?, ?> updateAsync(AnActionEvent e) {
         return ActionSafeReadLock.run(e, presentation -> {
+            presentation.setEnabled(e.getData(Project.KEY) != null);
+        }, presentation -> {
             boolean enabled = false;
-            final Project project = e.getData(Project.KEY);
-            if (project != null) {
-                Editor editor = e.getData(EditorKeys.EDITOR_SNAPSHOT);
+            final Project project = e.getRequiredData(Project.KEY);
+            Editor editor = e.getData(EditorKeys.EDITOR_SNAPSHOT);
 
-                final PsiElement psiElement = getPsiElement(e.getDataContext(), project, editor);
-                if (psiElement != null) {
-                    if (psiElement.getContainingFile() instanceof PsiClassOwner && ByteCodeViewerManager.getContainingClass(psiElement) != null) {
-                        enabled = true;
-                    }
+            final PsiElement psiElement = getPsiElement(e.getDataContext(), project, editor);
+            if (psiElement != null) {
+                if (psiElement.getContainingFile() instanceof PsiClassOwner
+                    && ByteCodeViewerManager.getContainingClass(psiElement) != null) {
+                    enabled = true;
                 }
             }
 

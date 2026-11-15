@@ -43,6 +43,9 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
 
     protected abstract ConfigurationType getConfigurationType();
 
+    /**
+     * Also called without a read lock, so it must decide from the configuration settings only, never from PSI.
+     */
     protected abstract boolean isPatternBasedConfiguration(T configuration);
 
     protected abstract Set<String> getPatterns(T configuration);
@@ -89,6 +92,10 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
     @Override
     public Coroutine<?, ?> updateAsync(AnActionEvent e) {
         return ActionSafeReadLock.run(e, (presentation) -> {
+            // the tests are only added to an existing pattern configuration - the run manager settings tell that without PSI
+            Project project = e.getData(Project.KEY);
+            presentation.setVisible(project != null && hasPatternConfigurations(project));
+        }, (presentation) -> {
             presentation.setVisible(false);
             final PsiElement[] psiElements = e.getData(PsiElement.KEY_OF_ARRAY);
             if (psiElements == null) {
@@ -101,17 +108,25 @@ public abstract class AbstractAddToTestsPatternAction<T extends JavaTestConfigur
             if (collection.isEmpty()) {
                 return;
             }
-            final Project project = e.getData(Project.KEY);
-            if (project != null) {
-                final List<T> foundConfigurations = collectPatternConfigurations(collection, project);
-                if (!foundConfigurations.isEmpty()) {
-                    presentation.setVisible(true);
-                    if (foundConfigurations.size() == 1) {
-                        presentation.setText("Add to temp suite: " + foundConfigurations.get(0).getName());
-                    }
+            final Project project = e.getRequiredData(Project.KEY);
+            final List<T> foundConfigurations = collectPatternConfigurations(collection, project);
+            if (!foundConfigurations.isEmpty()) {
+                presentation.setVisible(true);
+                if (foundConfigurations.size() == 1) {
+                    presentation.setText("Add to temp suite: " + foundConfigurations.get(0).getName());
                 }
             }
         }).toCoroutine();
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean hasPatternConfigurations(Project project) {
+        for (RunConfiguration configuration : RunManager.getInstance(project).getConfigurationsList(getConfigurationType())) {
+            if (isPatternBasedConfiguration((T) configuration)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @SuppressWarnings("unchecked")

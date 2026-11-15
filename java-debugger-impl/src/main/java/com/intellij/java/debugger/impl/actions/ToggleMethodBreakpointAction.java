@@ -60,16 +60,20 @@ public class ToggleMethodBreakpointAction extends AnAction implements AnActionWi
 
     @Override
     public Coroutine<?, ?> updateAsync(AnActionEvent e) {
-        return ActionSafeReadLock.run(e, presentation -> {
-            boolean toEnable = getPlace(e) != null;
+        return ActionSafeReadLock.run(
+            e,
+            presentation -> setAvailable(e, presentation, e.getData(Project.KEY) != null),
+            presentation -> setAvailable(e, presentation, getPlace(e) != null)
+        ).toCoroutine();
+    }
 
-            if (ActionPlaces.isPopupPlace(e.getPlace())) {
-                presentation.setVisible(toEnable);
-            }
-            else {
-                presentation.setEnabled(toEnable);
-            }
-        }).toCoroutine();
+    private static void setAvailable(AnActionEvent e, Presentation presentation, boolean toEnable) {
+        if (ActionPlaces.isPopupPlace(e.getPlace())) {
+            presentation.setVisible(toEnable);
+        }
+        else {
+            presentation.setEnabled(toEnable);
+        }
     }
 
     @Override

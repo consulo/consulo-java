@@ -104,6 +104,8 @@ public class ToggleFieldBreakpointAction extends AnAction implements AnActionWit
     @Override
     public Coroutine<?, ?> updateAsync(AnActionEvent e) {
         return ActionSafeReadLock.run(e, presentation -> {
+            presentation.setVisible(e.getData(Project.KEY) != null);
+        }, presentation -> {
             presentation.setVisible(getPlace(e, EditorKeys.EDITOR_SNAPSHOT) != null);
         }).toCoroutine();
     }

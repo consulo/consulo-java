@@ -100,12 +100,12 @@ public class CreatePackageInfoAction extends CreateFromTemplateActionBase implem
     @Override
     public Coroutine<?, ?> updateAsync(AnActionEvent e) {
         return ActionSafeReadLock.run(e, presentation -> {
-            if (!e.getPresentation().isVisible()) {
+            if (!presentation.isVisible()) {
                 return;
             }
 
-            e.getPresentation().setEnabledAndVisible(isAvailable(e.getDataContext()));
-        }).toCoroutine();
+            presentation.setEnabledAndVisible(e.getData(Project.KEY) != null);
+        }, presentation -> presentation.setEnabledAndVisible(isAvailable(e.getDataContext()))).toCoroutine();
     }
 
     @RequiredReadAction

@@ -40,6 +40,7 @@ import consulo.ui.ex.action.ActionPlaces;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
 import consulo.ui.ex.action.AnActionWithAsyncUpdate;
+import consulo.ui.ex.action.Presentation;
 import consulo.ui.ex.action.coroutine.ActionSafeReadLock;
 import consulo.undoRedo.CommandProcessor;
 import consulo.util.concurrent.coroutine.Coroutine;
@@ -58,15 +59,20 @@ public class I18nizeAction extends AnAction implements AnActionWithAsyncUpdate {
 
     @Override
     public Coroutine<?, ?> updateAsync(AnActionEvent e) {
-        return ActionSafeReadLock.run(e, presentation -> {
-            boolean active = getHandler(e) != null;
-            if (ActionPlaces.isPopupPlace(e.getPlace())) {
-                presentation.setVisible(active);
-            }
-            else {
-                presentation.setEnabled(active);
-            }
-        }).toCoroutine();
+        return ActionSafeReadLock.run(
+            e,
+            presentation -> setActive(e, presentation, getEditor(e) != null),
+            presentation -> setActive(e, presentation, getHandler(e) != null)
+        ).toCoroutine();
+    }
+
+    private static void setActive(AnActionEvent e, Presentation presentation, boolean active) {
+        if (ActionPlaces.isPopupPlace(e.getPlace())) {
+            presentation.setVisible(active);
+        }
+        else {
+            presentation.setEnabled(active);
+        }
     }
 
     @Nullable
