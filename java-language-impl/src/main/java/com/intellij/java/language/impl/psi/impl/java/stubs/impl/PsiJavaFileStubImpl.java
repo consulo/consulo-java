@@ -31,7 +31,7 @@ import consulo.language.psi.stub.StubElement;
 public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements PsiJavaFileStub {
     private final LanguageLevel myLanguageLevel;
     private final boolean myCompiled;
-    private final StubPsiFactory myFactory;
+    private StubPsiFactory myFactory;
 
     public PsiJavaFileStubImpl(boolean compiled) {
         this(null, null, compiled);
@@ -79,6 +79,11 @@ public class PsiJavaFileStubImpl extends PsiFileStubImpl<PsiJavaFile> implements
     @Override
     public StubPsiFactory getPsiFactory() {
         return myFactory;
+    }
+
+    /** Lets a stub built from a class file create other PSI, e.g. Kotlin light classes of compiled declarations. */
+    public void setPsiFactory(StubPsiFactory factory) {
+        myFactory = factory;
     }
 
     @Override
