@@ -8,6 +8,9 @@ import consulo.project.Project;
 public class JavaVariableFindUsagesOptions extends JavaFindUsagesOptions {
   public boolean isReadAccess = true;
   public boolean isWriteAccess = true;
+  public boolean isSearchForAccessors = false;
+  public boolean isSearchInOverridingMethods = false;
+  public boolean isSearchForBaseAccessors = false;
 
   public JavaVariableFindUsagesOptions(Project project) {
     super(project);

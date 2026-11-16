@@ -14,6 +14,7 @@ public class JavaMethodFindUsagesOptions extends JavaFindUsagesOptions {
   public boolean isCheckDeepInheritance = true;
   public boolean isIncludeInherited = false;
   public boolean isIncludeOverloadUsages = false;
+  public boolean isSearchForBaseMethod = true;
 
   public JavaMethodFindUsagesOptions(Project project) {
     super(project);

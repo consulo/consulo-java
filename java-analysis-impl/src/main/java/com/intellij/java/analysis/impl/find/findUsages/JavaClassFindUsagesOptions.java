@@ -9,6 +9,7 @@ import consulo.project.Project;
  * @author peter
  */
 public class JavaClassFindUsagesOptions extends JavaFindUsagesOptions {
+  public boolean isConstructorUsages = true;
   public boolean isMethodsUsages = false;
   public boolean isFieldsUsages = false;
   public boolean isDerivedClasses = false;
