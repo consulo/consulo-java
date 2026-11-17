@@ -454,13 +454,49 @@ public class HighlightClassUtil {
 
     @RequiredReadAction
     public static HighlightInfo.@Nullable Builder checkExtendsAllowed(PsiReferenceList list) {
-        if (list.getParent() instanceof PsiClass aClass && aClass.isEnum()) {
-            boolean isExtends = list.equals(aClass.getExtendsList());
-            if (isExtends) {
+        if (list.getParent() instanceof PsiClass aClass && list.equals(aClass.getExtendsList())) {
+            if (aClass.isRecord()) {
+                return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                    .range(list.getFirstChild())
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.recordExtends());
+            }
+            else if (aClass.isEnum()) {
                 return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                     .range(list)
                     .descriptionAndTooltip(JavaErrorLocalize.extendsAfterEnum());
             }
+        }
+        return null;
+    }
+
+    @RequiredReadAction
+    public static HighlightInfo.@Nullable Builder checkIllegalInstanceMemberInRecord(PsiMember member) {
+        if (!member.hasModifierProperty(PsiModifier.STATIC)) {
+            PsiClass aClass = member.getContainingClass();
+            if (aClass != null && aClass.isRecord()) {
+                LocalizeValue message = member instanceof PsiClassInitializer
+                    ? JavaCompilationErrorLocalize.recordInstanceInitializer()
+                    : JavaCompilationErrorLocalize.recordInstanceField();
+                return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                    .range(member)
+                    .descriptionAndTooltip(message);
+            }
+        }
+        return null;
+    }
+
+    @RequiredReadAction
+    public static HighlightInfo.@Nullable Builder checkExtendsProhibitedClass(
+        PsiClass superClass,
+        PsiClass psiClass,
+        PsiJavaCodeReferenceElement elementToHighlight
+    ) {
+        String qualifiedName = superClass.getQualifiedName();
+        if (CommonClassNames.JAVA_LANG_ENUM.equals(qualifiedName) && !psiClass.isEnum() ||
+            CommonClassNames.JAVA_LANG_RECORD.equals(qualifiedName) && !psiClass.isRecord()) {
+            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                .range(elementToHighlight)
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.classExtendsProhibitedClass(qualifiedName));
         }
         return null;
     }

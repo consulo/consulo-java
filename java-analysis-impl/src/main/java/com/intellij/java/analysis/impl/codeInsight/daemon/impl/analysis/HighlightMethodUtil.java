@@ -23,6 +23,7 @@ import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.codeInsight.daemon.impl.analysis.JavaGenericsUtil;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.impl.psi.impl.PsiSuperMethodImplUtil;
+import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import com.intellij.java.language.psi.*;
@@ -35,6 +36,7 @@ import consulo.annotation.access.RequiredWriteAction;
 import consulo.application.dumb.IndexNotReadyException;
 import consulo.document.util.TextRange;
 import consulo.document.util.TextRangeUtil;
+import consulo.language.ast.TokenSet;
 import consulo.java.language.impl.localize.JavaErrorLocalize;
 import consulo.java.language.localize.JavaCompilationErrorLocalize;
 import consulo.language.editor.inspection.LocalQuickFixOnPsiElementAsIntentionAdapter;
@@ -75,8 +77,32 @@ import java.util.*;
  */
 public class HighlightMethodUtil {
     private static final Logger LOG = Logger.getInstance(HighlightMethodUtil.class);
+    private static final TokenSet BRACKET_TOKENS = TokenSet.create(JavaTokenType.LBRACKET, JavaTokenType.RBRACKET);
 
     private HighlightMethodUtil() {
+    }
+
+    @RequiredReadAction
+    static @Nullable TextRange getCStyleDeclarationRange(PsiVariable variable) {
+        PsiIdentifier identifier = variable.getNameIdentifier();
+        TextRange range = null;
+        if (identifier != null) {
+            PsiElement start = null;
+            PsiElement end = null;
+            for (PsiElement element = identifier.getNextSibling(); element != null; element = element.getNextSibling()) {
+                if (PsiUtil.isJavaToken(element, BRACKET_TOKENS)) {
+                    if (start == null) {
+                        start = element;
+                    }
+                    end = element;
+                }
+            }
+            if (start != null) {
+                range = TextRange.create(start.getTextRange().getStartOffset(), end.getTextRange().getEndOffset())
+                    .shiftLeft(variable.getTextRange().getStartOffset());
+            }
+        }
+        return range;
     }
 
     public static LocalizeValue createClashMethodMessage(PsiMethod method1, PsiMethod method2, boolean showContainingClasses) {
@@ -1329,11 +1355,12 @@ public class HighlightMethodUtil {
             int start = method.getModifierList().getTextRange().getStartOffset();
             int end = method.getTextRange().getEndOffset();
 
+            boolean abstractAllowed = !aClass.isRecord() && !method.isConstructor() && !(aClass instanceof PsiAnonymousClass);
             QuickFixFactory factory = QuickFixFactory.getInstance();
             HighlightInfo.Builder hlBuilder = HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(start, end)
-                .descriptionAndTooltip(JavaErrorLocalize.missingMethodBody());
-            if (HighlightUtil.getIncompatibleModifier(PsiModifier.ABSTRACT, method.getModifierList()) == null) {
+                .descriptionAndTooltip(abstractAllowed ? JavaErrorLocalize.missingMethodBody() : JavaCompilationErrorLocalize.methodShouldHaveBody());
+            if (abstractAllowed && HighlightUtil.getIncompatibleModifier(PsiModifier.ABSTRACT, method.getModifierList()) == null) {
                 hlBuilder.registerFix(factory.createModifierFixBuilder(method).add(PsiModifier.ABSTRACT).create());
             }
             return hlBuilder.registerFix(factory.createAddMethodBodyFix(method));
@@ -1487,6 +1514,14 @@ public class HighlightMethodUtil {
     public static HighlightInfo.@Nullable Builder checkConstructorCallMustBeFirstStatement(PsiMethodCallExpression methodCall) {
         if (!RefactoringChangeUtil.isSuperOrThisMethodCall(methodCall)) {
             return null;
+        }
+        PsiMethod contextMethod =
+            PsiTreeUtil.getContextOfType(methodCall, PsiMethod.class, true, PsiClass.class, PsiLambdaExpression.class);
+        if (contextMethod != null && contextMethod.isConstructor()
+            && (JavaPsiRecordUtil.isCompactConstructor(contextMethod) || JavaPsiRecordUtil.isExplicitCanonicalConstructor(contextMethod))) {
+            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                .range(methodCall)
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.callConstructorRecordInCanonical());
         }
         if (methodCall.getParent().getParent() instanceof PsiCodeBlock codeBlock
             && codeBlock.getParent() instanceof PsiMethod method && method.isConstructor()) {

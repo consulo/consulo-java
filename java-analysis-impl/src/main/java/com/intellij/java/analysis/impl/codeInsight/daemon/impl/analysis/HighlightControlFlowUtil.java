@@ -19,6 +19,7 @@ import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.psi.controlFlow.AllVariablesControlFlowPolicy;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.psi.controlFlow.*;
+import com.intellij.java.language.impl.psi.impl.light.LightRecordCanonicalConstructor;
 import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.augment.PsiAugmentProvider;
@@ -771,6 +772,50 @@ public class HighlightControlFlowUtil {
         return null;
     }
 
+    @RequiredReadAction
+    public static HighlightInfo.@Nullable Builder checkRecordComponentInitialized(PsiRecordComponent component) {
+        PsiClass aClass = component.getContainingClass();
+        if (aClass == null) {
+            return null;
+        }
+        PsiIdentifier identifier = component.getNameIdentifier();
+        if (identifier == null) {
+            return null;
+        }
+        PsiMethod canonicalConstructor = JavaPsiRecordUtil.findCanonicalConstructor(aClass);
+        if (canonicalConstructor == null || canonicalConstructor instanceof LightRecordCanonicalConstructor) {
+            return null;
+        }
+        if (JavaPsiRecordUtil.isCompactConstructor(canonicalConstructor)) {
+            return null;
+        }
+        PsiCodeBlock body = canonicalConstructor.getBody();
+        if (body == null) {
+            return null;
+        }
+        PsiField field = JavaPsiRecordUtil.getFieldForComponent(component);
+        if (field == null) {
+            return null;
+        }
+        ControlFlow flow;
+        try {
+            flow = ControlFlowFactory.getControlFlow(
+                body,
+                LocalsOrMyInstanceFieldsControlFlowPolicy.getInstance(),
+                ControlFlowOptions.create(true, true, true)
+            );
+        }
+        catch (AnalysisCanceledException e) {
+            return null;
+        }
+        if (ControlFlowUtil.isVariableDefinitelyAssigned(field, flow)) {
+            return null;
+        }
+        return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+            .range(identifier)
+            .descriptionAndTooltip(JavaCompilationErrorLocalize.recordComponentNotInitialized(component.getName()));
+    }
+
     private static boolean canWriteToFinal(
         PsiVariable variable,
         PsiExpression expression,
@@ -793,8 +838,16 @@ public class HighlightControlFlowUtil {
             if (innerClass != null && !containingFile.getManager().areElementsEquivalent(innerClass, field.getContainingClass())) {
                 return false;
             }
+            PsiClass containingClass = field.getContainingClass();
+            if (containingClass == null) {
+                return true;
+            }
             PsiMember enclosingCtrOrInitializer = PsiUtil.findEnclosingConstructorOrInitializer(expression);
-            return enclosingCtrOrInitializer != null && isSameField(enclosingCtrOrInitializer, field, reference, containingFile);
+            return enclosingCtrOrInitializer != null
+                && !(enclosingCtrOrInitializer instanceof PsiMethod method
+                && JavaPsiRecordUtil.isCompactConstructor(method)
+                && containingClass.isRecord())
+                && isSameField(enclosingCtrOrInitializer, field, reference, containingFile);
         }
         if (variable instanceof PsiLocalVariable) {
             boolean isAccessedFromOtherClass = innerClass != null;

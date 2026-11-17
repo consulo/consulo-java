@@ -675,6 +675,24 @@ public class AnnotationsHighlightUtil {
     }
 
     @RequiredReadAction
+    public static HighlightInfo.@Nullable Builder checkSafeVarargAnnotation(PsiAnnotation annotation) {
+        if (!Comparing.strEqual(annotation.getQualifiedName(), CommonClassNames.JAVA_LANG_SAFE_VARARGS)) {
+            return null;
+        }
+        PsiAnnotationOwner owner = annotation.getOwner();
+        if (!(owner instanceof PsiModifierList list)) {
+            return null;
+        }
+        PsiElement parent = list.getParent();
+        if (parent instanceof PsiRecordComponent) {
+            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                .range(annotation)
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.safeVarargsOnRecordComponent());
+        }
+        return null;
+    }
+
+    @RequiredReadAction
     public static HighlightInfo.@Nullable Builder checkRepeatableAnnotation(PsiAnnotation annotation) {
         String qualifiedName = annotation.getQualifiedName();
         if (!CommonClassNames.JAVA_LANG_ANNOTATION_REPEATABLE.equals(qualifiedName)) {

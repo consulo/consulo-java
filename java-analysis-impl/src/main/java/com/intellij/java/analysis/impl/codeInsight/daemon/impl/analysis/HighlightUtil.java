@@ -33,6 +33,7 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.JavaResolveUtil;
 import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.InferenceSession;
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
+import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
@@ -765,6 +766,11 @@ public class HighlightUtil extends HighlightUtilBase {
                 .range(statement)
                 .descriptionAndTooltip(JavaCompilationErrorLocalize.returnOutsideMethod());
         }
+        else if (method != null && JavaPsiRecordUtil.isCompactConstructor(method)) {
+            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                .range(statement)
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.returnCompactConstructor());
+        }
         else {
             PsiType returnType = method != null ? method.getReturnType() : null/*JSP page returns void*/;
             boolean isMethodVoid = returnType == null || PsiType.VOID.equals(returnType);
@@ -1121,6 +1127,9 @@ public class HighlightUtil extends HighlightUtilBase {
                 if (aClass.isEnum()) {
                     isAllowed &= !(PsiModifier.FINAL.equals(modifier) || PsiModifier.ABSTRACT.equals(modifier));
                 }
+                else if (aClass.isRecord()) {
+                    isAllowed &= !PsiModifier.ABSTRACT.equals(modifier);
+                }
 
                 if (aClass.getContainingClass() instanceof PsiAnonymousClass) {
                     isAllowed &= !(PsiModifier.PRIVATE.equals(modifier) || PsiModifier.PROTECTED.equals(modifier));
@@ -1149,13 +1158,17 @@ public class HighlightUtil extends HighlightUtilBase {
                 isAllowed &= modifierOwnerParent instanceof PsiClass modifierClass && !modifierClass.isInterface();
             }
 
-            if (containingClass != null && containingClass.isInterface()) {
+            if (containingClass != null && (containingClass.isInterface() || containingClass.isRecord())) {
                 isAllowed &= !PsiModifier.NATIVE.equals(modifier);
             }
 
             if (containingClass != null && containingClass.isAnnotationType()) {
                 isAllowed &= !PsiModifier.STATIC.equals(modifier);
                 isAllowed &= !PsiModifier.DEFAULT.equals(modifier);
+            }
+
+            if (JavaPsiRecordUtil.getRecordComponentForAccessor(method) != null) {
+                isAllowed &= !PsiModifier.STATIC.equals(modifier);
             }
         }
         else if (modifierOwner instanceof PsiField) {
@@ -3615,7 +3628,7 @@ public class HighlightUtil extends HighlightUtilBase {
                         hlBuilder = HighlightClassUtil.checkCannotInheritFromFinal(aClass, ref);
                     }
                     if (hlBuilder == null) {
-                        // TODO highlightInfo = HighlightClassUtil.checkExtendsProhibitedClass(aClass, parentClass, ref);
+                        hlBuilder = HighlightClassUtil.checkExtendsProhibitedClass(aClass, parentClass, ref);
                     }
                     if (hlBuilder == null) {
                         hlBuilder = GenericsHighlightUtil.checkCannotInheritFromTypeParameter(aClass, ref);
@@ -3623,6 +3636,7 @@ public class HighlightUtil extends HighlightUtilBase {
                     if (hlBuilder == null) {
                         // TODO highlightInfo = HighlightClassUtil.checkExtendsSealedClass(parentClass, aClass, ref);
                     }
+                    return hlBuilder;
                 }
             }
             else if (refGrandParent instanceof PsiMethod method && method.getThrowsList() == referenceList) {

@@ -281,6 +281,9 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         if (!myHolder.hasErrorResults()) {
             add(AnnotationsHighlightUtil.checkRepeatableAnnotation(annotation));
         }
+        if (!myHolder.hasErrorResults()) {
+            add(AnnotationsHighlightUtil.checkSafeVarargAnnotation(annotation));
+        }
         if (CommonClassNames.JAVA_LANG_OVERRIDE.equals(annotation.getQualifiedName())) {
             if (annotation.getOwner() instanceof PsiModifierList modifierList && modifierList.getParent() instanceof PsiMethod method) {
                 add(GenericsHighlightUtil.checkOverrideAnnotation(method, annotation, myLanguageLevel));
@@ -496,6 +499,9 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
             add(HighlightClassUtil.checkPublicClassInRightFile(aClass));
         }
         if (!myHolder.hasErrorResults()) {
+            add(RecordChecker.checkRecordHeader(aClass));
+        }
+        if (!myHolder.hasErrorResults()) {
             myHolder.add(GenericsHighlightUtil.checkTypeParameterOverrideEquivalentMethods(aClass, myLanguageLevel));
         }
     }
@@ -512,6 +518,9 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         }
         if (!myHolder.hasErrorResults()) {
             add(HighlightClassUtil.checkThingNotAllowedInInterface(initializer));
+        }
+        if (!myHolder.hasErrorResults()) {
+            add(HighlightClassUtil.checkIllegalInstanceMemberInRecord(initializer));
         }
     }
 
@@ -727,7 +736,25 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     public void visitField(PsiField field) {
         super.visitField(field);
         if (!myHolder.hasErrorResults()) {
+            add(HighlightClassUtil.checkIllegalInstanceMemberInRecord(field));
+        }
+        if (!myHolder.hasErrorResults()) {
             myHolder.add(HighlightControlFlowUtil.checkFinalFieldInitialized(field));
+        }
+    }
+
+    @Override
+    @RequiredReadAction
+    public void visitRecordComponent(PsiRecordComponent recordComponent) {
+        super.visitRecordComponent(recordComponent);
+        if (!myHolder.hasErrorResults()) {
+            add(RecordChecker.checkRecordComponentWellFormed(recordComponent));
+        }
+        if (!myHolder.hasErrorResults()) {
+            add(RecordChecker.checkRecordAccessorReturnType(recordComponent));
+        }
+        if (!myHolder.hasErrorResults()) {
+            add(HighlightControlFlowUtil.checkRecordComponentInitialized(recordComponent));
         }
     }
 
@@ -1011,6 +1038,12 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
         PsiClass aClass = method.getContainingClass();
         if (!myHolder.hasErrorResults() && method.isConstructor()) {
             add(HighlightClassUtil.checkThingNotAllowedInInterface(method));
+        }
+        if (!myHolder.hasErrorResults()) {
+            add(RecordChecker.checkRecordAccessorDeclaration(method));
+        }
+        if (!myHolder.hasErrorResults()) {
+            add(RecordChecker.checkRecordConstructorDeclaration(method));
         }
         if (!myHolder.hasErrorResults() && method.hasModifierProperty(PsiModifier.DEFAULT)) {
             add(checkFeature(method, JavaFeature.EXTENSION_METHODS));

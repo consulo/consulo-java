@@ -72,7 +72,7 @@ public class OverrideImplementExploreUtil {
 
       Map<MethodSignature, PsiMethod> map = hisClass.isInterface() || method.hasModifierProperty(PsiModifier.ABSTRACT) ? abstracts : concretes;
       fillMap(signature, method, map);
-      if (isDefaultMethod(aClass, method)) {
+      if (shouldAppearInOverrideList(aClass, method)) {
         fillMap(signature, method, concretes);
       }
     }
@@ -103,6 +103,17 @@ public class OverrideImplementExploreUtil {
     return method.hasModifierProperty(PsiModifier.DEFAULT) && PsiUtil.getLanguageLevel(aClass).isAtLeast(LanguageLevel.JDK_1_8);
   }
 
+  private static boolean shouldAppearInOverrideList(PsiClass aClass, PsiMethod abstractOne) {
+    return isDefaultMethod(aClass, abstractOne) ||
+           // abstract methods from java.lang.Record (equals/hashCode/toString) are implicitly implemented in subclasses
+           // so it could be reasonable to expect them in 'override' method dialog
+           belongsToRecord(abstractOne);
+  }
+
+  public static boolean belongsToRecord(PsiMethod method) {
+    return CommonClassNames.JAVA_LANG_RECORD.equals(Objects.requireNonNull(method.getContainingClass()).getQualifiedName());
+  }
+
   private static void fillMap(HierarchicalMethodSignature signature, PsiMethod method, Map<MethodSignature, PsiMethod> map) {
     final PsiMethod other = map.get(signature);
     if (other == null || preferLeftForImplement(method, other)) {
@@ -120,7 +131,7 @@ public class OverrideImplementExploreUtil {
       PsiMethod abstractOne = entry.getValue();
       PsiMethod concrete = concretes.get(signature);
       if (concrete == null || PsiUtil.getAccessLevel(concrete.getModifierList()) < PsiUtil.getAccessLevel(abstractOne.getModifierList()) || !abstractOne.getContainingClass().isInterface() &&
-          abstractOne.getContainingClass().isInheritor(concrete.getContainingClass(), true) || isDefaultMethod(aClass, abstractOne)) {
+          abstractOne.getContainingClass().isInheritor(concrete.getContainingClass(), true) || shouldAppearInOverrideList(aClass, abstractOne)) {
         if (finals.get(signature) == null) {
           PsiSubstitutor subst = correctSubstitutor(abstractOne, signature.getSubstitutor());
           CandidateInfo info = new CandidateInfo(abstractOne, subst);
