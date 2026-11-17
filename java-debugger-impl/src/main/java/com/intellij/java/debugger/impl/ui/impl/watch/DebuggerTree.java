@@ -30,10 +30,8 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.jdi.LocalVariableProxyImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
-import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
 import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
 import com.intellij.java.debugger.impl.settings.NodeRendererSettings;
-import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.impl.DebuggerTreeBase;
 import com.intellij.java.debugger.impl.ui.impl.tree.TreeBuilder;
@@ -42,7 +40,6 @@ import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
 import com.intellij.java.debugger.impl.ui.tree.render.ArrayRenderer;
 import com.intellij.java.debugger.impl.ui.tree.render.ChildrenBuilder;
 import com.intellij.java.debugger.impl.ui.tree.render.ClassRenderer;
-import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.debugger.ui.tree.NodeDescriptor;
 import consulo.application.ApplicationManager;
@@ -72,7 +69,6 @@ import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
@@ -190,12 +186,6 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
         }
         else if (node.getDescriptor() instanceof StaticDescriptorImpl) {
             return new BuildStaticNodeCommand(node);
-        }
-        else if (node.getDescriptor() instanceof ThreadDescriptorImpl) {
-            return new BuildThreadCommand(node);
-        }
-        else if (node.getDescriptor() instanceof ThreadGroupDescriptorImpl) {
-            return new BuildThreadGroupCommand(node);
         }
         LOG.assertTrue(false);
         return null;
@@ -660,114 +650,6 @@ public abstract class DebuggerTree extends DebuggerTreeBase implements DataProvi
             }
 
             updateUI(true);
-        }
-    }
-
-    private class BuildThreadCommand extends BuildNodeCommand {
-        public BuildThreadCommand(DebuggerTreeNodeImpl threadNode) {
-            super(threadNode, ((ThreadDescriptorImpl) threadNode.getDescriptor()).getThreadReference());
-        }
-
-        @Override
-        public void threadAction() {
-            ThreadDescriptorImpl threadDescriptor = ((ThreadDescriptorImpl) myNode.getDescriptor());
-            ThreadReferenceProxyImpl threadProxy = threadDescriptor.getThreadReference();
-            if (!threadProxy.isCollected() && getDebuggerContext().getDebugProcess().getSuspendManager().isSuspended(threadProxy)) {
-                int status = threadProxy.status();
-                if (!(status == ThreadReference.THREAD_STATUS_UNKNOWN) &&
-                    !(status == ThreadReference.THREAD_STATUS_NOT_STARTED) &&
-                    !(status == ThreadReference.THREAD_STATUS_ZOMBIE)) {
-                    try {
-                        for (StackFrameProxyImpl stackFrame : threadProxy.frames()) {
-                            //Method method = stackFrame.location().method();
-                            //ToDo :check whether is synthetic if (shouldDisplay(method)) {
-                            myChildren.add(myNodeManager.createNode(myNodeManager.getStackFrameDescriptor(threadDescriptor, stackFrame),
-                                getDebuggerContext().createEvaluationContext()));
-                        }
-                    }
-                    catch (EvaluateException e) {
-                        myChildren.clear();
-                        myChildren.add(myNodeManager.createMessageNode(LocalizeValue.of(e.getMessage())));
-                        LOG.debug(e);
-                        //LOG.assertTrue(false);
-                        // if we pause during evaluation of this method the exception is thrown
-                        //  private static void longMethod(){
-                        //    try {
-                        //      Thread.sleep(100000);
-                        //    } catch (InterruptedException e) {
-                        //      e.printStackTrace();
-                        //    }
-                        //  }
-                    }
-                }
-            }
-            updateUI(true);
-        }
-    }
-
-    private class BuildThreadGroupCommand extends DebuggerCommandImpl {
-        private final DebuggerTreeNodeImpl myNode;
-        protected final List<DebuggerTreeNodeImpl> myChildren = new LinkedList<>();
-
-        public BuildThreadGroupCommand(DebuggerTreeNodeImpl node) {
-            myNode = node;
-        }
-
-        @Override
-        protected void action() throws Exception {
-            ThreadGroupDescriptorImpl groupDescriptor = (ThreadGroupDescriptorImpl) myNode.getDescriptor();
-            ThreadGroupReferenceProxyImpl threadGroup = groupDescriptor.getThreadGroupReference();
-
-            List<ThreadReferenceProxyImpl> threads = new ArrayList<>(threadGroup.threads());
-            threads.sort(ThreadReferenceProxyImpl.ourComparator);
-
-            final DebuggerContextImpl debuggerContext = getDebuggerContext();
-            final SuspendContextImpl suspendContext = debuggerContext.getSuspendContext();
-            final EvaluationContextImpl evaluationContext = suspendContext != null && !suspendContext.isResumed() ? debuggerContext.createEvaluationContext() : null;
-
-            boolean showCurrent = ThreadsViewSettings.getInstance().SHOW_CURRENT_THREAD;
-
-            for (final ThreadGroupReferenceProxyImpl group : threadGroup.threadGroups()) {
-                if (group != null) {
-                    DebuggerTreeNodeImpl threadNode = myNodeManager.createNode(myNodeManager.getThreadGroupDescriptor(groupDescriptor, group), evaluationContext);
-
-                    if (showCurrent && ((ThreadGroupDescriptorImpl) threadNode.getDescriptor()).isCurrent()) {
-                        myChildren.add(0, threadNode);
-                    }
-                    else {
-                        myChildren.add(threadNode);
-                    }
-                }
-            }
-
-            ArrayList<DebuggerTreeNodeImpl> threadNodes = new ArrayList<>();
-
-            for (ThreadReferenceProxyImpl thread : threads) {
-                if (thread != null) {
-                    final DebuggerTreeNodeImpl threadNode = myNodeManager.createNode(myNodeManager.getThreadDescriptor(groupDescriptor, thread), evaluationContext);
-                    if (showCurrent && ((ThreadDescriptorImpl) threadNode.getDescriptor()).isCurrent()) {
-                        threadNodes.add(0, threadNode);
-                    }
-                    else {
-                        threadNodes.add(threadNode);
-                    }
-                }
-            }
-
-            myChildren.addAll(threadNodes);
-
-            updateUI(true);
-        }
-
-        protected void updateUI(final boolean scrollToVisible) {
-            DebuggerInvocationUtil.swingInvokeLater(getProject(), () ->
-            {
-                myNode.removeAllChildren();
-                for (DebuggerTreeNodeImpl debuggerTreeNode : myChildren) {
-                    myNode.add(debuggerTreeNode);
-                }
-                myNode.childrenChanged(scrollToVisible);
-            });
         }
     }
 

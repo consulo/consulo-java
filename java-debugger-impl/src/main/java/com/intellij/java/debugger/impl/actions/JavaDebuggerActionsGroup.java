@@ -34,15 +34,11 @@ import consulo.ui.ex.action.DefaultActionGroup;
     children = {
         @ActionRef(type = CustomizeContextViewAction.class),
         @ActionRef(type = CustomizeThreadsViewAction.class),
-        @ActionRef(type = EditFrameSourceAction.class),
         @ActionRef(type = EditSourceAction.class),
         @ActionRef(type = JumpToObjectAction.class),
         @ActionRef(id = DebuggerActions.POP_FRAME),
         @ActionRef(type = ViewAsGroup.class),
         @ActionRef(type = AdjustArrayRangeAction.class),
-        @ActionRef(type = ResumeThreadAction.class),
-        @ActionRef(type = FreezeThreadAction.class),
-        @ActionRef(type = InterruptThreadAction.class),
         @ActionRef(type = CreateRendererAction.class),
         @ActionRef(type = AutoRendererAction.class),
         @ActionRef(type = ForceOnDemandRenderersAction.class)

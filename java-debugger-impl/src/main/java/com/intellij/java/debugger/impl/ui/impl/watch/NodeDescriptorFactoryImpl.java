@@ -177,14 +177,6 @@ public class NodeDescriptorFactoryImpl implements NodeDescriptorFactory {
     return getDescriptor(parent, new ThrownExceptionValueData(exceptionObject));
   }
 
-  public ThreadDescriptorImpl getThreadDescriptor(NodeDescriptorImpl parent, ThreadReferenceProxyImpl thread) {
-    return getDescriptor(parent, new ThreadData(thread));
-  }
-
-  public ThreadGroupDescriptorImpl getThreadGroupDescriptor(NodeDescriptorImpl parent, ThreadGroupReferenceProxyImpl group) {
-    return getDescriptor(parent, new ThreadGroupData(group));
-  }
-
   @Override
   public UserExpressionDescriptor getUserExpressionDescriptor(NodeDescriptor parent, final DescriptorData<UserExpressionDescriptor> data) {
     return getDescriptor(parent, data);

@@ -19,6 +19,7 @@ import com.intellij.java.debugger.engine.evaluation.EvaluateException;
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerUtilsAsync;
 import com.intellij.java.debugger.impl.DebuggerUtilsEx;
+import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.DebuggerContextCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
@@ -29,21 +30,26 @@ import com.intellij.java.debugger.impl.ui.impl.watch.MethodsTracker;
 import com.intellij.java.debugger.impl.ui.impl.watch.StackFrameDescriptorImpl;
 import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.application.util.registry.Registry;
+import consulo.execution.debug.frame.HasThreadInterrupt;
+import consulo.execution.debug.frame.HasThreadSuspend;
 import consulo.execution.debug.frame.XExecutionStack;
 import consulo.execution.debug.frame.XStackFrame;
 import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.setting.XDebuggerSettingsManager;
+import consulo.execution.debug.ui.XDebuggerUIConstants;
 import consulo.internal.com.sun.jdi.Location;
 import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.tools.jdi.ThreadGroupReferenceImpl;
 import consulo.internal.com.sun.tools.jdi.ThreadReferenceImpl;
 import consulo.logging.Logger;
+import consulo.project.ui.notification.NotificationService;
 import consulo.ui.ex.ColoredTextContainer;
 import consulo.ui.ex.SimpleTextAttributes;
 import consulo.ui.image.Image;
 import consulo.util.collection.ContainerUtil;
 import consulo.util.collection.Lists;
+import consulo.util.lang.Pair;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
@@ -55,36 +61,42 @@ import java.util.concurrent.CompletionException;
 /**
  * @author egor
  */
-public class JavaExecutionStack extends XExecutionStack {
+public class JavaExecutionStack extends XExecutionStack implements HasThreadSuspend, HasThreadInterrupt {
     private static final Logger LOG = Logger.getInstance(JavaExecutionStack.class);
 
     private final ThreadReferenceProxyImpl myThreadProxy;
     private final DebugProcessImpl myDebugProcess;
     private final CompletableFuture<List<XStackFrame>> myTopFrames = new CompletableFuture<>();
     private final MethodsTracker myTracker = new MethodsTracker();
+    // the state when the stack was created - the actions of the threads ask for it on the UI thread
+    private final boolean mySuspended;
 
     public JavaExecutionStack(ThreadReferenceProxyImpl threadProxy, DebugProcessImpl debugProcess, boolean current) {
         super(calcRepresentation(threadProxy), calcIcon(threadProxy, current));
         myThreadProxy = threadProxy;
         myDebugProcess = debugProcess;
+        mySuspended = threadProxy.isSuspended();
     }
 
     private JavaExecutionStack(String displayName,
                                @Nullable Image icon,
                                ThreadReferenceProxyImpl threadProxy,
-                               DebugProcessImpl debugProcess) {
+                               DebugProcessImpl debugProcess,
+                               boolean suspended) {
         super(displayName, icon);
         myThreadProxy = threadProxy;
         myDebugProcess = debugProcess;
+        mySuspended = suspended;
     }
 
     public static CompletableFuture<@Nullable JavaExecutionStack> create(ThreadReferenceProxyImpl threadProxy,
                                                                          DebugProcessImpl debugProcess,
                                                                          boolean current) {
         return calcRepresentationAsync(threadProxy)
-            .thenCombine(calcIconAsync(threadProxy, current),
-                (text, icon) -> {
-                    return new JavaExecutionStack(text, icon, threadProxy, debugProcess);
+            .thenCombine(calcIconAsync(threadProxy, current), Pair::create)
+            .thenCombine(isSuspendedAsync(threadProxy),
+                (textAndIcon, suspended) -> {
+                    return new JavaExecutionStack(textAndIcon.getFirst(), textAndIcon.getSecond(), threadProxy, debugProcess, suspended);
                 })
             .handle((stack, throwable) -> {
                 if (throwable instanceof ObjectCollectedException) {
@@ -142,8 +154,62 @@ public class JavaExecutionStack extends XExecutionStack {
         });
     }
 
+    private static CompletableFuture<Boolean> isSuspendedAsync(ThreadReferenceProxyImpl threadProxy) {
+        ThreadReference ref = threadProxy.getThreadReference();
+        if (!DebuggerUtilsAsync.isAsyncEnabled() || !(ref instanceof ThreadReferenceImpl threadReference)) {
+            return CompletableFuture.completedFuture(threadProxy.isSuspended());
+        }
+        return threadReference.isSuspendedAsync();
+    }
+
     public ThreadReferenceProxyImpl getThreadProxy() {
         return myThreadProxy;
+    }
+
+    @Override
+    public boolean isSuspended() {
+        return mySuspended;
+    }
+
+    @Override
+    public void suspendThread() {
+        myDebugProcess.getManagerThread().schedule(new DebuggerCommandImpl() {
+            @Override
+            protected void action() throws Exception {
+                myDebugProcess.createFreezeThreadCommand(myThreadProxy).run();
+            }
+        });
+    }
+
+    @Override
+    public void resumeThread() {
+        myDebugProcess.getManagerThread().schedule(new DebuggerCommandImpl() {
+            @Override
+            protected void action() throws Exception {
+                SuspendContextImpl suspendingContext = SuspendManagerUtil.getSuspendingContext(myDebugProcess.getSuspendManager(), myThreadProxy);
+                if (suspendingContext != null) {
+                    myDebugProcess.createResumeThreadCommand(suspendingContext, myThreadProxy).run();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void interruptThread() {
+        myDebugProcess.getManagerThread().schedule(new DebuggerCommandImpl() {
+            @Override
+            protected void action() throws Exception {
+                try {
+                    myThreadProxy.getThreadReference().interrupt();
+                }
+                catch (UnsupportedOperationException e) {
+                    NotificationService.getInstance()
+                        .newInfo(XDebuggerUIConstants.NOTIFICATION_GROUP)
+                        .content(JavaDebuggerLocalize.threadOperationInterruptIsNotSupportedByVm())
+                        .notify(myDebugProcess.getProject());
+                }
+            }
+        });
     }
 
     public final void initTopFrame() {

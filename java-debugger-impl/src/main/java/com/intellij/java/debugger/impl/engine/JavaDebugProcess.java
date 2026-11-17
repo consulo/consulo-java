@@ -22,10 +22,13 @@ import com.intellij.java.debugger.impl.actions.JvmSmartStepIntoActionHandler;
 import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
+import com.intellij.java.debugger.impl.jdi.ThreadGroupReferenceProxyImpl;
+import com.intellij.java.debugger.impl.jdi.ThreadReferenceProxyImpl;
+import com.intellij.java.debugger.impl.memory.JavaMemoryViewHandler;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
+import com.intellij.java.debugger.impl.settings.ThreadsViewSettings;
 import com.intellij.java.debugger.impl.ui.AlternativeSourceNotificationProvider;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
-import com.intellij.java.debugger.impl.ui.impl.ThreadsPanel;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import com.intellij.java.debugger.impl.ui.impl.watch.MessageDescriptor;
 import com.intellij.java.debugger.impl.ui.impl.watch.NodeManagerImpl;
@@ -36,17 +39,24 @@ import consulo.execution.debug.breakpoint.XBreakpoint;
 import consulo.execution.debug.breakpoint.XBreakpointHandler;
 import consulo.execution.debug.evaluation.XDebuggerEditorsProvider;
 import consulo.execution.debug.event.XDebugSessionListener;
+import consulo.execution.debug.frame.HasDropFrame;
+import consulo.execution.debug.frame.HasRunningExecutionStacks;
 import consulo.execution.debug.frame.XDropFrameHandler;
+import consulo.execution.debug.frame.XExecutionStack;
 import consulo.execution.debug.frame.XStackFrame;
+import consulo.execution.debug.frame.XSuspendContext;
 import consulo.execution.debug.frame.XValueMarkerProvider;
-import consulo.execution.debug.icon.ExecutionDebugIconGroup;
 import consulo.execution.debug.localize.XDebuggerLocalize;
+import consulo.execution.debug.memory.HasMemoryView;
+import consulo.execution.debug.memory.XMemoryViewHandler;
+import consulo.execution.debug.step.HasForceStepInto;
+import consulo.execution.debug.step.HasRunToPosition;
+import consulo.execution.debug.step.HasSmartStepInto;
 import consulo.execution.debug.step.XSmartStepIntoHandler;
 import consulo.execution.debug.ui.DebuggerContentInfo;
 import consulo.execution.debug.ui.XDebugTabLayouter;
 import consulo.execution.ui.ExecutionConsole;
 import consulo.execution.ui.ExecutionConsoleEx;
-import consulo.execution.ui.layout.PlaceInGrid;
 import consulo.execution.ui.layout.RunnerLayoutUi;
 import consulo.fileEditor.EditorNotifications;
 import consulo.internal.com.sun.jdi.event.Event;
@@ -56,8 +66,7 @@ import consulo.project.Project;
 import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.action.*;
 import consulo.ui.ex.content.Content;
-import consulo.ui.ex.content.event.ContentManagerAdapter;
-import consulo.ui.ex.content.event.ContentManagerEvent;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.virtualFileSystem.VirtualFile;
@@ -65,17 +74,20 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @author egor
  */
-public class JavaDebugProcess extends XDebugProcess {
+public class JavaDebugProcess extends XDebugProcess
+    implements HasForceStepInto, HasRunToPosition, HasSmartStepInto, HasDropFrame, HasRunningExecutionStacks, HasMemoryView {
     private final DebuggerSession myJavaSession;
     private final JavaDebuggerEditorsProvider myEditorsProvider;
     private final XBreakpointHandler<?>[] myBreakpointHandlers;
     private final JvmSmartStepIntoActionHandler mySmartStepIntoActionHandler;
     private final JvmDropFrameActionHandler myDropFrameActionActionHandler;
     private final NodeManagerImpl myNodeManager;
+    private final JavaMemoryViewHandler myMemoryViewHandler;
 
     public static JavaDebugProcess create(XDebugSession session, DebuggerSession javaSession) {
         JavaDebugProcess res = new JavaDebugProcess(session, javaSession);
@@ -149,6 +161,7 @@ public class JavaDebugProcess extends XDebugProcess {
                 return new DebuggerTreeNodeImpl(null, new MessageDescriptor(message));
             }
         };
+        myMemoryViewHandler = new JavaMemoryViewHandler(javaSession.getProcess(), myNodeManager);
         session.addSessionListener(new XDebugSessionListener() {
             @Override
             public void sessionPaused() {
@@ -228,6 +241,71 @@ public class JavaDebugProcess extends XDebugProcess {
     }
 
     @Override
+    public XMemoryViewHandler getMemoryViewHandler() {
+        return myMemoryViewHandler;
+    }
+
+    @Override
+    public void computeRunningExecutionStacks(XSuspendContext.XExecutionStackGroupContainer container, @Nullable XSuspendContext suspendContext) {
+        boolean showThreadGroups = ThreadsViewSettings.getInstance().SHOW_THREAD_GROUPS;
+        if (!showThreadGroups && suspendContext != null) {
+            suspendContext.computeExecutionStacks(container);
+            return;
+        }
+        DebugProcessImpl debugProcess = myJavaSession.getProcess();
+        debugProcess.getManagerThread().schedule(new DebuggerCommandImpl() {
+            @Override
+            protected void action() {
+                try {
+                    if (showThreadGroups) {
+                        addExecutionStackGroups(container, debugProcess);
+                    }
+                    else {
+                        addRunningExecutionStacks(container, debugProcess);
+                    }
+                }
+                catch (Throwable e) {
+                    container.errorOccurred(LocalizeValue.join(
+                        XDebuggerLocalize.debuggerThreadsNotAvailable(),
+                        LocalizeValue.of(": " + e.getMessage())
+                    ));
+                }
+            }
+
+            @Override
+            protected void commandCancelled() {
+                container.errorOccurred(XDebuggerLocalize.debuggerThreadsNotAvailable());
+            }
+        });
+    }
+
+    private static void addExecutionStackGroups(XSuspendContext.XExecutionStackGroupContainer container, DebugProcessImpl debugProcess) {
+        ThreadReferenceProxyImpl currentThread = debugProcess.getDebuggerContext().getThreadProxy();
+        List<CompletableFuture<JavaThreadGroup>> groups = new ArrayList<>();
+        for (ThreadGroupReferenceProxyImpl group : debugProcess.getVirtualMachineProxy().topLevelThreadGroups()) {
+            groups.add(JavaThreadGroup.build(group, debugProcess, currentThread));
+        }
+        CompletableFuture.allOf(groups.toArray(CompletableFuture[]::new)).whenComplete((unused, throwable) -> {
+            if (throwable != null) {
+                DebuggerUtilsAsync.logError(throwable);
+                return;
+            }
+            if (container.isObsolete()) {
+                return;
+            }
+            container.addExecutionStackGroups(ContainerUtil.map(groups, CompletableFuture::join), true);
+        });
+    }
+
+    private static void addRunningExecutionStacks(XSuspendContext.XExecutionStackGroupContainer container, DebugProcessImpl debugProcess) {
+        List<XExecutionStack> executionStacks = new ArrayList<>();
+        for (ThreadReferenceProxyImpl thread : debugProcess.getVirtualMachineProxy().allThreads()) {
+            executionStacks.add(new JavaExecutionStack(thread, debugProcess, false));
+        }
+        container.addExecutionStack(executionStacks, true);
+    }
+
+    @Override
     public XDebuggerEditorsProvider getEditorsProvider() {
         return myEditorsProvider;
     }
@@ -246,7 +324,7 @@ public class JavaDebugProcess extends XDebugProcess {
 
     @Override
     @RequiredUIAccess
-    public void startForceStepInto() {
+    public void startForceStepInto(@Nullable XSuspendContext context) {
         myJavaSession.stepInto(true, null);
     }
 
@@ -275,7 +353,7 @@ public class JavaDebugProcess extends XDebugProcess {
 
     @Override
     @RequiredUIAccess
-    public void runToPosition(XSourcePosition position) {
+    public void runToPosition(XSourcePosition position, @Nullable XSuspendContext context) {
         myJavaSession.runToCursor(position, false);
     }
 
@@ -309,7 +387,6 @@ public class JavaDebugProcess extends XDebugProcess {
         return new XDebugTabLayouter() {
             @Override
             public void registerAdditionalContent(RunnerLayoutUi ui) {
-                registerThreadsPanel(ui);
                 //registerMemoryViewPanel(ui);
             }
 
@@ -324,35 +401,6 @@ public class JavaDebugProcess extends XDebugProcess {
                     content = super.registerConsoleContent(ui, console);
                 }
                 return content;
-            }
-
-            private void registerThreadsPanel(RunnerLayoutUi ui) {
-                ThreadsPanel panel = new ThreadsPanel(myJavaSession.getProject(), getDebuggerStateManager());
-                Content threadsContent = ui.createContent(
-                    DebuggerContentInfo.THREADS_CONTENT,
-                    panel,
-                    XDebuggerLocalize.debuggerSessionTabThreadsTitle().get(),
-                    ExecutionDebugIconGroup.threadThreads(),
-                    null
-                );
-                threadsContent.setCloseable(false);
-                ui.addContent(threadsContent, 0, PlaceInGrid.left, true);
-                ui.addListener(new ContentManagerAdapter() {
-                    @Override
-                    public void selectionChanged(ContentManagerEvent event) {
-                        if (event.getContent() == threadsContent) {
-                            if (threadsContent.isSelected()) {
-                                panel.setUpdateEnabled(true);
-                                if (panel.isRefreshNeeded()) {
-                                    panel.rebuildIfVisible(DebuggerSession.Event.CONTEXT);
-                                }
-                            }
-                            else {
-                                panel.setUpdateEnabled(false);
-                            }
-                        }
-                    }
-                }, threadsContent);
             }
 
 //            private void registerMemoryViewPanel(RunnerLayoutUi ui) {
@@ -504,13 +552,11 @@ public class JavaDebugProcess extends XDebugProcess {
         return new JavaValueMarker();
     }
 
-    @Nullable
     @Override
     public XSmartStepIntoHandler<?> getSmartStepIntoHandler() {
         return mySmartStepIntoActionHandler;
     }
 
-    @Nullable
     @Override
     public XDropFrameHandler getDropFrameHandler() {
         return myDropFrameActionActionHandler;

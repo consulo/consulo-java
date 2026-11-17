@@ -1037,6 +1037,8 @@ text.base.renderer.configurable.no.class.patterns:
     text: No class patterns configured
 text.user.renderers.configurable.no.renderers:
     text: No renderers
+thread.operation.interrupt.is.not.supported.by.vm:
+    text: Thread operation 'interrupt' is not supported by VM
 threads.export.attribute.error.incompatible.state:
     text: 'Incompatible thread state: thread not suspended'
 threads.export.attribute.label.blocks.thread:

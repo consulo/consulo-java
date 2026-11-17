@@ -19,7 +19,6 @@ import com.intellij.java.debugger.SourcePosition;
 import com.intellij.java.debugger.impl.engine.SuspendContextImpl;
 import com.intellij.java.debugger.impl.engine.SuspendManagerUtil;
 import com.intellij.java.debugger.impl.jdi.StackFrameProxyImpl;
-import com.intellij.java.debugger.impl.ui.impl.watch.ThreadDescriptorImpl;
 import com.intellij.java.language.psi.PsiMethod;
 import consulo.codeEditor.Editor;
 import consulo.document.util.TextRange;
@@ -55,21 +54,6 @@ public class DebuggerContextUtil {
             newContext,
             session != null ? session.getState() : DebuggerSession.State.DISPOSED,
             DebuggerSession.Event.REFRESH
-        );
-    }
-
-    @RequiredUIAccess
-    public static void setThread(DebuggerStateManager contextManager, ThreadDescriptorImpl item) {
-        UIAccess.assertIsUIThread();
-
-        DebuggerSession session = contextManager.getContext().getDebuggerSession();
-        DebuggerContextImpl newContext =
-            DebuggerContextImpl.createDebuggerContext(session, item.getSuspendContext(), item.getThreadReference(), null);
-
-        contextManager.setState(
-            newContext,
-            session != null ? session.getState() : DebuggerSession.State.DISPOSED,
-            DebuggerSession.Event.CONTEXT
         );
     }
 

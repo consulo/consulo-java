@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class JvmSmartStepIntoActionHandler extends XSmartStepIntoHandler<JvmSmartStepIntoActionHandler.JvmSmartStepIntoVariant> {
+public class JvmSmartStepIntoActionHandler implements XSmartStepIntoHandler<JvmSmartStepIntoActionHandler.JvmSmartStepIntoVariant> {
     private final DebuggerSession mySession;
 
     public JvmSmartStepIntoActionHandler(DebuggerSession session) {

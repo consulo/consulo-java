@@ -17,29 +17,21 @@ package com.intellij.java.debugger.impl.actions;
 
 import com.intellij.java.debugger.impl.DebuggerContextImpl;
 import com.intellij.java.debugger.impl.DebuggerManagerEx;
-import com.intellij.java.debugger.impl.DebuggerStateManager;
 import com.intellij.java.debugger.impl.engine.JavaDebugProcess;
-import com.intellij.java.debugger.impl.ui.impl.DebuggerTreePanel;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTree;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeImpl;
 import consulo.dataContext.DataContext;
-import consulo.dataContext.DataManager;
-import consulo.disposer.Disposable;
 import consulo.execution.debug.XDebugSession;
 import consulo.execution.debug.frame.XValueNode;
 import consulo.execution.debug.ui.XValueTree;
 import consulo.localize.LocalizeValue;
 import consulo.project.Project;
-import consulo.ui.ex.action.ActionManager;
 import consulo.ui.ex.action.AnAction;
 import consulo.ui.ex.action.AnActionEvent;
-import consulo.ui.ex.action.CommonShortcuts;
-import consulo.ui.ex.awt.event.DoubleClickListener;
 import org.jspecify.annotations.Nullable;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,11 +50,6 @@ public abstract class DebuggerAction extends AnAction {
     @Nullable
     public static DebuggerTree getTree(DataContext dataContext) {
         return dataContext.getData(DebuggerTree.DATA_KEY);
-    }
-
-    @Nullable
-    public static DebuggerTreePanel getPanel(DataContext dataContext) {
-        return dataContext.getData(DebuggerTreePanel.DATA_KEY);
     }
 
     @Nullable
@@ -104,43 +91,8 @@ public abstract class DebuggerAction extends AnAction {
     }
 
     public static DebuggerContextImpl getDebuggerContext(DataContext dataContext) {
-        DebuggerTreePanel panel = getPanel(dataContext);
-        if (panel != null) {
-            return panel.getContext();
-        }
-        else {
-            Project project = dataContext.getData(Project.KEY);
-            return project != null ? (DebuggerManagerEx.getInstanceEx(project)).getContext() : DebuggerContextImpl.EMPTY_CONTEXT;
-        }
-    }
-
-    @Nullable
-    public static DebuggerStateManager getContextManager(DataContext dataContext) {
-        DebuggerTreePanel panel = getPanel(dataContext);
-        return panel == null ? null : panel.getContextManager();
-    }
-
-    public static Disposable installEditAction(JTree tree, String actionName) {
-        DoubleClickListener listener = new DoubleClickListener() {
-            @Override
-            protected boolean onDoubleClick(MouseEvent e) {
-                if (tree.getPathForLocation(e.getX(), e.getY()) == null) {
-                    return false;
-                }
-                DataContext dataContext = DataManager.getInstance().getDataContext(tree);
-                GotoFrameSourceAction.doAction(dataContext);
-                return true;
-            }
-        };
-        listener.installOn(tree);
-
-        AnAction action = ActionManager.getInstance().getAction(actionName);
-        action.registerCustomShortcutSet(CommonShortcuts.getEditSource(), tree);
-
-        return () -> {
-            listener.uninstall(tree);
-            action.unregisterCustomShortcutSet(tree);
-        };
+        Project project = dataContext.getData(Project.KEY);
+        return project != null ? DebuggerManagerEx.getInstanceEx(project).getContext() : DebuggerContextImpl.EMPTY_CONTEXT;
     }
 
     public static boolean isFirstStart(AnActionEvent event) {

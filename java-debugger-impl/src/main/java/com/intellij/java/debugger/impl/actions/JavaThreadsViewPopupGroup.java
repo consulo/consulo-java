@@ -16,35 +16,32 @@
 package com.intellij.java.debugger.impl.actions;
 
 import consulo.annotation.component.ActionImpl;
+import consulo.annotation.component.ActionParentRef;
 import consulo.annotation.component.ActionRef;
 import consulo.application.dumb.DumbAware;
+import consulo.execution.debug.XDebuggerActions;
 import consulo.localize.LocalizeValue;
 import consulo.ui.ex.action.AnSeparator;
 import consulo.ui.ex.action.DefaultActionGroup;
 
 /**
+ * The java actions of the Threads view.
+ *
  * @author UNV
  * @since 2025-10-30
  */
 @ActionImpl(
-    id = DebuggerActions.THREADS_PANEL_POPUP,
+    id = "Debugger.JavaThreadsViewPopup",
     children = {
-        //@ActionRef(type = ResumeThreadAction.class),
-        //@ActionRef(type = FreezeThreadAction.class),
-        @ActionRef(type = InterruptThreadAction.class),
-        //@ActionRef(id = "Debugger.ShowFrame"),
-        @ActionRef(id = DebuggerActions.POP_FRAME),
-        //@ActionRef(id = DebuggerActions.EDIT_FRAME_SOURCE),
-        //@ActionRef(id = "Debugger.EditTypeSource"),
-        //@ActionRef(id = "EditSource"),
         @ActionRef(type = AnSeparator.class),
         @ActionRef(type = ExportThreadsAction.class),
         @ActionRef(type = AnSeparator.class),
         @ActionRef(type = CustomizeThreadsViewAction.class)
-    }
+    },
+    parents = @ActionParentRef(@ActionRef(id = XDebuggerActions.THREADS_VIEW_POPUP))
 )
-public class JavaThreadsPanelPopupGroup extends DefaultActionGroup implements DumbAware {
-    public JavaThreadsPanelPopupGroup() {
+public class JavaThreadsViewPopupGroup extends DefaultActionGroup implements DumbAware {
+    public JavaThreadsViewPopupGroup() {
         super(LocalizeValue.empty(), false);
     }
 }

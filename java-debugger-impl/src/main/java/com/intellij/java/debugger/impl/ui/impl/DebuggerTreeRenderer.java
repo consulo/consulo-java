@@ -68,14 +68,7 @@ public class DebuggerTreeRenderer extends ColoredTreeCellRenderer {
     @Nullable
     public static Image getDescriptorIcon(NodeDescriptor descriptor) {
         Image nodeIcon = null;
-        if (descriptor instanceof ThreadGroupDescriptorImpl) {
-            nodeIcon = (((ThreadGroupDescriptorImpl) descriptor).isCurrent() ? ExecutionDebugIconGroup.threadThreadgroupcurrent() : ExecutionDebugIconGroup.threadThreadgroup());
-        }
-        else if (descriptor instanceof ThreadDescriptorImpl) {
-            ThreadDescriptorImpl threadDescriptor = (ThreadDescriptorImpl) descriptor;
-            nodeIcon = threadDescriptor.getIcon();
-        }
-        else if (descriptor instanceof StackFrameDescriptorImpl) {
+        if (descriptor instanceof StackFrameDescriptorImpl) {
             StackFrameDescriptorImpl stackDescriptor = (StackFrameDescriptorImpl) descriptor;
             nodeIcon = ExecutionDebugIconGroup.nodeFrame();
         }
