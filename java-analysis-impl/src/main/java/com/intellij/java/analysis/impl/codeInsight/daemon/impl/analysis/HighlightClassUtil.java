@@ -25,12 +25,14 @@ import com.intellij.java.analysis.codeInsight.intention.QuickFixFactory;
 import com.intellij.java.analysis.impl.codeInsight.ClassUtil;
 import com.intellij.java.analysis.impl.psi.util.JavaMatchers;
 import com.intellij.java.analysis.impl.psi.util.PsiMatchers;
+import com.intellij.java.codeserver.core.JavaPsiModuleUtil;
 import com.intellij.java.language.LanguageLevel;
 import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.impl.codeInsight.ExceptionUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.psi.util.InheritanceUtil;
+import com.intellij.java.language.psi.util.JavaElementKind;
 import com.intellij.java.language.psi.util.PsiUtil;
 import consulo.annotation.access.RequiredReadAction;
 import consulo.document.util.TextRange;
@@ -45,6 +47,7 @@ import consulo.language.psi.util.PsiTreeUtil;
 import consulo.localize.LocalizeValue;
 import consulo.module.Module;
 import consulo.project.Project;
+import consulo.util.collection.ContainerUtil;
 import consulo.util.io.FileUtil;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.ref.SimpleReference;
@@ -52,6 +55,7 @@ import consulo.virtualFileSystem.VirtualFile;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class HighlightClassUtil {
     /**
@@ -467,6 +471,108 @@ public class HighlightClassUtil {
             }
         }
         return null;
+    }
+
+    @RequiredReadAction
+    public static void checkPermitsList(
+        PsiReferenceList list,
+        @Nullable PsiJavaModule currentModule,
+        Consumer<HighlightInfo.Builder> sink
+    ) {
+        PsiElement parent = list.getParent();
+        if (!(parent instanceof PsiClass aClass) || !list.equals(aClass.getPermitsList())) {
+            return;
+        }
+        PsiIdentifier nameIdentifier = aClass.getNameIdentifier();
+        if (nameIdentifier == null) {
+            return;
+        }
+        if (aClass.isEnum() || aClass.isRecord() || aClass.isAnnotationType()) {
+            LocalizeValue description;
+            if (aClass.isEnum()) {
+                description = JavaCompilationErrorLocalize.enumPermits();
+            }
+            else if (aClass.isRecord()) {
+                description = JavaCompilationErrorLocalize.recordPermits();
+            }
+            else {
+                description = JavaCompilationErrorLocalize.annotationPermits();
+            }
+            sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                .range(list.getFirstChild())
+                .descriptionAndTooltip(description));
+            return;
+        }
+        if (!aClass.hasModifierProperty(PsiModifier.SEALED)) {
+            sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                .range(list.getFirstChild())
+                .descriptionAndTooltip(JavaCompilationErrorLocalize.classSealedPermitsOnNonSealed(aClass.getName())));
+            return;
+        }
+        JavaPsiFacade psiFacade = JavaPsiFacade.getInstance(aClass.getProject());
+        for (PsiJavaCodeReferenceElement permitted : list.getReferenceElements()) {
+            for (PsiAnnotation annotation : PsiTreeUtil.findChildrenOfType(permitted, PsiAnnotation.class)) {
+                sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                    .range(annotation)
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.annotationNotAllowedInPermitList()));
+            }
+
+            PsiReferenceParameterList parameterList = permitted.getParameterList();
+            if (parameterList != null && parameterList.getTypeParameterElements().length > 0) {
+                sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                    .range(parameterList)
+                    .descriptionAndTooltip(JavaCompilationErrorLocalize.typeArgumentInPermitsList()));
+                continue;
+            }
+            PsiElement resolve = permitted.resolve();
+            if (resolve instanceof PsiClass inheritorClass) {
+                PsiManager manager = inheritorClass.getManager();
+                if (!ContainerUtil.exists(inheritorClass.getSuperTypes(), type -> manager.areElementsEquivalent(aClass, type.resolve()))) {
+                    sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                        .range(permitted)
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.classPermittedNotDirectSubclass(
+                            inheritorClass.getName(),
+                            inheritorClass.isInterface() == aClass.isInterface() ? 1 : 2,
+                            aClass.getName()
+                        )));
+                }
+                else if (currentModule == null && !psiFacade.arePackagesTheSame(aClass, inheritorClass)) {
+                    sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                        .range(permitted)
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.classExtendsSealedAnotherPackage(
+                            JavaElementKind.fromElement(inheritorClass).subject(),
+                            HighlightUtil.formatClass(inheritorClass),
+                            JavaElementKind.fromElement(aClass).subject(),
+                            HighlightUtil.formatClass(aClass)
+                        ).capitalize()));
+                }
+                else if (currentModule != null
+                    && !areModulesTheSame(currentModule, JavaPsiModuleUtil.findDescriptorByElement(inheritorClass))) {
+                    sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                        .range(permitted)
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.classExtendsSealedAnotherModule()));
+                }
+                else if (!(inheritorClass instanceof PsiCompiledElement) && !hasPermittedSubclassModifier(inheritorClass)) {
+                    sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+                        .range(permitted)
+                        .descriptionAndTooltip(JavaCompilationErrorLocalize.classPermittedMustHaveModifier()));
+                }
+            }
+        }
+    }
+
+    private static boolean areModulesTheSame(PsiJavaModule module, @Nullable PsiJavaModule module1) {
+        return module1 != null && module.getOriginalElement() == module1.getOriginalElement();
+    }
+
+    private static boolean hasPermittedSubclassModifier(PsiClass psiClass) {
+        PsiModifierList modifiers = psiClass.getModifierList();
+        if (modifiers == null) {
+            return false;
+        }
+        return modifiers.hasModifierProperty(PsiModifier.SEALED)
+            || modifiers.hasModifierProperty(PsiModifier.NON_SEALED)
+            || modifiers.hasModifierProperty(PsiModifier.FINAL);
     }
 
     @RequiredReadAction

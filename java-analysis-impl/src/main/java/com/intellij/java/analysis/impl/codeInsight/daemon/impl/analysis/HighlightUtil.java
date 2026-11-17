@@ -34,6 +34,7 @@ import com.intellij.java.language.impl.psi.impl.source.resolve.graphInference.In
 import com.intellij.java.language.impl.psi.impl.source.tree.ElementType;
 import com.intellij.java.language.impl.psi.impl.source.tree.java.PsiReferenceExpressionImpl;
 import com.intellij.java.language.impl.psi.util.JavaPsiRecordUtil;
+import com.intellij.java.language.impl.psi.util.JavaPsiPatternUtil;
 import com.intellij.java.language.impl.refactoring.util.RefactoringChangeUtil;
 import com.intellij.java.language.module.EffectiveLanguageLevelUtil;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
@@ -84,6 +85,7 @@ import org.intellij.lang.annotations.Language;
 import org.jetbrains.annotations.Contract;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -387,28 +389,49 @@ public class HighlightUtil extends HighlightUtilBase {
 
 
     @RequiredReadAction
-    public static HighlightInfo.@Nullable Builder checkInstanceOfApplicable(PsiInstanceOfExpression expression) {
+    public static void checkInstanceOfApplicable(
+        PsiInstanceOfExpression expression,
+        LanguageLevel languageLevel,
+        PsiFile file,
+        Consumer<HighlightInfo.Builder> sink
+    ) {
         PsiExpression operand = expression.getOperand();
         PsiTypeElement typeElement = expression.getCheckType();
         if (typeElement == null) {
-            return null;
+            typeElement = JavaPsiPatternUtil.getPatternTypeElement(expression.getPattern());
+        }
+        if (typeElement == null) {
+            return;
         }
         PsiType checkType = typeElement.getType();
         PsiType operandType = operand.getType();
         if (operandType == null) {
-            return null;
+            return;
         }
-        if (TypeConversionUtil.isPrimitiveAndNotNull(operandType)
-            || TypeConversionUtil.isPrimitiveAndNotNull(checkType)
-            || !TypeConversionUtil.areTypesConvertible(operandType, checkType)) {
-            return HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
+        boolean operandIsPrimitive = TypeConversionUtil.isPrimitiveAndNotNull(operandType);
+        boolean checkIsPrimitive = TypeConversionUtil.isPrimitiveAndNotNull(checkType);
+        boolean convertible = TypeConversionUtil.areTypesConvertible(operandType, checkType);
+        boolean primitiveInPatternsEnabled = PsiUtil.isAvailable(JavaFeature.PRIMITIVE_TYPES_IN_PATTERNS, expression);
+        if (((operandIsPrimitive || checkIsPrimitive) && !primitiveInPatternsEnabled) || !convertible) {
+            if (((operandIsPrimitive || checkIsPrimitive) && !primitiveInPatternsEnabled) && convertible) {
+                HighlightInfo.Builder feature = checkFeature(expression, JavaFeature.PRIMITIVE_TYPES_IN_PATTERNS, languageLevel, file);
+                if (feature != null) {
+                    sink.accept(feature);
+                    return;
+                }
+            }
+            sink.accept(HighlightInfo.newHighlightInfo(HighlightInfoType.ERROR)
                 .range(expression)
                 .descriptionAndTooltip(JavaCompilationErrorLocalize.castInconvertible(
                     JavaHighlightUtil.formatType(operandType),
                     JavaHighlightUtil.formatType(checkType)
-                ));
+                )));
+            return;
         }
-        return null;
+        PsiPattern pattern = expression.getPattern();
+        if (pattern instanceof PsiDeconstructionPattern deconstruction) {
+            PatternChecker.checkDeconstructionErrors(deconstruction, file, sink);
+        }
     }
 
     /**

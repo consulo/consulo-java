@@ -946,10 +946,38 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
     public void visitInstanceOfExpression(PsiInstanceOfExpression expression) {
         super.visitInstanceOfExpression(expression);
         if (!myHolder.hasErrorResults()) {
-            add(HighlightUtil.checkInstanceOfApplicable(expression));
+            HighlightUtil.checkInstanceOfApplicable(expression, myLanguageLevel, myFile, this::add);
         }
         if (!myHolder.hasErrorResults()) {
             add(GenericsHighlightUtil.checkInstanceOfGenericType(expression));
+        }
+        if (!myHolder.hasErrorResults() && JavaFeature.PATTERNS.isSufficient(myLanguageLevel)
+            // 5.20.2 Removed restriction on pattern instanceof for unconditional patterns (JEP 432, 440)
+            && !JavaFeature.PATTERN_GUARDS_AND_RECORD_PATTERNS.isSufficient(myLanguageLevel)) {
+            add(PatternChecker.checkInstanceOfPatternSupertype(expression));
+        }
+    }
+
+    @Override
+    @RequiredReadAction
+    public void visitPatternVariable(PsiPatternVariable variable) {
+        super.visitPatternVariable(variable);
+        add(PatternChecker.checkDeconstructionVariable(variable));
+    }
+
+    @Override
+    @RequiredReadAction
+    public void visitDeconstructionPattern(PsiDeconstructionPattern deconstructionPattern) {
+        super.visitDeconstructionPattern(deconstructionPattern);
+        PatternChecker.checkDeconstructionPattern(deconstructionPattern, myLanguageLevel, myFile, this::add);
+    }
+
+    @Override
+    @RequiredReadAction
+    public void visitDeconstructionList(PsiDeconstructionList deconstructionList) {
+        super.visitDeconstructionList(deconstructionList);
+        if (deconstructionList.getParent() instanceof PsiDeconstructionPattern pattern) {
+            add(PatternChecker.checkMalformedDeconstructionPatternInCase(pattern));
         }
     }
 
@@ -1673,6 +1701,10 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
             }
         }
 
+        if (!myHolder.hasErrorResults() && resultForIncompleteCode != null
+            && JavaFeature.PATTERNS_IN_SWITCH.isSufficient(myLanguageLevel)) {
+            add(PatternChecker.checkPatternVariableRequired(expression, resultForIncompleteCode));
+        }
         if (!myHolder.hasErrorResults() && resultForIncompleteCode != null) {
             myHolder.add(HighlightUtil.checkExpressionRequired(expression, resultForIncompleteCode));
         }
@@ -1928,6 +1960,13 @@ public class HighlightVisitorImpl extends JavaElementVisitor implements Highligh
             }
             if (!myHolder.hasErrorResults()) {
                 add(HighlightClassUtil.checkClassExtendsOnlyOneClass(list));
+            }
+            if (!myHolder.hasErrorResults()
+                && parent instanceof PsiClass aClass && list.equals(aClass.getPermitsList())) {
+                add(checkFeature(list, JavaFeature.SEALED_CLASSES));
+                if (!myHolder.hasErrorResults()) {
+                    HighlightClassUtil.checkPermitsList(list, myJavaModule, this::add);
+                }
             }
             if (!myHolder.hasErrorResults()) {
                 add(GenericsHighlightUtil.checkGenericCannotExtendException(list));
