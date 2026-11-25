@@ -8,44 +8,15 @@ import com.intellij.java.debugger.impl.engine.events.DebuggerCommandImpl;
 import com.intellij.java.debugger.impl.engine.events.SuspendContextCommandImpl;
 import com.intellij.java.language.psi.CommonClassNames;
 import consulo.application.util.concurrent.ThreadDumper;
-import consulo.application.util.function.ThrowableComputable;
 import consulo.application.util.registry.Registry;
-import consulo.internal.com.sun.jdi.AbsentInformationException;
-import consulo.internal.com.sun.jdi.ArrayReference;
-import consulo.internal.com.sun.jdi.ArrayType;
-import consulo.internal.com.sun.jdi.ClassNotLoadedException;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.Field;
-import consulo.internal.com.sun.jdi.InterfaceType;
-import consulo.internal.com.sun.jdi.Location;
-import consulo.internal.com.sun.jdi.Method;
-import consulo.internal.com.sun.jdi.ObjectReference;
-import consulo.internal.com.sun.jdi.PrimitiveType;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.StackFrame;
-import consulo.internal.com.sun.jdi.StringReference;
-import consulo.internal.com.sun.jdi.ThreadReference;
-import consulo.internal.com.sun.jdi.Type;
-import consulo.internal.com.sun.jdi.Value;
-import consulo.internal.com.sun.jdi.VirtualMachine;
-import consulo.internal.com.sun.jdi.VoidType;
+import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.event.EventSet;
 import consulo.internal.com.sun.jdi.request.EventRequest;
 import consulo.internal.com.sun.jdi.request.EventRequestManager;
-import consulo.internal.com.sun.tools.jdi.ArrayReferenceImpl;
-import consulo.internal.com.sun.tools.jdi.ClassTypeImpl;
-import consulo.internal.com.sun.tools.jdi.EventRequestManagerImpl;
-import consulo.internal.com.sun.tools.jdi.EventSetImpl;
-import consulo.internal.com.sun.tools.jdi.InterfaceTypeImpl;
-import consulo.internal.com.sun.tools.jdi.LocationImpl;
-import consulo.internal.com.sun.tools.jdi.MethodImpl;
-import consulo.internal.com.sun.tools.jdi.ObjectReferenceImpl;
-import consulo.internal.com.sun.tools.jdi.ReferenceTypeImpl;
-import consulo.internal.com.sun.tools.jdi.StringReferenceImpl;
-import consulo.internal.com.sun.tools.jdi.ThreadReferenceImpl;
-import consulo.internal.com.sun.tools.jdi.VirtualMachineImpl;
+import consulo.internal.com.sun.tools.jdi.*;
 import consulo.logging.Logger;
 import consulo.util.lang.function.ThrowableRunnable;
+import consulo.util.lang.function.ThrowableSupplier;
 import one.util.streamex.StreamEx;
 import org.jspecify.annotations.Nullable;
 
@@ -82,22 +53,22 @@ public final class DebuggerUtilsAsync {
     }
 
     public static CompletableFuture<List<Method>> allMethods(ReferenceType type) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return reschedule(((ReferenceTypeImpl) type).allMethodsAsync());
+        if (type instanceof ReferenceTypeImpl typeImpl && isAsyncEnabled()) {
+            return reschedule(typeImpl.allMethodsAsync());
         }
         return completedFuture(type.allMethods());
     }
 
     public static CompletableFuture<List<Field>> allFields(ReferenceType type) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return reschedule(((ReferenceTypeImpl) type).allFieldsAsync());
+        if (type instanceof ReferenceTypeImpl typeImpl && isAsyncEnabled()) {
+            return reschedule(typeImpl.allFieldsAsync());
         }
         return completedFuture(type.allFields());
     }
 
     public static CompletableFuture<List<Field>> fields(ReferenceType type) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return reschedule(((ReferenceTypeImpl) type).fieldsAsync());
+        if (type instanceof ReferenceTypeImpl typeImpl && isAsyncEnabled()) {
+            return reschedule(typeImpl.fieldsAsync());
         }
         return completedFuture(type.fields());
     }
@@ -106,8 +77,8 @@ public final class DebuggerUtilsAsync {
         if (value == null) {
             return completedFuture(null);
         }
-        if (value instanceof ObjectReferenceImpl && isAsyncEnabled()) {
-            return reschedule(((ObjectReferenceImpl) value).typeAsync());
+        if (value instanceof ObjectReferenceImpl refImpl && isAsyncEnabled()) {
+            return reschedule(refImpl.typeAsync());
         }
         return completedFuture(value.type());
     }
@@ -120,60 +91,60 @@ public final class DebuggerUtilsAsync {
     }
 
     public static CompletableFuture<Value> getValue(ObjectReference ref, Field field) {
-        if (ref instanceof ObjectReferenceImpl && isAsyncEnabled()) {
-            return reschedule(((ObjectReferenceImpl) ref).getValueAsync(field));
+        if (ref instanceof ObjectReferenceImpl refImpl && isAsyncEnabled()) {
+            return reschedule(refImpl.getValueAsync(field));
         }
         return completedFuture(ref.getValue(field));
     }
 
     public static CompletableFuture<Map<Field, Value>> getValues(ObjectReference ref, List<Field> fields) {
-        if (ref instanceof ObjectReferenceImpl && isAsyncEnabled()) {
-            return reschedule(((ObjectReferenceImpl) ref).getValuesAsync(fields));
+        if (ref instanceof ObjectReferenceImpl refImpl && isAsyncEnabled()) {
+            return reschedule(refImpl.getValuesAsync(fields));
         }
         return completedFuture(ref.getValues(fields));
     }
 
     public static CompletableFuture<Map<Field, Value>> getValues(ReferenceType type, List<Field> fields) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return reschedule(((ReferenceTypeImpl) type).getValuesAsync(fields));
+        if (type instanceof ReferenceTypeImpl typeImpl && isAsyncEnabled()) {
+            return reschedule(typeImpl.getValuesAsync(fields));
         }
         return completedFuture(type.getValues(fields));
     }
 
     public static CompletableFuture<List<Value>> getValues(ArrayReference ref, int index, int length) {
-        if (ref instanceof ArrayReferenceImpl && isAsyncEnabled()) {
-            return reschedule(((ArrayReferenceImpl) ref).getValuesAsync(index, length));
+        if (ref instanceof ArrayReferenceImpl arrayRef && isAsyncEnabled()) {
+            return reschedule(arrayRef.getValuesAsync(index, length));
         }
         return completedFuture(ref.getValues(index, length));
     }
 
     public static CompletableFuture<List<ThreadReference>> allThreads(VirtualMachine vm) {
-        if (vm instanceof VirtualMachineImpl && isAsyncEnabled()) {
-            return reschedule(((VirtualMachineImpl) vm).allThreadsAsync());
+        if (vm instanceof VirtualMachineImpl vmImpl && isAsyncEnabled()) {
+            return reschedule(vmImpl.allThreadsAsync());
         }
         return completedFuture(vm.allThreads());
     }
 
 
     public static CompletableFuture<Integer> length(ArrayReference ref) {
-        if (ref instanceof ArrayReferenceImpl && isAsyncEnabled()) {
-            return reschedule(((ArrayReferenceImpl) ref).lengthAsync());
+        if (ref instanceof ArrayReferenceImpl arrayRef && isAsyncEnabled()) {
+            return reschedule(arrayRef.lengthAsync());
         }
         return completedFuture(ref.length());
     }
 
     public static CompletableFuture<String> sourceName(ReferenceType type) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return reschedule(((ReferenceTypeImpl) type).sourceNameAsync());
+        if (type instanceof ReferenceTypeImpl refImpl && isAsyncEnabled()) {
+            return reschedule(refImpl.sourceNameAsync());
         }
-        return toCompletableFuture(() -> type.sourceName());
+        return toCompletableFuture(type::sourceName);
     }
 
     public static CompletableFuture<List<String>> availableStrata(ReferenceType type) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return reschedule(((ReferenceTypeImpl) type).availableStrataAsync());
+        if (type instanceof ReferenceTypeImpl refImpl && isAsyncEnabled()) {
+            return reschedule(refImpl.availableStrataAsync());
         }
-        return toCompletableFuture(() -> type.availableStrata());
+        return toCompletableFuture(type::availableStrata);
     }
 
     public static CompletableFuture<List<Location>> locationsOfLine(ReferenceType type, int lineNumber) {
@@ -188,12 +159,14 @@ public final class DebuggerUtilsAsync {
         return locationsOfLineSync(type, type.virtualMachine().getDefaultStratum(), null, lineNumber);
     }
 
-    public static CompletableFuture<List<Location>> locationsOfLine(ReferenceType type,
-                                                                    String stratum,
-                                                                    @Nullable String sourceName,
-                                                                    int lineNumber) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return reschedule(((ReferenceTypeImpl) type).locationsOfLineAsync(stratum, sourceName, lineNumber));
+    public static CompletableFuture<List<Location>> locationsOfLine(
+        ReferenceType type,
+        String stratum,
+        @Nullable String sourceName,
+        int lineNumber
+    ) {
+        if (type instanceof ReferenceTypeImpl refImpl && isAsyncEnabled()) {
+            return reschedule(refImpl.locationsOfLineAsync(stratum, sourceName, lineNumber));
         }
         return toCompletableFuture(() -> type.locationsOfLine(stratum, sourceName, lineNumber));
     }
@@ -203,9 +176,9 @@ public final class DebuggerUtilsAsync {
      */
     public static List<Location> locationsOfLineSync(ReferenceType type, String stratum, @Nullable String sourceName, int lineNumber)
         throws AbsentInformationException {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
+        if (type instanceof ReferenceTypeImpl refImpl && isAsyncEnabled()) {
             try {
-                return ((ReferenceTypeImpl) type).locationsOfLineAsync(stratum, sourceName, lineNumber).get();
+                return refImpl.locationsOfLineAsync(stratum, sourceName, lineNumber).get();
             }
             catch (Exception e) {
                 if (e.getCause() instanceof AbsentInformationException) {
@@ -226,9 +199,9 @@ public final class DebuggerUtilsAsync {
      */
     public static List<Location> allLineLocationsSync(ReferenceType type, String stratum, @Nullable String sourceName)
         throws AbsentInformationException {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
+        if (type instanceof ReferenceTypeImpl refImpl && isAsyncEnabled()) {
             try {
-                return ((ReferenceTypeImpl) type).allLineLocationsAsync(stratum, sourceName).get();
+                return refImpl.allLineLocationsAsync(stratum, sourceName).get();
             }
             catch (Exception e) {
                 if (e.getCause() instanceof AbsentInformationException) {
@@ -241,8 +214,8 @@ public final class DebuggerUtilsAsync {
     }
 
     public static CompletableFuture<List<Location>> allLineLocations(Method method) {
-        if (method instanceof MethodImpl && isAsyncEnabled()) {
-            return reschedule(((MethodImpl) method).allLineLocationsAsync());
+        if (method instanceof MethodImpl methodImpl && isAsyncEnabled()) {
+            return reschedule(methodImpl.allLineLocationsAsync());
         }
         return toCompletableFuture(() -> method.allLineLocations());
     }
@@ -276,9 +249,7 @@ public final class DebuggerUtilsAsync {
         return reschedule(res);
     }
 
-    private static CompletableFuture<Void> instanceOfObject(@Nullable Type subType,
-                                                            String superType,
-                                                            CompletableFuture<Boolean> res) {
+    private static CompletableFuture<Void> instanceOfObject(@Nullable Type subType, String superType, CompletableFuture<Boolean> res) {
         if (subType == null || res.isDone()) {
             return completedFuture(null);
         }
@@ -288,27 +259,29 @@ public final class DebuggerUtilsAsync {
             return completedFuture(null); // early return
         }
 
-        if (subType instanceof ClassType) {
+        if (subType instanceof ClassType cls) {
             return allOf(
-                superclass((ClassType) subType).thenCompose(s -> instanceOfObject(s, superType, res)),
-                interfaces((ClassType) subType).thenCompose(
+                superclass(cls).thenCompose(s -> instanceOfObject(s, superType, res)),
+                interfaces(cls).thenCompose(
                     interfaces -> allOf(interfaces.stream()
                         .map(i -> instanceOfObject(i, superType, res))
-                        .toArray(CompletableFuture[]::new))));
+                        .toArray(CompletableFuture[]::new))
+                )
+            );
         }
 
-        if (subType instanceof InterfaceType) {
-            return allOf(
-                superinterfaces((InterfaceType) subType).thenCompose(
-                    interfaces -> allOf(interfaces.stream()
-                        .map(i -> instanceOfObject(i, superType, res))
-                        .toArray(CompletableFuture[]::new))));
+        if (subType instanceof InterfaceType iface) {
+            return allOf(superinterfaces(iface).thenCompose(
+                interfaces -> allOf(interfaces.stream()
+                    .map(i -> instanceOfObject(i, superType, res))
+                    .toArray(CompletableFuture[]::new))
+            ));
         }
 
-        if (subType instanceof ArrayType && superType.endsWith("[]")) {
+        if (subType instanceof ArrayType arrayType && superType.endsWith("[]")) {
             try {
                 String superTypeItem = superType.substring(0, superType.length() - 2);
-                Type subTypeItem = ((ArrayType) subType).componentType();
+                Type subTypeItem = arrayType.componentType();
                 return instanceOf(subTypeItem, superTypeItem, false).thenAccept(r -> {
                     if (r) {
                         res.complete(true);
@@ -324,8 +297,8 @@ public final class DebuggerUtilsAsync {
     }
 
     public static CompletableFuture<Void> deleteEventRequest(EventRequestManager eventRequestManager, EventRequest request) {
-        if (isAsyncEnabled() && eventRequestManager instanceof EventRequestManagerImpl) {
-            return ((EventRequestManagerImpl) eventRequestManager).deleteEventRequestAsync(request);
+        if (isAsyncEnabled() && eventRequestManager instanceof EventRequestManagerImpl eventRequestManagerImpl) {
+            return eventRequestManagerImpl.deleteEventRequestAsync(request);
         }
         else {
             try {
@@ -348,16 +321,20 @@ public final class DebuggerUtilsAsync {
         return type.name().replace('$', '.').equals(name.replace('$', '.'));
     }
 
-    public static CompletableFuture<Type> findAnyBaseType(Type subType,
-                                                          Function<? super Type, ? extends CompletableFuture<Boolean>> checker) {
+    public static CompletableFuture<Type> findAnyBaseType(
+        Type subType,
+        Function<? super Type, ? extends CompletableFuture<Boolean>> checker
+    ) {
         CompletableFuture<Type> res = new CompletableFuture<>();
         findAnyBaseType(subType, checker, res).thenRun(() -> res.complete(null));
         return reschedule(res);
     }
 
-    private static CompletableFuture<Void> findAnyBaseType(@Nullable Type type,
-                                                           Function<? super Type, ? extends CompletableFuture<Boolean>> checker,
-                                                           CompletableFuture<Type> res) {
+    private static CompletableFuture<Void> findAnyBaseType(
+        @Nullable Type type,
+        Function<? super Type, ? extends CompletableFuture<Boolean>> checker,
+        CompletableFuture<Type> res
+    ) {
         if (type == null || res.isDone()) {
             return completedFuture(null);
         }
@@ -370,91 +347,95 @@ public final class DebuggerUtilsAsync {
         });
 
         // check base types
-        if (type instanceof ClassType) {
+        if (type instanceof ClassType cls) {
             return allOf(
                 self,
-                superclass((ClassType) type).thenCompose(s -> findAnyBaseType(s, checker, res)),
-                interfaces((ClassType) type).thenCompose(
-                    interfaces -> allOf(interfaces.stream().map(i -> findAnyBaseType(i, checker, res)).toArray(CompletableFuture[]::new))));
+                superclass(cls).thenCompose(s -> findAnyBaseType(s, checker, res)),
+                interfaces(cls).thenCompose(interfaces -> allOf(
+                    interfaces.stream().map(i -> findAnyBaseType(i, checker, res)).toArray(CompletableFuture[]::new)
+                ))
+            );
         }
 
-        if (type instanceof InterfaceType) {
+        if (type instanceof InterfaceType iface) {
             return allOf(
                 self,
-                superinterfaces((InterfaceType) type).thenCompose(
-                    interfaces -> allOf(interfaces.stream().map(i -> findAnyBaseType(i, checker, res)).toArray(CompletableFuture[]::new))));
+                superinterfaces(iface).thenCompose(interfaces -> allOf(
+                    interfaces.stream().map(i -> findAnyBaseType(i, checker, res)).toArray(CompletableFuture[]::new)
+                ))
+            );
         }
 
         return self;
     }
 
     public static CompletableFuture<Method> method(Location location) {
-        if (location instanceof LocationImpl && isAsyncEnabled()) {
-            return reschedule(DebuggerUtilsEx.getMethodAsync((LocationImpl) location));
+        if (location instanceof LocationImpl locationImpl && isAsyncEnabled()) {
+            return reschedule(DebuggerUtilsEx.getMethodAsync(locationImpl));
         }
         return toCompletableFuture(() -> DebuggerUtilsEx.getMethod(location));
     }
 
     public static CompletableFuture<Boolean> isObsolete(Method method) {
-        if (method instanceof MethodImpl && isAsyncEnabled()) {
-            return reschedule(((MethodImpl) method).isObsoleteAsync());
+        if (method instanceof MethodImpl methodImpl && isAsyncEnabled()) {
+            return reschedule(methodImpl.isObsoleteAsync());
         }
-        return toCompletableFuture(() -> method.isObsolete());
+        return toCompletableFuture(method::isObsolete);
     }
 
     public static CompletableFuture<StackFrame> frame(ThreadReference thread, int index) {
-        if (thread instanceof ThreadReferenceImpl && isAsyncEnabled()) {
-            return reschedule(((ThreadReferenceImpl) thread).frameAsync(index));
+        if (thread instanceof ThreadReferenceImpl threadImpl && isAsyncEnabled()) {
+            return reschedule(threadImpl.frameAsync(index));
         }
         return toCompletableFuture(() -> thread.frame(index));
     }
 
     public static CompletableFuture<List<StackFrame>> frames(ThreadReference thread, int start, int length) {
-        if (thread instanceof ThreadReferenceImpl && isAsyncEnabled()) {
-            return reschedule(((ThreadReferenceImpl) thread).framesAsync(start, length));
+        if (thread instanceof ThreadReferenceImpl threadImpl && isAsyncEnabled()) {
+            return reschedule(threadImpl.framesAsync(start, length));
         }
         return toCompletableFuture(() -> thread.frames(start, length));
     }
 
     public static CompletableFuture<Integer> frameCount(ThreadReference thread) {
-        if (thread instanceof ThreadReferenceImpl && isAsyncEnabled()) {
-            return reschedule(((ThreadReferenceImpl) thread).frameCountAsync());
+        if (thread instanceof ThreadReferenceImpl threadImpl && isAsyncEnabled()) {
+            return reschedule(threadImpl.frameCountAsync());
         }
-        return toCompletableFuture(() -> thread.frameCount());
+        return toCompletableFuture(thread::frameCount);
     }
 
     public static CompletableFuture<String> nameAsync(ThreadReference thread) {
-        if (thread instanceof ThreadReferenceImpl threadReferenceImpl && isAsyncEnabled()) {
-            return reschedule(threadReferenceImpl.nameAsync());
+        if (thread instanceof ThreadReferenceImpl threadImpl && isAsyncEnabled()) {
+            return reschedule(threadImpl.nameAsync());
         }
-        return toCompletableFuture(() -> thread.name());
+        return toCompletableFuture(thread::name);
     }
 
     // Reader thread
     public static CompletableFuture<List<Method>> methods(ReferenceType type) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return ((ReferenceTypeImpl) type).methodsAsync();
+        if (type instanceof ReferenceTypeImpl typeImpl && isAsyncEnabled()) {
+            return typeImpl.methodsAsync();
         }
         return completedFuture(type.methods());
     }
 
     public static CompletableFuture<List<InterfaceType>> superinterfaces(InterfaceType iface) {
-        if (iface instanceof InterfaceTypeImpl && isAsyncEnabled()) {
-            return ((InterfaceTypeImpl) iface).superinterfacesAsync();
+        if (iface instanceof InterfaceTypeImpl ifaceImpl && isAsyncEnabled()) {
+            return ifaceImpl.superinterfacesAsync();
         }
         return completedFuture(iface.superinterfaces());
     }
 
     public static CompletableFuture<ClassType> superclass(ClassType cls) {
-        if (cls instanceof ClassTypeImpl && isAsyncEnabled()) {
-            return ((ClassTypeImpl) cls).superclassAsync();
+        if (cls instanceof ClassTypeImpl clsImpl && isAsyncEnabled()) {
+            return clsImpl.superclassAsync();
         }
         return completedFuture(cls.superclass());
     }
 
     public static CompletableFuture<List<InterfaceType>> interfaces(ClassType cls) {
-        if (cls instanceof ClassTypeImpl && isAsyncEnabled()) {
-            return ((ClassTypeImpl) cls).interfacesAsync();
+        if (cls instanceof ClassTypeImpl clsImpl && isAsyncEnabled()) {
+            return clsImpl.interfacesAsync();
         }
         return completedFuture(cls.interfaces());
     }
@@ -463,89 +444,90 @@ public final class DebuggerUtilsAsync {
         if (!isAsyncEnabled()) {
             return toCompletableFuture(() -> DebuggerUtilsImpl.supertypes(type));
         }
-        if (type instanceof InterfaceType) {
-            return superinterfaces(((InterfaceType) type)).thenApply(Collection::stream);
+        if (type instanceof InterfaceType iface) {
+            return superinterfaces(iface).thenApply(Collection::stream);
         }
-        else if (type instanceof ClassType) {
-            return superclass((ClassType) type).thenCombine(interfaces((ClassType) type), (superclass, interfaces) ->
-                StreamEx.<ReferenceType>ofNullable(superclass).prepend(interfaces));
+        else if (type instanceof ClassType classType) {
+            return superclass(classType).thenCombine(
+                interfaces(classType),
+                (superclass, interfaces) -> StreamEx.<ReferenceType>ofNullable(superclass).prepend(interfaces)
+            );
         }
         return completedFuture(StreamEx.empty());
     }
 
     public static CompletableFuture<byte[]> bytecodes(Method method) {
-        if (method instanceof MethodImpl && isAsyncEnabled()) {
-            return ((MethodImpl) method).bytecodesAsync();
+        if (method instanceof MethodImpl methodImpl && isAsyncEnabled()) {
+            return methodImpl.bytecodesAsync();
         }
-        return toCompletableFuture(() -> method.bytecodes());
+        return toCompletableFuture(method::bytecodes);
     }
 
     public static CompletableFuture<byte[]> constantPool(ReferenceType type) {
-        if (type instanceof ReferenceTypeImpl && isAsyncEnabled()) {
-            return ((ReferenceTypeImpl) type).constantPoolAsync();
+        if (type instanceof ReferenceTypeImpl typeImpl && isAsyncEnabled()) {
+            return typeImpl.constantPoolAsync();
         }
-        return toCompletableFuture(() -> type.constantPool());
+        return toCompletableFuture(type::constantPool);
     }
 
     public static CompletableFuture<Void> setEnabled(EventRequest request, boolean value) {
-        EventRequestManager eventRequestManager = request.virtualMachine().eventRequestManager();
-        if (eventRequestManager instanceof EventRequestManagerImpl && isAsyncEnabled()) {
-            return ((EventRequestManagerImpl) eventRequestManager).setEnabledAsync(request, value);
+        if (request.virtualMachine().eventRequestManager() instanceof EventRequestManagerImpl eventRequestManager && isAsyncEnabled()) {
+            return eventRequestManager.setEnabledAsync(request, value);
         }
         return toCompletableFuture(() -> request.setEnabled(value));
     }
 
     public static CompletableFuture<Void> suspend(VirtualMachine vm) {
-        if (vm instanceof VirtualMachineImpl && isAsyncEnabled()) {
-            return reschedule(((VirtualMachineImpl) vm).suspendAsync());
+        if (vm instanceof VirtualMachineImpl vmImpl && isAsyncEnabled()) {
+            return reschedule(vmImpl.suspendAsync());
         }
-        return toCompletableFuture(() -> vm.suspend());
+        return toCompletableFuture(vm::suspend);
     }
 
     public static CompletableFuture<Void> resume(VirtualMachine vm) {
-        if (vm instanceof VirtualMachineImpl && isAsyncEnabled()) {
-            return ((VirtualMachineImpl) vm).resumeAsync();
+        if (vm instanceof VirtualMachineImpl vmImpl && isAsyncEnabled()) {
+            return vmImpl.resumeAsync();
         }
-        return toCompletableFuture(() -> vm.resume());
+        return toCompletableFuture(vm::resume);
     }
 
     public static CompletableFuture<Void> resume(ThreadReference thread) {
         LOG.assertTrue(thread.suspendCount() > 0, "Suspend count must be greater zero before resume, " + thread);
-        if (thread instanceof ThreadReferenceImpl && isAsyncEnabled()) {
-            return ((ThreadReferenceImpl) thread).resumeAsync();
+        if (thread instanceof ThreadReferenceImpl threadImpl && isAsyncEnabled()) {
+            return threadImpl.resumeAsync();
         }
-        return toCompletableFuture(() -> thread.resume());
+        return toCompletableFuture(thread::resume);
     }
 
     public static CompletableFuture<Void> resume(EventSet eventSet) {
-        if (eventSet instanceof EventSetImpl && isAsyncEnabled()) {
-            return ((EventSetImpl) eventSet).resumeAsync();
+        if (eventSet instanceof EventSetImpl eventSetImpl && isAsyncEnabled()) {
+            return eventSetImpl.resumeAsync();
         }
-        return toCompletableFuture(() -> eventSet.resume());
+        return toCompletableFuture(eventSet::resume);
     }
 
-    public static CompletableFuture<List<ReferenceType>> allCLasses(VirtualMachine virtualMachine) {
-        if (virtualMachine instanceof VirtualMachineImpl && isAsyncEnabled()) {
-            return ((VirtualMachineImpl) virtualMachine).allClassesAsync();
+    public static CompletableFuture<List<ReferenceType>> allCLasses(VirtualMachine vm) {
+        if (vm instanceof VirtualMachineImpl vmImpl && isAsyncEnabled()) {
+            return vmImpl.allClassesAsync();
         }
-        return toCompletableFuture(() -> virtualMachine.allClasses());
+        return toCompletableFuture(vm::allClasses);
     }
 
     public static CompletableFuture<Void> disableCollection(Value value) {
         if (value instanceof ObjectReference objectReference) {
-            if (value instanceof ObjectReferenceImpl objectReferenceImpl && isAsyncEnabled()) {
-                return objectReferenceImpl.disableCollectionAsync();
+            if (value instanceof ObjectReferenceImpl refImpl && isAsyncEnabled()) {
+                return refImpl.disableCollectionAsync();
             }
-            return toCompletableFuture(() -> objectReference.disableCollection());
+            return toCompletableFuture(objectReference::disableCollection);
         }
         return completedFuture(null);
     }
 
     static CompletableFuture<Boolean> isCollectedJdiFuture(ObjectReference reference) {
-        if (reference instanceof ObjectReferenceImpl objectReferenceImpl && isAsyncEnabled()) {
-            return objectReferenceImpl.isCollectedAsync();
+        if (reference instanceof ObjectReferenceImpl refImpl && isAsyncEnabled()) {
+            return refImpl.isCollectedAsync();
         }
-        return toCompletableFuture(() -> reference.isCollected());
+        return toCompletableFuture(reference::isCollected);
     }
 
     private static <T> CompletableFuture<T> rescheduleIfNeeded(CompletableFuture<T> future) {
@@ -566,7 +548,7 @@ public final class DebuggerUtilsAsync {
         LOG.assertTrue(event != null);
         PrioritizedTask.Priority priority = event.getPriority();
         SuspendContextImpl suspendContext =
-            event instanceof SuspendContextCommandImpl ? ((SuspendContextCommandImpl) event).getSuspendContext() : null;
+            event instanceof SuspendContextCommandImpl suspendContextCommand ? suspendContextCommand.getSuspendContext() : null;
 
         CompletableFuture<T> res = new DebuggerCompletableFuture<>();
         future.whenComplete((r, ex) -> {
@@ -633,9 +615,9 @@ public final class DebuggerUtilsAsync {
         return null;
     }
 
-    public static <T, E extends Exception> CompletableFuture<T> toCompletableFuture(ThrowableComputable<? extends T, E> provider) {
+    public static <T, E extends Exception> CompletableFuture<T> toCompletableFuture(ThrowableSupplier<? extends T, E> provider) {
         try {
-            return completedFuture(provider.compute());
+            return completedFuture(provider.get());
         }
         catch (Exception e) {
             return CompletableFuture.failedFuture(e);

@@ -5,7 +5,6 @@ import com.intellij.java.analysis.impl.codeInspection.dataFlow.TrackingRunner;
 import com.intellij.java.language.psi.PsiExpression;
 import consulo.application.ReadAction;
 import consulo.application.progress.ProgressManager;
-import consulo.application.util.function.ThrowableComputable;
 import consulo.codeEditor.Editor;
 import consulo.codeEditor.EditorPopupHelper;
 import consulo.document.Document;
@@ -31,6 +30,7 @@ import consulo.ui.ex.popup.event.JBPopupAdapter;
 import consulo.ui.ex.popup.event.LightweightWindowEvent;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.ThrowableSupplier;
 import one.util.streamex.StreamEx;
 
 import javax.swing.*;
@@ -43,11 +43,7 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction 
     private final SmartPsiElementPointer<PsiExpression> myAnchor;
     private final TrackingRunner.DfaProblemType myProblemType;
 
-    public FindDfaProblemCauseFix(
-        boolean ignoreAssertStatements,
-        PsiExpression anchor,
-        TrackingRunner.DfaProblemType problemType
-    ) {
+    public FindDfaProblemCauseFix(boolean ignoreAssertStatements, PsiExpression anchor, TrackingRunner.DfaProblemType problemType) {
         myIgnoreAssertStatements = ignoreAssertStatements;
         myAnchor = SmartPointerManager.createPointer(anchor);
         myProblemType = problemType;
@@ -65,7 +61,7 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction 
 
     @Override
     public void applyFix(Project project, ProblemDescriptor descriptor) {
-        ThrowableComputable<TrackingRunner.CauseItem, RuntimeException> causeFinder = () -> {
+        ThrowableSupplier<TrackingRunner.CauseItem, RuntimeException> causeFinder = () -> {
             PsiExpression element = myAnchor.getElement();
             if (element == null) {
                 return null;
@@ -73,7 +69,11 @@ public class FindDfaProblemCauseFix implements LocalQuickFix, LowPriorityAction 
             return TrackingRunner.findProblemCause(myIgnoreAssertStatements, element, myProblemType);
         };
         TrackingRunner.CauseItem item = ProgressManager.getInstance().runProcessWithProgressSynchronously(
-            () -> ReadAction.compute(causeFinder), "Finding Cause", true, project);
+            () -> ReadAction.compute(causeFinder),
+            "Finding Cause",
+            true,
+            project
+        );
         PsiFile file = myAnchor.getContainingFile();
         if (item != null && file != null) {
             displayProblemCause(file, item);

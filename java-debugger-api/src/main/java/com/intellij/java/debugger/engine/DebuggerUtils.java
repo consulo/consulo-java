@@ -31,7 +31,6 @@ import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ServiceAPI;
 import consulo.application.Application;
 import consulo.application.dumb.IndexNotReadyException;
-import consulo.application.util.function.ThrowableComputable;
 import consulo.component.extension.ExtensionPoint;
 import consulo.dataContext.DataContext;
 import consulo.internal.com.sun.jdi.*;
@@ -47,7 +46,8 @@ import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
 import consulo.util.dataholder.Key;
-import consulo.util.lang.StringUtil;
+import consulo.util.lang.StringEscapeUtil;
+import consulo.util.lang.function.ThrowableSupplier;
 import consulo.util.lang.ref.SimpleReference;
 import org.jdom.Element;
 import org.jspecify.annotations.Nullable;
@@ -60,10 +60,11 @@ public abstract class DebuggerUtils {
     private static final Logger LOG = Logger.getInstance(DebuggerUtils.class);
 
     public abstract <R, T> R processCollectibleValue(
-        ThrowableComputable<? extends T, ? extends EvaluateException> valueComputable,
+        ThrowableSupplier<? extends T, ? extends EvaluateException> valueSupplier,
         Function<? super T, ? extends R> processor,
         EvaluationContext evaluationContext
     ) throws EvaluateException;
+
     private static final Key<Method> TO_STRING_METHOD_KEY = Key.create("CachedToStringMethod");
     public static final Set<String> ourPrimitiveTypeNames =
         new HashSet<>(Arrays.asList("byte", "short", "int", "long", "float", "double", "boolean", "char"));
@@ -206,13 +207,7 @@ public abstract class DebuggerUtils {
     }
 
     public static String translateStringValue(String str) {
-        int length = str.length();
-        StringBuilder buffer = new StringBuilder();
-        StringUtil.escapeStringCharacters(length, str, buffer);
-        if (str.length() > length) {
-            buffer.append("...");
-        }
-        return buffer.toString();
+        return StringEscapeUtil.escape(str, '"');
     }
 
     @Nullable
@@ -376,7 +371,7 @@ public abstract class DebuggerUtils {
     @Nullable
     @RequiredReadAction
     public static PsiClass findClass(String className, Project project, GlobalSearchScope scope) {
-        Application.get().assertReadAccessAllowed();
+        project.getApplication().assertReadAccessAllowed();
         try {
             if (getArrayClass(className) != null) {
                 return JavaPsiFacade.getInstance(project).getElementFactory().getArrayClass(LanguageLevel.HIGHEST);
@@ -404,7 +399,7 @@ public abstract class DebuggerUtils {
     @Nullable
     @RequiredReadAction
     public static PsiType getType(String className, Project project) {
-        Application.get().assertReadAccessAllowed();
+        project.getApplication().assertReadAccessAllowed();
 
         PsiManager psiManager = PsiManager.getInstance(project);
         try {
@@ -533,12 +528,8 @@ public abstract class DebuggerUtils {
     }
 
     public static boolean isInsideSimpleGetter(PsiElement contextElement) {
-        for (SimplePropertyGetterProvider provider : SimplePropertyGetterProvider.EP_NAME.getExtensionList()) {
-            if (provider.isInsideSimpleGetter(contextElement)) {
-                return true;
-            }
-        }
-        return false;
+        return Application.get().getExtensionPoint(SimplePropertyGetterProvider.class)
+            .anyMatchSafe(provider -> provider.isInsideSimpleGetter(contextElement));
     }
 
     public static boolean isPrimitiveType(String typeName) {
@@ -556,14 +547,10 @@ public abstract class DebuggerUtils {
     }
 
     public static @Nullable String tryExtractExceptionMessage(ObjectReference exception) {
-        final ReferenceType type = exception.referenceType();
-        final Field messageField = findField(type, "detailMessage");
-        if (messageField == null) return null;
-        final Value message = exception.getValue(messageField);
-        if (message instanceof StringReference) {
-            return ((StringReference) message).value();
+        Field messageField = findField(exception.referenceType(), "detailMessage");
+        if (messageField != null && exception.getValue(messageField) instanceof StringReference strRef) {
+            return strRef.value();
         }
-
         return null;
     }
 
@@ -587,8 +574,8 @@ public abstract class DebuggerUtils {
         Set<ReferenceType> checkedInterfaces = new HashSet<>();
         ReferenceType t;
         while ((t = types.poll()) != null) {
-            if (t instanceof ClassType) {
-                types.addAll(0, ((ClassType) t).interfaces());
+            if (t instanceof ClassType classType) {
+                types.addAll(0, classType.interfaces());
             }
             else if (t instanceof InterfaceType && checkedInterfaces.add(t)) {
                 for (Field candidate : t.fields()) {

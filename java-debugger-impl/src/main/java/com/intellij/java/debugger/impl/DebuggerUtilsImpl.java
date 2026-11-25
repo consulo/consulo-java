@@ -25,33 +25,26 @@ import com.intellij.java.debugger.engine.evaluation.expression.EvaluatorBuilder;
 import com.intellij.java.debugger.impl.actions.DebuggerAction;
 import com.intellij.java.debugger.impl.apiAdapters.TransportServiceWrapper;
 import com.intellij.java.debugger.impl.engine.DebugProcessImpl;
+import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.EvaluationContextImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.TextWithImportsImpl;
 import com.intellij.java.debugger.impl.engine.evaluation.expression.EvaluatorBuilderImpl;
 import com.intellij.java.debugger.impl.settings.DebuggerSettings;
 import com.intellij.java.debugger.impl.ui.impl.watch.DebuggerTreeNodeExpression;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
-import com.intellij.java.debugger.impl.engine.DebuggerManagerThreadImpl;
 import com.intellij.java.debugger.impl.ui.tree.render.BatchEvaluator;
 import com.intellij.java.debugger.impl.ui.tree.render.NodeRenderer;
 import com.intellij.java.language.impl.psi.impl.PsiJavaParserFacadeImpl;
 import com.intellij.java.language.psi.*;
 import com.intellij.java.language.util.TreeClassChooser;
 import com.intellij.java.language.util.TreeClassChooserFactory;
+import consulo.annotation.access.RequiredReadAction;
 import consulo.annotation.component.ServiceImpl;
-import consulo.application.util.function.ThrowableComputable;
 import consulo.component.ProcessCanceledException;
 import consulo.dataContext.DataContext;
 import consulo.execution.debug.breakpoint.XExpression;
 import consulo.execution.debug.breakpoint.XExpressionState;
-import consulo.internal.com.sun.jdi.ClassType;
-import consulo.internal.com.sun.jdi.InterfaceType;
-import consulo.internal.com.sun.jdi.InternalException;
-import consulo.internal.com.sun.jdi.ObjectCollectedException;
-import consulo.internal.com.sun.jdi.ReferenceType;
-import consulo.internal.com.sun.jdi.Type;
-import consulo.internal.com.sun.jdi.VMDisconnectedException;
-import consulo.internal.com.sun.jdi.Value;
+import consulo.internal.com.sun.jdi.*;
 import consulo.internal.com.sun.jdi.connect.spi.TransportService;
 import consulo.language.psi.PsiCompiledElement;
 import consulo.language.psi.PsiElement;
@@ -59,10 +52,12 @@ import consulo.language.psi.scope.GlobalSearchScope;
 import consulo.logging.Logger;
 import consulo.process.ExecutionException;
 import consulo.project.Project;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.util.dataholder.Key;
 import consulo.util.io.NetUtil;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.ThrowableSupplier;
 import consulo.util.xml.serializer.JDOMExternalizerUtil;
 import consulo.util.xml.serializer.SkipDefaultValuesSerializationFilters;
 import consulo.util.xml.serializer.XmlSerializer;
@@ -173,6 +168,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
         return PositionUtil.getContextElement(context);
     }
 
+    @RequiredReadAction
     public static Pair<PsiElement, PsiType> getPsiClassAndType(@Nullable String className, Project project) {
         PsiElement contextClass = null;
         PsiType contextType = null;
@@ -200,6 +196,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
     }
 
     @Override
+    @RequiredUIAccess
     public PsiClass chooseClassDialog(String title, Project project) {
         TreeClassChooser dialog = TreeClassChooserFactory.getInstance(project).createAllProjectScopeChooser(title);
         dialog.showDialog();
@@ -208,9 +205,8 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
 
     @Override
     public String findAvailableDebugAddress(boolean useSockets) throws ExecutionException {
-
         if (useSockets) {
-            final int freePort;
+            int freePort;
             try {
                 freePort = NetUtil.findAvailableSocketPort();
             }
@@ -221,7 +217,7 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
         }
 
         try {
-            final TransportServiceWrapper transportService = TransportServiceWrapper.createTransportService(DebuggerSettings.SHMEM_TRANSPORT);
+            TransportServiceWrapper transportService = TransportServiceWrapper.createTransportService(DebuggerSettings.SHMEM_TRANSPORT);
             TransportService.ListenKey address = transportService.startListening();
             transportService.stopListening(address);
             return address.address();
@@ -237,11 +233,11 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
 
     @Override
     public <R, T> R processCollectibleValue(
-        ThrowableComputable<? extends T, ? extends EvaluateException> valueComputable,
+        ThrowableSupplier<? extends T, ? extends EvaluateException> valueSupplier,
         Function<? super T, ? extends R> processor,
         EvaluationContext evaluationContext
     ) throws EvaluateException {
-        return processCollectibleValue(valueComputable, processor, ((EvaluationContextImpl) evaluationContext).getSuspendContext());
+        return processCollectibleValue(valueSupplier, processor, ((EvaluationContextImpl) evaluationContext).getSuspendContext());
     }
 
     public static Stream<? extends ReferenceType> supertypes(ReferenceType type) {
@@ -276,16 +272,14 @@ public class DebuggerUtilsImpl extends DebuggerUtilsEx {
         action.accept(wrapIntoThrowable ? new Throwable(e) : e);
     }
 
-    public static <T, E extends Exception> T suppressExceptions(ThrowableComputable<T, E> supplier, T defaultValue) throws E {
+    public static <T, E extends Exception> T suppressExceptions(ThrowableSupplier<T, E> supplier, T defaultValue) throws E {
         return suppressExceptions(supplier, defaultValue, true, null);
     }
 
-    public static <T, E extends Exception> T suppressExceptions(ThrowableComputable<T, E> supplier,
-                                                                T defaultValue,
-                                                                boolean ignorePCE,
-                                                                Class<E> rethrow) throws E {
+    public static <T, E extends Exception>
+    T suppressExceptions(ThrowableSupplier<T, E> supplier, T defaultValue, boolean ignorePCE, Class<E> rethrow) throws E {
         try {
-            return supplier.compute();
+            return supplier.get();
         }
         catch (ProcessCanceledException e) {
             if (!ignorePCE) {

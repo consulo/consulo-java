@@ -40,6 +40,7 @@ import com.intellij.java.debugger.impl.jdi.GeneratedReferenceType;
 import com.intellij.java.debugger.impl.jdi.VirtualMachineProxyImpl;
 import com.intellij.java.debugger.impl.ui.breakpoints.Breakpoint;
 import com.intellij.java.debugger.impl.ui.tree.DebuggerTreeNode;
+import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import com.intellij.java.debugger.requests.ClassPrepareRequestor;
 import com.intellij.java.debugger.requests.Requestor;
 import com.intellij.java.debugger.ui.classFilter.ClassFilter;
@@ -48,7 +49,6 @@ import com.intellij.java.language.impl.JavaFileType;
 import com.intellij.java.language.psi.*;
 import consulo.application.ApplicationManager;
 import consulo.application.ReadAction;
-import consulo.application.util.function.ThrowableComputable;
 import consulo.application.util.registry.Registry;
 import consulo.codeEditor.Editor;
 import consulo.dataContext.DataContext;
@@ -74,6 +74,7 @@ import consulo.internal.com.sun.tools.jdi.LocationImpl;
 import consulo.language.codeStyle.CodeStyleSettingsManager;
 import consulo.language.psi.*;
 import consulo.language.psi.util.PsiTreeUtil;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.content.ProjectFileIndex;
 import consulo.module.content.ProjectRootManager;
@@ -88,6 +89,7 @@ import consulo.util.dataholder.Key;
 import consulo.util.lang.Comparing;
 import consulo.util.lang.Pair;
 import consulo.util.lang.StringUtil;
+import consulo.util.lang.function.ThrowableSupplier;
 import consulo.util.xml.serializer.DefaultJDOMExternalizer;
 import consulo.util.xml.serializer.InvalidDataException;
 import consulo.util.xml.serializer.JDOMExternalizable;
@@ -95,9 +97,9 @@ import consulo.util.xml.serializer.WriteExternalException;
 import consulo.virtualFileSystem.VirtualFile;
 import consulo.virtualFileSystem.fileType.FileType;
 import one.util.streamex.StreamEx;
-import org.jspecify.annotations.Nullable;
 import org.jdom.Attribute;
 import org.jdom.Element;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -815,25 +817,25 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     }
 
     protected static <R, T> R processCollectibleValue(
-        ThrowableComputable<? extends T, ? extends EvaluateException> valueComputable,
+        ThrowableSupplier<? extends T, ? extends EvaluateException> valueSupplier,
         Function<? super T, ? extends R> processor,
         SuspendContextImpl suspendContext
     ) throws EvaluateException {
         int retries = 3;
         while (true) {
             try {
-                T result = valueComputable.compute();
+                T result = valueSupplier.get();
                 return processor.apply(result);
             }
             catch (ObjectCollectedException oce) {
                 if (--retries < 0) {
-                    return suspendAllAndEvaluate(valueComputable, processor, suspendContext.getDebugProcess().getVirtualMachineProxy());
+                    return suspendAllAndEvaluate(valueSupplier, processor, suspendContext.getDebugProcess().getVirtualMachineProxy());
                 }
             }
             catch (EvaluateException e) {
                 if (e.getCause() instanceof ObjectCollectedException) {
                     if (--retries < 0) {
-                        return suspendAllAndEvaluate(valueComputable, processor, suspendContext.getDebugProcess().getVirtualMachineProxy());
+                        return suspendAllAndEvaluate(valueSupplier, processor, suspendContext.getDebugProcess().getVirtualMachineProxy());
                     }
                 }
                 else {
@@ -844,7 +846,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
     }
 
     private static <R, T> R suspendAllAndEvaluate(
-        ThrowableComputable<? extends T, ? extends EvaluateException> valueComputable,
+        ThrowableSupplier<? extends T, ? extends EvaluateException> valueSupplier,
         Function<? super T, ? extends R> processor,
         VirtualMachineProxyImpl virtualMachineProxy
     ) throws EvaluateException {
@@ -853,7 +855,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         }
         virtualMachineProxy.suspend();
         try {
-            return processor.apply(valueComputable.compute());
+            return processor.apply(valueSupplier.get());
         }
         finally {
             virtualMachineProxy.resume();
@@ -942,7 +944,7 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return null;
     }
 
-    public static String truncateString(final String str) {
+    public static String truncateString(String str) {
         // leave a small gap over XValueNode.MAX_VALUE_LENGTH to detect oversize
         if (str.length() > XValueNode.MAX_VALUE_LENGTH + 5) {
             return str.substring(0, XValueNode.MAX_VALUE_LENGTH + 5);
@@ -950,25 +952,17 @@ public abstract class DebuggerUtilsEx extends DebuggerUtils {
         return str;
     }
 
-    public static String getThreadStatusText(int statusId) {
-        switch (statusId) {
-            case ThreadReference.THREAD_STATUS_MONITOR:
-                return DebuggerBundle.message("status.thread.monitor");
-            case ThreadReference.THREAD_STATUS_NOT_STARTED:
-                return DebuggerBundle.message("status.thread.not.started");
-            case ThreadReference.THREAD_STATUS_RUNNING:
-                return DebuggerBundle.message("status.thread.running");
-            case ThreadReference.THREAD_STATUS_SLEEPING:
-                return DebuggerBundle.message("status.thread.sleeping");
-            case ThreadReference.THREAD_STATUS_UNKNOWN:
-                return DebuggerBundle.message("status.thread.unknown");
-            case ThreadReference.THREAD_STATUS_WAIT:
-                return DebuggerBundle.message("status.thread.wait");
-            case ThreadReference.THREAD_STATUS_ZOMBIE:
-                return DebuggerBundle.message("status.thread.zombie");
-            default:
-                return DebuggerBundle.message("status.thread.undefined");
-        }
+    public static LocalizeValue getThreadStatusText(int statusId) {
+        return switch (statusId) {
+            case ThreadReference.THREAD_STATUS_MONITOR -> JavaDebuggerLocalize.statusThreadMonitor();
+            case ThreadReference.THREAD_STATUS_NOT_STARTED -> JavaDebuggerLocalize.statusThreadNotStarted();
+            case ThreadReference.THREAD_STATUS_RUNNING -> JavaDebuggerLocalize.statusThreadRunning();
+            case ThreadReference.THREAD_STATUS_SLEEPING -> JavaDebuggerLocalize.statusThreadSleeping();
+            case ThreadReference.THREAD_STATUS_UNKNOWN -> JavaDebuggerLocalize.statusThreadUnknown();
+            case ThreadReference.THREAD_STATUS_WAIT -> JavaDebuggerLocalize.statusThreadWait();
+            case ThreadReference.THREAD_STATUS_ZOMBIE -> JavaDebuggerLocalize.statusThreadZombie();
+            default -> JavaDebuggerLocalize.statusThreadUndefined();
+        };
     }
 
     public static String prepareValueText(String text, Project project) {

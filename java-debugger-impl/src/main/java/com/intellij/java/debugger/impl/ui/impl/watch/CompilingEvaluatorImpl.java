@@ -152,12 +152,16 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 	{
 		/*if(DEBUGGER_COMPILING_EVALUATOR && psiContext != null)
 		{
-			return ApplicationManager.getApplication().runReadAction((ThrowableComputable<ExpressionEvaluator, EvaluateException>) () ->
+			return ApplicationManager.getApplication().runReadAction((ThrowableSupplier<ExpressionEvaluator, EvaluateException>) () ->
 			{
 				try
 				{
-					ExtractLightMethodObjectHandler.ExtractedData data = ExtractLightMethodObjectHandler.extractLightMethodObject(project, findPhysicalContext(psiContext), fragmentFactory.apply
-							(psiContext), getGeneratedClassName());
+					ExtractLightMethodObjectHandler.ExtractedData data = ExtractLightMethodObjectHandler.extractLightMethodObject(
+						project,
+						findPhysicalContext(psiContext),
+						fragmentFactory.apply(psiContext),
+						getGeneratedClassName()
+					);
 					if(data != null)
 					{
 						return new CompilingEvaluatorImpl(project, psiContext, data);
@@ -169,7 +173,7 @@ public class CompilingEvaluatorImpl extends CompilingEvaluator
 				}
 				return null;
 			});
-		}   */
+		}*/
 		return null;
 	}
 

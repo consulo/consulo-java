@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package consulo.java.compiler.bytecodeProcessing;
 
 import com.intellij.compiler.instrumentation.InstrumentationClassFinder;
@@ -21,10 +20,10 @@ import com.intellij.java.compiler.impl.cache.Cache;
 import com.intellij.java.compiler.impl.cache.JavaDependencyCache;
 import consulo.annotation.component.ComponentScope;
 import consulo.annotation.component.ExtensionAPI;
-import consulo.application.util.function.ThrowableComputable;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompileContext;
 import consulo.module.Module;
+import consulo.util.lang.function.ThrowableSupplier;
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
@@ -32,17 +31,18 @@ import java.io.IOException;
 
 /**
  * @author VISTALL
- * @since 28-Sep-16
+ * @since 2016-09-28
  */
 @ExtensionAPI(ComponentScope.APPLICATION)
 public interface JavaBytecodeProcessor {
-  @Nullable
-  byte[] processClassFile(CompileContext compileContext,
-                          Module affectedModule,
-                          JavaDependencyCache dependencyCache,
-                          Cache newClassesCache,
-                          int classId,
-                          File file,
-                          ThrowableComputable<byte[], IOException> bytesComputable,
-                          InstrumentationClassFinder classFinder) throws IOException, CacheCorruptedException;
+    byte @Nullable [] processClassFile(
+        CompileContext compileContext,
+        Module affectedModule,
+        JavaDependencyCache dependencyCache,
+        Cache newClassesCache,
+        int classId,
+        File file,
+        ThrowableSupplier<byte[], IOException> bytesSupplier,
+        InstrumentationClassFinder classFinder
+    ) throws IOException, CacheCorruptedException;
 }
