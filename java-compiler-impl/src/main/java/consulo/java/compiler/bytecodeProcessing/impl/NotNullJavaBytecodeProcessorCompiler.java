@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package consulo.java.compiler.bytecodeProcessing.impl;
 
 import com.intellij.compiler.instrumentation.FailSafeClassReader;
@@ -26,7 +25,6 @@ import com.intellij.java.compiler.impl.javaCompiler.JavaCompilerConfiguration;
 import com.intellij.java.language.codeInsight.NullableNotNullManager;
 import com.intellij.java.language.projectRoots.JavaSdkVersion;
 import consulo.annotation.component.ExtensionImpl;
-import consulo.application.util.function.ThrowableComputable;
 import consulo.compiler.CacheCorruptedException;
 import consulo.compiler.CompileContext;
 import consulo.content.bundle.Sdk;
@@ -36,6 +34,7 @@ import consulo.java.compiler.bytecodeProcessing.JavaBytecodeProcessor;
 import consulo.java.language.bundle.JavaSdkTypeUtil;
 import consulo.module.Module;
 import consulo.util.collection.ArrayUtil;
+import consulo.util.lang.function.ThrowableSupplier;
 import org.jspecify.annotations.Nullable;
 
 import java.io.File;
@@ -43,47 +42,48 @@ import java.io.IOException;
 
 /**
  * @author VISTALL
- * @since 28-Sep-16
+ * @since 2016-09-28
  */
 @ExtensionImpl
-public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcessor
-{
-	@Nullable
-	@Override
-	public byte[] processClassFile(CompileContext compileContext,
-			Module affectedModule,
-			JavaDependencyCache dependencyCache,
-			Cache newClassesCache,
-			int classId,
-			File file,
-			ThrowableComputable<byte[], IOException> bytesComputable,
-			InstrumentationClassFinder classFinder) throws IOException, CacheCorruptedException
-	{
-		Sdk jdk = JavaCompilerUtil.getSdkForCompilation(affectedModule);
+public class NotNullJavaBytecodeProcessorCompiler implements JavaBytecodeProcessor {
+    @Override
+    public byte @Nullable [] processClassFile(
+        CompileContext compileContext,
+        Module affectedModule,
+        JavaDependencyCache dependencyCache,
+        Cache newClassesCache,
+        int classId,
+        File file,
+        ThrowableSupplier<byte[], IOException> bytesSupplier,
+        InstrumentationClassFinder classFinder
+    ) throws IOException, CacheCorruptedException {
+        Sdk jdk = JavaCompilerUtil.getSdkForCompilation(affectedModule);
 
-		boolean isJdk6 = jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
+        boolean isJdk6 = jdk != null && JavaSdkTypeUtil.isOfVersionOrHigher(jdk, JavaSdkVersion.JDK_1_6);
 
-		boolean addNotNullAssertions = JavaCompilerConfiguration.getInstance(affectedModule.getProject()).isAddNotNullAssertions();
+        boolean addNotNullAssertions = JavaCompilerConfiguration.getInstance(affectedModule.getProject()).isAddNotNullAssertions();
 
-		if(!addNotNullAssertions)
-		{
-			return null;
-		}
+        if (!addNotNullAssertions) {
+            return null;
+        }
 
-		byte[] bytes = bytesComputable.compute();
-		FailSafeClassReader reader = new FailSafeClassReader(bytes, 0, bytes.length);
+        byte[] bytes = bytesSupplier.get();
+        FailSafeClassReader reader = new FailSafeClassReader(bytes, 0, bytes.length);
 
-		assert classFinder != null;
+        assert classFinder != null;
 
-		ClassWriter writer = new InstrumenterClassWriter(reader, isJdk6 ? ClassWriter.COMPUTE_FRAMES : ClassWriter.COMPUTE_MAXS, classFinder);
+        ClassWriter writer = new InstrumenterClassWriter(
+            reader,
+            isJdk6 ? ClassWriter.COMPUTE_FRAMES : ClassWriter.COMPUTE_MAXS,
+            classFinder
+        );
 
-		NullableNotNullManager manager = NullableNotNullManager.getInstance(affectedModule.getProject());
+        NullableNotNullManager manager = NullableNotNullManager.getInstance(affectedModule.getProject());
 
-		if(NotNullVerifyingInstrumenter.processClassFile(reader, writer, ArrayUtil.toStringArray(manager.getNotNulls())))
-		{
-			return writer.toByteArray();
-		}
+        if (NotNullVerifyingInstrumenter.processClassFile(reader, writer, ArrayUtil.toStringArray(manager.getNotNulls()))) {
+            return writer.toByteArray();
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

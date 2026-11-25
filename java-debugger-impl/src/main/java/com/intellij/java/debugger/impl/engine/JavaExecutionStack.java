@@ -42,6 +42,7 @@ import consulo.internal.com.sun.jdi.ObjectCollectedException;
 import consulo.internal.com.sun.jdi.ThreadReference;
 import consulo.internal.com.sun.tools.jdi.ThreadGroupReferenceImpl;
 import consulo.internal.com.sun.tools.jdi.ThreadReferenceImpl;
+import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.project.ui.notification.NotificationService;
 import consulo.ui.ex.ColoredTextContainer;
@@ -72,32 +73,37 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
     private final boolean mySuspended;
 
     public JavaExecutionStack(ThreadReferenceProxyImpl threadProxy, DebugProcessImpl debugProcess, boolean current) {
-        super(calcRepresentation(threadProxy), calcIcon(threadProxy, current));
+        super(calcRepresentation(threadProxy).get(), calcIcon(threadProxy, current));
         myThreadProxy = threadProxy;
         myDebugProcess = debugProcess;
         mySuspended = threadProxy.isSuspended();
     }
 
-    private JavaExecutionStack(String displayName,
-                               @Nullable Image icon,
-                               ThreadReferenceProxyImpl threadProxy,
-                               DebugProcessImpl debugProcess,
-                               boolean suspended) {
+    private JavaExecutionStack(
+        String displayName,
+        @Nullable Image icon,
+        ThreadReferenceProxyImpl threadProxy,
+        DebugProcessImpl debugProcess,
+        boolean suspended
+    ) {
         super(displayName, icon);
         myThreadProxy = threadProxy;
         myDebugProcess = debugProcess;
         mySuspended = suspended;
     }
 
-    public static CompletableFuture<@Nullable JavaExecutionStack> create(ThreadReferenceProxyImpl threadProxy,
-                                                                         DebugProcessImpl debugProcess,
-                                                                         boolean current) {
+    public static CompletableFuture<@Nullable JavaExecutionStack> create(
+        ThreadReferenceProxyImpl threadProxy,
+        DebugProcessImpl debugProcess,
+        boolean current
+    ) {
         return calcRepresentationAsync(threadProxy)
             .thenCombine(calcIconAsync(threadProxy, current), Pair::create)
-            .thenCombine(isSuspendedAsync(threadProxy),
-                (textAndIcon, suspended) -> {
-                    return new JavaExecutionStack(textAndIcon.getFirst(), textAndIcon.getSecond(), threadProxy, debugProcess, suspended);
-                })
+            .thenCombine(
+                isSuspendedAsync(threadProxy),
+                (textAndIcon, suspended) ->
+                    new JavaExecutionStack(textAndIcon.getFirst().get(), textAndIcon.getSecond(), threadProxy, debugProcess, suspended)
+            )
             .handle((stack, throwable) -> {
                 if (throwable instanceof ObjectCollectedException) {
                     return null;
@@ -186,7 +192,10 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
         myDebugProcess.getManagerThread().schedule(new DebuggerCommandImpl() {
             @Override
             protected void action() throws Exception {
-                SuspendContextImpl suspendingContext = SuspendManagerUtil.getSuspendingContext(myDebugProcess.getSuspendManager(), myThreadProxy);
+                SuspendContextImpl suspendingContext = SuspendManagerUtil.getSuspendingContext(
+                    myDebugProcess.getSuspendManager(),
+                    myThreadProxy
+                );
                 if (suspendingContext != null) {
                     myDebugProcess.createResumeThreadCommand(suspendingContext, myThreadProxy).run();
                 }
@@ -280,7 +289,7 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
      * Not an override: Consulo's {@link XExecutionStack} has no asynchronous top frame accessor (D-A5).
      */
     public CompletableFuture<@Nullable XStackFrame> getTopFrameAsync() {
-        return myTopFrames.thenApply(frames -> ContainerUtil.getFirstItem(frames));
+        return myTopFrames.thenApply(ContainerUtil::getFirstItem);
     }
 
     @Override
@@ -354,15 +363,17 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
         private int myAddedAsync;
         private boolean mySeparator;
 
-        private AppendFrameCommand(SuspendContextImpl suspendContext,
-                                   @Nullable Iterator<StackFrameProxyImpl> stackFramesIterator,
-                                   XStackFrameContainer container,
-                                   int added,
-                                   int skip,
-                                   @Nullable List<? extends StackFrameItem> asyncStack,
-                                   @Nullable List<? extends StackFrameItem> creationStack,
-                                   int addedAsync,
-                                   boolean separator) {
+        private AppendFrameCommand(
+            SuspendContextImpl suspendContext,
+            @Nullable Iterator<StackFrameProxyImpl> stackFramesIterator,
+            XStackFrameContainer container,
+            int added,
+            int skip,
+            @Nullable List<? extends StackFrameItem> asyncStack,
+            @Nullable List<? extends StackFrameItem> creationStack,
+            int addedAsync,
+            boolean separator
+        ) {
             super(suspendContext);
             myStackFramesIterator = stackFramesIterator;
             myContainer = container;
@@ -374,11 +385,13 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
             mySeparator = separator;
         }
 
-        AppendFrameCommand(SuspendContextImpl suspendContext,
-                           Iterator<StackFrameProxyImpl> iterator,
-                           XStackFrameContainer container,
-                           int added,
-                           int firstFrameIndex) {
+        AppendFrameCommand(
+            SuspendContextImpl suspendContext,
+            Iterator<StackFrameProxyImpl> iterator,
+            XStackFrameContainer container,
+            int added,
+            int firstFrameIndex
+        ) {
             this(suspendContext, iterator, container, added, firstFrameIndex, null, null, 0, true);
         }
 
@@ -465,7 +478,7 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
                     }
 
                     schedule(suspendContext, myStackFramesIterator, relatedStack, creationStack, false);
-                }).exceptionally(throwable -> DebuggerUtilsAsync.logError(throwable));
+                }).exceptionally(DebuggerUtilsAsync::logError);
             }
             else if (myAsyncStack != null && myAddedAsync < myAsyncStack.size()) {
                 appendRelatedStack(suspendContext, myAsyncStack.subList(myAddedAsync, myAsyncStack.size()));
@@ -478,26 +491,41 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
             }
         }
 
-        private void schedule(SuspendContextImpl suspendContext,
-                              @Nullable Iterator<StackFrameProxyImpl> stackFramesIterator,
-                              @Nullable List<? extends StackFrameItem> asyncStackFrames,
-                              @Nullable List<? extends StackFrameItem> creationStackFrames,
-                              boolean separator) {
-            myDebugProcess.getManagerThread().schedule(
-                new AppendFrameCommand(suspendContext, stackFramesIterator, myContainer,
-                    myAdded, mySkip, asyncStackFrames, creationStackFrames, myAddedAsync, separator));
+        private void schedule(
+            SuspendContextImpl suspendContext,
+            @Nullable Iterator<StackFrameProxyImpl> stackFramesIterator,
+            @Nullable List<? extends StackFrameItem> asyncStackFrames,
+            @Nullable List<? extends StackFrameItem> creationStackFrames,
+            boolean separator
+        ) {
+            myDebugProcess.getManagerThread().schedule(new AppendFrameCommand(
+                suspendContext,
+                stackFramesIterator,
+                myContainer,
+                myAdded,
+                mySkip,
+                asyncStackFrames,
+                creationStackFrames,
+                myAddedAsync,
+                separator
+            ));
         }
 
         void appendRelatedStack(SuspendContextImpl suspendContext, List<? extends StackFrameItem> asyncStack) {
             for (StackFrameItem stackFrame : asyncStack) {
                 if (myAddedAsync > AsyncStacksUtils.getMaxStackLength()) {
-                    addFrameIfNeeded(new XStackFrame() {
-                        @Override
-                        public void customizePresentation(ColoredTextContainer component) {
-                            component.append(JavaDebuggerLocalize.labelTooManyFramesRestTruncated(),
-                                SimpleTextAttributes.REGULAR_ITALIC_ATTRIBUTES);
-                        }
-                    }, true);
+                    addFrameIfNeeded(
+                        new XStackFrame() {
+                            @Override
+                            public void customizePresentation(ColoredTextContainer component) {
+                                component.append(
+                                    JavaDebuggerLocalize.labelTooManyFramesRestTruncated(),
+                                    SimpleTextAttributes.REGULAR_ITALIC_ATTRIBUTES
+                                );
+                            }
+                        },
+                        true
+                    );
                     return;
                 }
                 myAddedAsync++;
@@ -541,26 +569,24 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
     }
 
     private static boolean showFrame(XStackFrame frame) {
-        if (!XDebuggerSettingsManager.getInstance().getDataViewSettings().isShowLibraryStackFrames() &&
-            frame instanceof JVMStackFrameInfoProvider info) {
-            return !info.shouldHide();
-        }
-        return true;
+        return XDebuggerSettingsManager.getInstance().getDataViewSettings().isShowLibraryStackFrames()
+            || !(frame instanceof JVMStackFrameInfoProvider info)
+            || !info.shouldHide();
     }
 
-    private static String calcRepresentation(ThreadReferenceProxyImpl thread) {
+    private static LocalizeValue calcRepresentation(ThreadReferenceProxyImpl thread) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         String name = thread.name();
         ThreadGroupReferenceProxyImpl gr = thread.threadGroupProxy();
         String grname = (gr != null) ? gr.name() : null;
-        String threadStatusText = DebuggerUtilsEx.getThreadStatusText(thread.status());
+        LocalizeValue threadStatusText = DebuggerUtilsEx.getThreadStatusText(thread.status());
         if (grname != null && !"SYSTEM".equalsIgnoreCase(grname)) {
-            return JavaDebuggerLocalize.labelThreadNodeInGroup(name, thread.uniqueID(), threadStatusText, grname).get();
+            return JavaDebuggerLocalize.labelThreadNodeInGroup(name, thread.uniqueID(), threadStatusText, grname);
         }
-        return JavaDebuggerLocalize.labelThreadNode(name, thread.uniqueID(), threadStatusText).get();
+        return JavaDebuggerLocalize.labelThreadNode(name, thread.uniqueID(), threadStatusText);
     }
 
-    private static CompletableFuture<String> calcRepresentationAsync(ThreadReferenceProxyImpl thread) {
+    private static CompletableFuture<LocalizeValue> calcRepresentationAsync(ThreadReferenceProxyImpl thread) {
         DebuggerManagerThreadImpl.assertIsManagerThread();
         ThreadReference ref = thread.getThreadReference();
         if (!DebuggerUtilsAsync.isAsyncEnabled() || !(ref instanceof ThreadReferenceImpl threadReference)) {
@@ -568,26 +594,25 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
         }
         CompletableFuture<String> nameFuture = threadReference.nameAsync();
         CompletableFuture<String> groupNameFuture = threadReference.threadGroupAsync().thenCompose(gr -> {
-            if (gr instanceof ThreadGroupReferenceImpl) {
-                return ((ThreadGroupReferenceImpl) gr).nameAsync();
+            if (gr instanceof ThreadGroupReferenceImpl grImpl) {
+                return grImpl.nameAsync();
             }
             return CompletableFuture.completedFuture(null);
         });
-        CompletableFuture<String> statusTextFuture = threadReference.statusAsync().thenApply(DebuggerUtilsEx::getThreadStatusText);
+        CompletableFuture<LocalizeValue> statusTextFuture = threadReference.statusAsync().thenApply(DebuggerUtilsEx::getThreadStatusText);
 
         long uniqueID = threadReference.uniqueID();
-        return DebuggerUtilsAsync.reschedule(groupNameFuture).thenCompose(grname -> {
-            return nameFuture.thenCombine(statusTextFuture, (name, threadStatusText) -> {
+        return DebuggerUtilsAsync.reschedule(groupNameFuture)
+            .thenCompose(grname -> nameFuture.thenCombine(statusTextFuture, (name, threadStatusText) -> {
                 if (grname != null && !"SYSTEM".equalsIgnoreCase(grname)) {
-                    return JavaDebuggerLocalize.labelThreadNodeInGroup(name, uniqueID, threadStatusText, grname).get();
+                    return JavaDebuggerLocalize.labelThreadNodeInGroup(name, uniqueID, threadStatusText, grname);
                 }
-                return JavaDebuggerLocalize.labelThreadNode(name, uniqueID, threadStatusText).get();
-            });
-        });
+                return JavaDebuggerLocalize.labelThreadNode(name, uniqueID, threadStatusText);
+            }));
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) {
             return true;
         }
@@ -595,13 +620,9 @@ public class JavaExecutionStack extends XExecutionStack implements HasThreadSusp
             return false;
         }
 
-        JavaExecutionStack stack = (JavaExecutionStack) o;
+        JavaExecutionStack that = (JavaExecutionStack) o;
 
-        if (!myThreadProxy.equals(stack.myThreadProxy)) {
-            return false;
-        }
-
-        return true;
+        return myThreadProxy.equals(that.myThreadProxy);
     }
 
     @Override

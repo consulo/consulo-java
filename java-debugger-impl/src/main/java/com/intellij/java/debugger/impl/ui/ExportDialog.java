@@ -33,8 +33,10 @@ import com.intellij.java.debugger.localize.JavaDebuggerLocalize;
 import consulo.application.HelpManager;
 import consulo.fileChooser.FileChooserDescriptorFactory;
 import consulo.internal.com.sun.jdi.*;
+import consulo.localize.LocalizeValue;
 import consulo.project.Project;
 import consulo.ui.ModalityState;
+import consulo.ui.annotation.RequiredUIAccess;
 import consulo.ui.ex.awt.*;
 import consulo.util.lang.StringUtil;
 
@@ -66,20 +68,25 @@ public class ExportDialog extends DialogWrapper {
         myCopyToClipboardAction.setEnabled(false);
 
         myTextArea.setText(MessageDescriptor.EVALUATING.getLabel().get());
-        debugProcess.getManagerThread().invoke(new ExportThreadsCommand(myProject.getApplication().getModalityStateForComponent(myTextArea)));
+        debugProcess.getManagerThread()
+            .invoke(new ExportThreadsCommand(myProject.getApplication().getModalityStateForComponent(myTextArea)));
 
         myTfFilePath.setText(destinationDirectory + File.separator + DEFAULT_REPORT_FILE_NAME);
         setHorizontalStretch(1.5f);
     }
 
+    @Override
     protected Action[] createActions() {
         return new Action[]{getOKAction(), myCopyToClipboardAction, getCancelAction(), getHelpAction()};
     }
 
+    @Override
+    @RequiredUIAccess
     protected void doHelpAction() {
         HelpManager.getInstance().invokeHelp(HelpID.EXPORT_THREADS);
     }
 
+    @Override
     protected JComponent createNorthPanel() {
         JPanel box = new JPanel(new BorderLayout());
         box.add(new JLabel(JavaDebuggerLocalize.labelThreadsExportDialogFile().get()), BorderLayout.WEST);
@@ -92,6 +99,7 @@ public class ExportDialog extends DialogWrapper {
         return panel;
     }
 
+    @Override
     protected JComponent createCenterPanel() {
         myTextArea.setEditable(false);
         JScrollPane pane = ScrollPaneFactory.createScrollPane(myTextArea);
@@ -99,6 +107,8 @@ public class ExportDialog extends DialogWrapper {
         return pane;
     }
 
+    @Override
+    @RequiredUIAccess
     protected void doOKAction() {
         String path = myTfFilePath.getText();
         File file = new File(path);
@@ -134,15 +144,16 @@ public class ExportDialog extends DialogWrapper {
         return myTextArea.getText();
     }
 
+    @Override
     protected String getDimensionServiceKey() {
         return "#com.intellij.debugger.ui.ExportDialog";
     }
 
     public static String getExportThreadsText(VirtualMachineProxyImpl vmProxy) {
-        final StringBuilder buffer = new StringBuilder(512);
+        StringBuilder buffer = new StringBuilder(512);
         List<ThreadReference> threads = vmProxy.getVirtualMachine().allThreads();
         for (ThreadReference threadReference : threads) {
-            final String name = threadName(threadReference);
+            String name = threadName(threadReference);
             if (name == null) {
                 continue;
             }
@@ -162,8 +173,8 @@ public class ExportDialog extends DialogWrapper {
                 Field priority = referenceType.fieldByName("priority");
                 if (priority != null) {
                     Value value = threadReference.getValue(priority);
-                    if (value instanceof IntegerValue) {
-                        buffer.append(", ").append(JavaDebuggerLocalize.threadsExportAttributeLabelPriority(((IntegerValue) value).intValue()).get());
+                    if (value instanceof IntegerValue integerValue) {
+                        buffer.append(", ").append(JavaDebuggerLocalize.threadsExportAttributeLabelPriority(integerValue.intValue()).get());
                     }
                 }
             }
@@ -173,17 +184,19 @@ public class ExportDialog extends DialogWrapper {
                 buffer.append(", ").append(JavaDebuggerLocalize.threadsExportAttributeLabelGroup(groupReference.name()).get());
             }
             buffer.append(", ").append(
-                JavaDebuggerLocalize.threadsExportAttributeLabelStatus(DebuggerUtilsEx.getThreadStatusText(threadReference.status())).get());
+                JavaDebuggerLocalize.threadsExportAttributeLabelStatus(DebuggerUtilsEx.getThreadStatusText(threadReference.status())).get()
+            );
 
             try {
                 if (vmProxy.canGetOwnedMonitorInfo() && vmProxy.canGetMonitorInfo()) {
                     List<ObjectReference> list = threadReference.ownedMonitors();
                     for (ObjectReference reference : list) {
-                        final List<ThreadReference> waiting = reference.waitingThreads();
+                        List<ThreadReference> waiting = reference.waitingThreads();
                         for (ThreadReference thread : waiting) {
-                            final String waitingThreadName = threadName(thread);
+                            String waitingThreadName = threadName(thread);
                             if (waitingThreadName != null) {
-                                buffer.append("\n\t ").append(JavaDebuggerLocalize.threadsExportAttributeLabelBlocksThread(waitingThreadName).get());
+                                buffer.append("\n\t ")
+                                    .append(JavaDebuggerLocalize.threadsExportAttributeLabelBlocksThread(waitingThreadName).get());
                             }
                         }
                     }
@@ -194,18 +207,22 @@ public class ExportDialog extends DialogWrapper {
                     if (vmProxy.canGetMonitorInfo()) {
                         ThreadReference waitedThread = waitedMonitor.owningThread();
                         if (waitedThread != null) {
-                            final String waitedThreadName = threadName(waitedThread);
+                            String waitedThreadName = threadName(waitedThread);
                             if (waitedThreadName != null) {
-                                buffer.append("\n\t ").append(JavaDebuggerLocalize.threadsExportAttributeLabelWaitingForThread(waitedThreadName, ThreadDumpAction.renderObject(waitedMonitor)).get());
+                                buffer.append("\n\t ")
+                                    .append(JavaDebuggerLocalize.threadsExportAttributeLabelWaitingForThread(
+                                        waitedThreadName,
+                                        ThreadDumpAction.renderObject(waitedMonitor)
+                                    ).get());
                             }
                         }
                     }
                 }
 
-                final List<StackFrame> frames = threadReference.frames();
+                List<StackFrame> frames = threadReference.frames();
                 for (StackFrame stackFrame : frames) {
-                    final Location location = stackFrame.location();
-                    buffer.append("\n\t  ").append(renderLocation(location));
+                    Location location = stackFrame.location();
+                    buffer.append("\n\t  ").append(renderLocation(location).get());
                 }
             }
             catch (IncompatibleThreadStateException e) {
@@ -216,7 +233,7 @@ public class ExportDialog extends DialogWrapper {
         return buffer.toString();
     }
 
-    private static String renderLocation(final Location location) {
+    private static LocalizeValue renderLocation(Location location) {
         String sourceName;
         try {
             sourceName = location.sourceName();
@@ -224,7 +241,11 @@ public class ExportDialog extends DialogWrapper {
         catch (AbsentInformationException e) {
             sourceName = "Unknown Source";
         }
-        return JavaDebuggerLocalize.exportThreadsStackframeFormat(location.declaringType().name() + "." + location.method().name(), sourceName, location.lineNumber()).get();
+        return JavaDebuggerLocalize.exportThreadsStackframeFormat(
+            location.declaringType().name() + "." + location.method().name(),
+            sourceName,
+            location.lineNumber()
+        );
     }
 
     private static String threadName(ThreadReference threadReference) {
@@ -242,6 +263,7 @@ public class ExportDialog extends DialogWrapper {
             putValue(Action.SHORT_DESCRIPTION, JavaDebuggerLocalize.exportDialogCopyActionDescription().get());
         }
 
+        @Override
         public void actionPerformed(ActionEvent e) {
             String s = StringUtil.convertLineSeparators(myTextArea.getText());
             CopyPasteManager.getInstance().setContents(new StringSelection(s));
@@ -255,14 +277,19 @@ public class ExportDialog extends DialogWrapper {
             myModalityState = modalityState;
         }
 
-        private void setText(final String text) {
-            DebuggerInvocationUtil.invokeLater(myProject, () -> {
-                myTextArea.setText(text);
-                setOKActionEnabled(true);
-                myCopyToClipboardAction.setEnabled(true);
-            }, myModalityState);
+        private void setText(String text) {
+            DebuggerInvocationUtil.invokeLater(
+                myProject,
+                () -> {
+                    myTextArea.setText(text);
+                    setOKActionEnabled(true);
+                    myCopyToClipboardAction.setEnabled(true);
+                },
+                myModalityState
+            );
         }
 
+        @Override
         protected void action() {
             setText(getExportThreadsText(myDebugProcess.getVirtualMachineProxy()));
         }

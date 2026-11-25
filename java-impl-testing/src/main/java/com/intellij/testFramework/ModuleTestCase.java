@@ -109,7 +109,7 @@ public abstract class ModuleTestCase extends IdeaTestCase
 		Module module = null;
 		try
 		{
-			//module = ApplicationManager.getApplication().runWriteAction((ThrowableComputable<Module, Exception>) () -> moduleManager.loadModule(FileUtil.toSystemIndependentName(modulePath)));
+			//module = ApplicationManager.getApplication().runWriteAction((ThrowableSupplier<Module, Exception>) () -> moduleManager.loadModule(FileUtil.toSystemIndependentName(modulePath)));
 		}
 		catch(Exception e)
 		{

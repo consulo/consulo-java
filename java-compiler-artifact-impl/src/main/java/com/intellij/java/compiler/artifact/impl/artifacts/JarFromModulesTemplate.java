@@ -16,15 +16,15 @@
 package com.intellij.java.compiler.artifact.impl.artifacts;
 
 import com.intellij.java.compiler.artifact.impl.ManifestFileUtil;
+import consulo.application.WriteAction;
 import consulo.application.util.function.CommonProcessors;
-import consulo.application.util.function.ThrowableComputable;
 import consulo.compiler.artifact.ArtifactTemplate;
 import consulo.compiler.artifact.ArtifactUtil;
 import consulo.compiler.artifact.PlainArtifactType;
 import consulo.compiler.artifact.element.*;
-import consulo.java.compiler.artifact.impl.localize.JavaCompilerArtifactLocalize;
 import consulo.content.base.BinariesOrderRootType;
 import consulo.content.library.Library;
+import consulo.java.compiler.artifact.impl.localize.JavaCompilerArtifactLocalize;
 import consulo.localize.LocalizeValue;
 import consulo.logging.Logger;
 import consulo.module.Module;
@@ -92,9 +92,7 @@ public class JarFromModulesTemplate extends ArtifactTemplate {
         if (mainClassName != null && !mainClassName.isEmpty() || !extractLibrariesToJar) {
             VirtualFile directory;
             try {
-                directory = project.getApplication().runWriteAction(
-                    (ThrowableComputable<VirtualFile, IOException>)() -> VirtualFileUtil.createDirectoryIfMissing(directoryForManifest)
-                );
+                directory = WriteAction.compute(() -> VirtualFileUtil.createDirectoryIfMissing(directoryForManifest));
             }
             catch (IOException e) {
                 LOG.info(e);
